@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'pages/landing_page.dart';
+import 'widgets/shell/page_scaffold.dart';
 
 void main() {
   runApp(const T1GridApp());
@@ -19,7 +20,9 @@ class T1GridApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F9F7),
         fontFamily: "Inter18pt",
       ),
-      home: const LandingPage(),
+      home: const PageScaffold(
+        child: LandingPage(),
+      ),
     );
   }
 }

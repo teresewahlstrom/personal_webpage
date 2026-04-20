@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../config/app_ui_config.dart';
 import 'arrow_key_scroll_wrapper.dart';
 
 typedef AppModalChildBuilder = Widget Function(
@@ -8,25 +9,19 @@ typedef AppModalChildBuilder = Widget Function(
 Future<void> showAppModal({
   required BuildContext context,
   required AppModalChildBuilder builder,
-  Color barrierColor = const Color(0xBF000000),
-  Color backgroundColor = const Color(0xFF1A1A1A),
-  EdgeInsets insetPadding = const EdgeInsets.all(16),
-  EdgeInsets contentPadding = const EdgeInsets.fromLTRB(24, 20, 24, 20),
-  double maxWidth = 650,
-  double maxHeightFactor = 0.9,
 }) {
   return showDialog<void>(
     context: context,
-    barrierColor: barrierColor,
+    barrierColor: ModalUiConfig.barrierColor,
     builder: (BuildContext dialogContext) {
       void close() => Navigator.of(dialogContext).pop();
 
       return _AppModalFrame(
-        backgroundColor: backgroundColor,
-        insetPadding: insetPadding,
-        contentPadding: contentPadding,
-        maxWidth: maxWidth,
-        maxHeightFactor: maxHeightFactor,
+        backgroundColor: ModalUiConfig.backgroundColor,
+        insetPadding: ModalUiConfig.insetPadding,
+        contentPadding: ModalUiConfig.contentPadding,
+        maxWidth: ModalUiConfig.maxWidth,
+        maxHeightFactor: ModalUiConfig.maxHeightFactor,
         close: close,
         builder: builder,
       );
@@ -126,7 +121,9 @@ class _ModalCloseButtonState extends State<_ModalCloseButton> {
           child: Text(
             "×",
             style: TextStyle(
-              color: _isHovered ? Colors.white : const Color(0xFFCCCCCC),
+              color: _isHovered
+                  ? ModalUiConfig.closeIconHoverColor
+                  : ModalUiConfig.closeIconColor,
               fontSize: 28,
               height: 1,
             ),

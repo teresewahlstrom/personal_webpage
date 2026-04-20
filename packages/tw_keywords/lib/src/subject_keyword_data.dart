@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tw_keywords/tw_keywords.dart';
+
+import 'keyword_composition_model.dart';
 
 /// Complete subject profile with all keywords, semantic metadata, and layout hints.
 ///

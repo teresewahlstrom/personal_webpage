@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
-
-import '../models/subject_keyword_data.dart';
+import 'package:tw_keywords/tw_keywords.dart';
 
 final class SubjectRegistry {
   static const String _indexAssetPath = 'assets/data/subjects/index.json';

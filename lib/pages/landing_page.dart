@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tw_chat/chat.dart';
-import 'package:tw_chat/content.dart';
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'newsletter/newsletter_modal_content.dart';
-import 'privacy_cookies_content.dart';
-import '../data/subject_keywords_registry.dart';
-import '../models/subject_keyword_data.dart';
+import '../modals/newsletter/newsletter_modal.dart';
+import '../services/subject_keywords_registry.dart';
 import '../widgets/app_modal.dart';
 import '../widgets/arrow_key_scroll_wrapper.dart';
-import '../widgets/grid_background_with_chat.dart';
 
 class LandingPage extends StatefulWidget {
   /// The subject to display (defaults to Terese)
@@ -28,19 +23,12 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   final ScrollController _scrollController = ScrollController();
-  final ValueNotifier<bool> _isChatKeyboardScrollTarget = ValueNotifier<bool>(
-    false,
-  );
   late Future<SubjectKeywordData> _subjectFuture;
-  late final TwinConversationController _conversationController;
   late final List<bool> _expandedTiles = List<bool>.filled(
     _skills.length,
     false,
     growable: false,
   );
-
-  static const String _dummyReplyText =
-      'This is a prototype reply from Twin chat. Real backend responses are not connected yet.';
 
   @override
   void initState() {
@@ -48,27 +36,10 @@ class _LandingPageState extends State<LandingPage> {
     _subjectFuture = widget.subject != null
         ? Future<SubjectKeywordData>.value(widget.subject)
         : SubjectRegistry.defaultSubject();
-    _conversationController = TwinConversationController(
-      introText: twinPrototypeIntroText,
-      replyClient: const FixedTwinReplyClient(
-        replyText: _dummyReplyText,
-        replyDelay: Duration(milliseconds: 450),
-      ),
-      ownsReplyClient: true,
-    );
-  }
-
-  void _setChatKeyboardScrollTarget(bool value) {
-    if (_isChatKeyboardScrollTarget.value == value) {
-      return;
-    }
-    _isChatKeyboardScrollTarget.value = value;
   }
 
   @override
   void dispose() {
-    _conversationController.dispose();
-    _isChatKeyboardScrollTarget.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -103,18 +74,8 @@ class _LandingPageState extends State<LandingPage> {
   void _openNewsletterModal() {
     showAppModal(
       context: context,
-      contentPadding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
       builder: (BuildContext context, VoidCallback close) {
         return const NewsletterModalContent();
-      },
-    );
-  }
-
-  void _openPrivacyModal() {
-    showAppModal(
-      context: context,
-      builder: (BuildContext context, VoidCallback close) {
-        return PrivacyCookiesContent(onLaunchUrl: _launchUrl);
       },
     );
   }
@@ -124,175 +85,138 @@ class _LandingPageState extends State<LandingPage> {
     return FutureBuilder<SubjectKeywordData>(
       future: _subjectFuture,
       builder: (BuildContext context, AsyncSnapshot<SubjectKeywordData> snapshot) {
+        Widget content;
+
         if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(
-              child: Text('Failed to load subject data: ${snapshot.error}'),
-            ),
+          content = Center(
+            child: Text('Failed to load subject data: ${snapshot.error}'),
           );
-        }
+        } else if (!snapshot.hasData) {
+          content = const Center(child: CircularProgressIndicator());
+        } else {
+          final SubjectKeywordData subject = snapshot.data!;
+          final Size viewport = MediaQuery.sizeOf(context);
+          // heightRatio: taller on mobile (portrait), shallower on wide desktop.
+          final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
 
-        if (!snapshot.hasData) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        final SubjectKeywordData subject = snapshot.data!;
-        final Size viewport = MediaQuery.sizeOf(context);
-        // heightRatio: taller on mobile (portrait), shallower on wide desktop.
-        final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
-
-        return DefaultTextStyle(
-          style: _Styles.body,
-          child: Scaffold(
-            body: Stack(
-              children: <Widget>[
-                GridBackgroundWithChat(
-                  child: ArrowKeyScrollWrapper(
-                    controller: _scrollController,
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: SingleChildScrollView(
-                            controller: _scrollController,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 700),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 11),
-                                      child: const Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          SizedBox(height: 8),
-                                          _HeaderLogo(),
-                                          SizedBox(height: 10),
-                                          _HeroStatement(),
-                                          SizedBox(height: 14),
-                                        ],
-                                      ),
-                                    ),
+          content = ArrowKeyScrollWrapper(
+            controller: _scrollController,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 11),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 8),
+                            _HeaderLogo(),
+                            SizedBox(height: 10),
+                            _HeroStatement(),
+                            SizedBox(height: 14),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 980),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        child: WordCloud(
+                          keywords: subject.keywords,
+                          heightRatio: cloudHeightRatio,
+                          maxContentWidth: 980,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 26),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 11),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _SkillsSection(
+                              expandedTiles: _expandedTiles,
+                              onToggleAll: _toggleAllTiles,
+                              onToggleTile: _toggleTile,
+                              allExpanded: _allExpanded,
+                            ),
+                            const SizedBox(height: 24),
+                            _SocialSection(
+                              title: "Contact",
+                              entries: <_SocialItem>[
+                                _SocialItem(
+                                  icon: const Icon(Icons.email_outlined),
+                                  label: "terese@t1grid.com",
+                                  onTap: () => _launchUrl(
+                                    "mailto:terese@t1grid.com",
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 980),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                                      child: WordCloud(
-                                        keywords: subject.keywords,
-                                        heightRatio: cloudHeightRatio,
-                                        maxContentWidth: 980,
-                                      ),
-                                    ),
+                                _SocialItem(
+                                  icon: const Icon(Icons.phone_outlined),
+                                  label: "+46 709 800 525",
+                                  onTap: () => _launchUrl(
+                                    "tel:+46709800525",
                                   ),
                                 ),
-                                const SizedBox(height: 26),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 700),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 11),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          _SkillsSection(
-                                            expandedTiles: _expandedTiles,
-                                            onToggleAll: _toggleAllTiles,
-                                            onToggleTile: _toggleTile,
-                                            allExpanded: _allExpanded,
-                                          ),
-                                          const SizedBox(height: 24),
-                                          _SocialSection(
-                                            title: "Contact",
-                                            entries: <_SocialItem>[
-                                              _SocialItem(
-                                                icon: const Icon(Icons.email_outlined),
-                                                label: "terese@t1grid.com",
-                                                onTap: () => _launchUrl(
-                                                  "mailto:terese@t1grid.com",
-                                                ),
-                                              ),
-                                              _SocialItem(
-                                                icon: const Icon(Icons.phone_outlined),
-                                                label: "+46 709 800 525",
-                                                onTap: () => _launchUrl(
-                                                  "tel:+46709800525",
-                                                ),
-                                              ),
-                                              _SocialItem(
-                                                icon: const Icon(
-                                                  Icons.calendar_month_outlined,
-                                                ),
-                                                label: "Video meeting",
-                                                onTap: () => _launchUrl(
-                                                  "https://cal.com/teresew/intro",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 12),
-                                          _SocialSection(
-                                            title: "Follow",
-                                            entries: <_SocialItem>[
-                                              _SocialItem(
-                                                icon: const Icon(
-                                                  Icons.notifications_active_outlined,
-                                                ),
-                                                label: "Newsletter",
-                                                onTap: _openNewsletterModal,
-                                              ),
-                                              _SocialItem(
-                                                icon: const FaIcon(
-                                                  FontAwesomeIcons.linkedinIn,
-                                                ),
-                                                label: "LinkedIn",
-                                                onTap: () => _launchUrl(
-                                                  "https://www.linkedin.com/in/teresewahlstrom",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 40),
-                                        ],
-                                      ),
-                                    ),
+                                _SocialItem(
+                                  icon: const Icon(Icons.calendar_month_outlined),
+                                  label: "Video meeting",
+                                  onTap: () => _launchUrl(
+                                    "https://cal.com/teresew/intro",
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                            const SizedBox(height: 12),
+                            _SocialSection(
+                              title: "Follow",
+                              entries: <_SocialItem>[
+                                _SocialItem(
+                                  icon: const Icon(
+                                    Icons.notifications_active_outlined,
+                                  ),
+                                  label: "Newsletter",
+                                  onTap: _openNewsletterModal,
+                                ),
+                                _SocialItem(
+                                  icon: const FaIcon(FontAwesomeIcons.linkedinIn),
+                                  label: "LinkedIn",
+                                  onTap: () => _launchUrl(
+                                    "https://www.linkedin.com/in/teresewahlstrom",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 40),
+                          ],
                         ),
-                        _Footer(onOpenPrivacy: _openPrivacyModal),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                // Twin chat overlay - positioned at Scaffold level for proper floating
-                AnimatedBuilder(
-                  animation: _conversationController,
-                  builder: (BuildContext context, Widget? child) {
-                    return TwinChatDock(
-                      messages: _conversationController.messages,
-                      onSend: _conversationController.sendMessage,
-                      onStop: _conversationController.stopPendingReply,
-                      isChatKeyboardScrollTarget: _isChatKeyboardScrollTarget,
-                      onSetChatKeyboardScrollTarget: () =>
-                          _setChatKeyboardScrollTarget(true),
-                      onSetPageKeyboardScrollTarget: () =>
-                          _setChatKeyboardScrollTarget(false),
-                    );
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          );
+        }
+
+        return DefaultTextStyle(
+          style: _Styles.body,
+          child: content,
         );
       },
     );
@@ -603,76 +527,6 @@ class _SocialRowState extends State<_SocialRow> {
   }
 }
 
-class _Footer extends StatelessWidget {
-  const _Footer({required this.onOpenPrivacy});
-
-  final VoidCallback onOpenPrivacy;
-
-  @override
-  Widget build(BuildContext context) {
-    final int year = DateTime.now().year;
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 50),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF8F9F7),
-        border: Border(top: BorderSide(color: Color(0xFFE1E4F2), width: 2)),
-      ),
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          runSpacing: 2,
-          children: <Widget>[
-            Text(
-              "©$year T1 grid. All rights reserved.",
-              style: _Styles.footerText,
-              textAlign: TextAlign.center,
-            ),
-            _FooterLinkButton(
-              label: "Privacy & Cookies Note.",
-              onTap: onOpenPrivacy,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FooterLinkButton extends StatefulWidget {
-  const _FooterLinkButton({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  State<_FooterLinkButton> createState() => _FooterLinkButtonState();
-}
-
-class _FooterLinkButtonState extends State<_FooterLinkButton> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Text(
-          widget.label,
-          style: _Styles.footerLink.copyWith(
-            color: _isHovered ? _Palette.hover : _Palette.social,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _SocialItem {
   const _SocialItem({
     required this.icon,
@@ -703,7 +557,6 @@ class _Palette {
   static const Color bodyText = Color(0xFF252525);
   static const Color social = accent;
   static const Color socialHover = hover;
-  static const Color footerText = Color(0xFF555764);
   static const Color tileHoverBorder = hover;
 }
 
@@ -754,21 +607,6 @@ class _Styles {
     fontWeight: FontWeight.w300,
     fontSize: 17.3,
     height: 1.2,
-  );
-
-  static const TextStyle footerText = TextStyle(
-    fontFamily: "Inter18pt",
-    fontWeight: FontWeight.w300,
-    fontSize: 14,
-    color: _Palette.footerText,
-  );
-
-  static const TextStyle footerLink = TextStyle(
-    fontFamily: "Inter18pt",
-    fontWeight: FontWeight.w300,
-    fontSize: 14,
-    color: _Palette.social,
-    decoration: TextDecoration.underline,
   );
 }
 

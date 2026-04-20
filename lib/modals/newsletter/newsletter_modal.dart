@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'newsletter_embed.dart';
+import 'embed.dart';
 
 class NewsletterModalContent extends StatelessWidget {
   const NewsletterModalContent({super.key});
