@@ -2,8 +2,8 @@
 
 The local backend has two services under one parent directory:
 
-- `gateway`: a TypeScript proxy that exposes the Flutter-facing `/api/chat` endpoint
-- `twin`: a Python service that owns prompt construction, session memory, and the LangChain LLM call
+- `gateway`: a Node/Express proxy that exposes the Flutter-facing `/api/chat` endpoint
+- `twin`: a Python FastAPI service that hosts the full retrieval-backed digital twin runtime
 
 ## Responsibilities
 
@@ -17,11 +17,23 @@ The local backend has two services under one parent directory:
 ### Twin
 
 - uses the workspace `.env` OpenAI key
-- calls GPT-4 through LangChain
-- owns RagGraph orchestration and retrieval flow
-- injects one fixed prototype context payload as retrieved evidence
+- loads runtime package directly from `backend/twin/repo/src/twin`
+- loads subject policies + retrieval artifacts directly from `backend/twin/repo/01_define_subject`
 - keeps in-memory session history keyed by `sessionId` while the service is running
-- returns only the final answer
+- returns only the final answer text for each turn
+
+## Twin Layout
+
+- `backend/twin/app.py`: FastAPI entrypoint and adapter for `/twin/chat`
+- `backend/twin/repo/src/twin`: bridged runtime package source
+- `backend/twin/repo/01_define_subject`: bridged subject data, contracts, and built retrieval artifacts
+
+Bridge behavior:
+
+- no local sync step is required
+- backend imports from `backend/twin/repo/src` at runtime
+- runtime artifact paths resolve under `backend/twin/repo/01_define_subject`
+- optional override: set `TWIN_REPO_ROOT` to point at a different twin repo root
 
 ## Run
 
@@ -41,7 +53,7 @@ Stop the local stack:
 
 Omit `-WithFlutter` in either command if you only want the backends.
 
-The Python twin keeps in-memory session history while it is running, so that memory resets when the twin process restarts.
+The Python twin keeps in-memory session history while it is running, so memory resets when the twin process restarts.
 
 If you need different local endpoints, pass them through the launcher script instead of starting services manually. For example:
 
