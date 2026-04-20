@@ -1,11 +1,11 @@
-name: personal_webpage_flutter
-description: Flutter Web version of the personal_webpage Astro site.
-publish_to: "none"
+name: personal_webpage
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ^3.11.4
 
 dependencies:
   flutter:
@@ -17,6 +17,9 @@ dependencies:
     path: packages/tw_chat
   tw_keywords:
     path: packages/tw_keywords
+  flutter_svg: ^2.2.0
+  google_fonts: ^6.2.1
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

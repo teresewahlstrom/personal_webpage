@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -17,7 +19,7 @@ migrate_working_dir/
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be committed into version control, so this line
+# VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
 #.vscode/
 
@@ -26,11 +28,16 @@ migrate_working_dir/
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
+.env
+.env.*
+tmp/
 .flutter-plugins-dependencies
 .packages
+node_modules/
 .pub-cache/
 .pub/
 /build/
+/coverage/
 
 # Symbolication related
 app.*.symbols
@@ -67,6 +74,9 @@ app.*.map.json
 # Web
 lib/generated_plugin_registrant.dart
 
-# Old Astro website
-old_astro_site/
-.git_local_backup
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+/.venv

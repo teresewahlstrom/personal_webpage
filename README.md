@@ -1,32 +1,43 @@
-# personal_webpage (Flutter Web)
+# personal_webpage
 
-This repository serves a Flutter Web version of the personal webpage.
+Flutter web personal site with a local chat prototype split into three layers:
+
+- Flutter UI
+- TypeScript gateway service
+- Python twin service
+
+Backend setup and run details are documented in [backend/README.md](backend/README.md).
+RagGraph orchestration is backend-owned (gateway/twin), not frontend-owned.
 
 ## Local Development
 
-```bash
-flutter pub get
-flutter run -d chrome
+Keep the OpenAI API key in the workspace root `.env` file.
+
+Run the shortcut scripts from the workspace root.
+
+Start the local stack:
+
+```powershell
+.\scripts\start-local.ps1 -WithFlutter
 ```
 
-## Build
+Stop the local stack:
 
-```bash
-flutter build web
+```powershell
+.\scripts\stop-local.ps1 -WithFlutter
 ```
 
-Build output is generated at:
+That opens and stops tracked PowerShell windows for the Python twin, the TypeScript gateway, and Flutter Web.
+Omit `-WithFlutter` in either command if you only want the backends.
 
-`build/web`
+The Python twin keeps in-memory session history while it is running, so that memory resets when the twin process restarts.
 
-## Cloudflare Pages (GitHub Integration)
+## Troubleshooting (Web)
 
-Use these settings in Cloudflare Pages:
+If you see repeated errors like `LateInitializationError: Field '_handledContextLostEvent' has not been initialized` during hot restart in Chrome, use the HTML renderer for local development:
 
-- Root directory: `/`
-- Build command: `bash cloudflare-pages-build.sh`
-- Build output directory: `build/web`
+```powershell
+flutter run -d chrome --web-renderer html
+```
 
-Backward-compatibility note:
-- If your Pages project is still set to `npm run deploy`, this repository supports it via `package.json`.
-- If your Pages output directory is still `dist`, the build script mirrors `build/web` to `dist`.
+In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vscode/launch.json`.
