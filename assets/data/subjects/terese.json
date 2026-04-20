@@ -1,0 +1,32 @@
+{
+  "id": "terese",
+  "name": "Terese Dellinger",
+  "role": "Product Engineer & Leader",
+  "theme": "product-engineer-leader",
+  "bio": "Building systems, leading teams, driving strategy across mechanical, product, and AI domains.",
+  "keywords": [
+    { "text": "SYSTEMS", "color": "#2AACCC", "weight": 800, "em": 0.082, "tier": "hero", "group": "engineering" },
+    { "text": "STRATEGY", "color": "#D0277B", "weight": 800, "em": 0.072, "tier": "hero", "group": "business" },
+    { "text": "ENGINEER", "color": "#D0277B", "weight": 900, "em": 0.132, "tier": "hero", "group": "engineering", "lockGroup": "cross_domain_engineer", "lockOrder": 1, "lockAxis": "vertical", "lockAlign": "center", "lockGapEm": 0.002 },
+    { "text": "AI", "color": "#D0277B", "weight": 800, "em": 0.068, "tier": "hero", "group": "future" },
+
+    { "text": "PRODUCT", "color": "#3D3D3D", "weight": 700, "em": 0.036, "tier": "core", "group": "business" },
+    { "text": "CROSS-DOMAIN", "color": "#3D3D3D", "weight": 900, "em": 0.072, "tier": "core", "group": "engineering", "lockGroup": "cross_domain_engineer", "lockOrder": 0, "lockAxis": "vertical", "lockAlign": "center", "lockGapEm": 0.002 },
+    { "text": "LEADERSHIP", "color": "#2AACCC", "weight": 700, "em": 0.038, "tier": "core", "group": "human" },
+    { "text": "MECHANICAL", "color": "#3D3D3D", "weight": 700, "em": 0.066, "tier": "core", "group": "engineering" },
+    { "text": "ENGINEERING", "color": "#3D3D3D", "weight": 700, "em": 0.066, "tier": "core", "group": "engineering" },
+    { "text": "INTEGRATION", "color": "#2AACCC", "weight": 800, "em": 0.048, "tier": "core", "group": "engineering" },
+    { "text": "SALES", "color": "#D0277B", "weight": 900, "em": 0.062, "tier": "core", "group": "business" },
+    { "text": "COLLABORATION", "color": "#2AACCC", "weight": 700, "em": 0.038, "tier": "core", "group": "human" },
+    { "text": "EXECUTION", "color": "#D0277B", "weight": 800, "em": 0.048, "tier": "core", "group": "business" },
+    { "text": "HUMAN", "color": "#2AACCC", "weight": 700, "em": 0.026, "tier": "core", "group": "human" },
+    { "text": "FACTORS", "color": "#2AACCC", "weight": 700, "em": 0.026, "tier": "core", "group": "human" },
+
+    { "text": "MATERIALS", "color": "#3D3D3D", "weight": 700, "em": 0.034, "tier": "support", "group": "engineering" },
+    { "text": "BIG DATA", "color": "#3D3D3D", "weight": 700, "em": 0.034, "tier": "support", "group": "engineering" },
+    { "text": "BUSINESS", "color": "#2AACCC", "weight": 700, "em": 0.034, "tier": "support", "group": "business" },
+    { "text": "SCALE", "color": "#D0277B", "weight": 800, "em": 0.052, "tier": "core", "group": "business" },
+    { "text": "MANUFACTURING", "color": "#3D3D3D", "weight": 700, "em": 0.034, "tier": "support", "group": "engineering" },
+    { "text": "CUSTOMERS", "color": "#9A8FAA", "weight": 700, "em": 0.030, "tier": "support", "group": "business" }
+  ]
+}

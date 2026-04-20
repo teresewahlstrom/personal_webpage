@@ -1,0 +1,54 @@
+name: personal_webpage_flutter
+description: Flutter Web version of the personal_webpage Astro site.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  font_awesome_flutter: ^11.0.0
+  url_launcher: ^6.3.1
+  tw_chat:
+    path: packages/tw_chat
+  tw_keywords:
+    path: packages/tw_keywords
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo.png
+    - assets/images/light/key_words_2.png
+    - assets/data/subjects/index.json
+    - assets/data/subjects/terese.json
+
+  fonts:
+    - family: Inter18pt
+      fonts:
+        - asset: assets/fonts/inter/Inter_18pt-Light.ttf
+          weight: 300
+        - asset: assets/fonts/inter/Inter_18pt-Medium.ttf
+          weight: 400
+        - asset: assets/fonts/inter/Inter_18pt-SemiBold.ttf
+          weight: 500
+        - asset: assets/fonts/inter/Inter_18pt-Bold.ttf
+          weight: 700
+    - family: ComingSoon
+      fonts:
+        - asset: assets/fonts/comingsoon/ComingSoon-Regular.ttf
+          weight: 400
+    - family: BebasNeue
+      fonts:
+        - asset: assets/fonts/BebasNeue-Regular.ttf
+          weight: 400
+

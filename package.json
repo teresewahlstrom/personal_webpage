@@ -1,0 +1,9 @@
+{
+  "name": "personal-webpage-flutter-deploy-shim",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "deploy": "bash cloudflare-pages-build.sh",
+    "build": "bash cloudflare-pages-build.sh"
+  }
+}

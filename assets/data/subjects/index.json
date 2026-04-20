@@ -1,0 +1,9 @@
+{
+  "defaultSubjectId": "terese",
+  "subjects": [
+    {
+      "id": "terese",
+      "file": "assets/data/subjects/terese.json"
+    }
+  ]
+}
