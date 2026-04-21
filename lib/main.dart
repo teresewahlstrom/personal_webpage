@@ -18,6 +18,7 @@ class T1GridApp extends StatefulWidget {
 
 class _T1GridAppState extends State<T1GridApp> {
   ThemeMode _themeMode = ThemeMode.light;
+  bool _isLandingContentReady = false;
 
   bool get _isDarkMode => _themeMode == ThemeMode.dark;
 
@@ -27,11 +28,21 @@ class _T1GridAppState extends State<T1GridApp> {
     });
   }
 
+  void _setLandingContentReady(bool value) {
+    if (_isLandingContentReady == value) {
+      return;
+    }
+    setState(() {
+      _isLandingContentReady = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "T1 grid",
+      themeAnimationDuration: Duration.zero,
       theme: ThemeData(
         useMaterial3: false,
         scaffoldBackgroundColor: ShellUiConfig.pageBackgroundColor,
@@ -56,10 +67,11 @@ class _T1GridAppState extends State<T1GridApp> {
         showThemeToggle: true,
         isDarkMode: _isDarkMode,
         onToggleTheme: _toggleThemeMode,
+        showFooter: _isLandingContentReady,
         initialChatSkinMode: _isDarkMode
             ? ChatSkinMode.dark
             : ChatSkinMode.light,
-        child: const LandingPage(),
+        child: LandingPage(onContentReadyChanged: _setLandingContentReady),
       ),
     );
   }

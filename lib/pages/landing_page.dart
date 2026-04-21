@@ -11,10 +11,12 @@ import '../widgets/app_modal.dart';
 class LandingPage extends StatefulWidget {
   /// The subject to display (defaults to Terese)
   final SubjectKeywordData? subject;
+  final ValueChanged<bool>? onContentReadyChanged;
 
   const LandingPage({
     super.key,
     this.subject,
+    this.onContentReadyChanged,
   });
 
   @override
@@ -23,6 +25,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   late Future<SubjectKeywordData> _subjectFuture;
+  bool? _lastReportedContentReady;
 
   @override
   void initState() {
@@ -59,6 +62,18 @@ class _LandingPageState extends State<LandingPage> {
     return FutureBuilder<SubjectKeywordData>(
       future: _subjectFuture,
       builder: (BuildContext context, AsyncSnapshot<SubjectKeywordData> snapshot) {
+        final bool isContentReady = snapshot.connectionState == ConnectionState.done;
+        final Size viewport = MediaQuery.sizeOf(context);
+        if (_lastReportedContentReady != isContentReady) {
+          _lastReportedContentReady = isContentReady;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) {
+              return;
+            }
+            widget.onContentReadyChanged?.call(isContentReady);
+          });
+        }
+
         Widget content;
 
         if (snapshot.hasError) {
@@ -66,10 +81,12 @@ class _LandingPageState extends State<LandingPage> {
             child: Text('Failed to load subject data: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData) {
-          content = const Center(child: CircularProgressIndicator());
+          content = SizedBox(
+            height: (viewport.height * 0.72).clamp(320.0, 860.0),
+            child: const Center(child: _LandingLoadingIndicator()),
+          );
         } else {
           final SubjectKeywordData subject = snapshot.data!;
-          final Size viewport = MediaQuery.sizeOf(context);
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
           final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
 
@@ -174,6 +191,56 @@ class _LandingPageState extends State<LandingPage> {
           child: content,
         );
       },
+    );
+  }
+}
+
+class _LandingLoadingIndicator extends StatelessWidget {
+  const _LandingLoadingIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color accent = LandingPagePalette.socialFor(brightness);
+    final Color fill = ShellUiConfig.headerToggleBackgroundFor(brightness);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+      decoration: BoxDecoration(
+        color: fill,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: accent, width: 1),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: accent.withValues(alpha: 0.12),
+            blurRadius: 18,
+            offset: const Offset(0, 7),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(
+            width: 34,
+            height: 34,
+            child: CircularProgressIndicator(
+              strokeWidth: 3.4,
+              valueColor: AlwaysStoppedAnimation<Color>(accent),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Text(
+            'Loading profile...',
+            style: LandingPageStyles.body(context).copyWith(
+              color: accent,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
