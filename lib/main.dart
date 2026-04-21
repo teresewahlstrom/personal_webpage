@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
+import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
 import 'widgets/shell/page_scaffold.dart';
 
@@ -7,8 +9,23 @@ void main() {
   runApp(const T1GridApp());
 }
 
-class T1GridApp extends StatelessWidget {
+class T1GridApp extends StatefulWidget {
   const T1GridApp({super.key});
+
+  @override
+  State<T1GridApp> createState() => _T1GridAppState();
+}
+
+class _T1GridAppState extends State<T1GridApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  bool get _isDarkMode => _themeMode == ThemeMode.dark;
+
+  void _toggleThemeMode() {
+    setState(() {
+      _themeMode = _isDarkMode ? ThemeMode.light : ThemeMode.dark;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +34,32 @@ class T1GridApp extends StatelessWidget {
       title: "T1 grid",
       theme: ThemeData(
         useMaterial3: false,
-        scaffoldBackgroundColor: const Color(0xFFF8F9F7),
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundColor,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.light,
+          seedColor: const Color(0xFF394183),
+        ),
         fontFamily: "Inter18pt",
       ),
-      home: const PageScaffold(
-        child: LandingPage(),
+      darkTheme: ThemeData(
+        useMaterial3: false,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundColorDark,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.dark,
+          seedColor: const Color(0xFF90E8F8),
+        ),
+        fontFamily: "Inter18pt",
+      ),
+      themeMode: _themeMode,
+      home: PageScaffold(
+        showThemeToggle: true,
+        isDarkMode: _isDarkMode,
+        onToggleTheme: _toggleThemeMode,
+        initialChatSkinMode: _isDarkMode
+            ? ChatSkinMode.dark
+            : ChatSkinMode.light,
+        child: const LandingPage(),
       ),
     );
   }

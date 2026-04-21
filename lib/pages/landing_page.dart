@@ -170,7 +170,7 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-          style: LandingPageStyles.body,
+          style: LandingPageStyles.body(context),
           child: content,
         );
       },
@@ -190,9 +190,9 @@ class _HeroStatement extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(_title, style: LandingPageStyles.h2),
+        Text(_title, style: LandingPageStyles.h2(context)),
         const SizedBox(height: 10),
-        Text(_content, style: LandingPageStyles.body),
+        Text(_content, style: LandingPageStyles.body(context)),
       ],
     );
   }
@@ -210,9 +210,9 @@ class _AboutDataDrivenResumeSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(_title, style: LandingPageStyles.h2),
+        Text(_title, style: LandingPageStyles.h2(context)),
         const SizedBox(height: 10),
-        Text(_content, style: LandingPageStyles.body),
+        Text(_content, style: LandingPageStyles.body(context)),
       ],
     );
   }
@@ -229,7 +229,10 @@ class _SocialSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(title, style: LandingPageStyles.h2.copyWith(fontSize: 34)),
+        Text(
+          title,
+          style: LandingPageStyles.h2(context).copyWith(fontSize: 34),
+        ),
         const SizedBox(height: 6),
         for (final _SocialItem entry in entries) ...<Widget>[
           _SocialRow(entry: entry),
@@ -253,9 +256,10 @@ class _SocialRowState extends State<_SocialRow> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-        ? LandingPagePalette.socialHover
-        : LandingPagePalette.social;
+        ? LandingPagePalette.socialHoverFor(brightness)
+        : LandingPagePalette.socialFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -274,7 +278,7 @@ class _SocialRowState extends State<_SocialRow> {
               const SizedBox(width: 8),
               Text(
                 widget.entry.label,
-                style: LandingPageStyles.socialLink.copyWith(
+                style: LandingPageStyles.socialLink(context).copyWith(
                   color: color,
                   decoration: _isHovered
                       ? TextDecoration.underline

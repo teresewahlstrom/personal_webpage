@@ -19,13 +19,16 @@ class PageScaffold extends StatefulWidget {
     required this.child,
     this.overlays = const <Widget>[],
     this.showHeader = true,
+    this.showThemeToggle = true,
+    this.isDarkMode = false,
+    this.onToggleTheme,
     this.showTwinChat = true,
     this.showFooter = true,
     this.footerBrandName = 'T1 grid',
     this.footerPrivacyLabel = 'Privacy & Cookies Note.',
     this.twinBackendUrl = AppRuntimeConfig.twinBackendUrl,
-    this.gridColor = ShellUiConfig.pageBackgroundColor,
-    this.gridLineColor = ShellUiConfig.gridLineColor,
+    this.gridColor,
+    this.gridLineColor,
     this.initialChatSkinMode = ChatSkinMode.light,
   });
 
@@ -37,6 +40,15 @@ class PageScaffold extends StatefulWidget {
 
   /// Enables the built-in header.
   final bool showHeader;
+
+  /// Enables the app theme toggle in the header.
+  final bool showThemeToggle;
+
+  /// Whether the app is currently in dark mode.
+  final bool isDarkMode;
+
+  /// Callback used by the header toggle to switch app theme.
+  final VoidCallback? onToggleTheme;
 
   /// Enables the built-in twin chat dock overlay.
   final bool showTwinChat;
@@ -54,10 +66,10 @@ class PageScaffold extends StatefulWidget {
   final String twinBackendUrl;
 
   /// Background color of the grid.
-  final Color gridColor;
+  final Color? gridColor;
 
   /// Color of the grid lines.
-  final Color gridLineColor;
+  final Color? gridLineColor;
 
   /// Initial skin mode used by the twin chat widget.
   final ChatSkinMode initialChatSkinMode;
@@ -67,7 +79,6 @@ class PageScaffold extends StatefulWidget {
 }
 
 class _PageScaffoldState extends State<PageScaffold> {
-  late ChatSkinMode _chatSkinMode;
   final ScrollController _pageScrollController = ScrollController();
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
@@ -75,15 +86,9 @@ class _PageScaffoldState extends State<PageScaffold> {
     debugLabel: 'page-selectable-region',
   );
 
-  bool get _isChatDarkMode => _chatSkinMode == ChatSkinMode.dark;
-
-  bool get _showChatThemeToggle =>
-      widget.showTwinChat && AppRuntimeConfig.showChatInUi;
-
   @override
   void initState() {
     super.initState();
-    _chatSkinMode = widget.initialChatSkinMode;
   }
 
   @override
@@ -93,26 +98,22 @@ class _PageScaffoldState extends State<PageScaffold> {
     super.dispose();
   }
 
-  void _toggleChatTheme() {
-    setState(() {
-      _chatSkinMode = _isChatDarkMode ? ChatSkinMode.light : ChatSkinMode.dark;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     return GridBackground(
-      backgroundColor: widget.gridColor,
-      gridLineColor: widget.gridLineColor,
+      backgroundColor:
+          widget.gridColor ?? ShellUiConfig.pageBackgroundFor(brightness),
+      gridLineColor: widget.gridLineColor ?? ShellUiConfig.gridLineFor(brightness),
       child: Stack(
         children: <Widget>[
           Column(
             children: <Widget>[
               if (widget.showHeader)
                 PageHeader(
-                  showThemeToggle: _showChatThemeToggle,
-                  isDarkMode: _isChatDarkMode,
-                  onToggleTheme: _showChatThemeToggle ? _toggleChatTheme : null,
+                  showThemeToggle: widget.showThemeToggle,
+                  isDarkMode: widget.isDarkMode,
+                  onToggleTheme: widget.onToggleTheme,
                 ),
               Expanded(
                 child: ArrowKeyScrollWrapper(
@@ -147,7 +148,7 @@ class _PageScaffoldState extends State<PageScaffold> {
           if (widget.showTwinChat && AppRuntimeConfig.showChatInUi)
             TwinChatOverlay(
               twinBackendUrl: widget.twinBackendUrl,
-              chatSkinMode: _chatSkinMode,
+              chatSkinMode: widget.initialChatSkinMode,
             ),
         ],
       ),

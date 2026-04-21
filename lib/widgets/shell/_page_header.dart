@@ -18,16 +18,20 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
         minHeight: ShellUiConfig.headerMinHeight,
       ),
       padding: ShellUiConfig.headerPadding,
-      decoration: const BoxDecoration(
-        color: ShellUiConfig.headerBackgroundColor,
+      decoration: BoxDecoration(
+        color: ShellUiConfig.headerBackgroundFor(brightness),
         border: Border(
-          bottom: BorderSide(color: ShellUiConfig.headerBorderColor, width: 2),
+          bottom: BorderSide(
+            color: ShellUiConfig.headerBorderFor(brightness),
+            width: 2,
+          ),
         ),
       ),
       child: Center(
@@ -75,15 +79,16 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     final Color foregroundColor = _isHovered
-        ? ShellUiConfig.headerToggleHoverColor
-        : ShellUiConfig.headerToggleColor;
+      ? ShellUiConfig.headerToggleHoverFor(brightness)
+      : ShellUiConfig.headerToggleFor(brightness);
     final IconData icon = widget.isDarkMode
         ? Icons.light_mode_outlined
         : Icons.dark_mode_outlined;
     final String tooltip = widget.isDarkMode
-        ? 'Switch chat to light'
-        : 'Switch chat to dark';
+      ? 'Switch app to light'
+      : 'Switch app to dark';
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -97,7 +102,7 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
             width: ShellUiConfig.headerToggleSize,
             height: ShellUiConfig.headerToggleSize,
             decoration: BoxDecoration(
-              color: ShellUiConfig.headerToggleBackgroundColor,
+              color: ShellUiConfig.headerToggleBackgroundFor(brightness),
               shape: BoxShape.circle,
               border: Border.all(color: foregroundColor, width: 1),
               boxShadow: <BoxShadow>[

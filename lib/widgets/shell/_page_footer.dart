@@ -18,16 +18,20 @@ class PageFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int year = DateTime.now().year;
+    final Brightness brightness = Theme.of(context).brightness;
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
         minHeight: ShellUiConfig.footerMinHeight,
       ),
       padding: ShellUiConfig.footerPadding,
-      decoration: const BoxDecoration(
-        color: ShellUiConfig.footerBackgroundColor,
+      decoration: BoxDecoration(
+        color: ShellUiConfig.footerBackgroundFor(brightness),
         border: Border(
-          top: BorderSide(color: ShellUiConfig.footerBorderColor, width: 2),
+          top: BorderSide(
+            color: ShellUiConfig.footerBorderFor(brightness),
+            width: 2,
+          ),
         ),
       ),
       child: Center(
@@ -39,11 +43,11 @@ class PageFooter extends StatelessWidget {
           children: <Widget>[
             Text(
               '©$year $brandName. All rights reserved.',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Inter18pt',
                 fontWeight: FontWeight.w300,
                 fontSize: 14,
-                color: ShellUiConfig.footerTextColor,
+                color: ShellUiConfig.footerTextFor(brightness),
                 decoration: TextDecoration.none,
               ),
               textAlign: TextAlign.center,
@@ -98,9 +102,10 @@ class _FooterLinkButtonState extends State<_FooterLinkButton> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-        ? ShellUiConfig.footerLinkHoverColor
-        : ShellUiConfig.footerLinkColor;
+      ? ShellUiConfig.footerLinkHoverFor(brightness)
+      : ShellUiConfig.footerLinkFor(brightness);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -116,7 +121,7 @@ class _FooterLinkButtonState extends State<_FooterLinkButton> {
             color: color,
             decoration: TextDecoration.underline,
             decorationStyle: TextDecorationStyle.solid,
-            decorationColor: ShellUiConfig.footerLinkColor,
+            decorationColor: ShellUiConfig.footerLinkFor(brightness),
             decorationThickness: 1.0,
           ),
         ),
