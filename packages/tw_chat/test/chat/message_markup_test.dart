@@ -154,6 +154,13 @@ Second paragraph.''');
     expect(firstSpan.style!.fontSize, greaterThan(thirdSpan.style!.fontSize!));
   });
 
+  test('heading markers beyond H3 are parsed as paragraph text', () {
+    final document = ChatMessageMarkup.parse('#### Level four');
+    expect(document.blocks, hasLength(1));
+    expect(document.blocks.single, isA<ChatMarkupParagraphBlock>());
+    expect(document.toPlainText(), '#### Level four');
+  });
+
   test('rich text plain output matches transcript body formatting', () {
     final document = ChatMessageMarkup.parse('''# Strengths
 
@@ -224,8 +231,8 @@ ChatMarkupTheme _testTheme() {
 
 TextStyle _testHeadingStyle(int level) {
   const baseSize = 12.0;
-  const scales = <double>[1.55, 1.36, 1.22, 1.12, 1.06, 1.0];
-  final index = level.clamp(1, 6) - 1;
+  const scales = <double>[1.55, 1.36, 1.22];
+  final index = level.clamp(1, 3) - 1;
   return TextStyle(
     fontSize: baseSize * scales[index],
     fontWeight: FontWeight.w800,

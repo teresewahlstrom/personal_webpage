@@ -2,6 +2,8 @@ import 'message_markup_model.dart';
 import 'message_markup_tokenizer.dart';
 
 class ChatMarkupParser {
+  static const int _maxHeadingLevel = 3;
+
   ChatMarkupParser(String raw)
     : _lines = raw.replaceAll('\r\n', '\n').split('\n'),
       preserveSoftLineBreaks = false;
@@ -264,13 +266,13 @@ class ChatMarkupParser {
       return null;
     }
     final match = RegExp(
-      r'^\s{0,3}(#{1,6})\s+(.+?)\s*$',
+      r'^\s{0,3}(#{1,3})\s+(.+?)\s*$',
     ).firstMatch(line.substring(baseIndent));
     if (match == null) {
       return null;
     }
     return _HeadingMatch(
-      level: match.group(1)!.length,
+      level: match.group(1)!.length.clamp(1, _maxHeadingLevel).toInt(),
       text: match.group(2)!.trim(),
     );
   }

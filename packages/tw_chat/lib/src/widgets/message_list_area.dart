@@ -97,7 +97,9 @@ class ChatMessageListArea extends StatelessWidget {
                   minThumbLength: tokens.scrollbarMinThumbLength,
                   crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
                   mainAxisMargin: 0,
-                  padding: EdgeInsets.only(top: tokens.chatListTopShadowHeight),
+                  padding: EdgeInsets.only(
+                    top: tokens.chatListTopShadowHeight,
+                  ),
                   radius: tokens.scrollbarRadius,
                   thumbVisibility: true,
                   interactive: true,
@@ -111,7 +113,9 @@ class ChatMessageListArea extends StatelessWidget {
                               if (copyText.trim().isEmpty) {
                                 return null;
                               }
-                              Clipboard.setData(ClipboardData(text: copyText));
+                              Clipboard.setData(
+                                ClipboardData(text: copyText),
+                              );
                               return null;
                             },
                           ),

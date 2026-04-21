@@ -34,10 +34,4 @@ Dummy text.
 Dummy text.
 ### H3
 Dummy text.
-#### H4
-Dummy text.
-##### H5
-Dummy text.
-###### H6
-Dummy text.
 ''';

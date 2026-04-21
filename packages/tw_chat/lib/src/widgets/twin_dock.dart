@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 import '../config/config.dart';
 import '../models/message.dart';
@@ -208,6 +209,11 @@ class MinimizedChatLauncher extends StatelessWidget {
   final VoidCallback onExpand;
   final ChatSkinTokens tokens;
 
+  bool _shouldRoutePointerToChatKeyboardTarget(PointerDownEvent event) {
+    return event.kind == PointerDeviceKind.mouse &&
+        event.buttons == kPrimaryMouseButton;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = ChatSkin.data.colors;
@@ -215,7 +221,11 @@ class MinimizedChatLauncher extends StatelessWidget {
       color: colors.transparent,
       child: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) => onSetChatKeyboardScrollTarget(),
+        onPointerDown: (event) {
+          if (_shouldRoutePointerToChatKeyboardTarget(event)) {
+            onSetChatKeyboardScrollTarget();
+          }
+        },
         child: InkWell(
           onTap: onExpand,
           borderRadius: tokens.shellBorderRadiusMinimized,
@@ -261,14 +271,27 @@ class FloatingChatWindow extends StatelessWidget {
   final double maxHeight;
   final ChatSkinTokens tokens;
 
+  bool _shouldRoutePointerToChatKeyboardTarget(PointerDownEvent event) {
+    return event.kind == PointerDeviceKind.mouse &&
+        event.buttons == kPrimaryMouseButton;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = ChatSkin.data.colors;
+    final gridLineColor = (ChatSkin.isDark
+            ? colors.shellDivider
+            : colors.shellOuterBorder)
+        .withValues(alpha: ChatSkin.isDark ? 0.24 : 0.10);
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) => onSetChatKeyboardScrollTarget(),
+        onPointerDown: (event) {
+          if (_shouldRoutePointerToChatKeyboardTarget(event)) {
+            onSetChatKeyboardScrollTarget();
+          }
+        },
         child: Material(
           color: colors.transparent,
           child: Container(
@@ -287,6 +310,16 @@ class FloatingChatWindow extends StatelessWidget {
                 Flexible(
                   child: Stack(
                     children: [
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: ClipRect(
+                            child: _GlobalAnchoredGridPaper(
+                              color: gridLineColor,
+                              unitSize: 4,
+                            ),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: tokens.shellContentPadding,
                         child: ChatSection(
@@ -338,4 +371,41 @@ BoxDecoration _chatShellDecoration({required BorderRadius borderRadius}) {
     ),
     boxShadow: [tokens.shellShadow(colors)],
   );
+}
+
+class _GlobalAnchoredGridPaper extends StatelessWidget {
+  const _GlobalAnchoredGridPaper({
+    required this.color,
+    required this.unitSize,
+  });
+
+  final Color color;
+  final double unitSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final renderBox = context.findRenderObject() as RenderBox?;
+        final globalOrigin =
+            renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+        final xShift = globalOrigin.dx % unitSize;
+        final yShift = globalOrigin.dy % unitSize;
+
+        return Transform.translate(
+          offset: Offset(-xShift, -yShift),
+          child: SizedBox(
+            width: constraints.maxWidth + unitSize,
+            height: constraints.maxHeight + unitSize,
+            child: GridPaper(
+              color: color,
+              interval: unitSize,
+              divisions: 1,
+              subdivisions: 1,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

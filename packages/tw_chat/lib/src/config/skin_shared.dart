@@ -191,6 +191,28 @@ class ChatSkinTokens {
     vertical: 10,
   );
   final double markupUnderlineThickness = 1.75;
+  final double markupBlockBaseSpacingFactor = 0.75;
+  final double markupBlockQuoteExtraSpacing = 1.2;
+  final double markupListTopSpacingAdjustment = -0.3;
+  final double markupNestedListTopSpacingAdjustment = -0.59;
+  final double markupNestedListBottomSpacingAdjustment = -0.55;
+  final double markupBlockQuoteTopSpacingAdjustment = -0.1;
+  final double markupListBottomSpacingAdjustment = 0.9;
+  final List<double> markupHeadingBottomSpacingFactors = const <double>[
+    -0.4,
+    -0.4,
+    -0.5,
+  ];
+  final List<double> markupHeadingTopSpacingFactors = const <double>[
+    1.0,
+    1.0,
+    1.0,
+  ];
+  final double markupListItemBaseSpacingFactor = 0.14;
+  final double markupTopLevelListItemSpacingAdjustment = 0.28;
+  final double markupListMarkerGapFactor = 0.3333333333;
+  final double markupTopLevelListMarkerSlotFactor = 2.0;
+  final double markupNestedListMarkerSlotFactor = 1.75;
 
   final double markupTruncationMaxFadeHeight = 40.0;
   final double markupTruncationOverlayMidAlphaUser = 0.28;
@@ -233,6 +255,19 @@ class ChatSkinTokens {
   final Duration typingIndicatorAnimationDuration = const Duration(
     milliseconds: 1400,
   );
+
+  double markupHeadingBottomSpacingFactorForLevel(int level) {
+    return _markupFactorByLevel(markupHeadingBottomSpacingFactors, level);
+  }
+
+  double markupHeadingTopSpacingFactorForLevel(int level) {
+    return _markupFactorByLevel(markupHeadingTopSpacingFactors, level);
+  }
+
+  double _markupFactorByLevel(List<double> factors, int level) {
+    final index = level.clamp(1, factors.length).toInt() - 1;
+    return factors[index];
+  }
 
   LinearGradient shellTopShadowGradient(ChatSkinColors colors) {
     return LinearGradient(
@@ -370,18 +405,14 @@ class ChatSkinTextStyles {
     int level,
     ChatSkinColors colors,
   ) {
-    const scales = <double>[1.55, 1.36, 1.22, 1.12, 1.06, 1.0];
+    const scales = <double>[1.55, 1.36, 1.22];
     const weights = <FontWeight>[
       FontWeight.w600,
       FontWeight.w700,
-      FontWeight.w700,
-      FontWeight.w700,
-      FontWeight.w700,
-      FontWeight.w700,
-      FontWeight.w700,
+      FontWeight.w900,
     ];
 
-    final clampedLevel = level.clamp(1, 6);
+    final clampedLevel = level.clamp(1, 3);
     final index = clampedLevel - 1;
     final strongStyle = markdownStrongStyle(baseStyle, colors);
     final fontSize = baseStyle.fontSize == null
@@ -391,7 +422,7 @@ class ChatSkinTextStyles {
     return strongStyle.copyWith(
       fontSize: fontSize,
       fontWeight: weights[index],
-      height: clampedLevel <= 2 ? 1.2 : 1.3,
+      height: 1.2,
     );
   }
 

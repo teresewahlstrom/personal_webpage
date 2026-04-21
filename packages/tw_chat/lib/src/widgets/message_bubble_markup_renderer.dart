@@ -335,7 +335,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
               height: _listItemSpacing(
                 theme.baseStyle,
                 listDepth: listDepth,
-                previousItemBlocks: block.items[entry.$1 - 1].blocks,
               ),
             ),
           );
@@ -360,7 +359,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
               textBaseline: canUseBaseline ? TextBaseline.alphabetic : null,
               children: [
                 SizedBox(
-                  width: _listMarkerSlotWidth(listDepth),
+                  width: _listMarkerSlotWidth(theme.baseStyle, listDepth),
                   child: Align(
                     alignment: block.ordered
                         ? const Alignment(0.78, 0.0)
@@ -373,7 +372,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: _listMarkerGap()),
+                SizedBox(width: _listMarkerGap(theme.baseStyle)),
                 Expanded(
                   child: canUseBaseline
                       ? _buildRenderedMarkupBlock(
@@ -399,11 +398,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
             ),
           ),
         );
-      }
-
-      if (listDepth <= 0) {
-        final fontSize = theme.baseStyle.fontSize ?? 12.0;
-        children.add(SizedBox(height: fontSize * 0.9));
       }
 
       return Column(
@@ -477,63 +471,95 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     required bool inListItem,
   }) {
     final fontSize = theme.baseStyle.fontSize ?? 12.0;
-    const blockQuoteExtraSpacing = 1.2;
-    const headingScales = <double>[1.55, 1.36, 1.22, 1.12, 1.06, 1.0];
-    double spacing;
+    final tokens = ChatSkin.data.tokens;
+
+    double spacing = fontSize * tokens.markupBlockBaseSpacingFactor;
     if (inListItem && nextBlock is ChatMarkupListBlock) {
-      spacing = fontSize * 0.16;
+      spacing += fontSize * tokens.markupNestedListTopSpacingAdjustment;
     } else if (inListItem && previousBlock is ChatMarkupListBlock) {
-      spacing = fontSize * 0.2;
-    } else if (previousBlock is ChatMarkupHeadingBlock) {
-      final index = (previousBlock.level.clamp(1, 6)) - 1;
-      final headingFontSize = fontSize * headingScales[index];
-      spacing = headingFontSize * 0.2;
-    } else if (nextBlock is ChatMarkupListBlock) {
-      spacing = fontSize * 0.45;
+      spacing += fontSize * tokens.markupNestedListBottomSpacingAdjustment;
     } else if (nextBlock is ChatMarkupBlockQuoteBlock) {
-      spacing = fontSize * 0.65;
-    } else if (nextBlock is ChatMarkupHeadingBlock) {
-      final index = (nextBlock.level.clamp(1, 6)) - 1;
-      final headingFontSize = fontSize * headingScales[index];
-      spacing = headingFontSize * 1.1;
-    } else {
-      spacing = fontSize * 0.75;
+      spacing += fontSize * tokens.markupBlockQuoteTopSpacingAdjustment;
+    }
+
+    if (previousBlock is ChatMarkupHeadingBlock) {
+      final headingBottomSpacingFactor = tokens
+          .markupHeadingBottomSpacingFactorForLevel(previousBlock.level);
+      final headingFontSize = _resolveHeadingFontSize(
+        theme: theme,
+        fallbackFontSize: fontSize,
+        level: previousBlock.level,
+      );
+      spacing += headingFontSize * headingBottomSpacingFactor;
+    }
+    if (nextBlock is ChatMarkupHeadingBlock) {
+      final headingTopSpacingFactor = tokens
+          .markupHeadingTopSpacingFactorForLevel(nextBlock.level);
+      final headingFontSize = _resolveHeadingFontSize(
+        theme: theme,
+        fallbackFontSize: fontSize,
+        level: nextBlock.level,
+      );
+      spacing += headingFontSize * headingTopSpacingFactor;
     }
 
     if (previousBlock is ChatMarkupBlockQuoteBlock) {
-      spacing += fontSize * blockQuoteExtraSpacing;
+      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
     }
     if (nextBlock is ChatMarkupBlockQuoteBlock) {
-      spacing += fontSize * blockQuoteExtraSpacing;
+      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
     }
-    return spacing;
+    if (!inListItem &&
+        nextBlock is ChatMarkupListBlock &&
+        previousBlock is! ChatMarkupHeadingBlock) {
+      spacing += fontSize * tokens.markupListTopSpacingAdjustment;
+    }
+    if (!inListItem && previousBlock is ChatMarkupListBlock) {
+      spacing += fontSize * tokens.markupListBottomSpacingAdjustment;
+    }
+    return spacing < 0 ? 0 : spacing;
   }
 
   double _listItemSpacing(
     TextStyle style, {
     required int listDepth,
-    required List<ChatMarkupBlock> previousItemBlocks,
   }) {
     final fontSize = style.fontSize ?? 12.0;
+    final tokens = ChatSkin.data.tokens;
+
+    var spacing = fontSize * tokens.markupListItemBaseSpacingFactor;
     if (listDepth <= 0) {
-      return fontSize * 0.42;
+      spacing += fontSize * tokens.markupTopLevelListItemSpacingAdjustment;
     }
-    return fontSize * 0.14;
+
+    return spacing < 0 ? 0 : spacing;
   }
 
   double _listIndent() {
     return 0.0;
   }
 
-  double _listMarkerGap() {
-    return 4.0;
+  double _listMarkerGap(TextStyle style) {
+    final fontSize = style.fontSize ?? 12.0;
+    return fontSize * ChatSkin.data.tokens.markupListMarkerGapFactor;
   }
 
-  double _listMarkerSlotWidth(int depth) {
-    if (depth <= 0) {
-      return 24.0;
-    }
-    return 21.0;
+  double _listMarkerSlotWidth(TextStyle style, int depth) {
+    final fontSize = style.fontSize ?? 12.0;
+    final tokens = ChatSkin.data.tokens;
+    final factor = depth <= 0
+        ? tokens.markupTopLevelListMarkerSlotFactor
+        : tokens.markupNestedListMarkerSlotFactor;
+    return fontSize * factor;
+  }
+
+  double _resolveHeadingFontSize({
+    required ChatMarkupTheme theme,
+    required double fallbackFontSize,
+    required int level,
+  }) {
+    final resolvedFontSize = theme.headingStyleResolver(level).fontSize;
+    return resolvedFontSize ?? fallbackFontSize;
   }
 }
 

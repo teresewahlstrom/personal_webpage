@@ -157,7 +157,7 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                             const SizedBox(height: 24),
                             _SocialSection(
-                              title: "Contact",
+                              title: "Contact, Connect, Follow",
                               entries: <_SocialItem>[
                                 _SocialItem(
                                   icon: const Icon(Icons.email_outlined),
@@ -180,12 +180,9 @@ class _LandingPageState extends State<LandingPage> {
                                     "https://cal.com/teresew/intro",
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            _SocialSection(
-                              title: "Follow",
-                              entries: <_SocialItem>[
+
+
+
                                 _SocialItem(
                                   icon: const Icon(
                                     Icons.notifications_active_outlined,
@@ -200,6 +197,10 @@ class _LandingPageState extends State<LandingPage> {
                                     "https://www.linkedin.com/in/teresewahlstrom",
                                   ),
                                 ),
+
+
+
+
                               ],
                             ),
                             const SizedBox(height: 40),

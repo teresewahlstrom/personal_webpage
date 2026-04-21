@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
@@ -37,7 +38,19 @@ class ChatWebCopyInterceptor {
     }
 
     final copyEvent = event as web.ClipboardEvent;
-    copyEvent.preventDefault();
-    copyEvent.clipboardData?.setData('text/plain', copyText);
+    final clipboardData = copyEvent.clipboardData;
+    if (clipboardData != null) {
+      copyEvent.preventDefault();
+      clipboardData.setData('text/plain', copyText);
+      return;
+    }
+
+    // Some mobile browsers fire a copy event without clipboardData.
+    // Try asynchronous clipboard write and allow default copy to proceed.
+    try {
+      unawaited(web.window.navigator.clipboard.writeText(copyText).toDart);
+    } catch (_) {
+      // Keep the default browser copy behavior as a fallback.
+    }
   }
 }
