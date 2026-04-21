@@ -4,6 +4,7 @@ import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import '../../config/app_ui_config.dart';
 import '../arrow_key_scroll_wrapper.dart';
 import '_chat_overlay.dart';
+import 'floating_control_inset.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
 import '_page_header.dart';
@@ -80,8 +81,6 @@ class PageScaffold extends StatefulWidget {
 
 class _PageScaffoldState extends State<PageScaffold>
     with SingleTickerProviderStateMixin {
-  static const double _floatingThemeInset = 25;
-
   final ScrollController _pageScrollController = ScrollController();
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
@@ -98,20 +97,22 @@ class _PageScaffoldState extends State<PageScaffold>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     )..value = 1;
-    _themeFadeOpacity = TweenSequence<double>(
-      <TweenSequenceItem<double>>[
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1, end: 0.88)
-              .chain(CurveTween(curve: Curves.easeOutCubic)),
-          weight: 45,
-        ),
-        TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.88, end: 1)
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 55,
-        ),
-      ],
-    ).animate(_themeFadeController);
+    _themeFadeOpacity = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(
+          begin: 1,
+          end: 0.88,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 45,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(
+          begin: 0.88,
+          end: 1,
+        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
+        weight: 55,
+      ),
+    ]).animate(_themeFadeController);
   }
 
   @override
@@ -134,10 +135,14 @@ class _PageScaffoldState extends State<PageScaffold>
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
+    final double floatingInset = FloatingControlInset.forViewportWidth(
+      mediaQuery.size.width,
+    );
     return GridBackground(
       backgroundColor:
           widget.gridColor ?? ShellUiConfig.pageBackgroundFor(brightness),
-      gridLineColor: widget.gridLineColor ?? ShellUiConfig.gridLineFor(brightness),
+      gridLineColor:
+          widget.gridLineColor ?? ShellUiConfig.gridLineFor(brightness),
       child: FadeTransition(
         opacity: _themeFadeOpacity,
         child: Stack(
@@ -182,8 +187,8 @@ class _PageScaffoldState extends State<PageScaffold>
             ...widget.overlays,
             if (widget.showThemeToggle && widget.onToggleTheme != null)
               Positioned(
-                right: mediaQuery.viewPadding.right + _floatingThemeInset,
-                top: mediaQuery.viewPadding.top + _floatingThemeInset,
+                right: mediaQuery.viewPadding.right + floatingInset,
+                top: mediaQuery.viewPadding.top + floatingInset,
                 child: _FloatingThemeToggle(
                   isDarkMode: widget.isDarkMode,
                   onTap: widget.onToggleTheme!,
@@ -202,10 +207,7 @@ class _PageScaffoldState extends State<PageScaffold>
 }
 
 class _FloatingThemeToggle extends StatefulWidget {
-  const _FloatingThemeToggle({
-    required this.isDarkMode,
-    required this.onTap,
-  });
+  const _FloatingThemeToggle({required this.isDarkMode, required this.onTap});
 
   final bool isDarkMode;
   final VoidCallback onTap;
@@ -224,8 +226,8 @@ class _FloatingThemeToggleState extends State<_FloatingThemeToggle> {
         ? ShellUiConfig.headerToggleHoverFor(brightness)
         : ShellUiConfig.headerToggleFor(brightness);
     final IconData icon = widget.isDarkMode
-      ? Icons.light_mode
-      : Icons.dark_mode;
+        ? Icons.light_mode
+        : Icons.dark_mode;
     final String tooltip = widget.isDarkMode
         ? 'Switch app to light'
         : 'Switch app to dark';

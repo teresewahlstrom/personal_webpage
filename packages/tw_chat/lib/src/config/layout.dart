@@ -94,8 +94,19 @@ class ChatLayout {
       compactThreshold: widthThreshold,
       transitionBand: compactWidthTransitionBand,
     );
+    final compactMargin = _compactDockHorizontalMargin(safeWidth);
     final baseMargin = _baseDockHorizontalMargin(safeWidth);
-    return _lerp(0.0, baseMargin, transitionProgress);
+    return _lerp(compactMargin, baseMargin, transitionProgress);
+  }
+
+  static double _compactDockHorizontalMargin(double viewportWidth) {
+    return ChatMath.lerpClamped(
+      viewportWidth,
+      minReferenceWidth,
+      compactWidthFillViewportThresholdLandscape,
+      6,
+      10,
+    );
   }
 
   static double _baseDockHorizontalMargin(double viewportWidth) {

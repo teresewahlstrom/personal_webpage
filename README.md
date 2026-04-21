@@ -46,7 +46,7 @@ In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vs
 
 The Cloudflare Pages build script uses:
 
-- `flutter build web --release --pwa-strategy=none` to disable Flutter PWA worker generation.
+- `flutter build web --release --pwa-strategy=none --no-tree-shake-icons` to disable Flutter PWA worker generation and keep full Material icon coverage.
 - Revalidation cache headers for entry files (`max-age=0, must-revalidate`).
 - Long-lived immutable cache for static assets (`/assets/*`, `/canvaskit/*`).
 

@@ -30,12 +30,12 @@ final class ShellUiConfig {
   static const double gridSpacing = 25;
   static const double gridYStart = 15;
 
-  static const double headerMinHeight = 86;
+  static const double headerMinHeight = 56;
   static const double headerMaxWidth = 980;
-  static const double headerLogoWidth = 88;
-  static const double headerLogoHeight = 72;
+  static const double headerLogoWidth = 44;
+  static const double headerLogoHeight = 36;
   static const double headerToggleSize = 42;
-  static const EdgeInsets headerPadding = EdgeInsets.fromLTRB(16, 10, 16, 8);
+  static const EdgeInsets headerPadding = EdgeInsets.fromLTRB(5.5, 3.3, 5.5, 2.7);
 
   static const double footerMinHeight = 50;
   static const EdgeInsets footerPadding = EdgeInsets.symmetric(
@@ -70,11 +70,15 @@ final class ShellUiConfig {
   }
 
   static Color headerBorderFor(Brightness brightness) {
-    return brightness == Brightness.dark ? headerBorderColorDark : headerBorderColor;
+    return brightness == Brightness.dark
+        ? headerBorderColorDark
+        : headerBorderColor;
   }
 
   static Color headerToggleFor(Brightness brightness) {
-    return brightness == Brightness.dark ? headerToggleColorDark : headerToggleColor;
+    return brightness == Brightness.dark
+        ? headerToggleColorDark
+        : headerToggleColor;
   }
 
   static Color headerToggleHoverFor(Brightness brightness) {
@@ -96,15 +100,21 @@ final class ShellUiConfig {
   }
 
   static Color footerBorderFor(Brightness brightness) {
-    return brightness == Brightness.dark ? footerBorderColorDark : footerBorderColor;
+    return brightness == Brightness.dark
+        ? footerBorderColorDark
+        : footerBorderColor;
   }
 
   static Color footerTextFor(Brightness brightness) {
-    return brightness == Brightness.dark ? footerTextColorDark : footerTextColor;
+    return brightness == Brightness.dark
+        ? footerTextColorDark
+        : footerTextColor;
   }
 
   static Color footerLinkFor(Brightness brightness) {
-    return brightness == Brightness.dark ? footerLinkColorDark : footerLinkColor;
+    return brightness == Brightness.dark
+        ? footerLinkColorDark
+        : footerLinkColor;
   }
 
   static Color footerLinkHoverFor(Brightness brightness) {
@@ -116,14 +126,65 @@ final class ShellUiConfig {
 
 final class ModalUiConfig {
   static const Color barrierColor = Color(0xBF000000);
-  static const Color backgroundColor = Color(0xFF1A1A1A);
-  static const EdgeInsets insetPadding = EdgeInsets.all(16);
+  static const Color backgroundColor = Color(0xFFF8F9F7);
+  static const Color backgroundColorDark = Color(0xFF101B34);
+  static const Color headerBorderColor = Color(0x1F394183);
+  static const Color headerBorderColorDark = Color(0x3390E8F8);
+  static const EdgeInsets insetPadding = EdgeInsets.all(14);
   static const EdgeInsets contentPadding = EdgeInsets.fromLTRB(24, 20, 24, 20);
+  static const EdgeInsets contentPaddingCompact = EdgeInsets.fromLTRB(
+    14,
+    12,
+    14,
+    12,
+  );
   static const double maxWidth = 650;
   static const double maxHeightFactor = 0.9;
+  static const double maxHeightFactorCompact = 0.96;
+  static const double headerHeight = 52;
 
-  static const Color closeIconColor = Color(0xFFCCCCCC);
-  static const Color closeIconHoverColor = Colors.white;
+  static const Color closeIconColor = Color(0xFF394183);
+  static const Color closeIconColorDark = Color(0xFF90E8F8);
+  static const Color closeIconHoverColor = Color(0xFF843F02);
+  static const Color closeIconHoverColorDark = Color(0xFF4EF0FF);
+
+  static Color backgroundFor(Brightness brightness) {
+    return brightness == Brightness.dark
+        ? backgroundColorDark
+        : backgroundColor;
+  }
+
+  static Color headerBorderFor(Brightness brightness) {
+    return brightness == Brightness.dark
+        ? headerBorderColorDark
+        : headerBorderColor;
+  }
+
+  static Color closeIconFor(Brightness brightness) {
+    return brightness == Brightness.dark ? closeIconColorDark : closeIconColor;
+  }
+
+  static Color closeIconHoverFor(Brightness brightness) {
+    return brightness == Brightness.dark
+        ? closeIconHoverColorDark
+        : closeIconHoverColor;
+  }
+
+  static bool isCompact(Size viewportSize) {
+    return viewportSize.width <= 720 || viewportSize.height <= 760;
+  }
+
+  static EdgeInsets insetPaddingFor(Size viewportSize) {
+    return isCompact(viewportSize) ? const EdgeInsets.all(8) : insetPadding;
+  }
+
+  static EdgeInsets contentPaddingFor(Size viewportSize) {
+    return isCompact(viewportSize) ? contentPaddingCompact : contentPadding;
+  }
+
+  static double maxHeightFactorFor(Size viewportSize) {
+    return isCompact(viewportSize) ? maxHeightFactorCompact : maxHeightFactor;
+  }
 }
 
 final class LandingPagePalette {

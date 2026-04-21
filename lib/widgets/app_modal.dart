@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import '../config/app_ui_config.dart';
 import 'arrow_key_scroll_wrapper.dart';
 
-typedef AppModalChildBuilder = Widget Function(
-    BuildContext context, VoidCallback close);
+typedef AppModalChildBuilder =
+    Widget Function(BuildContext context, VoidCallback close);
 
 Future<void> showAppModal({
   required BuildContext context,
   required AppModalChildBuilder builder,
+  String? headerTitle,
 }) {
+  final Brightness brightness = Theme.of(context).brightness;
+  final Size viewportSize = MediaQuery.of(context).size;
   return showDialog<void>(
     context: context,
     barrierColor: ModalUiConfig.barrierColor,
@@ -17,11 +20,15 @@ Future<void> showAppModal({
       void close() => Navigator.of(dialogContext).pop();
 
       return _AppModalFrame(
-        backgroundColor: ModalUiConfig.backgroundColor,
-        insetPadding: ModalUiConfig.insetPadding,
-        contentPadding: ModalUiConfig.contentPadding,
+        backgroundColor: ModalUiConfig.backgroundFor(brightness),
+        headerBorderColor: ModalUiConfig.headerBorderFor(brightness),
+        closeIconColor: ModalUiConfig.closeIconFor(brightness),
+        closeIconHoverColor: ModalUiConfig.closeIconHoverFor(brightness),
+        insetPadding: ModalUiConfig.insetPaddingFor(viewportSize),
+        contentPadding: ModalUiConfig.contentPaddingFor(viewportSize),
         maxWidth: ModalUiConfig.maxWidth,
-        maxHeightFactor: ModalUiConfig.maxHeightFactor,
+        maxHeightFactor: ModalUiConfig.maxHeightFactorFor(viewportSize),
+        headerTitle: headerTitle,
         close: close,
         builder: builder,
       );
@@ -32,19 +39,27 @@ Future<void> showAppModal({
 class _AppModalFrame extends StatefulWidget {
   const _AppModalFrame({
     required this.backgroundColor,
+    required this.headerBorderColor,
+    required this.closeIconColor,
+    required this.closeIconHoverColor,
     required this.insetPadding,
     required this.contentPadding,
     required this.maxWidth,
     required this.maxHeightFactor,
+    this.headerTitle,
     required this.close,
     required this.builder,
   });
 
   final Color backgroundColor;
+  final Color headerBorderColor;
+  final Color closeIconColor;
+  final Color closeIconHoverColor;
   final EdgeInsets insetPadding;
   final EdgeInsets contentPadding;
   final double maxWidth;
   final double maxHeightFactor;
+  final String? headerTitle;
   final VoidCallback close;
   final AppModalChildBuilder builder;
 
@@ -63,6 +78,7 @@ class _AppModalFrameState extends State<_AppModalFrame> {
 
   @override
   Widget build(BuildContext context) {
+    final Size viewportSize = MediaQuery.of(context).size;
     return Dialog(
       backgroundColor: widget.backgroundColor,
       insetPadding: widget.insetPadding,
@@ -70,27 +86,57 @@ class _AppModalFrameState extends State<_AppModalFrame> {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: widget.maxWidth,
-          maxHeight:
-              MediaQuery.of(context).size.height * widget.maxHeightFactor,
+          maxHeight: viewportSize.height * widget.maxHeightFactor,
         ),
-        child: ArrowKeyScrollWrapper(
-          controller: _modalScrollController,
-          child: PrimaryScrollController(
-            controller: _modalScrollController,
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: widget.contentPadding,
-                  child: widget.builder(context, widget.close),
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: ModalUiConfig.headerHeight,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: widget.headerBorderColor, width: 1),
                 ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: _ModalCloseButton(onTap: widget.close),
-                ),
-              ],
+              ),
+              padding: const EdgeInsets.only(left: 14, right: 8),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: widget.headerTitle == null
+                        ? const SizedBox.shrink()
+                        : Text(
+                            widget.headerTitle!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'ComingSoon',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24,
+                              color: widget.closeIconColor,
+                              height: 1,
+                            ),
+                          ),
+                  ),
+                  _ModalCloseButton(
+                    onTap: widget.close,
+                    color: widget.closeIconColor,
+                    hoverColor: widget.closeIconHoverColor,
+                  ),
+                ],
+              ),
             ),
-          ),
+            Expanded(
+              child: ArrowKeyScrollWrapper(
+                controller: _modalScrollController,
+                child: PrimaryScrollController(
+                  controller: _modalScrollController,
+                  child: Padding(
+                    padding: widget.contentPadding,
+                    child: widget.builder(context, widget.close),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -98,9 +144,15 @@ class _AppModalFrameState extends State<_AppModalFrame> {
 }
 
 class _ModalCloseButton extends StatefulWidget {
-  const _ModalCloseButton({required this.onTap});
+  const _ModalCloseButton({
+    required this.onTap,
+    required this.color,
+    required this.hoverColor,
+  });
 
   final VoidCallback onTap;
+  final Color color;
+  final Color hoverColor;
 
   @override
   State<_ModalCloseButton> createState() => _ModalCloseButtonState();
@@ -121,9 +173,7 @@ class _ModalCloseButtonState extends State<_ModalCloseButton> {
           child: Text(
             "×",
             style: TextStyle(
-              color: _isHovered
-                  ? ModalUiConfig.closeIconHoverColor
-                  : ModalUiConfig.closeIconColor,
+              color: _isHovered ? widget.hoverColor : widget.color,
               fontSize: 28,
               height: 1,
             ),

@@ -13,11 +13,7 @@ class LandingPage extends StatefulWidget {
   final SubjectKeywordData? subject;
   final ValueChanged<bool>? onContentReadyChanged;
 
-  const LandingPage({
-    super.key,
-    this.subject,
-    this.onContentReadyChanged,
-  });
+  const LandingPage({super.key, this.subject, this.onContentReadyChanged});
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -51,6 +47,7 @@ class _LandingPageState extends State<LandingPage> {
   void _openNewsletterModal() {
     showAppModal(
       context: context,
+      headerTitle: 'Subscribe',
       builder: (BuildContext context, VoidCallback close) {
         return const NewsletterModalContent();
       },
@@ -62,7 +59,8 @@ class _LandingPageState extends State<LandingPage> {
     return FutureBuilder<SubjectKeywordData>(
       future: _subjectFuture,
       builder: (BuildContext context, AsyncSnapshot<SubjectKeywordData> snapshot) {
-        final bool isContentReady = snapshot.connectionState == ConnectionState.done;
+        final bool isContentReady =
+            snapshot.connectionState == ConnectionState.done;
         final Size viewport = MediaQuery.sizeOf(context);
         if (_lastReportedContentReady != isContentReady) {
           _lastReportedContentReady = isContentReady;
@@ -87,6 +85,13 @@ class _LandingPageState extends State<LandingPage> {
           );
         } else {
           final SubjectKeywordData subject = snapshot.data!;
+          final Brightness brightness = Theme.of(context).brightness;
+          final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
+            brightness,
+          );
+          final Color keywordGraphicBorder = brightness == Brightness.dark
+              ? const Color(0x6690E8F8)
+              : const Color(0x66394183);
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
           final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
 
@@ -113,13 +118,20 @@ class _LandingPageState extends State<LandingPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 980),
+                  constraints: const BoxConstraints(maxWidth: 700),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: 11),
                     child: WordCloud(
                       keywords: subject.keywords,
                       heightRatio: cloudHeightRatio,
-                      maxContentWidth: 980,
+                      maxContentWidth: 700,
+                      frameStyle: WordCloudFrameStyle(
+                        backgroundColor: keywordGraphicFill,
+                        borderColor: keywordGraphicBorder,
+                        borderWidth: 1.4,
+                        borderRadius: BorderRadius.circular(4),
+                        padding: const EdgeInsets.all(5),
+                      ),
                     ),
                   ),
                 ),
@@ -135,30 +147,26 @@ class _LandingPageState extends State<LandingPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         const _AboutDataDrivenResumeSection(),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 40),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
                           entries: <_SocialItem>[
                             _SocialItem(
                               icon: const Icon(Icons.email_outlined),
                               label: "terese@t1grid.com",
-                              onTap: () => _launchUrl(
-                                "mailto:terese@t1grid.com",
-                              ),
+                              onTap: () =>
+                                  _launchUrl("mailto:terese@t1grid.com"),
                             ),
                             _SocialItem(
                               icon: const Icon(Icons.phone_outlined),
                               label: "+46 709 800 525",
-                              onTap: () => _launchUrl(
-                                "tel:+46709800525",
-                              ),
+                              onTap: () => _launchUrl("tel:+46709800525"),
                             ),
                             _SocialItem(
                               icon: const Icon(Icons.calendar_month_outlined),
                               label: "Video meeting",
-                              onTap: () => _launchUrl(
-                                "https://cal.com/teresew/intro",
-                              ),
+                              onTap: () =>
+                                  _launchUrl("https://cal.com/teresew/intro"),
                             ),
                             _SocialItem(
                               icon: const Icon(
@@ -250,7 +258,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "About me";
   static const String _content =
-      "Turns complexity into clarity. A rare blend of systems thinker, cross-domain integrator, and practical catalyst";
+      "Turns complexity into clarity. A rare blend of systems thinker, cross-domain integrator, and a driver of change.";
 
   @override
   Widget build(BuildContext context) {

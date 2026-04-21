@@ -1,19 +1,41 @@
 # SOLVED
 SOLVED
+* update color of keywords graph
+* Added to the sized box above contact, connect, follow 
+* In the header of page_scaffold.dart: make logo smaller by half. 
+* landing page update
+    * i want a background fill and outline for the keyword graphic. 
+* in the newsletter modal, Newsletter content should be centered but it is not. Please attempt to make it centered
+* Fix the modal scaffold. It should follow the light/dark theme. And it should take up even more of the area of small devices. And it should not clip the header as it currently does. Modal appbar should not hide.
 
 
 PERHAPS SOLVED (will verify after deployment)
+* Icons still not showing (dark/light button and chat circle button) - dig deep - search the web. It does display in this "https://personal-webpage-34s.pages.dev/", but not on this "www.t1grid.com". Deployment is successful. Not even on a device that I never opened www.t1grid.com on earlier does it work.
+* Positioning of chat icon button weird. On mobile it is far to the right. I do agree that on a window/device that are very small, that the chat button and the dark/light button should be closer to their corners, but not at the very edges
+* Make a slight distance betw window edge and chat edge on scenarios were the chat fills the entire view (currently it has a distance to the top, but I also want that distance to the right and left)
 
 
 ---
 # SOON SOLVED
 
 
+
 ---
 # PROPOSED NEXT
-* landing page update
-    * Title + bgd + outline for the keyword graphic. 
 
+
+Make the header collapse similar to Facebook 
+
+
+Write "a data-driven resume creator"
+ make the title into correct font and size and position.
+
+Make projects boxes:
+* Data-driven twin
+
+
+* Formatted copy from my phone still does not work
+* At the bottom of a truncated message, I want a gradient shadow with the same color like that of the chat grid. But always with a transparency
 
 
 
@@ -81,3 +103,21 @@ Göra ett shared paket:
     - gemensam färg-config mellan tw_chat och main app?
     - annat som kan ingå i detta?
     - Make the selection/deselction logic centralised into a wrapper? Create internal package tw_flutter_basics that can be shared with other internal packages as well as Main app. Move the scrollable behavior in there as well?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

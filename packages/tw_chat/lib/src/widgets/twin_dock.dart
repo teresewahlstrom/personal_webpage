@@ -48,6 +48,7 @@ class TwinChatDock extends StatefulWidget {
     required this.onSetChatKeyboardScrollTarget,
     required this.onSetPageKeyboardScrollTarget,
     this.minimizedBottomOffset = 25,
+    this.minimizedRightInset = 0,
     this.skinMode = ChatSkinMode.light,
     this.launcherStyle = const ChatLauncherStyle(),
   });
@@ -59,6 +60,7 @@ class TwinChatDock extends StatefulWidget {
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onSetPageKeyboardScrollTarget;
   final double minimizedBottomOffset;
+  final double minimizedRightInset;
   final ChatSkinMode skinMode;
   final ChatLauncherStyle launcherStyle;
 
@@ -102,9 +104,17 @@ class _TwinChatDockState extends State<TwinChatDock> {
       viewPadding: mediaQuery.viewPadding,
     );
 
+    final baseRightInset = mediaQuery.viewPadding.right + chatMargin;
+    final minimizedRightInset =
+        mediaQuery.viewPadding.right +
+        (chatMargin > widget.minimizedRightInset
+            ? chatMargin
+            : widget.minimizedRightInset);
+
     return Positioned(
-      right: mediaQuery.viewPadding.right + chatMargin,
-      bottom: mediaQuery.viewInsets.bottom +
+      right: _isExpanded ? baseRightInset : minimizedRightInset,
+      bottom:
+          mediaQuery.viewInsets.bottom +
           (_isExpanded ? 0 : widget.minimizedBottomOffset),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -294,7 +304,9 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: foregroundColor.withValues(alpha: launcherStyle.shadowAlpha),
+                      color: foregroundColor.withValues(
+                        alpha: launcherStyle.shadowAlpha,
+                      ),
                       blurRadius: _isHovered
                           ? launcherStyle.hoverShadowBlurRadius
                           : launcherStyle.idleShadowBlurRadius,
@@ -350,10 +362,9 @@ class FloatingChatWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = ChatSkin.data.colors;
-    final gridLineColor = (ChatSkin.isDark
-            ? colors.shellDivider
-            : colors.shellOuterBorder)
-        .withValues(alpha: ChatSkin.isDark ? 0.24 : 0.10);
+    final gridLineColor =
+        (ChatSkin.isDark ? colors.shellDivider : colors.shellOuterBorder)
+            .withValues(alpha: ChatSkin.isDark ? 0.24 : 0.10);
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Listener(
@@ -445,10 +456,7 @@ BoxDecoration _chatShellDecoration({required BorderRadius borderRadius}) {
 }
 
 class _GlobalAnchoredGridPaper extends StatelessWidget {
-  const _GlobalAnchoredGridPaper({
-    required this.color,
-    required this.unitSize,
-  });
+  const _GlobalAnchoredGridPaper({required this.color, required this.unitSize});
 
   final Color color;
   final double unitSize;

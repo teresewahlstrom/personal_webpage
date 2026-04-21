@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 
 class PrivacyCookiesContent extends StatelessWidget {
-  const PrivacyCookiesContent({
-    super.key,
-    required this.onLaunchUrl,
-  });
+  const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
 
   final Future<void> Function(String url) onLaunchUrl;
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle h3Style = _ModalStyles.h3(context);
+    final TextStyle bodyStyle = _ModalStyles.body(context);
+    final TextStyle linkStyle = _ModalStyles.link(context);
     return SingleChildScrollView(
       primary: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Privacy & Cookies", style: _ModalStyles.h2),
-          const SizedBox(height: 14),
-          Text(
-            "Controller: Terese Wahlstrom (EU resident)",
-            style: _ModalStyles.body,
-          ),
+          Text("Controller: Terese Wahlstrom (EU resident)", style: bodyStyle),
           const SizedBox(height: 16),
-          Text("Cookies", style: _ModalStyles.h3),
+          Text("Cookies", style: h3Style),
           const SizedBox(height: 8),
-          Text("We only set essential cookies via:", style: _ModalStyles.body),
+          Text("We only set essential cookies via:", style: bodyStyle),
           const SizedBox(height: 4),
           _PrivacyModalLink(
             label: "Brevo",
@@ -53,7 +48,7 @@ class PrivacyCookiesContent extends StatelessWidget {
             onLaunchUrl: onLaunchUrl,
           ),
           const SizedBox(height: 16),
-          Text("What We Collect", style: _ModalStyles.h3),
+          Text("What We Collect", style: h3Style),
           const SizedBox(height: 8),
           const _PrivacyModalBullet(
             text:
@@ -68,17 +63,18 @@ class PrivacyCookiesContent extends StatelessWidget {
                 "Payments (via Stripe): Stripe processes and retains your name, email and billing information for seven years to meet legal and accounting requirements.",
           ),
           const SizedBox(height: 16),
-          Text("Transfers & Safeguards", style: _ModalStyles.h3),
+          Text("Transfers & Safeguards", style: h3Style),
           const SizedBox(height: 8),
           Text(
             "Our embedded services may transfer data outside the EEA under their own GDPR-compliant safeguards (Standard Contractual Clauses or adequacy).",
-            style: _ModalStyles.body,
+            style: bodyStyle,
           ),
           const SizedBox(height: 16),
-          Text("Your Rights", style: _ModalStyles.h3),
+          Text("Your Rights", style: h3Style),
           const SizedBox(height: 8),
           const _PrivacyModalBullet(
-              text: "Access, correct or delete your data"),
+            text: "Access, correct or delete your data",
+          ),
           const _PrivacyModalBullet(text: "Restrict or object to processing"),
           const _PrivacyModalBullet(text: "Data portability"),
           const _PrivacyModalBullet(text: "Withdraw consent anytime"),
@@ -91,12 +87,12 @@ class PrivacyCookiesContent extends StatelessWidget {
             spacing: 4,
             runSpacing: 2,
             children: <Widget>[
-              Text("To exercise any right, email", style: _ModalStyles.body),
+              Text("To exercise any right, email", style: bodyStyle),
               GestureDetector(
                 onTap: () => onLaunchUrl("mailto:terese@t1grid.com"),
-                child: Text("terese@t1grid.com", style: _ModalStyles.link),
+                child: Text("terese@t1grid.com", style: linkStyle),
               ),
-              Text(".", style: _ModalStyles.body),
+              Text(".", style: bodyStyle),
             ],
           ),
         ],
@@ -125,6 +121,13 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color baseLinkColor = isDark
+        ? const Color(0xFF90E8F8)
+        : const Color(0xFF394183);
+    final Color hoverLinkColor = isDark
+        ? const Color(0xFF4EF0FF)
+        : const Color(0xFF843F02);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -134,9 +137,9 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
           padding: const EdgeInsets.only(bottom: 2),
           child: Text(
             widget.label,
-            style: _ModalStyles.link.copyWith(
-              color: _isHovered ? Colors.white : const Color(0xFF78A9FF),
-            ),
+            style: _ModalStyles.link(
+              context,
+            ).copyWith(color: _isHovered ? hoverLinkColor : baseLinkColor),
           ),
         ),
       ),
@@ -151,13 +154,14 @@ class _PrivacyModalBullet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle bodyStyle = _ModalStyles.body(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("\u2022 ", style: _ModalStyles.body),
-          Expanded(child: Text(text, style: _ModalStyles.body)),
+          Text("\u2022 ", style: bodyStyle),
+          Expanded(child: Text(text, style: bodyStyle)),
         ],
       ),
     );
@@ -165,36 +169,37 @@ class _PrivacyModalBullet extends StatelessWidget {
 }
 
 class _ModalStyles {
-  static const TextStyle h2 = TextStyle(
-    fontFamily: "ComingSoon",
-    fontWeight: FontWeight.w700,
-    fontSize: 32,
-    color: Colors.white,
-    height: 1,
-  );
+  static TextStyle h3(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w500,
+      fontSize: 22,
+      color: isDark ? const Color(0xFFEAF7FF) : const Color(0xFF252525),
+      height: 1.2,
+    );
+  }
 
-  static const TextStyle h3 = TextStyle(
-    fontFamily: "Inter18pt",
-    fontWeight: FontWeight.w500,
-    fontSize: 22,
-    color: Colors.white,
-    height: 1.2,
-  );
+  static TextStyle body(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w300,
+      fontSize: 16,
+      height: 1.6,
+      color: isDark ? const Color(0xFFEAF7FF) : const Color(0xFF252525),
+    );
+  }
 
-  static const TextStyle body = TextStyle(
-    fontFamily: "Inter18pt",
-    fontWeight: FontWeight.w300,
-    fontSize: 16,
-    height: 1.6,
-    color: Colors.white,
-  );
-
-  static const TextStyle link = TextStyle(
-    fontFamily: "Inter18pt",
-    fontWeight: FontWeight.w300,
-    fontSize: 16,
-    height: 1.6,
-    color: Color(0xFF78A9FF),
-    decoration: TextDecoration.underline,
-  );
+  static TextStyle link(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w300,
+      fontSize: 16,
+      height: 1.6,
+      color: isDark ? const Color(0xFF90E8F8) : const Color(0xFF394183),
+      decoration: TextDecoration.underline,
+    );
+  }
 }

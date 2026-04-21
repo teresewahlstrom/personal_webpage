@@ -1,18 +1,23 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'keyword_composition_model.dart';
+import 'word_cloud_frame_style.dart';
 
 /// A single word after spiral placement, ready for rendering.
 final class _PlacedWord {
   final KeywordNode node;
   final double left;
   final double top;
+  final double width;
+  final double height;
   final double fontSize;
 
   const _PlacedWord({
     required this.node,
     required this.left,
     required this.top,
+    required this.width,
+    required this.height,
     required this.fontSize,
   });
 }
@@ -77,6 +82,7 @@ class WordCloud extends StatelessWidget {
   final String fontFamily;
   final double letterSpacing;
   final double? maxContentWidth;
+  final WordCloudFrameStyle? frameStyle;
 
   const WordCloud({
     super.key,
@@ -85,6 +91,7 @@ class WordCloud extends StatelessWidget {
     this.fontFamily = 'BebasNeue',
     this.letterSpacing = 1.5,
     this.maxContentWidth,
+    this.frameStyle,
   });
 
   // ── Width resolution ──────────────────────────────────────────────────────
@@ -127,7 +134,8 @@ class WordCloud extends StatelessWidget {
   }
 
   _PlacementUnit _singleUnit(KeywordNode word, double w) {
-    final _MeasuredKeyword measured = _measureKeywords(<KeywordNode>[word], w).first;
+    final _MeasuredKeyword measured =
+        _measureKeywords(<KeywordNode>[word], w).first;
     return _PlacementUnit(
       words: <_WordBox>[
         _WordBox(
@@ -160,16 +168,17 @@ class WordCloud extends StatelessWidget {
             .firstWhere((String? value) => value != null, orElse: () => null) ??
         'vertical';
     final String lockAlign = sorted
-        .map((KeywordNode word) => word.lockAlign)
-        .firstWhere((String? value) => value != null, orElse: () => null) ??
-      'left';
+            .map((KeywordNode word) => word.lockAlign)
+            .firstWhere((String? value) => value != null, orElse: () => null) ??
+        'left';
     final double? lockGapEm = sorted
         .map((KeywordNode word) => word.lockGapEm)
         .firstWhere((double? value) => value != null, orElse: () => null);
 
     final double maxFontSize = measured.fold(
       0.0,
-      (double acc, _MeasuredKeyword item) => item.fontSize > acc ? item.fontSize : acc,
+      (double acc, _MeasuredKeyword item) =>
+          item.fontSize > acc ? item.fontSize : acc,
     );
     final double gap = lockGapEm != null ? lockGapEm * w : maxFontSize * 0.10;
 
@@ -209,7 +218,8 @@ class WordCloud extends StatelessWidget {
     // Vertical is default and best for editorial top/bottom pairings.
     final double maxWidth = measured.fold(
       0.0,
-      (double acc, _MeasuredKeyword item) => item.size.width > acc ? item.size.width : acc,
+      (double acc, _MeasuredKeyword item) =>
+          item.size.width > acc ? item.size.width : acc,
     );
     double y = 0;
     final List<_WordBox> boxes = <_WordBox>[];
@@ -245,9 +255,11 @@ class WordCloud extends StatelessWidget {
     );
   }
 
-  List<_PlacementUnit> _buildPlacementUnits(List<KeywordNode> keywords, double w) {
+  List<_PlacementUnit> _buildPlacementUnits(
+      List<KeywordNode> keywords, double w) {
     final List<KeywordNode> singles = <KeywordNode>[];
-    final Map<String, List<KeywordNode>> grouped = <String, List<KeywordNode>>{};
+    final Map<String, List<KeywordNode>> grouped =
+        <String, List<KeywordNode>>{};
 
     for (final KeywordNode kw in keywords) {
       final String? lockGroup = kw.lockGroup;
@@ -271,7 +283,8 @@ class WordCloud extends StatelessWidget {
       units.add(_groupUnit(words, w));
     }
 
-    units.sort((_PlacementUnit a, _PlacementUnit b) => b.priority.compareTo(a.priority));
+    units.sort((_PlacementUnit a, _PlacementUnit b) =>
+        b.priority.compareTo(a.priority));
     return units;
   }
 
@@ -344,6 +357,8 @@ class WordCloud extends StatelessWidget {
               node: word.node,
               left: x + word.left,
               top: y + word.top,
+              width: word.width,
+              height: word.height,
               fontSize: word.fontSize,
             ));
           }
@@ -363,20 +378,48 @@ class WordCloud extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final double w = _resolveWidth(context, constraints);
-        final double h = w * heightRatio;
-        final List<_PlacedWord> placed = _computeLayout(keywords, w, h);
+        final double outerWidth = _resolveWidth(context, constraints);
+        final EdgeInsets framePadding = frameStyle?.padding ?? EdgeInsets.zero;
+        final double innerWidth = math.max(
+          200,
+          outerWidth - framePadding.horizontal,
+        );
+        final double innerHeight = innerWidth * heightRatio;
+        final List<_PlacedWord> placed = _computeLayout(
+          keywords,
+          innerWidth,
+          innerHeight,
+        );
 
-        return SizedBox(
-          width: w,
-          height: h,
+        const double contentVerticalInset = 8;
+        double contentTop = 0;
+        double contentBottom = 0;
+        if (placed.isNotEmpty) {
+          contentTop = placed
+              .map((placedWord) => placedWord.top)
+              .reduce((double a, double b) => a < b ? a : b);
+          contentBottom = placed
+              .map((placedWord) => placedWord.top + placedWord.height)
+              .reduce((double a, double b) => a > b ? a : b);
+        }
+        final double croppedInnerHeight = placed.isEmpty
+            ? innerHeight
+            : math.max(
+                contentBottom - contentTop + contentVerticalInset * 2,
+                120,
+              );
+        final double outerHeight = croppedInnerHeight + framePadding.vertical;
+
+        final Widget cloud = SizedBox(
+          width: innerWidth,
+          height: croppedInnerHeight,
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: <Widget>[
               for (final _PlacedWord pw in placed)
                 Positioned(
                   left: pw.left,
-                  top: pw.top,
+                  top: pw.top - contentTop + contentVerticalInset,
                   child: Text(
                     pw.node.text,
                     style: TextStyle(
@@ -390,6 +433,33 @@ class WordCloud extends StatelessWidget {
                   ),
                 ),
             ],
+          ),
+        );
+
+        if (frameStyle == null) {
+          return SizedBox(
+            width: innerWidth,
+            height: croppedInnerHeight,
+            child: cloud,
+          );
+        }
+
+        return SizedBox(
+          width: outerWidth,
+          height: outerHeight,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: frameStyle!.backgroundColor,
+              borderRadius: frameStyle!.borderRadius,
+              border: Border.all(
+                color: frameStyle!.borderColor,
+                width: frameStyle!.borderWidth,
+              ),
+            ),
+            child: Padding(
+              padding: framePadding,
+              child: cloud,
+            ),
           ),
         );
       },

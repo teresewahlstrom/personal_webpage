@@ -5,6 +5,7 @@ import 'package:tw_chat/content.dart';
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
 import 'chat_keyboard_scroll_target.dart';
+import 'floating_control_inset.dart';
 
 class TwinChatOverlay extends StatefulWidget {
   const TwinChatOverlay({
@@ -52,6 +53,10 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
+    final Size viewport = MediaQuery.of(context).size;
+    final double floatingInset = FloatingControlInset.forViewportWidth(
+      viewport.width,
+    );
     return AnimatedBuilder(
       animation: _conversationController,
       builder: (BuildContext context, Widget? child) {
@@ -64,14 +69,20 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
               _setChatKeyboardScrollTarget(true),
           onSetPageKeyboardScrollTarget: () =>
               _setChatKeyboardScrollTarget(false),
+          minimizedBottomOffset: floatingInset,
+          minimizedRightInset: floatingInset,
           skinMode: widget.chatSkinMode,
           launcherStyle: ChatLauncherStyle(
             size: ShellUiConfig.headerToggleSize * 1.5,
             iconSize: 30,
             icon: Icons.chat,
             foregroundColor: ShellUiConfig.headerToggleFor(brightness),
-            hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(brightness),
-            backgroundColor: ShellUiConfig.headerToggleBackgroundFor(brightness),
+            hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(
+              brightness,
+            ),
+            backgroundColor: ShellUiConfig.headerToggleBackgroundFor(
+              brightness,
+            ),
             borderWidth: 1,
             animationDuration: const Duration(milliseconds: 180),
             idleShadowBlurRadius: 8,

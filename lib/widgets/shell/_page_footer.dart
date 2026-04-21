@@ -78,6 +78,7 @@ class PageFooter extends StatelessWidget {
   void _openBuiltInPrivacyModal(BuildContext context) {
     showAppModal(
       context: context,
+      headerTitle: 'Privacy & Cookies',
       builder: (BuildContext context, VoidCallback close) {
         return PrivacyCookiesContent(
           onLaunchUrl: (String url) => _launchUrl(context, url),
@@ -104,8 +105,8 @@ class _FooterLinkButtonState extends State<_FooterLinkButton> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-      ? ShellUiConfig.footerLinkHoverFor(brightness)
-      : ShellUiConfig.footerLinkFor(brightness);
+        ? ShellUiConfig.footerLinkHoverFor(brightness)
+        : ShellUiConfig.footerLinkFor(brightness);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),

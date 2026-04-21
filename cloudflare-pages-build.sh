@@ -12,7 +12,7 @@ export PATH="$FLUTTER_DIR/bin:$PATH"
 flutter --version
 flutter config --enable-web
 flutter pub get
-flutter build web --release --pwa-strategy=none
+flutter build web --release --pwa-strategy=none --no-tree-shake-icons
 
 # Ensure Cloudflare Pages custom routing headers/redirects are present
 # in the final artifact even if Flutter omits underscore-prefixed files.
