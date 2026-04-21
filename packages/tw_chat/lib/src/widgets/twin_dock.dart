@@ -255,8 +255,8 @@ class MinimizedChatLauncher extends StatelessWidget {
             ),
             child: Center(
               child: Icon(
-                Icons.chat_bubble_outline_rounded,
-                size: 24,
+                Icons.chat_bubble,
+                size: 25,
                 color: colors.appBarTitle,
               ),
             ),

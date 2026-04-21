@@ -11,11 +11,13 @@ class ArrowKeyScrollWrapper extends StatefulWidget {
     required this.controller,
     required this.child,
     this.lineStep = 120,
+    this.onPointerDown,
   });
 
   final ScrollController controller;
   final Widget child;
   final double lineStep;
+  final VoidCallback? onPointerDown;
 
   @override
   State<ArrowKeyScrollWrapper> createState() => _ArrowKeyScrollWrapperState();
@@ -113,10 +115,11 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
         // KeyboardListener is used here for focus management only.
         // Actual scroll handling is done in _handleScroll via the timer.
       },
-      child: GestureDetector(
+      child: Listener(
         behavior: HitTestBehavior.translucent,
-        onTap: () {
+        onPointerDown: (_) {
           ChatKeyboardScrollTarget.setChatTarget(false);
+          widget.onPointerDown?.call();
           _focusNode.requestFocus();
         },
         child: widget.child,

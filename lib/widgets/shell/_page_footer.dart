@@ -10,23 +10,14 @@ class PageFooter extends StatelessWidget {
     super.key,
     required this.brandName,
     required this.privacyLabel,
-    this.showChatThemeToggle = false,
-    this.isChatDarkMode = false,
-    this.onToggleChatTheme,
   });
 
   final String brandName;
   final String privacyLabel;
-  final bool showChatThemeToggle;
-  final bool isChatDarkMode;
-  final VoidCallback? onToggleChatTheme;
 
   @override
   Widget build(BuildContext context) {
     final int year = DateTime.now().year;
-    final String chatThemeToggleLabel = isChatDarkMode
-        ? 'Switch Chat to Light'
-        : 'Switch Chat to Dark';
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
@@ -61,11 +52,6 @@ class PageFooter extends StatelessWidget {
               label: privacyLabel,
               onTap: () => _openBuiltInPrivacyModal(context),
             ),
-            if (showChatThemeToggle && onToggleChatTheme != null)
-              _FooterThemeButton(
-                label: chatThemeToggleLabel,
-                onTap: onToggleChatTheme!,
-              ),
           ],
         ),
       ),
@@ -132,51 +118,6 @@ class _FooterLinkButtonState extends State<_FooterLinkButton> {
             decorationStyle: TextDecorationStyle.solid,
             decorationColor: ShellUiConfig.footerLinkColor,
             decorationThickness: 1.0,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FooterThemeButton extends StatefulWidget {
-  const _FooterThemeButton({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  State<_FooterThemeButton> createState() => _FooterThemeButtonState();
-}
-
-class _FooterThemeButtonState extends State<_FooterThemeButton> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color borderColor = _isHovered
-        ? ShellUiConfig.footerLinkHoverColor
-        : ShellUiConfig.footerLinkColor;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            border: Border.all(color: borderColor, width: 1),
-          ),
-          child: Text(
-            widget.label,
-            style: TextStyle(
-              fontFamily: 'Inter18pt',
-              fontWeight: FontWeight.w300,
-              fontSize: 13,
-              color: borderColor,
-              decoration: TextDecoration.none,
-            ),
           ),
         ),
       ),

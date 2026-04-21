@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
 import '../../config/app_ui_config.dart';
+import '../arrow_key_scroll_wrapper.dart';
 import '_chat_overlay.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
+import '_page_header.dart';
 
 /// A reusable widget that combines a grid background with content.
 ///
@@ -16,6 +18,7 @@ class PageScaffold extends StatefulWidget {
     super.key,
     required this.child,
     this.overlays = const <Widget>[],
+    this.showHeader = true,
     this.showTwinChat = true,
     this.showFooter = true,
     this.footerBrandName = 'T1 grid',
@@ -31,6 +34,9 @@ class PageScaffold extends StatefulWidget {
 
   /// Optional floating layers rendered above page content (for docks/overlays).
   final List<Widget> overlays;
+
+  /// Enables the built-in header.
+  final bool showHeader;
 
   /// Enables the built-in twin chat dock overlay.
   final bool showTwinChat;
@@ -62,6 +68,12 @@ class PageScaffold extends StatefulWidget {
 
 class _PageScaffoldState extends State<PageScaffold> {
   late ChatSkinMode _chatSkinMode;
+  final ScrollController _pageScrollController = ScrollController();
+  final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
+      GlobalKey<SelectableRegionState>();
+  final FocusNode _pageSelectionFocusNode = FocusNode(
+    debugLabel: 'page-selectable-region',
+  );
 
   bool get _isChatDarkMode => _chatSkinMode == ChatSkinMode.dark;
 
@@ -72,6 +84,13 @@ class _PageScaffoldState extends State<PageScaffold> {
   void initState() {
     super.initState();
     _chatSkinMode = widget.initialChatSkinMode;
+  }
+
+  @override
+  void dispose() {
+    _pageScrollController.dispose();
+    _pageSelectionFocusNode.dispose();
+    super.dispose();
   }
 
   void _toggleChatTheme() {
@@ -89,21 +108,39 @@ class _PageScaffoldState extends State<PageScaffold> {
         children: <Widget>[
           Column(
             children: <Widget>[
+              if (widget.showHeader)
+                PageHeader(
+                  showThemeToggle: _showChatThemeToggle,
+                  isDarkMode: _isChatDarkMode,
+                  onToggleTheme: _showChatThemeToggle ? _toggleChatTheme : null,
+                ),
               Expanded(
-                child: SelectionArea(
-                  child: widget.child,
+                child: ArrowKeyScrollWrapper(
+                  controller: _pageScrollController,
+                  onPointerDown: () {
+                    _pageSelectionAreaKey.currentState?.clearSelection();
+                  },
+                  child: SingleChildScrollView(
+                    controller: _pageScrollController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SelectableRegion(
+                          key: _pageSelectionAreaKey,
+                          focusNode: _pageSelectionFocusNode,
+                          selectionControls: materialTextSelectionControls,
+                          child: widget.child,
+                        ),
+                        if (widget.showFooter)
+                          PageFooter(
+                            brandName: widget.footerBrandName,
+                            privacyLabel: widget.footerPrivacyLabel,
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              if (widget.showFooter)
-                PageFooter(
-                  brandName: widget.footerBrandName,
-                  privacyLabel: widget.footerPrivacyLabel,
-                  showChatThemeToggle: _showChatThemeToggle,
-                  isChatDarkMode: _isChatDarkMode,
-                  onToggleChatTheme: _showChatThemeToggle
-                      ? _toggleChatTheme
-                      : null,
-                ),
             ],
           ),
           ...widget.overlays,
