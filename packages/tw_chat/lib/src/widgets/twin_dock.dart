@@ -16,6 +16,7 @@ class TwinChatDock extends StatefulWidget {
     required this.isChatKeyboardScrollTarget,
     required this.onSetChatKeyboardScrollTarget,
     required this.onSetPageKeyboardScrollTarget,
+    this.skinMode = ChatSkinMode.light,
   });
 
   final List<ChatMessage> messages;
@@ -24,6 +25,7 @@ class TwinChatDock extends StatefulWidget {
   final ValueListenable<bool> isChatKeyboardScrollTarget;
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onSetPageKeyboardScrollTarget;
+  final ChatSkinMode skinMode;
 
   @override
   State<TwinChatDock> createState() => _TwinChatDockState();
@@ -46,6 +48,8 @@ class _TwinChatDockState extends State<TwinChatDock> {
 
   @override
   Widget build(BuildContext context) {
+    ChatSkin.setMode(widget.skinMode);
+    final tokens = ChatSkin.data.tokens;
     final mediaQuery = MediaQuery.of(context);
     final viewportSize = mediaQuery.size;
     final chatMargin = ChatLayout.dockHorizontalMargin(
@@ -89,6 +93,7 @@ class _TwinChatDockState extends State<TwinChatDock> {
                     maxHeight: availableChatHeight,
                     isVisible: _isExpanded,
                     onMinimize: _minimizeChat,
+                    tokens: tokens,
                   ),
                 ),
               ),
@@ -100,6 +105,7 @@ class _TwinChatDockState extends State<TwinChatDock> {
               onSetChatKeyboardScrollTarget:
                   widget.onSetChatKeyboardScrollTarget,
               onExpand: _expandChat,
+              tokens: tokens,
             ),
           ),
         ],
@@ -114,34 +120,38 @@ class TwinChatAppBar extends StatelessWidget {
     required this.onDisplayStateToggle,
     required this.displayStateToggleIcon,
     required this.displayStateToggleTooltip,
+    required this.tokens,
     this.shrinkWrap = false,
   });
 
   final VoidCallback onDisplayStateToggle;
   final IconData displayStateToggleIcon;
   final String displayStateToggleTooltip;
+  final ChatSkinTokens tokens;
   final bool shrinkWrap;
 
   @override
   Widget build(BuildContext context) {
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final titleStyle = ChatTextStyles.appBarTitleStyle(textScale);
+    final titleStyle = skin.textStyles.appBarTitleStyle(textScale, colors);
     final headerRadius = shrinkWrap
-        ? ChatTokens.headerRadiusMinimized
-        : ChatTokens.headerRadiusExpanded;
+        ? tokens.headerRadiusMinimized
+        : tokens.headerRadiusExpanded;
     final iconColor =
         titleStyle.color ??
         DefaultTextStyle.of(context).style.color ??
         Theme.of(context).textTheme.titleMedium?.color ??
-        ChatColors.bubbleText;
+        colors.bubbleText;
     final pad = shrinkWrap
-        ? ChatTokens.appBarPaddingMinimized
-        : ChatTokens.appBarPaddingExpanded;
+        ? tokens.appBarPaddingMinimized
+        : tokens.appBarPaddingExpanded;
     final titleArea = Padding(
       padding: EdgeInsets.fromLTRB(
-        pad.left + ChatTokens.appBarLeadingGap,
+        pad.left + tokens.appBarLeadingGap,
         pad.top,
-        ChatTokens.appBarActionGap + ChatTokens.appBarActionWidth,
+        tokens.appBarActionGap + tokens.appBarActionWidth,
         pad.bottom,
       ),
       child: Column(
@@ -154,9 +164,9 @@ class TwinChatAppBar extends StatelessWidget {
       top: 0,
       right: 0,
       bottom: 0,
-      width: ChatTokens.appBarActionWidth,
+      width: tokens.appBarActionWidth,
       child: Material(
-        color: ChatColors.transparent,
+        color: colors.transparent,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(headerRadius),
         ),
@@ -191,36 +201,34 @@ class MinimizedChatLauncher extends StatelessWidget {
     super.key,
     required this.onSetChatKeyboardScrollTarget,
     required this.onExpand,
+    required this.tokens,
   });
 
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onExpand;
+  final ChatSkinTokens tokens;
 
   @override
   Widget build(BuildContext context) {
+    final colors = ChatSkin.data.colors;
     return Material(
-      color: ChatColors.transparent,
+      color: colors.transparent,
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (_) => onSetChatKeyboardScrollTarget(),
         child: InkWell(
           onTap: onExpand,
-          borderRadius: ChatTokens.shellBorderRadiusMinimized,
+          borderRadius: tokens.shellBorderRadiusMinimized,
           child: Container(
             decoration: _chatShellDecoration(
-              borderRadius: ChatTokens.shellBorderRadiusMinimized,
+              borderRadius: tokens.shellBorderRadiusMinimized,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF6BA3D6),
-                borderRadius: ChatTokens.shellBorderRadiusMinimized,
-              ),
-              child: TwinChatAppBar(
-                onDisplayStateToggle: onExpand,
-                displayStateToggleIcon: Icons.expand_less_rounded,
-                displayStateToggleTooltip: 'Expand chat',
-                shrinkWrap: true,
-              ),
+            child: TwinChatAppBar(
+              onDisplayStateToggle: onExpand,
+              displayStateToggleIcon: Icons.expand_less_rounded,
+              displayStateToggleTooltip: 'Expand chat',
+              tokens: tokens,
+              shrinkWrap: true,
             ),
           ),
         ),
@@ -240,6 +248,7 @@ class FloatingChatWindow extends StatelessWidget {
     required this.isVisible,
     required this.onMinimize,
     required this.maxHeight,
+    required this.tokens,
   });
 
   final List<ChatMessage> messages;
@@ -250,42 +259,36 @@ class FloatingChatWindow extends StatelessWidget {
   final bool isVisible;
   final VoidCallback onMinimize;
   final double maxHeight;
+  final ChatSkinTokens tokens;
 
   @override
   Widget build(BuildContext context) {
+    final colors = ChatSkin.data.colors;
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (_) => onSetChatKeyboardScrollTarget(),
         child: Material(
-          color: ChatColors.transparent,
+          color: colors.transparent,
           child: Container(
             decoration: _chatShellDecoration(
-              borderRadius: ChatTokens.shellBorderRadiusExpanded,
+              borderRadius: tokens.shellBorderRadiusExpanded,
             ),
             child: Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF6BA3D6),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(ChatTokens.headerRadiusExpanded),
-                      topRight: Radius.circular(ChatTokens.headerRadiusExpanded),
-                    ),
-                  ),
-                  child: TwinChatAppBar(
-                    onDisplayStateToggle: onMinimize,
-                    displayStateToggleIcon: Icons.expand_more_rounded,
-                    displayStateToggleTooltip: 'Minimize chat',
-                  ),
+                TwinChatAppBar(
+                  onDisplayStateToggle: onMinimize,
+                  displayStateToggleIcon: Icons.expand_more_rounded,
+                  displayStateToggleTooltip: 'Minimize chat',
+                  tokens: tokens,
                 ),
-                const Divider(height: 1, color: ChatLayout.dividerColor),
+                Divider(height: 1, color: ChatLayout.dividerColor),
                 Flexible(
                   child: Stack(
                     children: [
                       Padding(
-                        padding: ChatTokens.shellContentPadding,
+                        padding: tokens.shellContentPadding,
                         child: ChatSection(
                           messages: messages,
                           onSend: onSend,
@@ -301,11 +304,11 @@ class FloatingChatWindow extends StatelessWidget {
                         top: 0,
                         left: 0,
                         right: 0,
-                        height: ChatTokens.chatListTopShadowHeight,
+                        height: tokens.chatListTopShadowHeight,
                         child: IgnorePointer(
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              gradient: ChatTokens.shellTopShadowGradient,
+                              gradient: tokens.shellTopShadowGradient(colors),
                             ),
                           ),
                         ),
@@ -323,13 +326,16 @@ class FloatingChatWindow extends StatelessWidget {
 }
 
 BoxDecoration _chatShellDecoration({required BorderRadius borderRadius}) {
+  final skin = ChatSkin.data;
+  final colors = skin.colors;
+  final tokens = skin.tokens;
   return BoxDecoration(
     gradient: ChatLayout.backgroundGradient,
     borderRadius: borderRadius,
     border: Border.all(
-      color: ChatColors.shellOuterBorder,
-      width: ChatTokens.shellOuterBorderWidth,
+      color: colors.shellOuterBorder,
+      width: tokens.shellOuterBorderWidth,
     ),
-    boxShadow: const [ChatTokens.shellShadow],
+    boxShadow: [tokens.shellShadow(colors)],
   );
 }

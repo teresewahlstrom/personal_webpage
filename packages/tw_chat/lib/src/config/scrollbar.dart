@@ -8,9 +8,10 @@ class ChatScrollbar {
   const ChatScrollbar._();
 
   static const visibilityOverflowThreshold = 0.5;
-  static const thumbColor = ChatColors.scrollbarThumb;
-  static const thumbInactiveColor = ChatColors.scrollbarThumbInactive;
-  static const trackColor = ChatColors.scrollbarTrack;
+  static Color get thumbColor => ChatSkin.data.colors.scrollbarThumb;
+  static Color get thumbInactiveColor =>
+      ChatSkin.data.colors.scrollbarThumbInactive;
+  static Color get trackColor => ChatSkin.data.colors.scrollbarTrack;
   static const inputTrackBorder = Border();
   static const thumbFadeDuration = Duration(milliseconds: 220);
   static const thumbFadeOutDelay = Duration(milliseconds: 700);
@@ -27,10 +28,11 @@ class ChatScrollbar {
     required double thickness,
     required double crossAxisInset,
   }) {
+    final tokens = ChatSkin.data.tokens;
     return IgnorePointer(
       child: Padding(
         padding: EdgeInsets.only(
-          right: crossAxisInset + ChatTokens.scrollbarTrackLeftShift,
+          right: crossAxisInset + tokens.scrollbarTrackLeftShift,
         ),
         child: Align(
           alignment: Alignment.centerRight,
@@ -38,7 +40,7 @@ class ChatScrollbar {
             width: thickness,
             decoration: BoxDecoration(
               color: trackColor,
-              borderRadius: ChatTokens.scrollbarTrackRadius,
+              borderRadius: tokens.scrollbarTrackRadius,
               border: inputTrackBorder,
             ),
           ),

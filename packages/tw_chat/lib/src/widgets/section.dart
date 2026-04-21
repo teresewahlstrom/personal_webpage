@@ -125,6 +125,10 @@ class _ChatSectionState extends State<ChatSection> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final skin = ChatSkin.data;
+        final colors = skin.colors;
+        final tokens = skin.tokens;
+        final textStyles = skin.textStyles;
         final textScale = MediaQuery.textScalerOf(context).scale(1.0);
         final composerMetrics = ChatComposerLayout.resolveMetrics(
           panelHeight: constraints.maxHeight,
@@ -166,23 +170,22 @@ class _ChatSectionState extends State<ChatSection> {
                       ? null
                       : FilledButton.icon(
                           onPressed: _coordinator.jumpToLatest,
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.south_rounded,
-                            size: ChatTokens.jumpToLatestButtonIconSize,
+                            size: tokens.jumpToLatestButtonIconSize,
                           ),
                           label: Text(jumpToLatestLabel),
                           style: FilledButton.styleFrom(
-                            backgroundColor: ChatColors.composerFill,
+                            backgroundColor: colors.composerFill,
                             foregroundColor: ChatComposerLayout.sendIconColor,
-                            side: const BorderSide(
+                            side: BorderSide(
                               color: ChatComposerLayout.sendIconColor,
                             ),
-                            elevation: ChatTokens.jumpToLatestButtonElevation,
-                            padding: ChatTokens.jumpToLatestButtonPadding,
-                            textStyle:
-                                ChatTextStyles.composerHintStyle(
-                                  textScale,
-                                ).copyWith(
+                            elevation: tokens.jumpToLatestButtonElevation,
+                            padding: tokens.jumpToLatestButtonPadding,
+                            textStyle: textStyles
+                                .composerHintStyle(textScale, colors)
+                                .copyWith(
                                   color: ChatComposerLayout.sendIconColor,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -192,7 +195,7 @@ class _ChatSectionState extends State<ChatSection> {
                 );
               },
             ),
-            const SizedBox(height: ChatTokens.composerGap),
+            SizedBox(height: tokens.composerGap),
             ValueListenableBuilder<int>(
               valueListenable: _coordinator.composerViewListenable,
               builder: (_, _, _) => ChatComposerRow(

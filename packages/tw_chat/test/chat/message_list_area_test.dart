@@ -76,6 +76,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(chatScroll.position.maxScrollExtent, greaterThan(0));
+    final tokens = ChatSkin.data.tokens;
 
     final initialViewportRect = tester.getRect(
       find.byType(SingleChildScrollView),
@@ -86,7 +87,7 @@ void main() {
 
     expect(
       initialFirstBubbleRect.top - initialViewportRect.top,
-      closeTo(ChatTokens.bubbleViewportPadding.top, 0.1),
+      closeTo(tokens.bubbleViewportPadding.top, 0.1),
     );
 
     chatScroll.jumpTo(chatScroll.position.maxScrollExtent);
@@ -97,7 +98,7 @@ void main() {
 
     expect(
       viewportRect.bottom - lastBubbleRect.bottom,
-      closeTo(ChatTokens.bubbleViewportPadding.bottom, 0.1),
+      closeTo(tokens.bubbleViewportPadding.bottom, 0.1),
     );
   });
 }

@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+
+import 'skin_shared.dart';
+
+const ChatSkinData chatDarkSkin = ChatSkinData(
+  colors: ChatSkinColors(
+    transparent: Color(0x00000000),
+    shellTopShadowStrong: Color(0x80000000),
+    shellTopShadowSoft: Color(0x08000000),
+    appBarTitle: Color(0xEBDCF6F8),
+    bubbleText: Color(0xEBFFFFFF),
+    shellBackgroundBaseStart: Color(0xFF0F1D3A),
+    shellBackgroundBaseEnd: Color(0xFF0A1532),
+    shellBackgroundStart: Color(0xFF0F1D3A),
+    shellBackgroundEnd: Color(0xFF0A1532),
+    shellOuterShadow: Color(0x8A000000),
+    shellOuterBorder: Color(0x397199FF),
+    shellDivider: Color(0x1E7199FF),
+    userBubbleFill: Color(0xFF161739),
+    userBubbleBorder: Color(0x885B46C9),
+    botBubbleFill: Color(0xFF15233F),
+    botBubbleBorder: Color(0x87547BE0),
+    bubbleShadow: Color(0x47000000),
+    bubbleCollapseButton: Color(0xFFB15CFF),
+    bubbleCollapseButtonIcon: Color(0xFF0F1D3A),
+    composerHint: Color(0xFF9AA8C6),
+    composerFill: Color(0xFF161739),
+    composerBorder: Color(0x885B46C9),
+    composerCursor: Color(0xFF4EF0FF),
+    composerCornerAccent: Color(0xFFB15CFF),
+    composerSendIcon: Color(0xFFB15CFF),
+    markupFadeMaskOpaque: Color(0xFFFFFFFF),
+    markupFadeMaskSoft: Color(0x50FFFFFF),
+    markupBlockquoteRail: Color(0xCE90E8F8),
+    markupLink: Color(0xCE90E8F8),
+    markupLinkDecoration: Color(0xCE90E8F8),
+    scrollbarThumb: Color(0x7690E8F8),
+    scrollbarThumbInactive: Color(0xFF2F4A63),
+    scrollbarTrack: Color(0x004EF0FF),
+  ),
+);

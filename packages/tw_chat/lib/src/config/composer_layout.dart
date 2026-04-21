@@ -23,22 +23,25 @@ class ChatComposerLayout {
   ///
   /// Width scales up with accessibility text scaling.
   static const sendButtonMinWidthFloor = 50.0;
-  static const fillColor = ChatColors.composerFill;
-  static const borderColor = ChatColors.composerBorder;
-  static const cursorColor = ChatColors.composerCursor;
-  static const cornerAccentColor = ChatColors.composerCornerAccent;
-  static const sendIconColor = ChatColors.composerSendIcon;
+  static Color get fillColor => ChatSkin.data.colors.composerFill;
+  static Color get borderColor => ChatSkin.data.colors.composerBorder;
+  static Color get cursorColor => ChatSkin.data.colors.composerCursor;
+  static Color get cornerAccentColor =>
+      ChatSkin.data.colors.composerCornerAccent;
+  static Color get sendIconColor => ChatSkin.data.colors.composerSendIcon;
 
   static TextStyle hintStyle(double textScale) {
-    return ChatTextStyles.composerHintStyle(textScale);
+    final skin = ChatSkin.data;
+    return skin.textStyles.composerHintStyle(textScale, skin.colors);
   }
 
   static ChatComposerMetrics resolveMetrics({
     required double panelHeight,
     required double textScale,
   }) {
+    final skin = ChatSkin.data;
     final scale = (!textScale.isFinite || textScale <= 0)
-        ? ChatTextStyles.minTextScale
+        ? skin.textStyles.minTextScale
         : textScale;
     final compactnessT =
         1.0 -

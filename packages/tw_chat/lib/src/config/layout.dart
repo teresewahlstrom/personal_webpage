@@ -66,12 +66,16 @@ class ChatLayout {
 
   /// Number of post-frame passes used to force final bottom settle.
   static const forcedBottomPasses = 3;
-  static final backgroundGradient = LinearGradient(
-    colors: [ChatColors.shellBackgroundStart, ChatColors.shellBackgroundEnd],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-  static const dividerColor = ChatColors.shellDivider;
+  static LinearGradient get backgroundGradient {
+    final colors = ChatSkin.data.colors;
+    return LinearGradient(
+      colors: [colors.shellBackgroundStart, colors.shellBackgroundEnd],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+  }
+
+  static Color get dividerColor => ChatSkin.data.colors.shellDivider;
 
   static double dockHorizontalMargin({
     required Size viewportSize,
@@ -184,9 +188,10 @@ class ChatLayout {
       compactThreshold: heightThreshold,
       transitionBand: compactHeightTransitionBand,
     );
+    final tokens = ChatSkin.data.tokens;
     final baseVerticalGutter = viewportSize.width <= phoneBreakpoint
-        ? ChatTokens.phoneVerticalHeightGutter
-        : ChatTokens.verticalHeightGutter;
+        ? tokens.phoneVerticalHeightGutter
+        : tokens.verticalHeightGutter;
     final verticalGutter = _lerp(0.0, baseVerticalGutter, transitionProgress);
     final clampedSafeUsableHeight = (clampedSafeViewportHeight - verticalGutter)
         .clamp(0.0, double.infinity);

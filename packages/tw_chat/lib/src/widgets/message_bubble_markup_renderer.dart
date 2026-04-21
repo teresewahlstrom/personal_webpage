@@ -25,6 +25,9 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final tokens = skin.tokens;
     final markupTheme = _buildMarkupTheme(style);
 
     if (!isTruncated) {
@@ -69,25 +72,25 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           selectable: false,
           chromeVisible: true,
         );
-        final fadeHeight = truncatedContentHeight <
-            ChatTokens.markupTruncationMaxFadeHeight
+        final fadeHeight =
+            truncatedContentHeight < tokens.markupTruncationMaxFadeHeight
             ? truncatedContentHeight
-          : ChatTokens.markupTruncationMaxFadeHeight;
+            : tokens.markupTruncationMaxFadeHeight;
         final overlayMidAlpha = isUserBubble
-          ? ChatTokens.markupTruncationOverlayMidAlphaUser
-          : ChatTokens.markupTruncationOverlayMidAlphaBot;
+            ? tokens.markupTruncationOverlayMidAlphaUser
+            : tokens.markupTruncationOverlayMidAlphaBot;
         final overlayLateAlpha = isUserBubble
-          ? ChatTokens.markupTruncationOverlayLateAlphaUser
-          : ChatTokens.markupTruncationOverlayLateAlphaBot;
+            ? tokens.markupTruncationOverlayLateAlphaUser
+            : tokens.markupTruncationOverlayLateAlphaBot;
         final midFadeFactor = isUserBubble
-          ? ChatTokens.markupFadeMaskMidFactorUser
-          : ChatTokens.markupFadeMaskMidFactorBot;
+            ? tokens.markupFadeMaskMidFactorUser
+            : tokens.markupFadeMaskMidFactorBot;
         final lateFadeFactor = isUserBubble
-          ? ChatTokens.markupFadeMaskLateFactorUser
-          : ChatTokens.markupFadeMaskLateFactorBot;
+            ? tokens.markupFadeMaskLateFactorUser
+            : tokens.markupFadeMaskLateFactorBot;
         final overlayStops = isUserBubble
-          ? ChatTokens.markupTruncationOverlayStopsUser
-          : ChatTokens.markupTruncationOverlayStopsBot;
+            ? tokens.markupTruncationOverlayStopsUser
+            : tokens.markupTruncationOverlayStopsBot;
 
         return SizedBox(
           height: truncatedContentHeight,
@@ -117,12 +120,12 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                     return LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: const [
-                        ChatColors.markupFadeMaskOpaque,
-                        ChatColors.markupFadeMaskOpaque,
-                        ChatColors.markupFadeMaskOpaque,
-                        ChatColors.markupFadeMaskSoft,
-                        ChatColors.transparent,
+                      colors: [
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskSoft,
+                        colors.transparent,
                       ],
                       stops: [
                         0.0,
@@ -148,7 +151,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             bubbleColor.withValues(
-                              alpha: ChatTokens.alphaTransparent,
+                              alpha: tokens.alphaTransparent,
                             ),
                             bubbleColor.withValues(alpha: overlayMidAlpha),
                             bubbleColor.withValues(alpha: overlayLateAlpha),
@@ -169,22 +172,26 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
   }
 
   ChatMarkupTheme _buildMarkupTheme(TextStyle baseStyle) {
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final tokens = skin.tokens;
+    final textStyles = skin.textStyles;
     final linkStyle = baseStyle.copyWith(
-      color: ChatColors.markupLink,
+      color: colors.markupLink,
       decoration: TextDecoration.underline,
-      decorationColor: ChatColors.markupLinkDecoration,
-      decorationThickness: ChatTokens.markupUnderlineThickness,
+      decorationColor: colors.markupLinkDecoration,
+      decorationThickness: tokens.markupUnderlineThickness,
     );
     return ChatMarkupTheme(
       baseStyle: baseStyle,
-      strongStyle: ChatTextStyles.markdownStrongStyle(baseStyle),
-      emphasisStyle: ChatTextStyles.markdownEmphasisStyle(baseStyle),
-      strikethroughStyle: ChatTextStyles.markdownStrikethroughStyle(baseStyle),
-      underlineStyle: ChatTextStyles.markdownUnderlineStyle(baseStyle),
+      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
+      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
+      strikethroughStyle: textStyles.markdownStrikethroughStyle(baseStyle),
+      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
       linkStyle: linkStyle,
-      blockquoteStyle: ChatTextStyles.markdownBlockquoteStyle(baseStyle),
+      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
       headingStyleResolver: (level) =>
-          ChatTextStyles.markdownHeadingStyle(baseStyle, level),
+          textStyles.markdownHeadingStyle(baseStyle, level, colors),
     );
   }
 
@@ -295,25 +302,26 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       );
       final railColor = chromeVisible
           ? ChatBubbleRules.botBorder
-          : ChatColors.transparent;
+          : ChatSkin.data.colors.transparent;
+      final tokens = ChatSkin.data.tokens;
       return CustomPaint(
         foregroundPainter: _BlockQuoteRailPainter(
           color: railColor,
-          railThickness: ChatTokens.bubbleBorderWidth,
-          capLength: ChatTokens.composerCornerAccentSegment,
+          railThickness: tokens.bubbleBorderWidth,
+          capLength: tokens.composerCornerAccentSegment,
           railInset: 5.0,
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 10),
-        child: _buildRenderedMarkupDocument(
-          context,
-          ChatMarkupDocument(block.blocks),
-          quoteTheme,
-          listDepth: listDepth,
-          inListItem: inListItem,
-          selectable: selectable,
-          chromeVisible: chromeVisible,
-        ),
+          child: _buildRenderedMarkupDocument(
+            context,
+            ChatMarkupDocument(block.blocks),
+            quoteTheme,
+            listDepth: listDepth,
+            inListItem: inListItem,
+            selectable: selectable,
+            chromeVisible: chromeVisible,
+          ),
         ),
       );
     }
@@ -453,10 +461,11 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
   }
 
   TextStyle _transparentTextStyle(TextStyle style) {
+    final transparent = ChatSkin.data.colors.transparent;
     return style.copyWith(
-      color: ChatColors.transparent,
-      backgroundColor: ChatColors.transparent,
-      decorationColor: ChatColors.transparent,
+      color: transparent,
+      backgroundColor: transparent,
+      decorationColor: transparent,
       shadows: const <Shadow>[],
     );
   }

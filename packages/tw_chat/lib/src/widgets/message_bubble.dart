@@ -127,14 +127,17 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
 
   @override
   Widget build(BuildContext context) {
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final tokens = skin.tokens;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final bubbleTextStyle = ChatBubbleRules.textStyle(textScale);
     final horizontalInset = ChatBubbleRules.horizontalTextInset(textScale);
     final verticalInset = ChatBubbleRules.verticalTextInset(textScale);
     final bubbleMaxWidth =
         (widget.availableWidth * ChatBubbleRules.maxWidthFactor +
-                ChatTokens.bubbleWidthCompensation)
-            .clamp(ChatTokens.bubbleMinMaxWidth, widget.availableWidth);
+                tokens.bubbleWidthCompensation)
+            .clamp(tokens.bubbleMinMaxWidth, widget.availableWidth);
     final textScaler = MediaQuery.textScalerOf(context);
     final parsedMarkup = widget.isTypingIndicator
         ? null
@@ -154,13 +157,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         measuredLayout.lineHeight * ChatBubbleRules.collapsedVisibleLines;
     final bubbleTopMargin = widget.isFirstMessage
         ? 0.0
-        : ChatTokens.bubbleVerticalMargin;
-    final collapseButtonOverflowRight = ChatTokens.collapseButtonRightInset < 0
-        ? -ChatTokens.collapseButtonRightInset
+        : tokens.bubbleVerticalMargin;
+    final collapseButtonOverflowRight = tokens.collapseButtonRightInset < 0
+        ? -tokens.collapseButtonRightInset
         : 0.0;
-    final collapseButtonOverflowBottom =
-        ChatTokens.collapseButtonBottomInset < 0
-        ? -ChatTokens.collapseButtonBottomInset
+    final collapseButtonOverflowBottom = tokens.collapseButtonBottomInset < 0
+        ? -tokens.collapseButtonBottomInset
         : 0.0;
     final toggleButtonBackgroundColor = widget.isTruncated
         ? ChatBubbleRules.collapseButtonColor
@@ -170,7 +172,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         : ChatBubbleRules.collapseButtonColor;
     final toggleButtonBorderSide = widget.isTruncated
         ? BorderSide.none
-        : const BorderSide(color: ChatBubbleRules.collapseButtonColor, width: 0.5);
+        : BorderSide(color: ChatBubbleRules.collapseButtonColor, width: 0.5);
     final align = widget.isUser ? Alignment.centerRight : Alignment.centerLeft;
     final bubbleColor = widget.isUser
         ? ChatBubbleRules.userFill
@@ -188,12 +190,11 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             top: bubbleTopMargin,
             bottom: 0.0,
             left: widget.isUser
-                ? ChatTokens.bubbleFarEdgeInset
-                : ChatTokens.bubbleNearEdgeInset,
+                ? tokens.bubbleFarEdgeInset
+                : tokens.bubbleNearEdgeInset,
             right: widget.isUser
-                ? ChatTokens.bubbleNearEdgeInset +
-                      ChatTokens.userBubbleRightInset
-                : ChatTokens.bubbleFarEdgeInset,
+                ? tokens.bubbleNearEdgeInset + tokens.userBubbleRightInset
+                : tokens.bubbleFarEdgeInset,
           ),
           child: Stack(
             clipBehavior: Clip.none,
@@ -213,14 +214,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   constraints: BoxConstraints(maxWidth: bubbleMaxWidth),
                   decoration: BoxDecoration(
                     color: bubbleColor,
-                    borderRadius: BorderRadius.circular(
-                      ChatTokens.bubbleRadius,
-                    ),
+                    borderRadius: BorderRadius.circular(tokens.bubbleRadius),
                     border: Border.all(
                       color: borderColor,
-                      width: ChatTokens.bubbleBorderWidth,
+                      width: tokens.bubbleBorderWidth,
                     ),
-                    boxShadow: const [ChatTokens.surfaceShadow],
+                    boxShadow: [tokens.surfaceShadow(colors)],
                   ),
                   child: _buildBubbleText(
                     parsedMarkup,
@@ -235,41 +234,41 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
               if (isTruncatable)
                 Positioned(
                   right:
-                      ChatTokens.collapseButtonRightInset +
+                      tokens.collapseButtonRightInset +
                       collapseButtonOverflowRight,
                   bottom:
-                      ChatTokens.collapseButtonBottomInset +
+                      tokens.collapseButtonBottomInset +
                       collapseButtonOverflowBottom,
                   child: Tooltip(
                     message: widget.isTruncated ? 'Show more' : 'Show less',
                     child: SizedBox(
-                      width: ChatTokens.collapseButtonDiameter,
-                      height: ChatTokens.collapseButtonDiameter,
+                      width: tokens.collapseButtonDiameter,
+                      height: tokens.collapseButtonDiameter,
                       child: Material(
                         color: toggleButtonBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
-                            ChatTokens.collapseButtonRadius,
+                            tokens.collapseButtonRadius,
                           ),
                           side: toggleButtonBorderSide,
                         ),
                         child: InkWell(
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
-                              ChatTokens.collapseButtonRadius,
+                              tokens.collapseButtonRadius,
                             ),
                             side: toggleButtonBorderSide,
                           ),
                           onTap: widget.onToggleTruncation,
                           child: Center(
                             child: SizedBox(
-                              width: ChatTokens.collapseButtonIconSize,
-                              height: ChatTokens.collapseButtonIconSize,
+                              width: tokens.collapseButtonIconSize,
+                              height: tokens.collapseButtonIconSize,
                               child: CustomPaint(
                                 painter: _PlusMinusPainter(
                                   isPlus: widget.isTruncated,
                                   color: toggleButtonIconColor,
-                                  strokeWidth: ChatTokens.collapseButtonStroke,
+                                  strokeWidth: tokens.collapseButtonStroke,
                                 ),
                               ),
                             ),
@@ -294,19 +293,22 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required double truncatedContentHeight,
     required bool isTruncated,
   }) {
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final tokens = skin.tokens;
     if (widget.isTypingIndicator) {
       return SelectionListener(
         selectionNotifier: widget.selectionListenerNotifier,
         child: Padding(
-          padding: ChatTokens.typingIndicatorPadding,
+          padding: tokens.typingIndicatorPadding,
           child: _TypingDotsIndicator(
-            color: ChatColors.scrollbarThumb,
+            color: colors.scrollbarThumb,
             dotDiameter:
-                ((style.fontSize ?? ChatTokens.typingIndicatorDefaultFontSize) *
+                ((style.fontSize ?? tokens.typingIndicatorDefaultFontSize) *
                         0.5)
                     .clamp(
-                      ChatTokens.typingIndicatorDotMinDiameter,
-                      ChatTokens.typingIndicatorDotMaxDiameter,
+                      tokens.typingIndicatorDotMinDiameter,
+                      tokens.typingIndicatorDotMaxDiameter,
                     ),
           ),
         ),
@@ -415,9 +417,11 @@ class _TypingDotsIndicator extends StatefulWidget {
 
 class _TypingDotsIndicatorState extends State<_TypingDotsIndicator>
     with SingleTickerProviderStateMixin {
+  ChatSkinTokens get _tokens => ChatSkin.data.tokens;
+
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: ChatTokens.typingIndicatorAnimationDuration,
+    duration: _tokens.typingIndicatorAnimationDuration,
   );
   bool _reduceMotion = false;
 
@@ -454,7 +458,7 @@ class _TypingDotsIndicatorState extends State<_TypingDotsIndicator>
         for (int index = 0; index < 3; index++)
           Padding(
             padding: EdgeInsets.only(
-              right: index < 2 ? ChatTokens.typingIndicatorDotGap : 0.0,
+              right: index < 2 ? _tokens.typingIndicatorDotGap : 0.0,
             ),
             child: _TypingDot(
               diameter: widget.dotDiameter,
@@ -512,12 +516,11 @@ class _TypingDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = ChatSkin.data.tokens;
     final scale =
-        ChatTokens.typingDotScaleBase +
-        (ChatTokens.typingDotScaleAmplitude * strength);
+        tokens.typingDotScaleBase + (tokens.typingDotScaleAmplitude * strength);
     final alpha =
-        ChatTokens.typingDotAlphaBase +
-        (ChatTokens.typingDotAlphaAmplitude * strength);
+        tokens.typingDotAlphaBase + (tokens.typingDotAlphaAmplitude * strength);
     return Transform.scale(
       scale: scale,
       child: Container(

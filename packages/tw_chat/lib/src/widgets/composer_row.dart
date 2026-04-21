@@ -98,6 +98,9 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   Widget build(BuildContext context) {
     _scheduleHeightSync();
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final tokens = skin.tokens;
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final composerTextStyle = ChatBubbleRules.textStyle(textScale);
@@ -108,12 +111,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
     final composerButtonIcon = widget.isAwaitingResponse
         ? Icons.stop_rounded
         : Icons.send_rounded;
-    const inputScrollbarThickness = ChatTokens.scrollbarThickness;
+    final inputScrollbarThickness = tokens.scrollbarThickness;
     final inputScrollbarCrossAxisInset =
-        ChatTokens.composerScrollbarReservedWidth > inputScrollbarThickness
-        ? (ChatTokens.composerScrollbarReservedWidth -
-                  inputScrollbarThickness) /
-              2
+        tokens.composerScrollbarReservedWidth > inputScrollbarThickness
+        ? (tokens.composerScrollbarReservedWidth - inputScrollbarThickness) / 2
         : 0.0;
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
@@ -131,30 +132,26 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         children: [
           Expanded(
             child: CustomPaint(
-              foregroundPainter: const _CornerAccentPainter(
+              foregroundPainter: _CornerAccentPainter(
                 color: ChatComposerLayout.cornerAccentColor,
-                radius: ChatTokens.composerCornerAccentRadius,
-                strokeWidth: ChatTokens.composerCornerAccentStroke,
-                segmentLength: ChatTokens.composerCornerAccentSegment,
+                radius: tokens.composerCornerAccentRadius,
+                strokeWidth: tokens.composerCornerAccentStroke,
+                segmentLength: tokens.composerCornerAccentSegment,
               ),
               child: Container(
                 key: _inputShellKey,
                 decoration: BoxDecoration(
                   color: ChatComposerLayout.fillColor,
-                  borderRadius: BorderRadius.circular(
-                    ChatTokens.composerRadius,
-                  ),
+                  borderRadius: BorderRadius.circular(tokens.composerRadius),
                   border: Border.all(color: ChatComposerLayout.borderColor),
-                  boxShadow: const [ChatTokens.surfaceShadow],
+                  boxShadow: [tokens.surfaceShadow(colors)],
                 ),
                 constraints: BoxConstraints(
                   minHeight: widget.minInputHeight,
                   maxHeight: widget.maxInputHeight,
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    ChatTokens.composerRadius,
-                  ),
+                  borderRadius: BorderRadius.circular(tokens.composerRadius),
                   child: Stack(
                     fit: StackFit.passthrough,
                     children: [
@@ -169,15 +166,15 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                         trackVisibility: false,
                         interactive: true,
                         thickness: inputScrollbarThickness,
-                        minThumbLength: ChatTokens.scrollbarMinThumbLength,
+                        minThumbLength: tokens.scrollbarMinThumbLength,
                         mainAxisMargin: 0,
                         crossAxisMargin:
                             inputScrollbarCrossAxisInset +
-                            ChatTokens.scrollbarThumbCrossAxisMargin,
-                        padding: const EdgeInsets.only(
-                          bottom: -ChatTokens.composerInputTextInsetTopBottom,
+                            tokens.scrollbarThumbCrossAxisMargin,
+                        padding: EdgeInsets.only(
+                          bottom: -tokens.composerInputTextInsetTopBottom,
                         ),
-                        radius: ChatTokens.scrollbarRadius,
+                        radius: tokens.scrollbarRadius,
                         child: ScrollConfiguration(
                           behavior: const ChatNoScrollbarBehavior(),
                           child: TextField(
@@ -201,12 +198,12 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                               border: InputBorder.none,
                               hintText: 'Ask me anything...',
                               hintStyle: composerHintStyle,
-                              contentPadding: const EdgeInsets.fromLTRB(
-                                ChatTokens.composerTextInsetLeft,
-                                ChatTokens.composerInputTextInsetTopBottom,
-                                ChatTokens.composerTextInsetRight +
-                                    ChatTokens.composerScrollbarReservedWidth,
-                                ChatTokens.composerInputTextInsetTopBottom,
+                              contentPadding: EdgeInsets.fromLTRB(
+                                tokens.composerTextInsetLeft,
+                                tokens.composerInputTextInsetTopBottom,
+                                tokens.composerTextInsetRight +
+                                    tokens.composerScrollbarReservedWidth,
+                                tokens.composerInputTextInsetTopBottom,
                               ),
                             ),
                           ),
@@ -225,12 +222,12 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
               maxHeight: actionHeight,
             ),
             child: Material(
-              color: ChatColors.transparent,
+              color: colors.transparent,
               child: Tooltip(
                 message: composerButtonTooltip,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(
-                    ChatTokens.composerSendButtonRadius,
+                    tokens.composerSendButtonRadius,
                   ),
                   onTap: widget.isAwaitingResponse
                       ? widget.onStop
@@ -238,7 +235,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                   child: Center(
                     child: Icon(
                       composerButtonIcon,
-                      size: ChatTokens.composerSendIconSize,
+                      size: tokens.composerSendIconSize,
                       color: ChatComposerLayout.sendIconColor,
                     ),
                   ),

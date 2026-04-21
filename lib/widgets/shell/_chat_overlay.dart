@@ -9,9 +9,11 @@ class TwinChatOverlay extends StatefulWidget {
   const TwinChatOverlay({
     super.key,
     required this.twinBackendUrl,
+    this.chatSkinMode = ChatSkinMode.light,
   });
 
   final String twinBackendUrl;
+  final ChatSkinMode chatSkinMode;
 
   @override
   State<TwinChatOverlay> createState() => _TwinChatOverlayState();
@@ -27,11 +29,9 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
   void initState() {
     super.initState();
     final TwinReplyClient replyClient = AppRuntimeConfig.useChatBackend
-        ? HttpTwinReplyClient(
-            baseUri: Uri.parse(widget.twinBackendUrl),
-          )
-      : const FixedTwinReplyClient(
-        replyText: AppRuntimeConfig.backendDisabledReply,
+        ? HttpTwinReplyClient(baseUri: Uri.parse(widget.twinBackendUrl))
+        : const FixedTwinReplyClient(
+            replyText: AppRuntimeConfig.backendDisabledReply,
           );
 
     _conversationController = TwinConversationController(
@@ -65,8 +65,11 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
           onSend: _conversationController.sendMessage,
           onStop: _conversationController.stopPendingReply,
           isChatKeyboardScrollTarget: _isChatKeyboardScrollTarget,
-          onSetChatKeyboardScrollTarget: () => _setChatKeyboardScrollTarget(true),
-          onSetPageKeyboardScrollTarget: () => _setChatKeyboardScrollTarget(false),
+          onSetChatKeyboardScrollTarget: () =>
+              _setChatKeyboardScrollTarget(true),
+          onSetPageKeyboardScrollTarget: () =>
+              _setChatKeyboardScrollTarget(false),
+          skinMode: widget.chatSkinMode,
         );
       },
     );
