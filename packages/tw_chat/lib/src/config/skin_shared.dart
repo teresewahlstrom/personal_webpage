@@ -313,7 +313,10 @@ class ChatSkinTextStyles {
       height: 1.12,
       fontWeight: FontWeight.w700,
     );
-    final scale = _resolvedTextScale(textScale);
+    final scale = _resolvedTextScale(
+      textScale,
+      maxTextScale: defaultMaxTextScale,
+    );
     return base.copyWith(
       color: colors.appBarTitle,
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.7),
@@ -322,9 +325,12 @@ class ChatSkinTextStyles {
   }
 
   TextStyle bubbleTextStyle(double textScale, ChatSkinColors colors) {
-    final scale = _resolvedTextScale(textScale);
+    final scale = _resolvedTextScale(
+      textScale,
+      maxTextScale: defaultMaxTextScale,
+    );
     final base = GoogleFonts.nunito(
-      fontSize: 14,
+      fontSize: 16,
       height: 1.5,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
@@ -336,9 +342,12 @@ class ChatSkinTextStyles {
   }
 
   TextStyle composerHintStyle(double textScale, ChatSkinColors colors) {
-    final scale = _resolvedTextScale(textScale);
+    final scale = _resolvedTextScale(
+      textScale,
+      maxTextScale: composerMaxTextScale,
+    );
     final base = GoogleFonts.nunito(
-      fontSize: 14,
+      fontSize: 16,
       height: 1.35,
       color: colors.composerHint,
       fontWeight: FontWeight.w300,
@@ -444,10 +453,13 @@ class ChatSkinTextStyles {
     return ChatMath.scaleFromOne(base, scale, intensity);
   }
 
-  double _resolvedTextScale(double textScale) {
+  double _resolvedTextScale(
+    double textScale, {
+    double maxTextScale = double.infinity,
+  }) {
     if (!textScale.isFinite || textScale <= 0) {
       return minTextScale;
     }
-    return textScale;
+    return textScale.clamp(minTextScale, maxTextScale).toDouble();
   }
 }

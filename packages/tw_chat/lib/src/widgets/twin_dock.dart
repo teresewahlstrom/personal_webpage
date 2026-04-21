@@ -17,6 +17,7 @@ class TwinChatDock extends StatefulWidget {
     required this.isChatKeyboardScrollTarget,
     required this.onSetChatKeyboardScrollTarget,
     required this.onSetPageKeyboardScrollTarget,
+    this.minimizedBottomOffset = 25,
     this.skinMode = ChatSkinMode.light,
   });
 
@@ -26,6 +27,7 @@ class TwinChatDock extends StatefulWidget {
   final ValueListenable<bool> isChatKeyboardScrollTarget;
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onSetPageKeyboardScrollTarget;
+  final double minimizedBottomOffset;
   final ChatSkinMode skinMode;
 
   @override
@@ -70,7 +72,8 @@ class _TwinChatDockState extends State<TwinChatDock> {
 
     return Positioned(
       right: mediaQuery.viewPadding.right + chatMargin,
-      bottom: mediaQuery.viewInsets.bottom,
+      bottom: mediaQuery.viewInsets.bottom +
+          (_isExpanded ? 0 : widget.minimizedBottomOffset),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -106,7 +109,6 @@ class _TwinChatDockState extends State<TwinChatDock> {
               onSetChatKeyboardScrollTarget:
                   widget.onSetChatKeyboardScrollTarget,
               onExpand: _expandChat,
-              tokens: tokens,
             ),
           ),
         ],
@@ -202,12 +204,10 @@ class MinimizedChatLauncher extends StatelessWidget {
     super.key,
     required this.onSetChatKeyboardScrollTarget,
     required this.onExpand,
-    required this.tokens,
   });
 
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onExpand;
-  final ChatSkinTokens tokens;
 
   bool _shouldRoutePointerToChatKeyboardTarget(PointerDownEvent event) {
     return event.kind == PointerDeviceKind.mouse &&
@@ -216,7 +216,13 @@ class MinimizedChatLauncher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ChatSkin.data.colors;
+    final skin = ChatSkin.data;
+    final colors = skin.colors;
+    final shadowColor = (ChatSkin.isDark
+            ? colors.shellOuterShadow
+            : colors.shellOuterBorder)
+        .withValues(alpha: ChatSkin.isDark ? 0.36 : 0.24);
+
     return Material(
       color: colors.transparent,
       child: Listener(
@@ -228,17 +234,31 @@ class MinimizedChatLauncher extends StatelessWidget {
         },
         child: InkWell(
           onTap: onExpand,
-          borderRadius: tokens.shellBorderRadiusMinimized,
+          customBorder: const CircleBorder(),
           child: Container(
-            decoration: _chatShellDecoration(
-              borderRadius: tokens.shellBorderRadiusMinimized,
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: ChatLayout.backgroundGradient,
+              border: Border.all(
+                color: colors.shellOuterBorder,
+                width: skin.tokens.shellOuterBorderWidth,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: shadowColor,
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
-            child: TwinChatAppBar(
-              onDisplayStateToggle: onExpand,
-              displayStateToggleIcon: Icons.expand_less_rounded,
-              displayStateToggleTooltip: 'Expand chat',
-              tokens: tokens,
-              shrinkWrap: true,
+            child: Center(
+              child: Icon(
+                Icons.chat_bubble_outline_rounded,
+                size: 24,
+                color: colors.appBarTitle,
+              ),
             ),
           ),
         ),

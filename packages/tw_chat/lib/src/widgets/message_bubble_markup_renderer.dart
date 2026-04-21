@@ -96,7 +96,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           height: truncatedContentHeight,
           child: ClipRect(
             child: Stack(
-              fit: StackFit.expand,
               children: [
                 hiddenSelectionLayer,
                 ShaderMask(
@@ -211,14 +210,18 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         primary: false,
         clipBehavior: Clip.hardEdge,
-        child: SizedBox(
-          width: maxWidth,
-          child: _buildRenderedMarkupDocument(
-            context,
-            document,
-            theme,
-            selectable: selectable,
-            chromeVisible: chromeVisible,
+        child: Align(
+          alignment: Alignment.topLeft,
+          widthFactor: 1.0,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: _buildRenderedMarkupDocument(
+              context,
+              document,
+              theme,
+              selectable: selectable,
+              chromeVisible: chromeVisible,
+            ),
           ),
         ),
       ),

@@ -42,7 +42,10 @@ class ChatComposerLayout {
     final skin = ChatSkin.data;
     final scale = (!textScale.isFinite || textScale <= 0)
         ? skin.textStyles.minTextScale
-        : textScale;
+        : textScale.clamp(
+            skin.textStyles.minTextScale,
+            skin.textStyles.composerMaxTextScale,
+          ).toDouble();
     final compactnessT =
         1.0 -
         ChatMath.normalized(panelHeight, compactPanelHeight, roomyPanelHeight);

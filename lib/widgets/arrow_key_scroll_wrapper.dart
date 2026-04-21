@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'shell/chat_keyboard_scroll_target.dart';
+
 class ArrowKeyScrollWrapper extends StatefulWidget {
   const ArrowKeyScrollWrapper({
     super.key,
@@ -51,6 +53,10 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
   }
 
   void _handleScroll() {
+    if (ChatKeyboardScrollTarget.isChatTarget.value) {
+      return;
+    }
+
     if (!widget.controller.hasClients) {
       return;
     }
@@ -109,7 +115,10 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
       },
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: _focusNode.requestFocus,
+        onTap: () {
+          ChatKeyboardScrollTarget.setChatTarget(false);
+          _focusNode.requestFocus();
+        },
         child: widget.child,
       ),
     );

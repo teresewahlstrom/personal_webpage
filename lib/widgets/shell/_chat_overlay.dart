@@ -4,6 +4,7 @@ import 'package:tw_chat/content.dart';
 
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
+import 'chat_keyboard_scroll_target.dart';
 
 class TwinChatOverlay extends StatefulWidget {
   const TwinChatOverlay({
@@ -21,9 +22,6 @@ class TwinChatOverlay extends StatefulWidget {
 
 class _TwinChatOverlayState extends State<TwinChatOverlay> {
   late final TwinConversationController _conversationController;
-  final ValueNotifier<bool> _isChatKeyboardScrollTarget = ValueNotifier<bool>(
-    false,
-  );
 
   @override
   void initState() {
@@ -44,15 +42,11 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
   @override
   void dispose() {
     _conversationController.dispose();
-    _isChatKeyboardScrollTarget.dispose();
     super.dispose();
   }
 
   void _setChatKeyboardScrollTarget(bool value) {
-    if (_isChatKeyboardScrollTarget.value == value) {
-      return;
-    }
-    _isChatKeyboardScrollTarget.value = value;
+    ChatKeyboardScrollTarget.setChatTarget(value);
   }
 
   @override
@@ -64,7 +58,7 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
           messages: _conversationController.messages,
           onSend: _conversationController.sendMessage,
           onStop: _conversationController.stopPendingReply,
-          isChatKeyboardScrollTarget: _isChatKeyboardScrollTarget,
+          isChatKeyboardScrollTarget: ChatKeyboardScrollTarget.isChatTarget,
           onSetChatKeyboardScrollTarget: () =>
               _setChatKeyboardScrollTarget(true),
           onSetPageKeyboardScrollTarget: () =>
