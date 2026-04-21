@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/config.dart';
@@ -36,6 +37,14 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
+
+  bool get _useNativeMobileWebSelectionControls {
+    if (!kIsWeb) {
+      return false;
+    }
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+  }
 
   @override
   void initState() {
@@ -116,6 +125,11 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         tokens.composerScrollbarReservedWidth > inputScrollbarThickness
         ? (tokens.composerScrollbarReservedWidth - inputScrollbarThickness) / 2
         : 0.0;
+    final inputScrollbarPadding = _useNativeMobileWebSelectionControls
+        ? EdgeInsets.zero
+        : EdgeInsets.only(
+            bottom: -tokens.composerInputTextInsetTopBottom,
+          );
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
           widget.minInputHeight,
@@ -171,9 +185,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                         crossAxisMargin:
                             inputScrollbarCrossAxisInset +
                             tokens.scrollbarThumbCrossAxisMargin,
-                        padding: EdgeInsets.only(
-                          bottom: -tokens.composerInputTextInsetTopBottom,
-                        ),
+                        padding: inputScrollbarPadding,
                         radius: tokens.scrollbarRadius,
                         child: ScrollConfiguration(
                           behavior: const ChatNoScrollbarBehavior(),
@@ -181,6 +193,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                             controller: widget.controller,
                             focusNode: widget.inputFocusNode,
                             scrollController: widget.inputScroll,
+                            selectionControls:
+                                _useNativeMobileWebSelectionControls
+                                ? null
+                                : materialTextSelectionControls,
                             style: composerTextStyle,
                             textAlignVertical: TextAlignVertical.center,
                             cursorColor: ChatComposerLayout.cursorColor,

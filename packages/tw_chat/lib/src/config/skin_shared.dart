@@ -191,6 +191,7 @@ class ChatSkinTokens {
     vertical: 10,
   );
   final double markupUnderlineThickness = 1.75;
+  final double markupDecorationThicknessBias = 0.15;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
   final double markupListTopSpacingAdjustment = -0.3;
@@ -375,10 +376,19 @@ class ChatSkinTextStyles {
     return baseStyle.copyWith(fontStyle: FontStyle.italic);
   }
 
-  TextStyle markdownStrikethroughStyle(TextStyle baseStyle) {
+  double markdownDecorationThickness(ChatSkinTokens tokens) {
+    return tokens.markupUnderlineThickness +
+        tokens.markupDecorationThicknessBias;
+  }
+
+  TextStyle markdownStrikethroughStyle(
+    TextStyle baseStyle,
+    ChatSkinTokens tokens,
+  ) {
     return baseStyle.copyWith(
       decoration: TextDecoration.lineThrough,
       decorationColor: baseStyle.color,
+      decorationThickness: markdownDecorationThickness(tokens),
     );
   }
 
@@ -386,7 +396,7 @@ class ChatSkinTextStyles {
     return baseStyle.copyWith(
       decoration: TextDecoration.underline,
       decorationColor: baseStyle.color,
-      decorationThickness: tokens.markupUnderlineThickness,
+      decorationThickness: markdownDecorationThickness(tokens),
     );
   }
 

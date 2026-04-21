@@ -180,13 +180,16 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       color: colors.markupLink,
       decoration: TextDecoration.underline,
       decorationColor: colors.markupLinkDecoration,
-      decorationThickness: tokens.markupUnderlineThickness,
+      decorationThickness: textStyles.markdownDecorationThickness(tokens),
     );
     return ChatMarkupTheme(
       baseStyle: baseStyle,
       strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
       emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
-      strikethroughStyle: textStyles.markdownStrikethroughStyle(baseStyle),
+      strikethroughStyle: textStyles.markdownStrikethroughStyle(
+        baseStyle,
+        tokens,
+      ),
       underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
       linkStyle: linkStyle,
       blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
