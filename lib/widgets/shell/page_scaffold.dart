@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
 import '../../config/app_ui_config.dart';
 import '_chat_overlay.dart';
@@ -10,7 +11,7 @@ import '_page_footer.dart';
 /// Use this widget to display content over a grid background pattern.
 /// The grid and content are properly layered with IgnorePointer on the grid
 /// to allow interaction with content beneath.
-class PageScaffold extends StatelessWidget {
+class PageScaffold extends StatefulWidget {
   const PageScaffold({
     super.key,
     required this.child,
@@ -22,6 +23,7 @@ class PageScaffold extends StatelessWidget {
     this.twinBackendUrl = AppRuntimeConfig.twinBackendUrl,
     this.gridColor = ShellUiConfig.pageBackgroundColor,
     this.gridLineColor = ShellUiConfig.gridLineColor,
+    this.initialChatSkinMode = ChatSkinMode.light,
   });
 
   /// The main content to display on top of the grid background.
@@ -51,26 +53,65 @@ class PageScaffold extends StatelessWidget {
   /// Color of the grid lines.
   final Color gridLineColor;
 
+  /// Initial skin mode used by the twin chat widget.
+  final ChatSkinMode initialChatSkinMode;
+
+  @override
+  State<PageScaffold> createState() => _PageScaffoldState();
+}
+
+class _PageScaffoldState extends State<PageScaffold> {
+  late ChatSkinMode _chatSkinMode;
+
+  bool get _isChatDarkMode => _chatSkinMode == ChatSkinMode.dark;
+
+  bool get _showChatThemeToggle =>
+      widget.showTwinChat && AppRuntimeConfig.showChatInUi;
+
+  @override
+  void initState() {
+    super.initState();
+    _chatSkinMode = widget.initialChatSkinMode;
+  }
+
+  void _toggleChatTheme() {
+    setState(() {
+      _chatSkinMode = _isChatDarkMode ? ChatSkinMode.light : ChatSkinMode.dark;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridBackground(
-      backgroundColor: gridColor,
-      gridLineColor: gridLineColor,
+      backgroundColor: widget.gridColor,
+      gridLineColor: widget.gridLineColor,
       child: Stack(
         children: <Widget>[
           Column(
             children: <Widget>[
-              Expanded(child: child),
-              if (showFooter)
+              Expanded(
+                child: SelectionArea(
+                  child: widget.child,
+                ),
+              ),
+              if (widget.showFooter)
                 PageFooter(
-                  brandName: footerBrandName,
-                  privacyLabel: footerPrivacyLabel,
+                  brandName: widget.footerBrandName,
+                  privacyLabel: widget.footerPrivacyLabel,
+                  showChatThemeToggle: _showChatThemeToggle,
+                  isChatDarkMode: _isChatDarkMode,
+                  onToggleChatTheme: _showChatThemeToggle
+                      ? _toggleChatTheme
+                      : null,
                 ),
             ],
           ),
-          ...overlays,
-          if (showTwinChat && AppRuntimeConfig.showChatInUi)
-            TwinChatOverlay(twinBackendUrl: twinBackendUrl),
+          ...widget.overlays,
+          if (widget.showTwinChat && AppRuntimeConfig.showChatInUi)
+            TwinChatOverlay(
+              twinBackendUrl: widget.twinBackendUrl,
+              chatSkinMode: _chatSkinMode,
+            ),
         ],
       ),
     );
