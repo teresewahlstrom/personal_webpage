@@ -41,3 +41,17 @@ flutter run -d chrome --web-renderer html
 ```
 
 In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vscode/launch.json`.
+
+## Deploy Cache Behavior
+
+The Cloudflare Pages build script uses:
+
+- `flutter build web --release --pwa-strategy=none` to disable Flutter PWA worker generation.
+- Revalidation cache headers for entry files (`max-age=0, must-revalidate`).
+- Long-lived immutable cache for static assets (`/assets/*`, `/canvaskit/*`).
+
+Optional entry-file purge after build is enabled when all these environment variables are set:
+
+- `CF_ZONE_ID`
+- `CF_API_TOKEN` (must include Zone Cache Purge permission)
+- `PURGE_BASE_URLS` (space-separated origins, for example: `https://t1grid.com https://www.t1grid.com`)
