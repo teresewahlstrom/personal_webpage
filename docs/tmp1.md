@@ -1,34 +1,20 @@
 # SOLVED
 SOLVED
-* dark/light theme update
-    * Do a dark/light theme for main page as well, use some of the same color as for the dark chat for the dark theme of the main app?
+* tw_chat updates
+    * When one is not on the bottom of the chat, perhaps there should be a down-arrow in a button-circle that take one down to the bottom, somehow shared with the button "new message", perhaps reusing the same container?
+    * The "new message" button should only display if the bottom is not currently visible
+
 
 
 PERHAPS SOLVED (will verify after deployment)
-
 
 
 ---
 # SOON SOLVED
 
 
-
 ---
 # PROPOSED NEXT
-
-* tw_chat updates
-    * When one is not on the bottom of the chat, perhaps there should be a down-arrow in a button-circle that take one down to the bottom, somehow shared with the button "new message", perhaps reusing the same container?
-    * The "new message" button should only display if the bottom is not currently visible
-    * Make truncation shadow same color as outline of bubble in bottom
-
-
-## DRY-ify
-Göra ett shared paket:
-    - återanvända tw_chat scrollbar i main app från tw_chat?
-    - återanvända arrow-key-scroll i tw_chat från main app?
-    - gemensam färg-config mellan tw_chat och main app?
-    - annat som kan ingå i detta?
-    - Make the selection/deselction logic centralised into a wrapper? Create internal package tw_flutter_basics that can be shared with other internal packages as well as Main app. Move the scrollable behavior in there as well?
 
 
 
@@ -91,3 +77,11 @@ Göra ett shared paket:
         Creating joyful work processes & UI
         Design & 3D-modeling
         3D-printing
+
+## DRY-ify
+Göra ett shared paket:
+    - återanvända tw_chat scrollbar i main app från tw_chat?
+    - återanvända arrow-key-scroll i tw_chat från main app?
+    - gemensam färg-config mellan tw_chat och main app?
+    - annat som kan ingå i detta?
+    - Make the selection/deselction logic centralised into a wrapper? Create internal package tw_flutter_basics that can be shared with other internal packages as well as Main app. Move the scrollable behavior in there as well?

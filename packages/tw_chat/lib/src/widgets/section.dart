@@ -140,6 +140,7 @@ class _ChatSectionState extends State<ChatSection> {
             ValueListenableBuilder<int>(
               valueListenable: _coordinator.chatViewListenable,
               builder: (_, _, _) {
+                final bool showJumpToLatest = !_coordinator.isNearChatBottom;
                 final jumpToLatestLabel = _coordinator.newMessageCount == 1
                     ? 'New message'
                     : '${_coordinator.newMessageCount} new messages';
@@ -166,7 +167,7 @@ class _ChatSectionState extends State<ChatSection> {
                       _coordinator.handleChatPointerInteractionStart,
                   onChatPointerInteractionEnd:
                       _coordinator.handleChatPointerInteractionEnd,
-                  jumpToLatestButton: _coordinator.newMessageCount == 0
+                  jumpToLatestButton: !showJumpToLatest
                       ? null
                       : FilledButton.icon(
                           onPressed: _coordinator.jumpToLatest,
@@ -174,7 +175,11 @@ class _ChatSectionState extends State<ChatSection> {
                             Icons.south_rounded,
                             size: tokens.jumpToLatestButtonIconSize,
                           ),
-                          label: Text(jumpToLatestLabel),
+                          label: Text(
+                            _coordinator.newMessageCount == 0
+                                ? 'Jump to bottom'
+                                : jumpToLatestLabel,
+                          ),
                           style: FilledButton.styleFrom(
                             backgroundColor: colors.composerFill,
                             foregroundColor: ChatComposerLayout.sendIconColor,

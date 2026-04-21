@@ -38,6 +38,7 @@ class SectionCoordinator extends ChangeNotifier {
   bool showInputScrollbarTrack = false;
   bool isChatPointerInteractionActive = false;
   int newMessageCount = 0;
+  bool _isNearBottomCache = true;
 
   List<ChatMessage> _previousMessagesSnapshot = const <ChatMessage>[];
   String? _deferredRevealMessageId;
@@ -56,6 +57,8 @@ class SectionCoordinator extends ChangeNotifier {
 
   bool get shouldPauseAutoFollow =>
       isChatPointerInteractionActive || isChatSelectionActive;
+
+  bool get isNearChatBottom => _isNearBottomCache;
 
   void initialize({required List<ChatMessage> messages}) {
     _syncMessageBubbleKeys(messages);
@@ -86,6 +89,7 @@ class SectionCoordinator extends ChangeNotifier {
       if (messages.isNotEmpty) {
         _stickChatToBottom();
       }
+      _refreshNearBottomCache(notify: false);
     });
   }
 
@@ -291,7 +295,8 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void _handleChatScroll() {
-    if (newMessageCount > 0 && _isNearChatBottom()) {
+    _refreshNearBottomCache();
+    if (newMessageCount > 0 && _isNearBottomCache) {
       _clearNewMessagesIndicator();
     }
   }
@@ -376,6 +381,17 @@ class SectionCoordinator extends ChangeNotifier {
       controller: chatScroll,
       threshold: ChatLayout.nearBottomThreshold,
     );
+  }
+
+  void _refreshNearBottomCache({bool notify = true}) {
+    final bool nextValue = _isNearChatBottom();
+    if (_isNearBottomCache == nextValue) {
+      return;
+    }
+    _isNearBottomCache = nextValue;
+    if (notify) {
+      _notifyChatView();
+    }
   }
 
   void _stickChatToBottom([
