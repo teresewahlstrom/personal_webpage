@@ -84,8 +84,8 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
       ? ShellUiConfig.headerToggleHoverFor(brightness)
       : ShellUiConfig.headerToggleFor(brightness);
     final IconData icon = widget.isDarkMode
-        ? Icons.light_mode_outlined
-        : Icons.dark_mode_outlined;
+      ? Icons.light_mode
+      : Icons.dark_mode;
     final String tooltip = widget.isDarkMode
       ? 'Switch app to light'
       : 'Switch app to dark';

@@ -51,6 +51,7 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     return AnimatedBuilder(
       animation: _conversationController,
       builder: (BuildContext context, Widget? child) {
@@ -64,6 +65,20 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
           onSetPageKeyboardScrollTarget: () =>
               _setChatKeyboardScrollTarget(false),
           skinMode: widget.chatSkinMode,
+          launcherStyle: ChatLauncherStyle(
+            size: ShellUiConfig.headerToggleSize * 1.5,
+            iconSize: 30,
+            icon: Icons.chat,
+            foregroundColor: ShellUiConfig.headerToggleFor(brightness),
+            hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(brightness),
+            backgroundColor: ShellUiConfig.headerToggleBackgroundFor(brightness),
+            borderWidth: 1,
+            animationDuration: const Duration(milliseconds: 180),
+            idleShadowBlurRadius: 8,
+            hoverShadowBlurRadius: 12,
+            shadowOffset: const Offset(0, 3),
+            shadowAlpha: 0.12,
+          ),
         );
       },
     );

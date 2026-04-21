@@ -38,6 +38,8 @@ ENTRY_FILES=(
   "/main.dart.js"
   "/flutter_service_worker.js"
   "/manifest.json"
+  "/assets/FontManifest.json"
+  "/assets/fonts/MaterialIcons-Regular.otf"
 )
 
 if [[ -n "${CF_ZONE_ID:-}" && -n "${CF_API_TOKEN:-}" && -n "${PURGE_BASE_URLS:-}" ]]; then

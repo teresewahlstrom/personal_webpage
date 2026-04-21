@@ -8,6 +8,36 @@ import 'section.dart';
 
 enum ChatDockDisplayState { minimized, expanded }
 
+class ChatLauncherStyle {
+  const ChatLauncherStyle({
+    this.size = 58,
+    this.iconSize = 25,
+    this.icon = Icons.chat_bubble,
+    this.foregroundColor = const Color(0xFF394183),
+    this.hoverForegroundColor = const Color(0xFF843F02),
+    this.backgroundColor = Colors.white,
+    this.borderWidth = 1,
+    this.animationDuration = const Duration(milliseconds: 180),
+    this.idleShadowBlurRadius = 8,
+    this.hoverShadowBlurRadius = 12,
+    this.shadowOffset = const Offset(0, 3),
+    this.shadowAlpha = 0.12,
+  });
+
+  final double size;
+  final double iconSize;
+  final IconData icon;
+  final Color foregroundColor;
+  final Color hoverForegroundColor;
+  final Color backgroundColor;
+  final double borderWidth;
+  final Duration animationDuration;
+  final double idleShadowBlurRadius;
+  final double hoverShadowBlurRadius;
+  final Offset shadowOffset;
+  final double shadowAlpha;
+}
+
 class TwinChatDock extends StatefulWidget {
   const TwinChatDock({
     super.key,
@@ -19,6 +49,7 @@ class TwinChatDock extends StatefulWidget {
     required this.onSetPageKeyboardScrollTarget,
     this.minimizedBottomOffset = 25,
     this.skinMode = ChatSkinMode.light,
+    this.launcherStyle = const ChatLauncherStyle(),
   });
 
   final List<ChatMessage> messages;
@@ -29,6 +60,7 @@ class TwinChatDock extends StatefulWidget {
   final VoidCallback onSetPageKeyboardScrollTarget;
   final double minimizedBottomOffset;
   final ChatSkinMode skinMode;
+  final ChatLauncherStyle launcherStyle;
 
   @override
   State<TwinChatDock> createState() => _TwinChatDockState();
@@ -106,6 +138,7 @@ class _TwinChatDockState extends State<TwinChatDock> {
           Offstage(
             offstage: _isExpanded,
             child: MinimizedChatLauncher(
+              launcherStyle: widget.launcherStyle,
               onSetChatKeyboardScrollTarget:
                   widget.onSetChatKeyboardScrollTarget,
               onExpand: _expandChat,
@@ -199,13 +232,15 @@ class TwinChatAppBar extends StatelessWidget {
   }
 }
 
-class MinimizedChatLauncher extends StatelessWidget {
+class MinimizedChatLauncher extends StatefulWidget {
   const MinimizedChatLauncher({
     super.key,
+    required this.launcherStyle,
     required this.onSetChatKeyboardScrollTarget,
     required this.onExpand,
   });
 
+  final ChatLauncherStyle launcherStyle;
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onExpand;
 
@@ -215,49 +250,65 @@ class MinimizedChatLauncher extends StatelessWidget {
   }
 
   @override
+  State<MinimizedChatLauncher> createState() => _MinimizedChatLauncherState();
+}
+
+class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    final skin = ChatSkin.data;
-    final colors = skin.colors;
-    final shadowColor = (ChatSkin.isDark
-            ? colors.shellOuterShadow
-            : colors.shellOuterBorder)
-        .withValues(alpha: ChatSkin.isDark ? 0.36 : 0.24);
+    final colors = ChatSkin.data.colors;
+    final launcherStyle = widget.launcherStyle;
+    final foregroundColor = _isHovered
+        ? launcherStyle.hoverForegroundColor
+        : launcherStyle.foregroundColor;
 
     return Material(
       color: colors.transparent,
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (event) {
-          if (_shouldRoutePointerToChatKeyboardTarget(event)) {
-            onSetChatKeyboardScrollTarget();
-          }
-        },
-        child: InkWell(
-          onTap: onExpand,
-          customBorder: const CircleBorder(),
-          child: Container(
-            width: 58,
-            height: 58,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: ChatLayout.backgroundGradient,
-              border: Border.all(
-                color: colors.shellOuterBorder,
-                width: skin.tokens.shellOuterBorderWidth,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: shadowColor,
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (event) {
+            if (widget._shouldRoutePointerToChatKeyboardTarget(event)) {
+              widget.onSetChatKeyboardScrollTarget();
+            }
+          },
+          child: InkWell(
+            onTap: widget.onExpand,
+            customBorder: const CircleBorder(),
+            child: Tooltip(
+              message: 'Open chat',
+              child: AnimatedContainer(
+                duration: launcherStyle.animationDuration,
+                width: launcherStyle.size,
+                height: launcherStyle.size,
+                decoration: BoxDecoration(
+                  color: launcherStyle.backgroundColor,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: foregroundColor,
+                    width: launcherStyle.borderWidth,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: foregroundColor.withValues(alpha: launcherStyle.shadowAlpha),
+                      blurRadius: _isHovered
+                          ? launcherStyle.hoverShadowBlurRadius
+                          : launcherStyle.idleShadowBlurRadius,
+                      offset: launcherStyle.shadowOffset,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Center(
-              child: Icon(
-                Icons.chat_bubble,
-                size: 25,
-                color: colors.appBarTitle,
+                child: Center(
+                  child: Icon(
+                    launcherStyle.icon,
+                    size: launcherStyle.iconSize,
+                    color: foregroundColor,
+                  ),
+                ),
               ),
             ),
           ),

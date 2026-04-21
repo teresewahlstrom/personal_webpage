@@ -79,6 +79,8 @@ class PageScaffold extends StatefulWidget {
 }
 
 class _PageScaffoldState extends State<PageScaffold> {
+  static const double _floatingThemeInset = 25;
+
   final ScrollController _pageScrollController = ScrollController();
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
@@ -101,6 +103,7 @@ class _PageScaffoldState extends State<PageScaffold> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
     return GridBackground(
       backgroundColor:
           widget.gridColor ?? ShellUiConfig.pageBackgroundFor(brightness),
@@ -111,7 +114,7 @@ class _PageScaffoldState extends State<PageScaffold> {
             children: <Widget>[
               if (widget.showHeader)
                 PageHeader(
-                  showThemeToggle: widget.showThemeToggle,
+                  showThemeToggle: false,
                   isDarkMode: widget.isDarkMode,
                   onToggleTheme: widget.onToggleTheme,
                 ),
@@ -145,12 +148,81 @@ class _PageScaffoldState extends State<PageScaffold> {
             ],
           ),
           ...widget.overlays,
+          if (widget.showThemeToggle && widget.onToggleTheme != null)
+            Positioned(
+              right: mediaQuery.viewPadding.right + _floatingThemeInset,
+              top: mediaQuery.viewPadding.top + _floatingThemeInset,
+              child: _FloatingThemeToggle(
+                isDarkMode: widget.isDarkMode,
+                onTap: widget.onToggleTheme!,
+              ),
+            ),
           if (widget.showTwinChat && AppRuntimeConfig.showChatInUi)
             TwinChatOverlay(
               twinBackendUrl: widget.twinBackendUrl,
               chatSkinMode: widget.initialChatSkinMode,
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _FloatingThemeToggle extends StatefulWidget {
+  const _FloatingThemeToggle({
+    required this.isDarkMode,
+    required this.onTap,
+  });
+
+  final bool isDarkMode;
+  final VoidCallback onTap;
+
+  @override
+  State<_FloatingThemeToggle> createState() => _FloatingThemeToggleState();
+}
+
+class _FloatingThemeToggleState extends State<_FloatingThemeToggle> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color foregroundColor = _isHovered
+        ? ShellUiConfig.headerToggleHoverFor(brightness)
+        : ShellUiConfig.headerToggleFor(brightness);
+    final IconData icon = widget.isDarkMode
+      ? Icons.light_mode
+      : Icons.dark_mode;
+    final String tooltip = widget.isDarkMode
+        ? 'Switch app to light'
+        : 'Switch app to dark';
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Tooltip(
+        message: tooltip,
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            width: ShellUiConfig.headerToggleSize,
+            height: ShellUiConfig.headerToggleSize,
+            decoration: BoxDecoration(
+              color: ShellUiConfig.headerToggleBackgroundFor(brightness),
+              shape: BoxShape.circle,
+              border: Border.all(color: foregroundColor, width: 1),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: foregroundColor.withValues(alpha: 0.12),
+                  blurRadius: _isHovered ? 12 : 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: foregroundColor, size: 22),
+          ),
+        ),
       ),
     );
   }

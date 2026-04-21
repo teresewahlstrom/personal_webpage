@@ -1,9 +1,5 @@
 # SOLVED
 SOLVED
-* tw_chat updates
-    * When one is not on the bottom of the chat, perhaps there should be a down-arrow in a button-circle that take one down to the bottom, somehow shared with the button "new message", perhaps reusing the same container?
-    * The "new message" button should only display if the bottom is not currently visible
-
 
 
 PERHAPS SOLVED (will verify after deployment)
@@ -15,6 +11,8 @@ PERHAPS SOLVED (will verify after deployment)
 
 ---
 # PROPOSED NEXT
+* landing page update
+    * Title + bgd + outline for the keyword graphic. 
 
 
 
@@ -22,8 +20,6 @@ PERHAPS SOLVED (will verify after deployment)
 
 ---
 # LATER
-* landing page update
-    * Title + bgd + outline for the keyword graphic. 
 
 ## Fix colors/theme across main app and tw_chat
 * Light theme is not on brand
