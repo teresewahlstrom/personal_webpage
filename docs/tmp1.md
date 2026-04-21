@@ -1,5 +1,5 @@
 # SOLVED
-in tw_chat chatlist, we removed the spacing hindering the thumb of scrollbar to go the entire way up
+
 
 # SOON SOLVED
 
@@ -7,12 +7,6 @@ in tw_chat chatlist, we removed the spacing hindering the thumb of scrollbar to 
 # NEXT
 * tw_chat scrollbar
     - scroll thumbbar in text input does not go entire way down, but it does so on chrome
-
-
-
-
-
-
 
 
 # Keywords förb:

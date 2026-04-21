@@ -1,10 +1,7 @@
 const String twinPrototypeIntroText = r'''## Prototype Mode
-
-I answer from a fixed Terese context and keep in-session chat memory while the local backend is running.
-Terese is a software engineer and designer with a background in product management. She has experience working on a variety of projects, including mobile apps, web applications, and design systems. Terese is passionate about creating user-friendly and visually appealing products that solve real problems.
+Eventually this will be a real AI chat.
 
 ## Markdown Showcase
-
 - **Bold**
 - *Italic*
 - ~~Strikethrough~~
