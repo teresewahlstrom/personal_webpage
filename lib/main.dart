@@ -17,10 +17,19 @@ class T1GridApp extends StatefulWidget {
 }
 
 class _T1GridAppState extends State<T1GridApp> {
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.system;
   bool _isLandingContentReady = false;
 
-  bool get _isDarkMode => _themeMode == ThemeMode.dark;
+  bool get _isDarkMode {
+    if (_themeMode == ThemeMode.dark) {
+      return true;
+    }
+    if (_themeMode == ThemeMode.light) {
+      return false;
+    }
+    return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
+  }
 
   void _toggleThemeMode() {
     setState(() {
