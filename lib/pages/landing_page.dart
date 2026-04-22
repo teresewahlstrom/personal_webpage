@@ -257,7 +257,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "About me";
   static const String _content =
-      "Turns complexity into clarity. A rare blend of systems thinker, cross-domain integrator, and a driver of change.";
+      "Turns complexity into clarity. A rare blend of systems thinker, cross-domain integrator, and driver of change.";
 
   @override
   Widget build(BuildContext context) {

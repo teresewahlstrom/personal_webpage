@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../config/app_ui_config.dart';
+import 'floating_controls.dart';
 
 class PageHeader extends StatelessWidget {
   const PageHeader({
@@ -47,75 +48,11 @@ class PageHeader extends StatelessWidget {
               ),
               const Spacer(),
               if (showThemeToggle && onToggleTheme != null)
-                _HeaderThemeButton(
+                ThemeToggleControlButton(
                   isDarkMode: isDarkMode,
                   onTap: onToggleTheme!,
                 ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HeaderThemeButton extends StatefulWidget {
-  const _HeaderThemeButton({
-    required this.isDarkMode,
-    required this.onTap,
-  });
-
-  final bool isDarkMode;
-  final VoidCallback onTap;
-
-  @override
-  State<_HeaderThemeButton> createState() => _HeaderThemeButtonState();
-}
-
-class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color foregroundColor = _isHovered
-      ? ShellUiConfig.headerToggleHoverFor(brightness)
-      : ShellUiConfig.headerToggleFor(brightness);
-    final AppLineStyle outlineStyle = AppLineTheme.accentFor(
-      brightness,
-      hovered: _isHovered,
-    );
-    final IconData icon = widget.isDarkMode
-      ? Icons.light_mode
-      : Icons.dark_mode;
-    final String tooltip = widget.isDarkMode
-      ? 'Switch app to light'
-      : 'Switch app to dark';
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: Tooltip(
-        message: tooltip,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            width: ShellUiConfig.headerToggleSize,
-            height: ShellUiConfig.headerToggleSize,
-            decoration: BoxDecoration(
-              color: ShellUiConfig.headerToggleBackgroundFor(brightness),
-              shape: BoxShape.circle,
-              border: outlineStyle.borderAll,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: foregroundColor.withValues(alpha: 0.12),
-                  blurRadius: _isHovered ? 12 : 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(icon, color: foregroundColor, size: 22),
           ),
         ),
       ),

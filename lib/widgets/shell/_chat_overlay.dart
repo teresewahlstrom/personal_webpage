@@ -4,8 +4,9 @@ import 'package:tw_chat/content.dart';
 
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
-import 'chat_keyboard_scroll_target.dart';
-import 'floating_control_inset.dart';
+import '_chat_keyboard_scroll_target.dart';
+import '_floating_control_inset.dart';
+import 'floating_controls.dart';
 
 class ChatOverlay extends StatefulWidget {
   const ChatOverlay({
@@ -72,24 +73,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
           minimizedBottomOffset: floatingInset,
           minimizedRightInset: floatingInset,
           skinMode: widget.chatSkinMode,
-          launcherStyle: ChatLauncherStyle(
-            size: ShellUiConfig.headerToggleSize * 1.5,
-            iconSize: 30,
-            icon: Icons.chat,
-            foregroundColor: ShellUiConfig.headerToggleFor(brightness),
-            hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(
-              brightness,
-            ),
-            backgroundColor: ShellUiConfig.headerToggleBackgroundFor(
-              brightness,
-            ),
-            borderWidth: 1,
-            animationDuration: const Duration(milliseconds: 180),
-            idleShadowBlurRadius: 8,
-            hoverShadowBlurRadius: 12,
-            shadowOffset: const Offset(0, 3),
-            shadowAlpha: 0.12,
-          ),
+          launcherStyle: buildChatLauncherStyle(brightness),
         );
       },
     );

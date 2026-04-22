@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'shell/chat_keyboard_scroll_target.dart';
+import 'shell/_chat_keyboard_scroll_target.dart';
 
 class ArrowKeyScrollWrapper extends StatefulWidget {
   const ArrowKeyScrollWrapper({
