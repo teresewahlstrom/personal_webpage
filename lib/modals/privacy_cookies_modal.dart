@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../config/app_ui_config.dart';
+
 class PrivacyCookiesContent extends StatelessWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
 
@@ -121,13 +123,9 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color baseLinkColor = isDark
-        ? const Color(0xFF90E8F8)
-        : const Color(0xFF394183);
-    final Color hoverLinkColor = isDark
-        ? const Color(0xFF4EF0FF)
-        : const Color(0xFF843F02);
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color baseLinkColor = AppColorTheme.landingAccentFor(brightness);
+    final Color hoverLinkColor = AppColorTheme.landingHoverFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -170,35 +168,35 @@ class _PrivacyModalBullet extends StatelessWidget {
 
 class _ModalStyles {
   static TextStyle h3(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
       fontFamily: "Inter18pt",
       fontWeight: FontWeight.w500,
       fontSize: 22,
-      color: isDark ? const Color(0xFFEAF7FF) : const Color(0xFF252525),
+      color: AppColorTheme.modalContentTextFor(brightness),
       height: 1.2,
     );
   }
 
   static TextStyle body(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
       fontFamily: "Inter18pt",
       fontWeight: FontWeight.w300,
       fontSize: 16,
       height: 1.6,
-      color: isDark ? const Color(0xFFEAF7FF) : const Color(0xFF252525),
+      color: AppColorTheme.modalContentTextFor(brightness),
     );
   }
 
   static TextStyle link(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
       fontFamily: "Inter18pt",
       fontWeight: FontWeight.w300,
       fontSize: 16,
       height: 1.6,
-      color: isDark ? const Color(0xFF90E8F8) : const Color(0xFF394183),
+      color: AppColorTheme.landingAccentFor(brightness),
       decoration: TextDecoration.underline,
     );
   }

@@ -59,7 +59,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
-          seedColor: const Color(0xFF394183),
+          seedColor: AppColorTheme.appSeedFor(Brightness.light),
         ),
         fontFamily: "Inter18pt",
       ),
@@ -71,7 +71,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          seedColor: const Color(0xFF90E8F8),
+          seedColor: AppColorTheme.appSeedFor(Brightness.dark),
         ),
         fontFamily: "Inter18pt",
       ),

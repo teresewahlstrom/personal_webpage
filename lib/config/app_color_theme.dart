@@ -12,6 +12,7 @@ final class _ThemeColor {
 }
 
 final class _AppLightColors {
+  static const Color appSeed = Color(0xFF394183);
   static const Color pageBackground = Color(0xFFF8F9F7);
   static const Color headerBackground = Color(0xFFF8F9F7);
   static const Color headerToggleBackground = Color(0xFFF8F9F7);
@@ -24,11 +25,12 @@ final class _AppLightColors {
   static const Color modalHeaderBorder = Color(0x1F394183);
   static const Color modalCloseIcon = Color(0xFF394183);
   static const Color modalCloseIconHover = Color(0xFF843F02);
+  static const Color modalContentText = Color(0xFF252525);
 
   static const Color landingAccent = Color(0xFF394183);
   static const Color landingHover = Color(0xFF843F02);
-  static const Color landingHeading = Color(0xFF161C45);
-  static const Color landingBody = Color(0xFF252525);
+  static const Color landingHeadingText = Color(0xFF161C45);
+  static const Color landingBodyText = Color(0xFF252525);
 
   static const Color lineSubtle = Color(0xFFE1E4F2);
   static const Color lineSubtle2 = Color(0x40394183);
@@ -38,6 +40,7 @@ final class _AppLightColors {
 }
 
 final class _AppDarkColors {
+  static const Color appSeed = Color(0xFF90E8F8);
   static const Color pageBackground = Color(0xFF212835);
   static const Color headerBackground = Color(0xFF212835);
   static const Color headerToggleBackground = Color(0xFF212835);
@@ -50,11 +53,12 @@ final class _AppDarkColors {
   static const Color modalHeaderBorder = Color(0x3390E8F8);
   static const Color modalCloseIcon = Color(0xFF90E8F8);
   static const Color modalCloseIconHover = Color(0xFF4EF0FF);
+  static const Color modalContentText = Color(0xFFEAF7FF);
 
   static const Color landingAccent = Color(0xFF90E8F8);
   static const Color landingHover = Color(0xFF4EF0FF);
-  static const Color landingHeading = Color(0xEBDCF6F8);
-  static const Color landingBody = Color(0xD6DCF6F8);
+  static const Color landingHeadingText = Color(0xEBDCF6F8);
+  static const Color landingBodyText = Color(0xD6DCF6F8);
 
   static const Color lineSubtle = Color(0xFF2B364A);
   static const Color lineSubtle2 = Color(0x397199FF);
@@ -64,6 +68,13 @@ final class _AppDarkColors {
 }
 
 final class AppColorTheme {
+  static const Color newsletterEmbedText = Color(0xFFFFFFFF);
+
+  static const _ThemeColor _appSeed = _ThemeColor(
+    _AppLightColors.appSeed,
+    _AppDarkColors.appSeed,
+  );
+
   // Shell surfaces
   static const _ThemeColor _pageBackground = _ThemeColor(
     _AppLightColors.pageBackground,
@@ -112,6 +123,10 @@ final class AppColorTheme {
     _AppLightColors.modalCloseIconHover,
     _AppDarkColors.modalCloseIconHover,
   );
+  static const _ThemeColor _modalContentText = _ThemeColor(
+    _AppLightColors.modalContentText,
+    _AppDarkColors.modalContentText,
+  );
 
   // Landing page palette
   static const _ThemeColor _landingAccent = _ThemeColor(
@@ -123,12 +138,12 @@ final class AppColorTheme {
     _AppDarkColors.landingHover,
   );
   static const _ThemeColor _landingHeading = _ThemeColor(
-    _AppLightColors.landingHeading,
-    _AppDarkColors.landingHeading,
+    _AppLightColors.landingHeadingText,
+    _AppDarkColors.landingHeadingText,
   );
   static const _ThemeColor _landingBody = _ThemeColor(
-    _AppLightColors.landingBody,
-    _AppDarkColors.landingBody,
+    _AppLightColors.landingBodyText,
+    _AppDarkColors.landingBodyText,
   );
 
   // Line theme colors
@@ -152,6 +167,9 @@ final class AppColorTheme {
     _AppLightColors.lineAccent1Hover,
     _AppDarkColors.lineAccent1Hover,
   );
+
+    static Color appSeedFor(Brightness brightness) =>
+      _appSeed.resolve(brightness);
 
   static Color pageBackgroundFor(Brightness brightness) =>
       _pageBackground.resolve(brightness);
@@ -185,6 +203,9 @@ final class AppColorTheme {
 
   static Color modalCloseIconHoverFor(Brightness brightness) =>
       _modalCloseIconHover.resolve(brightness);
+
+    static Color modalContentTextFor(Brightness brightness) =>
+      _modalContentText.resolve(brightness);
 
   static Color landingAccentFor(Brightness brightness) =>
       _landingAccent.resolve(brightness);

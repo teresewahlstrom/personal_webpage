@@ -6,7 +6,7 @@ class GridBackground extends StatelessWidget {
   const GridBackground({
     super.key,
     required this.child,
-    this.backgroundColor = const Color(0xFFF8F9F7),
+    required this.backgroundColor,
     required this.gridLineStyle,
   });
 
