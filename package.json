@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "check:colors": "powershell -ExecutionPolicy Bypass -File ./scripts/check-color-centralization.ps1",
+    "check:colors": "bash ./scripts/check-color-centralization.sh",
     "deploy": "npm run check:colors && bash cloudflare-pages-build.sh",
     "build": "npm run check:colors && bash cloudflare-pages-build.sh"
   }

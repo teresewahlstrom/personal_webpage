@@ -52,7 +52,7 @@ class PageFooter extends StatelessWidget {
               runSpacing: 2,
               children: <Widget>[
                 Text(
-                  '(c)$year $brandName. All rights reserved.',
+                  '\u00A9$year $brandName. All rights reserved.',
                   style: TextStyle(
                     fontFamily: 'Inter18pt',
                     fontWeight: FontWeight.w300,

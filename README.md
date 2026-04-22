@@ -47,8 +47,10 @@ In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vs
 The Cloudflare Pages build script uses:
 
 - `flutter build web --release --pwa-strategy=none --no-tree-shake-icons` to disable Flutter PWA worker generation and keep full Material icon coverage.
+- A cross-platform precheck wrapper (`scripts/check-color-centralization.sh`) so CI/CD environments without PowerShell do not fail before deploy.
 - Build metadata defines (`APP_BUILD_SHA`, `APP_BUILD_TIME_UTC`, `APP_BUILD_ID`) and writes `version.json` in the deployed artifact.
 - Strict no-store headers for entry files (`no-cache, no-store, must-revalidate`) including `index.html`, `flutter_bootstrap.js`, `main.dart.js`, and `version.json`.
+- Build-time cache-busting query params for JS entrypoints (`flutter_bootstrap.js?v=<sha>`, `main.dart.js?v=<sha>`).
 - Long-lived immutable cache for static assets (`/assets/*`, `/canvaskit/*`).
 - A lightweight build stamp in the footer so the live commit/time is visible in the UI.
 
@@ -57,3 +59,8 @@ Optional entry-file purge after build is enabled when all these environment vari
 - `CF_ZONE_ID`
 - `CF_API_TOKEN` (must include Zone Cache Purge permission)
 - `PURGE_BASE_URLS` (space-separated origins, for example: `https://t1grid.com https://www.t1grid.com`)
+
+Quick verification after deploy:
+
+- `https://www.t1grid.com/version.json` should return `{"build_sha":"...","build_time_utc":"...","build_id":"..."}` from this script.
+- If you instead see Flutter default metadata (`app_name/version/build_number/package_name`), the Pages project is not using this build script/output and is deploying from a different config path.
