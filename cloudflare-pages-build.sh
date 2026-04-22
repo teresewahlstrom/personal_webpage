@@ -34,17 +34,50 @@ flutter build web --release --pwa-strategy=none --no-tree-shake-icons \
   --dart-define=APP_BUILD_TIME_UTC="${BUILD_TIME_UTC}" \
   --dart-define=APP_BUILD_ID="${BUILD_ID}"
 
+FONT_MANIFEST_FILE="build/web/assets/FontManifest.json"
+
 # Force a build-versioned Material Icons font path so deploys cannot reuse
 # a stale edge-cached font blob from older releases.
 MATERIAL_ICONS_PURGE_PATH="/assets/fonts/MaterialIcons-Regular.otf"
 MATERIAL_ICONS_FILE="build/web/assets/fonts/MaterialIcons-Regular.otf"
-if [[ -f "${MATERIAL_ICONS_FILE}" ]]; then
+if [[ -f "${MATERIAL_ICONS_FILE}" && -f "${FONT_MANIFEST_FILE}" ]]; then
   VERSIONED_MATERIAL_ICONS_FILE="MaterialIcons-Regular-${BUILD_SHA}.otf"
   cp "${MATERIAL_ICONS_FILE}" "build/web/assets/fonts/${VERSIONED_MATERIAL_ICONS_FILE}"
   sed -i \
     "s|\"asset\":\"fonts/MaterialIcons-Regular.otf\"|\"asset\":\"fonts/${VERSIONED_MATERIAL_ICONS_FILE}\"|g" \
-    build/web/assets/FontManifest.json
+    "${FONT_MANIFEST_FILE}"
   MATERIAL_ICONS_PURGE_PATH="/assets/fonts/${VERSIONED_MATERIAL_ICONS_FILE}"
+fi
+
+# Apply the same cache-busting strategy to Font Awesome fonts so brand icons
+# (including LinkedIn) cannot drift behind app JS on some edges.
+FONT_AWESOME_PURGE_PATHS=()
+if [[ -f "${FONT_MANIFEST_FILE}" ]]; then
+  FONT_AWESOME_RELATIVE_FILES=(
+    "packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Brands-Regular-400.otf"
+    "packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Free-Regular-400.otf"
+    "packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Free-Solid-900.otf"
+  )
+
+  for relative_font in "${FONT_AWESOME_RELATIVE_FILES[@]}"; do
+    source_font="build/web/assets/${relative_font}"
+    if [[ ! -f "${source_font}" ]]; then
+      continue
+    fi
+
+    font_dir="${relative_font%/*}"
+    font_file="${relative_font##*/}"
+    font_stem="${font_file%.*}"
+    font_ext="${font_file##*.}"
+    versioned_relative_font="${font_dir}/${font_stem}-${BUILD_SHA}.${font_ext}"
+    versioned_output_font="build/web/assets/${versioned_relative_font}"
+
+    cp "${source_font}" "${versioned_output_font}"
+    sed -i \
+      "s|\"asset\":\"${relative_font}\"|\"asset\":\"${versioned_relative_font}\"|g" \
+      "${FONT_MANIFEST_FILE}"
+    FONT_AWESOME_PURGE_PATHS+=("/assets/${versioned_relative_font}")
+  done
 fi
 
 # Make the manifest request build-specific to avoid stale edge cache keys.
@@ -84,9 +117,17 @@ ENTRY_FILES=(
   "/version.json"
   "/assets/FontManifest.json"
   "/assets/fonts/MaterialIcons-Regular.otf"
+  "/assets/packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Brands-Regular-400.otf"
+  "/assets/packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Free-Regular-400.otf"
+  "/assets/packages/font_awesome_flutter/lib/fonts/Font-Awesome-7-Free-Solid-900.otf"
 )
 if [[ "${MATERIAL_ICONS_PURGE_PATH}" != "/assets/fonts/MaterialIcons-Regular.otf" ]]; then
   ENTRY_FILES+=("${MATERIAL_ICONS_PURGE_PATH}")
+fi
+if [[ ${#FONT_AWESOME_PURGE_PATHS[@]} -gt 0 ]]; then
+  for versioned_font_path in "${FONT_AWESOME_PURGE_PATHS[@]}"; do
+    ENTRY_FILES+=("${versioned_font_path}")
+  done
 fi
 
 if [[ -n "${CF_ZONE_ID:-}" && -n "${CF_API_TOKEN:-}" && -n "${PURGE_BASE_URLS:-}" ]]; then
