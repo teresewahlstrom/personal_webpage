@@ -79,15 +79,8 @@ final class SubjectKeywordData {
       return _tokenFromString(token);
     }
 
-    // Backward compatibility for previously deployed JSON payloads that
-    // used the legacy "color" hex field instead of semantic "colorToken".
-    final String? legacyHex = _readOptionalString(json, 'color');
-    if (legacyHex != null && legacyHex.isNotEmpty) {
-      return _tokenFromLegacyHex(legacyHex);
-    }
-
     throw FormatException(
-      'Keyword is missing color information: expected "colorToken" or legacy "color".',
+      'Keyword is missing color information: expected "colorToken".',
     );
   }
 
@@ -98,21 +91,6 @@ final class SubjectKeywordData {
       'slate' => KeywordTextColorToken.slate,
       'charcoal' => KeywordTextColorToken.charcoal,
       _ => throw FormatException('Unknown colorToken: $raw'),
-    };
-  }
-
-  static KeywordTextColorToken _tokenFromLegacyHex(String value) {
-    String raw = value.trim().replaceFirst('#', '').toUpperCase();
-    if (raw.length == 8) {
-      raw = raw.substring(2);
-    }
-
-    return switch (raw) {
-      '43ADCF' => KeywordTextColorToken.cyan,
-      'E12D80' => KeywordTextColorToken.magenta,
-      '555B68' => KeywordTextColorToken.slate,
-      '3A3F47' => KeywordTextColorToken.charcoal,
-      _ => throw FormatException('Unknown legacy keyword color hex: $value'),
     };
   }
 
