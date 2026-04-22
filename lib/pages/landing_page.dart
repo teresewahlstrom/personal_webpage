@@ -81,7 +81,6 @@ class _LandingPageState extends State<LandingPage> {
         } else if (!snapshot.hasData) {
           content = SizedBox(
             height: (viewport.height * 0.72).clamp(320.0, 860.0),
-            child: const Center(child: _LandingLoadingIndicator()),
           );
         } else {
           final SubjectKeywordData subject = snapshot.data!;
@@ -198,56 +197,6 @@ class _LandingPageState extends State<LandingPage> {
           child: content,
         );
       },
-    );
-  }
-}
-
-class _LandingLoadingIndicator extends StatelessWidget {
-  const _LandingLoadingIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color accent = PagePalette.accentFor(brightness);
-    final Color fill = ShellUiConfig.headerToggleBackgroundFor(brightness);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-      decoration: BoxDecoration(
-        color: fill,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: accent, width: 1),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: accent.withValues(alpha: 0.12),
-            blurRadius: 18,
-            offset: const Offset(0, 7),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SizedBox(
-            width: 34,
-            height: 34,
-            child: CircularProgressIndicator(
-              strokeWidth: 3.4,
-              valueColor: AlwaysStoppedAnimation<Color>(accent),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Text(
-            'Loading profile...',
-            style: PageTextStyles.body(context).copyWith(
-              color: accent,
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -381,8 +330,8 @@ class _SocialRowState extends State<_SocialRow> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-      ? PagePalette.accentHoverFor(brightness)
-      : PagePalette.accentFor(brightness);
+      ? ShellUiConfig.linkTextHoverFor(brightness)
+      : ShellUiConfig.linkTextFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),

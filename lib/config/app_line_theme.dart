@@ -47,8 +47,8 @@ final class AppLineTheme {
   static AppLineStyle accentFor(Brightness brightness, {bool hovered = false}) {
     return AppLineStyle(
       color: hovered
-          ? AppColorTheme.lineAccentHoverFor(brightness)
-          : AppColorTheme.lineAccentFor(brightness),
+          ? AppColorTheme.lineInteractiveHoverFor(brightness)
+          : AppColorTheme.lineInteractiveFor(brightness),
       width: accentWidth,
     );
   }

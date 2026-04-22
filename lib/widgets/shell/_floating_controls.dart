@@ -80,7 +80,7 @@ class _ThemeToggleControlButtonState extends State<ThemeToggleControlButton> {
             width: buttonSize,
             height: buttonSize,
             decoration: BoxDecoration(
-              color: ShellUiConfig.headerToggleBackgroundFor(brightness),
+              color: ShellUiConfig.buttonBackgroundFor(brightness),
               shape: BoxShape.circle,
               border: outlineStyle.borderAll,
               boxShadow: <BoxShadow>[
@@ -110,7 +110,7 @@ ChatLauncherStyle buildChatLauncherStyle(Brightness brightness) {
     icon: Icons.chat,
     foregroundColor: ShellUiConfig.headerToggleFor(brightness),
     hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(brightness),
-    backgroundColor: ShellUiConfig.headerToggleBackgroundFor(brightness),
+    backgroundColor: ShellUiConfig.buttonBackgroundFor(brightness),
     borderWidth: 1,
     animationDuration: FloatingControlTokens.animationDuration,
     idleShadowBlurRadius: FloatingControlTokens.idleShadowBlurRadius,

@@ -69,8 +69,8 @@ final class ShellUiConfig {
     return AppLineTheme.accentFor(brightness, hovered: true).color;
   }
 
-  static Color headerToggleBackgroundFor(Brightness brightness) {
-    return AppColorTheme.headerToggleBackgroundFor(brightness);
+  static Color buttonBackgroundFor(Brightness brightness) {
+    return AppColorTheme.buttonBackgroundFor(brightness);
   }
 
   static Color footerBackgroundFor(Brightness brightness) {
@@ -85,12 +85,12 @@ final class ShellUiConfig {
     return AppColorTheme.footerTextFor(brightness);
   }
 
-  static Color footerLinkFor(Brightness brightness) {
-    return AppColorTheme.footerLinkFor(brightness);
+  static Color linkTextFor(Brightness brightness) {
+    return AppColorTheme.linkTextFor(brightness);
   }
 
-  static Color footerLinkHoverFor(Brightness brightness) {
-    return AppColorTheme.footerLinkHoverFor(brightness);
+  static Color linkTextHoverFor(Brightness brightness) {
+    return AppColorTheme.linkTextHoverFor(brightness);
   }
 }
 
@@ -144,11 +144,7 @@ final class ModalUiConfig {
 
 final class PagePalette {
   static Color accentFor(Brightness brightness) {
-    return AppColorTheme.pageAccentFor(brightness);
-  }
-
-  static Color accentHoverFor(Brightness brightness) {
-    return AppColorTheme.pageAccentHoverFor(brightness);
+    return AppColorTheme.pageLoaderFor(brightness);
   }
 
   static Color headingFor(Brightness brightness) {
@@ -223,7 +219,7 @@ final class ModalTextStyles {
       fontWeight: FontWeight.w300,
       fontSize: 16,
       height: 1.6,
-      color: AppColorTheme.pageAccentFor(brightness),
+      color: AppColorTheme.linkTextFor(brightness),
       decoration: TextDecoration.underline,
     );
   }

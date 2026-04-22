@@ -51,7 +51,7 @@ class PageFooter extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            _FooterLinkButton(
+            _LinkTextButton(
               label: privacyLabel,
               onTap: () => _openBuiltInPrivacyModal(context),
             ),
@@ -87,8 +87,8 @@ class PageFooter extends StatelessWidget {
   }
 }
 
-class _FooterLinkButton extends StatelessWidget {
-  const _FooterLinkButton({required this.label, required this.onTap});
+class _LinkTextButton extends StatelessWidget {
+  const _LinkTextButton({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
@@ -115,9 +115,9 @@ class _FooterLinkButton extends StatelessWidget {
         foregroundColor: WidgetStateProperty.resolveWith<Color>(
           (Set<WidgetState> states) {
             if (states.contains(WidgetState.hovered)) {
-              return ShellUiConfig.footerLinkHoverFor(brightness);
+              return ShellUiConfig.linkTextHoverFor(brightness);
             }
-            return ShellUiConfig.footerLinkFor(brightness);
+            return ShellUiConfig.linkTextFor(brightness);
           },
         ),
       ),
@@ -129,7 +129,7 @@ class _FooterLinkButton extends StatelessWidget {
           fontSize: 14,
           decoration: TextDecoration.underline,
           decorationStyle: TextDecorationStyle.solid,
-          decorationColor: ShellUiConfig.footerLinkFor(brightness),
+          decorationColor: ShellUiConfig.linkTextFor(brightness),
           decorationThickness: 1.0,
         ),
       ),

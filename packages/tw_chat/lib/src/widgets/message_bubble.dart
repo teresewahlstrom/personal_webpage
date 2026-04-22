@@ -48,7 +48,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   double? _lastMeasuredLetterSpacing;
   double? _lastMeasuredTextScale;
   _RenderedTextLayout? _cachedLayout;
-  final Map<String, TapGestureRecognizer> _linkRecognizersByHref =
+  final Map<String, TapGestureRecognizer> _linkTextRecognizersByHref =
       <String, TapGestureRecognizer>{};
 
   static bool _sameDouble(double? left, double? right) {
@@ -359,7 +359,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 
   TapGestureRecognizer _createLinkRecognizer(String href) {
-    final recognizer = _linkRecognizersByHref.putIfAbsent(
+    final recognizer = _linkTextRecognizersByHref.putIfAbsent(
       href,
       TapGestureRecognizer.new,
     );
@@ -375,18 +375,18 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     }
     _lastParsedText = null;
     _cachedParsedMarkup = null;
-    for (final recognizer in _linkRecognizersByHref.values) {
+    for (final recognizer in _linkTextRecognizersByHref.values) {
       recognizer.dispose();
     }
-    _linkRecognizersByHref.clear();
+    _linkTextRecognizersByHref.clear();
   }
 
   @override
   void dispose() {
-    for (final recognizer in _linkRecognizersByHref.values) {
+    for (final recognizer in _linkTextRecognizersByHref.values) {
       recognizer.dispose();
     }
-    _linkRecognizersByHref.clear();
+    _linkTextRecognizersByHref.clear();
     super.dispose();
   }
 }

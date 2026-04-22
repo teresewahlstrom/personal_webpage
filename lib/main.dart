@@ -37,7 +37,7 @@ class _T1GridAppState extends State<T1GridApp> {
     });
   }
 
-  void _setLandingContentReady(bool value) {
+  void _setPageContentReady(bool value) {
     if (_isPageContentReady == value) {
       return;
     }
@@ -59,7 +59,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
-          seedColor: AppColorTheme.appSeedFor(Brightness.light),
+          seedColor: AppColorTheme.seedColorFor(Brightness.light),
         ),
         fontFamily: "Inter18pt",
       ),
@@ -71,7 +71,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          seedColor: AppColorTheme.appSeedFor(Brightness.dark),
+          seedColor: AppColorTheme.seedColorFor(Brightness.dark),
         ),
         fontFamily: "Inter18pt",
       ),
@@ -80,11 +80,12 @@ class _T1GridAppState extends State<T1GridApp> {
         showThemeToggle: true,
         isDarkMode: _isDarkMode,
         onToggleTheme: _toggleThemeMode,
-        showFooter: _isPageContentReady,
+        isPageLoading: !_isPageContentReady,
+        showFooter: true,
         initialChatSkinMode: _isDarkMode
             ? ChatSkinMode.dark
             : ChatSkinMode.light,
-        child: LandingPage(onContentReadyChanged: _setLandingContentReady),
+        child: LandingPage(onContentReadyChanged: _setPageContentReady),
       ),
     );
   }

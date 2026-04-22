@@ -122,8 +122,8 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color baseLinkColor = AppColorTheme.pageAccentFor(brightness);
-    final Color hoverLinkColor = AppColorTheme.pageAccentHoverFor(brightness);
+    final Color baseLinkColor = AppColorTheme.linkTextFor(brightness);
+    final Color hoverLinkColor = AppColorTheme.linkTextHoverFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),

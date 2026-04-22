@@ -21,6 +21,7 @@ class PageScaffold extends StatefulWidget {
     this.showThemeToggle = true,
     this.isDarkMode = false,
     this.onToggleTheme,
+    this.isPageLoading = false,
     this.showFooter = true,
     this.initialChatSkinMode = ChatSkinMode.light,
   });
@@ -36,6 +37,9 @@ class PageScaffold extends StatefulWidget {
 
   /// Callback used by the floating toggle to switch app theme.
   final VoidCallback? onToggleTheme;
+
+  /// Whether the page body is still loading and should show a centered loader.
+  final bool isPageLoading;
 
   /// Enables the built-in footer.
   final bool showFooter;
@@ -117,44 +121,54 @@ class _PageScaffoldState extends State<PageScaffold>
               children: <Widget>[
                 const PageHeader(),
                 Expanded(
-                  child: PrimaryScrollController(
-                    controller: _pageScrollController,
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(
-                        context,
-                      ).copyWith(scrollbars: false),
-                      child: Scrollbar(
-                        controller: _pageScrollController,
-                        interactive: true,
-                        child: SingleChildScrollView(
+                  child: Stack(
+                    children: <Widget>[
+                      AbsorbPointer(
+                        absorbing: widget.isPageLoading,
+                        child: PrimaryScrollController(
                           controller: _pageScrollController,
-                          child: ArrowKeyScrollWrapper(
-                            controller: _pageScrollController,
-                            onPointerDown: () {
-                              _pageSelectionAreaKey.currentState
-                                  ?.clearSelection();
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                SelectableRegion(
-                                  key: _pageSelectionAreaKey,
-                                  focusNode: _pageSelectionFocusNode,
-                                  selectionControls:
-                                      materialTextSelectionControls,
-                                  child: widget.child,
-                                ),
-                                if (widget.showFooter)
-                                  const PageFooter(
-                                    brandName: 'T1 grid',
-                                    privacyLabel: 'Privacy & Cookies Note.',
+                          child: ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(
+                              context,
+                            ).copyWith(scrollbars: false),
+                            child: Scrollbar(
+                              controller: _pageScrollController,
+                              interactive: true,
+                              child: SingleChildScrollView(
+                                controller: _pageScrollController,
+                                child: ArrowKeyScrollWrapper(
+                                  controller: _pageScrollController,
+                                  onPointerDown: () {
+                                    _pageSelectionAreaKey.currentState
+                                        ?.clearSelection();
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: <Widget>[
+                                      SelectableRegion(
+                                        key: _pageSelectionAreaKey,
+                                        focusNode: _pageSelectionFocusNode,
+                                        selectionControls:
+                                            materialTextSelectionControls,
+                                        child: widget.child,
+                                      ),
+                                      if (widget.showFooter && !widget.isPageLoading)
+                                        const PageFooter(
+                                          brandName: 'T1 grid',
+                                          privacyLabel: 'Privacy & Cookies Note.',
+                                        ),
+                                    ],
                                   ),
-                              ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      if (widget.isPageLoading)
+                        const Center(child: _PageLoadingIndicator()),
+                    ],
                   ),
                 ),
               ],
@@ -175,6 +189,24 @@ class _PageScaffoldState extends State<PageScaffold>
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PageLoadingIndicator extends StatelessWidget {
+  const _PageLoadingIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color accent = PagePalette.accentFor(brightness);
+    return SizedBox(
+      width: 34,
+      height: 34,
+      child: CircularProgressIndicator(
+        strokeWidth: 3.4,
+        valueColor: AlwaysStoppedAnimation<Color>(accent),
       ),
     );
   }
