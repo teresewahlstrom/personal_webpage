@@ -33,11 +33,19 @@ migrate_working_dir/
 tmp/
 .flutter-plugins-dependencies
 .packages
+/packages/**/pubspec.lock
 node_modules/
 .pub-cache/
 .pub/
 /build/
+/packages/tw_chat/build/
 /coverage/
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+.coverage
+.coverage.*
 
 # Symbolication related
 app.*.symbols
