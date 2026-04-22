@@ -62,11 +62,11 @@ final class ShellUiConfig {
   }
 
   static Color headerToggleFor(Brightness brightness) {
-    return AppLineTheme.accentFor(brightness).color;
+    return AppLineTheme.interactiveFor(brightness).color;
   }
 
   static Color headerToggleHoverFor(Brightness brightness) {
-    return AppLineTheme.accentFor(brightness, hovered: true).color;
+    return AppLineTheme.interactiveFor(brightness, hovered: true).color;
   }
 
   static Color buttonBackgroundFor(Brightness brightness) {

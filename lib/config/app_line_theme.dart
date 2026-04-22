@@ -21,7 +21,7 @@ final class AppLineTheme {
   static const double subtleWidth = 1;
   static const double subtleSecondaryWidth = 1.5;
   static const double subtleTertiaryWidth = 2;
-  static const double accentWidth = 1;
+  static const double interactiveWidth = 1;
 
   static AppLineStyle subtleFor(Brightness brightness) {
     return AppLineStyle(
@@ -44,12 +44,12 @@ final class AppLineTheme {
     );
   }
 
-  static AppLineStyle accentFor(Brightness brightness, {bool hovered = false}) {
+  static AppLineStyle interactiveFor(Brightness brightness, {bool hovered = false}) {
     return AppLineStyle(
       color: hovered
           ? AppColorTheme.lineInteractiveHoverFor(brightness)
           : AppColorTheme.lineInteractiveFor(brightness),
-      width: accentWidth,
+      width: interactiveWidth,
     );
   }
 }

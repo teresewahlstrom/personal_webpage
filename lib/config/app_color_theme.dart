@@ -13,6 +13,7 @@ final class _ThemeColor {
 
 final class _AppLightColors {
   static const Color seedColor = Color(0xFF394183);
+  static const Color pageLoader = pageBodyText;
 
   // background colors
   static const Color pageBackground = Color(0xFFF8F9F7);
@@ -33,8 +34,6 @@ final class _AppLightColors {
   static const Color modalContentText = Color(0xFF252525);
   static const Color pageBodyText = Color(0xFF252525);
 
-  static const Color pageLoader = pageBodyText;
-
   // clickable accent colors
   static const Color _interactive = Color(0xFF394183);
   static const Color _interactiveHover = Color(0xFF843F02);
@@ -48,6 +47,7 @@ final class _AppLightColors {
 
 final class _AppDarkColors {
   static const Color seedColor = Color(0xFF90E8F8);
+  static const Color pageLoader = Color(0xFF90E8F8);
 
   // background colors
   static const Color pageBackground = Color(0xFF212835);
@@ -68,7 +68,6 @@ final class _AppDarkColors {
   static const Color modalContentText = Color(0xFFEAF7FF);
   static const Color pageBodyText = Color(0xD6DCF6F8);
 
-  static const Color pageLoader = Color(0xFF90E8F8);
 
   // clickable accent colors
   static const Color _interactive = Color(0xFF90E8F8);

@@ -423,7 +423,7 @@ class WordCloud extends StatelessWidget {
                   left: pw.left,
                   top: pw.top - contentTop + contentVerticalInset,
                   child: Text(
-                    pw.node.text,
+                    '${pw.node.text} ',
                     style: TextStyle(
                       fontFamily: fontFamily,
                       fontSize: pw.fontSize,

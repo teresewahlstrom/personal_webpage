@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_ui_config.dart';
 
@@ -9,6 +10,17 @@ class PageHeader extends StatelessWidget {
   });
 
   final String logoAssetPath;
+
+  Future<void> _launchUrl() async {
+    final Uri uri = Uri.parse('https://www.t1grid.com');
+    final bool launched = await launchUrl(
+      uri,
+      mode: LaunchMode.platformDefault,
+    );
+    if (!launched) {
+      throw 'Could not launch https://www.t1grid.com';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +45,17 @@ class PageHeader extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Image.asset(
-                logoAssetPath,
-                width: ShellUiConfig.headerLogoWidth,
-                height: ShellUiConfig.headerLogoHeight,
-                fit: BoxFit.contain,
+              GestureDetector(
+                onTap: _launchUrl,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Image.asset(
+                    logoAssetPath,
+                    width: ShellUiConfig.headerLogoWidth,
+                    height: ShellUiConfig.headerLogoHeight,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
             ],
           ),

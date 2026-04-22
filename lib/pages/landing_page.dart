@@ -221,9 +221,14 @@ class _HeroStatement extends StatelessWidget {
   }
 }
 
-class _ProjectsSection extends StatelessWidget {
+class _ProjectsSection extends StatefulWidget {
   const _ProjectsSection();
 
+  @override
+  State<_ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _title = "Projects Portfolio";
   static const List<_ProjectCardData> _projectCards = <_ProjectCardData>[
     _ProjectCardData(
@@ -233,13 +238,18 @@ class _ProjectsSection extends StatelessWidget {
     ),
   ];
 
+  late List<bool> _expandedStates;
+
+  @override
+  void initState() {
+    super.initState();
+    _expandedStates = List<bool>.filled(_projectCards.length, false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
-    final BorderSide frameBorder = AppLineTheme.subtleSecondaryFor(
-      brightness,
-    ).borderSide;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,38 +257,142 @@ class _ProjectsSection extends StatelessWidget {
         Text(_title, style: PageTextStyles.h2(context)),
         const SizedBox(height: 10),
         for (int index = 0; index < _projectCards.length; index++) ...<Widget>[
-          SizedBox(
-            width: double.infinity,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: frameFill,
-                border: Border.fromBorderSide(frameBorder),
-                borderRadius: BorderRadius.zero,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _projectCards[index].title,
-                      style: PageTextStyles.body(
-                        context,
-                      ).copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      _projectCards[index].content,
-                      style: PageTextStyles.body(context),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          _ExpandableProjectCard(
+            title: _projectCards[index].title,
+            content: _projectCards[index].content,
+            isExpanded: _expandedStates[index],
+            onTap: () {
+              setState(() {
+                _expandedStates[index] = !_expandedStates[index];
+              });
+            },
+            frameFill: frameFill,
           ),
           if (index < _projectCards.length - 1) const SizedBox(height: 12),
         ],
       ],
+    );
+  }
+}
+
+class _ExpandableProjectCard extends StatefulWidget {
+  const _ExpandableProjectCard({
+    required this.title,
+    required this.content,
+    required this.isExpanded,
+    required this.onTap,
+    required this.frameFill,
+  });
+
+  final String title;
+  final String content;
+  final bool isExpanded;
+  final VoidCallback onTap;
+  final Color frameFill;
+
+  @override
+  State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
+}
+
+class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _heightAnimation;
+  bool _isHovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+    _heightAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+    if (widget.isExpanded) {
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(_ExpandableProjectCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isExpanded != oldWidget.isExpanded) {
+      if (widget.isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final AppLineStyle borderStyle = AppLineTheme.interactiveFor(
+      brightness,
+      hovered: _isHovered,
+    );
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: widget.frameFill,
+            border: borderStyle.borderAll,
+            borderRadius: BorderRadius.zero,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        widget.title,
+                        style: PageTextStyles.body(context)
+                            .copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    RotationTransition(
+                      turns: Tween<double>(begin: 0, end: 0.5)
+                          .animate(_heightAnimation),
+                      child: Icon(
+                        Icons.expand_more,
+                        color: borderStyle.color,
+                      ),
+                    ),
+                  ],
+                ),
+                SizeTransition(
+                  sizeFactor: _heightAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      widget.content,
+                      style: PageTextStyles.body(context),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

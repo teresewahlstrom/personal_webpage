@@ -58,7 +58,7 @@ class _ThemeToggleControlButtonState extends State<ThemeToggleControlButton> {
     final Color foregroundColor = _isHovered
         ? ShellUiConfig.headerToggleHoverFor(brightness)
         : ShellUiConfig.headerToggleFor(brightness);
-    final AppLineStyle outlineStyle = AppLineTheme.accentFor(
+    final AppLineStyle outlineStyle = AppLineTheme.interactiveFor(
       brightness,
       hovered: _isHovered,
     );
