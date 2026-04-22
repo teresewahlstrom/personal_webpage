@@ -34,6 +34,24 @@ flutter build web --release --pwa-strategy=none --no-tree-shake-icons \
   --dart-define=APP_BUILD_TIME_UTC="${BUILD_TIME_UTC}" \
   --dart-define=APP_BUILD_ID="${BUILD_ID}"
 
+# Force a build-versioned Material Icons font path so deploys cannot reuse
+# a stale edge-cached font blob from older releases.
+MATERIAL_ICONS_PURGE_PATH="/assets/fonts/MaterialIcons-Regular.otf"
+MATERIAL_ICONS_FILE="build/web/assets/fonts/MaterialIcons-Regular.otf"
+if [[ -f "${MATERIAL_ICONS_FILE}" ]]; then
+  VERSIONED_MATERIAL_ICONS_FILE="MaterialIcons-Regular-${BUILD_SHA}.otf"
+  cp "${MATERIAL_ICONS_FILE}" "build/web/assets/fonts/${VERSIONED_MATERIAL_ICONS_FILE}"
+  sed -i \
+    "s|\"asset\":\"fonts/MaterialIcons-Regular.otf\"|\"asset\":\"fonts/${VERSIONED_MATERIAL_ICONS_FILE}\"|g" \
+    build/web/assets/FontManifest.json
+  MATERIAL_ICONS_PURGE_PATH="/assets/fonts/${VERSIONED_MATERIAL_ICONS_FILE}"
+fi
+
+# Make the manifest request build-specific to avoid stale edge cache keys.
+if [[ -f "build/web/main.dart.js" ]]; then
+  sed -i "s|FontManifest.json|FontManifest.json?v=${BUILD_SHA}|g" build/web/main.dart.js
+fi
+
 # Ensure Cloudflare Pages custom routing headers/redirects are present
 # in the final artifact even if Flutter omits underscore-prefixed files.
 for pages_file in _headers _redirects; do
@@ -67,6 +85,9 @@ ENTRY_FILES=(
   "/assets/FontManifest.json"
   "/assets/fonts/MaterialIcons-Regular.otf"
 )
+if [[ "${MATERIAL_ICONS_PURGE_PATH}" != "/assets/fonts/MaterialIcons-Regular.otf" ]]; then
+  ENTRY_FILES+=("${MATERIAL_ICONS_PURGE_PATH}")
+fi
 
 if [[ -n "${CF_ZONE_ID:-}" && -n "${CF_API_TOKEN:-}" && -n "${PURGE_BASE_URLS:-}" ]]; then
   files_json="["
