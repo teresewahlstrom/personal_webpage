@@ -194,7 +194,7 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-          style: LandingPageStyles.body(context),
+          style: PageTextStyles.body(context),
           child: content,
         );
       },
@@ -208,7 +208,7 @@ class _LandingLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color accent = LandingPagePalette.socialFor(brightness);
+    final Color accent = PagePalette.socialFor(brightness);
     final Color fill = ShellUiConfig.headerToggleBackgroundFor(brightness);
 
     return Container(
@@ -240,7 +240,7 @@ class _LandingLoadingIndicator extends StatelessWidget {
           const SizedBox(width: 14),
           Text(
             'Loading profile...',
-            style: LandingPageStyles.body(context).copyWith(
+            style: PageTextStyles.body(context).copyWith(
               color: accent,
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -264,9 +264,9 @@ class _HeroStatement extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(_title, style: LandingPageStyles.h2(context)),
+        Text(_title, style: PageTextStyles.h2(context)),
         const SizedBox(height: 10),
-        Text(_content, style: LandingPageStyles.body(context)),
+        Text(_content, style: PageTextStyles.body(context)),
       ],
     );
   }
@@ -284,9 +284,9 @@ class _AboutDataDrivenResumeSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(_title, style: LandingPageStyles.h2(context)),
+        Text(_title, style: PageTextStyles.h2(context)),
         const SizedBox(height: 10),
-        Text(_content, style: LandingPageStyles.body(context)),
+        Text(_content, style: PageTextStyles.body(context)),
       ],
     );
   }
@@ -305,7 +305,7 @@ class _SocialSection extends StatelessWidget {
       children: <Widget>[
         Text(
           title,
-          style: LandingPageStyles.h2(context).copyWith(fontSize: 34),
+          style: PageTextStyles.h2(context).copyWith(fontSize: 34),
         ),
         const SizedBox(height: 6),
         for (final _SocialItem entry in entries) ...<Widget>[
@@ -332,8 +332,8 @@ class _SocialRowState extends State<_SocialRow> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-        ? LandingPagePalette.socialHoverFor(brightness)
-        : LandingPagePalette.socialFor(brightness);
+        ? PagePalette.socialHoverFor(brightness)
+        : PagePalette.socialFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -352,7 +352,7 @@ class _SocialRowState extends State<_SocialRow> {
               const SizedBox(width: 8),
               Text(
                 widget.entry.label,
-                style: LandingPageStyles.socialLink(context).copyWith(
+                style: PageTextStyles.socialLink(context).copyWith(
                   color: color,
                   decoration: _isHovered
                       ? TextDecoration.underline

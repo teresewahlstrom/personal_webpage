@@ -130,25 +130,25 @@ final class ModalUiConfig {
   }
 }
 
-final class LandingPagePalette {
+final class PagePalette {
   static Color socialFor(Brightness brightness) {
-    return AppColorTheme.landingAccentFor(brightness);
+    return AppColorTheme.pageAccentFor(brightness);
   }
 
   static Color socialHoverFor(Brightness brightness) {
-    return AppColorTheme.landingHoverFor(brightness);
+    return AppColorTheme.pageAccentHoverFor(brightness);
   }
 
   static Color headingFor(Brightness brightness) {
-    return AppColorTheme.landingHeadingFor(brightness);
+    return AppColorTheme.pageHeadingTextFor(brightness);
   }
 
   static Color bodyFor(Brightness brightness) {
-    return AppColorTheme.landingBodyFor(brightness);
+    return AppColorTheme.pageBodyTextFor(brightness);
   }
 }
 
-final class LandingPageStyles {
+final class PageTextStyles {
   static TextStyle body(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     return TextStyle(
@@ -156,7 +156,7 @@ final class LandingPageStyles {
       fontWeight: FontWeight.w300,
       fontSize: 17.3,
       height: 1.4,
-      color: LandingPagePalette.bodyFor(brightness),
+      color: PagePalette.bodyFor(brightness),
     );
   }
 
@@ -167,7 +167,7 @@ final class LandingPageStyles {
       fontWeight: FontWeight.w700,
       fontSize: 35,
       height: 1,
-      color: LandingPagePalette.headingFor(brightness),
+      color: PagePalette.headingFor(brightness),
     );
   }
 
@@ -177,6 +177,42 @@ final class LandingPageStyles {
       fontWeight: FontWeight.w300,
       fontSize: 17.3,
       height: 1.2,
+    );
+  }
+}
+
+final class ModalTextStyles {
+  static TextStyle h3(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w500,
+      fontSize: 22,
+      color: AppColorTheme.modalContentTextFor(brightness),
+      height: 1.2,
+    );
+  }
+
+  static TextStyle body(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w300,
+      fontSize: 16,
+      height: 1.6,
+      color: AppColorTheme.modalContentTextFor(brightness),
+    );
+  }
+
+  static TextStyle link(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    return TextStyle(
+      fontFamily: "Inter18pt",
+      fontWeight: FontWeight.w300,
+      fontSize: 16,
+      height: 1.6,
+      color: AppColorTheme.pageAccentFor(brightness),
+      decoration: TextDecoration.underline,
     );
   }
 }

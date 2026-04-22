@@ -27,10 +27,10 @@ final class _AppLightColors {
   static const Color modalCloseIconHover = Color(0xFF843F02);
   static const Color modalContentText = Color(0xFF252525);
 
-  static const Color landingAccent = Color(0xFF394183);
-  static const Color landingHover = Color(0xFF843F02);
-  static const Color landingHeadingText = Color(0xFF161C45);
-  static const Color landingBodyText = Color(0xFF252525);
+  static const Color pageAccent = Color(0xFF394183);
+  static const Color pageAccentHover = Color(0xFF843F02);
+  static const Color pageHeadingText = Color(0xFF161C45);
+  static const Color pageBodyText = Color(0xFF252525);
 
   static const Color lineSubtle = Color(0xFFE1E4F2);
   static const Color lineSubtle2 = Color(0x40394183);
@@ -55,10 +55,10 @@ final class _AppDarkColors {
   static const Color modalCloseIconHover = Color(0xFF4EF0FF);
   static const Color modalContentText = Color(0xFFEAF7FF);
 
-  static const Color landingAccent = Color(0xFF90E8F8);
-  static const Color landingHover = Color(0xFF4EF0FF);
-  static const Color landingHeadingText = Color(0xEBDCF6F8);
-  static const Color landingBodyText = Color(0xD6DCF6F8);
+  static const Color pageAccent = Color(0xFF90E8F8);
+  static const Color pageAccentHover = Color(0xFF4EF0FF);
+  static const Color pageHeadingText = Color(0xEBDCF6F8);
+  static const Color pageBodyText = Color(0xD6DCF6F8);
 
   static const Color lineSubtle = Color(0xFF2B364A);
   static const Color lineSubtle2 = Color(0x397199FF);
@@ -128,22 +128,22 @@ final class AppColorTheme {
     _AppDarkColors.modalContentText,
   );
 
-  // Landing page palette
-  static const _ThemeColor _landingAccent = _ThemeColor(
-    _AppLightColors.landingAccent,
-    _AppDarkColors.landingAccent,
+  // Page text/link palette
+  static const _ThemeColor _pageAccent = _ThemeColor(
+    _AppLightColors.pageAccent,
+    _AppDarkColors.pageAccent,
   );
-  static const _ThemeColor _landingHover = _ThemeColor(
-    _AppLightColors.landingHover,
-    _AppDarkColors.landingHover,
+  static const _ThemeColor _pageAccentHover = _ThemeColor(
+    _AppLightColors.pageAccentHover,
+    _AppDarkColors.pageAccentHover,
   );
-  static const _ThemeColor _landingHeading = _ThemeColor(
-    _AppLightColors.landingHeadingText,
-    _AppDarkColors.landingHeadingText,
+  static const _ThemeColor _pageHeadingText = _ThemeColor(
+    _AppLightColors.pageHeadingText,
+    _AppDarkColors.pageHeadingText,
   );
-  static const _ThemeColor _landingBody = _ThemeColor(
-    _AppLightColors.landingBodyText,
-    _AppDarkColors.landingBodyText,
+  static const _ThemeColor _pageBodyText = _ThemeColor(
+    _AppLightColors.pageBodyText,
+    _AppDarkColors.pageBodyText,
   );
 
   // Line theme colors
@@ -207,17 +207,17 @@ final class AppColorTheme {
     static Color modalContentTextFor(Brightness brightness) =>
       _modalContentText.resolve(brightness);
 
-  static Color landingAccentFor(Brightness brightness) =>
-      _landingAccent.resolve(brightness);
+  static Color pageAccentFor(Brightness brightness) =>
+      _pageAccent.resolve(brightness);
 
-  static Color landingHoverFor(Brightness brightness) =>
-      _landingHover.resolve(brightness);
+  static Color pageAccentHoverFor(Brightness brightness) =>
+      _pageAccentHover.resolve(brightness);
 
-  static Color landingHeadingFor(Brightness brightness) =>
-      _landingHeading.resolve(brightness);
+  static Color pageHeadingTextFor(Brightness brightness) =>
+      _pageHeadingText.resolve(brightness);
 
-  static Color landingBodyFor(Brightness brightness) =>
-      _landingBody.resolve(brightness);
+  static Color pageBodyTextFor(Brightness brightness) =>
+      _pageBodyText.resolve(brightness);
 
   static Color lineSubtleFor(Brightness brightness) =>
       _lineSubtle.resolve(brightness);

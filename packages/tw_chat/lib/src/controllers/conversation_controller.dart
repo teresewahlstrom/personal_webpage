@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import '../models/message.dart';
 import 'reply_client.dart';
 
-class TwinConversationController extends ChangeNotifier {
-  TwinConversationController({
+class ConversationController extends ChangeNotifier {
+  ConversationController({
     required this.introText,
-    required TwinReplyClient replyClient,
+    required ReplyClient replyClient,
     bool ownsReplyClient = false,
     String? sessionId,
   }) {
@@ -21,7 +21,7 @@ class TwinConversationController extends ChangeNotifier {
   }
 
   final String introText;
-  late final TwinReplyClient _replyClient;
+  late final ReplyClient _replyClient;
   late final bool _ownsReplyClient;
   late final String _sessionId;
   Object? _lastReplyFailure;
@@ -101,7 +101,7 @@ class TwinConversationController extends ChangeNotifier {
         token: token,
         replyText: reply,
       );
-    } on TwinReplyException catch (error, stackTrace) {
+    } on ReplyException catch (error, stackTrace) {
       _recordReplyFailure(
         error: error,
         stackTrace: stackTrace,

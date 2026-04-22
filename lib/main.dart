@@ -18,7 +18,7 @@ class T1GridApp extends StatefulWidget {
 
 class _T1GridAppState extends State<T1GridApp> {
   ThemeMode _themeMode = ThemeMode.system;
-  bool _isLandingContentReady = false;
+  bool _isPageContentReady = false;
 
   bool get _isDarkMode {
     if (_themeMode == ThemeMode.dark) {
@@ -38,11 +38,11 @@ class _T1GridAppState extends State<T1GridApp> {
   }
 
   void _setLandingContentReady(bool value) {
-    if (_isLandingContentReady == value) {
+    if (_isPageContentReady == value) {
       return;
     }
     setState(() {
-      _isLandingContentReady = value;
+      _isPageContentReady = value;
     });
   }
 
@@ -80,7 +80,7 @@ class _T1GridAppState extends State<T1GridApp> {
         showThemeToggle: true,
         isDarkMode: _isDarkMode,
         onToggleTheme: _toggleThemeMode,
-        showFooter: _isLandingContentReady,
+        showFooter: _isPageContentReady,
         initialChatSkinMode: _isDarkMode
             ? ChatSkinMode.dark
             : ChatSkinMode.light,

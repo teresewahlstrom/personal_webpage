@@ -10,6 +10,6 @@ It does not own retrieval orchestration (RAG graph), LLM runtime behavior, backe
 
 ## Controller and Client Notes
 
-- `TwinConversationController` treats injected `TwinReplyClient` as borrowed by default.
+- `ConversationController` treats injected `ReplyClient` as borrowed by default.
 - Pass `ownsReplyClient: true` only when the controller should dispose the client.
-- `TwinReplyClient` is an app-provided transport seam. The app decides whether replies come from HTTP, local mocks, or another runtime.
+- `ReplyClient` is an app-provided transport seam. The app decides whether replies come from HTTP, local mocks, or another runtime.

@@ -129,9 +129,12 @@ class _AppModalFrameState extends State<_AppModalFrame> {
                 controller: _modalScrollController,
                 child: PrimaryScrollController(
                   controller: _modalScrollController,
-                  child: Padding(
-                    padding: widget.contentPadding,
-                    child: widget.builder(context, widget.close),
+                  child: DefaultTextStyle(
+                    style: ModalTextStyles.body(context),
+                    child: Padding(
+                      padding: widget.contentPadding,
+                      child: widget.builder(context, widget.close),
+                    ),
                   ),
                 ),
               ),

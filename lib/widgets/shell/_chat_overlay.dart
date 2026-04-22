@@ -7,8 +7,8 @@ import '../../services/http_twin_reply_client.dart';
 import 'chat_keyboard_scroll_target.dart';
 import 'floating_control_inset.dart';
 
-class TwinChatOverlay extends StatefulWidget {
-  const TwinChatOverlay({
+class ChatOverlay extends StatefulWidget {
+  const ChatOverlay({
     super.key,
     required this.twinBackendUrl,
     this.chatSkinMode = ChatSkinMode.light,
@@ -18,22 +18,22 @@ class TwinChatOverlay extends StatefulWidget {
   final ChatSkinMode chatSkinMode;
 
   @override
-  State<TwinChatOverlay> createState() => _TwinChatOverlayState();
+  State<ChatOverlay> createState() => _ChatOverlayState();
 }
 
-class _TwinChatOverlayState extends State<TwinChatOverlay> {
-  late final TwinConversationController _conversationController;
+class _ChatOverlayState extends State<ChatOverlay> {
+  late final ConversationController _conversationController;
 
   @override
   void initState() {
     super.initState();
-    final TwinReplyClient replyClient = AppRuntimeConfig.useChatBackend
-        ? HttpTwinReplyClient(baseUri: Uri.parse(widget.twinBackendUrl))
-        : const FixedTwinReplyClient(
+    final ReplyClient replyClient = AppRuntimeConfig.useChatBackend
+        ? HttpReplyClient(baseUri: Uri.parse(widget.twinBackendUrl))
+        : const FixedReplyClient(
             replyText: AppRuntimeConfig.backendDisabledReply,
           );
 
-    _conversationController = TwinConversationController(
+    _conversationController = ConversationController(
       introText: twinPrototypeIntroText,
       replyClient: replyClient,
       ownsReplyClient: true,
@@ -60,7 +60,7 @@ class _TwinChatOverlayState extends State<TwinChatOverlay> {
     return AnimatedBuilder(
       animation: _conversationController,
       builder: (BuildContext context, Widget? child) {
-        return TwinChatDock(
+        return ChatDock(
           messages: _conversationController.messages,
           onSend: _conversationController.sendMessage,
           onStop: _conversationController.stopPendingReply,

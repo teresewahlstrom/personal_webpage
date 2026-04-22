@@ -5,9 +5,9 @@ import 'package:tw_chat/src/controllers/reply_client.dart';
 
 void main() {
   test('controller starts with intro bot message', () {
-    final controller = TwinConversationController(
+    final controller = ConversationController(
       introText: 'intro',
-      replyClient: const FixedTwinReplyClient(replyText: 'fixed'),
+      replyClient: const FixedReplyClient(replyText: 'fixed'),
     );
 
     expect(controller.messages.length, 1);
@@ -18,9 +18,9 @@ void main() {
   });
 
   test('controller emits fixed response after pending placeholder', () async {
-    final controller = TwinConversationController(
+    final controller = ConversationController(
       introText: 'intro',
-      replyClient: const FixedTwinReplyClient(
+      replyClient: const FixedReplyClient(
         replyText: 'fixed',
         replyDelay: Duration(milliseconds: 5),
       ),
@@ -42,9 +42,9 @@ void main() {
   });
 
   test('stopPendingReply removes pending bot messages', () {
-    final controller = TwinConversationController(
+    final controller = ConversationController(
       introText: 'intro',
-      replyClient: const FixedTwinReplyClient(
+      replyClient: const FixedReplyClient(
         replyText: 'fixed',
         replyDelay: Duration(seconds: 5),
       ),
@@ -64,9 +64,9 @@ void main() {
   test(
     'controller shows backend error message when reply client fails',
     () async {
-      final controller = TwinConversationController(
+      final controller = ConversationController(
         introText: 'intro',
-        replyClient: _ThrowingTwinReplyClient(),
+        replyClient: _ThrowingReplyClient(),
       );
 
       controller.sendMessage('hello');
@@ -84,7 +84,7 @@ void main() {
   );
 }
 
-class _ThrowingTwinReplyClient extends TwinReplyClient {
+class _ThrowingReplyClient extends ReplyClient {
   @override
   Future<String> fetchReply({
     required String sessionId,

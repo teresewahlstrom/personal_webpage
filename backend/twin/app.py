@@ -67,7 +67,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return default
 
 
-class TwinChatRequest(BaseModel):
+class ChatRequest(BaseModel):
     session_id: str = Field(min_length=1, alias='sessionId')
     message: str = Field(min_length=1)
     retrieval_context: str | None = Field(default=None, alias='retrievalContext')
@@ -77,7 +77,7 @@ class TwinChatRequest(BaseModel):
     }
 
 
-class TwinChatResponse(BaseModel):
+class ChatResponse(BaseModel):
     reply: str
 
 
@@ -151,8 +151,8 @@ def health() -> dict[str, str | bool]:
     }
 
 
-@app.post('/twin/chat', response_model=TwinChatResponse)
-def twin_chat(request: TwinChatRequest) -> TwinChatResponse:
+@app.post('/twin/chat', response_model=ChatResponse)
+def twin_chat(request: ChatRequest) -> ChatResponse:
     message = request.message.strip()
     if message == '':
         raise HTTPException(status_code=400, detail='message is required')
@@ -179,4 +179,4 @@ def twin_chat(request: TwinChatRequest) -> TwinChatResponse:
         raise HTTPException(status_code=502, detail='python twin returned an empty reply')
 
     _remember_turn(request.session_id, message, reply)
-    return TwinChatResponse(reply=reply)
+    return ChatResponse(reply=reply)

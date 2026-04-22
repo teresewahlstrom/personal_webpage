@@ -38,8 +38,8 @@ class ChatLauncherStyle {
   final double shadowAlpha;
 }
 
-class TwinChatDock extends StatefulWidget {
-  const TwinChatDock({
+class ChatDock extends StatefulWidget {
+  const ChatDock({
     super.key,
     required this.messages,
     required this.onSend,
@@ -65,10 +65,10 @@ class TwinChatDock extends StatefulWidget {
   final ChatLauncherStyle launcherStyle;
 
   @override
-  State<TwinChatDock> createState() => _TwinChatDockState();
+  State<ChatDock> createState() => _ChatDockState();
 }
 
-class _TwinChatDockState extends State<TwinChatDock> {
+class _ChatDockState extends State<ChatDock> {
   ChatDockDisplayState _displayState = ChatDockDisplayState.minimized;
 
   bool get _isExpanded => _displayState == ChatDockDisplayState.expanded;
@@ -160,8 +160,8 @@ class _TwinChatDockState extends State<TwinChatDock> {
   }
 }
 
-class TwinChatAppBar extends StatelessWidget {
-  const TwinChatAppBar({
+class ChatAppBar extends StatelessWidget {
+  const ChatAppBar({
     super.key,
     required this.onDisplayStateToggle,
     required this.displayStateToggleIcon,
@@ -382,7 +382,7 @@ class FloatingChatWindow extends StatelessWidget {
             ),
             child: Column(
               children: [
-                TwinChatAppBar(
+                ChatAppBar(
                   onDisplayStateToggle: onMinimize,
                   displayStateToggleIcon: Icons.expand_more_rounded,
                   displayStateToggleTooltip: 'Minimize chat',

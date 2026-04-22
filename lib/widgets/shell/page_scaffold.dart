@@ -23,7 +23,7 @@ class PageScaffold extends StatefulWidget {
     this.showThemeToggle = true,
     this.isDarkMode = false,
     this.onToggleTheme,
-    this.showTwinChat = true,
+    this.showChat = true,
     this.showFooter = true,
     this.footerBrandName = 'T1 grid',
     this.footerPrivacyLabel = 'Privacy & Cookies Note.',
@@ -52,7 +52,7 @@ class PageScaffold extends StatefulWidget {
   final VoidCallback? onToggleTheme;
 
   /// Enables the built-in twin chat dock overlay.
-  final bool showTwinChat;
+  final bool showChat;
 
   /// Enables the built-in footer.
   final bool showFooter;
@@ -194,8 +194,8 @@ class _PageScaffoldState extends State<PageScaffold>
                   onTap: widget.onToggleTheme!,
                 ),
               ),
-            if (widget.showTwinChat && AppRuntimeConfig.showChatInUi)
-              TwinChatOverlay(
+            if (widget.showChat && AppRuntimeConfig.showChatInUi)
+              ChatOverlay(
                 twinBackendUrl: widget.twinBackendUrl,
                 chatSkinMode: widget.initialChatSkinMode,
               ),

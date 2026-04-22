@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tw_chat/chat.dart';
 
-class HttpTwinReplyClient extends TwinReplyClient {
-  HttpTwinReplyClient({
+class HttpReplyClient extends ReplyClient {
+  HttpReplyClient({
     required Uri baseUri,
     http.Client? httpClient,
     Duration timeout = const Duration(seconds: 30),
@@ -42,31 +42,31 @@ class HttpTwinReplyClient extends TwinReplyClient {
         final errorMessage = decodedBody is Map<String, dynamic>
             ? decodedBody['error'] as String?
             : null;
-        throw TwinReplyException(
+        throw ReplyException(
           errorMessage ?? 'The chat service returned ${response.statusCode}.',
         );
       }
 
       if (decodedBody is! Map<String, dynamic>) {
-        throw const TwinReplyException(
+        throw const ReplyException(
           'The chat service returned invalid JSON.',
         );
       }
 
       final reply = decodedBody['reply'];
       if (reply is! String || reply.trim().isEmpty) {
-        throw const TwinReplyException(
+        throw const ReplyException(
           'The chat service returned an empty reply.',
         );
       }
 
       return reply.trim();
     } on TimeoutException {
-      throw const TwinReplyException('The chat service timed out.');
+      throw const ReplyException('The chat service timed out.');
     } on FormatException {
-      throw const TwinReplyException('The chat service returned invalid JSON.');
+      throw const ReplyException('The chat service returned invalid JSON.');
     } on http.ClientException catch (error) {
-      throw TwinReplyException(
+      throw ReplyException(
         'The chat service is unavailable: ${error.message}',
       );
     }

@@ -9,19 +9,18 @@ class PrivacyCookiesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle h3Style = _ModalStyles.h3(context);
-    final TextStyle bodyStyle = _ModalStyles.body(context);
-    final TextStyle linkStyle = _ModalStyles.link(context);
+    final TextStyle h3Style = ModalTextStyles.h3(context);
+    final TextStyle linkStyle = ModalTextStyles.link(context);
     return SingleChildScrollView(
       primary: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Controller: Terese Wahlstrom (EU resident)", style: bodyStyle),
+          Text("Controller: Terese Wahlstrom (EU resident)"),
           const SizedBox(height: 16),
           Text("Cookies", style: h3Style),
           const SizedBox(height: 8),
-          Text("We only set essential cookies via:", style: bodyStyle),
+          Text("We only set essential cookies via:"),
           const SizedBox(height: 4),
           _PrivacyModalLink(
             label: "Brevo",
@@ -69,7 +68,6 @@ class PrivacyCookiesContent extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             "Our embedded services may transfer data outside the EEA under their own GDPR-compliant safeguards (Standard Contractual Clauses or adequacy).",
-            style: bodyStyle,
           ),
           const SizedBox(height: 16),
           Text("Your Rights", style: h3Style),
@@ -89,12 +87,12 @@ class PrivacyCookiesContent extends StatelessWidget {
             spacing: 4,
             runSpacing: 2,
             children: <Widget>[
-              Text("To exercise any right, email", style: bodyStyle),
+              Text("To exercise any right, email"),
               GestureDetector(
                 onTap: () => onLaunchUrl("mailto:terese@t1grid.com"),
                 child: Text("terese@t1grid.com", style: linkStyle),
               ),
-              Text(".", style: bodyStyle),
+              Text("."),
             ],
           ),
         ],
@@ -124,8 +122,8 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color baseLinkColor = AppColorTheme.landingAccentFor(brightness);
-    final Color hoverLinkColor = AppColorTheme.landingHoverFor(brightness);
+    final Color baseLinkColor = AppColorTheme.pageAccentFor(brightness);
+    final Color hoverLinkColor = AppColorTheme.pageAccentHoverFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -135,7 +133,7 @@ class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
           padding: const EdgeInsets.only(bottom: 2),
           child: Text(
             widget.label,
-            style: _ModalStyles.link(
+            style: ModalTextStyles.link(
               context,
             ).copyWith(color: _isHovered ? hoverLinkColor : baseLinkColor),
           ),
@@ -152,52 +150,15 @@ class _PrivacyModalBullet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle bodyStyle = _ModalStyles.body(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("\u2022 ", style: bodyStyle),
-          Expanded(child: Text(text, style: bodyStyle)),
+          Text("\u2022 "),
+          Expanded(child: Text(text)),
         ],
       ),
-    );
-  }
-}
-
-class _ModalStyles {
-  static TextStyle h3(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: "Inter18pt",
-      fontWeight: FontWeight.w500,
-      fontSize: 22,
-      color: AppColorTheme.modalContentTextFor(brightness),
-      height: 1.2,
-    );
-  }
-
-  static TextStyle body(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: "Inter18pt",
-      fontWeight: FontWeight.w300,
-      fontSize: 16,
-      height: 1.6,
-      color: AppColorTheme.modalContentTextFor(brightness),
-    );
-  }
-
-  static TextStyle link(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: "Inter18pt",
-      fontWeight: FontWeight.w300,
-      fontSize: 16,
-      height: 1.6,
-      color: AppColorTheme.landingAccentFor(brightness),
-      decoration: TextDecoration.underline,
     );
   }
 }

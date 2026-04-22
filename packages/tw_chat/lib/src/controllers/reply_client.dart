@@ -1,7 +1,7 @@
 import 'dart:async';
 
-abstract class TwinReplyClient {
-  const TwinReplyClient();
+abstract class ReplyClient {
+  const ReplyClient();
 
   Future<String> fetchReply({
     required String sessionId,
@@ -11,8 +11,8 @@ abstract class TwinReplyClient {
   void dispose() {}
 }
 
-class FixedTwinReplyClient extends TwinReplyClient {
-  const FixedTwinReplyClient({
+class FixedReplyClient extends ReplyClient {
+  const FixedReplyClient({
     required this.replyText,
     this.replyDelay = Duration.zero,
   });
@@ -32,8 +32,8 @@ class FixedTwinReplyClient extends TwinReplyClient {
   }
 }
 
-class TwinReplyException implements Exception {
-  const TwinReplyException(this.message);
+class ReplyException implements Exception {
+  const ReplyException(this.message);
 
   final String message;
 
