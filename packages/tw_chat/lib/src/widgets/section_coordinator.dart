@@ -102,6 +102,11 @@ class SectionCoordinator extends ChangeNotifier {
     required bool becameVisible,
     required bool isVisible,
   }) {
+    if (!isVisible) {
+      isChatPointerInteractionActive = false;
+      _selectionCopy.clearSelection();
+    }
+
     if (becameVisible) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_isMounted()) {

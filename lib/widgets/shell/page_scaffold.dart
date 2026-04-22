@@ -138,7 +138,7 @@ class _PageScaffoldState extends State<PageScaffold>
                                 controller: _pageScrollController,
                                 child: ArrowKeyScrollWrapper(
                                   controller: _pageScrollController,
-                                  onPointerDown: () {
+                                  onTap: () {
                                     _pageSelectionAreaKey.currentState
                                         ?.clearSelection();
                                   },

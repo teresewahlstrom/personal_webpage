@@ -88,7 +88,7 @@ class _LandingPageState extends State<LandingPage> {
           final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
             brightness,
           );
-          final AppLineStyle keywordGraphicLine = AppLineTheme.subtleSecondaryFor(
+          final AppLineStyle keywordGraphicLine = ShellUiConfig.gridLineFor(
             brightness,
           );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
@@ -206,7 +206,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "About me";
   static const String _content =
-      "Turns complexity into clarity. A rare blend of systems thinker, cross-domain integrator, and driver of change.";
+      "Turns complexity into clarity. A rare blend of creative systems thinker, cross-domain integrator, and driver of change.";
 
   @override
   Widget build(BuildContext context) {
@@ -250,6 +250,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
+    final AppLineStyle gridLineStyle = ShellUiConfig.gridLineFor(brightness);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,6 +268,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               });
             },
             frameFill: frameFill,
+            gridLineStyle: gridLineStyle,
           ),
           if (index < _projectCards.length - 1) const SizedBox(height: 12),
         ],
@@ -282,6 +284,7 @@ class _ExpandableProjectCard extends StatefulWidget {
     required this.isExpanded,
     required this.onTap,
     required this.frameFill,
+    required this.gridLineStyle,
   });
 
   final String title;
@@ -289,6 +292,7 @@ class _ExpandableProjectCard extends StatefulWidget {
   final bool isExpanded;
   final VoidCallback onTap;
   final Color frameFill;
+  final AppLineStyle gridLineStyle;
 
   @override
   State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
@@ -337,10 +341,14 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final AppLineStyle borderStyle = AppLineTheme.interactiveFor(
-      brightness,
-      hovered: _isHovered,
-    );
+    final Color cardFill = widget.gridLineStyle.color;
+    final Color baseIconColor =
+      PageTextStyles.body(context).color ??
+      Theme.of(context).textTheme.bodyMedium?.color ??
+      PagePalette.bodyFor(brightness);
+    final Color iconColor = _isHovered
+        ? ShellUiConfig.linkTextHoverFor(brightness)
+      : baseIconColor;
     return GestureDetector(
       onTap: widget.onTap,
       child: MouseRegion(
@@ -349,8 +357,8 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
         onExit: (_) => setState(() => _isHovered = false),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: widget.frameFill,
-            border: borderStyle.borderAll,
+            color: cardFill,
+            border: widget.gridLineStyle.borderAll,
             borderRadius: BorderRadius.zero,
           ),
           child: Padding(
@@ -373,7 +381,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                           .animate(_heightAnimation),
                       child: Icon(
                         Icons.expand_more,
-                        color: borderStyle.color,
+                        color: iconColor,
                       ),
                     ),
                   ],
@@ -419,9 +427,13 @@ class _SocialSection extends StatelessWidget {
           title,
           style: PageTextStyles.h2(context).copyWith(fontSize: 34),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
-          _SocialRow(entry: entry),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: _SocialRow(entry: entry),
+          ),
+          const SizedBox(height: 6),
         ],
       ],
     );
@@ -443,29 +455,36 @@ class _SocialRowState extends State<_SocialRow> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
+    final Color headingColor =
+        PageTextStyles.h2(context).color ??
+        PageTextStyles.body(context).color ??
+        Theme.of(context).textTheme.bodyMedium?.color ??
+      PagePalette.bodyFor(brightness);
     final Color color = _isHovered
-      ? ShellUiConfig.linkTextHoverFor(brightness)
-      : ShellUiConfig.linkTextFor(brightness);
+        ? headingColor.withValues(alpha: 0.82)
+        : headingColor;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.entry.onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               // Use IconTheme so both Material Icon and FaIcon inherit size/color.
               IconTheme(
-                data: IconThemeData(size: 24, color: color),
+                data: IconThemeData(size: 27, color: color),
                 child: widget.entry.icon,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 14),
               Text(
                 widget.entry.label,
                 style: PageTextStyles.socialLink(context).copyWith(
                   color: color,
+                  fontSize: 17,
+                  letterSpacing: 0.35,
                   decoration: _isHovered
                       ? TextDecoration.underline
                       : TextDecoration.none,

@@ -11,13 +11,13 @@ class ArrowKeyScrollWrapper extends StatefulWidget {
     required this.controller,
     required this.child,
     this.lineStep = 120,
-    this.onPointerDown,
+    this.onTap,
   });
 
   final ScrollController controller;
   final Widget child;
   final double lineStep;
-  final VoidCallback? onPointerDown;
+  final VoidCallback? onTap;
 
   @override
   State<ArrowKeyScrollWrapper> createState() => _ArrowKeyScrollWrapperState();
@@ -26,6 +26,10 @@ class ArrowKeyScrollWrapper extends StatefulWidget {
 class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
   late final FocusNode _focusNode;
   Timer? _scrollTimer;
+  final Map<int, Offset> _pointerDownPositions = <int, Offset>{};
+  final Set<int> _movedPointers = <int>{};
+
+  static const double _tapMoveTolerance = 8;
 
   @override
   void initState() {
@@ -117,10 +121,31 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
       },
       child: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) {
+        onPointerDown: (event) {
+          _pointerDownPositions[event.pointer] = event.position;
+          _movedPointers.remove(event.pointer);
           ChatKeyboardScrollTarget.setChatTarget(false);
-          widget.onPointerDown?.call();
           _focusNode.requestFocus();
+        },
+        onPointerMove: (event) {
+          final down = _pointerDownPositions[event.pointer];
+          if (down == null || _movedPointers.contains(event.pointer)) {
+            return;
+          }
+          if ((event.position - down).distance > _tapMoveTolerance) {
+            _movedPointers.add(event.pointer);
+          }
+        },
+        onPointerUp: (event) {
+          final didMove = _movedPointers.remove(event.pointer);
+          _pointerDownPositions.remove(event.pointer);
+          if (!didMove) {
+            widget.onTap?.call();
+          }
+        },
+        onPointerCancel: (event) {
+          _movedPointers.remove(event.pointer);
+          _pointerDownPositions.remove(event.pointer);
         },
         child: widget.child,
       ),

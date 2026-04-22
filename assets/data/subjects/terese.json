@@ -27,6 +27,6 @@
     { "text": "BUSINESS", "colorToken": "cyan", "weight": 700, "em": 0.034, "tier": "support", "group": "business" },
     { "text": "SCALE", "colorToken": "magenta", "weight": 800, "em": 0.052, "tier": "core", "group": "business" },
     { "text": "MANUFACTURING", "colorToken": "slate", "weight": 700, "em": 0.034, "tier": "support", "group": "engineering" },
-    { "text": "CUSTOMERS", "colorToken": "charcoal", "weight": 700, "em": 0.030, "tier": "support", "group": "business" }
+    { "text": "CUSTOMERS", "colorToken": "slate", "weight": 700, "em": 0.030, "tier": "support", "group": "business" }
   ]
 }

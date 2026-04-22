@@ -89,7 +89,6 @@ final class SubjectKeywordData {
       'cyan' => KeywordTextColorToken.cyan,
       'magenta' => KeywordTextColorToken.magenta,
       'slate' => KeywordTextColorToken.slate,
-      'charcoal' => KeywordTextColorToken.charcoal,
       _ => throw FormatException('Unknown colorToken: $raw'),
     };
   }

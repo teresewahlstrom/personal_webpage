@@ -66,6 +66,11 @@ class SelectionCopyHelper {
     return _currentSelectedPlainText;
   }
 
+  void clearSelection() {
+    _currentSelectedPlainText = '';
+    _isChatSelectionActive = false;
+  }
+
   void syncActiveMessageIds(Set<String> activeMessageIds) {
     _messageSelectionNotifiers.removeWhere((messageId, notifier) {
       if (activeMessageIds.contains(messageId)) {

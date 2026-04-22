@@ -4,7 +4,6 @@ enum KeywordTextColorToken {
   cyan,
   magenta,
   slate,
-  charcoal,
 }
 
 final class KeywordTextPalette {
@@ -12,20 +11,17 @@ final class KeywordTextPalette {
     required this.cyan,
     required this.magenta,
     required this.slate,
-    required this.charcoal,
   });
 
   final Color cyan;
   final Color magenta;
   final Color slate;
-  final Color charcoal;
 
   Color forToken(KeywordTextColorToken token) {
     return switch (token) {
       KeywordTextColorToken.cyan => cyan,
       KeywordTextColorToken.magenta => magenta,
       KeywordTextColorToken.slate => slate,
-      KeywordTextColorToken.charcoal => charcoal,
     };
   }
 }
@@ -41,7 +37,6 @@ const KeywordSkinData keywordLightSkin = KeywordSkinData(
     cyan: Color(0xFF43ADCF),
     magenta: Color(0xFFE12D80),
     slate: Color(0xFF555B68),
-    charcoal: Color(0xFF3A3F47),
   ),
 );
 
@@ -51,7 +46,6 @@ const KeywordSkinData keywordDarkSkin = KeywordSkinData(
     cyan: Color(0xFF43ADCF),
     magenta: Color(0xFFE12D80),
     slate: Color(0xFF555B68),
-    charcoal: Color(0xFF3A3F47),
   ),
 );
 
