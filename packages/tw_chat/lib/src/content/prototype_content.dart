@@ -1,4 +1,4 @@
-const String twinPrototypeIntroText = r'''## Prototype Mode
+const String prototypeIntroText = r'''## Prototype Mode
 Eventually this will be a real AI chat.
 
 ## Markdown Showcase

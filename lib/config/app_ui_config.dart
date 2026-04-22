@@ -46,15 +46,15 @@ final class ShellUiConfig {
   }
 
   static AppLineStyle headerBorderFor(Brightness brightness) {
-    return AppLineTheme.subtle3For(brightness);
+    return AppLineTheme.subtleTertiaryFor(brightness);
   }
 
   static Color headerToggleFor(Brightness brightness) {
-    return AppLineTheme.accent1For(brightness).color;
+    return AppLineTheme.accentFor(brightness).color;
   }
 
   static Color headerToggleHoverFor(Brightness brightness) {
-    return AppLineTheme.accent1For(brightness, hovered: true).color;
+    return AppLineTheme.accentFor(brightness, hovered: true).color;
   }
 
   static Color headerToggleBackgroundFor(Brightness brightness) {
@@ -66,7 +66,7 @@ final class ShellUiConfig {
   }
 
   static AppLineStyle footerBorderFor(Brightness brightness) {
-    return AppLineTheme.subtle2For(brightness);
+    return AppLineTheme.subtleSecondaryFor(brightness);
   }
 
   static Color footerTextFor(Brightness brightness) {
@@ -131,11 +131,11 @@ final class ModalUiConfig {
 }
 
 final class PagePalette {
-  static Color socialFor(Brightness brightness) {
+  static Color accentFor(Brightness brightness) {
     return AppColorTheme.pageAccentFor(brightness);
   }
 
-  static Color socialHoverFor(Brightness brightness) {
+  static Color accentHoverFor(Brightness brightness) {
     return AppColorTheme.pageAccentHoverFor(brightness);
   }
 

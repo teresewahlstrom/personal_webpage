@@ -34,7 +34,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
           );
 
     _conversationController = ConversationController(
-      introText: twinPrototypeIntroText,
+      introText: prototypeIntroText,
       replyClient: replyClient,
       ownsReplyClient: true,
     );

@@ -89,7 +89,7 @@ class _LandingPageState extends State<LandingPage> {
           final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
             brightness,
           );
-          final AppLineStyle keywordGraphicLine = AppLineTheme.subtle2For(
+          final AppLineStyle keywordGraphicLine = AppLineTheme.subtleSecondaryFor(
             brightness,
           );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
@@ -208,7 +208,7 @@ class _LandingLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color accent = PagePalette.socialFor(brightness);
+    final Color accent = PagePalette.accentFor(brightness);
     final Color fill = ShellUiConfig.headerToggleBackgroundFor(brightness);
 
     return Container(
@@ -332,8 +332,8 @@ class _SocialRowState extends State<_SocialRow> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color color = _isHovered
-        ? PagePalette.socialHoverFor(brightness)
-        : PagePalette.socialFor(brightness);
+      ? PagePalette.accentHoverFor(brightness)
+      : PagePalette.accentFor(brightness);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),

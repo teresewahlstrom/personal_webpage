@@ -81,7 +81,7 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
     final Color foregroundColor = _isHovered
       ? ShellUiConfig.headerToggleHoverFor(brightness)
       : ShellUiConfig.headerToggleFor(brightness);
-    final AppLineStyle outlineStyle = AppLineTheme.accent1For(
+    final AppLineStyle outlineStyle = AppLineTheme.accentFor(
       brightness,
       hovered: _isHovered,
     );

@@ -33,10 +33,10 @@ final class _AppLightColors {
   static const Color pageBodyText = Color(0xFF252525);
 
   static const Color lineSubtle = Color(0xFFE1E4F2);
-  static const Color lineSubtle2 = Color(0x40394183);
-  static const Color lineSubtle3 = Color(0x40394183);
-  static const Color lineAccent1 = Color(0xFF394183);
-  static const Color lineAccent1Hover = Color(0xFF843F02);
+  static const Color lineSubtleSecondary = Color(0x40394183);
+  static const Color lineSubtleTertiary = Color(0x40394183);
+  static const Color lineAccent = Color(0xFF394183);
+  static const Color lineAccentHover = Color(0xFF843F02);
 }
 
 final class _AppDarkColors {
@@ -61,10 +61,10 @@ final class _AppDarkColors {
   static const Color pageBodyText = Color(0xD6DCF6F8);
 
   static const Color lineSubtle = Color(0xFF2B364A);
-  static const Color lineSubtle2 = Color(0x397199FF);
-  static const Color lineSubtle3 = Color(0x397199FF);
-  static const Color lineAccent1 = Color(0xFF90E8F8);
-  static const Color lineAccent1Hover = Color(0xFF4EF0FF);
+  static const Color lineSubtleSecondary = Color(0x397199FF);
+  static const Color lineSubtleTertiary = Color(0x397199FF);
+  static const Color lineAccent = Color(0xFF90E8F8);
+  static const Color lineAccentHover = Color(0xFF4EF0FF);
 }
 
 final class AppColorTheme {
@@ -151,21 +151,21 @@ final class AppColorTheme {
     _AppLightColors.lineSubtle,
     _AppDarkColors.lineSubtle,
   );
-  static const _ThemeColor _lineSubtle2 = _ThemeColor(
-    _AppLightColors.lineSubtle2,
-    _AppDarkColors.lineSubtle2,
+  static const _ThemeColor _lineSubtleSecondary = _ThemeColor(
+    _AppLightColors.lineSubtleSecondary,
+    _AppDarkColors.lineSubtleSecondary,
   );
-  static const _ThemeColor _lineSubtle3 = _ThemeColor(
-    _AppLightColors.lineSubtle3,
-    _AppDarkColors.lineSubtle3,
+  static const _ThemeColor _lineSubtleTertiary = _ThemeColor(
+    _AppLightColors.lineSubtleTertiary,
+    _AppDarkColors.lineSubtleTertiary,
   );
-  static const _ThemeColor _lineAccent1 = _ThemeColor(
-    _AppLightColors.lineAccent1,
-    _AppDarkColors.lineAccent1,
+  static const _ThemeColor _lineAccent = _ThemeColor(
+    _AppLightColors.lineAccent,
+    _AppDarkColors.lineAccent,
   );
-  static const _ThemeColor _lineAccent1Hover = _ThemeColor(
-    _AppLightColors.lineAccent1Hover,
-    _AppDarkColors.lineAccent1Hover,
+  static const _ThemeColor _lineAccentHover = _ThemeColor(
+    _AppLightColors.lineAccentHover,
+    _AppDarkColors.lineAccentHover,
   );
 
     static Color appSeedFor(Brightness brightness) =>
@@ -222,15 +222,15 @@ final class AppColorTheme {
   static Color lineSubtleFor(Brightness brightness) =>
       _lineSubtle.resolve(brightness);
 
-  static Color lineSubtle2For(Brightness brightness) =>
-      _lineSubtle2.resolve(brightness);
+    static Color lineSubtleSecondaryFor(Brightness brightness) =>
+      _lineSubtleSecondary.resolve(brightness);
 
-  static Color lineSubtle3For(Brightness brightness) =>
-      _lineSubtle3.resolve(brightness);
+    static Color lineSubtleTertiaryFor(Brightness brightness) =>
+      _lineSubtleTertiary.resolve(brightness);
 
-  static Color lineAccent1For(Brightness brightness) =>
-      _lineAccent1.resolve(brightness);
+    static Color lineAccentFor(Brightness brightness) =>
+      _lineAccent.resolve(brightness);
 
-  static Color lineAccent1HoverFor(Brightness brightness) =>
-      _lineAccent1Hover.resolve(brightness);
+    static Color lineAccentHoverFor(Brightness brightness) =>
+      _lineAccentHover.resolve(brightness);
 }
