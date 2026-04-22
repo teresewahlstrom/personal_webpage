@@ -34,14 +34,6 @@ flutter build web --release --pwa-strategy=none --no-tree-shake-icons \
   --dart-define=APP_BUILD_TIME_UTC="${BUILD_TIME_UTC}" \
   --dart-define=APP_BUILD_ID="${BUILD_ID}"
 
-# Add per-build cache-busting query params to critical JS entry points.
-if [ -f "build/web/index.html" ]; then
-  sed -i "s#flutter_bootstrap.js#flutter_bootstrap.js?v=${BUILD_SHA}#g" build/web/index.html
-fi
-if [ -f "build/web/flutter_bootstrap.js" ]; then
-  sed -i "s#\"main.dart.js\"#\"main.dart.js?v=${BUILD_SHA}\"#g" build/web/flutter_bootstrap.js
-fi
-
 # Ensure Cloudflare Pages custom routing headers/redirects are present
 # in the final artifact even if Flutter omits underscore-prefixed files.
 for pages_file in _headers _redirects; do
@@ -67,10 +59,8 @@ ENTRY_FILES=(
   "/"
   "/index.html"
   "/flutter_bootstrap.js"
-  "/flutter_bootstrap.js?v=${BUILD_SHA}"
   "/flutter.js"
   "/main.dart.js"
-  "/main.dart.js?v=${BUILD_SHA}"
   "/flutter_service_worker.js"
   "/manifest.json"
   "/version.json"

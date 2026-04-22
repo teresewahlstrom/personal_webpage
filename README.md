@@ -50,9 +50,7 @@ The Cloudflare Pages build script uses:
 - A cross-platform precheck wrapper (`scripts/check-color-centralization.sh`) so CI/CD environments without PowerShell do not fail before deploy.
 - Build metadata defines (`APP_BUILD_SHA`, `APP_BUILD_TIME_UTC`, `APP_BUILD_ID`) and writes `version.json` in the deployed artifact.
 - Strict no-store headers for entry files (`no-cache, no-store, must-revalidate`) including `index.html`, `flutter_bootstrap.js`, `main.dart.js`, and `version.json`.
-- Build-time cache-busting query params for JS entrypoints (`flutter_bootstrap.js?v=<sha>`, `main.dart.js?v=<sha>`).
 - Long-lived immutable cache for static assets (`/assets/*`, `/canvaskit/*`).
-- A lightweight build stamp in the footer so the live commit/time is visible in the UI.
 
 Optional entry-file purge after build is enabled when all these environment variables are set:
 

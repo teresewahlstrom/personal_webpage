@@ -27,8 +27,6 @@ final class AppRuntimeConfig {
   );
   static const String backendDisabledReply =
       'Chat backend is disabled in this build. Set AppRuntimeConfig.useChatBackend to true to re-enable server replies.';
-
-  static String get buildStamp => 'build $appBuildSha @ $appBuildTimeUtc';
 }
 
 final class ShellUiConfig {

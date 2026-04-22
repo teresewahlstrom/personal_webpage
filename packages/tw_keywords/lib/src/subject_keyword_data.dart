@@ -40,11 +40,11 @@ final class SubjectKeywordData {
   factory SubjectKeywordData.fromJson(Map<String, dynamic> json) {
     final List<dynamic> rawKeywords = (json['keywords'] as List<dynamic>? ?? <dynamic>[]);
     return SubjectKeywordData(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      role: json['role'] as String?,
-      theme: json['theme'] as String?,
-      bio: json['bio'] as String?,
+      id: _readRequiredString(json, 'id'),
+      name: _readRequiredString(json, 'name'),
+      role: _readOptionalString(json, 'role'),
+      theme: _readOptionalString(json, 'theme'),
+      bio: _readOptionalString(json, 'bio'),
       keywords: rawKeywords
           .map((dynamic item) => _keywordNodeFromJson(item as Map<String, dynamic>))
           .toList(growable: false),
@@ -55,25 +55,40 @@ final class SubjectKeywordData {
     final KeywordTextColorToken colorToken =
         _parseKeywordTextColorToken(json);
     return KeywordNode(
-      json['text'] as String,
+      _readRequiredString(json, 'text'),
       colorToken,
       _parseFontWeight((json['weight'] as num).toInt()),
       (json['em'] as num).toDouble(),
-      tier: json['tier'] as String,
-      group: json['group'] as String?,
-      alignmentBias: json['alignmentBias'] as String?,
-      lockGroup: json['lockGroup'] as String?,
+      tier: _readRequiredString(json, 'tier'),
+      group: _readOptionalString(json, 'group'),
+      alignmentBias: _readOptionalString(json, 'alignmentBias'),
+      lockGroup: _readOptionalString(json, 'lockGroup'),
       lockOrder: (json['lockOrder'] as num?)?.toInt(),
-      lockAxis: json['lockAxis'] as String?,
-      lockAlign: json['lockAlign'] as String?,
+      lockAxis: _readOptionalString(json, 'lockAxis'),
+      lockAlign: _readOptionalString(json, 'lockAlign'),
       lockGapEm: (json['lockGapEm'] as num?)?.toDouble(),
     );
   }
 
   static KeywordTextColorToken _parseKeywordTextColorToken(
       Map<String, dynamic> json) {
-    final String token = (json['colorToken'] as String).trim().toLowerCase();
-    return _tokenFromString(token);
+    final String? token = _readOptionalString(json, 'colorToken')
+        ?.trim()
+        .toLowerCase();
+    if (token != null && token.isNotEmpty) {
+      return _tokenFromString(token);
+    }
+
+    // Backward compatibility for previously deployed JSON payloads that
+    // used the legacy "color" hex field instead of semantic "colorToken".
+    final String? legacyHex = _readOptionalString(json, 'color');
+    if (legacyHex != null && legacyHex.isNotEmpty) {
+      return _tokenFromLegacyHex(legacyHex);
+    }
+
+    throw FormatException(
+      'Keyword is missing color information: expected "colorToken" or legacy "color".',
+    );
   }
 
   static KeywordTextColorToken _tokenFromString(String raw) {
@@ -84,6 +99,37 @@ final class SubjectKeywordData {
       'charcoal' => KeywordTextColorToken.charcoal,
       _ => throw FormatException('Unknown colorToken: $raw'),
     };
+  }
+
+  static KeywordTextColorToken _tokenFromLegacyHex(String value) {
+    String raw = value.trim().replaceFirst('#', '').toUpperCase();
+    if (raw.length == 8) {
+      raw = raw.substring(2);
+    }
+
+    return switch (raw) {
+      '43ADCF' => KeywordTextColorToken.cyan,
+      'E12D80' => KeywordTextColorToken.magenta,
+      '555B68' => KeywordTextColorToken.slate,
+      '3A3F47' => KeywordTextColorToken.charcoal,
+      _ => throw FormatException('Unknown legacy keyword color hex: $value'),
+    };
+  }
+
+  static String _readRequiredString(Map<String, dynamic> json, String key) {
+    final dynamic value = json[key];
+    if (value is String && value.trim().isNotEmpty) {
+      return value;
+    }
+    throw FormatException('Missing required string field "$key".');
+  }
+
+  static String? _readOptionalString(Map<String, dynamic> json, String key) {
+    final dynamic value = json[key];
+    if (value == null) {
+      return null;
+    }
+    return value.toString();
   }
 
   static FontWeight _parseFontWeight(int weight) {
