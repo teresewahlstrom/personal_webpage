@@ -5,7 +5,6 @@ import 'package:tw_chat/content.dart';
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
 import '_chat_keyboard_scroll_target.dart';
-import '_floating_control_inset.dart';
 import 'floating_controls.dart';
 
 class ChatOverlay extends StatefulWidget {
@@ -47,10 +46,6 @@ class _ChatOverlayState extends State<ChatOverlay> {
     super.dispose();
   }
 
-  void _setChatKeyboardScrollTarget(bool value) {
-    ChatKeyboardScrollTarget.setChatTarget(value);
-  }
-
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
@@ -67,9 +62,9 @@ class _ChatOverlayState extends State<ChatOverlay> {
           onStop: _conversationController.stopPendingReply,
           isChatKeyboardScrollTarget: ChatKeyboardScrollTarget.isChatTarget,
           onSetChatKeyboardScrollTarget: () =>
-              _setChatKeyboardScrollTarget(true),
+              ChatKeyboardScrollTarget.setChatTarget(true),
           onSetPageKeyboardScrollTarget: () =>
-              _setChatKeyboardScrollTarget(false),
+              ChatKeyboardScrollTarget.setChatTarget(false),
           minimizedBottomOffset: floatingInset,
           minimizedRightInset: floatingInset,
           skinMode: widget.chatSkinMode,

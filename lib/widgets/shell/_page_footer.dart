@@ -86,43 +86,50 @@ class PageFooter extends StatelessWidget {
   }
 }
 
-class _FooterLinkButton extends StatefulWidget {
+class _FooterLinkButton extends StatelessWidget {
   const _FooterLinkButton({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
 
   @override
-  State<_FooterLinkButton> createState() => _FooterLinkButtonState();
-}
-
-class _FooterLinkButtonState extends State<_FooterLinkButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color color = _isHovered
-        ? ShellUiConfig.footerLinkHoverFor(brightness)
-        : ShellUiConfig.footerLinkFor(brightness);
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Text(
-          widget.label,
-          style: TextStyle(
-            fontFamily: 'Inter18pt',
-            fontWeight: FontWeight.w300,
-            fontSize: 14,
-            color: color,
-            decoration: TextDecoration.underline,
-            decorationStyle: TextDecorationStyle.solid,
-            decorationColor: ShellUiConfig.footerLinkFor(brightness),
-            decorationThickness: 1.0,
-          ),
+    return TextButton(
+      onPressed: onTap,
+      style: ButtonStyle(
+        visualDensity: VisualDensity.compact,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: WidgetStateProperty.all(Size.zero),
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
+        overlayColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.hovered) ||
+                states.contains(WidgetState.focused)) {
+              return AppColorTheme.transparent;
+            }
+            return null;
+          },
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.hovered)) {
+              return ShellUiConfig.footerLinkHoverFor(brightness);
+            }
+            return ShellUiConfig.footerLinkFor(brightness);
+          },
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Inter18pt',
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+          decoration: TextDecoration.underline,
+          decorationStyle: TextDecorationStyle.solid,
+          decorationColor: ShellUiConfig.footerLinkFor(brightness),
+          decorationThickness: 1.0,
         ),
       ),
     );

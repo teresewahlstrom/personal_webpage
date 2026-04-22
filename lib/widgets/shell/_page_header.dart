@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../config/app_ui_config.dart';
-import 'floating_controls.dart';
 
 class PageHeader extends StatelessWidget {
   const PageHeader({
     super.key,
     this.logoAssetPath = 'assets/images/logo.png',
-    this.showThemeToggle = false,
-    this.isDarkMode = false,
-    this.onToggleTheme,
   });
 
   final String logoAssetPath;
-  final bool showThemeToggle;
-  final bool isDarkMode;
-  final VoidCallback? onToggleTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +39,6 @@ class PageHeader extends StatelessWidget {
                 height: ShellUiConfig.headerLogoHeight,
                 fit: BoxFit.contain,
               ),
-              const Spacer(),
-              if (showThemeToggle && onToggleTheme != null)
-                ThemeToggleControlButton(
-                  isDarkMode: isDarkMode,
-                  onTap: onToggleTheme!,
-                ),
             ],
           ),
         ),

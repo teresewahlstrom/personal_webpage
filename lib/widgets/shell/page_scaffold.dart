@@ -4,7 +4,6 @@ import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import '../../config/app_ui_config.dart';
 import '../arrow_key_scroll_wrapper.dart';
 import '_chat_overlay.dart';
-import '_floating_control_inset.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
 import '_page_header.dart';
@@ -19,59 +18,27 @@ class PageScaffold extends StatefulWidget {
   const PageScaffold({
     super.key,
     required this.child,
-    this.overlays = const <Widget>[],
-    this.showHeader = true,
     this.showThemeToggle = true,
     this.isDarkMode = false,
     this.onToggleTheme,
-    this.showChat = true,
     this.showFooter = true,
-    this.footerBrandName = 'T1 grid',
-    this.footerPrivacyLabel = 'Privacy & Cookies Note.',
-    this.twinBackendUrl = AppRuntimeConfig.twinBackendUrl,
-    this.gridColor,
-    this.gridLineStyle,
     this.initialChatSkinMode = ChatSkinMode.light,
   });
 
   /// The main content to display on top of the grid background.
   final Widget child;
 
-  /// Optional floating layers rendered above page content (for docks/overlays).
-  final List<Widget> overlays;
-
-  /// Enables the built-in header.
-  final bool showHeader;
-
-  /// Enables the app theme toggle in the header.
+  /// Enables the floating app theme toggle.
   final bool showThemeToggle;
 
   /// Whether the app is currently in dark mode.
   final bool isDarkMode;
 
-  /// Callback used by the header toggle to switch app theme.
+  /// Callback used by the floating toggle to switch app theme.
   final VoidCallback? onToggleTheme;
-
-  /// Enables the built-in twin chat dock overlay.
-  final bool showChat;
 
   /// Enables the built-in footer.
   final bool showFooter;
-
-  /// Footer brand label shown in copyright line.
-  final String footerBrandName;
-
-  /// Footer link label.
-  final String footerPrivacyLabel;
-
-  /// Backend URL used by the built-in twin chat dock.
-  final String twinBackendUrl;
-
-  /// Background color of the grid.
-  final Color? gridColor;
-
-  /// Style of the grid lines.
-  final AppLineStyle? gridLineStyle;
 
   /// Initial skin mode used by the twin chat widget.
   final ChatSkinMode initialChatSkinMode;
@@ -140,22 +107,15 @@ class _PageScaffoldState extends State<PageScaffold>
       mediaQuery.size.width,
     );
     return GridBackground(
-      backgroundColor:
-          widget.gridColor ?? ShellUiConfig.pageBackgroundFor(brightness),
-      gridLineStyle:
-        widget.gridLineStyle ?? ShellUiConfig.gridLineFor(brightness),
+      backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
+      gridLineStyle: ShellUiConfig.gridLineFor(brightness),
       child: FadeTransition(
         opacity: _themeFadeOpacity,
         child: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
-                if (widget.showHeader)
-                  PageHeader(
-                    showThemeToggle: false,
-                    isDarkMode: widget.isDarkMode,
-                    onToggleTheme: widget.onToggleTheme,
-                  ),
+                const PageHeader(),
                 Expanded(
                   child: ArrowKeyScrollWrapper(
                     controller: _pageScrollController,
@@ -174,9 +134,9 @@ class _PageScaffoldState extends State<PageScaffold>
                             child: widget.child,
                           ),
                           if (widget.showFooter)
-                            PageFooter(
-                              brandName: widget.footerBrandName,
-                              privacyLabel: widget.footerPrivacyLabel,
+                            const PageFooter(
+                              brandName: 'T1 grid',
+                              privacyLabel: 'Privacy & Cookies Note.',
                             ),
                         ],
                       ),
@@ -185,7 +145,6 @@ class _PageScaffoldState extends State<PageScaffold>
                 ),
               ],
             ),
-            ...widget.overlays,
             if (widget.showThemeToggle && widget.onToggleTheme != null)
               Positioned(
                 right: mediaQuery.viewPadding.right + floatingInset,
@@ -195,9 +154,9 @@ class _PageScaffoldState extends State<PageScaffold>
                   onTap: widget.onToggleTheme!,
                 ),
               ),
-            if (widget.showChat && AppRuntimeConfig.showChatInUi)
+            if (AppRuntimeConfig.showChatInUi)
               ChatOverlay(
-                twinBackendUrl: widget.twinBackendUrl,
+                twinBackendUrl: AppRuntimeConfig.twinBackendUrl,
                 chatSkinMode: widget.initialChatSkinMode,
               ),
           ],

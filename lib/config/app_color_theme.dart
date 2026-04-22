@@ -69,6 +69,7 @@ final class _AppDarkColors {
 
 final class AppColorTheme {
   static const Color newsletterEmbedText = Color(0xFFFFFFFF);
+  static const Color transparent = Color(0x00000000);
 
   static const _ThemeColor _appSeed = _ThemeColor(
     _AppLightColors.appSeed,
