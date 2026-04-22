@@ -30,7 +30,7 @@ class PageFooter extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: ShellUiConfig.footerBorderFor(brightness),
-            width: 2,
+            width: 1,
           ),
         ),
       ),

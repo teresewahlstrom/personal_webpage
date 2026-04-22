@@ -13,19 +13,19 @@ final class AppRuntimeConfig {
 
 final class ShellUiConfig {
   static const Color pageBackgroundColor = Color(0xFFF8F9F7);
-  static const Color pageBackgroundColorDark = Color(0xFF0F1D3A);
+  static const Color pageBackgroundColorDark = Color(0xFF212835);
   static const Color gridLineColor = Color(0xFFE1E4F2);
-  static const Color gridLineColorDark = Color(0x2E7199FF);
+  static const Color gridLineColorDark = Color(0xFF2B364A);
   static const Color headerBackgroundColor = Color(0xFFF8F9F7);
-  static const Color headerBackgroundColorDark = Color(0xFF0F1D3A);
-  static const Color headerBorderColor = Color(0xFFE1E4F2);
+  static const Color headerBackgroundColorDark = Color(0xFF212835);
+  static const Color headerBorderColor = Color(0x40394183);
   static const Color headerBorderColorDark = Color(0x397199FF);
   static const Color headerToggleColor = Color(0xFF394183);
   static const Color headerToggleColorDark = Color(0xFF90E8F8);
   static const Color headerToggleHoverColor = Color(0xFF843F02);
   static const Color headerToggleHoverColorDark = Color(0xFF4EF0FF);
-  static const Color headerToggleBackgroundColor = Color(0xFFFFFFFF);
-  static const Color headerToggleBackgroundColorDark = Color(0xFF15233F);
+  static const Color headerToggleBackgroundColor = Color(0xFFF8F9F7);
+  static const Color headerToggleBackgroundColorDark = Color(0xFF212835);
 
   static const double gridSpacing = 25;
   static const double gridYStart = 15;
@@ -43,8 +43,8 @@ final class ShellUiConfig {
     vertical: 10,
   );
   static const Color footerBackgroundColor = Color(0xFFF8F9F7);
-  static const Color footerBackgroundColorDark = Color(0xFF0F1D3A);
-  static const Color footerBorderColor = Color(0xFFE1E4F2);
+  static const Color footerBackgroundColorDark = Color(0xFF212835);
+  static const Color footerBorderColor = Color(0x40394183);
   static const Color footerBorderColorDark = Color(0x397199FF);
   static const Color footerTextColor = Color(0xFF555764);
   static const Color footerTextColorDark = Color(0xD6DCF6F8);

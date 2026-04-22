@@ -89,9 +89,9 @@ class _LandingPageState extends State<LandingPage> {
           final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
             brightness,
           );
-          final Color keywordGraphicBorder = brightness == Brightness.dark
-              ? const Color(0x6690E8F8)
-              : const Color(0x66394183);
+          final Color keywordGraphicBorder = ShellUiConfig.headerBorderFor(
+            brightness,
+          );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
           final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
 
@@ -128,8 +128,8 @@ class _LandingPageState extends State<LandingPage> {
                       frameStyle: WordCloudFrameStyle(
                         backgroundColor: keywordGraphicFill,
                         borderColor: keywordGraphicBorder,
-                        borderWidth: 1.4,
-                        borderRadius: BorderRadius.circular(4),
+                        borderWidth: 1.5,
+                        borderRadius: BorderRadius.zero,
                         padding: const EdgeInsets.all(5),
                       ),
                     ),
@@ -176,7 +176,7 @@ class _LandingPageState extends State<LandingPage> {
                               onTap: _openNewsletterModal,
                             ),
                             _SocialItem(
-                              icon: const FaIcon(FontAwesomeIcons.linkedinIn),
+                              icon: const FaIcon(FontAwesomeIcons.linkedin),
                               label: "LinkedIn",
                               onTap: () => _launchUrl(
                                 "https://www.linkedin.com/in/teresewahlstrom",
