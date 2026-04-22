@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -341,7 +341,9 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color cardFill = widget.gridLineStyle.color;
+    final Color cardFill = widget.gridLineStyle.color.withValues(
+      alpha: AppColorTheme.projectCardFillAlphaFor(brightness),
+    );
     final Color baseIconColor =
       PageTextStyles.body(context).color ??
       Theme.of(context).textTheme.bodyMedium?.color ??
