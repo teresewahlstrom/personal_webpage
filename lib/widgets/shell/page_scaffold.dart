@@ -117,28 +117,42 @@ class _PageScaffoldState extends State<PageScaffold>
               children: <Widget>[
                 const PageHeader(),
                 Expanded(
-                  child: ArrowKeyScrollWrapper(
+                  child: PrimaryScrollController(
                     controller: _pageScrollController,
-                    onPointerDown: () {
-                      _pageSelectionAreaKey.currentState?.clearSelection();
-                    },
-                    child: SingleChildScrollView(
-                      controller: _pageScrollController,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          SelectableRegion(
-                            key: _pageSelectionAreaKey,
-                            focusNode: _pageSelectionFocusNode,
-                            selectionControls: materialTextSelectionControls,
-                            child: widget.child,
-                          ),
-                          if (widget.showFooter)
-                            const PageFooter(
-                              brandName: 'T1 grid',
-                              privacyLabel: 'Privacy & Cookies Note.',
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
+                      child: Scrollbar(
+                        controller: _pageScrollController,
+                        interactive: true,
+                        child: SingleChildScrollView(
+                          controller: _pageScrollController,
+                          child: ArrowKeyScrollWrapper(
+                            controller: _pageScrollController,
+                            onPointerDown: () {
+                              _pageSelectionAreaKey.currentState
+                                  ?.clearSelection();
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                SelectableRegion(
+                                  key: _pageSelectionAreaKey,
+                                  focusNode: _pageSelectionFocusNode,
+                                  selectionControls:
+                                      materialTextSelectionControls,
+                                  child: widget.child,
+                                ),
+                                if (widget.showFooter)
+                                  const PageFooter(
+                                    brandName: 'T1 grid',
+                                    privacyLabel: 'Privacy & Cookies Note.',
+                                  ),
+                              ],
                             ),
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                   ),

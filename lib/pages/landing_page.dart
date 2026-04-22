@@ -135,7 +135,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 26),
+              const SizedBox(height: 40),
               Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
@@ -145,7 +145,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const _AboutDataDrivenResumeSection(),
+                        const _ProjectsSection(),
                         const SizedBox(height: 40),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
@@ -272,24 +272,73 @@ class _HeroStatement extends StatelessWidget {
   }
 }
 
-class _AboutDataDrivenResumeSection extends StatelessWidget {
-  const _AboutDataDrivenResumeSection();
+class _ProjectsSection extends StatelessWidget {
+  const _ProjectsSection();
 
-  static const String _title = "About the Data-driven resume";
-  static const String _content =
-      "An AI-augmented professional twin built on structured data. Instead of a static resume, it models experience, capabilities, and cross-domain strengths as an explorable chat and keywords tree. Everything data driven.";
+  static const String _title = "Projects";
+  static const List<_ProjectCardData> _projectCards = <_ProjectCardData>[
+    _ProjectCardData(
+      title: "Data-driven resume",
+      content:
+          "An AI-augmented professional twin built on structured data. Instead of a static resume, it models experience, capabilities, and cross-domain strengths as an explorable chat and keywords tree. Everything data driven.",
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
+    final BorderSide frameBorder = AppLineTheme.subtleSecondaryFor(
+      brightness,
+    ).borderSide;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(_title, style: PageTextStyles.h2(context)),
         const SizedBox(height: 10),
-        Text(_content, style: PageTextStyles.body(context)),
+        for (int index = 0; index < _projectCards.length; index++) ...<Widget>[
+          SizedBox(
+            width: double.infinity,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: frameFill,
+                border: Border.fromBorderSide(frameBorder),
+                borderRadius: BorderRadius.zero,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      _projectCards[index].title,
+                      style: PageTextStyles.body(
+                        context,
+                      ).copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _projectCards[index].content,
+                      style: PageTextStyles.body(context),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (index < _projectCards.length - 1) const SizedBox(height: 12),
+        ],
       ],
     );
   }
+}
+
+class _ProjectCardData {
+  const _ProjectCardData({required this.title, required this.content});
+
+  final String title;
+  final String content;
 }
 
 class _SocialSection extends StatelessWidget {
