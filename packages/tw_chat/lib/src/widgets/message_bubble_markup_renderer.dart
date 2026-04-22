@@ -25,10 +25,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skin = ChatSkin.data;
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
-    final markupTheme = _buildMarkupTheme(style);
+    final markupTheme = _buildMarkupTheme(context, style);
 
     if (!isTruncated) {
       final visibleMarkupLayer = _buildRenderedMarkupDocument(
@@ -170,8 +170,8 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  ChatMarkupTheme _buildMarkupTheme(TextStyle baseStyle) {
-    final skin = ChatSkin.data;
+  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
     final textStyles = skin.textStyles;
@@ -307,9 +307,9 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
             theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
       );
       final railColor = chromeVisible
-          ? ChatBubbleRules.botBorder
-          : ChatSkin.data.colors.transparent;
-      final tokens = ChatSkin.data.tokens;
+          ? ChatBubbleRules.botBorder(context)
+          : ChatSkin.dataOf(context).colors.transparent;
+        final tokens = ChatSkin.tokens;
       return CustomPaint(
         foregroundPainter: _BlockQuoteRailPainter(
           color: railColor,
@@ -461,7 +461,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
   }
 
   TextStyle _transparentTextStyle(TextStyle style) {
-    final transparent = ChatSkin.data.colors.transparent;
+    final transparent = Colors.transparent;
     return style.copyWith(
       color: transparent,
       backgroundColor: transparent,
@@ -477,7 +477,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     required bool inListItem,
   }) {
     final fontSize = theme.baseStyle.fontSize ?? 12.0;
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
 
     double spacing = fontSize * tokens.markupBlockBaseSpacingFactor;
     if (inListItem && nextBlock is ChatMarkupListBlock) {
@@ -531,7 +531,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     required int listDepth,
   }) {
     final fontSize = style.fontSize ?? 12.0;
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
 
     var spacing = fontSize * tokens.markupListItemBaseSpacingFactor;
     if (listDepth <= 0) {
@@ -547,12 +547,12 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
 
   double _listMarkerGap(TextStyle style) {
     final fontSize = style.fontSize ?? 12.0;
-    return fontSize * ChatSkin.data.tokens.markupListMarkerGapFactor;
+    return fontSize * ChatSkin.tokens.markupListMarkerGapFactor;
   }
 
   double _listMarkerSlotWidth(TextStyle style, int depth) {
     final fontSize = style.fontSize ?? 12.0;
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     final factor = depth <= 0
         ? tokens.markupTopLevelListMarkerSlotFactor
         : tokens.markupNestedListMarkerSlotFactor;

@@ -76,7 +76,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(chatScroll.position.maxScrollExtent, greaterThan(0));
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.dataForBrightness(Brightness.light).tokens;
 
     final initialViewportRect = tester.getRect(
       find.byType(SingleChildScrollView),

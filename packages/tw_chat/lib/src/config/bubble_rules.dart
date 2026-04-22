@@ -6,10 +6,14 @@ import 'skin.dart';
 class ChatBubbleRules {
   const ChatBubbleRules._();
 
-  static Color get userFill => ChatSkin.data.colors.userBubbleFill;
-  static Color get botFill => ChatSkin.data.colors.botBubbleFill;
-  static Color get userBorder => ChatSkin.data.colors.userBubbleBorder;
-  static Color get botBorder => ChatSkin.data.colors.botBubbleBorder;
+  static Color userFill(BuildContext context) =>
+    ChatSkin.dataOf(context).colors.userBubbleFill;
+  static Color botFill(BuildContext context) =>
+    ChatSkin.dataOf(context).colors.botBubbleFill;
+  static Color userBorder(BuildContext context) =>
+    ChatSkin.dataOf(context).colors.userBubbleBorder;
+  static Color botBorder(BuildContext context) =>
+    ChatSkin.dataOf(context).colors.botBubbleBorder;
 
   /// Target max bubble width across layouts.
   ///
@@ -28,35 +32,34 @@ class ChatBubbleRules {
   /// Matches [collapsibleLineThreshold] so expanding is only offered when
   /// additional content is actually hidden.
   static const collapsedVisibleLines = 7;
-  static Color get collapseButtonColor =>
-      ChatSkin.data.colors.bubbleCollapseButton;
-  static Color get collapseButtonIconColor =>
-      ChatSkin.data.colors.bubbleCollapseButtonIcon;
+  static Color collapseButtonColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.bubbleCollapseButton;
+  static Color collapseButtonIconColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.bubbleCollapseButtonIcon;
 
-  static TextStyle textStyle(double textScale) {
-    final skin = ChatSkin.data;
-    return skin.textStyles.bubbleTextStyle(textScale, skin.colors);
+  static TextStyle textStyle(BuildContext context, double textScale) {
+    final skin = ChatSkin.dataOf(context);
+    return ChatSkin.textStyles.bubbleTextStyle(textScale, skin.colors);
   }
 
   static double horizontalTextInset(double textScale) {
-    return _scaledInset(ChatSkin.data.tokens.bubbleTextInsetLeft, textScale);
+    return _scaledInset(ChatSkin.tokens.bubbleTextInsetLeft, textScale);
   }
 
   static double verticalTextInset(double textScale) {
     return _scaledInset(
-      ChatSkin.data.tokens.bubbleTextInsetTopBottom,
+      ChatSkin.tokens.bubbleTextInsetTopBottom,
       textScale,
     );
   }
 
   static double _scaledInset(double base, double textScale) {
-    final skin = ChatSkin.data;
     return ChatMath.tapered(
       base,
       textScale,
-      skin.textStyles.minTextScale,
-      skin.textStyles.defaultMaxTextScale,
-      skin.tokens.bubbleMinInsetScaleFactor,
+      ChatSkin.textStyles.minTextScale,
+      ChatSkin.textStyles.defaultMaxTextScale,
+      ChatSkin.tokens.bubbleMinInsetScaleFactor,
     );
   }
 }

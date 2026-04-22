@@ -23,28 +23,32 @@ class ChatComposerLayout {
   ///
   /// Width scales up with accessibility text scaling.
   static const sendButtonMinWidthFloor = 50.0;
-  static Color get fillColor => ChatSkin.data.colors.composerFill;
-  static Color get borderColor => ChatSkin.data.colors.composerBorder;
-  static Color get cursorColor => ChatSkin.data.colors.composerCursor;
-  static Color get cornerAccentColor =>
-      ChatSkin.data.colors.composerCornerAccent;
-  static Color get sendIconColor => ChatSkin.data.colors.composerSendIcon;
+    static Color fillColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.composerFill;
+    static Color borderColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.composerBorder;
+    static Color cursorColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.composerCursor;
+    static Color cornerAccentColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.composerCornerAccent;
+    static Color sendIconColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.composerSendIcon;
 
-  static TextStyle hintStyle(double textScale) {
-    final skin = ChatSkin.data;
-    return skin.textStyles.composerHintStyle(textScale, skin.colors);
+  static TextStyle hintStyle(BuildContext context, double textScale) {
+    final skin = ChatSkin.dataOf(context);
+    return ChatSkin.textStyles.composerHintStyle(textScale, skin.colors);
   }
 
   static ChatComposerMetrics resolveMetrics({
+    required BuildContext context,
     required double panelHeight,
     required double textScale,
   }) {
-    final skin = ChatSkin.data;
     final scale = (!textScale.isFinite || textScale <= 0)
-        ? skin.textStyles.minTextScale
+        ? ChatSkin.textStyles.minTextScale
         : textScale.clamp(
-            skin.textStyles.minTextScale,
-            skin.textStyles.composerMaxTextScale,
+            ChatSkin.textStyles.minTextScale,
+            ChatSkin.textStyles.composerMaxTextScale,
           ).toDouble();
     final compactnessT =
         1.0 -

@@ -24,6 +24,7 @@ $rgArgs = @(
   '--glob', 'packages/**/*.dart',
   '--glob', '!lib/config/app_color_theme.dart',
   '--glob', '!packages/tw_chat/**',
+  '--glob', '!packages/tw_keywords/lib/src/config/keyword_color_theme.dart',
   $pattern,
   $repoRoot
 )
@@ -33,11 +34,11 @@ $rgMatches = & $rg.Source @rgArgs
 if ($LASTEXITCODE -eq 0 -and $rgMatches) {
   Write-Host ''
   Write-Host 'Color centralization check failed.' -ForegroundColor Red
-  Write-Host 'Found hardcoded color usage outside lib/config/app_color_theme.dart and packages/tw_chat/:' -ForegroundColor Yellow
+  Write-Host 'Found hardcoded color usage outside approved theme sources (lib/config/app_color_theme.dart, packages/tw_chat/, packages/tw_keywords/lib/src/config/keyword_color_theme.dart):' -ForegroundColor Yellow
   Write-Host ''
   $rgMatches | ForEach-Object { Write-Host $_ }
   Write-Host ''
-  Write-Host 'Move these colors into AppColorTheme (or tw_chat skin if applicable) and reference semantic tokens.' -ForegroundColor Yellow
+  Write-Host 'Move these colors into AppColorTheme (or package-owned theme files) and reference semantic tokens.' -ForegroundColor Yellow
   exit 1
 }
 

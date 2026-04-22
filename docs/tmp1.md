@@ -92,3 +92,4 @@ Göra ett shared paket:
     - gemensam färg-config mellan tw_chat och main app?
     - annat som kan ingå i detta?
     - Make the selection/deselction logic centralised into a wrapper? Create internal package tw_flutter_basics that can be shared with other internal packages as well as Main app. Move the scrollable behavior in there as well?
+

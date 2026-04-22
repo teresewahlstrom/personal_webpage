@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'config/keyword_color_theme.dart';
+
 /// A single keyword cell with visual and semantic metadata.
 ///
 /// [em] = font size as a fraction of container width — expresses visual
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 /// reuse across different keyword sets.
 final class KeywordNode {
   final String text;
-  final Color color;
+  final KeywordTextColorToken colorToken;
   final FontWeight weight;
   final double em;
 
@@ -41,7 +43,7 @@ final class KeywordNode {
 
   const KeywordNode(
     this.text,
-    this.color,
+    this.colorToken,
     this.weight,
     this.em, {
     required this.tier,

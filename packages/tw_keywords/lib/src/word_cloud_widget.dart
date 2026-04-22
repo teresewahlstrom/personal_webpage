@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'keyword_composition_model.dart';
+import 'config/keyword_color_theme.dart';
 import 'word_cloud_frame_style.dart';
 
 /// A single word after spiral placement, ready for rendering.
@@ -376,6 +377,7 @@ class WordCloud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final double outerWidth = _resolveWidth(context, constraints);
@@ -426,7 +428,10 @@ class WordCloud extends StatelessWidget {
                       fontFamily: fontFamily,
                       fontSize: pw.fontSize,
                       fontWeight: pw.node.weight,
-                      color: pw.node.color,
+                      color: KeywordSkin.textColorForToken(
+                        pw.node.colorToken,
+                        brightness,
+                      ),
                       height: 1.0,
                       letterSpacing: letterSpacing,
                     ),

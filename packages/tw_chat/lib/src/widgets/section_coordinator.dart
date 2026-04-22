@@ -257,7 +257,7 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   bool animateChatScrollBy(double delta, {required bool animate}) {
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     return _scrollHelper.animateBy(
       controller: chatScroll,
       delta: delta,

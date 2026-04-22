@@ -65,7 +65,7 @@ class ChatMessageListArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     return Expanded(
       child: Focus(
         focusNode: chatFocusNode,

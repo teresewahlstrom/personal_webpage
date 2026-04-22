@@ -66,8 +66,8 @@ class ChatLayout {
 
   /// Number of post-frame passes used to force final bottom settle.
   static const forcedBottomPasses = 3;
-  static LinearGradient get backgroundGradient {
-    final colors = ChatSkin.data.colors;
+  static LinearGradient backgroundGradient(BuildContext context) {
+    final colors = ChatSkin.dataOf(context).colors;
     return LinearGradient(
       colors: [colors.shellBackgroundStart, colors.shellBackgroundEnd],
       begin: Alignment.topLeft,
@@ -75,7 +75,8 @@ class ChatLayout {
     );
   }
 
-  static Color get dividerColor => ChatSkin.data.colors.shellDivider;
+  static Color dividerColor(BuildContext context) =>
+      ChatSkin.dataOf(context).colors.shellDivider;
 
   static double dockHorizontalMargin({
     required Size viewportSize,
@@ -199,7 +200,7 @@ class ChatLayout {
       compactThreshold: heightThreshold,
       transitionBand: compactHeightTransitionBand,
     );
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     final baseVerticalGutter = viewportSize.width <= phoneBreakpoint
         ? tokens.phoneVerticalHeightGutter
         : tokens.verticalHeightGutter;

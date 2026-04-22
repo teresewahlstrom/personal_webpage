@@ -127,11 +127,11 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final skin = ChatSkin.data;
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final bubbleTextStyle = ChatBubbleRules.textStyle(textScale);
+    final bubbleTextStyle = ChatBubbleRules.textStyle(context, textScale);
     final horizontalInset = ChatBubbleRules.horizontalTextInset(textScale);
     final verticalInset = ChatBubbleRules.verticalTextInset(textScale);
     final bubbleMaxWidth =
@@ -165,21 +165,24 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         ? -tokens.collapseButtonBottomInset
         : 0.0;
     final toggleButtonBackgroundColor = widget.isTruncated
-        ? ChatBubbleRules.collapseButtonColor
-        : ChatBubbleRules.collapseButtonIconColor;
+      ? ChatBubbleRules.collapseButtonColor(context)
+      : ChatBubbleRules.collapseButtonIconColor(context);
     final toggleButtonIconColor = widget.isTruncated
-        ? ChatBubbleRules.collapseButtonIconColor
-        : ChatBubbleRules.collapseButtonColor;
+      ? ChatBubbleRules.collapseButtonIconColor(context)
+      : ChatBubbleRules.collapseButtonColor(context);
     final toggleButtonBorderSide = widget.isTruncated
         ? BorderSide.none
-        : BorderSide(color: ChatBubbleRules.collapseButtonColor, width: 0.5);
+      : BorderSide(
+        color: ChatBubbleRules.collapseButtonColor(context),
+        width: 0.5,
+        );
     final align = widget.isUser ? Alignment.centerRight : Alignment.centerLeft;
     final bubbleColor = widget.isUser
-        ? ChatBubbleRules.userFill
-        : ChatBubbleRules.botFill;
+      ? ChatBubbleRules.userFill(context)
+      : ChatBubbleRules.botFill(context);
     final borderColor = widget.isUser
-        ? ChatBubbleRules.userBorder
-        : ChatBubbleRules.botBorder;
+      ? ChatBubbleRules.userBorder(context)
+      : ChatBubbleRules.botBorder(context);
 
     return SizedBox(
       width: double.infinity,
@@ -293,7 +296,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required double truncatedContentHeight,
     required bool isTruncated,
   }) {
-    final skin = ChatSkin.data;
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
     if (widget.isTypingIndicator) {
@@ -417,7 +420,7 @@ class _TypingDotsIndicator extends StatefulWidget {
 
 class _TypingDotsIndicatorState extends State<_TypingDotsIndicator>
     with SingleTickerProviderStateMixin {
-  ChatSkinTokens get _tokens => ChatSkin.data.tokens;
+  ChatSkinTokens get _tokens => ChatSkin.tokens;
 
   late final AnimationController _controller = AnimationController(
     vsync: this,
@@ -516,7 +519,7 @@ class _TypingDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     final scale =
         tokens.typingDotScaleBase + (tokens.typingDotScaleAmplitude * strength);
     final alpha =

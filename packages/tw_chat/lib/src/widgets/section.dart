@@ -125,12 +125,13 @@ class _ChatSectionState extends State<ChatSection> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final skin = ChatSkin.data;
+        final skin = ChatSkin.dataOf(context);
         final colors = skin.colors;
         final tokens = skin.tokens;
-        final textStyles = skin.textStyles;
+        final textStyles = ChatSkin.textStyles;
         final textScale = MediaQuery.textScalerOf(context).scale(1.0);
         final composerMetrics = ChatComposerLayout.resolveMetrics(
+          context: context,
           panelHeight: constraints.maxHeight,
           textScale: textScale,
         );
@@ -182,21 +183,32 @@ class _ChatSectionState extends State<ChatSection> {
                           ),
                           style: FilledButton.styleFrom(
                             backgroundColor: colors.composerFill,
-                            foregroundColor: ChatComposerLayout.sendIconColor,
+                            foregroundColor: ChatComposerLayout.sendIconColor(
+                              context,
+                            ),
                             side: BorderSide(
-                              color: ChatComposerLayout.sendIconColor,
+                              color: ChatComposerLayout.sendIconColor(context),
                             ),
                             elevation: tokens.jumpToLatestButtonElevation,
                             padding: tokens.jumpToLatestButtonPadding,
                             textStyle: textStyles
                                 .composerHintStyle(textScale, colors)
                                 .copyWith(
-                                  color: ChatComposerLayout.sendIconColor,
+                                  color: ChatComposerLayout.sendIconColor(
+                                    context,
+                                  ),
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
                         ),
-                  buildScrollbarTrack: ChatScrollbar.buildTrack,
+                  buildScrollbarTrack: ({
+                    required double thickness,
+                    required double crossAxisInset,
+                  }) => ChatScrollbar.buildTrack(
+                    context: context,
+                    thickness: thickness,
+                    crossAxisInset: crossAxisInset,
+                  ),
                 );
               },
             ),

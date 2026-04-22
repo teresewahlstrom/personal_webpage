@@ -107,13 +107,13 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   Widget build(BuildContext context) {
     _scheduleHeightSync();
-    final skin = ChatSkin.data;
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final composerTextStyle = ChatBubbleRules.textStyle(textScale);
-    final composerHintStyle = ChatComposerLayout.hintStyle(textScale);
+    final composerTextStyle = ChatBubbleRules.textStyle(context, textScale);
+    final composerHintStyle = ChatComposerLayout.hintStyle(context, textScale);
     final composerButtonTooltip = widget.isAwaitingResponse
         ? 'Stop response'
         : 'Send message';
@@ -147,7 +147,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           Expanded(
             child: CustomPaint(
               foregroundPainter: _CornerAccentPainter(
-                color: ChatComposerLayout.cornerAccentColor,
+                color: ChatComposerLayout.cornerAccentColor(context),
                 radius: tokens.composerCornerAccentRadius,
                 strokeWidth: tokens.composerCornerAccentStroke,
                 segmentLength: tokens.composerCornerAccentSegment,
@@ -155,9 +155,11 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
               child: Container(
                 key: _inputShellKey,
                 decoration: BoxDecoration(
-                  color: ChatComposerLayout.fillColor,
+                  color: ChatComposerLayout.fillColor(context),
                   borderRadius: BorderRadius.circular(tokens.composerRadius),
-                  border: Border.all(color: ChatComposerLayout.borderColor),
+                  border: Border.all(
+                    color: ChatComposerLayout.borderColor(context),
+                  ),
                   boxShadow: [tokens.surfaceShadow(colors)],
                 ),
                 constraints: BoxConstraints(
@@ -171,6 +173,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                     children: [
                       if (widget.showInputScrollbarTrack)
                         ChatScrollbar.buildTrack(
+                          context: context,
                           thickness: inputScrollbarThickness,
                           crossAxisInset: inputScrollbarCrossAxisInset,
                         ),
@@ -199,7 +202,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                                 : materialTextSelectionControls,
                             style: composerTextStyle,
                             textAlignVertical: TextAlignVertical.center,
-                            cursorColor: ChatComposerLayout.cursorColor,
+                            cursorColor: ChatComposerLayout.cursorColor(context),
                             keyboardType: TextInputType.multiline,
                             textInputAction: TextInputAction.newline,
                             minLines: 1,
@@ -252,7 +255,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                     child: Icon(
                       composerButtonIcon,
                       size: tokens.composerSendIconSize,
-                      color: ChatComposerLayout.sendIconColor,
+                      color: ChatComposerLayout.sendIconColor(context),
                     ),
                   ),
                 ),

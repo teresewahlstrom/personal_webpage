@@ -85,8 +85,7 @@ class _ChatDockState extends State<ChatDock> {
 
   @override
   Widget build(BuildContext context) {
-    ChatSkin.setMode(widget.skinMode);
-    final tokens = ChatSkin.data.tokens;
+    final tokens = ChatSkin.tokens;
     final mediaQuery = MediaQuery.of(context);
     final viewportSize = mediaQuery.size;
     final chatMargin = ChatLayout.dockHorizontalMargin(
@@ -111,50 +110,53 @@ class _ChatDockState extends State<ChatDock> {
             ? chatMargin
             : widget.minimizedRightInset);
 
-    return Positioned(
-      right: _isExpanded ? baseRightInset : minimizedRightInset,
-      bottom:
-          mediaQuery.viewInsets.bottom +
-          (_isExpanded ? 0 : widget.minimizedBottomOffset),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TickerMode(
-            enabled: _isExpanded,
-            child: ExcludeFocus(
-              excluding: !_isExpanded,
-              child: Offstage(
-                offstage: !_isExpanded,
-                child: SizedBox(
-                  width: floatingChatWidth,
-                  child: FloatingChatWindow(
-                    messages: widget.messages,
-                    onSend: widget.onSend,
-                    onStop: widget.onStop,
-                    isChatKeyboardScrollTarget:
-                        widget.isChatKeyboardScrollTarget,
-                    onSetChatKeyboardScrollTarget:
-                        widget.onSetChatKeyboardScrollTarget,
-                    maxHeight: availableChatHeight,
-                    isVisible: _isExpanded,
-                    onMinimize: _minimizeChat,
-                    tokens: tokens,
+    return ChatSkinScope(
+      mode: widget.skinMode,
+      child: Positioned(
+        right: _isExpanded ? baseRightInset : minimizedRightInset,
+        bottom:
+            mediaQuery.viewInsets.bottom +
+            (_isExpanded ? 0 : widget.minimizedBottomOffset),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TickerMode(
+              enabled: _isExpanded,
+              child: ExcludeFocus(
+                excluding: !_isExpanded,
+                child: Offstage(
+                  offstage: !_isExpanded,
+                  child: SizedBox(
+                    width: floatingChatWidth,
+                    child: FloatingChatWindow(
+                      messages: widget.messages,
+                      onSend: widget.onSend,
+                      onStop: widget.onStop,
+                      isChatKeyboardScrollTarget:
+                          widget.isChatKeyboardScrollTarget,
+                      onSetChatKeyboardScrollTarget:
+                          widget.onSetChatKeyboardScrollTarget,
+                      maxHeight: availableChatHeight,
+                      isVisible: _isExpanded,
+                      onMinimize: _minimizeChat,
+                      tokens: tokens,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Offstage(
-            offstage: _isExpanded,
-            child: MinimizedChatLauncher(
-              launcherStyle: widget.launcherStyle,
-              onSetChatKeyboardScrollTarget:
-                  widget.onSetChatKeyboardScrollTarget,
-              onExpand: _expandChat,
+            Offstage(
+              offstage: _isExpanded,
+              child: MinimizedChatLauncher(
+                launcherStyle: widget.launcherStyle,
+                onSetChatKeyboardScrollTarget:
+                    widget.onSetChatKeyboardScrollTarget,
+                onExpand: _expandChat,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -178,7 +180,7 @@ class ChatAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skin = ChatSkin.data;
+    final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final titleStyle = skin.textStyles.appBarTitleStyle(textScale, colors);
@@ -268,7 +270,7 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ChatSkin.data.colors;
+    final colors = ChatSkin.dataOf(context).colors;
     final launcherStyle = widget.launcherStyle;
     final foregroundColor = _isHovered
         ? launcherStyle.hoverForegroundColor
@@ -361,10 +363,11 @@ class FloatingChatWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ChatSkin.data.colors;
+    final colors = ChatSkin.dataOf(context).colors;
+    final isDark = ChatSkin.isDarkOf(context);
     final gridLineColor =
-        (ChatSkin.isDark ? colors.shellDivider : colors.shellOuterBorder)
-            .withValues(alpha: ChatSkin.isDark ? 0.24 : 0.10);
+      (isDark ? colors.shellDivider : colors.shellOuterBorder)
+        .withValues(alpha: isDark ? 0.24 : 0.10);
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Listener(
@@ -378,6 +381,7 @@ class FloatingChatWindow extends StatelessWidget {
           color: colors.transparent,
           child: Container(
             decoration: _chatShellDecoration(
+              context: context,
               borderRadius: tokens.shellBorderRadiusExpanded,
             ),
             child: Column(
@@ -388,7 +392,7 @@ class FloatingChatWindow extends StatelessWidget {
                   displayStateToggleTooltip: 'Minimize chat',
                   tokens: tokens,
                 ),
-                Divider(height: 1, color: ChatLayout.dividerColor),
+                Divider(height: 1, color: ChatLayout.dividerColor(context)),
                 Flexible(
                   child: Stack(
                     children: [
@@ -440,12 +444,14 @@ class FloatingChatWindow extends StatelessWidget {
   }
 }
 
-BoxDecoration _chatShellDecoration({required BorderRadius borderRadius}) {
-  final skin = ChatSkin.data;
-  final colors = skin.colors;
-  final tokens = skin.tokens;
+BoxDecoration _chatShellDecoration({
+  required BuildContext context,
+  required BorderRadius borderRadius,
+}) {
+  final colors = ChatSkin.dataOf(context).colors;
+  final tokens = ChatSkin.tokens;
   return BoxDecoration(
-    gradient: ChatLayout.backgroundGradient,
+    gradient: ChatLayout.backgroundGradient(context),
     borderRadius: borderRadius,
     border: Border.all(
       color: colors.shellOuterBorder,

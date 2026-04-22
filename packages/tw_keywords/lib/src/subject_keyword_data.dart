@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'keyword_composition_model.dart';
+import 'config/keyword_color_theme.dart';
 
 /// Complete subject profile with all keywords, semantic metadata, and layout hints.
 ///
@@ -51,9 +52,11 @@ final class SubjectKeywordData {
   }
 
   static KeywordNode _keywordNodeFromJson(Map<String, dynamic> json) {
+    final KeywordTextColorToken colorToken =
+        _parseKeywordTextColorToken(json);
     return KeywordNode(
       json['text'] as String,
-      _parseHexColor(json['color'] as String),
+      colorToken,
       _parseFontWeight((json['weight'] as num).toInt()),
       (json['em'] as num).toDouble(),
       tier: json['tier'] as String,
@@ -67,15 +70,20 @@ final class SubjectKeywordData {
     );
   }
 
-  static Color _parseHexColor(String value) {
-    final String raw = value.trim().replaceFirst('#', '');
-    if (raw.length == 6) {
-      return Color(int.parse('FF$raw', radix: 16));
-    }
-    if (raw.length == 8) {
-      return Color(int.parse(raw, radix: 16));
-    }
-    throw FormatException('Invalid color hex: $value');
+  static KeywordTextColorToken _parseKeywordTextColorToken(
+      Map<String, dynamic> json) {
+    final String token = (json['colorToken'] as String).trim().toLowerCase();
+    return _tokenFromString(token);
+  }
+
+  static KeywordTextColorToken _tokenFromString(String raw) {
+    return switch (raw) {
+      'cyan' => KeywordTextColorToken.cyan,
+      'magenta' => KeywordTextColorToken.magenta,
+      'slate' => KeywordTextColorToken.slate,
+      'charcoal' => KeywordTextColorToken.charcoal,
+      _ => throw FormatException('Unknown colorToken: $raw'),
+    };
   }
 
   static FontWeight _parseFontWeight(int weight) {
