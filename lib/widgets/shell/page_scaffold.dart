@@ -7,7 +7,7 @@ import '_chat_overlay.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
 import '_page_header.dart';
-import 'floating_controls.dart';
+import '_floating_controls.dart';
 
 /// A reusable widget that combines a grid background with content.
 ///

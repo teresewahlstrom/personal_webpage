@@ -22,7 +22,7 @@ void _registerViewFactoryIfNeeded() {
       ..style.border = "0"
       ..width = "540"
       ..height = "590"
-      ..allowFullscreen = true;
+      ..setAttribute("allow", "fullscreen");
 
     return iframe;
   });

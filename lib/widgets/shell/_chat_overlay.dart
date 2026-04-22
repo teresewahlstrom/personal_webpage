@@ -5,7 +5,7 @@ import 'package:tw_chat/content.dart';
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
 import '_chat_keyboard_scroll_target.dart';
-import 'floating_controls.dart';
+import '_floating_controls.dart';
 
 class ChatOverlay extends StatefulWidget {
   const ChatOverlay({

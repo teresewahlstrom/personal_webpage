@@ -275,7 +275,7 @@ class _HeroStatement extends StatelessWidget {
 class _ProjectsSection extends StatelessWidget {
   const _ProjectsSection();
 
-  static const String _title = "Projects";
+  static const String _title = "Projects Portfolio";
   static const List<_ProjectCardData> _projectCards = <_ProjectCardData>[
     _ProjectCardData(
       title: "Data-driven resume",

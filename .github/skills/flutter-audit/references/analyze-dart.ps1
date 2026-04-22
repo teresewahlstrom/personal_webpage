@@ -32,7 +32,7 @@ function Get-DartPath {
 }
 
 function Get-ChangedDartFiles {
-  $files = New-Object System.Collections.Generic.HashSet[string]
+  $files = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 
   $unstaged = git diff --name-only -- '*.dart'
   $staged = git diff --cached --name-only -- '*.dart'
@@ -48,7 +48,7 @@ function Get-ChangedDartFiles {
     }
   }
 
-  return @($files.ToArray() | Sort-Object)
+  return @($files | Sort-Object)
 }
 
 if ($ChangedOnly -or $Paths.Count -eq 0) {
