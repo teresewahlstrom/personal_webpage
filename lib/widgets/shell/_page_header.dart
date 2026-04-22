@@ -19,6 +19,7 @@ class PageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
+    final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
@@ -28,10 +29,7 @@ class PageHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: ShellUiConfig.headerBackgroundFor(brightness),
         border: Border(
-          bottom: BorderSide(
-            color: ShellUiConfig.headerBorderFor(brightness),
-            width: 2,
-          ),
+          bottom: headerLine.borderSide,
         ),
       ),
       child: Center(
@@ -83,6 +81,10 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
     final Color foregroundColor = _isHovered
       ? ShellUiConfig.headerToggleHoverFor(brightness)
       : ShellUiConfig.headerToggleFor(brightness);
+    final AppLineStyle outlineStyle = AppLineTheme.accent1For(
+      brightness,
+      hovered: _isHovered,
+    );
     final IconData icon = widget.isDarkMode
       ? Icons.light_mode
       : Icons.dark_mode;
@@ -104,7 +106,7 @@ class _HeaderThemeButtonState extends State<_HeaderThemeButton> {
             decoration: BoxDecoration(
               color: ShellUiConfig.headerToggleBackgroundFor(brightness),
               shape: BoxShape.circle,
-              border: Border.all(color: foregroundColor, width: 1),
+              border: outlineStyle.borderAll,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: foregroundColor.withValues(alpha: 0.12),

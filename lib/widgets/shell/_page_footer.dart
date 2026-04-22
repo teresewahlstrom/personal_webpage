@@ -19,6 +19,7 @@ class PageFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final int year = DateTime.now().year;
     final Brightness brightness = Theme.of(context).brightness;
+    final AppLineStyle footerLine = ShellUiConfig.footerBorderFor(brightness);
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
@@ -28,10 +29,7 @@ class PageFooter extends StatelessWidget {
       decoration: BoxDecoration(
         color: ShellUiConfig.footerBackgroundFor(brightness),
         border: Border(
-          top: BorderSide(
-            color: ShellUiConfig.footerBorderFor(brightness),
-            width: 1,
-          ),
+          top: footerLine.borderSide,
         ),
       ),
       child: Center(

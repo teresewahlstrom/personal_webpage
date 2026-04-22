@@ -451,10 +451,7 @@ class WordCloud extends StatelessWidget {
             decoration: BoxDecoration(
               color: frameStyle!.backgroundColor,
               borderRadius: frameStyle!.borderRadius,
-              border: Border.all(
-                color: frameStyle!.borderColor,
-                width: frameStyle!.borderWidth,
-              ),
+              border: Border.fromBorderSide(frameStyle!.borderSide),
             ),
             child: Padding(
               padding: framePadding,

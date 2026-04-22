@@ -89,7 +89,7 @@ class _LandingPageState extends State<LandingPage> {
           final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
             brightness,
           );
-          final Color keywordGraphicBorder = ShellUiConfig.headerBorderFor(
+          final AppLineStyle keywordGraphicLine = AppLineTheme.subtle2For(
             brightness,
           );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
@@ -127,8 +127,7 @@ class _LandingPageState extends State<LandingPage> {
                       maxContentWidth: 700,
                       frameStyle: WordCloudFrameStyle(
                         backgroundColor: keywordGraphicFill,
-                        borderColor: keywordGraphicBorder,
-                        borderWidth: 1.5,
+                        borderSide: keywordGraphicLine.borderSide,
                         borderRadius: BorderRadius.zero,
                         padding: const EdgeInsets.all(5),
                       ),

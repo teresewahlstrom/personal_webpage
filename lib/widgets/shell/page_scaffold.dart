@@ -29,7 +29,7 @@ class PageScaffold extends StatefulWidget {
     this.footerPrivacyLabel = 'Privacy & Cookies Note.',
     this.twinBackendUrl = AppRuntimeConfig.twinBackendUrl,
     this.gridColor,
-    this.gridLineColor,
+    this.gridLineStyle,
     this.initialChatSkinMode = ChatSkinMode.light,
   });
 
@@ -69,8 +69,8 @@ class PageScaffold extends StatefulWidget {
   /// Background color of the grid.
   final Color? gridColor;
 
-  /// Color of the grid lines.
-  final Color? gridLineColor;
+  /// Style of the grid lines.
+  final AppLineStyle? gridLineStyle;
 
   /// Initial skin mode used by the twin chat widget.
   final ChatSkinMode initialChatSkinMode;
@@ -141,8 +141,8 @@ class _PageScaffoldState extends State<PageScaffold>
     return GridBackground(
       backgroundColor:
           widget.gridColor ?? ShellUiConfig.pageBackgroundFor(brightness),
-      gridLineColor:
-          widget.gridLineColor ?? ShellUiConfig.gridLineFor(brightness),
+      gridLineStyle:
+        widget.gridLineStyle ?? ShellUiConfig.gridLineFor(brightness),
       child: FadeTransition(
         opacity: _themeFadeOpacity,
         child: Stack(
@@ -225,6 +225,10 @@ class _FloatingThemeToggleState extends State<_FloatingThemeToggle> {
     final Color foregroundColor = _isHovered
         ? ShellUiConfig.headerToggleHoverFor(brightness)
         : ShellUiConfig.headerToggleFor(brightness);
+    final AppLineStyle outlineStyle = AppLineTheme.accent1For(
+      brightness,
+      hovered: _isHovered,
+    );
     final IconData icon = widget.isDarkMode
         ? Icons.light_mode
         : Icons.dark_mode;
@@ -246,7 +250,7 @@ class _FloatingThemeToggleState extends State<_FloatingThemeToggle> {
             decoration: BoxDecoration(
               color: ShellUiConfig.headerToggleBackgroundFor(brightness),
               shape: BoxShape.circle,
-              border: Border.all(color: foregroundColor, width: 1),
+              border: outlineStyle.borderAll,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: foregroundColor.withValues(alpha: 0.12),

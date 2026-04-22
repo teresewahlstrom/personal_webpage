@@ -7,12 +7,12 @@ class GridBackground extends StatelessWidget {
     super.key,
     required this.child,
     this.backgroundColor = const Color(0xFFF8F9F7),
-    this.gridLineColor = const Color(0xFFE1E4F2),
+    required this.gridLineStyle,
   });
 
   final Widget child;
   final Color backgroundColor;
-  final Color gridLineColor;
+  final AppLineStyle gridLineStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class GridBackground extends StatelessWidget {
           Positioned.fill(
             child: IgnorePointer(
               child: CustomPaint(
-                painter: _GridPainter(gridLineColor: gridLineColor),
+                painter: _GridPainter(gridLineStyle: gridLineStyle),
               ),
             ),
           ),
@@ -35,15 +35,13 @@ class GridBackground extends StatelessWidget {
 }
 
 class _GridPainter extends CustomPainter {
-  const _GridPainter({required this.gridLineColor});
+  const _GridPainter({required this.gridLineStyle});
 
-  final Color gridLineColor;
+  final AppLineStyle gridLineStyle;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint linePaint = Paint()
-      ..color = gridLineColor
-      ..strokeWidth = 1;
+    final Paint linePaint = gridLineStyle.createPaint();
 
     final double xStart = (size.width / 2) % ShellUiConfig.gridSpacing;
     for (double x = xStart; x <= size.width; x += ShellUiConfig.gridSpacing) {
@@ -69,5 +67,6 @@ class _GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _GridPainter oldDelegate) =>
-      oldDelegate.gridLineColor != gridLineColor;
+      oldDelegate.gridLineStyle.color != gridLineStyle.color ||
+      oldDelegate.gridLineStyle.width != gridLineStyle.width;
 }

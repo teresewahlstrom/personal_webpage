@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'app_color_theme.dart';
+import 'app_line_theme.dart';
+
+export 'app_color_theme.dart';
+export 'app_line_theme.dart';
+
 final class AppRuntimeConfig {
   static const bool useChatBackend = true;
   static const bool showChatInUi = true;
@@ -12,21 +18,6 @@ final class AppRuntimeConfig {
 }
 
 final class ShellUiConfig {
-  static const Color pageBackgroundColor = Color(0xFFF8F9F7);
-  static const Color pageBackgroundColorDark = Color(0xFF212835);
-  static const Color gridLineColor = Color(0xFFE1E4F2);
-  static const Color gridLineColorDark = Color(0xFF2B364A);
-  static const Color headerBackgroundColor = Color(0xFFF8F9F7);
-  static const Color headerBackgroundColorDark = Color(0xFF212835);
-  static const Color headerBorderColor = Color(0x40394183);
-  static const Color headerBorderColorDark = Color(0x397199FF);
-  static const Color headerToggleColor = Color(0xFF394183);
-  static const Color headerToggleColorDark = Color(0xFF90E8F8);
-  static const Color headerToggleHoverColor = Color(0xFF843F02);
-  static const Color headerToggleHoverColorDark = Color(0xFF4EF0FF);
-  static const Color headerToggleBackgroundColor = Color(0xFFF8F9F7);
-  static const Color headerToggleBackgroundColorDark = Color(0xFF212835);
-
   static const double gridSpacing = 25;
   static const double gridYStart = 15;
 
@@ -42,94 +33,57 @@ final class ShellUiConfig {
     horizontal: 16,
     vertical: 10,
   );
-  static const Color footerBackgroundColor = Color(0xFFF8F9F7);
-  static const Color footerBackgroundColorDark = Color(0xFF212835);
-  static const Color footerBorderColor = Color(0x40394183);
-  static const Color footerBorderColorDark = Color(0x397199FF);
-  static const Color footerTextColor = Color(0xFF555764);
-  static const Color footerTextColorDark = Color(0xD6DCF6F8);
-  static const Color footerLinkColor = Color(0xFF394183);
-  static const Color footerLinkColorDark = Color(0xFF90E8F8);
-  static const Color footerLinkHoverColor = Color(0xFF843F02);
-  static const Color footerLinkHoverColorDark = Color(0xFF4EF0FF);
-
   static Color pageBackgroundFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? pageBackgroundColorDark
-        : pageBackgroundColor;
+    return AppColorTheme.pageBackgroundFor(brightness);
   }
 
-  static Color gridLineFor(Brightness brightness) {
-    return brightness == Brightness.dark ? gridLineColorDark : gridLineColor;
+  static AppLineStyle gridLineFor(Brightness brightness) {
+    return AppLineTheme.subtleFor(brightness);
   }
 
   static Color headerBackgroundFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerBackgroundColorDark
-        : headerBackgroundColor;
+    return AppColorTheme.headerBackgroundFor(brightness);
   }
 
-  static Color headerBorderFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerBorderColorDark
-        : headerBorderColor;
+  static AppLineStyle headerBorderFor(Brightness brightness) {
+    return AppLineTheme.subtle3For(brightness);
   }
 
   static Color headerToggleFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerToggleColorDark
-        : headerToggleColor;
+    return AppLineTheme.accent1For(brightness).color;
   }
 
   static Color headerToggleHoverFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerToggleHoverColorDark
-        : headerToggleHoverColor;
+    return AppLineTheme.accent1For(brightness, hovered: true).color;
   }
 
   static Color headerToggleBackgroundFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerToggleBackgroundColorDark
-        : headerToggleBackgroundColor;
+    return AppColorTheme.headerToggleBackgroundFor(brightness);
   }
 
   static Color footerBackgroundFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? footerBackgroundColorDark
-        : footerBackgroundColor;
+    return AppColorTheme.footerBackgroundFor(brightness);
   }
 
-  static Color footerBorderFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? footerBorderColorDark
-        : footerBorderColor;
+  static AppLineStyle footerBorderFor(Brightness brightness) {
+    return AppLineTheme.subtle2For(brightness);
   }
 
   static Color footerTextFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? footerTextColorDark
-        : footerTextColor;
+    return AppColorTheme.footerTextFor(brightness);
   }
 
   static Color footerLinkFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? footerLinkColorDark
-        : footerLinkColor;
+    return AppColorTheme.footerLinkFor(brightness);
   }
 
   static Color footerLinkHoverFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? footerLinkHoverColorDark
-        : footerLinkHoverColor;
+    return AppColorTheme.footerLinkHoverFor(brightness);
   }
 }
 
 final class ModalUiConfig {
-  static const Color barrierColor = Color(0xBF000000);
-  static const Color backgroundColor = Color(0xFFF8F9F7);
-  static const Color backgroundColorDark = Color(0xFF101B34);
-  static const Color headerBorderColor = Color(0x1F394183);
-  static const Color headerBorderColorDark = Color(0x3390E8F8);
+  static const Color barrierColor = AppColorTheme.modalBarrier;
   static const EdgeInsets insetPadding = EdgeInsets.all(14);
   static const EdgeInsets contentPadding = EdgeInsets.fromLTRB(24, 20, 24, 20);
   static const EdgeInsets contentPaddingCompact = EdgeInsets.fromLTRB(
@@ -143,31 +97,20 @@ final class ModalUiConfig {
   static const double maxHeightFactorCompact = 0.96;
   static const double headerHeight = 52;
 
-  static const Color closeIconColor = Color(0xFF394183);
-  static const Color closeIconColorDark = Color(0xFF90E8F8);
-  static const Color closeIconHoverColor = Color(0xFF843F02);
-  static const Color closeIconHoverColorDark = Color(0xFF4EF0FF);
-
   static Color backgroundFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? backgroundColorDark
-        : backgroundColor;
+    return AppColorTheme.modalBackgroundFor(brightness);
   }
 
   static Color headerBorderFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? headerBorderColorDark
-        : headerBorderColor;
+    return AppColorTheme.modalHeaderBorderFor(brightness);
   }
 
   static Color closeIconFor(Brightness brightness) {
-    return brightness == Brightness.dark ? closeIconColorDark : closeIconColor;
+    return AppColorTheme.modalCloseIconFor(brightness);
   }
 
   static Color closeIconHoverFor(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? closeIconHoverColorDark
-        : closeIconHoverColor;
+    return AppColorTheme.modalCloseIconHoverFor(brightness);
   }
 
   static bool isCompact(Size viewportSize) {
@@ -188,29 +131,20 @@ final class ModalUiConfig {
 }
 
 final class LandingPagePalette {
-  static const Color accent = Color(0xFF394183);
-  static const Color accentDark = Color(0xFF90E8F8);
-  static const Color hover = Color(0xFF843F02);
-  static const Color hoverDark = Color(0xFF4EF0FF);
-  static const Color heading2 = Color(0xFF161C45);
-  static const Color heading2Dark = Color(0xEBDCF6F8);
-  static const Color bodyText = Color(0xFF252525);
-  static const Color bodyTextDark = Color(0xD6DCF6F8);
-
   static Color socialFor(Brightness brightness) {
-    return brightness == Brightness.dark ? accentDark : accent;
+    return AppColorTheme.landingAccentFor(brightness);
   }
 
   static Color socialHoverFor(Brightness brightness) {
-    return brightness == Brightness.dark ? hoverDark : hover;
+    return AppColorTheme.landingHoverFor(brightness);
   }
 
   static Color headingFor(Brightness brightness) {
-    return brightness == Brightness.dark ? heading2Dark : heading2;
+    return AppColorTheme.landingHeadingFor(brightness);
   }
 
   static Color bodyFor(Brightness brightness) {
-    return brightness == Brightness.dark ? bodyTextDark : bodyText;
+    return AppColorTheme.landingBodyFor(brightness);
   }
 }
 

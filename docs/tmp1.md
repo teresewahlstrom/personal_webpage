@@ -92,3 +92,39 @@ Göra ett shared paket:
     - gemensam färg-config mellan tw_chat och main app?
     - annat som kan ingå i detta?
     - Make the selection/deselction logic centralised into a wrapper? Create internal package tw_flutter_basics that can be shared with other internal packages as well as Main app. Move the scrollable behavior in there as well?
+
+
+
+
+
+
+
+I’ve got enough context from the current app_ui_config.dart and the `tw_chat` skin split. I’ll answer this as a design recommendation rather than editing code, because the main question is whether the structure should change.Yes, but only for theme tokens and theme-owned styling, not for the whole app.
+
+Right now app_ui_config.dart is starting to do the same job that `tw_chat` split across skin.dart, skin_light.dart, skin_dark.dart, and skin_shared.dart. That pattern is good when:
+- the number of light/dark overrides keeps growing
+- you want one place to reason about each mode
+- you want token naming to become more semantic than “header/footer/grid/etc”
+
+I would not split the whole app by theme. I would split only the visual token layer. Concretely, the clean version would look like this:
+
+1. `app_theme_shared.dart`
+   Contains typed theme contracts like `AppLineThemeData`, `AppSurfaceThemeData`, `AppAccentThemeData`, spacing, radii, and shared resolvers.
+
+2. `app_theme_light.dart`
+   Exports one `appLightThemeData` constant.
+
+3. `app_theme_dark.dart`
+   Exports one `appDarkThemeData` constant.
+
+4. `app_theme.dart`
+   Small facade with `AppThemeData forBrightness(Brightness brightness)`.
+
+That would be closer to `tw_chat`, but with one important improvement: prefer returning a theme object from brightness rather than mutating a global mode like `ChatSkin.setMode(...)`. For the main app, scoped lookup is cleaner and safer than a global singleton.
+
+So the short answer is:
+- yes, a similar split is a good idea
+- no, do not split widgets/pages into separate dark/light files
+- split the token/config layer only
+
+Given where this app is now, I think that is the right next structural move before app_ui_config.dart becomes a long mixed bag of unrelated tokens. If you want, I can do that refactor next and migrate the current line/surface/button tokens into a shared `AppThemeData` shape.

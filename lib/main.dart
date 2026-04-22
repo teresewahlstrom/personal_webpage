@@ -54,7 +54,9 @@ class _T1GridAppState extends State<T1GridApp> {
       themeAnimationDuration: Duration.zero,
       theme: ThemeData(
         useMaterial3: false,
-        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundColor,
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+          Brightness.light,
+        ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
           seedColor: const Color(0xFF394183),
@@ -64,7 +66,9 @@ class _T1GridAppState extends State<T1GridApp> {
       darkTheme: ThemeData(
         useMaterial3: false,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundColorDark,
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+          Brightness.dark,
+        ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
           seedColor: const Color(0xFF90E8F8),
