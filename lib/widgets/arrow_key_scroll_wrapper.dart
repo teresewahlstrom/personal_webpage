@@ -26,10 +26,6 @@ class ArrowKeyScrollWrapper extends StatefulWidget {
 class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
   late final FocusNode _focusNode;
   Timer? _scrollTimer;
-  final Map<int, Offset> _pointerDownPositions = <int, Offset>{};
-  final Set<int> _movedPointers = <int>{};
-
-  static const double _tapMoveTolerance = 8;
 
   @override
   void initState() {
@@ -119,35 +115,17 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
         // KeyboardListener is used here for focus management only.
         // Actual scroll handling is done in _handleScroll via the timer.
       },
-      child: Listener(
+      child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onPointerDown: (event) {
-          _pointerDownPositions[event.pointer] = event.position;
-          _movedPointers.remove(event.pointer);
-          ChatKeyboardScrollTarget.setChatTarget(false);
-          _focusNode.requestFocus();
-        },
-        onPointerMove: (event) {
-          final down = _pointerDownPositions[event.pointer];
-          if (down == null || _movedPointers.contains(event.pointer)) {
-            return;
-          }
-          if ((event.position - down).distance > _tapMoveTolerance) {
-            _movedPointers.add(event.pointer);
-          }
-        },
-        onPointerUp: (event) {
-          final didMove = _movedPointers.remove(event.pointer);
-          _pointerDownPositions.remove(event.pointer);
-          if (!didMove) {
-            widget.onTap?.call();
-          }
-        },
-        onPointerCancel: (event) {
-          _movedPointers.remove(event.pointer);
-          _pointerDownPositions.remove(event.pointer);
-        },
-        child: widget.child,
+        onTap: widget.onTap,
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (_) {
+            ChatKeyboardScrollTarget.setChatTarget(false);
+            _focusNode.requestFocus();
+          },
+          child: widget.child,
+        ),
       ),
     );
   }
