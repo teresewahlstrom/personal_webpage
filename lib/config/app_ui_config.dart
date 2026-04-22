@@ -9,12 +9,26 @@ export 'app_line_theme.dart';
 final class AppRuntimeConfig {
   static const bool useChatBackend = true;
   static const bool showChatInUi = true;
+  static const String appBuildSha = String.fromEnvironment(
+    'APP_BUILD_SHA',
+    defaultValue: 'dev',
+  );
+  static const String appBuildTimeUtc = String.fromEnvironment(
+    'APP_BUILD_TIME_UTC',
+    defaultValue: 'local',
+  );
+  static const String appBuildId = String.fromEnvironment(
+    'APP_BUILD_ID',
+    defaultValue: 'dev@local',
+  );
   static const String twinBackendUrl = String.fromEnvironment(
     'TWIN_BACKEND_URL',
     defaultValue: 'http://localhost:8787',
   );
   static const String backendDisabledReply =
       'Chat backend is disabled in this build. Set AppRuntimeConfig.useChatBackend to true to re-enable server replies.';
+
+  static String get buildStamp => 'build $appBuildSha @ $appBuildTimeUtc';
 }
 
 final class ShellUiConfig {

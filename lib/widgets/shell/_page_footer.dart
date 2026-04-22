@@ -20,6 +20,15 @@ class PageFooter extends StatelessWidget {
     final int year = DateTime.now().year;
     final Brightness brightness = Theme.of(context).brightness;
     final AppLineStyle footerLine = ShellUiConfig.footerBorderFor(brightness);
+    final TextStyle buildStampStyle = TextStyle(
+      fontFamily: 'Inter18pt',
+      fontWeight: FontWeight.w300,
+      fontSize: 11,
+      height: 1.2,
+      color: ShellUiConfig.footerTextFor(brightness).withValues(alpha: 0.72),
+      decoration: TextDecoration.none,
+    );
+
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
@@ -33,26 +42,37 @@ class PageFooter extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          runSpacing: 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              '©$year $brandName. All rights reserved.',
-              style: TextStyle(
-                fontFamily: 'Inter18pt',
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-                color: ShellUiConfig.footerTextFor(brightness),
-                decoration: TextDecoration.none,
-              ),
-              textAlign: TextAlign.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 4,
+              runSpacing: 2,
+              children: <Widget>[
+                Text(
+                  '(c)$year $brandName. All rights reserved.',
+                  style: TextStyle(
+                    fontFamily: 'Inter18pt',
+                    fontWeight: FontWeight.w300,
+                    fontSize: 14,
+                    color: ShellUiConfig.footerTextFor(brightness),
+                    decoration: TextDecoration.none,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                _FooterLinkButton(
+                  label: privacyLabel,
+                  onTap: () => _openBuiltInPrivacyModal(context),
+                ),
+              ],
             ),
-            _FooterLinkButton(
-              label: privacyLabel,
-              onTap: () => _openBuiltInPrivacyModal(context),
+            const SizedBox(height: 4),
+            SelectableText(
+              AppRuntimeConfig.buildStamp,
+              style: buildStampStyle,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

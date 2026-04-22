@@ -12,7 +12,27 @@ export PATH="$FLUTTER_DIR/bin:$PATH"
 flutter --version
 flutter config --enable-web
 flutter pub get
-flutter build web --release --pwa-strategy=none --no-tree-shake-icons
+
+BUILD_SHA="${CF_PAGES_COMMIT_SHA:-${GITHUB_SHA:-}}"
+if [[ -n "${BUILD_SHA}" ]]; then
+  BUILD_SHA="${BUILD_SHA:0:12}"
+fi
+if [[ -z "${BUILD_SHA}" ]] && command -v git >/dev/null 2>&1; then
+  BUILD_SHA="$(git rev-parse --short=12 HEAD 2>/dev/null || true)"
+fi
+if [[ -z "${BUILD_SHA}" ]]; then
+  BUILD_SHA="unknown"
+fi
+
+BUILD_TIME_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+BUILD_ID="${BUILD_SHA}@${BUILD_TIME_UTC}"
+
+echo "Build metadata: sha=${BUILD_SHA} built_at=${BUILD_TIME_UTC}"
+
+flutter build web --release --pwa-strategy=none --no-tree-shake-icons \
+  --dart-define=APP_BUILD_SHA="${BUILD_SHA}" \
+  --dart-define=APP_BUILD_TIME_UTC="${BUILD_TIME_UTC}" \
+  --dart-define=APP_BUILD_ID="${BUILD_ID}"
 
 # Ensure Cloudflare Pages custom routing headers/redirects are present
 # in the final artifact even if Flutter omits underscore-prefixed files.
@@ -21,6 +41,10 @@ for pages_file in _headers _redirects; do
     cp "web/$pages_file" "build/web/$pages_file"
   fi
 done
+
+cat > build/web/version.json <<EOF
+{"build_sha":"${BUILD_SHA}","build_time_utc":"${BUILD_TIME_UTC}","build_id":"${BUILD_ID}"}
+EOF
 
 # Compatibility output for projects still configured with "dist" on Pages.
 rm -rf dist
@@ -32,12 +56,14 @@ cp -r build/web dist
 # - CF_API_TOKEN (token with Zone.Cache Purge permission)
 # - PURGE_BASE_URLS (space-separated absolute origins)
 ENTRY_FILES=(
+  "/"
   "/index.html"
   "/flutter_bootstrap.js"
   "/flutter.js"
   "/main.dart.js"
   "/flutter_service_worker.js"
   "/manifest.json"
+  "/version.json"
   "/assets/FontManifest.json"
   "/assets/fonts/MaterialIcons-Regular.otf"
 )
