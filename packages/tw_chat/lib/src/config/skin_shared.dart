@@ -157,7 +157,7 @@ class ChatSkinTokens {
   final double appBarActionGap = 15.0;
   final double appBarActionWidth = 40.0;
 
-  final double bubbleVerticalMargin = 8.0;
+  final double bubbleVerticalMargin = 40.0;
   final double bubbleBorderWidth = 1.0;
   final double bubbleNearEdgeInset = 0.0;
   final double bubbleFarEdgeInset = 0.0;

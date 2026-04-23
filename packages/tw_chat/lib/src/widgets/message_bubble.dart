@@ -245,9 +245,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   left:
                       tokens.collapseButtonRightInset +
                       collapseButtonOverflowLeft,
-                  bottom:
-                      tokens.collapseButtonBottomInset +
-                      collapseButtonOverflowBottom,
+                  bottom: tokens.collapseButtonBottomInset,
                   child: Tooltip(
                     message: widget.isTruncated ? 'Show more' : 'Show less',
                     child: SizedBox(
