@@ -158,8 +158,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final bubbleTopMargin = widget.isFirstMessage
         ? 0.0
         : tokens.bubbleVerticalMargin;
-    final collapseButtonOverflowRight = tokens.collapseButtonRightInset < 0
-        ? -tokens.collapseButtonRightInset
+    final collapseButtonOverflowLeft = tokens.collapseButtonRightInset < 0
+      ? -tokens.collapseButtonRightInset
         : 0.0;
     final collapseButtonOverflowBottom = tokens.collapseButtonBottomInset < 0
         ? -tokens.collapseButtonBottomInset
@@ -204,7 +204,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  right: collapseButtonOverflowRight,
+                  left: collapseButtonOverflowLeft,
                   bottom: collapseButtonOverflowBottom,
                 ),
                 child: Container(
@@ -242,9 +242,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
               ),
               if (isTruncatable)
                 Positioned(
-                  right:
+                  left:
                       tokens.collapseButtonRightInset +
-                      collapseButtonOverflowRight,
+                      collapseButtonOverflowLeft,
                   bottom:
                       tokens.collapseButtonBottomInset +
                       collapseButtonOverflowBottom,

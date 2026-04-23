@@ -132,14 +132,14 @@ class ChatSkinTokens {
     10,
   );
   final double chatListTopShadowHeight = 45.0;
-  final double chatListBottomShadowHeight = 85;
+  final double chatListBottomShadowHeight = 30;
 
   // Top shadow gradient
   final List<double> shellTopShadowGradientStops = const <double>[0.0, 0.45, 0.82, 1.0];
   final List<int> shellTopShadowGradientAlphas = const <int>[0xFF, 0xE8, 0xC0, 0x00];
 
   // Bottom shadow gradient
-  final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.18, 0.55, 1.0];
+  final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.24, 0.88, 1.0];
   final List<int> shellBottomShadowGradientAlphas = const <int>[0xFF, 0xE8, 0xC0, 0x00];
   final EdgeInsets appBarPaddingMinimized = const EdgeInsets.fromLTRB(
     14,

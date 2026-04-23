@@ -184,9 +184,6 @@ class ChatAppBar extends StatelessWidget {
     final colors = skin.colors;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final titleStyle = skin.textStyles.appBarTitleStyle(textScale, colors);
-    final headerRadius = shrinkWrap
-        ? tokens.headerRadiusMinimized
-        : tokens.headerRadiusExpanded;
     final iconColor =
         titleStyle.color ??
         DefaultTextStyle.of(context).style.color ??
@@ -215,15 +212,9 @@ class ChatAppBar extends StatelessWidget {
       width: tokens.appBarActionWidth,
       child: Material(
         color: colors.transparent,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(headerRadius),
-        ),
         child: Tooltip(
           message: displayStateToggleTooltip,
           child: InkWell(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(headerRadius),
-            ),
             onTap: onDisplayStateToggle,
             child: Center(
               child: Icon(displayStateToggleIcon, color: iconColor),
@@ -378,23 +369,10 @@ class FloatingChatWindow extends StatelessWidget {
           child: Container(
             decoration: _chatShellDecoration(
               context: context,
-              borderRadius: tokens.shellBorderRadiusExpanded,
+              borderRadius: BorderRadius.zero,
             ),
             child: Stack(
               children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: tokens.chatListBottomShadowHeight,
-                  child: IgnorePointer(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: tokens.shellBottomShadowGradient(colors),
-                      ),
-                    ),
-                  ),
-                ),
                 Positioned.fill(
                   child: Padding(
                     padding: tokens.shellContentPadding,
@@ -406,19 +384,6 @@ class FloatingChatWindow extends StatelessWidget {
                       onSetChatKeyboardScrollTarget:
                           onSetChatKeyboardScrollTarget,
                       isVisible: isVisible,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: -1,
-                  left: 0,
-                  right: 0,
-                  height: tokens.chatListTopShadowHeight + 1,
-                  child: IgnorePointer(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: tokens.shellTopShadowGradient(colors),
-                      ),
                     ),
                   ),
                 ),
