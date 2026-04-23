@@ -134,7 +134,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              
               Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
@@ -144,8 +144,9 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        const SizedBox(height: 60),
                         const _ProjectsSection(),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 60),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
                           entries: <_SocialItem>[

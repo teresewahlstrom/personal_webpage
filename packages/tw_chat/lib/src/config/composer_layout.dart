@@ -23,15 +23,24 @@ class ChatComposerLayout {
   ///
   /// Width scales up with accessibility text scaling.
   static const sendButtonMinWidthFloor = 50.0;
-    static Color fillColor(BuildContext context) =>
-      ChatSkin.dataOf(context).colors.composerFill;
-    static Color borderColor(BuildContext context) =>
+
+  static Color fillColor(BuildContext context) {
+    final colors = ChatSkin.dataOf(context).colors;
+    if (ChatSkin.isDarkOf(context)) {
+      // Match the portfolio card "tinted panel" feel with an opaque lerp.
+      return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, 0.65) ??
+          colors.composerFill;
+    }
+    return colors.composerFill;
+  }
+
+  static Color borderColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.composerBorder;
-    static Color cursorColor(BuildContext context) =>
+  static Color cursorColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.composerCursor;
-    static Color cornerAccentColor(BuildContext context) =>
+  static Color cornerAccentColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.composerCornerAccent;
-    static Color sendIconColor(BuildContext context) =>
+  static Color sendIconColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.composerSendIcon;
 
   static TextStyle hintStyle(BuildContext context, double textScale) {
