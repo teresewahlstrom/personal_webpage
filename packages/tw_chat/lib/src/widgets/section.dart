@@ -230,7 +230,7 @@ class _ChatSectionState extends State<ChatSection> {
                           : jumpToLatestLabel,
                     ),
                     style: FilledButton.styleFrom(
-                      backgroundColor: colors.composerFill,
+                      backgroundColor: ChatComposerLayout.fillColor(context),
                       foregroundColor: ChatComposerLayout.sendIconColor(
                         context,
                       ),

@@ -164,6 +164,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final collapseButtonOverflowBottom = tokens.collapseButtonBottomInset < 0
         ? -tokens.collapseButtonBottomInset
         : 0.0;
+    final collapseButtonReservedBottom = isTruncatable
+      ? collapseButtonOverflowBottom * 2
+      : collapseButtonOverflowBottom;
     final toggleButtonBackgroundColor = widget.isTruncated
       ? ChatBubbleRules.collapseButtonColor(context)
       : ChatBubbleRules.collapseButtonIconColor(context);
@@ -205,7 +208,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
               Padding(
                 padding: EdgeInsets.only(
                   left: collapseButtonOverflowLeft,
-                  bottom: collapseButtonOverflowBottom,
+                  bottom: collapseButtonReservedBottom,
                 ),
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
@@ -245,7 +248,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   left:
                       tokens.collapseButtonRightInset +
                       collapseButtonOverflowLeft,
-                  bottom: tokens.collapseButtonBottomInset,
+                  bottom: 0,
                   child: Tooltip(
                     message: widget.isTruncated ? 'Show more' : 'Show less',
                     child: SizedBox(

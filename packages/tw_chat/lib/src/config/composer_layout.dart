@@ -6,6 +6,9 @@ import 'skin.dart';
 class ChatComposerLayout {
   const ChatComposerLayout._();
 
+  static const double _composerFillLerpTLight = 0.70;
+  static const double _composerFillLerpTDark = 0.65;
+
   /// Lower guardrail for composer input height in compact layouts.
   static const minHeightFloor = 34.0;
 
@@ -26,12 +29,12 @@ class ChatComposerLayout {
 
   static Color fillColor(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
-    if (ChatSkin.isDarkOf(context)) {
-      // Match the portfolio card "tinted panel" feel with an opaque lerp.
-      return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, 0.65) ??
-          colors.composerFill;
-    }
-    return colors.composerFill;
+    // Match the portfolio card "tinted panel" feel with an opaque lerp.
+    final t = ChatSkin.isDarkOf(context)
+        ? _composerFillLerpTDark
+        : _composerFillLerpTLight;
+    return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, t) ??
+        colors.composerFill;
   }
 
   static Color borderColor(BuildContext context) =>

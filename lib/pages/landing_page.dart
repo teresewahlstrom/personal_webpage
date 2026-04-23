@@ -233,9 +233,14 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _title = "Projects Portfolio";
   static const List<_ProjectCardData> _projectCards = <_ProjectCardData>[
     _ProjectCardData(
-      title: "Data-driven resume",
+      title: "Professional Twin with Advanced Retrieval",
       content:
-          "An AI-augmented professional twin built on structured data. Instead of a static resume, it models experience, capabilities, and cross-domain strengths as an explorable chat and keywords tree. Everything data driven.",
+        "A data-driven professional twin that turns structured career data into an explorable chat and interactive keyword map. Designed as a richer alternative to a static resume, it helps users understand experience, capabilities, and cross-domain strengths quickly. The chat in this app is powered by that system.",
+    ),
+    _ProjectCardData(
+      title: "Coming soon",
+      content:
+          "More projects coming soon.",
     ),
   ];
 

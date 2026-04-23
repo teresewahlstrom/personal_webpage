@@ -16,7 +16,7 @@ const ChatSkinData chatLightSkin = ChatSkinData(
     shellOuterShadow: Color(0x08000000),
     shellOuterBorder: Color(0xFF394183),
     shellDivider: Color(0xFFE1E4F2),
-    userBubbleFill: Color(0xFFFFFFFF),
+    userBubbleFill: Color(0xFFE8EAF3),
     userBubbleBorder: Color(0xFF394183),
     botBubbleFill: Color(0xFFFFFFFF),
     botBubbleBorder: Color(0xFF394183),
