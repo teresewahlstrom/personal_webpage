@@ -194,10 +194,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             bottom: 0.0,
             left: widget.isUser
                 ? tokens.bubbleFarEdgeInset
-                : tokens.bubbleNearEdgeInset,
+                : 0.0,
             right: widget.isUser
                 ? tokens.bubbleNearEdgeInset + tokens.userBubbleRightInset
-                : tokens.bubbleFarEdgeInset,
+                : 0.0,
           ),
           child: Stack(
             clipBehavior: Clip.none,
@@ -214,16 +214,22 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                     horizontalInset,
                     verticalInset,
                   ),
-                  constraints: BoxConstraints(maxWidth: bubbleMaxWidth),
-                  decoration: BoxDecoration(
-                    color: bubbleColor,
-                    borderRadius: BorderRadius.circular(tokens.bubbleRadius),
-                    border: Border.all(
-                      color: borderColor,
-                      width: tokens.bubbleBorderWidth,
-                    ),
-                    boxShadow: [tokens.surfaceShadow(colors)],
-                  ),
+                  constraints: widget.isUser
+                      ? BoxConstraints(maxWidth: bubbleMaxWidth)
+                      : null,
+                  decoration: widget.isUser
+                      ? BoxDecoration(
+                          color: bubbleColor,
+                          borderRadius: BorderRadius.circular(
+                            tokens.bubbleRadius,
+                          ),
+                          border: Border.all(
+                            color: borderColor,
+                            width: tokens.bubbleBorderWidth,
+                          ),
+                          boxShadow: [tokens.surfaceShadow(colors)],
+                        )
+                      : null,
                   child: _buildBubbleText(
                     parsedMarkup,
                     style: bubbleTextStyle,

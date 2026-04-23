@@ -364,10 +364,6 @@ class FloatingChatWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
-    final isDark = ChatSkin.isDarkOf(context);
-    final gridLineColor =
-      (isDark ? colors.shellDivider : colors.shellOuterBorder)
-        .withValues(alpha: isDark ? 0.24 : 0.10);
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
       child: Listener(
@@ -384,55 +380,57 @@ class FloatingChatWindow extends StatelessWidget {
               context: context,
               borderRadius: tokens.shellBorderRadiusExpanded,
             ),
-            child: Column(
+            child: Stack(
               children: [
-                ChatAppBar(
-                  onDisplayStateToggle: onMinimize,
-                  displayStateToggleIcon: Icons.expand_more_rounded,
-                  displayStateToggleTooltip: 'Minimize chat',
-                  tokens: tokens,
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: tokens.chatListBottomShadowHeight,
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: tokens.shellBottomShadowGradient(colors),
+                      ),
+                    ),
+                  ),
                 ),
-                Divider(height: 1, color: ChatLayout.dividerColor(context)),
-                Flexible(
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: IgnorePointer(
-                          child: ClipRect(
-                            child: _GlobalAnchoredGridPaper(
-                              color: gridLineColor,
-                              unitSize: 4,
-                            ),
-                          ),
-                        ),
+                Positioned.fill(
+                  child: Padding(
+                    padding: tokens.shellContentPadding,
+                    child: ChatSection(
+                      messages: messages,
+                      onSend: onSend,
+                      onStop: onStop,
+                      isChatKeyboardScrollTarget: isChatKeyboardScrollTarget,
+                      onSetChatKeyboardScrollTarget:
+                          onSetChatKeyboardScrollTarget,
+                      isVisible: isVisible,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -1,
+                  left: 0,
+                  right: 0,
+                  height: tokens.chatListTopShadowHeight + 1,
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: tokens.shellTopShadowGradient(colors),
                       ),
-                      Padding(
-                        padding: tokens.shellContentPadding,
-                        child: ChatSection(
-                          messages: messages,
-                          onSend: onSend,
-                          onStop: onStop,
-                          isChatKeyboardScrollTarget:
-                              isChatKeyboardScrollTarget,
-                          onSetChatKeyboardScrollTarget:
-                              onSetChatKeyboardScrollTarget,
-                          isVisible: isVisible,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: tokens.chatListTopShadowHeight,
-                        child: IgnorePointer(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: tokens.shellTopShadowGradient(colors),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: ChatAppBar(
+                    onDisplayStateToggle: onMinimize,
+                    displayStateToggleIcon: Icons.expand_more_rounded,
+                    displayStateToggleTooltip: 'Minimize chat',
+                    tokens: tokens,
                   ),
                 ),
               ],
@@ -459,38 +457,4 @@ BoxDecoration _chatShellDecoration({
     ),
     boxShadow: [tokens.shellShadow(colors)],
   );
-}
-
-class _GlobalAnchoredGridPaper extends StatelessWidget {
-  const _GlobalAnchoredGridPaper({required this.color, required this.unitSize});
-
-  final Color color;
-  final double unitSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final renderBox = context.findRenderObject() as RenderBox?;
-        final globalOrigin =
-            renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-        final xShift = globalOrigin.dx % unitSize;
-        final yShift = globalOrigin.dy % unitSize;
-
-        return Transform.translate(
-          offset: Offset(-xShift, -yShift),
-          child: SizedBox(
-            width: constraints.maxWidth + unitSize,
-            height: constraints.maxHeight + unitSize,
-            child: GridPaper(
-              color: color,
-              interval: unitSize,
-              divisions: 1,
-              subdivisions: 1,
-            ),
-          ),
-        );
-      },
-    );
-  }
 }

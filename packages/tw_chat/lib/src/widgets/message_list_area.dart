@@ -26,6 +26,8 @@ class ChatMessageListArea extends StatelessWidget {
     required this.onRequestChatKeyboardTarget,
     required this.onChatPointerInteractionStart,
     required this.onChatPointerInteractionEnd,
+    required this.scrollbarTopInset,
+    required this.scrollbarBottomInset,
     required this.jumpToLatestButton,
     required this.buildScrollbarTrack,
   });
@@ -46,10 +48,14 @@ class ChatMessageListArea extends StatelessWidget {
   final VoidCallback onRequestChatKeyboardTarget;
   final VoidCallback onChatPointerInteractionStart;
   final VoidCallback onChatPointerInteractionEnd;
+  final double scrollbarTopInset;
+  final double scrollbarBottomInset;
   final Widget? jumpToLatestButton;
   final Widget Function({
     required double thickness,
     required double crossAxisInset,
+    required double topInset,
+    required double bottomInset,
   })
   buildScrollbarTrack;
 
@@ -66,101 +72,112 @@ class ChatMessageListArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
-    return Expanded(
-      child: Focus(
-        focusNode: chatFocusNode,
-        canRequestFocus: true,
-        child: Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerDown: (event) {
-            if (!_isPrimaryActivationPointer(event)) {
-              return;
-            }
-            onChatPointerInteractionStart();
-            onRequestChatKeyboardTarget();
-          },
-          onPointerUp: (_) => onChatPointerInteractionEnd(),
-          onPointerCancel: (_) => onChatPointerInteractionEnd(),
-          child: ScrollConfiguration(
-            behavior: const ChatNoScrollbarBehavior(),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                if (showChatScrollbarTrack)
-                  buildScrollbarTrack(
-                    thickness: tokens.scrollbarThickness,
-                    crossAxisInset: 0,
-                  ),
-                ChatFadingScrollbar(
-                  controller: chatScroll,
+    return Focus(
+      focusNode: chatFocusNode,
+      canRequestFocus: true,
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (event) {
+          if (!_isPrimaryActivationPointer(event)) {
+            return;
+          }
+          onChatPointerInteractionStart();
+          onRequestChatKeyboardTarget();
+        },
+        onPointerUp: (_) => onChatPointerInteractionEnd(),
+        onPointerCancel: (_) => onChatPointerInteractionEnd(),
+        child: ScrollConfiguration(
+          behavior: const ChatNoScrollbarBehavior(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (showChatScrollbarTrack)
+                buildScrollbarTrack(
                   thickness: tokens.scrollbarThickness,
-                  minThumbLength: tokens.scrollbarMinThumbLength,
-                  crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
-                  mainAxisMargin: 0,
-                  radius: tokens.scrollbarRadius,
-                  thumbVisibility: true,
-                  interactive: true,
-                  trackVisibility: false,
-                  child: Actions(
-                    actions: <Type, Action<Intent>>{
-                      CopySelectionTextIntent:
-                          CallbackAction<CopySelectionTextIntent>(
-                            onInvoke: (_) {
-                              final copyText = onCopySelectionRequested();
-                              if (copyText.trim().isEmpty) {
-                                return null;
-                              }
-                              Clipboard.setData(
-                                ClipboardData(text: copyText),
-                              );
+                  crossAxisInset: 0,
+                  topInset: scrollbarTopInset,
+                  bottomInset: scrollbarBottomInset,
+                ),
+              ChatFadingScrollbar(
+                controller: chatScroll,
+                thickness: tokens.scrollbarThickness,
+                minThumbLength: tokens.scrollbarMinThumbLength,
+                crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
+                mainAxisMargin: 0,
+                padding: EdgeInsets.only(
+                  top: scrollbarTopInset,
+                  bottom: scrollbarBottomInset,
+                ),
+                radius: tokens.scrollbarRadius,
+                thumbVisibility: true,
+                interactive: true,
+                trackVisibility: false,
+                child: Actions(
+                  actions: <Type, Action<Intent>>{
+                    CopySelectionTextIntent:
+                        CallbackAction<CopySelectionTextIntent>(
+                          onInvoke: (_) {
+                            final copyText = onCopySelectionRequested();
+                            if (copyText.trim().isEmpty) {
                               return null;
-                            },
-                          ),
-                    },
-                    child: SelectionArea(
-                      key: chatSelectionAreaKey,
-                      onSelectionChanged: onChatSelectionChanged,
-                      child: SingleChildScrollView(
-                        controller: chatScroll,
-                        physics: const ClampingScrollPhysics(),
-                        child: Padding(
-                          padding: tokens.bubbleViewportPadding,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              for (final entry in messages.indexed)
-                                ChatMessageBubble(
-                                  key: messageBubbleKeys[entry.$2.id],
-                                  availableWidth: availableWidth,
-                                  text: entry.$2.text,
-                                  selectionListenerNotifier:
-                                      selectionNotifierForMessage(entry.$2.id),
-                                  isUser: entry.$2.role == ChatRole.user,
-                                  isTypingIndicator:
-                                      entry.$2.role == ChatRole.bot &&
-                                      entry.$2.isPending,
-                                  isTruncated: isMessageTruncated(entry.$2.id),
-                                  isFirstMessage: entry.$1 == 0,
-                                  isLastMessage:
-                                      entry.$1 == messages.length - 1,
-                                  onToggleTruncation: () =>
-                                      onToggleTruncation(entry.$2.id),
-                                ),
-                            ],
-                          ),
+                            }
+                            Clipboard.setData(
+                              ClipboardData(text: copyText),
+                            );
+                            return null;
+                          },
+                        ),
+                  },
+                  child: SelectionArea(
+                    key: chatSelectionAreaKey,
+                    onSelectionChanged: onChatSelectionChanged,
+                    child: SingleChildScrollView(
+                      controller: chatScroll,
+                      physics: const ClampingScrollPhysics(),
+                      child: Padding(
+                        padding: tokens.bubbleViewportPadding.copyWith(
+                          top: 0,
+                          bottom: 0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: tokens.chatListTopShadowHeight + 10),
+                            for (final entry in messages.indexed)
+                              ChatMessageBubble(
+                                key: messageBubbleKeys[entry.$2.id],
+                                availableWidth: availableWidth,
+                                text: entry.$2.text,
+                                selectionListenerNotifier:
+                                    selectionNotifierForMessage(entry.$2.id),
+                                isUser: entry.$2.role == ChatRole.user,
+                                isTypingIndicator:
+                                    entry.$2.role == ChatRole.bot &&
+                                    entry.$2.isPending,
+                                isTruncated: isMessageTruncated(entry.$2.id),
+                                isFirstMessage: entry.$1 == 0,
+                                isLastMessage:
+                                    entry.$1 == messages.length - 1,
+                                onToggleTruncation: () =>
+                                    onToggleTruncation(entry.$2.id),
+                              ),
+                            SizedBox(
+                              height: tokens.chatListBottomShadowHeight + 15,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-                if (jumpToLatestButton != null)
-                  Positioned(
-                    right: tokens.jumpToLatestButtonRightInset,
-                    bottom: tokens.jumpToLatestButtonBottomInset,
-                    child: jumpToLatestButton!,
-                  ),
-              ],
-            ),
+              ),
+              if (jumpToLatestButton != null)
+                Positioned(
+                  right: tokens.jumpToLatestButtonRightInset,
+                  bottom: tokens.jumpToLatestButtonBottomInset,
+                  child: jumpToLatestButton!,
+                ),
+            ],
           ),
         ),
       ),

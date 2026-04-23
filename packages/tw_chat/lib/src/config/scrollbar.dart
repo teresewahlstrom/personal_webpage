@@ -30,11 +30,15 @@ class ChatScrollbar {
     required BuildContext context,
     required double thickness,
     required double crossAxisInset,
+    double topInset = 0,
+    double bottomInset = 0,
   }) {
     final tokens = ChatSkin.tokens;
     return IgnorePointer(
       child: Padding(
         padding: EdgeInsets.only(
+          top: topInset,
+          bottom: bottomInset,
           right: crossAxisInset + tokens.scrollbarTrackLeftShift,
         ),
         child: Align(

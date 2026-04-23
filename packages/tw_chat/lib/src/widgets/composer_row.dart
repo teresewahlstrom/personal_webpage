@@ -16,6 +16,7 @@ class ChatComposerRow extends StatefulWidget {
     required this.isAwaitingResponse,
     required this.onSubmit,
     required this.onStop,
+    this.onMeasuredHeight,
   });
 
   final TextEditingController controller;
@@ -28,6 +29,7 @@ class ChatComposerRow extends StatefulWidget {
   final bool isAwaitingResponse;
   final VoidCallback onSubmit;
   final VoidCallback onStop;
+  final ValueChanged<double>? onMeasuredHeight;
 
   @override
   State<ChatComposerRow> createState() => _ChatComposerRowState();
@@ -101,6 +103,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       setState(() {
         _actionHeight = measuredHeight;
       });
+      widget.onMeasuredHeight?.call(measuredHeight);
     });
   }
 

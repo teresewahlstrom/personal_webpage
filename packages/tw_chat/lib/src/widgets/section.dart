@@ -34,6 +34,16 @@ class ChatSection extends StatefulWidget {
 class _ChatSectionState extends State<ChatSection> {
   late final SectionCoordinator _coordinator;
   late final ChatWebCopyInterceptor _webCopyInterceptor;
+  double _composerMeasuredHeight = 0.0;
+
+  void _handleComposerHeightChanged(double height) {
+    if ((_composerMeasuredHeight - height).abs() <= 0.5) {
+      return;
+    }
+    setState(() {
+      _composerMeasuredHeight = height;
+    });
+  }
 
   bool _prefersReducedMotion() {
     final mediaQuery = MediaQuery.maybeOf(context);
@@ -135,99 +145,136 @@ class _ChatSectionState extends State<ChatSection> {
           panelHeight: constraints.maxHeight,
           textScale: textScale,
         );
+        final composerHeight = (_composerMeasuredHeight > 0
+                ? _composerMeasuredHeight
+                : composerMetrics.minInputHeight)
+            .clamp(composerMetrics.minInputHeight, composerMetrics.maxInputHeight);
+        final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
+        final chatScrollbarBottomInset =
+            composerHeight + tokens.composerGap;
 
-        return Column(
+        return Stack(
           children: [
-            ValueListenableBuilder<int>(
-              valueListenable: _coordinator.chatViewListenable,
-              builder: (_, _, _) {
-                final bool showJumpToLatest = !_coordinator.isNearChatBottom;
-                final jumpToLatestLabel = _coordinator.newMessageCount == 1
-                    ? 'New message'
-                    : '${_coordinator.newMessageCount} new messages';
+            Positioned.fill(
+              child: ValueListenableBuilder<int>(
+                valueListenable: _coordinator.chatViewListenable,
+                builder: (_, _, _) {
+                  return ChatMessageListArea(
+                    messages: widget.messages,
+                    availableWidth: constraints.maxWidth,
+                    chatScroll: _coordinator.chatScroll,
+                    chatFocusNode: _coordinator.chatFocusNode,
+                    chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
+                    messageBubbleKeys: _coordinator.messageBubbleKeys,
+                    showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
+                    isMessageTruncated: _coordinator.isMessageTruncated,
+                    onToggleTruncation: _coordinator.toggleMessageTruncation,
+                    onChatSelectionChanged:
+                        _coordinator.handleChatSelectionChanged,
+                    selectionNotifierForMessage:
+                        _coordinator.selectionNotifierForMessage,
+                    onCopySelectionRequested: () =>
+                        _coordinator.resolveSelectionCopyText(widget.messages),
+                    onRequestChatKeyboardTarget:
+                        widget.onSetChatKeyboardScrollTarget,
+                    onChatPointerInteractionStart:
+                        _coordinator.handleChatPointerInteractionStart,
+                    onChatPointerInteractionEnd:
+                        _coordinator.handleChatPointerInteractionEnd,
+                    scrollbarTopInset: chatScrollbarTopInset,
+                    scrollbarBottomInset: chatScrollbarBottomInset,
+                    jumpToLatestButton: null,
+                    buildScrollbarTrack: ({
+                      required double thickness,
+                      required double crossAxisInset,
+                      required double topInset,
+                      required double bottomInset,
+                    }) => ChatScrollbar.buildTrack(
+                      context: context,
+                      thickness: thickness,
+                      crossAxisInset: crossAxisInset,
+                      topInset: topInset,
+                      bottomInset: bottomInset,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              right: tokens.jumpToLatestButtonRightInset,
+              bottom:
+                  composerHeight +
+                  tokens.composerGap +
+                  tokens.jumpToLatestButtonBottomInset,
+              child: ValueListenableBuilder<int>(
+                valueListenable: _coordinator.chatViewListenable,
+                builder: (_, _, _) {
+                  final bool showJumpToLatest = !_coordinator.isNearChatBottom;
+                  if (!showJumpToLatest) {
+                    return const SizedBox.shrink();
+                  }
 
-                return ChatMessageListArea(
-                  messages: widget.messages,
-                  availableWidth: constraints.maxWidth,
-                  chatScroll: _coordinator.chatScroll,
-                  chatFocusNode: _coordinator.chatFocusNode,
-                  chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
-                  messageBubbleKeys: _coordinator.messageBubbleKeys,
-                  showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
-                  isMessageTruncated: _coordinator.isMessageTruncated,
-                  onToggleTruncation: _coordinator.toggleMessageTruncation,
-                  onChatSelectionChanged:
-                      _coordinator.handleChatSelectionChanged,
-                  selectionNotifierForMessage:
-                      _coordinator.selectionNotifierForMessage,
-                  onCopySelectionRequested: () =>
-                      _coordinator.resolveSelectionCopyText(widget.messages),
-                  onRequestChatKeyboardTarget:
-                      widget.onSetChatKeyboardScrollTarget,
-                  onChatPointerInteractionStart:
-                      _coordinator.handleChatPointerInteractionStart,
-                  onChatPointerInteractionEnd:
-                      _coordinator.handleChatPointerInteractionEnd,
-                  jumpToLatestButton: !showJumpToLatest
-                      ? null
-                      : FilledButton.icon(
-                          onPressed: _coordinator.jumpToLatest,
-                          icon: Icon(
-                            Icons.south_rounded,
-                            size: tokens.jumpToLatestButtonIconSize,
-                          ),
-                          label: Text(
-                            _coordinator.newMessageCount == 0
-                                ? 'Jump to bottom'
-                                : jumpToLatestLabel,
-                          ),
-                          style: FilledButton.styleFrom(
-                            backgroundColor: colors.composerFill,
-                            foregroundColor: ChatComposerLayout.sendIconColor(
+                  final jumpToLatestLabel = _coordinator.newMessageCount == 1
+                      ? 'New message'
+                      : '${_coordinator.newMessageCount} new messages';
+
+                  return FilledButton.icon(
+                    onPressed: _coordinator.jumpToLatest,
+                    icon: Icon(
+                      Icons.south_rounded,
+                      size: tokens.jumpToLatestButtonIconSize,
+                    ),
+                    label: Text(
+                      _coordinator.newMessageCount == 0
+                          ? 'Jump to bottom'
+                          : jumpToLatestLabel,
+                    ),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colors.composerFill,
+                      foregroundColor: ChatComposerLayout.sendIconColor(
+                        context,
+                      ),
+                      side: BorderSide(
+                        color: ChatComposerLayout.sendIconColor(
+                          context,
+                        ),
+                      ),
+                      elevation: tokens.jumpToLatestButtonElevation,
+                      padding: tokens.jumpToLatestButtonPadding,
+                      textStyle: textStyles
+                          .composerHintStyle(textScale, colors)
+                          .copyWith(
+                            color: ChatComposerLayout.sendIconColor(
                               context,
                             ),
-                            side: BorderSide(
-                              color: ChatComposerLayout.sendIconColor(context),
-                            ),
-                            elevation: tokens.jumpToLatestButtonElevation,
-                            padding: tokens.jumpToLatestButtonPadding,
-                            textStyle: textStyles
-                                .composerHintStyle(textScale, colors)
-                                .copyWith(
-                                  color: ChatComposerLayout.sendIconColor(
-                                    context,
-                                  ),
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            fontWeight: FontWeight.w700,
                           ),
-                        ),
-                  buildScrollbarTrack: ({
-                    required double thickness,
-                    required double crossAxisInset,
-                  }) => ChatScrollbar.buildTrack(
-                    context: context,
-                    thickness: thickness,
-                    crossAxisInset: crossAxisInset,
-                  ),
-                );
-              },
+                    ),
+                  );
+                },
+              ),
             ),
-            SizedBox(height: tokens.composerGap),
-            ValueListenableBuilder<int>(
-              valueListenable: _coordinator.composerViewListenable,
-              builder: (_, _, _) => ChatComposerRow(
-                controller: _coordinator.controller,
-                inputFocusNode: _coordinator.inputFocusNode,
-                inputScroll: _coordinator.inputScroll,
-                showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
-                minInputHeight: composerMetrics.minInputHeight,
-                maxInputHeight: composerMetrics.maxInputHeight,
-                sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
-                isAwaitingResponse: widget.messages.any(
-                  (message) => message.isPending,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ValueListenableBuilder<int>(
+                valueListenable: _coordinator.composerViewListenable,
+                builder: (_, _, _) => ChatComposerRow(
+                  controller: _coordinator.controller,
+                  inputFocusNode: _coordinator.inputFocusNode,
+                  inputScroll: _coordinator.inputScroll,
+                  showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
+                  minInputHeight: composerMetrics.minInputHeight,
+                  maxInputHeight: composerMetrics.maxInputHeight,
+                  sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
+                  isAwaitingResponse: widget.messages.any(
+                    (message) => message.isPending,
+                  ),
+                  onSubmit: _submitMessage,
+                  onStop: _stopPendingReply,
+                  onMeasuredHeight: _handleComposerHeightChanged,
                 ),
-                onSubmit: _submitMessage,
-                onStop: _stopPendingReply,
               ),
             ),
           ],

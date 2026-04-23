@@ -69,9 +69,16 @@ class ChatLayout {
   static LinearGradient backgroundGradient(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
     return LinearGradient(
-      colors: [colors.shellBackgroundStart, colors.shellBackgroundEnd],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
+      colors: [
+        colors.shellBackgroundStart,
+        colors.shellBackgroundStart,
+        colors.shellBackgroundEnd,
+        colors.shellBackgroundStart,
+        colors.shellBackgroundStart,
+      ],
+      stops: const [0.0, 0.12, 0.50, 0.88, 1.0],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
     );
   }
 

@@ -61,10 +61,14 @@ void main() {
                   onChatPointerInteractionStart: () {},
                   onChatPointerInteractionEnd: () {},
                   jumpToLatestButton: null,
+                  scrollbarTopInset: 0,
+                  scrollbarBottomInset: 0,
                   buildScrollbarTrack:
                       ({
                         required double thickness,
                         required double crossAxisInset,
+                        required double topInset,
+                        required double bottomInset,
                       }) => const SizedBox.shrink(),
                 ),
               ],
