@@ -238,9 +238,14 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
         "A data-driven professional twin that turns structured career data into an explorable chat and interactive keyword map. Designed as a richer alternative to a static resume, it helps users understand experience, capabilities, and cross-domain strengths quickly. The chat in this app is powered by that system.",
     ),
     _ProjectCardData(
-      title: "Coming soon",
+      title: "Knowledge Management",
       content:
-          "More projects coming soon.",
+          "A structured approach to capturing, organising, and surfacing organisational knowledge so it remains findable and actionable over time. Covers taxonomy design, metadata standards, search optimisation, and the integration of tacit knowledge into shared repositories — enabling teams to build on existing insights rather than rediscover them.",
+    ),
+    _ProjectCardData(
+      title: "Production Cost Estimation",
+      content:
+          "A systematic framework for forecasting manufacturing and production costs with high accuracy. Combines bottom-up cost modelling, parametric estimating, and scenario analysis to support pricing decisions, investment appraisals, and operational planning — bridging the gap between engineering specifications and financial targets.",
     ),
   ];
 
