@@ -23,15 +23,15 @@ class ChatBubbleRules {
 
   /// Number of lines required before the collapse control appears.
   ///
-  /// Seven lines is a compromise: long enough to preserve context while
-  /// avoiding very tall messages dominating the viewport.
-  static const collapsibleLineThreshold = 7;
+  /// Four lines keeps shorter responses fully visible while still truncating
+  /// anything meaningfully long.
+  static const collapsibleLineThreshold = 4;
 
   /// Number of lines shown while a bubble is collapsed.
   ///
   /// Matches [collapsibleLineThreshold] so expanding is only offered when
   /// additional content is actually hidden.
-  static const collapsedVisibleLines = 7;
+  static const collapsedVisibleLines = 4;
   static Color collapseButtonColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.bubbleCollapseButton;
   static Color collapseButtonIconColor(BuildContext context) =>
