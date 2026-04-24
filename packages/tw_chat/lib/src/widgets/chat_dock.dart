@@ -414,7 +414,7 @@ BoxDecoration _chatShellDecoration({
   final colors = ChatSkin.dataOf(context).colors;
   final tokens = ChatSkin.tokens;
   return BoxDecoration(
-    gradient: ChatLayout.backgroundGradient(context),
+    color: ChatLayout.shellFill(context),
     borderRadius: borderRadius,
     border: Border.all(
       color: colors.shellOuterBorder,
