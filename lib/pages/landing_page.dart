@@ -352,9 +352,11 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color cardFill = widget.gridLineStyle.color.withValues(
-      alpha: AppColorTheme.projectCardFillAlphaFor(brightness),
-    );
+    final Color cardFill = Color.lerp(
+      widget.frameFill,
+      widget.gridLineStyle.color,
+      AppColorTheme.projectCardFillAlphaFor(brightness),
+    )!;
     final Color baseIconColor =
       PageTextStyles.body(context).color ??
       Theme.of(context).textTheme.bodyMedium?.color ??
