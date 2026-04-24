@@ -101,7 +101,7 @@ class ChatSkinTokens {
   final double composerRadius = 0.0;
   final double composerCornerAccentRadius = 0.0;
   final double composerSendButtonRadius = 2.0;
-  final Radius scrollbarRadius = const Radius.circular(3);
+  final Radius scrollbarRadius = Radius.zero;
   final BorderRadius scrollbarTrackRadius = const BorderRadius.all(
     Radius.circular(3),
   );
