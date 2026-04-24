@@ -278,6 +278,21 @@ class ChatMarkupListBlock extends ChatMarkupBlock {
   }
 }
 
+class ChatMarkupHorizontalRuleBlock extends ChatMarkupBlock {
+  const ChatMarkupHorizontalRuleBlock();
+
+  @override
+  String toPlainText() => '';
+
+  @override
+  TextSpan toTextSpan({
+    required ChatMarkupTheme theme,
+    required GestureRecognizerFactory gestureRecognizerFactory,
+  }) {
+    return TextSpan(text: '', style: theme.baseStyle);
+  }
+}
+
 class ChatMarkupListItem {
   const ChatMarkupListItem(this.blocks);
 

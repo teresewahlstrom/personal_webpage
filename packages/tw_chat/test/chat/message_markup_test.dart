@@ -154,7 +154,37 @@ Second paragraph.''');
     expect(firstSpan.style!.fontSize, greaterThan(thirdSpan.style!.fontSize!));
   });
 
-  test('heading markers beyond H3 are parsed as paragraph text', () {
+  test('horizontal rule (---) is parsed as ChatMarkupHorizontalRuleBlock', () {
+    final document = ChatMessageMarkup.parse('---');
+    expect(document.blocks, hasLength(1));
+    expect(document.blocks.single, isA<ChatMarkupHorizontalRuleBlock>());
+  });
+
+  test('longer horizontal rule (-----) is parsed as ChatMarkupHorizontalRuleBlock', () {
+    final document = ChatMessageMarkup.parse('-----');
+    expect(document.blocks, hasLength(1));
+    expect(document.blocks.single, isA<ChatMarkupHorizontalRuleBlock>());
+  });
+
+  test('horizontal rule is omitted from plain text', () {
+    final plainText = ChatMessageMarkup.toPlainText('Before\n\n---\n\nAfter');
+    expect(plainText, 'Before\n\nAfter');
+  });
+
+  test('horizontal rule separates surrounding paragraphs', () {
+    final document = ChatMessageMarkup.parse('Before\n\n---\n\nAfter');
+    expect(document.blocks, hasLength(3));
+    expect(document.blocks[0], isA<ChatMarkupParagraphBlock>());
+    expect(document.blocks[1], isA<ChatMarkupHorizontalRuleBlock>());
+    expect(document.blocks[2], isA<ChatMarkupParagraphBlock>());
+  });
+
+  test('horizontal rule without blank lines still parses as its own block', () {
+    final document = ChatMessageMarkup.parse('Before\n---\nAfter');
+    expect(document.blocks.any((b) => b is ChatMarkupHorizontalRuleBlock), isTrue);
+  });
+
+
     final document = ChatMessageMarkup.parse('#### Level four');
     expect(document.blocks, hasLength(1));
     expect(document.blocks.single, isA<ChatMarkupParagraphBlock>());
