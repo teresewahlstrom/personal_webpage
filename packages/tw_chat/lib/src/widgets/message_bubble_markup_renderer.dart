@@ -307,7 +307,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
             theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
       );
       final railColor = chromeVisible
-          ? ChatComposerLayout.sendIconColor(context)
+          ? ChatSkin.dataOf(context).colors.bubbleText
           : ChatSkin.dataOf(context).colors.transparent;
         final tokens = ChatSkin.tokens;
       return CustomPaint(
