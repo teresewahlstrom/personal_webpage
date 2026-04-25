@@ -149,8 +149,10 @@ class _PageScaffoldState extends State<PageScaffold>
                                       SelectableRegion(
                                         key: _pageSelectionAreaKey,
                                         focusNode: _pageSelectionFocusNode,
-                                        selectionControls:
-                                            adaptiveTextSelectionControls,
+                                        selectionControls: Theme.of(context).platform == TargetPlatform.iOS ||
+                                            Theme.of(context).platform == TargetPlatform.macOS
+                                            ? cupertinoTextSelectionControls
+                                            : materialTextSelectionControls,
                                         child: widget.child,
                                       ),
                                       if (widget.showFooter && !widget.isPageLoading)
