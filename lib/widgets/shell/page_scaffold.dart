@@ -150,7 +150,7 @@ class _PageScaffoldState extends State<PageScaffold>
                                         key: _pageSelectionAreaKey,
                                         focusNode: _pageSelectionFocusNode,
                                         selectionControls:
-                                            materialTextSelectionControls,
+                                            adaptiveTextSelectionControls,
                                         child: widget.child,
                                       ),
                                       if (widget.showFooter && !widget.isPageLoading)
