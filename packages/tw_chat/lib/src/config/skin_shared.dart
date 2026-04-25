@@ -182,7 +182,7 @@ class ChatSkinTokens {
   );
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupBlockquoteRailWidth = 0.5;
+  final double markupBlockquoteRailWidth = 0.25;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
   final double markupListTopSpacingAdjustment = -0.3;
@@ -415,7 +415,6 @@ class ChatSkinTextStyles {
     ChatSkinColors colors,
   ) {
     return baseStyle.copyWith(
-      color: colors.markupBlockquoteRail,
       fontStyle: FontStyle.italic,
     );
   }
