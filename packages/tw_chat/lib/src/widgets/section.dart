@@ -303,10 +303,11 @@ class _ChatSectionState extends State<ChatSection> {
             Positioned(
               left: 0,
               right: 0,
-              bottom: tokens.shellContentPadding.bottom +
+              bottom: 0,
+              height: tokens.shellContentPadding.bottom +
                   composerHeight +
-                  tokens.composerGap,
-              height: tokens.chatListBottomShadowHeight,
+                  tokens.composerGap +
+                  tokens.chatListBottomShadowHeight,
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
