@@ -222,7 +222,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                               hintStyle: composerHintStyle,
                               contentPadding: EdgeInsets.fromLTRB(
                                 tokens.composerTextInsetLeft,
-                                tokens.composerInputTextInsetTopBottom,
+                                tokens.composerInputTextInsetTop,
                                 tokens.composerTextInsetRight +
                                     tokens.composerScrollbarReservedWidth,
                                 tokens.composerInputTextInsetTopBottom,
