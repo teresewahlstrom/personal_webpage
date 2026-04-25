@@ -167,7 +167,7 @@ class ChatSkinTokens {
   final double composerTextInsetLeft = 8.0;
   final double composerTextInsetRight = 12.0;
   final double composerInputTextInsetTopBottom = 9.5;
-  final double composerInputTextInsetTop = 14.5;
+  final double composerInputTextInsetTop = 24.5;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
   final double composerSendIconSize = 25.0;
