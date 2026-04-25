@@ -374,17 +374,14 @@ class FloatingChatWindow extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: Padding(
-                    padding: tokens.shellContentPadding,
-                    child: ChatSection(
-                      messages: messages,
-                      onSend: onSend,
-                      onStop: onStop,
-                      isChatKeyboardScrollTarget: isChatKeyboardScrollTarget,
-                      onSetChatKeyboardScrollTarget:
-                          onSetChatKeyboardScrollTarget,
-                      isVisible: isVisible,
-                    ),
+                  child: ChatSection(
+                    messages: messages,
+                    onSend: onSend,
+                    onStop: onStop,
+                    isChatKeyboardScrollTarget: isChatKeyboardScrollTarget,
+                    onSetChatKeyboardScrollTarget:
+                        onSetChatKeyboardScrollTarget,
+                    isVisible: isVisible,
                   ),
                 ),
                 Positioned(

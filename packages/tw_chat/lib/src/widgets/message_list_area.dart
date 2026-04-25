@@ -71,7 +71,6 @@ class ChatMessageListArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ChatSkin.dataOf(context).colors;
     final tokens = ChatSkin.tokens;
     return Focus(
       focusNode: chatFocusNode,
@@ -130,84 +129,49 @@ class ChatMessageListArea extends StatelessWidget {
                           },
                         ),
                   },
-                  child: Stack(
-                    fit: StackFit.expand,
-                    clipBehavior: Clip.none,
-                    children: [
-                      SelectionArea(
-                        key: chatSelectionAreaKey,
-                        onSelectionChanged: onChatSelectionChanged,
-                        child: SingleChildScrollView(
-                          controller: chatScroll,
-                          physics: const ClampingScrollPhysics(),
-                          child: Padding(
-                            padding: tokens.bubbleViewportPadding.copyWith(
-                              top: 0,
-                              bottom: 0,
+                  child: SelectionArea(
+                    key: chatSelectionAreaKey,
+                    onSelectionChanged: onChatSelectionChanged,
+                    child: SingleChildScrollView(
+                      controller: chatScroll,
+                      physics: const ClampingScrollPhysics(),
+                      child: Padding(
+                        padding: tokens.bubbleViewportPadding.copyWith(
+                          top: 0,
+                          bottom: 0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: tokens.chatListTopShadowHeight + 10),
+                            for (final entry in messages.indexed)
+                              ChatMessageBubble(
+                                key: messageBubbleKeys[entry.$2.id],
+                                availableWidth: availableWidth,
+                                text: entry.$2.text,
+                                selectionListenerNotifier:
+                                    selectionNotifierForMessage(entry.$2.id),
+                                isUser: entry.$2.role == ChatRole.user,
+                                isTypingIndicator:
+                                    entry.$2.role == ChatRole.bot &&
+                                    entry.$2.isPending,
+                                isTruncated: isMessageTruncated(entry.$2.id),
+                                isFirstMessage: entry.$1 == 0,
+                                isLastMessage:
+                                    entry.$1 == messages.length - 1,
+                                onToggleTruncation: () =>
+                                    onToggleTruncation(entry.$2.id),
+                              ),
+                            SizedBox(
+                              height:
+                                  scrollbarBottomInset +
+                                  tokens.chatListBottomShadowHeight +
+                                  15,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                SizedBox(height: tokens.chatListTopShadowHeight + 10),
-                                for (final entry in messages.indexed)
-                                  ChatMessageBubble(
-                                    key: messageBubbleKeys[entry.$2.id],
-                                    availableWidth: availableWidth,
-                                    text: entry.$2.text,
-                                    selectionListenerNotifier:
-                                        selectionNotifierForMessage(entry.$2.id),
-                                    isUser: entry.$2.role == ChatRole.user,
-                                    isTypingIndicator:
-                                        entry.$2.role == ChatRole.bot &&
-                                        entry.$2.isPending,
-                                    isTruncated: isMessageTruncated(entry.$2.id),
-                                    isFirstMessage: entry.$1 == 0,
-                                    isLastMessage:
-                                        entry.$1 == messages.length - 1,
-                                    onToggleTruncation: () =>
-                                        onToggleTruncation(entry.$2.id),
-                                  ),
-                                SizedBox(
-                                  height:
-                                      scrollbarBottomInset +
-                                      tokens.chatListBottomShadowHeight +
-                                      15,
-                                ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ),
                       ),
-                      Positioned(
-                        top: -1,
-                        left: 0,
-                        right: -tokens.shellContentPadding.right,
-                        height: tokens.chatListTopShadowHeight + 1,
-                        child: IgnorePointer(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: tokens.shellTopShadowGradient(colors),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: -tokens.shellContentPadding.right,
-                        bottom: -tokens.shellContentPadding.bottom,
-                        height:
-                            scrollbarBottomInset +
-                            tokens.chatListBottomShadowHeight +
-                            tokens.shellContentPadding.bottom,
-                        child: IgnorePointer(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: tokens.shellBottomShadowGradient(colors),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
