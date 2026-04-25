@@ -164,10 +164,10 @@ class ChatSkinTokens {
   final double composerScrollbarReservedWidth = 10.0;
   final double userBubbleRightInset = 21.0;
 
-  final double composerTextInsetLeft = 8.0;
-  final double composerTextInsetRight = 12.0;
+  final double composerTextInsetLeft = 9.5;
+  final double composerTextInsetRight = 9.5;
   final double composerInputTextInsetTopBottom = 9.5;
-  final double composerInputTextInsetTop = 14.5;
+  final double composerInputTextInsetTop = 9.5;
   final double composerRowTopSpacing = 10.0;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
