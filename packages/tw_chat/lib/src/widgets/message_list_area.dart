@@ -91,6 +91,7 @@ class ChatMessageListArea extends StatelessWidget {
           behavior: const ChatNoScrollbarBehavior(),
           child: Stack(
             fit: StackFit.expand,
+            clipBehavior: Clip.none,
             children: [
               if (showChatScrollbarTrack)
                 buildScrollbarTrack(
@@ -131,6 +132,7 @@ class ChatMessageListArea extends StatelessWidget {
                   },
                   child: Stack(
                     fit: StackFit.expand,
+                    clipBehavior: Clip.none,
                     children: [
                       SelectionArea(
                         key: chatSelectionAreaKey,
@@ -179,7 +181,7 @@ class ChatMessageListArea extends StatelessWidget {
                       Positioned(
                         top: -1,
                         left: 0,
-                        right: 0,
+                        right: -tokens.shellContentPadding.right,
                         height: tokens.chatListTopShadowHeight + 1,
                         child: IgnorePointer(
                           child: DecoratedBox(
@@ -191,11 +193,12 @@ class ChatMessageListArea extends StatelessWidget {
                       ),
                       Positioned(
                         left: 0,
-                        right: 0,
-                        bottom: 0,
+                        right: -tokens.shellContentPadding.right,
+                        bottom: -tokens.shellContentPadding.bottom,
                         height:
                             scrollbarBottomInset +
-                            tokens.chatListBottomShadowHeight,
+                            tokens.chatListBottomShadowHeight +
+                            tokens.shellContentPadding.bottom,
                         child: IgnorePointer(
                           child: DecoratedBox(
                             decoration: BoxDecoration(

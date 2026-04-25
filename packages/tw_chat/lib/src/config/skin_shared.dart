@@ -121,8 +121,8 @@ class ChatSkinTokens {
   final EdgeInsets shellContentPadding = const EdgeInsets.fromLTRB(
     10,
     0,
-    0,
-    0,
+    2,
+    10,
   );
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
