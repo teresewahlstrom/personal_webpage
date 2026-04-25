@@ -69,7 +69,7 @@ class ChatLayout {
   static Color shellFill(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
     final double t =
-        Theme.of(context).brightness == Brightness.dark ? 0.65 : 0.70;
+        Theme.of(context).brightness == Brightness.dark ? 0.75 : 0.70;
     return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, t)!;
   }
 
