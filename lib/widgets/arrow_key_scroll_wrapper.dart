@@ -117,12 +117,20 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
       },
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: widget.onTap,
+        onTap: () {
+          // Request focus on confirmed tap only, not on every pointer-down.
+          // Requesting focus on pointer-down steals it from any active
+          // SelectableRegion, which clears text selection even when the user
+          // is just starting a drag-scroll.  A confirmed tap (no significant
+          // movement) is the right moment to reclaim keyboard-scroll focus
+          // and to clear the selection via the optional onTap callback.
+          _focusNode.requestFocus();
+          widget.onTap?.call();
+        },
         child: Listener(
           behavior: HitTestBehavior.translucent,
           onPointerDown: (_) {
             ChatKeyboardScrollTarget.setChatTarget(false);
-            _focusNode.requestFocus();
           },
           child: widget.child,
         ),
