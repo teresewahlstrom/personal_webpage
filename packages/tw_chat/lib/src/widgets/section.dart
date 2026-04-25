@@ -265,6 +265,34 @@ class _ChatSectionState extends State<ChatSection> {
               ),
             ),
             Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: tokens.chatListTopShadowHeight,
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: tokens.shellTopShadowGradient(colors),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: tokens.shellContentPadding.bottom +
+                  composerHeight +
+                  tokens.composerGap,
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: tokens.shellBottomShadowGradient(colors),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
               left: tokens.shellContentPadding.left,
               right: tokens.shellContentPadding.right,
               bottom: tokens.shellContentPadding.bottom,
@@ -284,32 +312,6 @@ class _ChatSectionState extends State<ChatSection> {
                   onSubmit: _submitMessage,
                   onStop: _stopPendingReply,
                   onMeasuredHeight: _handleComposerHeightChanged,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: tokens.chatListTopShadowHeight,
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: tokens.shellTopShadowGradient(colors),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: tokens.shellContentPadding.bottom + composerHeight,
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: tokens.shellBottomShadowGradient(colors),
-                  ),
                 ),
               ),
             ),
