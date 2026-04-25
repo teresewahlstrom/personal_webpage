@@ -151,7 +151,7 @@ class _ChatSectionState extends State<ChatSection> {
             .clamp(composerMetrics.minInputHeight, composerMetrics.maxInputHeight);
         final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
         final chatScrollbarBottomInset =
-            tokens.shellContentPadding.bottom + composerHeight + tokens.composerGap;
+            tokens.shellContentPadding.bottom + composerHeight + tokens.composerGap + tokens.composerRowTopSpacing;
 
         return Stack(
           children: [
@@ -215,6 +215,7 @@ class _ChatSectionState extends State<ChatSection> {
                   tokens.shellContentPadding.bottom +
                   composerHeight +
                   tokens.composerGap +
+                  tokens.composerRowTopSpacing +
                   tokens.jumpToLatestButtonBottomInset,
               child: ValueListenableBuilder<int>(
                 valueListenable: _coordinator.chatViewListenable,
@@ -283,7 +284,8 @@ class _ChatSectionState extends State<ChatSection> {
               bottom: 0,
               height: tokens.shellContentPadding.bottom +
                   composerHeight +
-                  tokens.composerGap,
+                  tokens.composerGap +
+                  tokens.composerRowTopSpacing,
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -298,20 +300,23 @@ class _ChatSectionState extends State<ChatSection> {
               bottom: tokens.shellContentPadding.bottom,
               child: ValueListenableBuilder<int>(
                 valueListenable: _coordinator.composerViewListenable,
-                builder: (_, _, _) => ChatComposerRow(
-                  controller: _coordinator.controller,
-                  inputFocusNode: _coordinator.inputFocusNode,
-                  inputScroll: _coordinator.inputScroll,
-                  showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
-                  minInputHeight: composerMetrics.minInputHeight,
-                  maxInputHeight: composerMetrics.maxInputHeight,
-                  sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
-                  isAwaitingResponse: widget.messages.any(
-                    (message) => message.isPending,
+                builder: (_, _, _) => Padding(
+                  padding: EdgeInsets.only(top: tokens.composerRowTopSpacing),
+                  child: ChatComposerRow(
+                    controller: _coordinator.controller,
+                    inputFocusNode: _coordinator.inputFocusNode,
+                    inputScroll: _coordinator.inputScroll,
+                    showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
+                    minInputHeight: composerMetrics.minInputHeight,
+                    maxInputHeight: composerMetrics.maxInputHeight,
+                    sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
+                    isAwaitingResponse: widget.messages.any(
+                      (message) => message.isPending,
+                    ),
+                    onSubmit: _submitMessage,
+                    onStop: _stopPendingReply,
+                    onMeasuredHeight: _handleComposerHeightChanged,
                   ),
-                  onSubmit: _submitMessage,
-                  onStop: _stopPendingReply,
-                  onMeasuredHeight: _handleComposerHeightChanged,
                 ),
               ),
             ),
