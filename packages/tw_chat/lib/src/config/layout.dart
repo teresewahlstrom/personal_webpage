@@ -66,20 +66,11 @@ class ChatLayout {
 
   /// Number of post-frame passes used to force final bottom settle.
   static const forcedBottomPasses = 3;
-  static LinearGradient backgroundGradient(BuildContext context) {
+  static Color shellFill(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
-    return LinearGradient(
-      colors: [
-        colors.shellBackgroundStart,
-        colors.shellBackgroundStart,
-        colors.shellBackgroundEnd,
-        colors.shellBackgroundStart,
-        colors.shellBackgroundStart,
-      ],
-      stops: const [0.0, 0.12, 0.50, 0.88, 1.0],
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-    );
+    final double t =
+        Theme.of(context).brightness == Brightness.dark ? 0.65 : 0.70;
+    return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, t)!;
   }
 
   static Color dividerColor(BuildContext context) =>
