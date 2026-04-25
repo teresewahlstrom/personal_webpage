@@ -137,33 +137,33 @@ class _PageScaffoldState extends State<PageScaffold>
                             child: Scrollbar(
                               controller: _pageScrollController,
                               interactive: true,
-                              child: SingleChildScrollView(
-                                controller: _pageScrollController,
-                                child: ArrowKeyScrollWrapper(
+                              child: SelectableRegion(
+                                key: _pageSelectionAreaKey,
+                                focusNode: _pageSelectionFocusNode,
+                                selectionControls: platform == TargetPlatform.iOS ||
+                                    platform == TargetPlatform.macOS
+                                    ? cupertinoTextSelectionControls
+                                    : materialTextSelectionControls,
+                                child: SingleChildScrollView(
                                   controller: _pageScrollController,
-                                  onTap: () {
-                                    _pageSelectionAreaKey.currentState
-                                        ?.clearSelection();
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: <Widget>[
-                                      SelectableRegion(
-                                        key: _pageSelectionAreaKey,
-                                        focusNode: _pageSelectionFocusNode,
-                                        selectionControls: platform == TargetPlatform.iOS ||
-                                            platform == TargetPlatform.macOS
-                                            ? cupertinoTextSelectionControls
-                                            : materialTextSelectionControls,
-                                        child: widget.child,
-                                      ),
-                                      if (widget.showFooter && !widget.isPageLoading)
-                                        const PageFooter(
-                                          brandName: 'T1 grid',
-                                          privacyLabel: 'Privacy & Cookies Note.',
-                                        ),
-                                    ],
+                                  child: ArrowKeyScrollWrapper(
+                                    controller: _pageScrollController,
+                                    onTap: () {
+                                      _pageSelectionAreaKey.currentState
+                                          ?.clearSelection();
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: <Widget>[
+                                        widget.child,
+                                        if (widget.showFooter && !widget.isPageLoading)
+                                          const PageFooter(
+                                            brandName: 'T1 grid',
+                                            privacyLabel: 'Privacy & Cookies Note.',
+                                          ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
