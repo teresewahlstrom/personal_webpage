@@ -105,7 +105,9 @@ class _PageScaffoldState extends State<PageScaffold>
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
+    final ThemeData theme = Theme.of(context);
+    final Brightness brightness = theme.brightness;
+    final TargetPlatform platform = theme.platform;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double floatingInset = FloatingControlInset.forViewportWidth(
       mediaQuery.size.width,
@@ -149,8 +151,8 @@ class _PageScaffoldState extends State<PageScaffold>
                                       SelectableRegion(
                                         key: _pageSelectionAreaKey,
                                         focusNode: _pageSelectionFocusNode,
-                                        selectionControls: Theme.of(context).platform == TargetPlatform.iOS ||
-                                            Theme.of(context).platform == TargetPlatform.macOS
+                                        selectionControls: platform == TargetPlatform.iOS ||
+                                            platform == TargetPlatform.macOS
                                             ? cupertinoTextSelectionControls
                                             : materialTextSelectionControls,
                                         child: widget.child,
