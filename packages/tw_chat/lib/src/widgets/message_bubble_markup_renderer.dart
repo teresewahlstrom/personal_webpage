@@ -313,7 +313,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       return CustomPaint(
         foregroundPainter: _BlockQuoteRailPainter(
           color: railColor,
-          railThickness: tokens.bubbleBorderWidth,
+          railThickness: tokens.markupBlockquoteRailWidth,
           capLength: tokens.composerCornerAccentSegment,
           railInset: 5.0,
         ),

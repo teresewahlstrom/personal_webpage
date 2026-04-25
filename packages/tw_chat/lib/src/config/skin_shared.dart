@@ -97,7 +97,7 @@ class ChatSkinTokens {
   final double composerRadius = 0.0;
   final double composerCornerAccentRadius = 0.0;
   final double composerSendButtonRadius = 2.0;
-  final Radius scrollbarRadius = Radius.zero;
+  final Radius scrollbarRadius = const Radius.circular(100);
   final BorderRadius scrollbarTrackRadius = const BorderRadius.all(
     Radius.circular(3),
   );
@@ -118,7 +118,7 @@ class ChatSkinTokens {
     0,
     10,
   );
-  final double chatListTopShadowHeight = 45.0;
+  final double chatListTopShadowHeight = 43.0;
   final double chatListBottomShadowHeight = 30;
 
   // Top shadow gradient
@@ -164,10 +164,10 @@ class ChatSkinTokens {
   final double composerScrollbarReservedWidth = 10.0;
   final double userBubbleRightInset = 21.0;
 
-  final double composerTextInsetLeft = 9.5;
-  final double composerTextInsetRight = 9.5;
-  final double composerInputTextInsetTopBottom = 9.5;
-  final double composerInputTextInsetTop = 9.5;
+  final double composerTextInsetLeft = 6.3;
+  final double composerTextInsetRight = 6.3;
+  final double composerInputTextInsetTopBottom = 6.3;
+  final double composerInputTextInsetTop = 6.3;
   final double composerRowTopSpacing = 10.0;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
@@ -182,6 +182,7 @@ class ChatSkinTokens {
   );
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
+  final double markupBlockquoteRailWidth = 0.5;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
   final double markupListTopSpacingAdjustment = -0.3;
