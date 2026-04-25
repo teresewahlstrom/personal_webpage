@@ -91,11 +91,7 @@ class ChatSkinTokens {
   const ChatSkinTokens();
 
   final double alphaTransparent = 0.0;
-  final double alphaSoftText = 0.82;
-  final double alphaOpaque = 1.0;
 
-  final double headerRadiusMinimized = 16.0;
-  final double headerRadiusExpanded = 8.0;
   final double bubbleRadius = 4.0;
   final double collapseButtonRadius = 0.0;
   final double composerRadius = 0.0;
@@ -104,15 +100,6 @@ class ChatSkinTokens {
   final Radius scrollbarRadius = Radius.zero;
   final BorderRadius scrollbarTrackRadius = const BorderRadius.all(
     Radius.circular(3),
-  );
-
-  final BorderRadius shellBorderRadiusMinimized = const BorderRadius.only(
-    topLeft: Radius.circular(16.0),
-    topRight: Radius.circular(16.0),
-  );
-  final BorderRadius shellBorderRadiusExpanded = const BorderRadius.only(
-    topLeft: Radius.circular(8.0),
-    topRight: Radius.circular(8.0),
   );
 
   final double phoneVerticalHeightGutter = 4.0;
@@ -175,13 +162,10 @@ class ChatSkinTokens {
   final double scrollbarTrackLeftShift = 3.0;
   final double scrollbarMinThumbLength = 15.0;
   final double composerScrollbarReservedWidth = 10.0;
-  final double userBubbleClearanceFactor = 3.0;
   final double userBubbleRightInset = 21.0;
 
   final double composerTextInsetLeft = 8.0;
   final double composerTextInsetRight = 12.0;
-  final double composerTextInsetTopBottom = 8.0;
-  final double composerInputExtraVerticalSpace = 1.5;
   final double composerInputTextInsetTopBottom = 9.5;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
