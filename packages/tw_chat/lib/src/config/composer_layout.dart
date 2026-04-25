@@ -66,7 +66,7 @@ class ChatComposerLayout {
         1.0 -
         ChatMath.normalized(panelHeight, compactPanelHeight, roomyPanelHeight);
 
-    final baseInputHeight = ChatMath.lerp(45.0, 41.0, compactnessT);
+    final baseInputHeight = ChatMath.lerp(40.0, 36.0, compactnessT);
     final scaledMinInputHeightCeiling = ChatMath.scaleFromOne(
       minHeightCeiling,
       scale,
