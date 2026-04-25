@@ -184,7 +184,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                         controller: widget.inputScroll,
                         thumbVisibility: true,
                         trackVisibility: false,
-                        interactive: true,
+                        interactive: !_useNativeMobileWebSelectionControls,
                         thickness: inputScrollbarThickness,
                         minThumbLength: tokens.scrollbarMinThumbLength,
                         mainAxisMargin: 0,
