@@ -403,11 +403,20 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                 ),
                 SizeTransition(
                   sizeFactor: _heightAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      widget.content,
-                      style: PageTextStyles.body(context),
+                  child: AnimatedBuilder(
+                    animation: _heightAnimation,
+                    builder: (BuildContext context, Widget? child) {
+                      if (_heightAnimation.status == AnimationStatus.dismissed) {
+                        return SelectionContainer.disabled(child: child!);
+                      }
+                      return child!;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Text(
+                        widget.content,
+                        style: PageTextStyles.body(context),
+                      ),
                     ),
                   ),
                 ),
