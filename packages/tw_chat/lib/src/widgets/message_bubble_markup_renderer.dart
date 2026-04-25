@@ -524,7 +524,8 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     }
     if (!inListItem &&
         nextBlock is ChatMarkupListBlock &&
-        previousBlock is! ChatMarkupHeadingBlock) {
+        previousBlock is! ChatMarkupHeadingBlock &&
+        previousBlock is! ChatMarkupListBlock) {
       spacing += fontSize * tokens.markupListTopSpacingAdjustment;
     }
     if (!inListItem && previousBlock is ChatMarkupListBlock) {
