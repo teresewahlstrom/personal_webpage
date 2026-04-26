@@ -34,20 +34,34 @@ void main() {
     );
   });
 
-  test('composer keeps explicit Flutter selection controls on mobile web', () {
+  test('composer keeps native selection controls on mobile web', () {
     expect(
       composerSelectionControlsForPlatform(
         isWeb: true,
         platform: TargetPlatform.android,
       ),
-      same(materialTextSelectionControls),
+      isNull,
     );
     expect(
       composerSelectionControlsForPlatform(
         isWeb: true,
         platform: TargetPlatform.iOS,
       ),
+      isNull,
+    );
+    expect(
+      composerSelectionControlsForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.iOS,
+      ),
       same(cupertinoTextSelectionControls),
+    );
+    expect(
+      composerSelectionControlsForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.android,
+      ),
+      same(materialTextSelectionControls),
     );
   });
 
@@ -68,7 +82,22 @@ void main() {
     );
   });
 
-  test('composer scrollbar padding extends thumb travel through input padding', () {
-    expect(composerScrollbarPadding(6.3), const EdgeInsets.only(bottom: -6.3));
+  test('composer scrollbar padding extends mobile web thumb travel fully', () {
+    expect(
+      composerScrollbarPadding(
+        isMobileWebTextInputPlatform: false,
+        composerInputTextInsetTop: 6.3,
+        composerInputTextInsetTopBottom: 6.3,
+      ),
+      const EdgeInsets.only(bottom: -6.3),
+    );
+    expect(
+      composerScrollbarPadding(
+        isMobileWebTextInputPlatform: true,
+        composerInputTextInsetTop: 6.3,
+        composerInputTextInsetTopBottom: 6.3,
+      ),
+      const EdgeInsets.only(bottom: -12.6),
+    );
   });
 }
