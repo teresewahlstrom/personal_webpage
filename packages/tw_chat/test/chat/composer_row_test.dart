@@ -65,6 +65,44 @@ void main() {
     );
   });
 
+  test('composer defers context menu to the browser on mobile web', () {
+    expect(
+      composerContextMenuBuilderForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.android,
+      ),
+      isNull,
+    );
+    expect(
+      composerContextMenuBuilderForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.iOS,
+      ),
+      isNull,
+    );
+    expect(
+      composerContextMenuBuilderForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.windows,
+      ),
+      isNotNull,
+    );
+    expect(
+      composerContextMenuBuilderForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.android,
+      ),
+      isNotNull,
+    );
+    expect(
+      composerContextMenuBuilderForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.iOS,
+      ),
+      isNotNull,
+    );
+  });
+
   test('composer avoids mobile web clipping around selection handles', () {
     expect(
       shouldClipComposerInputForPlatform(
