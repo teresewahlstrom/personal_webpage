@@ -230,6 +230,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           isWeb: kIsWeb,
           platform: defaultTargetPlatform,
         ),
+        magnifierConfiguration: TextMagnifierConfiguration.disabled,
         style: composerTextStyle,
         textAlignVertical: TextAlignVertical.center,
         cursorColor: ChatComposerLayout.cursorColor(context),
