@@ -132,6 +132,7 @@ class ChatMessageListArea extends StatelessWidget {
                   child: SelectionArea(
                     key: chatSelectionAreaKey,
                     onSelectionChanged: onChatSelectionChanged,
+                    magnifierConfiguration: TextMagnifierConfiguration.disabled,
                     child: SingleChildScrollView(
                       controller: chatScroll,
                       physics: const ClampingScrollPhysics(),
