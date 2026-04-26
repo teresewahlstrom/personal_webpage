@@ -120,6 +120,37 @@ void main() {
     );
   });
 
+  test('composer disables custom input scrollbar on mobile web', () {
+    expect(
+      usesComposerInputScrollbarForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.android,
+      ),
+      isFalse,
+    );
+    expect(
+      usesComposerInputScrollbarForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.iOS,
+      ),
+      isFalse,
+    );
+    expect(
+      usesComposerInputScrollbarForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.windows,
+      ),
+      isTrue,
+    );
+    expect(
+      usesComposerInputScrollbarForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.android,
+      ),
+      isTrue,
+    );
+  });
+
   test('composer scrollbar padding extends mobile web thumb travel fully', () {
     expect(
       composerScrollbarPadding(
