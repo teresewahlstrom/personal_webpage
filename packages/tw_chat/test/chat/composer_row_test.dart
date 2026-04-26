@@ -114,7 +114,21 @@ void main() {
     expect(
       shouldClipComposerInputForPlatform(
         isWeb: true,
+        platform: TargetPlatform.iOS,
+      ),
+      isFalse,
+    );
+    expect(
+      shouldClipComposerInputForPlatform(
+        isWeb: true,
         platform: TargetPlatform.windows,
+      ),
+      isTrue,
+    );
+    expect(
+      shouldClipComposerInputForPlatform(
+        isWeb: false,
+        platform: TargetPlatform.iOS,
       ),
       isTrue,
     );
