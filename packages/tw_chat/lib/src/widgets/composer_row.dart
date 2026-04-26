@@ -18,33 +18,23 @@ TextSelectionControls? composerSelectionControlsForPlatform({
   required bool isWeb,
   required TargetPlatform platform,
 }) {
-  if (isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform)) {
-    return null;
-  }
   if (platform == TargetPlatform.iOS) {
     return cupertinoTextSelectionControls;
   }
   return materialTextSelectionControls;
 }
 
-// On mobile web (touch Chrome on Android, Safari on iOS) the browser already
-// provides a native long-press context menu and selection handles for the
-// underlying text input element. If Flutter also installs its own
-// `contextMenuBuilder`, the two compete: the browser's menu is dismissed when
-// Flutter shows its toolbar (causing the menu to flash and disappear), and
-// Flutter's selection overlay can hide the right-side selection handle.
-//
-// Returning `null` here disables Flutter's context menu in the composer on
-// mobile web so the browser's native copy/paste/select menu and handles work
-// as expected. On other platforms we keep Flutter's default toolbar.
+// Flutter web renders into a canvas element and intercepts all touch events
+// before the browser has a chance to act on them. Returning `null` here would
+// leave the user with no copy/paste UI at all – the browser cannot show its
+// native long-press context menu because Flutter has already consumed the
+// gesture. We therefore use Flutter's own adaptive toolbar on every platform,
+// including mobile web, so that copy/paste always works.
 @visibleForTesting
 EditableTextContextMenuBuilder? composerContextMenuBuilderForPlatform({
   required bool isWeb,
   required TargetPlatform platform,
 }) {
-  if (isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform)) {
-    return null;
-  }
   return _defaultComposerContextMenuBuilder;
 }
 
