@@ -34,20 +34,20 @@ void main() {
     );
   });
 
-  test('composer keeps native selection controls on mobile web', () {
+  test('composer uses Flutter selection controls on all platforms including mobile web', () {
     expect(
       composerSelectionControlsForPlatform(
         isWeb: true,
         platform: TargetPlatform.android,
       ),
-      isNull,
+      same(materialTextSelectionControls),
     );
     expect(
       composerSelectionControlsForPlatform(
         isWeb: true,
         platform: TargetPlatform.iOS,
       ),
-      isNull,
+      same(cupertinoTextSelectionControls),
     );
     expect(
       composerSelectionControlsForPlatform(
@@ -65,20 +65,20 @@ void main() {
     );
   });
 
-  test('composer defers context menu to the browser on mobile web', () {
+  test('composer uses Flutter context menu on all platforms including mobile web', () {
     expect(
       composerContextMenuBuilderForPlatform(
         isWeb: true,
         platform: TargetPlatform.android,
       ),
-      isNull,
+      isNotNull,
     );
     expect(
       composerContextMenuBuilderForPlatform(
         isWeb: true,
         platform: TargetPlatform.iOS,
       ),
-      isNull,
+      isNotNull,
     );
     expect(
       composerContextMenuBuilderForPlatform(
