@@ -78,7 +78,7 @@ bool shouldClipComposerInputForPlatform({
 }
 
 @visibleForTesting
-bool usesComposerInputScrollbarForPlatform({
+bool shouldUseComposerInputScrollbarForPlatform({
   required bool isWeb,
   required TargetPlatform platform,
 }) {
@@ -212,7 +212,8 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       composerInputTextInsetTop: tokens.composerInputTextInsetTop,
       composerInputTextInsetTopBottom: tokens.composerInputTextInsetTopBottom,
     );
-    final useComposerInputScrollbar = usesComposerInputScrollbarForPlatform(
+    final shouldUseComposerInputScrollbar =
+        shouldUseComposerInputScrollbarForPlatform(
       isWeb: kIsWeb,
       platform: defaultTargetPlatform,
     );
@@ -260,7 +261,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
             tokens.composerTextInsetLeft,
             tokens.composerInputTextInsetTop,
             tokens.composerTextInsetRight +
-                (useComposerInputScrollbar
+                (shouldUseComposerInputScrollbar
                     ? tokens.composerScrollbarReservedWidth
                     : 0),
             tokens.composerInputTextInsetTopBottom,
@@ -271,18 +272,18 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
     final inputStack = Stack(
       fit: StackFit.passthrough,
       children: [
-        if (useComposerInputScrollbar && widget.showInputScrollbarTrack)
+        if (shouldUseComposerInputScrollbar && widget.showInputScrollbarTrack)
           ChatScrollbar.buildTrack(
             context: context,
             thickness: inputScrollbarThickness,
             crossAxisInset: inputScrollbarCrossAxisInset,
           ),
-        if (useComposerInputScrollbar)
+        if (shouldUseComposerInputScrollbar)
           ChatFadingScrollbar(
             controller: widget.inputScroll,
             thumbVisibility: true,
             trackVisibility: false,
-            interactive: true,
+            interactive: !_isMobileWebTextInputPlatform,
             thickness: inputScrollbarThickness,
             minThumbLength: tokens.scrollbarMinThumbLength,
             mainAxisMargin: 0,

@@ -122,28 +122,28 @@ void main() {
 
   test('composer disables custom input scrollbar on mobile web', () {
     expect(
-      usesComposerInputScrollbarForPlatform(
+      shouldUseComposerInputScrollbarForPlatform(
         isWeb: true,
         platform: TargetPlatform.android,
       ),
       isFalse,
     );
     expect(
-      usesComposerInputScrollbarForPlatform(
+      shouldUseComposerInputScrollbarForPlatform(
         isWeb: true,
         platform: TargetPlatform.iOS,
       ),
       isFalse,
     );
     expect(
-      usesComposerInputScrollbarForPlatform(
+      shouldUseComposerInputScrollbarForPlatform(
         isWeb: true,
         platform: TargetPlatform.windows,
       ),
       isTrue,
     );
     expect(
-      usesComposerInputScrollbarForPlatform(
+      shouldUseComposerInputScrollbarForPlatform(
         isWeb: false,
         platform: TargetPlatform.android,
       ),
