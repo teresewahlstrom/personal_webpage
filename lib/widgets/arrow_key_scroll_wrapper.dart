@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -117,13 +118,25 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
       },
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
+        // Only participate in the gesture arena for mouse events.
+        // Touch events are deliberately excluded so that this GestureDetector
+        // never competes with the text-field caret-handle tap recognizer on
+        // touch devices.  The caret handle is rendered in Flutter's global
+        // Overlay and can extend outside the chat dock into the page-content
+        // area, which is covered by this widget.  Without this restriction the
+        // translucent GestureDetector wins the arena for a tap aimed at the
+        // caret handle, preventing the paste/select-all contextual toolbar from
+        // appearing.  Touch SelectableRegion selection clearing is handled
+        // internally by SelectableRegion itself.
+        supportedDevices: const {PointerDeviceKind.mouse},
         onTap: () {
-          // Request focus on confirmed tap only, not on every pointer-down.
-          // Requesting focus on pointer-down steals it from any active
-          // SelectableRegion, which clears text selection even when the user
-          // is just starting a drag-scroll.  A confirmed tap (no significant
-          // movement) is the right moment to reclaim keyboard-scroll focus
-          // and to clear the selection via the optional onTap callback.
+          // Request focus on confirmed mouse tap only, not on every
+          // pointer-down.  Requesting focus on pointer-down steals it from any
+          // active SelectableRegion, which clears text selection even when the
+          // user is just starting a drag-scroll.  A confirmed tap (no
+          // significant movement) is the right moment to reclaim
+          // keyboard-scroll focus and to clear the selection via the optional
+          // onTap callback.
           _focusNode.requestFocus();
           widget.onTap?.call();
         },
