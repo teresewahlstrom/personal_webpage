@@ -18,6 +18,15 @@ TextSelectionControls? composerSelectionControlsForPlatform({
   required bool isWeb,
   required TargetPlatform platform,
 }) {
+  // On iOS mobile web the Cupertino teardrop handle's tap does not reliably
+  // reach toggleToolbar(): Flutter web hides handles during pointer-down
+  // (_handleTapDown), so handlesVisible is false by the time pointer-up fires
+  // and toggleToolbar() returns immediately without showing the toolbar.
+  // Returning null removes the broken handle; the contextMenuBuilder is still
+  // active so the toolbar appears via long-press, which works on mobile web.
+  if (isWeb && platform == TargetPlatform.iOS) {
+    return null;
+  }
   if (platform == TargetPlatform.iOS) {
     return cupertinoTextSelectionControls;
   }

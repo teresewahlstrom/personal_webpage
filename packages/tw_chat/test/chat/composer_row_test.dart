@@ -34,20 +34,27 @@ void main() {
     );
   });
 
-  test('composer uses Flutter selection controls on all platforms including mobile web', () {
+  test('composer disables selection handles on iOS mobile web', () {
+    // iOS mobile web: the Cupertino handle's tap is intercepted during
+    // pointer-down so toggleToolbar() is a no-op; return null to remove the
+    // broken handle.  The contextMenuBuilder still provides the toolbar on
+    // long-press.
+    expect(
+      composerSelectionControlsForPlatform(
+        isWeb: true,
+        platform: TargetPlatform.iOS,
+      ),
+      isNull,
+    );
+  });
+
+  test('composer uses Flutter selection controls on non-iOS-web platforms', () {
     expect(
       composerSelectionControlsForPlatform(
         isWeb: true,
         platform: TargetPlatform.android,
       ),
       same(materialTextSelectionControls),
-    );
-    expect(
-      composerSelectionControlsForPlatform(
-        isWeb: true,
-        platform: TargetPlatform.iOS,
-      ),
-      same(cupertinoTextSelectionControls),
     );
     expect(
       composerSelectionControlsForPlatform(
