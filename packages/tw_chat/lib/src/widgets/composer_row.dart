@@ -77,6 +77,14 @@ bool shouldClipComposerInputForPlatform({
   return !isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform);
 }
 
+@visibleForTesting
+bool shouldUseComposerInputScrollbarForPlatform({
+  required bool isWeb,
+  required TargetPlatform platform,
+}) {
+  return !isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform);
+}
+
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({
     super.key,
@@ -204,6 +212,11 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       composerInputTextInsetTop: tokens.composerInputTextInsetTop,
       composerInputTextInsetTopBottom: tokens.composerInputTextInsetTopBottom,
     );
+    final shouldUseComposerInputScrollbar =
+        shouldUseComposerInputScrollbarForPlatform(
+      isWeb: kIsWeb,
+      platform: defaultTargetPlatform,
+    );
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
           widget.minInputHeight,
@@ -213,70 +226,76 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       isWeb: kIsWeb,
       platform: defaultTargetPlatform,
     );
+    final inputField = ScrollConfiguration(
+      behavior: const ChatNoScrollbarBehavior(),
+      child: TextField(
+        controller: widget.controller,
+        focusNode: widget.inputFocusNode,
+        scrollController: widget.inputScroll,
+        selectionControls: composerSelectionControlsForPlatform(
+          isWeb: kIsWeb,
+          platform: defaultTargetPlatform,
+        ),
+        contextMenuBuilder: composerContextMenuBuilderForPlatform(
+          isWeb: kIsWeb,
+          platform: defaultTargetPlatform,
+        ),
+        style: composerTextStyle,
+        textAlignVertical: TextAlignVertical.center,
+        cursorColor: ChatComposerLayout.cursorColor(context),
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
+        minLines: 1,
+        maxLines: null,
+        autofocus: true,
+        decoration: InputDecoration(
+          isCollapsed: true,
+          constraints: BoxConstraints(
+            minHeight: widget.minInputHeight,
+            maxHeight: widget.maxInputHeight,
+          ),
+          border: InputBorder.none,
+          hintText: 'Ask me anything...',
+          hintStyle: composerHintStyle,
+          contentPadding: EdgeInsets.fromLTRB(
+            tokens.composerTextInsetLeft,
+            tokens.composerInputTextInsetTop,
+            tokens.composerTextInsetRight +
+                (shouldUseComposerInputScrollbar
+                    ? tokens.composerScrollbarReservedWidth
+                    : 0),
+            tokens.composerInputTextInsetTopBottom,
+          ),
+        ),
+      ),
+    );
     final inputStack = Stack(
       fit: StackFit.passthrough,
       children: [
-        if (widget.showInputScrollbarTrack)
+        if (shouldUseComposerInputScrollbar && widget.showInputScrollbarTrack)
           ChatScrollbar.buildTrack(
             context: context,
             thickness: inputScrollbarThickness,
             crossAxisInset: inputScrollbarCrossAxisInset,
           ),
-        ChatFadingScrollbar(
-          controller: widget.inputScroll,
-          thumbVisibility: true,
-          trackVisibility: false,
-          interactive: !_isMobileWebTextInputPlatform,
-          thickness: inputScrollbarThickness,
-          minThumbLength: tokens.scrollbarMinThumbLength,
-          mainAxisMargin: 0,
-          crossAxisMargin:
-              inputScrollbarCrossAxisInset +
-              tokens.scrollbarThumbCrossAxisMargin,
-          padding: inputScrollbarPadding,
-          radius: tokens.scrollbarRadius,
-          child: ScrollConfiguration(
-            behavior: const ChatNoScrollbarBehavior(),
-            child: TextField(
-              controller: widget.controller,
-              focusNode: widget.inputFocusNode,
-              scrollController: widget.inputScroll,
-              selectionControls: composerSelectionControlsForPlatform(
-                isWeb: kIsWeb,
-                platform: defaultTargetPlatform,
-              ),
-              contextMenuBuilder: composerContextMenuBuilderForPlatform(
-                isWeb: kIsWeb,
-                platform: defaultTargetPlatform,
-              ),
-              style: composerTextStyle,
-              textAlignVertical: TextAlignVertical.center,
-              cursorColor: ChatComposerLayout.cursorColor(context),
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              minLines: 1,
-              maxLines: null,
-              autofocus: true,
-              decoration: InputDecoration(
-                isCollapsed: true,
-                constraints: BoxConstraints(
-                  minHeight: widget.minInputHeight,
-                  maxHeight: widget.maxInputHeight,
-                ),
-                border: InputBorder.none,
-                hintText: 'Ask me anything...',
-                hintStyle: composerHintStyle,
-                contentPadding: EdgeInsets.fromLTRB(
-                  tokens.composerTextInsetLeft,
-                  tokens.composerInputTextInsetTop,
-                  tokens.composerTextInsetRight +
-                      tokens.composerScrollbarReservedWidth,
-                  tokens.composerInputTextInsetTopBottom,
-                ),
-              ),
-            ),
-          ),
-        ),
+        if (shouldUseComposerInputScrollbar)
+          ChatFadingScrollbar(
+            controller: widget.inputScroll,
+            thumbVisibility: true,
+            trackVisibility: false,
+            interactive: !_isMobileWebTextInputPlatform,
+            thickness: inputScrollbarThickness,
+            minThumbLength: tokens.scrollbarMinThumbLength,
+            mainAxisMargin: 0,
+            crossAxisMargin:
+                inputScrollbarCrossAxisInset +
+                tokens.scrollbarThumbCrossAxisMargin,
+            padding: inputScrollbarPadding,
+            radius: tokens.scrollbarRadius,
+            child: inputField,
+          )
+        else
+          inputField,
       ],
     );
 
