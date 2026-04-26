@@ -155,55 +155,74 @@ class _ChatSectionState extends State<ChatSection> {
 
         return Stack(
           children: [
+            Positioned.fill(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: tokens.shellContentPadding.left,
+                  right: tokens.shellContentPadding.right,
+                ),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _coordinator.chatViewListenable,
+                  builder: (_, _, _) {
+                    return ChatMessageListArea(
+                      messages: widget.messages,
+                      availableWidth: constraints.maxWidth -
+                          tokens.shellContentPadding.left -
+                          tokens.shellContentPadding.right,
+                      chatScroll: _coordinator.chatScroll,
+                      chatFocusNode: _coordinator.chatFocusNode,
+                      chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
+                      messageBubbleKeys: _coordinator.messageBubbleKeys,
+                      showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
+                      isMessageTruncated: _coordinator.isMessageTruncated,
+                      onToggleTruncation: _coordinator.toggleMessageTruncation,
+                      onChatSelectionChanged:
+                          _coordinator.handleChatSelectionChanged,
+                      selectionNotifierForMessage:
+                          _coordinator.selectionNotifierForMessage,
+                      onCopySelectionRequested: () =>
+                          _coordinator.resolveSelectionCopyText(widget.messages),
+                      onRequestChatKeyboardTarget:
+                          widget.onSetChatKeyboardScrollTarget,
+                      onChatPointerInteractionStart:
+                          _coordinator.handleChatPointerInteractionStart,
+                      onChatPointerInteractionEnd:
+                          _coordinator.handleChatPointerInteractionEnd,
+                      scrollbarTopInset: chatScrollbarTopInset,
+                      scrollbarBottomInset: chatScrollbarBottomInset,
+                      jumpToLatestButton: null,
+                      buildScrollbarTrack: ({
+                        required double thickness,
+                        required double crossAxisInset,
+                        required double topInset,
+                        required double bottomInset,
+                      }) => ChatScrollbar.buildTrack(
+                        context: context,
+                        thickness: thickness,
+                        crossAxisInset: crossAxisInset,
+                        topInset: topInset,
+                        bottomInset: bottomInset,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            // Absorb any pointer event that lands in the composer zone but
+            // misses the Composer's exact Positioned bounds (e.g. the extended
+            // touch-target of the caret handle sitting just above the text
+            // field's top edge).  The Composer is the *last* Stack child so it
+            // is always hit-tested first and wins for precise hits.  This
+            // shield is the fallback: it ensures ChatMessageListArea's
+            // SelectionArea never participates in gesture-arena resolution for
+            // any pointer originating within the composer zone.
             Positioned(
-              top: 0,
-              left: tokens.shellContentPadding.left,
-              right: tokens.shellContentPadding.right,
-              bottom: chatScrollbarBottomInset,
-              child: ValueListenableBuilder<int>(
-                valueListenable: _coordinator.chatViewListenable,
-                builder: (_, _, _) {
-                  return ChatMessageListArea(
-                    messages: widget.messages,
-                    availableWidth: constraints.maxWidth -
-                        tokens.shellContentPadding.left -
-                        tokens.shellContentPadding.right,
-                    chatScroll: _coordinator.chatScroll,
-                    chatFocusNode: _coordinator.chatFocusNode,
-                    chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
-                    messageBubbleKeys: _coordinator.messageBubbleKeys,
-                    showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
-                    isMessageTruncated: _coordinator.isMessageTruncated,
-                    onToggleTruncation: _coordinator.toggleMessageTruncation,
-                    onChatSelectionChanged:
-                        _coordinator.handleChatSelectionChanged,
-                    selectionNotifierForMessage:
-                        _coordinator.selectionNotifierForMessage,
-                    onCopySelectionRequested: () =>
-                        _coordinator.resolveSelectionCopyText(widget.messages),
-                    onRequestChatKeyboardTarget:
-                        widget.onSetChatKeyboardScrollTarget,
-                    onChatPointerInteractionStart:
-                        _coordinator.handleChatPointerInteractionStart,
-                    onChatPointerInteractionEnd:
-                        _coordinator.handleChatPointerInteractionEnd,
-                    scrollbarTopInset: chatScrollbarTopInset,
-                    scrollbarBottomInset: 0,
-                    jumpToLatestButton: null,
-                    buildScrollbarTrack: ({
-                      required double thickness,
-                      required double crossAxisInset,
-                      required double topInset,
-                      required double bottomInset,
-                    }) => ChatScrollbar.buildTrack(
-                      context: context,
-                      thickness: thickness,
-                      crossAxisInset: crossAxisInset,
-                      topInset: topInset,
-                      bottomInset: bottomInset,
-                    ),
-                  );
-                },
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: chatScrollbarBottomInset,
+              child: AbsorbPointer(
+                child: const SizedBox.expand(),
               ),
             ),
             Positioned(
