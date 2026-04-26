@@ -1,7 +1,41 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/config.dart';
+
+@visibleForTesting
+bool isMobileWebTextInputPlatform({
+  required bool isWeb,
+  required TargetPlatform platform,
+}) {
+  return isWeb &&
+      (platform == TargetPlatform.android || platform == TargetPlatform.iOS);
+}
+
+@visibleForTesting
+TextSelectionControls composerSelectionControlsForPlatform({
+  required bool isWeb,
+  required TargetPlatform platform,
+}) {
+  if (isWeb && platform == TargetPlatform.iOS) {
+    return cupertinoTextSelectionControls;
+  }
+  return materialTextSelectionControls;
+}
+
+@visibleForTesting
+EdgeInsets composerScrollbarPadding(double composerInputTextInsetTopBottom) {
+  return EdgeInsets.only(bottom: -composerInputTextInsetTopBottom);
+}
+
+@visibleForTesting
+bool shouldClipComposerInputForPlatform({
+  required bool isWeb,
+  required TargetPlatform platform,
+}) {
+  return !isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform);
+}
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({
@@ -40,13 +74,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
 
-  bool get _useNativeMobileWebSelectionControls {
-    if (!kIsWeb) {
-      return false;
-    }
-    return defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS;
-  }
+  bool get _isMobileWebTextInputPlatform => isMobileWebTextInputPlatform(
+    isWeb: kIsWeb,
+    platform: defaultTargetPlatform,
+  );
 
   @override
   void initState() {
@@ -128,16 +159,80 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         tokens.composerScrollbarReservedWidth > inputScrollbarThickness
         ? (tokens.composerScrollbarReservedWidth - inputScrollbarThickness) / 2
         : 0.0;
-    final inputScrollbarPadding = _useNativeMobileWebSelectionControls
-        ? EdgeInsets.zero
-        : EdgeInsets.only(
-            bottom: -tokens.composerInputTextInsetTopBottom,
-          );
+    final inputScrollbarPadding = composerScrollbarPadding(
+      tokens.composerInputTextInsetTopBottom,
+    );
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
           widget.minInputHeight,
           widget.maxInputHeight,
         );
+    final shouldClipInput = shouldClipComposerInputForPlatform(
+      isWeb: kIsWeb,
+      platform: defaultTargetPlatform,
+    );
+    final inputStack = Stack(
+      fit: StackFit.passthrough,
+      children: [
+        if (widget.showInputScrollbarTrack)
+          ChatScrollbar.buildTrack(
+            context: context,
+            thickness: inputScrollbarThickness,
+            crossAxisInset: inputScrollbarCrossAxisInset,
+          ),
+        ChatFadingScrollbar(
+          controller: widget.inputScroll,
+          thumbVisibility: true,
+          trackVisibility: false,
+          interactive: !_isMobileWebTextInputPlatform,
+          thickness: inputScrollbarThickness,
+          minThumbLength: tokens.scrollbarMinThumbLength,
+          mainAxisMargin: 0,
+          crossAxisMargin:
+              inputScrollbarCrossAxisInset +
+              tokens.scrollbarThumbCrossAxisMargin,
+          padding: inputScrollbarPadding,
+          radius: tokens.scrollbarRadius,
+          child: ScrollConfiguration(
+            behavior: const ChatNoScrollbarBehavior(),
+            child: TextField(
+              controller: widget.controller,
+              focusNode: widget.inputFocusNode,
+              scrollController: widget.inputScroll,
+              selectionControls: composerSelectionControlsForPlatform(
+                isWeb: kIsWeb,
+                platform: defaultTargetPlatform,
+              ),
+              style: composerTextStyle,
+              textAlignVertical: TextAlignVertical.center,
+              cursorColor: ChatComposerLayout.cursorColor(context),
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              minLines: 1,
+              maxLines: null,
+              autofocus: true,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                constraints: BoxConstraints(
+                  minHeight: widget.minInputHeight,
+                  maxHeight: widget.maxInputHeight,
+                ),
+                border: InputBorder.none,
+                hintText: 'Ask me anything...',
+                hintStyle: composerHintStyle,
+                contentPadding: EdgeInsets.fromLTRB(
+                  tokens.composerTextInsetLeft,
+                  tokens.composerInputTextInsetTop,
+                  tokens.composerTextInsetRight +
+                      tokens.composerScrollbarReservedWidth,
+                  tokens.composerInputTextInsetTopBottom,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -169,71 +264,14 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                   minHeight: widget.minInputHeight,
                   maxHeight: widget.maxInputHeight,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(tokens.composerRadius),
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    children: [
-                      if (widget.showInputScrollbarTrack)
-                        ChatScrollbar.buildTrack(
-                          context: context,
-                          thickness: inputScrollbarThickness,
-                          crossAxisInset: inputScrollbarCrossAxisInset,
+                child: shouldClipInput
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          tokens.composerRadius,
                         ),
-                      ChatFadingScrollbar(
-                        controller: widget.inputScroll,
-                        thumbVisibility: true,
-                        trackVisibility: false,
-                        interactive: !_useNativeMobileWebSelectionControls,
-                        thickness: inputScrollbarThickness,
-                        minThumbLength: tokens.scrollbarMinThumbLength,
-                        mainAxisMargin: 0,
-                        crossAxisMargin:
-                            inputScrollbarCrossAxisInset +
-                            tokens.scrollbarThumbCrossAxisMargin,
-                        padding: inputScrollbarPadding,
-                        radius: tokens.scrollbarRadius,
-                        child: ScrollConfiguration(
-                          behavior: const ChatNoScrollbarBehavior(),
-                          child: TextField(
-                            controller: widget.controller,
-                            focusNode: widget.inputFocusNode,
-                            scrollController: widget.inputScroll,
-                            selectionControls:
-                                _useNativeMobileWebSelectionControls
-                                ? null
-                                : materialTextSelectionControls,
-                            style: composerTextStyle,
-                            textAlignVertical: TextAlignVertical.center,
-                            cursorColor: ChatComposerLayout.cursorColor(context),
-                            keyboardType: TextInputType.multiline,
-                            textInputAction: TextInputAction.newline,
-                            minLines: 1,
-                            maxLines: null,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              isCollapsed: true,
-                              constraints: BoxConstraints(
-                                minHeight: widget.minInputHeight,
-                                maxHeight: widget.maxInputHeight,
-                              ),
-                              border: InputBorder.none,
-                              hintText: 'Ask me anything...',
-                              hintStyle: composerHintStyle,
-                              contentPadding: EdgeInsets.fromLTRB(
-                                tokens.composerTextInsetLeft,
-                                tokens.composerInputTextInsetTop,
-                                tokens.composerTextInsetRight +
-                                    tokens.composerScrollbarReservedWidth,
-                                tokens.composerInputTextInsetTopBottom,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                        child: inputStack,
+                      )
+                    : inputStack,
               ),
             ),
           ),
