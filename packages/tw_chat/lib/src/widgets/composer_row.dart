@@ -14,19 +14,29 @@ bool isMobileWebTextInputPlatform({
 }
 
 @visibleForTesting
-TextSelectionControls composerSelectionControlsForPlatform({
+TextSelectionControls? composerSelectionControlsForPlatform({
   required bool isWeb,
   required TargetPlatform platform,
 }) {
-  if (isWeb && platform == TargetPlatform.iOS) {
+  if (isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform)) {
+    return null;
+  }
+  if (platform == TargetPlatform.iOS) {
     return cupertinoTextSelectionControls;
   }
   return materialTextSelectionControls;
 }
 
 @visibleForTesting
-EdgeInsets composerScrollbarPadding(double composerInputTextInsetTopBottom) {
-  return EdgeInsets.only(bottom: -composerInputTextInsetTopBottom);
+EdgeInsets composerScrollbarPadding({
+  required bool isMobileWebTextInputPlatform,
+  required double composerInputTextInsetTop,
+  required double composerInputTextInsetTopBottom,
+}) {
+  final bottomInset = isMobileWebTextInputPlatform
+      ? composerInputTextInsetTop + composerInputTextInsetTopBottom
+      : composerInputTextInsetTopBottom;
+  return EdgeInsets.only(bottom: -bottomInset);
 }
 
 @visibleForTesting
@@ -160,7 +170,9 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         ? (tokens.composerScrollbarReservedWidth - inputScrollbarThickness) / 2
         : 0.0;
     final inputScrollbarPadding = composerScrollbarPadding(
-      tokens.composerInputTextInsetTopBottom,
+      isMobileWebTextInputPlatform: _isMobileWebTextInputPlatform,
+      composerInputTextInsetTop: tokens.composerInputTextInsetTop,
+      composerInputTextInsetTopBottom: tokens.composerInputTextInsetTopBottom,
     );
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
