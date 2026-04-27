@@ -1,48 +1,44 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
-
-import 'dart:html' as html;
-import 'dart:ui_web' as ui_web;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const String _textareaViewType = 'tmp-native-textarea';
-bool _registeredTextareaFactory = false;
-
-void _registerTextareaFactoryIfNeeded() {
-  if (_registeredTextareaFactory) return;
-
-  ui_web.platformViewRegistry.registerViewFactory(_textareaViewType, (
-    int viewId,
-  ) {
-    return html.TextAreaElement()
-      ..autofocus = true
-      ..style.width = '100%'
-      ..style.height = '100%'
-      ..style.border = 'none'
-      ..style.outline = 'none'
-      ..style.resize = 'none'
-      ..style.padding = '0'
-      ..style.margin = '0'
-      ..style.boxSizing = 'border-box'
-      ..style.fontFamily = 'inherit'
-      ..style.fontSize = 'inherit'
-      ..style.background = 'transparent';
-  });
-
-  _registeredTextareaFactory = true;
-}
-
-class TmpPage extends StatelessWidget {
+class TmpPage extends StatefulWidget {
   const TmpPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    _registerTextareaFactoryIfNeeded();
+  State<TmpPage> createState() => _TmpPageState();
+}
 
+class _TmpPageState extends State<TmpPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Option 3: force a mobile platform so Flutter uses touch-style selection
+    // and context-menu behaviour on web instead of the desktop defaults.
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+  }
+
+  @override
+  void dispose() {
+    debugDefaultTargetPlatformOverride = null;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: HtmlElementView(viewType: _textareaViewType),
+      home: Scaffold(
+        body: TextField(
+          // Option 1: let Flutter defer context-menu rendering to the adaptive
+          // toolbar (which on web defers to the browser) and enable spellcheck.
+          contextMenuBuilder: (context, editableTextState) =>
+              AdaptiveTextSelectionToolbar.editableText(
+                editableTextState: editableTextState,
+              ),
+          spellCheckConfiguration: const SpellCheckConfiguration(),
+          maxLines: null,
+          expands: true,
+        ),
       ),
     );
   }
