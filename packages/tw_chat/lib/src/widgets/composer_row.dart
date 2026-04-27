@@ -1,96 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:super_editor/super_editor.dart';
 
 import '../config/config.dart';
-
-@visibleForTesting
-bool isMobileWebTextInputPlatform({
-  required bool isWeb,
-  required TargetPlatform platform,
-}) {
-  return isWeb &&
-      (platform == TargetPlatform.android || platform == TargetPlatform.iOS);
-}
-
-@visibleForTesting
-TextSelectionControls? composerSelectionControlsForPlatform({
-  required bool isWeb,
-  required TargetPlatform platform,
-}) {
-  // On iOS mobile web the Cupertino teardrop handle's tap does not reliably
-  // reach toggleToolbar(): Flutter web hides handles during pointer-down
-  // (_handleTapDown), so handlesVisible is false by the time pointer-up fires
-  // and toggleToolbar() returns immediately without showing the toolbar.
-  // Returning null removes the broken handle; the contextMenuBuilder is still
-  // active so the toolbar appears via long-press, which works on mobile web.
-  if (isWeb && platform == TargetPlatform.iOS) {
-    return null;
-  }
-  if (platform == TargetPlatform.iOS) {
-    return cupertinoTextSelectionControls;
-  }
-  return materialTextSelectionControls;
-}
-
-// Flutter web renders into a canvas element and intercepts all touch events
-// before the browser has a chance to act on them. Returning `null` here would
-// leave the user with no copy/paste UI at all – the browser cannot show its
-// native long-press context menu because Flutter has already consumed the
-// gesture. We therefore use Flutter's own adaptive toolbar on every platform,
-// including mobile web, so that copy/paste always works.
-@visibleForTesting
-EditableTextContextMenuBuilder? composerContextMenuBuilderForPlatform({
-  required bool isWeb,
-  required TargetPlatform platform,
-}) {
-  return _defaultComposerContextMenuBuilder;
-}
-
-Widget _defaultComposerContextMenuBuilder(
-  BuildContext context,
-  EditableTextState editableTextState,
-) {
-  return AdaptiveTextSelectionToolbar.editableText(
-    editableTextState: editableTextState,
-  );
-}
-
-@visibleForTesting
-EdgeInsets composerScrollbarPadding({
-  required bool isMobileWebTextInputPlatform,
-  required double composerInputTextInsetTop,
-  required double composerInputTextInsetTopBottom,
-}) {
-  final bottomInset = isMobileWebTextInputPlatform
-      ? composerInputTextInsetTop + composerInputTextInsetTopBottom
-      : composerInputTextInsetTopBottom;
-  return EdgeInsets.only(bottom: -bottomInset);
-}
-
-@visibleForTesting
-bool shouldClipComposerInputForPlatform({
-  required bool isWeb,
-  required TargetPlatform platform,
-}) {
-  return !isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform);
-}
-
-@visibleForTesting
-bool shouldUseComposerInputScrollbarForPlatform({
-  required bool isWeb,
-  required TargetPlatform platform,
-}) {
-  return !isMobileWebTextInputPlatform(isWeb: isWeb, platform: platform);
-}
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({
     super.key,
     required this.controller,
     required this.inputFocusNode,
-    required this.inputScroll,
-    required this.showInputScrollbarTrack,
     required this.minInputHeight,
     required this.maxInputHeight,
     required this.sendButtonMinWidth,
@@ -100,10 +17,8 @@ class ChatComposerRow extends StatefulWidget {
     this.onMeasuredHeight,
   });
 
-  final TextEditingController controller;
+  final AttributedTextEditingController controller;
   final FocusNode inputFocusNode;
-  final ScrollController inputScroll;
-  final bool showInputScrollbarTrack;
   final double minInputHeight;
   final double maxInputHeight;
   final double sendButtonMinWidth;
@@ -120,11 +35,6 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
-
-  bool get _isMobileWebTextInputPlatform => isMobileWebTextInputPlatform(
-    isWeb: kIsWeb,
-    platform: defaultTargetPlatform,
-  );
 
   @override
   void initState() {
@@ -201,102 +111,32 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
     final composerButtonIcon = widget.isAwaitingResponse
         ? Icons.stop_rounded
         : Icons.send_rounded;
-    final inputScrollbarThickness = tokens.scrollbarThickness;
-    final inputScrollbarCrossAxisInset =
-        tokens.composerScrollbarReservedWidth > inputScrollbarThickness
-        ? (tokens.composerScrollbarReservedWidth - inputScrollbarThickness) / 2
-        : 0.0;
-    final inputScrollbarPadding = composerScrollbarPadding(
-      isMobileWebTextInputPlatform: _isMobileWebTextInputPlatform,
-      composerInputTextInsetTop: tokens.composerInputTextInsetTop,
-      composerInputTextInsetTopBottom: tokens.composerInputTextInsetTopBottom,
-    );
-    final shouldUseComposerInputScrollbar =
-        shouldUseComposerInputScrollbarForPlatform(
-      isWeb: kIsWeb,
-      platform: defaultTargetPlatform,
-    );
     final actionHeight =
         (_actionHeight > 0 ? _actionHeight : widget.minInputHeight).clamp(
           widget.minInputHeight,
           widget.maxInputHeight,
         );
-    final shouldClipInput = shouldClipComposerInputForPlatform(
-      isWeb: kIsWeb,
-      platform: defaultTargetPlatform,
-    );
+
     final inputField = ScrollConfiguration(
       behavior: const ChatNoScrollbarBehavior(),
-      child: TextField(
-        controller: widget.controller,
+      child: SuperTextField(
         focusNode: widget.inputFocusNode,
-        scrollController: widget.inputScroll,
-        selectionControls: composerSelectionControlsForPlatform(
-          isWeb: kIsWeb,
-          platform: defaultTargetPlatform,
+        textController: widget.controller,
+        textStyleBuilder: (_) => composerTextStyle,
+        hintBuilder: (context) => Text(
+          'Ask me anything...',
+          style: composerHintStyle,
         ),
-        contextMenuBuilder: composerContextMenuBuilderForPlatform(
-          isWeb: kIsWeb,
-          platform: defaultTargetPlatform,
-        ),
-        magnifierConfiguration: TextMagnifierConfiguration.disabled,
-        style: composerTextStyle,
-        textAlignVertical: TextAlignVertical.center,
-        cursorColor: ChatComposerLayout.cursorColor(context),
-        keyboardType: TextInputType.multiline,
-        textInputAction: TextInputAction.newline,
         minLines: 1,
         maxLines: null,
-        autofocus: true,
-        decoration: InputDecoration(
-          isCollapsed: true,
-          constraints: BoxConstraints(
-            minHeight: widget.minInputHeight,
-            maxHeight: widget.maxInputHeight,
-          ),
-          border: InputBorder.none,
-          hintText: 'Ask me anything...',
-          hintStyle: composerHintStyle,
-          contentPadding: EdgeInsets.fromLTRB(
-            tokens.composerTextInsetLeft,
-            tokens.composerInputTextInsetTop,
-            tokens.composerTextInsetRight +
-                (shouldUseComposerInputScrollbar
-                    ? tokens.composerScrollbarReservedWidth
-                    : 0),
-            tokens.composerInputTextInsetTopBottom,
-          ),
+        padding: EdgeInsets.fromLTRB(
+          tokens.composerTextInsetLeft,
+          tokens.composerInputTextInsetTop,
+          tokens.composerTextInsetRight,
+          tokens.composerInputTextInsetTopBottom,
         ),
+        controlsColor: ChatComposerLayout.cursorColor(context),
       ),
-    );
-    final inputStack = Stack(
-      fit: StackFit.passthrough,
-      children: [
-        if (shouldUseComposerInputScrollbar && widget.showInputScrollbarTrack)
-          ChatScrollbar.buildTrack(
-            context: context,
-            thickness: inputScrollbarThickness,
-            crossAxisInset: inputScrollbarCrossAxisInset,
-          ),
-        if (shouldUseComposerInputScrollbar)
-          ChatFadingScrollbar(
-            controller: widget.inputScroll,
-            thumbVisibility: true,
-            trackVisibility: false,
-            interactive: !_isMobileWebTextInputPlatform,
-            thickness: inputScrollbarThickness,
-            minThumbLength: tokens.scrollbarMinThumbLength,
-            mainAxisMargin: 0,
-            crossAxisMargin:
-                inputScrollbarCrossAxisInset +
-                tokens.scrollbarThumbCrossAxisMargin,
-            padding: inputScrollbarPadding,
-            radius: tokens.scrollbarRadius,
-            child: inputField,
-          )
-        else
-          inputField,
-      ],
     );
 
     return ConstrainedBox(
@@ -329,14 +169,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                   minHeight: widget.minInputHeight,
                   maxHeight: widget.maxInputHeight,
                 ),
-                child: shouldClipInput
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          tokens.composerRadius,
-                        ),
-                        child: inputStack,
-                      )
-                    : inputStack,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(tokens.composerRadius),
+                  child: inputField,
+                ),
               ),
             ),
           ),
@@ -430,3 +266,4 @@ class _CornerAccentPainter extends CustomPainter {
         segmentLength != oldDelegate.segmentLength;
   }
 }
+

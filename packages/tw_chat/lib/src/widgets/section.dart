@@ -322,8 +322,6 @@ class _ChatSectionState extends State<ChatSection> {
                   child: ChatComposerRow(
                     controller: _coordinator.controller,
                     inputFocusNode: _coordinator.inputFocusNode,
-                    inputScroll: _coordinator.inputScroll,
-                    showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
                     minInputHeight: composerMetrics.minInputHeight,
                     maxInputHeight: composerMetrics.maxInputHeight,
                     sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
