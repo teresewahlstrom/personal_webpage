@@ -2,7 +2,7 @@ param(
   [string]$BackendUrl = 'http://localhost:8787',
   [string]$Device = 'chrome',
   [ValidateSet('auto', 'html', 'canvaskit', 'skwasm')]
-  [string]$WebRenderer = 'auto',
+  [string]$WebRenderer = 'html',
   [switch]$PubGet
 )
 

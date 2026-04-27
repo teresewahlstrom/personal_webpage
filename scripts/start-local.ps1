@@ -7,7 +7,7 @@ param(
   [string]$GatewayUrl = 'http://localhost:8787',
   [string]$Device = 'chrome',
   [ValidateSet('auto', 'html', 'canvaskit', 'skwasm')]
-  [string]$WebRenderer = 'auto'
+  [string]$WebRenderer = 'html'
 )
 
 $ErrorActionPreference = 'Stop'
