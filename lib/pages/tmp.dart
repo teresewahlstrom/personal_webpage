@@ -5,10 +5,16 @@ class TmpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TextField(
-      autofocus: true,
-      maxLines: null,
-      decoration: null,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: TextField(
+          autofocus: true,
+          maxLines: null,
+          expands: true,
+          decoration: null,
+        ),
+      ),
     );
   }
 }
