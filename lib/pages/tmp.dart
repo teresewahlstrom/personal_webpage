@@ -13,6 +13,12 @@ class TmpPage extends StatelessWidget {
           maxLines: null,
           expands: true,
           decoration: null,
+          spellCheckConfiguration: const SpellCheckConfiguration(),
+          contextMenuBuilder: (context, editableTextState) {
+            return AdaptiveTextSelectionToolbar.editableText(
+              editableTextState: editableTextState,
+            );
+          },
         ),
       ),
     );
