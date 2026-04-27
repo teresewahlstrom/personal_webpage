@@ -205,7 +205,7 @@ class SectionCoordinator extends ChangeNotifier {
     _deferredStickToBottom = false;
     onSend(controller.text.toPlainText());
     controller.text = AttributedText();
-    controller.selection = const TextSelection.collapsed(offset: -1);
+    controller.selection = const TextSelection.collapsed(offset: 0);
     inputFocusNode.requestFocus();
     _clearNewMessagesIndicator();
     _stickChatToBottom();
