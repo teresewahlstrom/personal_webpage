@@ -143,8 +143,8 @@ class _NativeInputOverlayState extends State<NativeInputOverlay> {
     _syncingFromNative = true;
     try {
       final text = _textarea.value;
-      final start = _textarea.selectionStart ?? text.length;
-      final end = _textarea.selectionEnd ?? text.length;
+      final start = _textarea.selectionStart ?? 0;
+      final end = _textarea.selectionEnd ?? 0;
       widget.controller.value = TextEditingValue(
         text: text,
         selection: TextSelection(baseOffset: start, extentOffset: end),
