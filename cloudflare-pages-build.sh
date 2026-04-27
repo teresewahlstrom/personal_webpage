@@ -29,7 +29,7 @@ BUILD_ID="${BUILD_SHA}@${BUILD_TIME_UTC}"
 
 echo "Build metadata: sha=${BUILD_SHA} built_at=${BUILD_TIME_UTC}"
 
-flutter build web --release --web-renderer html --pwa-strategy=none --no-tree-shake-icons \
+flutter build web --release --pwa-strategy=none --no-tree-shake-icons \
   --dart-define=APP_BUILD_SHA="${BUILD_SHA}" \
   --dart-define=APP_BUILD_TIME_UTC="${BUILD_TIME_UTC}" \
   --dart-define=APP_BUILD_ID="${BUILD_ID}"
