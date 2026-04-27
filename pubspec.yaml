@@ -18,7 +18,7 @@ dependencies:
     path: packages/tw_keywords
   flutter_svg: ^2.2.0
   http: ^1.4.0
-  super_editor: ^0.2.7
+  super_editor: ^0.3.0-dev.51
 
 dev_dependencies:
   flutter_test:
