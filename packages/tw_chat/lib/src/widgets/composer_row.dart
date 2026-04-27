@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../config/config.dart';
-import 'native_input_overlay.dart';
 
 @visibleForTesting
 bool isMobileWebTextInputPlatform({
@@ -226,57 +225,46 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       isWeb: kIsWeb,
       platform: defaultTargetPlatform,
     );
-    // NativeInputOverlay places a transparent HTML <textarea> on top of the
-    // Flutter TextField on web builds.  The browser treats the <textarea> as
-    // the active text element and applies its native text services (spell-check,
-    // autocorrect, mobile long-press copy/paste) while the Flutter TextField
-    // below continues to handle visual rendering.  On non-web platforms the
-    // overlay is a no-op pass-through.
-    final inputField = NativeInputOverlay(
-      controller: widget.controller,
-      focusNode: widget.inputFocusNode,
-      onSubmit: widget.onSubmit,
-      child: ScrollConfiguration(
-        behavior: const ChatNoScrollbarBehavior(),
-        child: TextField(
-          controller: widget.controller,
-          focusNode: widget.inputFocusNode,
-          scrollController: widget.inputScroll,
-          selectionControls: composerSelectionControlsForPlatform(
-            isWeb: kIsWeb,
-            platform: defaultTargetPlatform,
+    final inputField = ScrollConfiguration(
+      behavior: const ChatNoScrollbarBehavior(),
+      child: TextField(
+        controller: widget.controller,
+        focusNode: widget.inputFocusNode,
+        scrollController: widget.inputScroll,
+        selectionControls: composerSelectionControlsForPlatform(
+          isWeb: kIsWeb,
+          platform: defaultTargetPlatform,
+        ),
+        contextMenuBuilder: composerContextMenuBuilderForPlatform(
+          isWeb: kIsWeb,
+          platform: defaultTargetPlatform,
+        ),
+        magnifierConfiguration: TextMagnifierConfiguration.disabled,
+        style: composerTextStyle,
+        textAlignVertical: TextAlignVertical.center,
+        cursorColor: ChatComposerLayout.cursorColor(context),
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.newline,
+        minLines: 1,
+        maxLines: null,
+        autofocus: true,
+        decoration: InputDecoration(
+          isCollapsed: true,
+          constraints: BoxConstraints(
+            minHeight: widget.minInputHeight,
+            maxHeight: widget.maxInputHeight,
           ),
-          contextMenuBuilder: composerContextMenuBuilderForPlatform(
-            isWeb: kIsWeb,
-            platform: defaultTargetPlatform,
-          ),
-          magnifierConfiguration: TextMagnifierConfiguration.disabled,
-          style: composerTextStyle,
-          textAlignVertical: TextAlignVertical.center,
-          cursorColor: ChatComposerLayout.cursorColor(context),
-          keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.newline,
-          minLines: 1,
-          maxLines: null,
-          autofocus: true,
-          decoration: InputDecoration(
-            isCollapsed: true,
-            constraints: BoxConstraints(
-              minHeight: widget.minInputHeight,
-              maxHeight: widget.maxInputHeight,
-            ),
-            border: InputBorder.none,
-            hintText: 'Ask me anything...',
-            hintStyle: composerHintStyle,
-            contentPadding: EdgeInsets.fromLTRB(
-              tokens.composerTextInsetLeft,
-              tokens.composerInputTextInsetTop,
-              tokens.composerTextInsetRight +
-                  (shouldUseComposerInputScrollbar
-                      ? tokens.composerScrollbarReservedWidth
-                      : 0),
-              tokens.composerInputTextInsetTopBottom,
-            ),
+          border: InputBorder.none,
+          hintText: 'Ask me anything...',
+          hintStyle: composerHintStyle,
+          contentPadding: EdgeInsets.fromLTRB(
+            tokens.composerTextInsetLeft,
+            tokens.composerInputTextInsetTop,
+            tokens.composerTextInsetRight +
+                (shouldUseComposerInputScrollbar
+                    ? tokens.composerScrollbarReservedWidth
+                    : 0),
+            tokens.composerInputTextInsetTopBottom,
           ),
         ),
       ),
