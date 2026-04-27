@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Temporary bare-bones test page for diagnosing TextField selection handle
-/// behavior on iOS mobile web.  No PageScaffold, no overlays — just a plain
-/// Scaffold with a large centered TextField.
 class TmpPage extends StatefulWidget {
   const TmpPage({super.key});
 
@@ -22,23 +19,13 @@ class _TmpPageState extends State<TmpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tmp test'),
-      ),
-      body: Center(
-        child: SizedBox(
-          width: 400,
-          child: TextField(
-            controller: _controller,
-            autofocus: true,
-            maxLines: null,
-            minLines: 8,
-            keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Type here…',
-            ),
-          ),
+      body: TextField(
+        controller: _controller,
+        autofocus: true,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
         ),
       ),
     );
