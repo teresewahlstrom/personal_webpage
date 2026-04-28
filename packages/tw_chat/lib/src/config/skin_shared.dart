@@ -168,6 +168,7 @@ class ChatSkinTokens {
   final double composerTextInsetRight = 6.3;
   final double composerInputTextInsetTopBottom = 6.3;
   final double composerInputTextInsetTop = 6.3;
+  final double composerCaretWidth = 1.0;
   final double composerRowTopSpacing = 10.0;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
@@ -310,7 +311,7 @@ class ChatSkinTextStyles {
 
   TextStyle appBarTitleStyle(double textScale, ChatSkinColors colors) {
     const base = TextStyle(
-      fontSize: 16,
+      fontSize: 14,
       height: 1.12,
       fontWeight: FontWeight.w700,
     );
@@ -331,7 +332,7 @@ class ChatSkinTextStyles {
       maxTextScale: defaultMaxTextScale,
     );
     final base = GoogleFonts.nunito(
-      fontSize: 16,
+      fontSize: 14,
       height: 1.5,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
@@ -348,14 +349,14 @@ class ChatSkinTextStyles {
       maxTextScale: composerMaxTextScale,
     );
     final base = GoogleFonts.nunito(
-      fontSize: 16,
-      height: 1.35,
+      fontSize: 14,
+      height: 1.5,
       color: colors.composerHint,
       fontWeight: FontWeight.w300,
     );
     return base.copyWith(
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
-      height: _scaledLineHeight(base.height!, scale, 0.35),
+      height: _scaledLineHeight(base.height!, scale, 0.5),
     );
   }
 
