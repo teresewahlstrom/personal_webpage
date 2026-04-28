@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:super_editor/super_text_field.dart' show RawScrollbarWithCustomPhysics;
 
 import 'composer_layout.dart';
 import 'skin.dart';
@@ -85,6 +86,7 @@ class ChatFadingScrollbar extends StatefulWidget {
     this.thumbVisibility = true,
     this.interactive = true,
     this.trackVisibility = false,
+    this.physics,
   });
 
   final ScrollController controller;
@@ -98,6 +100,14 @@ class ChatFadingScrollbar extends StatefulWidget {
   final bool thumbVisibility;
   final bool interactive;
   final bool trackVisibility;
+
+  /// Optional scroll physics to pass to the underlying scrollbar.
+  ///
+  /// When non-null, [RawScrollbarWithCustomPhysics] is used instead of the
+  /// standard [RawScrollbar]. This is necessary when the associated [Scrollable]
+  /// uses [NeverScrollableScrollPhysics] (as [SuperTextField] does internally),
+  /// so that the user can still drag the scrollbar thumb.
+  final ScrollPhysics? physics;
 
   @override
   State<ChatFadingScrollbar> createState() => _ChatFadingScrollbarState();
@@ -159,6 +169,24 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
         tween: ColorTween(end: targetThumbColor),
         duration: ChatScrollbar.thumbFadeDuration,
         builder: (context, animatedThumbColor, child) {
+          final thumbColor = animatedThumbColor ?? targetThumbColor;
+          if (widget.physics != null) {
+            return RawScrollbarWithCustomPhysics(
+              controller: widget.controller,
+              physics: widget.physics!,
+              thumbVisibility: widget.thumbVisibility,
+              interactive: widget.interactive,
+              trackVisibility: widget.trackVisibility,
+              thickness: widget.thickness,
+              minThumbLength: widget.minThumbLength,
+              crossAxisMargin: widget.crossAxisMargin,
+              mainAxisMargin: widget.mainAxisMargin,
+              padding: widget.padding,
+              radius: widget.radius,
+              thumbColor: thumbColor,
+              child: child!,
+            );
+          }
           return RawScrollbar(
             controller: widget.controller,
             thumbVisibility: widget.thumbVisibility,
@@ -170,7 +198,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
             mainAxisMargin: widget.mainAxisMargin,
             padding: widget.padding,
             radius: widget.radius,
-            thumbColor: animatedThumbColor ?? targetThumbColor,
+            thumbColor: thumbColor,
             child: child!,
           );
         },

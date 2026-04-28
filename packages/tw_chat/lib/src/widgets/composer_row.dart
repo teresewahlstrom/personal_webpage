@@ -35,6 +35,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
+  final ScrollController _inputScrollController = ScrollController();
 
   @override
   void initState() {
@@ -59,6 +60,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   void dispose() {
     widget.controller.removeListener(_scheduleHeightSync);
+    _inputScrollController.dispose();
     super.dispose();
   }
 
@@ -117,8 +119,14 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           widget.maxInputHeight,
         );
 
-    final inputField = ScrollConfiguration(
-      behavior: const ChatNoScrollbarBehavior(),
+    final inputField = ChatFadingScrollbar(
+      controller: _inputScrollController,
+      thickness: tokens.scrollbarThickness,
+      minThumbLength: tokens.scrollbarMinThumbLength,
+      crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
+      mainAxisMargin: 0.0,
+      radius: tokens.scrollbarRadius,
+      physics: const BouncingScrollPhysics(),
       child: SuperTextField(
         focusNode: widget.inputFocusNode,
         textController: widget.controller,
@@ -142,6 +150,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           width: tokens.composerCaretWidth,
         ),
         handlesRadius: tokens.composerHandleRadius,
+        scrollController: _inputScrollController,
       ),
     );
 

@@ -82,6 +82,7 @@ class SuperTextField extends StatefulWidget {
     this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline,
+    this.scrollController,
   }) : super(key: key);
 
   final FocusNode? focusNode;
@@ -237,6 +238,15 @@ class SuperTextField extends StatefulWidget {
   /// Whether to show an underline beneath the text in the composing region, or `null`
   /// to let [SuperTextField] decide when to show the underline.
   final bool? showComposingUnderline;
+
+  /// An optional [ScrollController] to drive the text field's internal scroll view.
+  ///
+  /// Only used on desktop. When provided, the internal [ScrollbarWithCustomPhysics]
+  /// wrapper is skipped so the caller can supply its own scrollbar.
+  ///
+  /// When `null`, [SuperDesktopTextField] creates and manages its own
+  /// [ScrollController] and the default scrollbar is displayed.
+  final ScrollController? scrollController;
 
   @override
   State<SuperTextField> createState() => SuperTextFieldState();
@@ -405,6 +415,7 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
           imeConfiguration: widget.imeConfiguration,
           showComposingUnderline: widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
+          scrollController: widget.scrollController,
         );
       case SuperTextFieldPlatformConfiguration.android:
         return Shortcuts(
