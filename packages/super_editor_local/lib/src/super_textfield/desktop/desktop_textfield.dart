@@ -50,6 +50,7 @@ class SuperDesktopTextField extends StatefulWidget {
     this.focusNode,
     this.tapRegionGroupId,
     this.textController,
+    this.scrollController,
     this.textStyleBuilder = defaultTextFieldStyleBuilder,
     this.inlineWidgetBuilders = const [],
     this.textAlign = TextAlign.left,
@@ -88,6 +89,14 @@ class SuperDesktopTextField extends StatefulWidget {
   final String? tapRegionGroupId;
 
   final AttributedTextEditingController? textController;
+
+  /// An optional external [ScrollController] for the text field's scrollable
+  /// viewport.
+  ///
+  /// When provided, the caller owns the controller's lifecycle (it will not be
+  /// disposed by this widget). When `null`, an internal controller is created
+  /// and disposed automatically.
+  final ScrollController? scrollController;
 
   /// Text style factory that creates styles for the content in
   /// [textController] based on the attributions in that content.
@@ -212,7 +221,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
         : ImeAttributedTextEditingController();
     _controller.addListener(_onSelectionOrContentChange);
 
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController ?? ScrollController();
     _textFieldScroller = TextFieldScroller() //
       ..attach(_scrollController);
 
@@ -262,12 +271,23 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
         widget.maxLines != oldWidget.maxLines) {
       _onSelectionOrContentChange();
     }
+
+    if (widget.scrollController != oldWidget.scrollController) {
+      _textFieldScroller.detach();
+      if (oldWidget.scrollController == null) {
+        _scrollController.dispose();
+      }
+      _scrollController = widget.scrollController ?? ScrollController();
+      _textFieldScroller = TextFieldScroller()..attach(_scrollController);
+    }
   }
 
   @override
   void dispose() {
     _textFieldScroller.detach();
-    _scrollController.dispose();
+    if (widget.scrollController == null) {
+      _scrollController.dispose();
+    }
     _focusNode.removeListener(_updateSelectionAndComposingRegionOnFocusChange);
     if (widget.focusNode == null) {
       _focusNode.dispose();

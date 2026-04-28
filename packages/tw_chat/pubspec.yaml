@@ -13,6 +13,8 @@ dependencies:
   web: ^1.1.1
   url_launcher: ^6.3.1
   super_editor: ^0.3.0-dev.51
+  tw_flutter_skin:
+    path: ../../packages/tw_flutter_skin
 
 dependency_overrides:
   super_editor:

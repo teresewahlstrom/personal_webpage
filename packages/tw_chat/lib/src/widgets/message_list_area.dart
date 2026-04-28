@@ -87,7 +87,7 @@ class ChatMessageListArea extends StatelessWidget {
         onPointerUp: (_) => onChatPointerInteractionEnd(),
         onPointerCancel: (_) => onChatPointerInteractionEnd(),
         child: ScrollConfiguration(
-          behavior: const ChatNoScrollbarBehavior(),
+          behavior: const NoScrollbarBehavior(),
           child: Stack(
             fit: StackFit.expand,
             clipBehavior: Clip.none,
@@ -99,7 +99,7 @@ class ChatMessageListArea extends StatelessWidget {
                   topInset: scrollbarTopInset,
                   bottomInset: scrollbarBottomInset,
                 ),
-              ChatFadingScrollbar(
+              FadingScrollbar(
                 controller: chatScroll,
                 thickness: tokens.scrollbarThickness,
                 minThumbLength: tokens.scrollbarMinThumbLength,
@@ -110,6 +110,8 @@ class ChatMessageListArea extends StatelessWidget {
                   bottom: scrollbarBottomInset,
                 ),
                 radius: tokens.scrollbarRadius,
+                thumbActiveColor: ChatScrollbar.thumbColor(context),
+                thumbInactiveColor: ChatScrollbar.inactiveThumbColor(context),
                 thumbVisibility: true,
                 interactive: true,
                 trackVisibility: false,

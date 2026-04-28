@@ -16,6 +16,8 @@ dependencies:
     path: packages/tw_chat
   tw_keywords:
     path: packages/tw_keywords
+  tw_flutter_skin:
+    path: packages/tw_flutter_skin
   flutter_svg: ^2.2.0
   http: ^1.4.0
   super_editor: ^0.3.0-dev.51
