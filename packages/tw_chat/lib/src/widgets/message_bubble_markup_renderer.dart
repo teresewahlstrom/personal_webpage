@@ -310,9 +310,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           ? ChatSkin.dataOf(context).colors.bubbleText
           : ChatSkin.dataOf(context).colors.transparent;
         final tokens = ChatSkin.tokens;
+        final fontSize = theme.baseStyle.fontSize ?? 12.0;
       return Padding(
         padding: EdgeInsets.only(
-          left: _listMarkerSlotWidth(theme.baseStyle, 0),
+          left: fontSize * tokens.markupBlockquoteIndentFactor,
         ),
         child: CustomPaint(
           foregroundPainter: _BlockQuoteRailPainter(

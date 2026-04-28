@@ -195,7 +195,7 @@ class ChatSkinTokens {
   final double markupListTopSpacingAdjustment = -0.3;
   final double markupNestedListTopSpacingAdjustment = -0.59;
   final double markupNestedListBottomSpacingAdjustment = -0.55;
-  final double markupBlockQuoteTopSpacingAdjustment = -0.1;
+  final double markupBlockQuoteTopSpacingAdjustment = 0.0;
   final double markupListBottomSpacingAdjustment = 0.9;
   final List<double> markupHeadingBottomSpacingFactors = const <double>[
     -0.4,
@@ -212,6 +212,7 @@ class ChatSkinTokens {
   final double markupListMarkerGapFactor = 0.3333333333;
   final double markupTopLevelListMarkerSlotFactor = 2.0;
   final double markupNestedListMarkerSlotFactor = 1.75;
+  final double markupBlockquoteIndentFactor = 0.4;
 
   final double markupTruncationMaxFadeHeight = 40.0;
   final double markupTruncationOverlayMidAlphaUser = 0.28;

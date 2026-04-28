@@ -99,7 +99,7 @@ class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel 
     this.maxLines,
     this.overflow = TextOverflow.clip,
     this.indent = 0,
-    this.indentCalculator = defaultParagraphIndentCalculator,
+    this.indentCalculator = defaultBlockquoteIndentCalculator,
     required this.backgroundColor,
     required this.borderRadius,
     this.selection,
@@ -214,7 +214,7 @@ class BlockquoteComponent extends StatelessWidget {
     this.inlineWidgetBuilders = const [],
     this.textSelection,
     this.indent = 0,
-    this.indentCalculator = defaultParagraphIndentCalculator,
+    this.indentCalculator = defaultBlockquoteIndentCalculator,
     this.selectionColor = Colors.lightBlueAccent,
     required this.backgroundColor,
     required this.borderRadius,
@@ -278,4 +278,9 @@ class BlockquoteComponent extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The standard [TextBlockIndentCalculator] used by blockquotes in `SuperEditor`.
+double defaultBlockquoteIndentCalculator(TextStyle textStyle, int indent) {
+  return (textStyle.fontSize ?? 16) * 1.45 * indent;
 }
