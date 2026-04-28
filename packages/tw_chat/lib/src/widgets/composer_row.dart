@@ -123,6 +123,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         focusNode: widget.inputFocusNode,
         textController: widget.controller,
         textStyleBuilder: (_) => composerTextStyle,
+        hintBehavior: HintBehavior.displayHintUntilTextEntered,
         hintBuilder: (context) => Text(
           'Ask me anything...',
           style: composerHintStyle,
