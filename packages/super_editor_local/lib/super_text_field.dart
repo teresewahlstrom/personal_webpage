@@ -8,3 +8,8 @@ export 'src/super_textfield/infrastructure/text_field_tap_handlers.dart';
 
 // Tools for building new text fields.
 export 'src/super_textfield/infrastructure/text_field_border.dart';
+
+// Scrollbar that works with NeverScrollableScrollPhysics (used internally by
+// SuperDesktopTextField) and can be used externally as well.
+export 'src/infrastructure/flutter/scrollbar.dart'
+    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;

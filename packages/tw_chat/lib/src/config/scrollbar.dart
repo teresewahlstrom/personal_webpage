@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:super_editor/super_text_field.dart';
 
 import 'composer_layout.dart';
 import 'skin.dart';
@@ -71,6 +72,12 @@ class ChatNoScrollbarBehavior extends MaterialScrollBehavior {
   }
 }
 
+/// A fading scrollbar that wraps a scrollable [child].
+///
+/// When [physics] is provided, [RawScrollbarWithCustomPhysics] is used so the
+/// scrollbar thumb remains draggable even when the underlying [Scrollable] uses
+/// [NeverScrollableScrollPhysics] (as is the case with [SuperTextField]).
+/// When [physics] is `null`, the standard [RawScrollbar] is used.
 class ChatFadingScrollbar extends StatefulWidget {
   const ChatFadingScrollbar({
     super.key,
@@ -85,6 +92,7 @@ class ChatFadingScrollbar extends StatefulWidget {
     this.thumbVisibility = true,
     this.interactive = true,
     this.trackVisibility = false,
+    this.physics,
   });
 
   final ScrollController controller;
@@ -98,6 +106,15 @@ class ChatFadingScrollbar extends StatefulWidget {
   final bool thumbVisibility;
   final bool interactive;
   final bool trackVisibility;
+
+  /// Optional scroll physics to use for the scrollbar.
+  ///
+  /// When non-null, [RawScrollbarWithCustomPhysics] is used so the scrollbar
+  /// thumb can still be dragged even if the underlying [Scrollable] uses
+  /// [NeverScrollableScrollPhysics].  Pass
+  /// `ScrollConfiguration.of(context).getScrollPhysics(context)` here when
+  /// wrapping a [SuperTextField].
+  final ScrollPhysics? physics;
 
   @override
   State<ChatFadingScrollbar> createState() => _ChatFadingScrollbarState();
@@ -159,6 +176,25 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
         tween: ColorTween(end: targetThumbColor),
         duration: ChatScrollbar.thumbFadeDuration,
         builder: (context, animatedThumbColor, child) {
+          final thumbColor = animatedThumbColor ?? targetThumbColor;
+          final physics = widget.physics;
+          if (physics != null) {
+            return RawScrollbarWithCustomPhysics(
+              controller: widget.controller,
+              physics: physics,
+              thumbVisibility: widget.thumbVisibility,
+              interactive: widget.interactive,
+              trackVisibility: widget.trackVisibility,
+              thickness: widget.thickness,
+              minThumbLength: widget.minThumbLength,
+              crossAxisMargin: widget.crossAxisMargin,
+              mainAxisMargin: widget.mainAxisMargin,
+              padding: widget.padding,
+              radius: widget.radius,
+              thumbColor: thumbColor,
+              child: child!,
+            );
+          }
           return RawScrollbar(
             controller: widget.controller,
             thumbVisibility: widget.thumbVisibility,
@@ -170,7 +206,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
             mainAxisMargin: widget.mainAxisMargin,
             padding: widget.padding,
             radius: widget.radius,
-            thumbColor: animatedThumbColor ?? targetThumbColor,
+            thumbColor: thumbColor,
             child: child!,
           );
         },

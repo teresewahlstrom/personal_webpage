@@ -61,6 +61,7 @@ class SuperTextField extends StatefulWidget {
     this.tapRegionGroupId,
     this.configuration,
     this.textController,
+    this.scrollController,
     this.textAlign,
     this.textStyleBuilder = defaultTextFieldStyleBuilder,
     this.inlineWidgetBuilders = const [],
@@ -99,6 +100,14 @@ class SuperTextField extends StatefulWidget {
   /// Controller that holds the current text and selection for this field,
   /// similar to a standard Flutter `TextEditingController`.
   final AttributedTextEditingController? textController;
+
+  /// An optional [ScrollController] for the text field's scrollable viewport.
+  ///
+  /// When provided on desktop, the internal scrollbar is suppressed – the
+  /// caller is responsible for adding a scrollbar (e.g. [RawScrollbarWithCustomPhysics]).
+  ///
+  /// Only used on desktop. Mobile text fields manage their own scroll controllers.
+  final ScrollController? scrollController;
 
   /// The alignment of the text in this text field.
   ///
@@ -380,6 +389,7 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
           focusNode: _focusNode,
           tapRegionGroupId: widget.tapRegionGroupId,
           textController: _controller,
+          scrollController: widget.scrollController,
           textAlign: widget.textAlign,
           textStyleBuilder: widget.textStyleBuilder,
           inlineWidgetBuilders: widget.inlineWidgetBuilders,

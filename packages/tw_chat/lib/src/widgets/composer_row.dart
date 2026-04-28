@@ -33,6 +33,7 @@ class ChatComposerRow extends StatefulWidget {
 
 class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
+  final ScrollController _composerScrollController = ScrollController();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
 
@@ -58,6 +59,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
 
   @override
   void dispose() {
+    _composerScrollController.dispose();
     widget.controller.removeListener(_scheduleHeightSync);
     super.dispose();
   }
@@ -119,29 +121,42 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
 
     final inputField = ScrollConfiguration(
       behavior: const ChatNoScrollbarBehavior(),
-      child: SuperTextField(
-        focusNode: widget.inputFocusNode,
-        textController: widget.controller,
-        textStyleBuilder: (_) => composerTextStyle,
-        hintBehavior: HintBehavior.displayHintUntilTextEntered,
-        hintBuilder: (context) => Text(
-          'Ask me anything...',
-          style: composerHintStyle,
+      child: ChatFadingScrollbar(
+        controller: _composerScrollController,
+        physics: ScrollConfiguration.of(context).getScrollPhysics(context),
+        thickness: tokens.scrollbarThickness,
+        minThumbLength: tokens.scrollbarMinThumbLength,
+        crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
+        mainAxisMargin: 0,
+        radius: tokens.scrollbarRadius,
+        thumbVisibility: true,
+        interactive: true,
+        trackVisibility: false,
+        child: SuperTextField(
+          focusNode: widget.inputFocusNode,
+          textController: widget.controller,
+          scrollController: _composerScrollController,
+          textStyleBuilder: (_) => composerTextStyle,
+          hintBehavior: HintBehavior.displayHintUntilTextEntered,
+          hintBuilder: (context) => Text(
+            'Ask me anything...',
+            style: composerHintStyle,
+          ),
+          minLines: 1,
+          maxLines: null,
+          padding: EdgeInsets.fromLTRB(
+            tokens.composerTextInsetLeft,
+            tokens.composerInputTextInsetTop,
+            tokens.composerScrollbarReservedWidth,
+            tokens.composerInputTextInsetTopBottom,
+          ),
+          controlsColor: ChatComposerLayout.cursorColor(context),
+          caretStyle: CaretStyle(
+            color: ChatComposerLayout.cursorColor(context),
+            width: tokens.composerCaretWidth,
+          ),
+          handlesRadius: tokens.composerHandleRadius,
         ),
-        minLines: 1,
-        maxLines: null,
-        padding: EdgeInsets.fromLTRB(
-          tokens.composerTextInsetLeft,
-          tokens.composerInputTextInsetTop,
-          tokens.composerTextInsetRight,
-          tokens.composerInputTextInsetTopBottom,
-        ),
-        controlsColor: ChatComposerLayout.cursorColor(context),
-        caretStyle: CaretStyle(
-          color: ChatComposerLayout.cursorColor(context),
-          width: tokens.composerCaretWidth,
-        ),
-        handlesRadius: tokens.composerHandleRadius,
       ),
     );
 
