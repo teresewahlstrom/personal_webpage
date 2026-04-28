@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_ui_config.dart';
-import '../../pages/tmp.dart';
 
 class PageHeader extends StatelessWidget {
   const PageHeader({
@@ -59,16 +58,6 @@ class PageHeader extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => const TmpPage(),
-                    ),
-                  );
-                },
-                child: const Text('Tmp test'),
-              ),
             ],
           ),
         ),
