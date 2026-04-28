@@ -16,14 +16,11 @@ class ChatScrollbar {
 
   static const visibilityOverflowThreshold = 0.5;
 
-  static Color thumbColor(BuildContext context) =>
-      ChatComposerLayout.borderColor(context);
+  static Color thumbColor(BuildContext context) => ChatComposerLayout.borderColor(context);
 
-  static Color inactiveThumbColor(BuildContext context) =>
-      ChatComposerLayout.fillColor(context);
+  static Color inactiveThumbColor(BuildContext context) => ChatComposerLayout.fillColor(context);
 
-  static Color trackColor(BuildContext context) =>
-      ChatSkin.dataOf(context).colors.scrollbarTrack;
+  static Color trackColor(BuildContext context) => ChatSkin.dataOf(context).colors.scrollbarTrack;
 
   static const inputTrackBorder = Border();
 
