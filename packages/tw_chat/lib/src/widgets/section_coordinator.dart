@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:super_editor/super_editor.dart';
 
 import '../config/config.dart';
 import '../logic/message_diff.dart';
@@ -28,14 +29,12 @@ class SectionCoordinator extends ChangeNotifier {
   final Map<String, ChatMessage> _messagesById = <String, ChatMessage>{};
   final Map<String, bool> _messageTruncationOverrides = <String, bool>{};
 
-  final TextEditingController controller = TextEditingController();
+  final AttributedTextEditingController controller = AttributedTextEditingController();
   final ScrollController chatScroll = ScrollController();
-  final ScrollController inputScroll = ScrollController();
   final FocusNode inputFocusNode = FocusNode();
   final FocusNode chatFocusNode = FocusNode(debugLabel: 'chat_list');
 
   bool showChatScrollbarTrack = false;
-  bool showInputScrollbarTrack = false;
   bool isChatPointerInteractionActive = false;
   int newMessageCount = 0;
   bool _isNearBottomCache = true;
@@ -65,7 +64,6 @@ class SectionCoordinator extends ChangeNotifier {
     _previousMessagesSnapshot = List<ChatMessage>.unmodifiable(messages);
     chatScroll.addListener(_handleChatScroll);
     inputFocusNode.addListener(_handleInputFocusChange);
-    controller.addListener(_scheduleInputScrollbarVisibilitySync);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isMounted()) {
@@ -77,13 +75,6 @@ class SectionCoordinator extends ChangeNotifier {
         currentValue: () => showChatScrollbarTrack,
         updateVisibility: (value) => showChatScrollbarTrack = value,
         notifyListeners: _notifyChatView,
-        visibilityOverflowThreshold: ChatScrollbar.visibilityOverflowThreshold,
-      );
-      _scrollHelper.syncScrollbarVisibility(
-        controller: inputScroll,
-        currentValue: () => showInputScrollbarTrack,
-        updateVisibility: (value) => showInputScrollbarTrack = value,
-        notifyListeners: _notifyComposerView,
         visibilityOverflowThreshold: ChatScrollbar.visibilityOverflowThreshold,
       );
       if (messages.isNotEmpty) {
@@ -207,15 +198,15 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void submitMessage({required void Function(String text) onSend}) {
-    if (controller.text.trim().isEmpty) {
+    if (controller.text.toPlainText().trim().isEmpty) {
       return;
     }
     _deferredRevealMessageId = null;
     _deferredStickToBottom = false;
-    onSend(controller.text);
-    controller.clear();
+    onSend(controller.text.toPlainText());
+    controller.text = AttributedText();
+    controller.selection = const TextSelection.collapsed(offset: 0);
     inputFocusNode.requestFocus();
-    _scheduleInputScrollbarVisibilitySync();
     _clearNewMessagesIndicator();
     _stickChatToBottom();
   }
@@ -223,19 +214,16 @@ class SectionCoordinator extends ChangeNotifier {
   void stopPendingReply({required VoidCallback onStop}) {
     onStop();
     inputFocusNode.requestFocus();
-    _scheduleInputScrollbarVisibilitySync();
   }
 
   void transferFocusToInput() {
     _onSetChatKeyboardScrollTarget();
     inputFocusNode.requestFocus();
-    _scheduleInputScrollbarVisibilitySync();
   }
 
   void insertCharacterIntoInput(String character) {
-    final currentValue = controller.value;
-    final currentText = currentValue.text;
-    final selection = currentValue.selection;
+    final currentText = controller.text.toPlainText();
+    final selection = controller.selection;
     final hasValidSelection =
         selection.isValid &&
         selection.start >= 0 &&
@@ -254,11 +242,8 @@ class SectionCoordinator extends ChangeNotifier {
     );
     final caretOffset = normalizedStart + character.length;
 
-    controller.value = TextEditingValue(
-      text: nextText,
-      selection: TextSelection.collapsed(offset: caretOffset),
-      composing: TextRange.empty,
-    );
+    controller.text = AttributedText(nextText);
+    controller.selection = TextSelection.collapsed(offset: caretOffset);
   }
 
   bool animateChatScrollBy(double delta, {required bool animate}) {
@@ -281,10 +266,8 @@ class SectionCoordinator extends ChangeNotifier {
   void dispose() {
     chatScroll.removeListener(_handleChatScroll);
     inputFocusNode.removeListener(_handleInputFocusChange);
-    controller.removeListener(_scheduleInputScrollbarVisibilitySync);
     controller.dispose();
     chatScroll.dispose();
-    inputScroll.dispose();
     inputFocusNode.dispose();
     chatFocusNode.dispose();
     _selectionCopy.dispose();
@@ -353,15 +336,6 @@ class SectionCoordinator extends ChangeNotifier {
       currentValue: () => showChatScrollbarTrack,
       updateVisibility: (value) => showChatScrollbarTrack = value,
       onTrackVisibilityChanged: _notifyChatView,
-    );
-  }
-
-  void _scheduleInputScrollbarVisibilitySync() {
-    _scheduleScrollbarVisibilitySync(
-      controller: inputScroll,
-      currentValue: () => showInputScrollbarTrack,
-      updateVisibility: (value) => showInputScrollbarTrack = value,
-      onTrackVisibilityChanged: _notifyComposerView,
     );
   }
 

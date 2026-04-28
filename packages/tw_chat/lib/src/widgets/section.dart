@@ -208,6 +208,23 @@ class _ChatSectionState extends State<ChatSection> {
                 ),
               ),
             ),
+            // Absorb any pointer event that lands in the composer zone but
+            // misses the Composer's exact Positioned bounds (e.g. the extended
+            // touch-target of the caret handle sitting just above the text
+            // field's top edge).  The Composer is the *last* Stack child so it
+            // is always hit-tested first and wins for precise hits.  This
+            // shield is the fallback: it ensures ChatMessageListArea's
+            // SelectionArea never participates in gesture-arena resolution for
+            // any pointer originating within the composer zone.
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: chatScrollbarBottomInset,
+              child: AbsorbPointer(
+                child: const SizedBox.expand(),
+              ),
+            ),
             Positioned(
               right: tokens.shellContentPadding.right +
                   tokens.jumpToLatestButtonRightInset,
@@ -305,8 +322,6 @@ class _ChatSectionState extends State<ChatSection> {
                   child: ChatComposerRow(
                     controller: _coordinator.controller,
                     inputFocusNode: _coordinator.inputFocusNode,
-                    inputScroll: _coordinator.inputScroll,
-                    showInputScrollbarTrack: _coordinator.showInputScrollbarTrack,
                     minInputHeight: composerMetrics.minInputHeight,
                     maxInputHeight: composerMetrics.maxInputHeight,
                     sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
