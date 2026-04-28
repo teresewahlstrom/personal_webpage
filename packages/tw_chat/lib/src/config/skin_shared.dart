@@ -212,7 +212,7 @@ class ChatSkinTokens {
   final double markupListMarkerGapFactor = 0.3333333333;
   final double markupTopLevelListMarkerSlotFactor = 2.0;
   final double markupNestedListMarkerSlotFactor = 1.75;
-  final double markupBlockquoteIndentFactor = 1.3333333333;
+  final double markupBlockquoteIndentFactor = 0.4;
 
   final double markupTruncationMaxFadeHeight = 40.0;
   final double markupTruncationOverlayMidAlphaUser = 0.28;
