@@ -169,6 +169,12 @@ class ChatSkinTokens {
   final double composerInputTextInsetTopBottom = 6.3;
   final double composerInputTextInsetTop = 6.3;
   final double composerCaretWidth = 1.0;
+  /// The radius of the selection drag handles in the composer text field.
+  ///
+  /// For Android, this controls the teardrop handle radius.
+  /// For iOS, this controls the ball radius on the upstream/downstream handles.
+  /// The default is 6.0 logical pixels (smaller than super_editor's default of 10/8).
+  final double composerHandleRadius = 6.0;
   final double composerRowTopSpacing = 10.0;
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;

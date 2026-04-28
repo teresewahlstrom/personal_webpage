@@ -20,6 +20,10 @@ dependencies:
   http: ^1.4.0
   super_editor: ^0.3.0-dev.51
 
+dependency_overrides:
+  super_editor:
+    path: packages/super_editor_local
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
