@@ -476,30 +476,31 @@ class _AndroidEditingOverlayControlsState extends State<AndroidEditingOverlayCon
   Offset? _computeOffsetForCollapsedHandle() {
     final extentTextPosition = widget.editingController.textController.selection.extent;
     _log.finer('Collapsed handle text position: $extentTextPosition');
-    final extentHandleOffsetInText = _textPositionToTextOffset(extentTextPosition);
-    _log.finer('Collapsed handle text offset: $extentHandleOffsetInText');
 
-    if (extentHandleOffsetInText == const Offset(0, 0) && extentTextPosition.offset != 0) {
+    // Use getOffsetForCaret so the handle anchor matches the visual caret
+    // drawn by TextLayoutCaret, which also uses getOffsetForCaret.
+    final caretOffset = _textLayout.getOffsetForCaret(extentTextPosition);
+    _log.finer('Collapsed handle caret offset: $caretOffset');
+
+    if (caretOffset == const Offset(0, 0) && extentTextPosition.offset != 0) {
       // The caret offset is (0, 0), but the caret text position isn't at the
       // beginning of the text. This means that there's a layout timing
       // issue and we should reschedule this calculation for the next frame.
       return null;
     }
 
-    double extentLineHeight =
-        _textLayout.getCharacterBox(extentTextPosition)?.toRect().height ?? _textLayout.estimatedLineHeight;
-    if (widget.editingController.textController.text.isEmpty) {
-      extentLineHeight = _textLayout.getLineHeightAtPosition(extentTextPosition);
-    }
+    // Use getHeightForCaret so the handle sits at the actual bottom of the
+    // visual caret rather than at the bottom of the (potentially taller) line.
+    final caretHeight = _textLayout.getHeightForCaret(extentTextPosition) ?? _textLayout.estimatedLineHeight;
 
-    if (extentLineHeight == 0) {
-      _log.finer('Not building collapsed handle because the text layout reported a zero line-height');
-      // A line height of zero indicates that the text isn't laid out yet.
+    if (caretHeight == 0) {
+      _log.finer('Not building collapsed handle because the text layout reported a zero caret height');
+      // A height of zero indicates that the text isn't laid out yet.
       // We need to wait until the next frame.
       return null;
     }
 
-    return extentHandleOffsetInText + Offset(0, extentLineHeight);
+    return caretOffset + Offset(0, caretHeight);
   }
 
   @override
