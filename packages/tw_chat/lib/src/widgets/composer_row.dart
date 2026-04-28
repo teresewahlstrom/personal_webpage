@@ -136,6 +136,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           tokens.composerInputTextInsetTopBottom,
         ),
         controlsColor: ChatComposerLayout.cursorColor(context),
+        caretStyle: CaretStyle(
+          color: ChatComposerLayout.cursorColor(context),
+          width: tokens.composerCaretWidth,
+        ),
       ),
     );
 

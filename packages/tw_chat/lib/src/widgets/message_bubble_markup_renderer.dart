@@ -310,23 +310,28 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           ? ChatSkin.dataOf(context).colors.bubbleText
           : ChatSkin.dataOf(context).colors.transparent;
         final tokens = ChatSkin.tokens;
-      return CustomPaint(
-        foregroundPainter: _BlockQuoteRailPainter(
-          color: railColor,
-          railThickness: tokens.markupBlockquoteRailWidth,
-          capLength: tokens.composerCornerAccentSegment,
-          railInset: 5.0,
+      return Padding(
+        padding: EdgeInsets.only(
+          left: _listMarkerSlotWidth(theme.baseStyle, 0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: _buildRenderedMarkupDocument(
-            context,
-            ChatMarkupDocument(block.blocks),
-            quoteTheme,
-            listDepth: listDepth,
-            inListItem: inListItem,
-            selectable: selectable,
-            chromeVisible: chromeVisible,
+        child: CustomPaint(
+          foregroundPainter: _BlockQuoteRailPainter(
+            color: railColor,
+            railThickness: tokens.markupBlockquoteRailWidth,
+            capLength: tokens.composerCornerAccentSegment,
+            railInset: 5.0,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: _buildRenderedMarkupDocument(
+              context,
+              ChatMarkupDocument(block.blocks),
+              quoteTheme,
+              listDepth: listDepth,
+              inListItem: inListItem,
+              selectable: selectable,
+              chromeVisible: chromeVisible,
+            ),
           ),
         ),
       );
