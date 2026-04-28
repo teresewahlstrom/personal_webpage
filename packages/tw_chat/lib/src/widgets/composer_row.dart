@@ -140,6 +140,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           color: ChatComposerLayout.cursorColor(context),
           width: tokens.composerCaretWidth,
         ),
+        handlesRadius: tokens.composerHandleRadius,
       ),
     );
 
