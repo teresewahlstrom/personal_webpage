@@ -147,6 +147,8 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           padding: EdgeInsets.fromLTRB(
             tokens.composerTextInsetLeft,
             tokens.composerInputTextInsetTop,
+            // Reserve space on the right for the scrollbar thumb so text
+            // does not flow under it.  Replaces composerTextInsetRight.
             tokens.composerScrollbarReservedWidth,
             tokens.composerInputTextInsetTopBottom,
           ),

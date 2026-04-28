@@ -204,8 +204,11 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
 
   late ScrollController _scrollController;
 
-  /// Whether [_scrollController] was created internally (and must be disposed).
-  bool _ownedScrollController = false;
+  /// Whether [_scrollController] was created internally and must be disposed.
+  ///
+  /// `true` when no external [widget.scrollController] was supplied;
+  /// `false` when the caller owns the controller.
+  bool _ownsScrollController = false;
 
   late TextFieldScroller _textFieldScroller;
 
@@ -230,7 +233,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
       _scrollController = widget.scrollController!;
     } else {
       _scrollController = ScrollController();
-      _ownedScrollController = true;
+      _ownsScrollController = true;
     }
     _textFieldScroller = TextFieldScroller() //
       ..attach(_scrollController);
@@ -278,15 +281,15 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
 
     if (widget.scrollController != oldWidget.scrollController) {
       _textFieldScroller.detach();
-      if (_ownedScrollController) {
+      if (_ownsScrollController) {
         _scrollController.dispose();
-        _ownedScrollController = false;
+        _ownsScrollController = false;
       }
       if (widget.scrollController != null) {
         _scrollController = widget.scrollController!;
       } else {
         _scrollController = ScrollController();
-        _ownedScrollController = true;
+        _ownsScrollController = true;
       }
       _textFieldScroller.attach(_scrollController);
     }
@@ -301,7 +304,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
   @override
   void dispose() {
     _textFieldScroller.detach();
-    if (_ownedScrollController) {
+    if (_ownsScrollController) {
       _scrollController.dispose();
     }
     _focusNode.removeListener(_updateSelectionAndComposingRegionOnFocusChange);
