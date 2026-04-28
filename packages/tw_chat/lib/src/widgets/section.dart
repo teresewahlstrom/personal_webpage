@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../config/config.dart';
 import '../logic/keyboard_event_router.dart';
 import '../logic/web_copy_interceptor.dart';
+import '../logic/web_paste_interceptor.dart';
 import '../models/message.dart';
 import 'section_coordinator.dart';
 import 'composer_row.dart';
@@ -34,6 +35,7 @@ class ChatSection extends StatefulWidget {
 class _ChatSectionState extends State<ChatSection> {
   late final SectionCoordinator _coordinator;
   late final ChatWebCopyInterceptor _webCopyInterceptor;
+  late final ChatWebPasteInterceptor _webPasteInterceptor;
   double _composerMeasuredHeight = 0.0;
 
   void _handleComposerHeightChanged(double height) {
@@ -68,6 +70,7 @@ class _ChatSectionState extends State<ChatSection> {
     _webCopyInterceptor = ChatWebCopyInterceptor(
       () => _coordinator.resolveSelectionCopyText(widget.messages),
     )..attach();
+    _webPasteInterceptor = ChatWebPasteInterceptor(_handleWebPaste)..attach();
     HardwareKeyboard.instance.addHandler(_handleChatKeyEvent);
   }
 
@@ -106,6 +109,14 @@ class _ChatSectionState extends State<ChatSection> {
     _coordinator.stopPendingReply(onStop: widget.onStop);
   }
 
+  void _handleWebPaste(String text) {
+    // Only insert when the composer input is focused.
+    if (!_coordinator.inputFocusNode.hasFocus) {
+      return;
+    }
+    _coordinator.insertCharacterIntoInput(text);
+  }
+
   @override
   void didUpdateWidget(covariant ChatSection oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -127,6 +138,7 @@ class _ChatSectionState extends State<ChatSection> {
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_handleChatKeyEvent);
     _webCopyInterceptor.detach();
+    _webPasteInterceptor.detach();
     _coordinator.dispose();
     super.dispose();
   }

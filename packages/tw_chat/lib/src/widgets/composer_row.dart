@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../config/config.dart';
@@ -35,6 +37,54 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
+
+  /// On web the paste keyboard shortcut is blocked here so Flutter never calls
+  /// [Clipboard.getData] / `navigator.clipboard.readText`, which would trigger
+  /// the browser's clipboard-read permission prompt.  The actual paste is
+  /// handled by [ChatWebPasteInterceptor] via the synchronous `paste` DOM event,
+  /// which exposes clipboard text through [ClipboardEvent.clipboardData] without
+  /// requiring any extra permission.
+  static TextFieldKeyboardHandlerResult _blockPasteShortcutOnWeb({
+    required SuperTextFieldContext textFieldContext,
+    required KeyEvent keyEvent,
+  }) {
+    if (!keyEvent.isPrimaryShortcutKeyPressed) {
+      return TextFieldKeyboardHandlerResult.notHandled;
+    }
+    if (keyEvent.logicalKey != LogicalKeyboardKey.keyV) {
+      return TextFieldKeyboardHandlerResult.notHandled;
+    }
+    // Return `blocked` so the chain stops but the key is NOT consumed by
+    // Flutter (KeyEventResult.ignored).  The browser will then fire the
+    // `paste` event, which ChatWebPasteInterceptor handles.
+    return TextFieldKeyboardHandlerResult.blocked;
+  }
+
+  /// Keyboard handlers used on web: identical to [defaultTextFieldKeyboardHandlers]
+  /// except [DefaultSuperTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed]
+  /// is replaced by [_blockPasteShortcutOnWeb].
+  static final List<TextFieldKeyboardHandler> _webKeyboardHandlers = [
+    DefaultSuperTextFieldKeyboardHandlers.scrollOnPageUp,
+    DefaultSuperTextFieldKeyboardHandlers.scrollOnPageDown,
+    DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
+    DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
+    DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
+    DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
+    DefaultSuperTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
+    _blockPasteShortcutOnWeb,
+    DefaultSuperTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
+    DefaultSuperTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
+    DefaultSuperTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
+    DefaultSuperTextFieldKeyboardHandlers.moveToLineStartWithHome,
+    DefaultSuperTextFieldKeyboardHandlers.moveToLineEndWithEnd,
+    DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
+    DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
+    DefaultSuperTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
+    DefaultSuperTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
+    DefaultSuperTextFieldKeyboardHandlers.insertNewlineWhenEnterIsPressed,
+    DefaultSuperTextFieldKeyboardHandlers.blockControlKeys,
+    DefaultSuperTextFieldKeyboardHandlers.insertCharacterWhenKeyIsPressed,
+  ];
 
   @override
   void initState() {
@@ -142,6 +192,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           width: tokens.composerCaretWidth,
         ),
         handlesRadius: tokens.composerHandleRadius,
+        keyboardHandlers: kIsWeb ? _webKeyboardHandlers : null,
       ),
     );
 
