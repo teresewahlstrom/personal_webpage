@@ -282,5 +282,5 @@ class BlockquoteComponent extends StatelessWidget {
 
 /// The standard [TextBlockIndentCalculator] used by blockquotes in `SuperEditor`.
 double defaultBlockquoteIndentCalculator(TextStyle textStyle, int indent) {
-  return (textStyle.fontSize ?? 16) * 1.45 * indent;
+  return (textStyle.fontSize ?? 16) * 1.45 * (indent + 1);
 }
