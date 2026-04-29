@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
 
 import '../config/config.dart';
+import '../logic/web_paste_interceptor.dart';
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({
@@ -35,12 +36,17 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
+  late final ChatWebPasteInterceptor _webPasteInterceptor;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_scheduleHeightSync);
     _scheduleHeightSync();
+    _webPasteInterceptor = ChatWebPasteInterceptor(
+      isFocused: () => widget.inputFocusNode.hasPrimaryFocus,
+      onPasteText: _insertPastedText,
+    )..attach();
   }
 
   @override
@@ -59,7 +65,16 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   void dispose() {
     widget.controller.removeListener(_scheduleHeightSync);
+    _webPasteInterceptor.detach();
     super.dispose();
+  }
+
+  void _insertPastedText(String text) {
+    final controller = widget.controller;
+    if (!controller.selection.isCollapsed) {
+      controller.deleteSelectedText();
+    }
+    controller.insertAtCaret(text: text);
   }
 
   void _scheduleHeightSync() {

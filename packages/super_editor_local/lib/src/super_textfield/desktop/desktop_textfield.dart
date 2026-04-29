@@ -2286,6 +2286,16 @@ class DefaultSuperTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
+    // On web, the browser paste DOM event is intercepted to read
+    // clipboard text from event.clipboardData without triggering the
+    // clipboard-read permission prompt. Block this handler so that
+    // Flutter never calls Clipboard.getData() / navigator.clipboard.readText().
+    // Actual paste handling on web is performed by ChatWebPasteInterceptor
+    // (see packages/tw_chat/lib/src/logic/web_paste_interceptor_web.dart).
+    if (kIsWeb) {
+      return TextFieldKeyboardHandlerResult.blocked;
+    }
+
     if (!textFieldContext.controller.selection.isCollapsed) {
       textFieldContext.controller.deleteSelectedText();
     }
