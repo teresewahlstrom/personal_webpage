@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../utils/math.dart';
+import 'composer_layout.dart';
 import 'skin.dart';
 
 class ChatBubbleRules {
   const ChatBubbleRules._();
 
   static Color userFill(BuildContext context) =>
-    ChatSkin.dataOf(context).colors.userBubbleFill;
+      ChatComposerLayout.fillColor(context);
   static Color botFill(BuildContext context) =>
     ChatSkin.dataOf(context).colors.botBubbleFill;
   static Color userBorder(BuildContext context) =>
-    ChatSkin.dataOf(context).colors.userBubbleBorder;
+      ChatComposerLayout.borderColor(context);
   static Color botBorder(BuildContext context) =>
     ChatSkin.dataOf(context).colors.botBubbleBorder;
 
