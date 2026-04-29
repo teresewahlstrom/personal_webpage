@@ -244,21 +244,8 @@ class _ChatSectionState extends State<ChatSection> {
                     return const SizedBox.shrink();
                   }
 
-                  final jumpToLatestLabel = _coordinator.newMessageCount == 1
-                      ? 'New message'
-                      : '${_coordinator.newMessageCount} new messages';
-
-                  return FilledButton.icon(
+                  return FilledButton(
                     onPressed: _coordinator.jumpToLatest,
-                    icon: Icon(
-                      Icons.south_rounded,
-                      size: tokens.jumpToLatestButtonIconSize,
-                    ),
-                    label: Text(
-                      _coordinator.newMessageCount == 0
-                          ? 'Jump to bottom'
-                          : jumpToLatestLabel,
-                    ),
                     style: FilledButton.styleFrom(
                       backgroundColor: ChatComposerLayout.fillColor(context),
                       foregroundColor: ChatComposerLayout.sendIconColor(
@@ -279,6 +266,10 @@ class _ChatSectionState extends State<ChatSection> {
                             ),
                             fontWeight: FontWeight.w700,
                           ),
+                    ),
+                    child: Icon(
+                      Icons.south_rounded,
+                      size: tokens.jumpToLatestButtonIconSize,
                     ),
                   );
                 },

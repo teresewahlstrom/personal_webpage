@@ -204,40 +204,59 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   left: collapseButtonOverflowLeft,
                   bottom: collapseButtonReservedBottom,
                 ),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                    horizontalInset,
-                    verticalInset,
-                    horizontalInset,
-                    verticalInset,
-                  ),
-                  constraints: widget.isUser
-                      ? BoxConstraints(
-                          minWidth: bubbleMinWidth,
-                          maxWidth: bubbleMaxWidth,
-                        )
-                      : null,
-                  decoration: widget.isUser
-                      ? BoxDecoration(
-                          color: bubbleColor,
-                          borderRadius: BorderRadius.circular(
-                            tokens.bubbleRadius,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                        horizontalInset,
+                        verticalInset,
+                        horizontalInset,
+                        verticalInset,
+                      ),
+                      constraints: widget.isUser
+                          ? BoxConstraints(
+                              minWidth: bubbleMinWidth,
+                              maxWidth: bubbleMaxWidth,
+                            )
+                          : null,
+                      decoration: widget.isUser
+                          ? BoxDecoration(
+                              color: bubbleColor,
+                              borderRadius: BorderRadius.circular(
+                                tokens.bubbleRadius,
+                              ),
+                              border: Border.all(
+                                color: borderColor,
+                                width: tokens.bubbleBorderWidth,
+                              ),
+                              boxShadow: [tokens.surfaceShadow(colors)],
+                            )
+                          : null,
+                      child: _buildBubbleText(
+                        parsedMarkup,
+                        style: bubbleTextStyle,
+                        bubbleColor: bubbleColor,
+                        isUserBubble: widget.isUser,
+                        truncatedContentHeight: truncatedContentHeight,
+                        isTruncated: isTruncatable && widget.isTruncated,
+                      ),
+                    ),
+                    if (isTruncatable && widget.isTruncated)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: 1.0,
+                        child: IgnorePointer(
+                          child: CustomPaint(
+                            painter: _DashedLinePainter(
+                              color: colors.composerCornerAccent,
+                              strokeWidth: 0.25,
+                            ),
                           ),
-                          border: Border.all(
-                            color: borderColor,
-                            width: tokens.bubbleBorderWidth,
-                          ),
-                          boxShadow: [tokens.surfaceShadow(colors)],
-                        )
-                      : null,
-                  child: _buildBubbleText(
-                    parsedMarkup,
-                    style: bubbleTextStyle,
-                    bubbleColor: bubbleColor,
-                    isUserBubble: widget.isUser,
-                    truncatedContentHeight: truncatedContentHeight,
-                    isTruncated: isTruncatable && widget.isTruncated,
-                  ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               if (isTruncatable)
@@ -583,5 +602,41 @@ class _PlusMinusPainter extends CustomPainter {
     return isPlus != oldDelegate.isPlus ||
         color != oldDelegate.color ||
         strokeWidth != oldDelegate.strokeWidth;
+  }
+}
+
+class _DashedLinePainter extends CustomPainter {
+  const _DashedLinePainter({
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  final Color color;
+  final double strokeWidth;
+
+  static const double _dashWidth = 12.0;
+  static const double _gapWidth = 8.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (color.a == 0.0) return;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.square;
+    final y = size.height / 2;
+    double x = 0;
+    while (x < size.width) {
+      final end = (x + _dashWidth).clamp(0.0, size.width);
+      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
+      x += _dashWidth + _gapWidth;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedLinePainter oldDelegate) {
+    // _dashWidth and _gapWidth are static constants so they never change.
+    return oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
   }
 }
