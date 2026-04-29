@@ -22,6 +22,12 @@ class ChatBubbleRules {
   /// and scrollbar affordances.
   static const maxWidthFactor = 0.78;
 
+  /// Minimum width for user bubbles as a fraction of the available chat width.
+  ///
+  /// Ensures short messages still occupy a recognisable pill-shaped area
+  /// without growing taller than necessary.
+  static const minWidthFactor = 0.25;
+
   /// Number of lines required before the collapse control appears.
   ///
   /// Four lines keeps shorter responses fully visible while still truncating
