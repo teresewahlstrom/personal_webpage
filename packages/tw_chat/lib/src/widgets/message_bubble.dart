@@ -138,6 +138,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         (widget.availableWidth * ChatBubbleRules.maxWidthFactor +
                 tokens.bubbleWidthCompensation)
             .clamp(tokens.bubbleMinMaxWidth, widget.availableWidth);
+    final bubbleMinWidth =
+        (widget.availableWidth * ChatBubbleRules.minWidthFactor)
+            .clamp(0.0, bubbleMaxWidth);
     final textScaler = MediaQuery.textScalerOf(context);
     final parsedMarkup = widget.isTypingIndicator
         ? null
@@ -192,16 +195,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       child: Align(
         alignment: align,
         child: Padding(
-          padding: EdgeInsets.only(
-            top: bubbleTopMargin,
-            bottom: 0.0,
-            left: widget.isUser
-                ? tokens.bubbleFarEdgeInset
-                : 0.0,
-            right: widget.isUser
-                ? tokens.bubbleNearEdgeInset + tokens.userBubbleRightInset
-                : 0.0,
-          ),
+          padding: EdgeInsets.only(top: bubbleTopMargin),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -218,7 +212,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                     verticalInset,
                   ),
                   constraints: widget.isUser
-                      ? BoxConstraints(maxWidth: bubbleMaxWidth)
+                      ? BoxConstraints(
+                          minWidth: bubbleMinWidth,
+                          maxWidth: bubbleMaxWidth,
+                        )
                       : null,
                   decoration: widget.isUser
                       ? BoxDecoration(

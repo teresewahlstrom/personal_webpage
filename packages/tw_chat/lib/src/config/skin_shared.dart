@@ -113,9 +113,9 @@ class ChatSkinTokens {
   );
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
-    0,
+    10,
     18,
-    0,
+    10,
     10,
   );
   final double chatListTopShadowHeight = 43.0;
@@ -146,8 +146,6 @@ class ChatSkinTokens {
 
   final double bubbleVerticalMargin = 40.0;
   final double bubbleBorderWidth = 1.0;
-  final double bubbleNearEdgeInset = 0.0;
-  final double bubbleFarEdgeInset = 0.0;
   final double bubbleTextInsetLeft = 8.0;
   final double bubbleTextInsetTopBottom = 5.0;
   final double bubbleMinInsetScaleFactor = 0.78;
@@ -162,7 +160,6 @@ class ChatSkinTokens {
   final double scrollbarTrackLeftShift = 3.0;
   final double scrollbarMinThumbLength = 15.0;
   final double composerScrollbarReservedWidth = 10.0;
-  final double userBubbleRightInset = 21.0;
 
   final double composerTextInsetLeft = 6.3;
   final double composerTextInsetRight = 6.3;

@@ -168,7 +168,9 @@ class _ChatSectionState extends State<ChatSection> {
                       messages: widget.messages,
                       availableWidth: constraints.maxWidth -
                           tokens.shellContentPadding.left -
-                          tokens.shellContentPadding.right,
+                          tokens.shellContentPadding.right -
+                          tokens.bubbleViewportPadding.left -
+                          tokens.bubbleViewportPadding.right,
                       chatScroll: _coordinator.chatScroll,
                       chatFocusNode: _coordinator.chatFocusNode,
                       chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,

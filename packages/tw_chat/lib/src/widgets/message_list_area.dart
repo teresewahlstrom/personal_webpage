@@ -144,7 +144,7 @@ class ChatMessageListArea extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            SizedBox(height: tokens.chatListTopShadowHeight + 10),
+                            SizedBox(height: tokens.bubbleViewportPadding.top),
                             for (final entry in messages.indexed)
                               ChatMessageBubble(
                                 key: messageBubbleKeys[entry.$2.id],
@@ -166,8 +166,7 @@ class ChatMessageListArea extends StatelessWidget {
                             SizedBox(
                               height:
                                   scrollbarBottomInset +
-                                  tokens.chatListBottomShadowHeight +
-                                  15,
+                                  tokens.bubbleViewportPadding.bottom,
                             ),
                           ],
                         ),
