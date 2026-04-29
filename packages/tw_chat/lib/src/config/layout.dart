@@ -67,10 +67,7 @@ class ChatLayout {
   /// Number of post-frame passes used to force final bottom settle.
   static const forcedBottomPasses = 3;
   static Color shellFill(BuildContext context) {
-    final colors = ChatSkin.dataOf(context).colors;
-    final double t =
-        Theme.of(context).brightness == Brightness.dark ? 0.75 : 0.70;
-    return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, t)!;
+    return ChatSkin.dataOf(context).colors.shellBackgroundStart;
   }
 
   static Color dividerColor(BuildContext context) =>
