@@ -92,7 +92,7 @@ class ChatSkinTokens {
 
   final double alphaTransparent = 0.0;
 
-  final double bubbleRadius = 4.0;
+  final double bubbleRadius = 0.0;
   final double collapseButtonRadius = 0.0;
   final double composerRadius = 0.0;
   final double composerCornerAccentRadius = 0.0;
@@ -189,7 +189,7 @@ class ChatSkinTokens {
   );
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupBlockquoteRailWidth = 0.25;
+  final double markupBlockquoteRailWidth = 0.5;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
   final double markupListTopSpacingAdjustment = -0.3;

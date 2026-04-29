@@ -137,27 +137,42 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                   },
                   child: visibleMarkupLayer,
                 ),
+                if (isUserBubble)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    height: fadeHeight,
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              bubbleColor.withValues(
+                                alpha: tokens.alphaTransparent,
+                              ),
+                              bubbleColor.withValues(alpha: overlayMidAlpha),
+                              bubbleColor.withValues(alpha: overlayLateAlpha),
+                              bubbleColor,
+                            ],
+                            stops: overlayStops,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 Positioned(
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  height: fadeHeight,
+                  height: 1.0,
                   child: IgnorePointer(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            bubbleColor.withValues(
-                              alpha: tokens.alphaTransparent,
-                            ),
-                            bubbleColor.withValues(alpha: overlayMidAlpha),
-                            bubbleColor.withValues(alpha: overlayLateAlpha),
-                            bubbleColor,
-                          ],
-                          stops: overlayStops,
-                        ),
+                    child: CustomPaint(
+                      painter: _DashedLinePainter(
+                        color: colors.composerCornerAccent,
+                        strokeWidth: 0.5,
                       ),
                     ),
                   ),
@@ -634,5 +649,40 @@ class _BlockQuoteRailPainter extends CustomPainter {
         oldDelegate.railThickness != railThickness ||
         oldDelegate.capLength != capLength ||
         oldDelegate.railInset != railInset;
+  }
+}
+
+class _DashedLinePainter extends CustomPainter {
+  const _DashedLinePainter({
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  final Color color;
+  final double strokeWidth;
+
+  static const double _dashWidth = 4.0;
+  static const double _gapWidth = 3.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (color.a == 0.0) return;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.square;
+    final y = size.height / 2;
+    double x = 0;
+    while (x < size.width) {
+      final end = (x + _dashWidth).clamp(0.0, size.width);
+      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
+      x += _dashWidth + _gapWidth;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedLinePainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
   }
 }
