@@ -255,6 +255,7 @@ class _ChatSectionState extends State<ChatSection> {
                         color: ChatComposerLayout.sendIconColor(
                           context,
                         ),
+                        width: 0.5,
                       ),
                       elevation: tokens.jumpToLatestButtonElevation,
                       padding: tokens.jumpToLatestButtonPadding,

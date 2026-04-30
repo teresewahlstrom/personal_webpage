@@ -172,7 +172,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       : collapseButtonOverflowBottom;
     final toggleButtonBackgroundColor = widget.isTruncated
       ? ChatBubbleRules.collapseButtonColor(context)
-      : ChatBubbleRules.collapseButtonIconColor(context);
+      : colors.shellBackgroundStart;
     final toggleButtonIconColor = widget.isTruncated
       ? ChatBubbleRules.collapseButtonIconColor(context)
       : ChatBubbleRules.collapseButtonColor(context);
@@ -211,7 +211,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                         horizontalInset,
                         verticalInset,
                         horizontalInset,
-                        verticalInset,
+                        (isTruncatable && widget.isTruncated) ? 0.0 : verticalInset,
                       ),
                       constraints: widget.isUser
                           ? BoxConstraints(
@@ -225,10 +225,25 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                               borderRadius: BorderRadius.circular(
                                 tokens.bubbleRadius,
                               ),
-                              border: Border.all(
-                                color: borderColor,
-                                width: tokens.bubbleBorderWidth,
-                              ),
+                              border: (isTruncatable && widget.isTruncated)
+                                  ? Border(
+                                      top: BorderSide(
+                                        color: borderColor,
+                                        width: tokens.bubbleBorderWidth,
+                                      ),
+                                      left: BorderSide(
+                                        color: borderColor,
+                                        width: tokens.bubbleBorderWidth,
+                                      ),
+                                      right: BorderSide(
+                                        color: borderColor,
+                                        width: tokens.bubbleBorderWidth,
+                                      ),
+                                    )
+                                  : Border.all(
+                                      color: borderColor,
+                                      width: tokens.bubbleBorderWidth,
+                                    ),
                               boxShadow: [tokens.surfaceShadow(colors)],
                             )
                           : null,

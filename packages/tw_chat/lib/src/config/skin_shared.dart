@@ -113,9 +113,9 @@ class ChatSkinTokens {
   );
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
-    10,
+    7,
     18,
-    10,
+    15,
     10,
   );
   final double chatListTopShadowHeight = 43.0;
@@ -186,7 +186,7 @@ class ChatSkinTokens {
   );
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupBlockquoteRailWidth = 0.5;
+  final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
   final double markupListTopSpacingAdjustment = -0.3;
