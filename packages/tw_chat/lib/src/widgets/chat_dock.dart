@@ -194,7 +194,7 @@ class ChatAppBar extends StatelessWidget {
         : tokens.appBarPaddingExpanded;
     final titleArea = Padding(
       padding: EdgeInsets.fromLTRB(
-        pad.left + tokens.appBarLeadingGap,
+        pad.left + tokens.appBarLeadingGap + tokens.composerTextInsetLeft,
         pad.top,
         tokens.appBarActionGap + tokens.appBarActionWidth,
         pad.bottom,
