@@ -212,7 +212,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   children: [
                     Container(
                       padding: EdgeInsets.fromLTRB(
-                        widget.isUser ? horizontalInset : 0.0,
+                        widget.isUser ? horizontalInset : tokens.composerTextInsetLeft,
                         verticalInset,
                         horizontalInset,
                         (isTruncatable && widget.isTruncated) ? 0.0 : verticalInset,
