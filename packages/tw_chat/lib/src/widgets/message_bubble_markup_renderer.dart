@@ -324,7 +324,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
             railInset: 5.0,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 4),
             child: _buildRenderedMarkupDocument(
               context,
               ChatMarkupDocument(block.blocks),
