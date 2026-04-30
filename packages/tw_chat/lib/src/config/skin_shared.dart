@@ -106,14 +106,14 @@ class ChatSkinTokens {
   final double verticalHeightGutter = 12.0;
   final double composerGap = 9.0;
   final EdgeInsets shellContentPadding = const EdgeInsets.fromLTRB(
-    10,
+    9,
     0,
     2,
     10,
   );
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
-    7,
+    0,
     18,
     15,
     10,
