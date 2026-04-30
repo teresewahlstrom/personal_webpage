@@ -127,7 +127,7 @@ class ChatSkinTokens {
 
   // Bottom shadow gradient
   final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.24, 0.88, 1.0];
-  final List<int> shellBottomShadowGradientAlphas = const <int>[0xFF, 0xE8, 0xC0, 0x00];
+  final List<int> shellBottomShadowGradientAlphas = const <int>[0xFF, 0xEF, 0xD3, 0x4D];
   final EdgeInsets appBarPaddingMinimized = const EdgeInsets.fromLTRB(
     14,
     15,

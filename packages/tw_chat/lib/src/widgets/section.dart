@@ -247,7 +247,7 @@ class _ChatSectionState extends State<ChatSection> {
                   return FilledButton(
                     onPressed: _coordinator.jumpToLatest,
                     style: FilledButton.styleFrom(
-                      backgroundColor: ChatComposerLayout.fillColor(context),
+                      backgroundColor: colors.shellBackgroundStart,
                       foregroundColor: ChatComposerLayout.sendIconColor(
                         context,
                       ),
