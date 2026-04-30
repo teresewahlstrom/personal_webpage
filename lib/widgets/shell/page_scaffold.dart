@@ -144,27 +144,38 @@ class _PageScaffoldState extends State<PageScaffold>
                                     platform == TargetPlatform.macOS
                                     ? cupertinoTextSelectionControls
                                     : materialTextSelectionControls,
-                                child: SingleChildScrollView(
-                                  controller: _pageScrollController,
-                                  child: ArrowKeyScrollWrapper(
-                                    controller: _pageScrollController,
-                                    onTap: () {
-                                      _pageSelectionAreaKey.currentState
-                                          ?.clearSelection();
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                        widget.child,
-                                        if (widget.showFooter && !widget.isPageLoading)
-                                          const PageFooter(
-                                            brandName: 'T1 grid',
-                                            privacyLabel: 'Privacy & Cookies Note.',
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    return SingleChildScrollView(
+                                      controller: _pageScrollController,
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minHeight: constraints.maxHeight,
+                                        ),
+                                        child: ArrowKeyScrollWrapper(
+                                          controller: _pageScrollController,
+                                          onTap: () {
+                                            _pageSelectionAreaKey.currentState
+                                                ?.clearSelection();
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              widget.child,
+                                              if (widget.showFooter && !widget.isPageLoading)
+                                                const PageFooter(
+                                                  brandName: 'T1 grid',
+                                                  privacyLabel: 'Privacy & Cookies Note.',
+                                                ),
+                                            ],
                                           ),
-                                      ],
-                                    ),
-                                  ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
