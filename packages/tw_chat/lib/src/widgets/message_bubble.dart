@@ -189,6 +189,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final borderColor = widget.isUser
       ? ChatBubbleRules.userBorder(context)
       : ChatBubbleRules.botBorder(context);
+    final bubbleBorderSide = BorderSide(
+      color: borderColor,
+      width: tokens.bubbleBorderWidth,
+    );
 
     return SizedBox(
       width: double.infinity,
@@ -227,23 +231,11 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                               ),
                               border: (isTruncatable && widget.isTruncated)
                                   ? Border(
-                                      top: BorderSide(
-                                        color: borderColor,
-                                        width: tokens.bubbleBorderWidth,
-                                      ),
-                                      left: BorderSide(
-                                        color: borderColor,
-                                        width: tokens.bubbleBorderWidth,
-                                      ),
-                                      right: BorderSide(
-                                        color: borderColor,
-                                        width: tokens.bubbleBorderWidth,
-                                      ),
+                                      top: bubbleBorderSide,
+                                      left: bubbleBorderSide,
+                                      right: bubbleBorderSide,
                                     )
-                                  : Border.all(
-                                      color: borderColor,
-                                      width: tokens.bubbleBorderWidth,
-                                    ),
+                                  : Border.fromBorderSide(bubbleBorderSide),
                               boxShadow: [tokens.surfaceShadow(colors)],
                             )
                           : null,
