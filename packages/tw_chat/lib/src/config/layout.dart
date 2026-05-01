@@ -73,6 +73,27 @@ class ChatLayout {
   static Color dividerColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.shellDivider;
 
+  static double dockTopMargin({
+    required Size viewportSize,
+    required EdgeInsets viewPadding,
+  }) {
+    final safeWidth = _safeViewportWidth(
+      viewportWidth: viewportSize.width,
+      viewPadding: viewPadding,
+    );
+    final widthThreshold = _compactWidthThreshold(
+      viewportWidth: viewportSize.width,
+      viewportHeight: viewportSize.height,
+    );
+    final transitionProgress = _transitionProgress(
+      value: safeWidth,
+      compactThreshold: widthThreshold,
+      transitionBand: compactWidthTransitionBand,
+    );
+    final compactMargin = _compactDockHorizontalMargin(safeWidth);
+    return _lerp(compactMargin, 0.0, transitionProgress);
+  }
+
   static double dockHorizontalMargin({
     required Size viewportSize,
     required EdgeInsets viewPadding,

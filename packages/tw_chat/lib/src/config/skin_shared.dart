@@ -118,7 +118,7 @@ class ChatSkinTokens {
     15,
     10,
   );
-  final double chatListTopShadowHeight = 43.0;
+  final double chatListTopShadowHeight = 32.0;
   final double chatListBottomShadowHeight = 30;
 
   // Top shadow gradient
