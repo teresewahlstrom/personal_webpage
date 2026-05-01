@@ -228,52 +228,55 @@ class _ChatSectionState extends State<ChatSection> {
               ),
             ),
             Positioned(
-              right: tokens.shellContentPadding.right +
-                  tokens.jumpToLatestButtonRightInset,
+              left: 0,
+              right: 0,
               bottom:
                   tokens.shellContentPadding.bottom +
                   composerHeight +
                   tokens.composerGap +
                   tokens.composerRowTopSpacing +
                   tokens.jumpToLatestButtonBottomInset,
-              child: ValueListenableBuilder<int>(
-                valueListenable: _coordinator.chatViewListenable,
-                builder: (_, _, _) {
-                  final bool showJumpToLatest = !_coordinator.isNearChatBottom;
-                  if (!showJumpToLatest) {
-                    return const SizedBox.shrink();
-                  }
+              child: Center(
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _coordinator.chatViewListenable,
+                  builder: (_, _, _) {
+                    final bool showJumpToLatest = !_coordinator.isNearChatBottom;
+                    if (!showJumpToLatest) {
+                      return const SizedBox.shrink();
+                    }
 
-                  return FilledButton(
-                    onPressed: _coordinator.jumpToLatest,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: colors.shellBackgroundStart,
-                      foregroundColor: ChatComposerLayout.sendIconColor(
-                        context,
-                      ),
-                      side: BorderSide(
-                        color: ChatComposerLayout.sendIconColor(
+                    return FilledButton(
+                      onPressed: _coordinator.jumpToLatest,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: colors.shellBackgroundStart,
+                        foregroundColor: ChatComposerLayout.sendIconColor(
                           context,
                         ),
-                        width: 0.5,
-                      ),
-                      elevation: tokens.jumpToLatestButtonElevation,
-                      padding: tokens.jumpToLatestButtonPadding,
-                      textStyle: textStyles
-                          .composerHintStyle(textScale, colors)
-                          .copyWith(
-                            color: ChatComposerLayout.sendIconColor(
-                              context,
-                            ),
-                            fontWeight: FontWeight.w700,
+                        shape: const CircleBorder(),
+                        side: BorderSide(
+                          color: ChatComposerLayout.sendIconColor(
+                            context,
                           ),
-                    ),
-                    child: Icon(
-                      Icons.south_rounded,
-                      size: tokens.jumpToLatestButtonIconSize,
-                    ),
-                  );
-                },
+                          width: 0.5,
+                        ),
+                        elevation: tokens.jumpToLatestButtonElevation,
+                        padding: tokens.jumpToLatestButtonPadding,
+                        textStyle: textStyles
+                            .composerHintStyle(textScale, colors)
+                            .copyWith(
+                              color: ChatComposerLayout.sendIconColor(
+                                context,
+                              ),
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      child: Icon(
+                        Icons.south_rounded,
+                        size: tokens.jumpToLatestButtonIconSize,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             Positioned(

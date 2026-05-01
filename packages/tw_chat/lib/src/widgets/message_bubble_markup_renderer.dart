@@ -343,7 +343,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       final hrColor = chromeVisible
           ? ChatSkin.dataOf(context).colors.bubbleText
           : ChatSkin.dataOf(context).colors.transparent;
-      return Container(height: 0.25, color: hrColor);
+      return Container(height: ChatSkin.tokens.markupBlockquoteRailWidth, color: hrColor);
     }
 
     if (block is ChatMarkupListBlock) {
