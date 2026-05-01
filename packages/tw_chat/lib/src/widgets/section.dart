@@ -266,6 +266,8 @@ class _ChatSectionState extends State<ChatSection> {
                           ),
                           elevation: tokens.jumpToLatestButtonElevation,
                           padding: tokens.jumpToLatestButtonPadding,
+                          fixedSize: Size.square(tokens.jumpToLatestButtonSize),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           textStyle: textStyles
                               .composerHintStyle(textScale, colors)
                               .copyWith(
