@@ -182,7 +182,7 @@ class ChatSkinTokens {
   final double jumpToLatestButtonIconSize = 15.5;
   final double jumpToLatestButtonFixedSize = 30.0;
   final double jumpToLatestButtonElevation = 0.0;
-  final EdgeInsets jumpToLatestButtonPadding = const EdgeInsets.all(-4);
+  final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
   final double markupBlockquoteRailWidth = 0.4;
