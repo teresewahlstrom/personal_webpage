@@ -179,11 +179,9 @@ class ChatSkinTokens {
   final double jumpToLatestButtonRightInset = 14.0;
   // 2/3 of the original 5.0 — keeps the button closer to the composer edge.
   final double jumpToLatestButtonBottomInset = 10 / 3;
-  final double jumpToLatestButtonSize = 28.0;
-  // Icon is ~90 % of the circle diameter (28 × 0.9 ≈ 25).
-  final double jumpToLatestButtonIconSize = 25.0;
+  final double jumpToLatestButtonIconSize = 17.0;
   final double jumpToLatestButtonElevation = 0.0;
-  final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
+  final EdgeInsets jumpToLatestButtonPadding = const EdgeInsets.all(-4);
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
   final double markupBlockquoteRailWidth = 0.4;
