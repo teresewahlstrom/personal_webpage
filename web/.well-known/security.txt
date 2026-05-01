@@ -1,4 +1,5 @@
 Contact: mailto:terese.wahlstrom@gmail.com
 Contact: tel:+46709800525
 Expires: 2027-05-01T00:00:00Z
+Canonical: https://t1grid.com/.well-known/security.txt
 Preferred-Languages: en, sv
