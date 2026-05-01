@@ -91,7 +91,7 @@ class ChatLayout {
       transitionBand: compactWidthTransitionBand,
     );
     final baseMargin = _baseDockHorizontalMargin(safeWidth);
-    return _lerp(0.0, baseMargin, transitionProgress);
+    return _lerp(4.0, baseMargin, transitionProgress);
   }
 
   static double _baseDockHorizontalMargin(double viewportWidth) {

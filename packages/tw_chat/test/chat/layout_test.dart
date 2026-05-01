@@ -67,7 +67,7 @@ void main() {
     expect(height, 560);
   });
 
-  test('compact width removes dock side margins and honors safe area', () {
+  test('compact width uses minimum dock side margins and honors safe area', () {
     const viewportSize = Size(740, 1000);
     const viewPadding = EdgeInsets.only(left: 20, right: 10);
     final margin = margin0(
@@ -80,8 +80,8 @@ void main() {
       viewPadding: viewPadding,
     );
 
-    expect(margin, 0);
-    expect(width, 710);
+    expect(margin, 4);
+    expect(width, 702);
   });
 
   test('width transition band smooths around compact threshold', () {
