@@ -58,7 +58,7 @@ final class ShellUiConfig {
   }
 
   static AppLineStyle headerBorderFor(Brightness brightness) {
-    return AppLineTheme.subtleTertiaryFor(brightness);
+    return AppLineTheme.subtleSecondaryFor(brightness);
   }
 
   static Color headerToggleFor(Brightness brightness) {

@@ -245,34 +245,40 @@ class _ChatSectionState extends State<ChatSection> {
                       return const SizedBox.shrink();
                     }
 
-                    return FilledButton(
-                      onPressed: _coordinator.jumpToLatest,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: colors.shellBackgroundStart,
-                        foregroundColor: ChatComposerLayout.sendIconColor(
-                          context,
-                        ),
-                        shape: const CircleBorder(),
-                        side: BorderSide(
-                          color: ChatComposerLayout.sendIconColor(
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [tokens.jumpToLatestButtonShadow(colors)],
+                      ),
+                      child: FilledButton(
+                        onPressed: _coordinator.jumpToLatest,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: colors.shellBackgroundStart,
+                          foregroundColor: ChatComposerLayout.sendIconColor(
                             context,
                           ),
-                          width: 0.5,
-                        ),
-                        elevation: tokens.jumpToLatestButtonElevation,
-                        padding: tokens.jumpToLatestButtonPadding,
-                        textStyle: textStyles
-                            .composerHintStyle(textScale, colors)
-                            .copyWith(
-                              color: ChatComposerLayout.sendIconColor(
-                                context,
-                              ),
-                              fontWeight: FontWeight.w700,
+                          shape: const CircleBorder(),
+                          side: BorderSide(
+                            color: ChatComposerLayout.sendIconColor(
+                              context,
                             ),
-                      ),
-                      child: Icon(
-                        Icons.south_rounded,
-                        size: tokens.jumpToLatestButtonIconSize,
+                            width: 0.5,
+                          ),
+                          elevation: tokens.jumpToLatestButtonElevation,
+                          padding: tokens.jumpToLatestButtonPadding,
+                          textStyle: textStyles
+                              .composerHintStyle(textScale, colors)
+                              .copyWith(
+                                color: ChatComposerLayout.sendIconColor(
+                                  context,
+                                ),
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                        child: Icon(
+                          Icons.south_rounded,
+                          size: tokens.jumpToLatestButtonIconSize,
+                        ),
                       ),
                     );
                   },

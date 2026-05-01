@@ -123,7 +123,7 @@ class ChatSkinTokens {
 
   // Top shadow gradient
   final List<double> shellTopShadowGradientStops = const <double>[0.0, 0.45, 0.82, 1.0];
-  final List<int> shellTopShadowGradientAlphas = const <int>[0xFF, 0xE8, 0xC0, 0x00];
+  final List<int> shellTopShadowGradientAlphas = const <int>[0xFF, 0xED, 0xCD, 0x33];
 
   // Bottom shadow gradient
   final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.24, 0.88, 1.0];
@@ -135,8 +135,8 @@ class ChatSkinTokens {
     15,
   );
   final EdgeInsets appBarPaddingExpanded = const EdgeInsets.fromLTRB(
-    7,
-    10,
+    9,
+    8,
     8,
     10,
   );
@@ -177,9 +177,9 @@ class ChatSkinTokens {
   final double composerCornerAccentSegment = 12.0;
   final double composerSendIconSize = 25.0;
   final double jumpToLatestButtonRightInset = 14.0;
-  final double jumpToLatestButtonBottomInset = 12.0;
+  final double jumpToLatestButtonBottomInset = 5.0;
   final double jumpToLatestButtonIconSize = 18.0;
-  final double jumpToLatestButtonElevation = 8.0;
+  final double jumpToLatestButtonElevation = 0.0;
   final EdgeInsets jumpToLatestButtonPadding = const EdgeInsets.all(6);
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
@@ -299,6 +299,15 @@ class ChatSkinTokens {
       color: colors.bubbleShadow,
       blurRadius: 10,
       offset: const Offset(0, 5),
+    );
+  }
+
+  BoxShadow jumpToLatestButtonShadow(ChatSkinColors colors) {
+    return BoxShadow(
+      color: colors.bubbleShadow,
+      blurRadius: 8,
+      spreadRadius: 2,
+      offset: const Offset(0, 1),
     );
   }
 }
