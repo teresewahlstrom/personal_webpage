@@ -179,9 +179,9 @@ class ChatSkinTokens {
   final double jumpToLatestButtonRightInset = 14.0;
   // 2/3 of the original 5.0 — keeps the button closer to the composer edge.
   final double jumpToLatestButtonBottomInset = 10 / 3;
-  final double jumpToLatestButtonIconSize = 18.0;
+  final double jumpToLatestButtonIconSize = 13.0;
   final double jumpToLatestButtonElevation = 0.0;
-  final EdgeInsets jumpToLatestButtonPadding = const EdgeInsets.all(6);
+  final EdgeInsets jumpToLatestButtonPadding = const EdgeInsets.all(1);
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
   final double markupBlockquoteRailWidth = 0.4;
@@ -415,7 +415,7 @@ class ChatSkinTextStyles {
         Shadow(
           offset: const Offset(0, 0.5),
           blurRadius: 2.0,
-          color: (baseStyle.color ?? const Color(0xFF000000)).withValues(alpha: 0.30),
+          color: (baseStyle.color ?? const Color(0xFF000000)).withValues(alpha: 0.70),
         ),
       ],
     );
