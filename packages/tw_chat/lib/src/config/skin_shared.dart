@@ -177,6 +177,7 @@ class ChatSkinTokens {
   final double composerCornerAccentSegment = 12.0;
   final double composerSendIconSize = 25.0;
   final double jumpToLatestButtonRightInset = 14.0;
+  // 2/3 of the original 5.0 — keeps the button closer to the composer edge.
   final double jumpToLatestButtonBottomInset = 10 / 3;
   final double jumpToLatestButtonIconSize = 18.0;
   final double jumpToLatestButtonElevation = 0.0;
