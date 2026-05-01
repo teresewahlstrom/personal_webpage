@@ -97,15 +97,11 @@ class _ChatDockState extends State<ChatDock> {
       viewPadding: mediaQuery.viewPadding,
       dockHorizontalMargin: chatMargin,
     );
-    final dockTopMargin = ChatLayout.dockTopMargin(
-      viewportSize: viewportSize,
-      viewPadding: mediaQuery.viewPadding,
-    );
     final availableChatHeight = ChatLayout.maxDockHeight(
       viewportSize: viewportSize,
       viewInsets: mediaQuery.viewInsets,
       viewPadding: mediaQuery.viewPadding,
-    ) - dockTopMargin;
+    );
 
     final baseRightInset = mediaQuery.viewPadding.right + chatMargin;
     final minimizedRightInset =
