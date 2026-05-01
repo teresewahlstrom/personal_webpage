@@ -93,6 +93,12 @@ for pages_file in _headers _redirects; do
   fi
 done
 
+# Ensure dot-directories (e.g. .well-known) are present in the final artifact.
+# Flutter's web build omits directories whose names start with a dot.
+if [ -d "web/.well-known" ]; then
+  cp -r "web/.well-known" "build/web/.well-known"
+fi
+
 cat > build/web/version.json <<EOF
 {"build_sha":"${BUILD_SHA}","build_time_utc":"${BUILD_TIME_UTC}","build_id":"${BUILD_ID}"}
 EOF
