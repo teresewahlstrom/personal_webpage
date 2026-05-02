@@ -73,7 +73,7 @@ final class _AppDarkColors {
 
   // clickable accent colors
   static const Color _interactive = Color(0xFF90E8F8);
-  static const Color _interactiveHover = Color(0xFF4EF0FF);
+  static const Color _interactiveHover = Color(0xFF90E8F8);
   static const Color linkText = _interactive;
   static const Color linkTextHover = _interactiveHover;
   static const Color modalCloseIcon = _interactive;

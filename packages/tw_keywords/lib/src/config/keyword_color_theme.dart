@@ -45,7 +45,7 @@ const KeywordSkinData keywordLightSkin = KeywordSkinData(
 const KeywordSkinData keywordDarkSkin = KeywordSkinData(
   // Intentionally identical for now; split is in place for future divergence.
   textColors: KeywordTextPalette(
-    cyan: Color(0xFF43ADCF),
+    cyan: Color(0xFF90E8F8),
     magenta: Color(0xFFE12D80),
     slate: Color(0xFF555B68),
   ),

@@ -26,7 +26,7 @@ const ChatSkinData chatDarkSkin = ChatSkinData(
     composerHint: Color(0xA6DCF6F8),
     composerFill: Color(0xFF101B34),
     composerBorder: Color(0x397199FF),
-    composerCursor: Color(0xFF4EF0FF),
+    composerCursor: Color(0xFF90E8F8),
     composerCornerAccent: Color(0xFF90E8F8),
     composerSendIcon: Color(0xFF90E8F8),
     markupFadeMaskOpaque: Color(0xFFFFFFFF),
