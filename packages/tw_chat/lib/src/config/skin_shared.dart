@@ -269,7 +269,10 @@ class ChatSkinTokens {
     return LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: _shellShadowGradientColors(colors),
+      colors: _shellShadowGradientColors(
+        colors.shellBackgroundStart,
+        shellTopShadowGradientAlphas,
+      ),
       stops: shellTopShadowGradientStops,
     );
   }
@@ -278,18 +281,20 @@ class ChatSkinTokens {
     return LinearGradient(
       begin: Alignment.bottomCenter,
       end: Alignment.topCenter,
-      colors: _shellShadowGradientColors(colors),
+      colors: _shellShadowGradientColors(
+        colors.shellBackgroundEnd,
+        shellBottomShadowGradientAlphas,
+      ),
       stops: shellBottomShadowGradientStops,
     );
   }
 
-  List<Color> _shellShadowGradientColors(ChatSkinColors colors) {
-    return <Color>[
-      colors.shellTopShadowStrong,
-      Color.lerp(colors.shellTopShadowStrong, colors.shellTopShadowSoft, 0.45)!,
-      colors.shellTopShadowSoft,
-      colors.transparent,
-    ];
+  List<Color> _shellShadowGradientColors(Color baseColor, List<int> alphas) {
+    return alphas
+        .map(
+          (alpha) => baseColor.withValues(alpha: alpha / 0xFF),
+        )
+        .toList(growable: false);
   }
 
   BoxShadow shellShadow(ChatSkinColors colors) {
