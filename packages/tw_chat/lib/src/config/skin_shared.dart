@@ -179,7 +179,6 @@ class ChatSkinTokens {
   final double jumpToLatestButtonRightInset = 14.0;
   // 2/3 of the original 5.0 — keeps the button closer to the composer edge.
   final double jumpToLatestButtonBottomInset = 10 / 3;
-  final double jumpToLatestButtonIconSize = 18.6;
   final double jumpToLatestButtonFixedSize = 24.0;
   final double jumpToLatestButtonElevation = 0.0;
   final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
