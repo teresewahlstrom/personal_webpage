@@ -284,7 +284,7 @@ class _ChatSectionState extends State<ChatSection> {
                           ),
                           child: Icon(
                             Icons.south_rounded,
-                            size: tokens.jumpToLatestButtonIconSize,
+                            size: buttonSize * 0.8,
                           ),
                         ),
                       ),
