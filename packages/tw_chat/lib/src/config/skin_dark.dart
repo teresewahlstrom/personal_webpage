@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'skin_shared.dart';
 
+const Color _accentCyan = Color(0xFF90E8F8);
+const Color _accentCyanBorder = Color(0x3990E8F8);
+const Color _accentCyanScrollbar = Color(0x7690E8F8);
+const Color _accentCyanTransparent = Color(0x0090E8F8);
+
 const ChatSkinData chatDarkSkin = ChatSkinData(
   colors: ChatSkinColors(
     transparent: Color(0x00000000),
@@ -14,28 +19,28 @@ const ChatSkinData chatDarkSkin = ChatSkinData(
     shellBackgroundStart: Color(0xFF212835),
     shellBackgroundEnd: Color(0xFF101B34),
     shellOuterShadow: Color(0x8A000000),
-    shellOuterBorder: Color(0x397199FF),
+    shellOuterBorder: _accentCyanBorder,
     shellDivider: Color(0xFF2B364A),
     userBubbleFill: Color(0xFF212835),
     userBubbleBorder: Color(0xFF2B364A),
     botBubbleFill: Color(0xFF101B34),
-    botBubbleBorder: Color(0x397199FF),
+    botBubbleBorder: _accentCyanBorder,
     bubbleShadow: Color(0x47000000),
-    bubbleCollapseButton: Color(0xFF90E8F8),
+    bubbleCollapseButton: _accentCyan,
     bubbleCollapseButtonIcon: Color(0xFF101B34),
     composerHint: Color(0xA6DCF6F8),
     composerFill: Color(0xFF101B34),
-    composerBorder: Color(0x397199FF),
-    composerCursor: Color(0xFF4EF0FF),
-    composerCornerAccent: Color(0xFF90E8F8),
-    composerSendIcon: Color(0xFF90E8F8),
+    composerBorder: _accentCyanBorder,
+    composerCursor: _accentCyan,
+    composerCornerAccent: _accentCyan,
+    composerSendIcon: _accentCyan,
     markupFadeMaskOpaque: Color(0xFFFFFFFF),
     markupFadeMaskSoft: Color(0x50FFFFFF),
-    markupBlockquoteRail: Color(0xFF90E8F8),
-    markupLink: Color(0xFF90E8F8),
-    markupLinkDecoration: Color(0xFF90E8F8),
-    scrollbarThumb: Color(0x7690E8F8),
+    markupBlockquoteRail: _accentCyan,
+    markupLink: _accentCyan,
+    markupLinkDecoration: _accentCyan,
+    scrollbarThumb: _accentCyanScrollbar,
     scrollbarThumbInactive: Color(0xFF2F4A63),
-    scrollbarTrack: Color(0x004EF0FF),
+    scrollbarTrack: _accentCyanTransparent,
   ),
 );
