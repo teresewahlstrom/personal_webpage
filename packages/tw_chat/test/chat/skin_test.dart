@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {
-  test('shell shadow gradients follow theme shadow tokens', () {
+  test('shell top and bottom gradients share the theme shadow ramp', () {
     for (final brightness in <Brightness>[Brightness.light, Brightness.dark]) {
       final skin = ChatSkin.dataForBrightness(brightness);
       final top = skin.tokens.shellTopShadowGradient(skin.colors);
@@ -13,9 +13,7 @@ void main() {
       expect(top.colors[2], skin.colors.shellTopShadowSoft);
       expect(top.colors.last, skin.colors.transparent);
 
-      expect(bottom.colors.first, skin.colors.shellTopShadowStrong);
-      expect(bottom.colors[2], skin.colors.shellTopShadowSoft);
-      expect(bottom.colors.last, skin.colors.transparent);
+      expect(bottom.colors, top.colors);
     }
   });
 
