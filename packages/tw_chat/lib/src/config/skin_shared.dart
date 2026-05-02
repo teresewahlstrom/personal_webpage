@@ -123,11 +123,7 @@ class ChatSkinTokens {
 
   // Top shadow gradient
   final List<double> shellTopShadowGradientStops = const <double>[0.0, 0.45, 0.82, 1.0];
-  final List<int> shellTopShadowGradientAlphas = const <int>[0xFF, 0xED, 0xCD, 0x33];
-
-  // Bottom shadow gradient
   final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.24, 0.88, 1.0];
-  final List<int> shellBottomShadowGradientAlphas = const <int>[0xFF, 0xEF, 0xD3, 0x4D];
   final EdgeInsets appBarPaddingMinimized = const EdgeInsets.fromLTRB(
     14,
     15,
@@ -269,10 +265,7 @@ class ChatSkinTokens {
     return LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: shellTopShadowGradientAlphas
-//           .map((a) => const Color(0xFFFF00FF).withAlpha(a))
-          .map((a) => colors.shellBackgroundStart.withAlpha(a))
-          .toList(),
+      colors: _shellShadowGradientColors(colors),
       stops: shellTopShadowGradientStops,
     );
   }
@@ -281,11 +274,20 @@ class ChatSkinTokens {
     return LinearGradient(
       begin: Alignment.bottomCenter,
       end: Alignment.topCenter,
-      colors: shellBottomShadowGradientAlphas
-          .map((a) => colors.shellBackgroundStart.withAlpha(a))
-          .toList(),
+      colors: _shellShadowGradientColors(colors),
       stops: shellBottomShadowGradientStops,
     );
+  }
+
+  List<Color> _shellShadowGradientColors(ChatSkinColors colors) {
+    final strong = colors.shellTopShadowStrong;
+    final soft = colors.shellTopShadowSoft;
+    return <Color>[
+      strong,
+      Color.lerp(strong, soft, 0.35)!,
+      Color.lerp(strong, soft, 0.75)!,
+      soft.withValues(alpha: 0),
+    ];
   }
 
   BoxShadow shellShadow(ChatSkinColors colors) {
