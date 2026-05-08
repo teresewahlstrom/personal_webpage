@@ -24,6 +24,8 @@ void main() {
       ),
     );
 
+    expect(ChatScrollbar.thumbColor(capturedContext), activeColor);
+    expect(ChatScrollbar.thumbInactiveColor(capturedContext), inactiveColor);
     expect(activeColor, ChatComposerLayout.borderColor(capturedContext));
     expect(inactiveColor, ChatComposerLayout.fillColor(capturedContext));
   });
@@ -49,6 +51,8 @@ void main() {
       ),
     );
 
+    expect(ChatScrollbar.thumbColor(capturedContext), activeColor);
+    expect(ChatScrollbar.thumbInactiveColor(capturedContext), inactiveColor);
     expect(activeColor, ChatComposerLayout.borderColor(capturedContext));
     expect(inactiveColor, ChatComposerLayout.fillColor(capturedContext));
   });
