@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'composer_layout.dart';
@@ -103,10 +105,19 @@ class ChatFadingScrollbar extends StatefulWidget {
 }
 
 class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
+  Timer? _thumbFadeTimer;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
+  bool _isUserScrollActive = false;
 
-  bool get _isScrollbarActive => _isScrollbarHovered || _isScrollbarPressed;
+  bool get _isScrollbarActive =>
+      _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
+
+  @override
+  void dispose() {
+    _thumbFadeTimer?.cancel();
+    super.dispose();
+  }
 
   void _setScrollbarInteraction({
     bool? isHovered,
@@ -122,6 +133,51 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
       _isScrollbarHovered = nextHovered;
       _isScrollbarPressed = nextPressed;
     });
+  }
+
+  void _setUserScrollActive() {
+    _thumbFadeTimer?.cancel();
+    if (_isUserScrollActive) {
+      return;
+    }
+    setState(() {
+      _isUserScrollActive = true;
+    });
+  }
+
+  void _scheduleUserScrollFadeOut() {
+    _thumbFadeTimer?.cancel();
+    _thumbFadeTimer = Timer(ChatScrollbar.thumbFadeOutDelay, () {
+      if (!mounted || !_isUserScrollActive) {
+        return;
+      }
+      setState(() {
+        _isUserScrollActive = false;
+      });
+    });
+  }
+
+  bool _isUserDrivenScrollNotification(ScrollNotification notification) {
+    if (notification is UserScrollNotification) {
+      return notification.direction != ScrollDirection.idle;
+    }
+    if (notification is ScrollStartNotification) {
+      return notification.dragDetails != null;
+    }
+    if (notification is ScrollUpdateNotification) {
+      return notification.dragDetails != null;
+    }
+    if (notification is OverscrollNotification) {
+      return notification.dragDetails != null;
+    }
+    return false;
+  }
+
+  bool _isUserScrollEndNotification(ScrollNotification notification) {
+    if (notification is UserScrollNotification) {
+      return notification.direction == ScrollDirection.idle;
+    }
+    return notification is ScrollEndNotification;
   }
 
   bool _isWithinScrollbarRegion(Offset localPosition, Size size) {
@@ -150,63 +206,76 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
     );
   }
 
+  bool _handleScrollNotification(ScrollNotification notification) {
+    if (_isUserDrivenScrollNotification(notification)) {
+      _setUserScrollActive();
+    } else if (_isUserScrollActive &&
+        _isUserScrollEndNotification(notification)) {
+      _scheduleUserScrollFadeOut();
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final targetThumbColor = ChatScrollbar.thumbColorForState(
       context,
       _isScrollbarActive,
     );
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final size = Size(constraints.maxWidth, constraints.maxHeight);
-        return Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerDown: (event) {
-            final isInteracting = _isWithinScrollbarRegion(
-              event.localPosition,
-              size,
-            );
-            _setScrollbarInteraction(
-              isHovered: isInteracting,
-              isPressed: isInteracting,
-            );
-          },
-          onPointerUp: (event) {
-            _setScrollbarInteraction(
-              isHovered: _isWithinScrollbarRegion(event.localPosition, size),
-              isPressed: false,
-            );
-          },
-          onPointerCancel: (_) {
-            _setScrollbarInteraction(isHovered: false, isPressed: false);
-          },
-          child: MouseRegion(
-            onHover: (event) => _updateHover(event.localPosition, size),
-            onExit: (_) => _setScrollbarInteraction(isHovered: false),
-            child: TweenAnimationBuilder<Color?>(
-              tween: ColorTween(end: targetThumbColor),
-              duration: ChatScrollbar.thumbFadeDuration,
-              builder: (context, animatedThumbColor, child) {
-                return RawScrollbar(
-                  controller: widget.controller,
-                  thumbVisibility: widget.thumbVisibility,
-                  interactive: widget.interactive,
-                  trackVisibility: widget.trackVisibility,
-                  thickness: widget.thickness,
-                  minThumbLength: widget.minThumbLength,
-                  crossAxisMargin: widget.crossAxisMargin,
-                  mainAxisMargin: widget.mainAxisMargin,
-                  padding: widget.padding,
-                  radius: widget.radius,
-                  thumbColor: animatedThumbColor ?? targetThumbColor,
-                  child: child!,
-                );
-              },
-              child: widget.child,
+    return NotificationListener<ScrollNotification>(
+      onNotification: _handleScrollNotification,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final size = Size(constraints.maxWidth, constraints.maxHeight);
+          return Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (event) {
+              final isInteracting = _isWithinScrollbarRegion(
+                event.localPosition,
+                size,
+              );
+              _setScrollbarInteraction(
+                isHovered: isInteracting,
+                isPressed: isInteracting,
+              );
+            },
+            onPointerUp: (event) {
+              _setScrollbarInteraction(
+                isHovered: _isWithinScrollbarRegion(event.localPosition, size),
+                isPressed: false,
+              );
+            },
+            onPointerCancel: (_) {
+              _setScrollbarInteraction(isHovered: false, isPressed: false);
+            },
+            child: MouseRegion(
+              onHover: (event) => _updateHover(event.localPosition, size),
+              onExit: (_) => _setScrollbarInteraction(isHovered: false),
+              child: TweenAnimationBuilder<Color?>(
+                tween: ColorTween(end: targetThumbColor),
+                duration: ChatScrollbar.thumbFadeDuration,
+                builder: (context, animatedThumbColor, child) {
+                  return RawScrollbar(
+                    controller: widget.controller,
+                    thumbVisibility: widget.thumbVisibility,
+                    interactive: widget.interactive,
+                    trackVisibility: widget.trackVisibility,
+                    thickness: widget.thickness,
+                    minThumbLength: widget.minThumbLength,
+                    crossAxisMargin: widget.crossAxisMargin,
+                    mainAxisMargin: widget.mainAxisMargin,
+                    padding: widget.padding,
+                    radius: widget.radius,
+                    thumbColor: animatedThumbColor ?? targetThumbColor,
+                    child: child!,
+                  );
+                },
+                child: widget.child,
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -9,6 +9,7 @@ void main() {
     WidgetTester tester, {
     required ScrollController controller,
     ThemeData? theme,
+    ValueChanged<BuildContext>? onScrollableBuild,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -26,11 +27,16 @@ void main() {
                 mainAxisMargin: 0,
                 radius: const Radius.circular(8),
                 thumbVisibility: true,
-                child: ListView.builder(
-                  controller: controller,
-                  itemCount: 40,
-                  itemExtent: 32,
-                  itemBuilder: (_, index) => Text('Item $index'),
+                child: Builder(
+                  builder: (context) {
+                    onScrollableBuild?.call(context);
+                    return ListView.builder(
+                      controller: controller,
+                      itemCount: 40,
+                      itemExtent: 32,
+                      itemBuilder: (_, index) => Text('Item $index'),
+                    );
+                  },
                 ),
               ),
             ),
@@ -94,11 +100,18 @@ void main() {
   });
 
   testWidgets(
-    'scrollbar stays inactive during programmatic scrolling and activates on hover',
+    'scrollbar stays inactive during programmatic scrolling and activates on user interaction',
     (tester) async {
       final controller = ScrollController();
+      late BuildContext scrollableContext;
 
-      await pumpScrollbar(tester, controller: controller);
+      await pumpScrollbar(
+        tester,
+        controller: controller,
+        onScrollableBuild: (context) {
+          scrollableContext = context;
+        },
+      );
 
       final scrollbarFinder = find.byType(RawScrollbar);
       final scrollbarElement = tester.element(find.byType(ChatFadingScrollbar));
@@ -113,6 +126,33 @@ void main() {
 
       controller.jumpTo(120);
       await tester.pump();
+      await tester.pump(ChatScrollbar.thumbFadeDuration);
+
+      expect(
+        tester.widget<RawScrollbar>(scrollbarFinder).thumbColor,
+        inactiveColor,
+      );
+
+      UserScrollNotification(
+        metrics: controller.position,
+        context: scrollableContext,
+        direction: ScrollDirection.reverse,
+      ).dispatch(scrollableContext);
+      await tester.pump();
+      await tester.pump(ChatScrollbar.thumbFadeDuration);
+
+      expect(
+        tester.widget<RawScrollbar>(scrollbarFinder).thumbColor,
+        activeColor,
+      );
+
+      UserScrollNotification(
+        metrics: controller.position,
+        context: scrollableContext,
+        direction: ScrollDirection.idle,
+      ).dispatch(scrollableContext);
+      await tester.pump();
+      await tester.pump(ChatScrollbar.thumbFadeOutDelay);
       await tester.pump(ChatScrollbar.thumbFadeDuration);
 
       expect(
