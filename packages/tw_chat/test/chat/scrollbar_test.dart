@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {
-  const outsideScrollbarOffset = 4.0;
+  const pointerStartOffset = 4.0;
 
   Future<void> pumpScrollbar(
     WidgetTester tester, {
@@ -165,7 +165,7 @@ void main() {
       final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
       await gesture.addPointer(
         location: Offset(
-          scrollbarRect.left + outsideScrollbarOffset,
+          scrollbarRect.left + pointerStartOffset,
           scrollbarRect.center.dy,
         ),
       );
@@ -184,7 +184,7 @@ void main() {
 
       await gesture.moveTo(
         Offset(
-          scrollbarRect.left + outsideScrollbarOffset,
+          scrollbarRect.left + pointerStartOffset,
           scrollbarRect.center.dy,
         ),
       );
