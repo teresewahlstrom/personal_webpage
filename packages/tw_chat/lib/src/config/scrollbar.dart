@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'composer_layout.dart';
@@ -9,6 +7,7 @@ class ChatScrollbar {
   const ChatScrollbar._();
 
   static const visibilityOverflowThreshold = 0.5;
+  static const hoverActivationInset = 12.0;
   static Color thumbColor(BuildContext context) =>
       ChatComposerLayout.borderColor(context);
   static Color thumbInactiveColor(BuildContext context) =>
@@ -104,47 +103,51 @@ class ChatFadingScrollbar extends StatefulWidget {
 }
 
 class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
-  Timer? _thumbFadeTimer;
-  bool _isScrollbarActive = false;
+  bool _isScrollbarHovered = false;
+  bool _isScrollbarPressed = false;
 
-  @override
-  void dispose() {
-    _thumbFadeTimer?.cancel();
-    super.dispose();
-  }
+  bool get _isScrollbarActive => _isScrollbarHovered || _isScrollbarPressed;
 
-  void _setScrollbarActive() {
-    _thumbFadeTimer?.cancel();
-    if (!_isScrollbarActive) {
-      setState(() {
-        _isScrollbarActive = true;
-      });
+  void _setScrollbarInteraction({
+    bool? isHovered,
+    bool? isPressed,
+  }) {
+    final nextHovered = isHovered ?? _isScrollbarHovered;
+    final nextPressed = isPressed ?? _isScrollbarPressed;
+    if (nextHovered == _isScrollbarHovered &&
+        nextPressed == _isScrollbarPressed) {
+      return;
     }
-  }
-
-  void _scheduleScrollbarFadeOut() {
-    _thumbFadeTimer?.cancel();
-    _thumbFadeTimer = Timer(ChatScrollbar.thumbFadeOutDelay, () {
-      if (!mounted) {
-        return;
-      }
-      if (_isScrollbarActive) {
-        setState(() {
-          _isScrollbarActive = false;
-        });
-      }
+    setState(() {
+      _isScrollbarHovered = nextHovered;
+      _isScrollbarPressed = nextPressed;
     });
   }
 
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollStartNotification ||
-        notification is ScrollUpdateNotification ||
-        notification is OverscrollNotification) {
-      _setScrollbarActive();
-    } else if (notification is ScrollEndNotification) {
-      _scheduleScrollbarFadeOut();
+  bool _isWithinScrollbarRegion(Offset localPosition, Size size) {
+    final padding =
+        widget.padding?.resolve(Directionality.of(context)) ?? EdgeInsets.zero;
+    final verticalStart = padding.top;
+    final verticalEnd = size.height - padding.bottom;
+    if (localPosition.dy < verticalStart || localPosition.dy > verticalEnd) {
+      return false;
     }
-    return false;
+
+    final interactionExtent =
+        widget.thickness +
+        widget.crossAxisMargin +
+        ChatScrollbar.hoverActivationInset;
+    final direction = Directionality.of(context);
+    if (direction == TextDirection.rtl) {
+      return localPosition.dx <= interactionExtent + padding.left;
+    }
+    return localPosition.dx >= size.width - padding.right - interactionExtent;
+  }
+
+  void _updateHover(Offset localPosition, Size size) {
+    _setScrollbarInteraction(
+      isHovered: _isWithinScrollbarRegion(localPosition, size),
+    );
   }
 
   @override
@@ -153,29 +156,57 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
       context,
       _isScrollbarActive,
     );
-    return NotificationListener<ScrollNotification>(
-      onNotification: _handleScrollNotification,
-      child: TweenAnimationBuilder<Color?>(
-        tween: ColorTween(end: targetThumbColor),
-        duration: ChatScrollbar.thumbFadeDuration,
-        builder: (context, animatedThumbColor, child) {
-          return RawScrollbar(
-            controller: widget.controller,
-            thumbVisibility: widget.thumbVisibility,
-            interactive: widget.interactive,
-            trackVisibility: widget.trackVisibility,
-            thickness: widget.thickness,
-            minThumbLength: widget.minThumbLength,
-            crossAxisMargin: widget.crossAxisMargin,
-            mainAxisMargin: widget.mainAxisMargin,
-            padding: widget.padding,
-            radius: widget.radius,
-            thumbColor: animatedThumbColor ?? targetThumbColor,
-            child: child!,
-          );
-        },
-        child: widget.child,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = Size(constraints.maxWidth, constraints.maxHeight);
+        return Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (event) {
+            final isInteracting = _isWithinScrollbarRegion(
+              event.localPosition,
+              size,
+            );
+            _setScrollbarInteraction(
+              isHovered: isInteracting,
+              isPressed: isInteracting,
+            );
+          },
+          onPointerUp: (event) {
+            _setScrollbarInteraction(
+              isHovered: _isWithinScrollbarRegion(event.localPosition, size),
+              isPressed: false,
+            );
+          },
+          onPointerCancel: (_) {
+            _setScrollbarInteraction(isHovered: false, isPressed: false);
+          },
+          child: MouseRegion(
+            onHover: (event) => _updateHover(event.localPosition, size),
+            onExit: (_) => _setScrollbarInteraction(isHovered: false),
+            child: TweenAnimationBuilder<Color?>(
+              tween: ColorTween(end: targetThumbColor),
+              duration: ChatScrollbar.thumbFadeDuration,
+              builder: (context, animatedThumbColor, child) {
+                return RawScrollbar(
+                  controller: widget.controller,
+                  thumbVisibility: widget.thumbVisibility,
+                  interactive: widget.interactive,
+                  trackVisibility: widget.trackVisibility,
+                  thickness: widget.thickness,
+                  minThumbLength: widget.minThumbLength,
+                  crossAxisMargin: widget.crossAxisMargin,
+                  mainAxisMargin: widget.mainAxisMargin,
+                  padding: widget.padding,
+                  radius: widget.radius,
+                  thumbColor: animatedThumbColor ?? targetThumbColor,
+                  child: child!,
+                );
+              },
+              child: widget.child,
+            ),
+          ),
+        );
+      },
     );
   }
 }
