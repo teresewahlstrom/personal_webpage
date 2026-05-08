@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {
+  const outsideScrollbarOffset = 4.0;
+
   Future<void> pumpScrollbar(
     WidgetTester tester, {
     required ScrollController controller,
@@ -162,7 +164,10 @@ void main() {
 
       final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
       await gesture.addPointer(
-        location: Offset(scrollbarRect.left + 4, scrollbarRect.center.dy),
+        location: Offset(
+          scrollbarRect.left + outsideScrollbarOffset,
+          scrollbarRect.center.dy,
+        ),
       );
       await tester.pump();
 
@@ -178,7 +183,10 @@ void main() {
       );
 
       await gesture.moveTo(
-        Offset(scrollbarRect.left + 4, scrollbarRect.center.dy),
+        Offset(
+          scrollbarRect.left + outsideScrollbarOffset,
+          scrollbarRect.center.dy,
+        ),
       );
       await tester.pump();
       await tester.pump(ChatScrollbar.thumbFadeDuration);

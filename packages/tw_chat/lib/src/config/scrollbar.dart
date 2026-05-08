@@ -185,7 +185,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
         widget.padding?.resolve(Directionality.of(context)) ?? EdgeInsets.zero;
     final verticalStart = padding.top;
     final verticalEnd = size.height - padding.bottom;
-    if (localPosition.dy < verticalStart || localPosition.dy > verticalEnd) {
+    if (localPosition.dy < verticalStart || localPosition.dy >= verticalEnd) {
       return false;
     }
 
@@ -195,9 +195,9 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
         ChatScrollbar.hoverActivationInset;
     final direction = Directionality.of(context);
     if (direction == TextDirection.rtl) {
-      return localPosition.dx <= interactionExtent + padding.left;
+      return localPosition.dx < interactionExtent + padding.left;
     }
-    return localPosition.dx >= size.width - padding.right - interactionExtent;
+    return localPosition.dx > size.width - padding.right - interactionExtent;
   }
 
   void _updateHover(Offset localPosition, Size size) {
