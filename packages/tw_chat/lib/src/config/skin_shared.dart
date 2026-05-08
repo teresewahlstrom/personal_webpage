@@ -50,6 +50,8 @@ class ChatSkinColors {
     required this.scrollbarThumb,
     required this.scrollbarThumbInactive,
     required this.scrollbarTrack,
+    required this.selectionMenuBackground,
+    required this.selectionMenuForeground,
   });
 
   final Color transparent;
@@ -85,6 +87,10 @@ class ChatSkinColors {
   final Color scrollbarThumb;
   final Color scrollbarThumbInactive;
   final Color scrollbarTrack;
+  /// Background color for the text-selection context menu (Copy / Select All).
+  final Color selectionMenuBackground;
+  /// Foreground (text / icon) color for the text-selection context menu.
+  final Color selectionMenuForeground;
 }
 
 class ChatSkinTokens {
@@ -188,6 +194,11 @@ class ChatSkinTokens {
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
+  /// Extra spacing added above and below a horizontal rule.
+  ///
+  /// Kept at 2/3 of [markupBlockQuoteExtraSpacing] so `---` rules breathe
+  /// without dominating the vertical rhythm.
+  final double markupHorizontalRuleExtraSpacing = 0.8;
   final double markupListTopSpacingAdjustment = -0.3;
   final double markupNestedListTopSpacingAdjustment = -0.59;
   final double markupNestedListBottomSpacingAdjustment = -0.55;

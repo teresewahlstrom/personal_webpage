@@ -133,6 +133,20 @@ class ChatMessageListArea extends StatelessWidget {
                     key: chatSelectionAreaKey,
                     onSelectionChanged: onChatSelectionChanged,
                     magnifierConfiguration: TextMagnifierConfiguration.disabled,
+                    contextMenuBuilder: (context, selectableRegionState) {
+                      final colors = ChatSkin.dataOf(context).colors;
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: Theme.of(context).colorScheme.copyWith(
+                            surface: colors.selectionMenuBackground,
+                            onSurface: colors.selectionMenuForeground,
+                          ),
+                        ),
+                        child: AdaptiveTextSelectionToolbar.selectableRegion(
+                          selectableRegionState: selectableRegionState,
+                        ),
+                      );
+                    },
                     child: SingleChildScrollView(
                       controller: chatScroll,
                       physics: const ClampingScrollPhysics(),

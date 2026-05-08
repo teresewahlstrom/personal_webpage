@@ -530,10 +530,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
     }
     if (previousBlock is ChatMarkupHorizontalRuleBlock) {
-      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
+      spacing += fontSize * tokens.markupHorizontalRuleExtraSpacing;
     }
     if (nextBlock is ChatMarkupHorizontalRuleBlock) {
-      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
+      spacing += fontSize * tokens.markupHorizontalRuleExtraSpacing;
     }
     if (!inListItem &&
         nextBlock is ChatMarkupListBlock &&

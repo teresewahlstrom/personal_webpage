@@ -147,34 +147,54 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
     return false;
   }
 
+  void _onMouseEnter(PointerEnterEvent event) {
+    // Pointer entered the scrollable area – reveal the scrollbar immediately.
+    _setScrollbarActive();
+  }
+
+  void _onMouseExit(PointerExitEvent event) {
+    // Pointer left the scrollable area – begin the normal fade-out countdown.
+    _scheduleScrollbarFadeOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     final targetThumbColor = ChatScrollbar.thumbColorForState(
       context,
       _isScrollbarActive,
     );
-    return NotificationListener<ScrollNotification>(
-      onNotification: _handleScrollNotification,
-      child: TweenAnimationBuilder<Color?>(
-        tween: ColorTween(end: targetThumbColor),
-        duration: ChatScrollbar.thumbFadeDuration,
-        builder: (context, animatedThumbColor, child) {
-          return RawScrollbar(
-            controller: widget.controller,
-            thumbVisibility: widget.thumbVisibility,
-            interactive: widget.interactive,
-            trackVisibility: widget.trackVisibility,
-            thickness: widget.thickness,
-            minThumbLength: widget.minThumbLength,
-            crossAxisMargin: widget.crossAxisMargin,
-            mainAxisMargin: widget.mainAxisMargin,
-            padding: widget.padding,
-            radius: widget.radius,
-            thumbColor: animatedThumbColor ?? targetThumbColor,
-            child: child!,
-          );
-        },
-        child: widget.child,
+    return MouseRegion(
+      // Show the scrollbar whenever the pointer is over the scroll area so
+      // the thumb is always reachable, and hide it (with the usual delay)
+      // once the pointer leaves.
+      onEnter: _onMouseEnter,
+      onExit: _onMouseExit,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: _handleScrollNotification,
+        child: TweenAnimationBuilder<Color?>(
+          // Provide an explicit begin equal to the initial target so the thumb
+          // renders at the correct colour on the very first frame instead of
+          // fading in from transparent.
+          tween: ColorTween(begin: targetThumbColor, end: targetThumbColor),
+          duration: ChatScrollbar.thumbFadeDuration,
+          builder: (context, animatedThumbColor, child) {
+            return RawScrollbar(
+              controller: widget.controller,
+              thumbVisibility: widget.thumbVisibility,
+              interactive: widget.interactive,
+              trackVisibility: widget.trackVisibility,
+              thickness: widget.thickness,
+              minThumbLength: widget.minThumbLength,
+              crossAxisMargin: widget.crossAxisMargin,
+              mainAxisMargin: widget.mainAxisMargin,
+              padding: widget.padding,
+              radius: widget.radius,
+              thumbColor: animatedThumbColor ?? targetThumbColor,
+              child: child!,
+            );
+          },
+          child: widget.child,
+        ),
       ),
     );
   }

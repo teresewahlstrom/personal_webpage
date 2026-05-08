@@ -215,7 +215,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                         widget.isUser ? horizontalInset : tokens.composerTextInsetLeft,
                         verticalInset,
                         horizontalInset,
-                        (isTruncatable && widget.isTruncated) ? 0.0 : verticalInset,
+                        // User bubbles gain an extra border-width of bottom padding
+                        // automatically from BoxDecoration.padding (the border's
+                        // EdgeInsets are added to the specified padding).  Bot bubbles
+                        // have no decoration, so we add the same amount explicitly so
+                        // the visual gap between the last text line and the collapse
+                        // button is identical for both bubble types.
+                        (isTruncatable && widget.isTruncated)
+                            ? 0.0
+                            : verticalInset + (widget.isUser ? 0.0 : tokens.bubbleBorderWidth),
                       ),
                       constraints: widget.isUser
                           ? BoxConstraints(

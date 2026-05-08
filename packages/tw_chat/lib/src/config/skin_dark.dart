@@ -37,5 +37,7 @@ const ChatSkinData chatDarkSkin = ChatSkinData(
     scrollbarThumb: Color(0x7690E8F8),
     scrollbarThumbInactive: Color(0xFF2F4A63),
     scrollbarTrack: Color(0x004EF0FF),
+    selectionMenuBackground: Color(0xFF212835),
+    selectionMenuForeground: Color(0xEBDCF6F8),
   ),
 );
