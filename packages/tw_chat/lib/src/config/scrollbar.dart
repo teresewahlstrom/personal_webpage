@@ -10,11 +10,11 @@ class ChatScrollbar {
 
   static const visibilityOverflowThreshold = 0.5;
   static Color thumbColor(BuildContext context) =>
-    ChatComposerLayout.borderColor(context);
+      ChatComposerLayout.borderColor(context);
   static Color thumbInactiveColor(BuildContext context) =>
-    ChatComposerLayout.fillColor(context);
+      ChatComposerLayout.fillColor(context);
   static Color trackColor(BuildContext context) =>
-    ChatSkin.dataOf(context).colors.scrollbarTrack;
+      ChatSkin.dataOf(context).colors.scrollbarTrack;
   static const inputTrackBorder = Border();
   static const thumbFadeDuration = Duration(milliseconds: 220);
   static const thumbFadeOutDelay = Duration(milliseconds: 700);
