@@ -20,14 +20,6 @@ class ChatScrollbar {
   static const thumbFadeDuration = Duration(milliseconds: 220);
   static const thumbFadeOutDelay = Duration(milliseconds: 700);
 
-  static Color inactiveThumbColor(BuildContext context) {
-    return thumbInactiveColor(context);
-  }
-
-  static Color thumbColorForState(BuildContext context, bool isActive) {
-    return isActive ? thumbColor(context) : inactiveThumbColor(context);
-  }
-
   static Widget buildTrack({
     required BuildContext context,
     required double thickness,
@@ -127,7 +119,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
     );
     _inactiveScrollbarPainter = ScrollbarPainter(
       color: Colors.transparent,
-      fadeoutOpacityAnimation: const AlwaysStoppedAnimation(1),
+      fadeoutOpacityAnimation: const AlwaysStoppedAnimation(1.0),
       textDirection: TextDirection.ltr,
       thickness: widget.thickness,
       padding: widget.padding ?? EdgeInsets.zero,
@@ -340,7 +332,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
   void _syncPainterTheme(BuildContext context) {
     final textDirection = Directionality.of(context);
     final inactiveThumbColor = widget.thumbVisibility
-        ? ChatScrollbar.inactiveThumbColor(context)
+        ? ChatScrollbar.thumbInactiveColor(context)
         : Colors.transparent;
     final activeThumbColor = widget.thumbVisibility
         ? ChatScrollbar.thumbColor(context)
