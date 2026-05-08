@@ -51,9 +51,12 @@ void main() {
         (tokens.markupBlockBaseSpacingFactor +
             tokens.markupBlockQuoteExtraSpacing) *
         (2 / 3);
-    final expectedGap =
+    final expectedVerticalGap =
         expectedPerSideSpacing * 2 + tokens.markupBlockquoteRailWidth;
 
-    expect(afterRect.top - beforeRect.bottom, closeTo(expectedGap, 0.5));
+    expect(
+      afterRect.top - beforeRect.bottom,
+      closeTo(expectedVerticalGap, 0.5),
+    );
   });
 }
