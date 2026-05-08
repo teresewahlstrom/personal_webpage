@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'composer_layout.dart';
 import 'skin.dart';
 
 class ChatScrollbar {
@@ -10,11 +9,11 @@ class ChatScrollbar {
 
   static const visibilityOverflowThreshold = 0.5;
   static Color thumbColor(BuildContext context) =>
-    ChatComposerLayout.borderColor(context);
+      ChatSkin.dataOf(context).colors.scrollbarThumb;
   static Color thumbInactiveColor(BuildContext context) =>
-    ChatComposerLayout.fillColor(context);
+      ChatSkin.dataOf(context).colors.scrollbarThumbInactive;
   static Color trackColor(BuildContext context) =>
-    ChatSkin.dataOf(context).colors.scrollbarTrack;
+      ChatSkin.dataOf(context).colors.scrollbarTrack;
   static const inputTrackBorder = Border();
   static const thumbFadeDuration = Duration(milliseconds: 220);
   static const thumbFadeOutDelay = Duration(milliseconds: 700);
