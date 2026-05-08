@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
 
-import 'composer_layout.dart';
 import 'skin.dart';
 
 class ChatScrollbar {
@@ -12,9 +11,9 @@ class ChatScrollbar {
   static const visibilityOverflowThreshold = 0.5;
   static const hoverActivationInset = 12.0;
   static Color thumbColor(BuildContext context) =>
-      ChatComposerLayout.borderColor(context);
+      ChatSkin.dataOf(context).colors.scrollbarThumb;
   static Color thumbInactiveColor(BuildContext context) =>
-      ChatComposerLayout.fillColor(context);
+      ChatSkin.dataOf(context).colors.scrollbarThumbInactive;
   static Color trackColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.scrollbarTrack;
   static const inputTrackBorder = Border();
@@ -254,7 +253,9 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar> {
               onExit: (_) => _setScrollbarInteraction(isHovered: false),
               child: TweenAnimationBuilder<Color?>(
                 tween: ColorTween(end: targetThumbColor),
-                duration: ChatScrollbar.thumbFadeDuration,
+                duration: _isScrollbarActive
+                    ? Duration.zero
+                    : ChatScrollbar.thumbFadeDuration,
                 builder: (context, animatedThumbColor, child) {
                   return RawScrollbar(
                     controller: widget.controller,
