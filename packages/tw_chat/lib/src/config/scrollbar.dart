@@ -272,7 +272,7 @@ class _ChatScrollbarState
         _isUserScrollActive = true;
       });
     }
-    _thumbOpacityController.value = 1;
+    _syncThumbOpacityAnimation();
   }
 
   void _scheduleUserScrollFadeOut() {
@@ -312,12 +312,8 @@ class _ChatScrollbarState
   }
 
   void _syncThumbOpacityAnimation() {
-    if (_isScrollbarActive) {
-      _thumbOpacityController.value = 1;
-      return;
-    }
     _thumbOpacityController.animateTo(
-      0,
+      _isScrollbarActive ? 1 : 0,
       duration: ChatScrollbar.thumbFadeDuration,
     );
   }
