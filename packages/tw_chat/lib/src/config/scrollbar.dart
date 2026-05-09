@@ -203,7 +203,7 @@ class _ChatScrollbarState
       ..crossAxisMargin = widget.crossAxisMargin
       ..mainAxisMargin = widget.mainAxisMargin
       ..minLength = widget.minThumbLength
-      ..minOverscrollLength = widget.minOverscrollLength ?? widget.minThumbLength
+      ..minOverscrollLength = widget.minThumbLength
       ..padding = widget.padding ?? EdgeInsets.zero
       ..ignorePointer = !enableGestures;
   }
