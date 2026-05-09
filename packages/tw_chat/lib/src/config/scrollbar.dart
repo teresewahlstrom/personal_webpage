@@ -96,7 +96,7 @@ class ChatFadingScrollbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ChatScrollbarPainterBridge(
+    return _ChatScrollbar(
       controller: controller,
       thumbVisibility: thumbVisibility,
       interactive: interactive,
@@ -112,8 +112,8 @@ class ChatFadingScrollbar extends StatelessWidget {
   }
 }
 
-class _ChatScrollbarPainterBridge extends RawScrollbarWithCustomPhysics {
-  const _ChatScrollbarPainterBridge({
+class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
+  const _ChatScrollbar({
     required super.controller,
     required super.child,
     required super.thumbVisibility,
@@ -142,12 +142,12 @@ class _ChatScrollbarPainterBridge extends RawScrollbarWithCustomPhysics {
        );
 
   @override
-  RawScrollbarWithCustomPhysicsState<_ChatScrollbarPainterBridge>
-  createState() => _ChatScrollbarPainterBridgeState();
+  RawScrollbarWithCustomPhysicsState<_ChatScrollbar> createState() =>
+      _ChatScrollbarState();
 }
 
-class _ChatScrollbarPainterBridgeState
-    extends RawScrollbarWithCustomPhysicsState<_ChatScrollbarPainterBridge> {
+class _ChatScrollbarState
+    extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
   late final AnimationController _thumbOpacityController;
   bool _isScrollbarHovered = false;
@@ -190,9 +190,8 @@ class _ChatScrollbarPainterBridgeState
       activeThumbColor,
       _thumbOpacityController.value,
     );
-    assert(thumbColor != null);
     scrollbarPainter
-      ..color = thumbColor!
+      ..color = thumbColor
       ..trackColor = _trackVisibility
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
