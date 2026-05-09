@@ -161,7 +161,7 @@ class _ChatScrollbarState
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
-  ScrollController get _controller => widget.controller!;
+  ScrollController? get _controller => widget.controller;
   double get _scrollbarThickness => widget.thickness!;
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
@@ -195,7 +195,7 @@ class _ChatScrollbarState
       padding: widget.padding ?? EdgeInsets.zero,
       ignorePointer: true,
     );
-    _controller.addListener(_syncActiveScrollbarPainterFromController);
+    _controller?.addListener(_syncActiveScrollbarPainterFromController);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -249,7 +249,7 @@ class _ChatScrollbarState
       oldWidget.controller?.removeListener(
         _syncActiveScrollbarPainterFromController,
       );
-      _controller.addListener(_syncActiveScrollbarPainterFromController);
+      _controller?.addListener(_syncActiveScrollbarPainterFromController);
       _syncActiveScrollbarPainterFromController();
     }
   }
@@ -367,10 +367,11 @@ class _ChatScrollbarState
   }
 
   void _syncActiveScrollbarPainterFromController() {
-    if (!mounted || !_controller.hasClients) {
+    final controller = _controller;
+    if (!mounted || controller == null || !controller.hasClients) {
       return;
     }
-    final position = _controller.position;
+    final position = controller.position;
     _activeScrollbarPainter.update(position, position.axisDirection);
   }
 
