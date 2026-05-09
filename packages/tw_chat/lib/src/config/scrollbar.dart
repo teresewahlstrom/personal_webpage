@@ -158,9 +158,11 @@ class _ChatScrollbarState
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
   double get _scrollbarThickness => widget.thickness!;
+  bool get _showsThumb => widget.thumbVisibility ?? false;
+  bool get _showsTrack => widget.trackVisibility ?? false;
 
   @override
-  bool get showScrollbar => widget.thumbVisibility ?? false;
+  bool get showScrollbar => _showsThumb;
 
   @override
   bool get enableGestures => widget.interactive ?? true;
@@ -178,8 +180,8 @@ class _ChatScrollbarState
 
   @override
   void updateScrollbarPainter() {
-    final showsThumb = widget.thumbVisibility ?? false;
-    final showsTrack = widget.trackVisibility ?? false;
+    final showsThumb = _showsThumb;
+    final showsTrack = _showsTrack;
     final inactiveThumbColor = showsThumb
         ? ChatScrollbar.thumbInactiveColor(context)
         : Colors.transparent;
