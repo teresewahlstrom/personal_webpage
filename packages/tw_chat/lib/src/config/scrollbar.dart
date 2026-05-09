@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:super_editor/super_editor.dart'
@@ -139,10 +140,10 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
          trackBorderColor: Colors.transparent,
          fadeDuration: ChatScrollbar.thumbFadeDuration,
          timeToFade: ChatScrollbar.thumbFadeOutDelay,
-       );
+        );
 
   @override
-  State<_ChatScrollbar> createState() => _ChatScrollbarState();
+  _ChatScrollbarState createState() => _ChatScrollbarState();
 }
 
 class _ChatScrollbarState
@@ -190,7 +191,7 @@ class _ChatScrollbarState
       inactiveThumbColor,
       activeThumbColor,
       _thumbOpacityController.value,
-    );
+    )!;
     scrollbarPainter
       ..color = thumbColor
       ..trackColor = (widget.trackVisibility ?? false)
