@@ -150,7 +150,7 @@ class _ChatScrollbarState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
   late final AnimationController _thumbColorAnimationController;
-  late Animation<Color?> _thumbColorAnimation;
+  Animation<Color?>? _thumbColorAnimation;
   Color? _thumbColorTarget;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
@@ -163,7 +163,7 @@ class _ChatScrollbarState
   Color get _thumbColor => _isScrollbarActive
       ? ChatScrollbar.thumbColor(context)
       : ChatScrollbar.thumbInactiveColor(context);
-  Color get _animatedThumbColor => _thumbColorAnimation.value ?? _thumbColor;
+  Color get _animatedThumbColor => _thumbColorAnimation?.value ?? _thumbColor;
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
 
@@ -174,7 +174,6 @@ class _ChatScrollbarState
       vsync: this,
       duration: ChatScrollbar.thumbFadeDuration,
     )..addListener(_handleThumbColorAnimationTick);
-    _thumbColorAnimation = const AlwaysStoppedAnimation<Color?>(Colors.transparent);
   }
 
   @override
@@ -325,7 +324,7 @@ class _ChatScrollbarState
     _thumbColorAnimationController
       ..stop()
       ..value = 0;
-    unawaited(_thumbColorAnimationController.forward());
+    _thumbColorAnimationController.forward();
   }
 
   bool _isUserDrivenScrollNotification(ScrollNotification notification) {
