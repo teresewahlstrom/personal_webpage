@@ -154,6 +154,7 @@ class _ChatScrollbarState
   Timer? _thumbFadeTimer;
   late final AnimationController _thumbOpacityController;
   late final ScrollbarPainter _activeScrollbarPainter;
+  ScrollController? _listenedController;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -195,7 +196,7 @@ class _ChatScrollbarState
       padding: widget.padding ?? EdgeInsets.zero,
       ignorePointer: true,
     );
-    _controller?.addListener(_syncActiveScrollbarPainterFromController);
+    _attachControllerListener(_controller);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -246,10 +247,8 @@ class _ChatScrollbarState
   void didUpdateWidget(covariant _ChatScrollbar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.removeListener(
-        _syncActiveScrollbarPainterFromController,
-      );
-      _controller?.addListener(_syncActiveScrollbarPainterFromController);
+      _detachControllerListener();
+      _attachControllerListener(_controller);
       _syncActiveScrollbarPainterFromController();
     }
   }
@@ -287,7 +286,7 @@ class _ChatScrollbarState
   void dispose() {
     _thumbFadeTimer?.cancel();
     _thumbOpacityController.removeListener(updateScrollbarPainter);
-    widget.controller?.removeListener(_syncActiveScrollbarPainterFromController);
+    _detachControllerListener();
     _activeScrollbarPainter.dispose();
     _thumbOpacityController.dispose();
     super.dispose();
@@ -364,6 +363,20 @@ class _ChatScrollbarState
       _isScrollbarActive ? 1 : 0,
       duration: ChatScrollbar.thumbFadeDuration,
     );
+  }
+
+  void _attachControllerListener(ScrollController? controller) {
+    if (_listenedController == controller) {
+      return;
+    }
+    _detachControllerListener();
+    controller?.addListener(_syncActiveScrollbarPainterFromController);
+    _listenedController = controller;
+  }
+
+  void _detachControllerListener() {
+    _listenedController?.removeListener(_syncActiveScrollbarPainterFromController);
+    _listenedController = null;
   }
 
   void _syncActiveScrollbarPainterFromController() {
