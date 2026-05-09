@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:super_editor/super_editor.dart'
+import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
     show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 
 import 'skin.dart';
@@ -149,7 +149,6 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
 class _ChatScrollbarState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
-  late final AnimationController _thumbOpacityController;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -158,6 +157,9 @@ class _ChatScrollbarState
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
   double get _scrollbarThickness => widget.thickness!;
+  Color get _thumbColor => _isScrollbarActive
+      ? ChatScrollbar.thumbColor(context)
+      : ChatScrollbar.thumbInactiveColor(context);
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
 
@@ -168,31 +170,9 @@ class _ChatScrollbarState
   bool get enableGestures => widget.interactive ?? true;
 
   @override
-  void initState() {
-    super.initState();
-    _thumbOpacityController = AnimationController(
-      vsync: this,
-      duration: ChatScrollbar.thumbFadeDuration,
-      value: 0,
-    );
-    _thumbOpacityController.addListener(updateScrollbarPainter);
-  }
-
-  @override
   void updateScrollbarPainter() {
-    final inactiveThumbColor = _showsThumb
-        ? ChatScrollbar.thumbInactiveColor(context)
-        : Colors.transparent;
-    final activeThumbColor = _showsThumb
-        ? ChatScrollbar.thumbColor(context)
-        : Colors.transparent;
-    final thumbColor = Color.lerp(
-      inactiveThumbColor,
-      activeThumbColor,
-      _thumbOpacityController.value,
-    )!;
     scrollbarPainter
-      ..color = thumbColor
+      ..color = _showsThumb ? _thumbColor : Colors.transparent
       ..trackColor = _showsTrack
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -240,8 +220,6 @@ class _ChatScrollbarState
   @override
   void dispose() {
     _thumbFadeTimer?.cancel();
-    _thumbOpacityController.removeListener(updateScrollbarPainter);
-    _thumbOpacityController.dispose();
     super.dispose();
   }
 
@@ -249,7 +227,6 @@ class _ChatScrollbarState
     bool? isHovered,
     bool? isPressed,
   }) {
-    final wasActive = _isScrollbarActive;
     final nextHovered = isHovered ?? _isScrollbarHovered;
     final nextPressed = isPressed ?? _isScrollbarPressed;
     if (nextHovered == _isScrollbarHovered &&
@@ -260,9 +237,6 @@ class _ChatScrollbarState
       _isScrollbarHovered = nextHovered;
       _isScrollbarPressed = nextPressed;
     });
-    if (wasActive != _isScrollbarActive) {
-      _syncThumbOpacityAnimation();
-    }
   }
 
   void _setUserScrollActive() {
@@ -272,7 +246,6 @@ class _ChatScrollbarState
         _isUserScrollActive = true;
       });
     }
-    _syncThumbOpacityAnimation();
   }
 
   void _scheduleUserScrollFadeOut() {
@@ -284,7 +257,6 @@ class _ChatScrollbarState
       setState(() {
         _isUserScrollActive = false;
       });
-      _syncThumbOpacityAnimation();
     });
   }
 
@@ -309,13 +281,6 @@ class _ChatScrollbarState
       return notification.direction == ScrollDirection.idle;
     }
     return notification is ScrollEndNotification;
-  }
-
-  void _syncThumbOpacityAnimation() {
-    _thumbOpacityController.animateTo(
-      _isScrollbarActive ? 1 : 0,
-      duration: ChatScrollbar.thumbFadeDuration,
-    );
   }
 
   bool _handleChatScrollNotification(ScrollNotification notification) {
