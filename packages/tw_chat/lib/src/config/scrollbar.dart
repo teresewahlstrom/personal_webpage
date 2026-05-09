@@ -142,7 +142,7 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
        );
 
   @override
-  createState() => _ChatScrollbarState();
+  State<_ChatScrollbar> createState() => _ChatScrollbarState();
 }
 
 class _ChatScrollbarState
@@ -155,6 +155,11 @@ class _ChatScrollbarState
 
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
+
+  double get _scrollbarThickness {
+    assert(widget.thickness != null);
+    return widget.thickness ?? 0;
+  }
 
   @override
   bool get showScrollbar => widget.thumbVisibility ?? false;
@@ -193,7 +198,7 @@ class _ChatScrollbarState
           : Colors.transparent
       ..trackBorderColor = Colors.transparent
       ..textDirection = Directionality.of(context)
-      ..thickness = widget.thickness!
+      ..thickness = _scrollbarThickness
       ..radius = widget.radius
       ..crossAxisMargin = widget.crossAxisMargin
       ..mainAxisMargin = widget.mainAxisMargin
