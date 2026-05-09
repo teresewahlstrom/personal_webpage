@@ -91,6 +91,8 @@ export 'src/infrastructure/keyboard.dart';
 export 'src/infrastructure/multi_tap_gesture.dart';
 export 'src/infrastructure/pausable_value_notifier.dart';
 export 'src/infrastructure/flutter/overlay_with_groups.dart';
+export 'src/infrastructure/flutter/scrollbar.dart'
+    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 export 'src/infrastructure/flutter/text_selection.dart';
 export 'src/infrastructure/platforms/android/android_document_controls.dart';
 export 'src/infrastructure/platforms/android/toolbar.dart';
