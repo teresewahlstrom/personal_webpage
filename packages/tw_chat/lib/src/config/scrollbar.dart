@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart';
+import 'package:super_editor/super_editor.dart'
+    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 
 import 'skin.dart';
 
@@ -148,7 +149,7 @@ class _ChatScrollbarPainterBridge extends RawScrollbarWithCustomPhysics {
 class _ChatScrollbarPainterBridgeState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbarPainterBridge> {
   Timer? _thumbFadeTimer;
-  late final AnimationController _thumbActivityController;
+  late final AnimationController _thumbOpacityController;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -168,11 +169,12 @@ class _ChatScrollbarPainterBridgeState
   @override
   void initState() {
     super.initState();
-    _thumbActivityController = AnimationController(
+    _thumbOpacityController = AnimationController(
       vsync: this,
       duration: ChatScrollbar.thumbFadeDuration,
       value: 0,
-    )..addListener(updateScrollbarPainter);
+    );
+    _thumbOpacityController.addListener(updateScrollbarPainter);
   }
 
   @override
@@ -183,12 +185,15 @@ class _ChatScrollbarPainterBridgeState
     final activeThumbColor = _thumbVisibility
         ? ChatScrollbar.thumbColor(context)
         : Colors.transparent;
+    final thumbColor =
+        Color.lerp(
+          inactiveThumbColor,
+          activeThumbColor,
+          _thumbOpacityController.value,
+        ) ??
+        inactiveThumbColor;
     scrollbarPainter
-      ..color = Color.lerp(
-        inactiveThumbColor,
-        activeThumbColor,
-        _thumbActivityController.value,
-      )!
+      ..color = thumbColor
       ..trackColor = _trackVisibility
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -236,7 +241,7 @@ class _ChatScrollbarPainterBridgeState
   @override
   void dispose() {
     _thumbFadeTimer?.cancel();
-    _thumbActivityController.dispose();
+    _thumbOpacityController.dispose();
     super.dispose();
   }
 
@@ -267,7 +272,7 @@ class _ChatScrollbarPainterBridgeState
         _isUserScrollActive = true;
       });
     }
-    _thumbActivityController.value = 1;
+    _thumbOpacityController.value = 1;
   }
 
   void _scheduleUserScrollFadeOut() {
@@ -308,10 +313,10 @@ class _ChatScrollbarPainterBridgeState
 
   void _syncThumbOpacityAnimation() {
     if (_isScrollbarActive) {
-      _thumbActivityController.value = 1;
+      _thumbOpacityController.value = 1;
       return;
     }
-    _thumbActivityController.animateTo(0);
+    _thumbOpacityController.animateTo(0);
   }
 
   bool _handleChatScrollNotification(ScrollNotification notification) {
