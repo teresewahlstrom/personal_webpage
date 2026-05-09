@@ -185,15 +185,14 @@ class _ChatScrollbarPainterBridgeState
     final activeThumbColor = _thumbVisibility
         ? ChatScrollbar.thumbColor(context)
         : Colors.transparent;
-    final thumbColor =
-        Color.lerp(
-          inactiveThumbColor,
-          activeThumbColor,
-          _thumbOpacityController.value,
-        ) ??
-        inactiveThumbColor;
+    final thumbColor = Color.lerp(
+      inactiveThumbColor,
+      activeThumbColor,
+      _thumbOpacityController.value,
+    );
+    assert(thumbColor != null);
     scrollbarPainter
-      ..color = thumbColor
+      ..color = thumbColor!
       ..trackColor = _trackVisibility
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -316,7 +315,10 @@ class _ChatScrollbarPainterBridgeState
       _thumbOpacityController.value = 1;
       return;
     }
-    _thumbOpacityController.animateTo(0);
+    _thumbOpacityController.animateTo(
+      0,
+      duration: ChatScrollbar.thumbFadeDuration,
+    );
   }
 
   bool _handleChatScrollNotification(ScrollNotification notification) {
