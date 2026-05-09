@@ -6,7 +6,7 @@ import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {
-  testWidgets('thumb cross-fade keeps distinct active and inactive painters', (
+  testWidgets('thumb uses one painter and only the active/inactive colors', (
     tester,
   ) async {
     final controller = ScrollController();
@@ -53,26 +53,21 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await mouse.moveTo(tester.getTopLeft(find.byType(ChatFadingScrollbar)));
-    await tester.pump(const Duration(milliseconds: 110));
-
-    final painters = tester
+    List<se_scrollbar.ScrollbarPainter> findScrollbarPainters() => tester
         .widgetList<CustomPaint>(find.byType(CustomPaint))
         .map((widget) => widget.foregroundPainter)
         .whereType<se_scrollbar.ScrollbarPainter>()
         .toList();
 
-    expect(painters, hasLength(2));
+    var painters = findScrollbarPainters();
+    expect(painters, hasLength(1));
+    expect(painters.single.color, colors.scrollbarThumb);
 
-    final inactivePainter = painters.singleWhere(
-      (painter) => painter.color == colors.scrollbarThumbInactive,
-    );
-    final activePainter = painters.singleWhere(
-      (painter) => painter.color == colors.scrollbarThumb,
-    );
+    await mouse.moveTo(tester.getTopLeft(find.byType(ChatFadingScrollbar)));
+    await tester.pump();
 
-    expect(inactivePainter.fadeoutOpacityAnimation.value, 1);
-    expect(activePainter.fadeoutOpacityAnimation.value, greaterThan(0));
-    expect(activePainter.fadeoutOpacityAnimation.value, lessThan(1));
+    painters = findScrollbarPainters();
+    expect(painters, hasLength(1));
+    expect(painters.single.color, colors.scrollbarThumbInactive);
   });
 }

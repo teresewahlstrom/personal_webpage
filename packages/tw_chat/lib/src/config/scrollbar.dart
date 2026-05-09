@@ -1,13 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' hide ScrollbarPainter;
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
-    show
-        RawScrollbarWithCustomPhysics,
-        RawScrollbarWithCustomPhysicsState,
-        ScrollbarPainter;
+    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 
 import 'skin.dart';
 
@@ -152,9 +149,6 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
 class _ChatScrollbarState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
-  late final AnimationController _thumbOpacityController;
-  late final ScrollbarPainter _activeScrollbarPainter;
-  ScrollController? _listenedController;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -162,8 +156,10 @@ class _ChatScrollbarState
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
-  ScrollController? get _controller => widget.controller;
   double get _scrollbarThickness => widget.thickness!;
+  Color get _thumbColor => _isScrollbarActive
+      ? ChatScrollbar.thumbColor(context)
+      : ChatScrollbar.thumbInactiveColor(context);
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
 
@@ -174,47 +170,9 @@ class _ChatScrollbarState
   bool get enableGestures => widget.interactive ?? true;
 
   @override
-  void initState() {
-    super.initState();
-    _thumbOpacityController = AnimationController(
-      vsync: this,
-      duration: ChatScrollbar.thumbFadeDuration,
-      value: 0,
-    );
-    _thumbOpacityController.addListener(updateScrollbarPainter);
-    _activeScrollbarPainter = ScrollbarPainter(
-      color: Colors.transparent,
-      fadeoutOpacityAnimation: _thumbOpacityController,
-      trackColor: Colors.transparent,
-      trackBorderColor: Colors.transparent,
-      thickness: _scrollbarThickness,
-      radius: widget.radius,
-      mainAxisMargin: widget.mainAxisMargin,
-      crossAxisMargin: widget.crossAxisMargin,
-      minLength: widget.minThumbLength,
-      minOverscrollLength: widget.minThumbLength,
-      padding: widget.padding ?? EdgeInsets.zero,
-      ignorePointer: true,
-    );
-    _attachControllerListener(_controller);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      _syncActiveScrollbarPainterFromController();
-    });
-  }
-
-  @override
   void updateScrollbarPainter() {
-    final inactiveThumbColor = _showsThumb
-        ? ChatScrollbar.thumbInactiveColor(context)
-        : Colors.transparent;
-    final activeThumbColor = _showsThumb
-        ? ChatScrollbar.thumbColor(context)
-        : Colors.transparent;
     scrollbarPainter
-      ..color = inactiveThumbColor
+      ..color = _showsThumb ? _thumbColor : Colors.transparent
       ..trackColor = _showsTrack
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -228,29 +186,6 @@ class _ChatScrollbarState
       ..minOverscrollLength = widget.minThumbLength
       ..padding = widget.padding ?? EdgeInsets.zero
       ..ignorePointer = !enableGestures;
-    _activeScrollbarPainter
-      ..color = activeThumbColor
-      ..trackColor = Colors.transparent
-      ..trackBorderColor = Colors.transparent
-      ..textDirection = Directionality.of(context)
-      ..thickness = _scrollbarThickness
-      ..radius = widget.radius
-      ..crossAxisMargin = widget.crossAxisMargin
-      ..mainAxisMargin = widget.mainAxisMargin
-      ..minLength = widget.minThumbLength
-      ..minOverscrollLength = widget.minThumbLength
-      ..padding = widget.padding ?? EdgeInsets.zero
-      ..ignorePointer = true;
-  }
-
-  @override
-  void didUpdateWidget(covariant _ChatScrollbar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      _detachControllerListener();
-      _attachControllerListener(_controller);
-      _syncActiveScrollbarPainterFromController();
-    }
   }
 
   @override
@@ -285,10 +220,6 @@ class _ChatScrollbarState
   @override
   void dispose() {
     _thumbFadeTimer?.cancel();
-    _thumbOpacityController.removeListener(updateScrollbarPainter);
-    _detachControllerListener();
-    _activeScrollbarPainter.dispose();
-    _thumbOpacityController.dispose();
     super.dispose();
   }
 
@@ -296,7 +227,6 @@ class _ChatScrollbarState
     bool? isHovered,
     bool? isPressed,
   }) {
-    final wasActive = _isScrollbarActive;
     final nextHovered = isHovered ?? _isScrollbarHovered;
     final nextPressed = isPressed ?? _isScrollbarPressed;
     if (nextHovered == _isScrollbarHovered &&
@@ -307,9 +237,6 @@ class _ChatScrollbarState
       _isScrollbarHovered = nextHovered;
       _isScrollbarPressed = nextPressed;
     });
-    if (wasActive != _isScrollbarActive) {
-      _syncThumbOpacityAnimation();
-    }
   }
 
   void _setUserScrollActive() {
@@ -319,7 +246,6 @@ class _ChatScrollbarState
         _isUserScrollActive = true;
       });
     }
-    _syncThumbOpacityAnimation();
   }
 
   void _scheduleUserScrollFadeOut() {
@@ -331,7 +257,6 @@ class _ChatScrollbarState
       setState(() {
         _isUserScrollActive = false;
       });
-      _syncThumbOpacityAnimation();
     });
   }
 
@@ -358,46 +283,6 @@ class _ChatScrollbarState
     return notification is ScrollEndNotification;
   }
 
-  void _syncThumbOpacityAnimation() {
-    _thumbOpacityController.animateTo(
-      _isScrollbarActive ? 1 : 0,
-      duration: ChatScrollbar.thumbFadeDuration,
-    );
-  }
-
-  void _attachControllerListener(ScrollController? controller) {
-    if (_listenedController == controller) {
-      return;
-    }
-    _detachControllerListener();
-    controller?.addListener(_syncActiveScrollbarPainterFromController);
-    _listenedController = controller;
-  }
-
-  void _detachControllerListener() {
-    _listenedController?.removeListener(_syncActiveScrollbarPainterFromController);
-    _listenedController = null;
-  }
-
-  void _syncActiveScrollbarPainterFromController() {
-    final controller = _controller;
-    if (!mounted || controller == null || !controller.hasClients) {
-      return;
-    }
-    final position = controller.position;
-    _activeScrollbarPainter.update(position, position.axisDirection);
-  }
-
-  bool _handleActivePainterMetricsNotification(
-    ScrollMetricsNotification notification,
-  ) {
-    _activeScrollbarPainter.update(
-      notification.metrics,
-      notification.metrics.axisDirection,
-    );
-    return false;
-  }
-
   bool _handleChatScrollNotification(ScrollNotification notification) {
     if (_isUserDrivenScrollNotification(notification)) {
       _setUserScrollActive();
@@ -410,15 +295,9 @@ class _ChatScrollbarState
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<ScrollMetricsNotification>(
-      onNotification: _handleActivePainterMetricsNotification,
-      child: NotificationListener<ScrollNotification>(
-        onNotification: _handleChatScrollNotification,
-        child: CustomPaint(
-          foregroundPainter: _activeScrollbarPainter,
-          child: super.build(context),
-        ),
-      ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: _handleChatScrollNotification,
+      child: super.build(context),
     );
   }
 }
