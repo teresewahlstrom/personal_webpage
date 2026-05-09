@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ScrollbarPainter;
 import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
     show
@@ -161,6 +161,7 @@ class _ChatScrollbarState
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
+  ScrollController get _controller => widget.controller!;
   double get _scrollbarThickness => widget.thickness!;
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
@@ -194,7 +195,7 @@ class _ChatScrollbarState
       padding: widget.padding ?? EdgeInsets.zero,
       ignorePointer: true,
     );
-    widget.controller.addListener(_syncActiveScrollbarPainterFromController);
+    _controller.addListener(_syncActiveScrollbarPainterFromController);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -245,8 +246,10 @@ class _ChatScrollbarState
   void didUpdateWidget(covariant _ChatScrollbar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller.removeListener(_syncActiveScrollbarPainterFromController);
-      widget.controller.addListener(_syncActiveScrollbarPainterFromController);
+      oldWidget.controller?.removeListener(
+        _syncActiveScrollbarPainterFromController,
+      );
+      _controller.addListener(_syncActiveScrollbarPainterFromController);
       _syncActiveScrollbarPainterFromController();
     }
   }
@@ -284,7 +287,7 @@ class _ChatScrollbarState
   void dispose() {
     _thumbFadeTimer?.cancel();
     _thumbOpacityController.removeListener(updateScrollbarPainter);
-    widget.controller.removeListener(_syncActiveScrollbarPainterFromController);
+    widget.controller?.removeListener(_syncActiveScrollbarPainterFromController);
     _activeScrollbarPainter.dispose();
     _thumbOpacityController.dispose();
     super.dispose();
@@ -364,10 +367,10 @@ class _ChatScrollbarState
   }
 
   void _syncActiveScrollbarPainterFromController() {
-    if (!mounted || !widget.controller.hasClients) {
+    if (!mounted || !_controller.hasClients) {
       return;
     }
-    final position = widget.controller.position;
+    final position = _controller.position;
     _activeScrollbarPainter.update(position, position.axisDirection);
   }
 
