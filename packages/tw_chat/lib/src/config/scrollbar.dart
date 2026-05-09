@@ -159,7 +159,7 @@ class _ChatScrollbarState
 
   double get _scrollbarThickness {
     assert(widget.thickness != null);
-    return widget.thickness ?? 0;
+    return widget.thickness!;
   }
 
   @override
@@ -191,7 +191,7 @@ class _ChatScrollbarState
       inactiveThumbColor,
       activeThumbColor,
       _thumbOpacityController.value,
-    )!;
+    ) ?? Colors.transparent;
     scrollbarPainter
       ..color = thumbColor
       ..trackColor = (widget.trackVisibility ?? false)
