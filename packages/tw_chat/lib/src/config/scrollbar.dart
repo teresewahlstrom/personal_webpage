@@ -112,6 +112,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
   @override
   void initState() {
     super.initState();
+    widget.controller.addListener(_handleControllerScrollChange);
     _activeThumbOpacityController = AnimationController(
       vsync: this,
       duration: ChatScrollbar.thumbFadeDuration,
@@ -155,6 +156,7 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
 
   @override
   void dispose() {
+    widget.controller.removeListener(_handleControllerScrollChange);
     _thumbFadeTimer?.cancel();
     _activeThumbOpacityController.dispose();
     _inactiveScrollbarPainter.dispose();
@@ -193,6 +195,8 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
       _activeScrollbarPainter.minOverscrollLength = widget.minThumbLength;
     }
     if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_handleControllerScrollChange);
+      widget.controller.addListener(_handleControllerScrollChange);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) {
           return;
@@ -200,6 +204,10 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
         _syncPainterMetricsFromController();
       });
     }
+  }
+
+  void _handleControllerScrollChange() {
+    _syncPainterMetricsFromController();
   }
 
   void _setScrollbarInteraction({
@@ -305,6 +313,11 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
     return false;
   }
 
+  bool _handleScrollMetricsNotification(ScrollMetricsNotification notification) {
+    _updatePainterMetrics(notification.metrics, notification.metrics.axisDirection);
+    return false;
+  }
+
   void _syncThumbOpacityAnimation() {
     if (_isScrollbarActive) {
       _activeThumbOpacityController.value = 1;
@@ -353,67 +366,74 @@ class _ChatFadingScrollbarState extends State<ChatFadingScrollbar>
   @override
   Widget build(BuildContext context) {
     _syncPainterTheme(context);
-    return NotificationListener<ScrollNotification>(
-      onNotification: _handleScrollNotification,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final size = Size(constraints.maxWidth, constraints.maxHeight);
-          return Listener(
-            behavior: HitTestBehavior.translucent,
-            onPointerDown: (event) {
-              final isInteracting = _isWithinScrollbarRegion(
-                event.localPosition,
-                size,
-              );
-              _setScrollbarInteraction(
-                isHovered: isInteracting,
-                isPressed: isInteracting,
-              );
-            },
-            onPointerUp: (event) {
-              _setScrollbarInteraction(
-                isHovered: _isWithinScrollbarRegion(event.localPosition, size),
-                isPressed: false,
-              );
-            },
-            onPointerCancel: (_) {
-              _setScrollbarInteraction(isHovered: false, isPressed: false);
-            },
-            child: MouseRegion(
-              onHover: (event) => _updateHover(event.localPosition, size),
-              onExit: (_) => _setScrollbarInteraction(isHovered: false),
-              child: Stack(
-                fit: StackFit.passthrough,
-                children: [
-                  RawScrollbar(
-                    controller: widget.controller,
-                    thumbVisibility: widget.thumbVisibility,
-                    interactive: widget.interactive,
-                    trackVisibility: false,
-                    thickness: widget.thickness,
-                    minThumbLength: widget.minThumbLength,
-                    crossAxisMargin: widget.crossAxisMargin,
-                    mainAxisMargin: widget.mainAxisMargin,
-                    padding: widget.padding,
-                    radius: widget.radius,
-                    thumbColor: Colors.transparent,
-                    child: widget.child,
-                  ),
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: CustomPaint(foregroundPainter: _inactiveScrollbarPainter),
+    return NotificationListener<ScrollMetricsNotification>(
+      onNotification: _handleScrollMetricsNotification,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: _handleScrollNotification,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final size = Size(constraints.maxWidth, constraints.maxHeight);
+            return Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (event) {
+                final isInteracting = _isWithinScrollbarRegion(
+                  event.localPosition,
+                  size,
+                );
+                _setScrollbarInteraction(
+                  isHovered: isInteracting,
+                  isPressed: isInteracting,
+                );
+              },
+              onPointerUp: (event) {
+                _setScrollbarInteraction(
+                  isHovered: _isWithinScrollbarRegion(event.localPosition, size),
+                  isPressed: false,
+                );
+              },
+              onPointerCancel: (_) {
+                _setScrollbarInteraction(isHovered: false, isPressed: false);
+              },
+              child: MouseRegion(
+                onHover: (event) => _updateHover(event.localPosition, size),
+                onExit: (_) => _setScrollbarInteraction(isHovered: false),
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    RawScrollbar(
+                      controller: widget.controller,
+                      thumbVisibility: widget.thumbVisibility,
+                      interactive: widget.interactive,
+                      trackVisibility: false,
+                      thickness: widget.thickness,
+                      minThumbLength: widget.minThumbLength,
+                      crossAxisMargin: widget.crossAxisMargin,
+                      mainAxisMargin: widget.mainAxisMargin,
+                      padding: widget.padding,
+                      radius: widget.radius,
+                      thumbColor: Colors.transparent,
+                      child: widget.child,
                     ),
-                  ),
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: CustomPaint(foregroundPainter: _activeScrollbarPainter),
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: CustomPaint(
+                          foregroundPainter: _inactiveScrollbarPainter,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: CustomPaint(
+                          foregroundPainter: _activeScrollbarPainter,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
