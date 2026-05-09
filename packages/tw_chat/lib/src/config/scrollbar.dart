@@ -180,22 +180,20 @@ class _ChatScrollbarState
 
   @override
   void updateScrollbarPainter() {
-    final showsThumb = _showsThumb;
-    final showsTrack = _showsTrack;
-    final inactiveThumbColor = showsThumb
+    final inactiveThumbColor = _showsThumb
         ? ChatScrollbar.thumbInactiveColor(context)
         : Colors.transparent;
-    final activeThumbColor = showsThumb
+    final activeThumbColor = _showsThumb
         ? ChatScrollbar.thumbColor(context)
         : Colors.transparent;
     final thumbColor = Color.lerp(
       inactiveThumbColor,
       activeThumbColor,
       _thumbOpacityController.value,
-    ) ?? Colors.transparent;
+    )!;
     scrollbarPainter
       ..color = thumbColor
-      ..trackColor = showsTrack
+      ..trackColor = _showsTrack
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
       ..trackBorderColor = Colors.transparent
