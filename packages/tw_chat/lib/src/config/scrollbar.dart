@@ -142,8 +142,7 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
        );
 
   @override
-  RawScrollbarWithCustomPhysicsState<_ChatScrollbar> createState() =>
-      _ChatScrollbarState();
+  createState() => _ChatScrollbarState();
 }
 
 class _ChatScrollbarState
@@ -157,11 +156,8 @@ class _ChatScrollbarState
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
 
-  bool get _thumbVisibility => widget.thumbVisibility ?? false;
-  bool get _trackVisibility => widget.trackVisibility ?? false;
-
   @override
-  bool get showScrollbar => _thumbVisibility;
+  bool get showScrollbar => widget.thumbVisibility ?? false;
 
   @override
   bool get enableGestures => widget.interactive ?? true;
@@ -179,10 +175,10 @@ class _ChatScrollbarState
 
   @override
   void updateScrollbarPainter() {
-    final inactiveThumbColor = _thumbVisibility
+    final inactiveThumbColor = (widget.thumbVisibility ?? false)
         ? ChatScrollbar.thumbInactiveColor(context)
         : Colors.transparent;
-    final activeThumbColor = _thumbVisibility
+    final activeThumbColor = (widget.thumbVisibility ?? false)
         ? ChatScrollbar.thumbColor(context)
         : Colors.transparent;
     final thumbColor = Color.lerp(
@@ -192,7 +188,7 @@ class _ChatScrollbarState
     );
     scrollbarPainter
       ..color = thumbColor
-      ..trackColor = _trackVisibility
+      ..trackColor = (widget.trackVisibility ?? false)
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
       ..trackBorderColor = Colors.transparent
@@ -239,6 +235,7 @@ class _ChatScrollbarState
   @override
   void dispose() {
     _thumbFadeTimer?.cancel();
+    _thumbOpacityController.removeListener(updateScrollbarPainter);
     _thumbOpacityController.dispose();
     super.dispose();
   }
