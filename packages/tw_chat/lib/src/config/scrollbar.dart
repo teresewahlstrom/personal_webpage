@@ -149,6 +149,9 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
 class _ChatScrollbarState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
+  late final AnimationController _thumbColorAnimationController;
+  late Animation<Color?> _thumbColorAnimation;
+  Color? _thumbColorTarget;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -160,8 +163,25 @@ class _ChatScrollbarState
   Color get _thumbColor => _isScrollbarActive
       ? ChatScrollbar.thumbColor(context)
       : ChatScrollbar.thumbInactiveColor(context);
+  Color get _animatedThumbColor => _thumbColorAnimation.value ?? _thumbColor;
   bool get _showsThumb => widget.thumbVisibility ?? false;
   bool get _showsTrack => widget.trackVisibility ?? false;
+
+  @override
+  void initState() {
+    super.initState();
+    _thumbColorAnimationController = AnimationController(
+      vsync: this,
+      duration: ChatScrollbar.thumbFadeDuration,
+    )..addListener(_handleThumbColorAnimationTick);
+    _thumbColorAnimation = const AlwaysStoppedAnimation<Color?>(Colors.transparent);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncThumbColor();
+  }
 
   @override
   bool get showScrollbar => _showsThumb;
@@ -172,7 +192,7 @@ class _ChatScrollbarState
   @override
   void updateScrollbarPainter() {
     scrollbarPainter
-      ..color = _showsThumb ? _thumbColor : Colors.transparent
+      ..color = _showsThumb ? _animatedThumbColor : Colors.transparent
       ..trackColor = _showsTrack
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -220,6 +240,7 @@ class _ChatScrollbarState
   @override
   void dispose() {
     _thumbFadeTimer?.cancel();
+    _thumbColorAnimationController.dispose();
     super.dispose();
   }
 
@@ -227,6 +248,7 @@ class _ChatScrollbarState
     bool? isHovered,
     bool? isPressed,
   }) {
+    final wasActive = _isScrollbarActive;
     final nextHovered = isHovered ?? _isScrollbarHovered;
     final nextPressed = isPressed ?? _isScrollbarPressed;
     if (nextHovered == _isScrollbarHovered &&
@@ -237,14 +259,17 @@ class _ChatScrollbarState
       _isScrollbarHovered = nextHovered;
       _isScrollbarPressed = nextPressed;
     });
+    _syncThumbColor(animate: wasActive != _isScrollbarActive);
   }
 
   void _setUserScrollActive() {
     _thumbFadeTimer?.cancel();
+    final wasActive = _isScrollbarActive;
     if (!_isUserScrollActive) {
       setState(() {
         _isUserScrollActive = true;
       });
+      _syncThumbColor(animate: wasActive != _isScrollbarActive);
     }
   }
 
@@ -257,7 +282,50 @@ class _ChatScrollbarState
       setState(() {
         _isUserScrollActive = false;
       });
+      _syncThumbColor(animate: true);
     });
+  }
+
+  void _handleThumbColorAnimationTick() {
+    scrollbarPainter.color = _showsThumb ? _animatedThumbColor : Colors.transparent;
+  }
+
+  void _syncThumbColor({bool animate = false}) {
+    final targetColor = _thumbColor;
+    if (_thumbColorTarget == null || !_showsThumb) {
+      _thumbColorAnimationController.stop();
+      _thumbColorTarget = targetColor;
+      _thumbColorAnimation = AlwaysStoppedAnimation<Color?>(targetColor);
+      _handleThumbColorAnimationTick();
+      return;
+    }
+    if (_thumbColorTarget == targetColor) {
+      _handleThumbColorAnimationTick();
+      return;
+    }
+
+    _thumbColorTarget = targetColor;
+    if (!animate) {
+      _thumbColorAnimationController.stop();
+      _thumbColorAnimation = AlwaysStoppedAnimation<Color?>(targetColor);
+      _handleThumbColorAnimationTick();
+      return;
+    }
+
+    final beginColor = _animatedThumbColor;
+    _thumbColorAnimation = ColorTween(
+      begin: beginColor,
+      end: targetColor,
+    ).animate(
+      CurvedAnimation(
+        parent: _thumbColorAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    _thumbColorAnimationController
+      ..stop()
+      ..value = 0;
+    unawaited(_thumbColorAnimationController.forward());
   }
 
   bool _isUserDrivenScrollNotification(ScrollNotification notification) {
