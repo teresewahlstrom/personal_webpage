@@ -34,8 +34,8 @@ const ChatSkinData chatDarkSkin = ChatSkinData(
     markupBlockquoteRail: Color(0xFF90E8F8),
     markupLink: Color(0xFF90E8F8),
     markupLinkDecoration: Color(0xFF90E8F8),
-    scrollbarThumb: Color(0x7690E8F8),
-    scrollbarThumbInactive: Color(0xFF2F4A63),
+    scrollbarThumb: Color(0x397199FF),
+    scrollbarThumbInactive: Color(0xFF283143),
     scrollbarTrack: Color(0x004EF0FF),
   ),
 );
