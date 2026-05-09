@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:super_editor/super_editor.dart'
-    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
+import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
+    show
+        RawScrollbarWithCustomPhysics,
+        RawScrollbarWithCustomPhysicsState,
+        ScrollbarPainter;
 
 import 'skin.dart';
 
@@ -150,6 +153,7 @@ class _ChatScrollbarState
     extends RawScrollbarWithCustomPhysicsState<_ChatScrollbar> {
   Timer? _thumbFadeTimer;
   late final AnimationController _thumbOpacityController;
+  late final ScrollbarPainter _activeScrollbarPainter;
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
@@ -176,6 +180,27 @@ class _ChatScrollbarState
       value: 0,
     );
     _thumbOpacityController.addListener(updateScrollbarPainter);
+    _activeScrollbarPainter = ScrollbarPainter(
+      color: Colors.transparent,
+      fadeoutOpacityAnimation: _thumbOpacityController,
+      trackColor: Colors.transparent,
+      trackBorderColor: Colors.transparent,
+      thickness: _scrollbarThickness,
+      radius: widget.radius,
+      mainAxisMargin: widget.mainAxisMargin,
+      crossAxisMargin: widget.crossAxisMargin,
+      minLength: widget.minThumbLength,
+      minOverscrollLength: widget.minThumbLength,
+      padding: widget.padding ?? EdgeInsets.zero,
+      ignorePointer: true,
+    );
+    widget.controller.addListener(_syncActiveScrollbarPainterFromController);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      _syncActiveScrollbarPainterFromController();
+    });
   }
 
   @override
@@ -186,13 +211,8 @@ class _ChatScrollbarState
     final activeThumbColor = _showsThumb
         ? ChatScrollbar.thumbColor(context)
         : Colors.transparent;
-    final thumbColor = Color.lerp(
-      inactiveThumbColor,
-      activeThumbColor,
-      _thumbOpacityController.value,
-    )!;
     scrollbarPainter
-      ..color = thumbColor
+      ..color = inactiveThumbColor
       ..trackColor = _showsTrack
           ? ChatScrollbar.trackColor(context)
           : Colors.transparent
@@ -206,6 +226,29 @@ class _ChatScrollbarState
       ..minOverscrollLength = widget.minThumbLength
       ..padding = widget.padding ?? EdgeInsets.zero
       ..ignorePointer = !enableGestures;
+    _activeScrollbarPainter
+      ..color = activeThumbColor
+      ..trackColor = Colors.transparent
+      ..trackBorderColor = Colors.transparent
+      ..textDirection = Directionality.of(context)
+      ..thickness = _scrollbarThickness
+      ..radius = widget.radius
+      ..crossAxisMargin = widget.crossAxisMargin
+      ..mainAxisMargin = widget.mainAxisMargin
+      ..minLength = widget.minThumbLength
+      ..minOverscrollLength = widget.minThumbLength
+      ..padding = widget.padding ?? EdgeInsets.zero
+      ..ignorePointer = true;
+  }
+
+  @override
+  void didUpdateWidget(covariant _ChatScrollbar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_syncActiveScrollbarPainterFromController);
+      widget.controller.addListener(_syncActiveScrollbarPainterFromController);
+      _syncActiveScrollbarPainterFromController();
+    }
   }
 
   @override
@@ -241,6 +284,8 @@ class _ChatScrollbarState
   void dispose() {
     _thumbFadeTimer?.cancel();
     _thumbOpacityController.removeListener(updateScrollbarPainter);
+    widget.controller.removeListener(_syncActiveScrollbarPainterFromController);
+    _activeScrollbarPainter.dispose();
     _thumbOpacityController.dispose();
     super.dispose();
   }
@@ -318,6 +363,24 @@ class _ChatScrollbarState
     );
   }
 
+  void _syncActiveScrollbarPainterFromController() {
+    if (!mounted || !widget.controller.hasClients) {
+      return;
+    }
+    final position = widget.controller.position;
+    _activeScrollbarPainter.update(position, position.axisDirection);
+  }
+
+  bool _handleActivePainterMetricsNotification(
+    ScrollMetricsNotification notification,
+  ) {
+    _activeScrollbarPainter.update(
+      notification.metrics,
+      notification.metrics.axisDirection,
+    );
+    return false;
+  }
+
   bool _handleChatScrollNotification(ScrollNotification notification) {
     if (_isUserDrivenScrollNotification(notification)) {
       _setUserScrollActive();
@@ -330,9 +393,15 @@ class _ChatScrollbarState
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: _handleChatScrollNotification,
-      child: super.build(context),
+    return NotificationListener<ScrollMetricsNotification>(
+      onNotification: _handleActivePainterMetricsNotification,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: _handleChatScrollNotification,
+        child: CustomPaint(
+          foregroundPainter: _activeScrollbarPainter,
+          child: super.build(context),
+        ),
+      ),
     );
   }
 }
