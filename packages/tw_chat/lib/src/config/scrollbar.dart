@@ -262,12 +262,11 @@ class _ChatScrollbarPainterBridgeState
 
   void _setUserScrollActive() {
     _thumbFadeTimer?.cancel();
-    if (_isUserScrollActive) {
-      return;
+    if (!_isUserScrollActive) {
+      setState(() {
+        _isUserScrollActive = true;
+      });
     }
-    setState(() {
-      _isUserScrollActive = true;
-    });
     _thumbActivityController.value = 1;
   }
 
