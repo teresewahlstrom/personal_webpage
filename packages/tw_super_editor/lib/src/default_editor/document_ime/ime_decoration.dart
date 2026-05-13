@@ -59,7 +59,12 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
       return;
     }
 
-    (connection as dynamic).updateStyle(style);
+    try {
+      (connection as dynamic).updateStyle(style);
+    } on NoSuchMethodError {
+      // Older Flutter SDKs and custom test doubles may not implement
+      // updateStyle yet.
+    }
   }
 
   @override
