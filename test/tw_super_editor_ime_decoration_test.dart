@@ -14,7 +14,7 @@ void main() {
 }
 
 class _TestTextInputConnectionDecorator extends TextInputConnectionDecorator {
-  _TestTextInputConnectionDecorator([super.client]);
+  _TestTextInputConnectionDecorator(TextInputConnection connection) : super(connection);
 }
 
 class _RecordingTextInputConnection implements TextInputConnection {

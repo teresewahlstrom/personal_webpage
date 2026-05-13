@@ -48,7 +48,12 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
           textDirection: textDirection,
           textAlign: textAlign);
 
-  void updateStyle(dynamic style) {
+  /// Forwards [TextInputConnection.updateStyle] on newer Flutter SDKs.
+  ///
+  /// [style] is intentionally typed as [Object] so this decorator stays
+  /// source-compatible with older Flutter SDKs where `TextInputStyle` doesn't
+  /// exist yet.
+  void updateStyle(Object style) {
     final connection = client;
     if (connection == null) {
       return;
