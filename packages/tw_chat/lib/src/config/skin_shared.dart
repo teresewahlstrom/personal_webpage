@@ -437,6 +437,9 @@ class ChatSkinTextStyles {
     int level,
     ChatSkinColors colors,
   ) {
+    // Heading scales for levels 1..3 (H1, H2, H3).
+    // We'll treat H3 as removed (render as normal text),
+    // and make H2 exactly 1.0 logical pixel smaller than before.
     const scales = <double>[1.55, 1.36, 1.22];
     const weights = <FontWeight>[
       FontWeight.w600,
@@ -446,10 +449,21 @@ class ChatSkinTextStyles {
 
     final clampedLevel = level.clamp(1, 3);
     final index = clampedLevel - 1;
+
+    // Remove H3 entirely: render it using the base style (no heading styling).
+    if (clampedLevel == 3) {
+      return baseStyle;
+    }
+
     final strongStyle = markdownStrongStyle(baseStyle, colors);
-    final fontSize = baseStyle.fontSize == null
+    double? fontSize = baseStyle.fontSize == null
         ? null
         : baseStyle.fontSize! * scales[index];
+
+    // Make H2 (level == 2) 1.0 logical pixel smaller than the computed size.
+    if (clampedLevel == 2 && fontSize != null) {
+      fontSize = (fontSize - 1.0).clamp(4.0, double.infinity);
+    }
 
     return strongStyle.copyWith(
       fontSize: fontSize,

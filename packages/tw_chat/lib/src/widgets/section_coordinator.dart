@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:super_editor/super_editor.dart';
+import 'package:tw_super_editor/super_editor.dart';
 
 import '../config/config.dart';
 import '../logic/message_diff.dart';
@@ -459,9 +459,5 @@ class SectionCoordinator extends ChangeNotifier {
 
   void _notifyChatView() {
     _chatViewTick.value++;
-  }
-
-  void _notifyComposerView() {
-    _composerViewTick.value++;
   }
 }

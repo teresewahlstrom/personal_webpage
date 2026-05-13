@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:super_editor/src/infrastructure/flutter/scrollbar.dart'
-    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
+import 'package:tw_super_editor/super_editor.dart'
+  show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 
 import 'skin.dart';
 
@@ -121,19 +121,15 @@ class _ChatScrollbar extends RawScrollbarWithCustomPhysics {
     required super.interactive,
     required super.trackVisibility,
     required double thickness,
-    required double minThumbLength,
-    required double crossAxisMargin,
-    required double mainAxisMargin,
+    required super.minThumbLength,
+    required super.crossAxisMargin,
+    required super.mainAxisMargin,
     required Radius radius,
-    required EdgeInsets? padding,
+    required super.padding,
   }) : super(
          physics: const ClampingScrollPhysics(),
          thickness: thickness,
-         minThumbLength: minThumbLength,
          minOverscrollLength: minThumbLength,
-         crossAxisMargin: crossAxisMargin,
-         mainAxisMargin: mainAxisMargin,
-         padding: padding,
          radius: radius,
          thumbColor: Colors.transparent,
          trackColor: Colors.transparent,

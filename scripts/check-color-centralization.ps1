@@ -24,6 +24,7 @@ $rgArgs = @(
   '--glob', 'packages/**/*.dart',
   '--glob', '!lib/config/app_color_theme.dart',
   '--glob', '!packages/tw_chat/**',
+  '--glob', '!packages/tw_super_editor/**',
   '--glob', '!packages/tw_keywords/lib/src/config/keyword_color_theme.dart',
   $pattern,
   $repoRoot

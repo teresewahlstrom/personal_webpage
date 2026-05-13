@@ -3,3 +3,7 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     avoid_print: true
+
+analyzer:
+  exclude:
+    - packages/tw_super_editor/**

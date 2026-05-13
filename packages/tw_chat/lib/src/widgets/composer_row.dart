@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:super_editor/super_editor.dart';
+import 'package:tw_super_editor/super_editor.dart';
 
 import '../config/config.dart';
 
