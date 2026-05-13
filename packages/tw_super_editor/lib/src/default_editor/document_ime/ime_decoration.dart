@@ -52,7 +52,9 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
   ///
   /// [style] is intentionally typed as [Object] so this decorator stays
   /// source-compatible with older Flutter SDKs where `TextInputStyle` doesn't
-  /// exist yet.
+  /// exist yet. For the same reason, this method uses a dynamic dispatch instead
+  /// of a type-safe direct call: older SDKs don't declare `updateStyle`, so a
+  /// compile-time invocation would break those builds.
   void updateStyle(Object style) {
     final wrappedConnection = client;
     if (wrappedConnection == null) {
