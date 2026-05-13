@@ -48,6 +48,15 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
           textDirection: textDirection,
           textAlign: textAlign);
 
+  void updateStyle(dynamic style) {
+    final connection = client;
+    if (connection == null) {
+      return;
+    }
+
+    (connection as dynamic).updateStyle(style);
+  }
+
   @override
   void requestAutofill() => client?.requestAutofill();
 
