@@ -25,18 +25,8 @@ class ChatLayout {
   /// Minimum width baseline used for margin interpolation on small screens.
   static const minReferenceWidth = 320.0;
 
-  /// Width factors by breakpoint band for expanded dock sizing.
-  static const phonePanelWidthFactor = 0.94;
-  static const tabletPanelWidthFactor = 0.60;
-  static const desktopPanelWidthFactor = 0.38;
-
-  /// Min/max panel width clamps by breakpoint band.
-  static const phonePanelMinWidth = 240.0;
-  static const phonePanelMaxWidth = 440.0;
-  static const tabletPanelMinWidth = 360.0;
-  static const tabletPanelMaxWidth = 520.0;
-  static const desktopPanelMinWidth = 380.0;
-  static const desktopPanelMaxWidth = 560.0;
+  /// Preferred dock width whenever the viewport has enough room.
+  static const stableExpandedDockWidth = 560.0;
 
   /// Height factors by breakpoint band for dock max-height resolution.
   static const phoneHeightFactor = 0.82;
@@ -145,15 +135,7 @@ class ChatLayout {
     required double viewportWidth,
     required double availableWidth,
   }) {
-    final panelFactor = _panelWidthFactor(viewportWidth);
-    final targetWidth = viewportWidth * panelFactor;
-    final minWidth = _panelMinWidth(viewportWidth);
-    final maxWidth = _panelMaxWidth(viewportWidth);
-    final clampedTarget = targetWidth.clamp(minWidth, maxWidth);
-    if (availableWidth < minWidth) {
-      return availableWidth;
-    }
-    return clampedTarget.clamp(minWidth, availableWidth);
+    return stableExpandedDockWidth.clamp(0.0, availableWidth);
   }
 
   static double maxDockHeight({
@@ -246,36 +228,6 @@ class ChatLayout {
 
   static double _lerp(double a, double b, double t) {
     return lerpDouble(a, b, t) ?? b;
-  }
-
-  static double _panelWidthFactor(double viewportWidth) {
-    if (viewportWidth <= phoneBreakpoint) {
-      return phonePanelWidthFactor;
-    }
-    if (viewportWidth <= desktopBreakpoint) {
-      return tabletPanelWidthFactor;
-    }
-    return desktopPanelWidthFactor;
-  }
-
-  static double _panelMinWidth(double viewportWidth) {
-    if (viewportWidth <= phoneBreakpoint) {
-      return phonePanelMinWidth;
-    }
-    if (viewportWidth <= desktopBreakpoint) {
-      return tabletPanelMinWidth;
-    }
-    return desktopPanelMinWidth;
-  }
-
-  static double _panelMaxWidth(double viewportWidth) {
-    if (viewportWidth <= phoneBreakpoint) {
-      return phonePanelMaxWidth;
-    }
-    if (viewportWidth <= desktopBreakpoint) {
-      return tabletPanelMaxWidth;
-    }
-    return desktopPanelMaxWidth;
   }
 
   static double _heightFactor(double viewportWidth) {

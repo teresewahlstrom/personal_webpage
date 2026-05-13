@@ -67,7 +67,7 @@ void main() {
     expect(height, 560);
   });
 
-  test('compact width stays at the natural dock width instead of filling the viewport', () {
+  test('compact width keeps the same fixed dock width when space allows', () {
     const viewportSize = Size(740, 1000);
     const viewPadding = EdgeInsets.only(left: 20, right: 10);
     final margin = margin0(
@@ -81,20 +81,20 @@ void main() {
     );
 
     expect(margin, 4);
-    expect(width, closeTo(426.0, 0.1));
+    expect(width, closeTo(560.0, 0.1));
   });
 
-  test('expanded width remains capped below the viewport width', () {
+  test('expanded width remains fixed at the global dock width target', () {
     const viewportSize = Size(800, 1200);
     final margin = margin0(viewportSize: viewportSize);
     final width = width0(viewportSize: viewportSize, dockMargin: margin);
 
     expect(margin, greaterThan(0));
-    expect(width, closeTo(480, 0.1));
+    expect(width, closeTo(560, 0.1));
     expect(width, lessThan(800));
   });
 
-  test('landscape and portrait both cap the dock at the natural width', () {
+  test('landscape and portrait keep the same fixed dock width', () {
     const landscapeViewport = Size(800, 600);
     const portraitViewport = Size(800, 1200);
     final landscapeMargin = margin0(viewportSize: landscapeViewport);
@@ -109,18 +109,28 @@ void main() {
     );
 
     expect(landscapeMargin, lessThan(portraitMargin));
-    expect(landscapeWidth, closeTo(480, 0.1));
-    expect(portraitWidth, closeTo(480, 0.1));
+    expect(landscapeWidth, closeTo(560, 0.1));
+    expect(portraitWidth, closeTo(560, 0.1));
   });
 
-  test('desktop width uses the wider desktop factor', () {
+  test('desktop width keeps the same fixed dock width', () {
     const viewportSize = Size(1300, 1200);
     final margin = margin0(viewportSize: viewportSize);
     final width = width0(viewportSize: viewportSize, dockMargin: margin);
 
     expect(margin, greaterThan(0));
-    expect(width, closeTo(494, 0.1));
+    expect(width, closeTo(560, 0.1));
     expect(width, lessThan(1300));
+  });
+
+  test('dock width shrinks only when available width is below fixed width', () {
+    const viewportSize = Size(580, 900);
+    final margin = margin0(viewportSize: viewportSize);
+    final width = width0(viewportSize: viewportSize, dockMargin: margin);
+    final available = viewportSize.width - margin * 2;
+
+    expect(available, lessThan(560));
+    expect(width, closeTo(available, 0.1));
   });
 
   test(
