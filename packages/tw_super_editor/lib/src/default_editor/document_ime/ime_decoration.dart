@@ -54,13 +54,13 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
   /// source-compatible with older Flutter SDKs where `TextInputStyle` doesn't
   /// exist yet.
   void updateStyle(Object style) {
-    final connection = client;
-    if (connection == null) {
+    final wrappedConnection = client;
+    if (wrappedConnection == null) {
       return;
     }
 
     try {
-      (connection as dynamic).updateStyle(style);
+      (wrappedConnection as dynamic).updateStyle(style);
     } on NoSuchMethodError {
       // Older Flutter SDKs and custom test doubles may not implement
       // updateStyle yet.

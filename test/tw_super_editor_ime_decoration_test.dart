@@ -11,6 +11,12 @@ void main() {
 
     expect(connection.lastUpdateStyleArgument, 'style payload');
   });
+
+  test('TextInputConnectionDecorator ignores missing updateStyle implementations', () {
+    final decorator = _TestTextInputConnectionDecorator(_ThrowingTextInputConnection());
+
+    expect(() => decorator.updateStyle('style payload'), returnsNormally);
+  });
 }
 
 class _TestTextInputConnectionDecorator extends TextInputConnectionDecorator {
@@ -27,6 +33,13 @@ class _RecordingTextInputConnection implements TextInputConnection {
       return null;
     }
 
+    return super.noSuchMethod(invocation);
+  }
+}
+
+class _ThrowingTextInputConnection implements TextInputConnection {
+  @override
+  dynamic noSuchMethod(Invocation invocation) {
     return super.noSuchMethod(invocation);
   }
 }
