@@ -26,9 +26,9 @@ class ChatLayout {
   static const minReferenceWidth = 320.0;
 
   /// Width factors by breakpoint band for expanded dock sizing.
-  static const phonePanelWidthFactor = 0.96;
-  static const tabletPanelWidthFactor = 0.62;
-  static const desktopPanelWidthFactor = 0.34;
+  static const phonePanelWidthFactor = 0.94;
+  static const tabletPanelWidthFactor = 0.60;
+  static const desktopPanelWidthFactor = 0.38;
 
   /// Min/max panel width clamps by breakpoint band.
   static const phonePanelMinWidth = 240.0;
@@ -135,20 +135,10 @@ class ChatLayout {
       0.0,
       double.infinity,
     );
-    final floatingWidth = _floatingExpandedDockWidth(
+    return _floatingExpandedDockWidth(
       viewportWidth: safeWidth,
       availableWidth: availableWidth,
     );
-    final widthThreshold = _compactWidthThreshold(
-      viewportWidth: viewportSize.width,
-      viewportHeight: viewportSize.height,
-    );
-    final transitionProgress = _transitionProgress(
-      value: safeWidth,
-      compactThreshold: widthThreshold,
-      transitionBand: compactWidthTransitionBand,
-    );
-    return _lerp(availableWidth, floatingWidth, transitionProgress);
   }
 
   static double _floatingExpandedDockWidth({

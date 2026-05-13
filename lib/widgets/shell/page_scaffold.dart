@@ -122,7 +122,6 @@ class _PageScaffoldState extends State<PageScaffold>
           children: <Widget>[
             Column(
               children: <Widget>[
-                const PageHeader(),
                 Expanded(
                   child: Stack(
                     children: <Widget>[
@@ -161,9 +160,8 @@ class _PageScaffoldState extends State<PageScaffold>
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.stretch,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
+                                              const PageHeader(),
                                               widget.child,
                                               if (widget.showFooter && !widget.isPageLoading)
                                                 const PageFooter(

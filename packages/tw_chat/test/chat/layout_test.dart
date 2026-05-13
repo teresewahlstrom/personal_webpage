@@ -67,7 +67,7 @@ void main() {
     expect(height, 560);
   });
 
-  test('compact width uses minimum dock side margins and honors safe area', () {
+  test('compact width stays at the natural dock width instead of filling the viewport', () {
     const viewportSize = Size(740, 1000);
     const viewPadding = EdgeInsets.only(left: 20, right: 10);
     final margin = margin0(
@@ -81,20 +81,20 @@ void main() {
     );
 
     expect(margin, 4);
-    expect(width, 702);
+    expect(width, closeTo(426.0, 0.1));
   });
 
-  test('width transition band smooths around compact threshold', () {
+  test('expanded width remains capped below the viewport width', () {
     const viewportSize = Size(800, 1200);
     final margin = margin0(viewportSize: viewportSize);
     final width = width0(viewportSize: viewportSize, dockMargin: margin);
 
     expect(margin, greaterThan(0));
+    expect(width, closeTo(480, 0.1));
     expect(width, lessThan(800));
-    expect(width, greaterThan(560));
   });
 
-  test('landscape keeps full width longer than portrait at same width', () {
+  test('landscape and portrait both cap the dock at the natural width', () {
     const landscapeViewport = Size(800, 600);
     const portraitViewport = Size(800, 1200);
     final landscapeMargin = margin0(viewportSize: landscapeViewport);
@@ -109,8 +109,18 @@ void main() {
     );
 
     expect(landscapeMargin, lessThan(portraitMargin));
-    expect(landscapeWidth, greaterThan(portraitWidth));
-    expect(landscapeWidth, 800);
+    expect(landscapeWidth, closeTo(480, 0.1));
+    expect(portraitWidth, closeTo(480, 0.1));
+  });
+
+  test('desktop width uses the wider desktop factor', () {
+    const viewportSize = Size(1300, 1200);
+    final margin = margin0(viewportSize: viewportSize);
+    final width = width0(viewportSize: viewportSize, dockMargin: margin);
+
+    expect(margin, greaterThan(0));
+    expect(width, closeTo(494, 0.1));
+    expect(width, lessThan(1300));
   });
 
   test(

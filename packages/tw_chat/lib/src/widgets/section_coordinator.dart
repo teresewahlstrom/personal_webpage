@@ -34,10 +34,12 @@ class SectionCoordinator extends ChangeNotifier {
   final FocusNode inputFocusNode = FocusNode();
   final FocusNode chatFocusNode = FocusNode(debugLabel: 'chat_list');
 
-  bool showChatScrollbarTrack = false;
-  bool isChatPointerInteractionActive = false;
-  int newMessageCount = 0;
+  bool _showChatScrollbarTrack = false;
+  bool _isChatPointerInteractionActive = false;
   bool _isNearBottomCache = true;
+
+  bool get showChatScrollbarTrack => _showChatScrollbarTrack;
+  bool get isChatPointerInteractionActive => _isChatPointerInteractionActive;
 
   List<ChatMessage> _previousMessagesSnapshot = const <ChatMessage>[];
   String? _deferredRevealMessageId;
@@ -55,7 +57,7 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   bool get shouldPauseAutoFollow =>
-      isChatPointerInteractionActive || isChatSelectionActive;
+      _isChatPointerInteractionActive || isChatSelectionActive;
 
   bool get isNearChatBottom => _isNearBottomCache;
 
@@ -72,8 +74,8 @@ class SectionCoordinator extends ChangeNotifier {
       inputFocusNode.requestFocus();
       _scrollHelper.syncScrollbarVisibility(
         controller: chatScroll,
-        currentValue: () => showChatScrollbarTrack,
-        updateVisibility: (value) => showChatScrollbarTrack = value,
+        currentValue: () => _showChatScrollbarTrack,
+        updateVisibility: (value) => _showChatScrollbarTrack = value,
         notifyListeners: _notifyChatView,
         visibilityOverflowThreshold: ChatScrollbar.visibilityOverflowThreshold,
       );
@@ -94,7 +96,7 @@ class SectionCoordinator extends ChangeNotifier {
     required bool isVisible,
   }) {
     if (!isVisible) {
-      isChatPointerInteractionActive = false;
+      _isChatPointerInteractionActive = false;
       _selectionCopy.clearSelection();
     }
 
@@ -118,7 +120,6 @@ class SectionCoordinator extends ChangeNotifier {
 
     _scheduleChatScrollbarVisibilitySync();
     if (shouldAutoFollow) {
-      _clearNewMessagesIndicator(notify: false);
       if (!isVisible) {
         if (messageDiff.resolvedPendingBotId != null) {
           _deferredRevealMessageId = messageDiff.resolvedPendingBotId;
@@ -141,14 +142,6 @@ class SectionCoordinator extends ChangeNotifier {
       _deferredRevealMessageId = null;
       _deferredStickToBottom = false;
     }
-
-    if (messageDiff.visibleIncomingMessages > 0 &&
-        (!wasNearBottom || shouldPauseAutoFollow)) {
-      _incrementNewMessagesIndicator(
-        messageDiff.visibleIncomingMessages,
-        notify: false,
-      );
-    }
   }
 
   bool isMessageTruncated(String messageId) {
@@ -170,17 +163,17 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void handleChatPointerInteractionStart() {
-    if (isChatPointerInteractionActive) {
+    if (_isChatPointerInteractionActive) {
       return;
     }
-    isChatPointerInteractionActive = true;
+    _isChatPointerInteractionActive = true;
   }
 
   void handleChatPointerInteractionEnd() {
-    if (!isChatPointerInteractionActive) {
+    if (!_isChatPointerInteractionActive) {
       return;
     }
-    isChatPointerInteractionActive = false;
+    _isChatPointerInteractionActive = false;
   }
 
   void handleChatSelectionChanged(SelectedContent? selectedContent) {
@@ -193,7 +186,6 @@ class SectionCoordinator extends ChangeNotifier {
 
   void jumpToLatest() {
     focusChatKeyboardTarget();
-    _clearNewMessagesIndicator();
     _stickChatToBottom();
   }
 
@@ -207,7 +199,6 @@ class SectionCoordinator extends ChangeNotifier {
     controller.text = AttributedText();
     controller.selection = const TextSelection.collapsed(offset: 0);
     inputFocusNode.requestFocus();
-    _clearNewMessagesIndicator();
     _stickChatToBottom();
   }
 
@@ -284,9 +275,6 @@ class SectionCoordinator extends ChangeNotifier {
 
   void _handleChatScroll() {
     _refreshNearBottomCache();
-    if (newMessageCount > 0 && _isNearBottomCache) {
-      _clearNewMessagesIndicator();
-    }
   }
 
   void _runDeferredVisibilityActionIfNeeded({required bool isVisible}) {
@@ -333,8 +321,8 @@ class SectionCoordinator extends ChangeNotifier {
   void _scheduleChatScrollbarVisibilitySync() {
     _scheduleScrollbarVisibilitySync(
       controller: chatScroll,
-      currentValue: () => showChatScrollbarTrack,
-      updateVisibility: (value) => showChatScrollbarTrack = value,
+      currentValue: () => _showChatScrollbarTrack,
+      updateVisibility: (value) => _showChatScrollbarTrack = value,
       onTrackVisibilityChanged: _notifyChatView,
     );
   }
@@ -431,26 +419,6 @@ class SectionCoordinator extends ChangeNotifier {
         _revealMessageTopIfPossible(messageId, remainingPasses - 1);
       }
     });
-  }
-
-  void _clearNewMessagesIndicator({bool notify = true}) {
-    if (newMessageCount == 0) {
-      return;
-    }
-    newMessageCount = 0;
-    if (notify) {
-      _notifyChatView();
-    }
-  }
-
-  void _incrementNewMessagesIndicator(int increment, {bool notify = true}) {
-    if (increment <= 0) {
-      return;
-    }
-    newMessageCount += increment;
-    if (notify) {
-      _notifyChatView();
-    }
   }
 
   bool _defaultMessageTruncation(ChatMessage message) {

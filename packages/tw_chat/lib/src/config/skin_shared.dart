@@ -270,7 +270,6 @@ class ChatSkinTokens {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: shellTopShadowGradientAlphas
-//           .map((a) => const Color(0xFFFF00FF).withAlpha(a))
           .map((a) => colors.shellBackgroundStart.withAlpha(a))
           .toList(),
       stops: shellTopShadowGradientStops,

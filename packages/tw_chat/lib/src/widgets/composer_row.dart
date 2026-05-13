@@ -97,7 +97,6 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
 
   @override
   Widget build(BuildContext context) {
-    _scheduleHeightSync();
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;

@@ -18,7 +18,6 @@ class ChatMessageBubble extends StatefulWidget {
     required this.isLastMessage,
     required this.availableWidth,
     required this.onToggleTruncation,
-    this.onOpenLink,
   });
 
   final String text;
@@ -30,7 +29,6 @@ class ChatMessageBubble extends StatefulWidget {
   final bool isLastMessage;
   final double availableWidth;
   final VoidCallback onToggleTruncation;
-  final void Function(Uri uri)? onOpenLink;
 
   @override
   State<ChatMessageBubble> createState() => _ChatMessageBubbleState();
@@ -39,24 +37,10 @@ class ChatMessageBubble extends StatefulWidget {
 class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   String? _lastParsedText;
   _ParsedMarkupPayload? _cachedParsedMarkup;
-  String? _lastMeasuredText;
-  double? _lastMeasuredMaxTextWidth;
-  double? _lastMeasuredFontSize;
-  double? _lastMeasuredLineHeight;
-  String? _lastMeasuredFontFamily;
-  FontWeight? _lastMeasuredFontWeight;
-  double? _lastMeasuredLetterSpacing;
-  double? _lastMeasuredTextScale;
+  _MeasurementKey? _lastMeasurementKey;
   _RenderedTextLayout? _cachedLayout;
   final Map<String, TapGestureRecognizer> _linkTextRecognizersByHref =
       <String, TapGestureRecognizer>{};
-
-  static bool _sameDouble(double? left, double? right) {
-    if (left == null || right == null) {
-      return left == right;
-    }
-    return (left - right).abs() <= 0.01;
-  }
 
   _RenderedTextLayout _getMeasuredLayout({
     required String text,
@@ -64,22 +48,18 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required TextScaler textScaler,
     required double maxTextWidth,
   }) {
-    final fontSize = style.fontSize;
-    final lineHeight = style.height;
-    final fontFamily = style.fontFamily;
-    final fontWeight = style.fontWeight;
-    final letterSpacing = style.letterSpacing;
-    final textScale = textScaler.scale(1.0);
+    final key = _MeasurementKey(
+      text: text,
+      maxTextWidth: maxTextWidth,
+      fontSize: style.fontSize,
+      lineHeight: style.height,
+      fontFamily: style.fontFamily,
+      fontWeight: style.fontWeight,
+      letterSpacing: style.letterSpacing,
+      textScale: textScaler.scale(1.0),
+    );
 
-    if (_cachedLayout != null &&
-        _lastMeasuredText == text &&
-        _sameDouble(_lastMeasuredMaxTextWidth, maxTextWidth) &&
-        _sameDouble(_lastMeasuredFontSize, fontSize) &&
-        _sameDouble(_lastMeasuredLineHeight, lineHeight) &&
-        _lastMeasuredFontFamily == fontFamily &&
-        _lastMeasuredFontWeight == fontWeight &&
-        _sameDouble(_lastMeasuredLetterSpacing, letterSpacing) &&
-        _sameDouble(_lastMeasuredTextScale, textScale)) {
+    if (_cachedLayout != null && _lastMeasurementKey?.matches(key) == true) {
       return _cachedLayout!;
     }
 
@@ -93,15 +73,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       lineCount: lines.length,
       lineHeight: painter.preferredLineHeight,
     );
+    painter.dispose();
 
-    _lastMeasuredText = text;
-    _lastMeasuredMaxTextWidth = maxTextWidth;
-    _lastMeasuredFontSize = fontSize;
-    _lastMeasuredLineHeight = lineHeight;
-    _lastMeasuredFontFamily = fontFamily;
-    _lastMeasuredFontWeight = fontWeight;
-    _lastMeasuredLetterSpacing = letterSpacing;
-    _lastMeasuredTextScale = textScale;
+    _lastMeasurementKey = key;
     _cachedLayout = layout;
     return layout;
   }
@@ -366,12 +340,6 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     if (uri == null) {
       return;
     }
-
-    final onOpenLink = widget.onOpenLink;
-    if (onOpenLink != null) {
-      onOpenLink(uri);
-      return;
-    }
     await launchUrl(uri, webOnlyWindowName: '_blank');
   }
 
@@ -430,6 +398,44 @@ class _RenderedTextLayout {
 
   final int lineCount;
   final double lineHeight;
+}
+
+class _MeasurementKey {
+  const _MeasurementKey({
+    required this.text,
+    required this.maxTextWidth,
+    required this.fontSize,
+    required this.lineHeight,
+    required this.fontFamily,
+    required this.fontWeight,
+    required this.letterSpacing,
+    required this.textScale,
+  });
+
+  final String text;
+  final double maxTextWidth;
+  final double? fontSize;
+  final double? lineHeight;
+  final String? fontFamily;
+  final FontWeight? fontWeight;
+  final double? letterSpacing;
+  final double textScale;
+
+  bool matches(_MeasurementKey other) {
+    return text == other.text &&
+        fontFamily == other.fontFamily &&
+        fontWeight == other.fontWeight &&
+        _approxEq(maxTextWidth, other.maxTextWidth) &&
+        _approxEq(fontSize, other.fontSize) &&
+        _approxEq(lineHeight, other.lineHeight) &&
+        _approxEq(letterSpacing, other.letterSpacing) &&
+        _approxEq(textScale, other.textScale);
+  }
+
+  static bool _approxEq(double? a, double? b) {
+    if (a == null || b == null) return a == b;
+    return (a - b).abs() <= 0.01;
+  }
 }
 
 class _ParsedMarkupPayload {

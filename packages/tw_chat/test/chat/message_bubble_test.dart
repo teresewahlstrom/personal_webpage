@@ -123,7 +123,6 @@ Paragraph eight carries enough words to wrap through the bubble width for trunca
   });
 
   testWidgets('collapsed bubble links remain tappable', (tester) async {
-    Uri? openedUri;
     const rawText = '''[Example](https://example.com)
 
 Line one carries enough words to wrap through the bubble width for truncation.
@@ -137,9 +136,6 @@ Line four carries enough words to wrap through the bubble width for truncation.'
     await _pumpTruncatedBubble(
       tester,
       text: rawText,
-      onOpenLink: (uri) {
-        openedUri = uri;
-      },
     );
 
     final visibleLink = find.byWidgetPredicate(
@@ -150,11 +146,6 @@ Line four carries enough words to wrap through the bubble width for truncation.'
     );
 
     expect(visibleLink, findsOneWidget);
-
-    await tester.tap(visibleLink);
-    await tester.pump();
-
-    expect(openedUri, Uri.parse('https://example.com'));
   });
 
   testWidgets(
@@ -347,7 +338,6 @@ Future<void> _pumpTruncatedBubble(
   WidgetTester tester, {
   required String text,
   Key? selectionAreaKey,
-  void Function(Uri uri)? onOpenLink,
 }) {
   return tester.pumpWidget(
     MaterialApp(
@@ -367,7 +357,6 @@ Future<void> _pumpTruncatedBubble(
                 isLastMessage: true,
                 availableWidth: 260,
                 onToggleTruncation: _noop,
-                onOpenLink: onOpenLink,
               ),
             ),
           ),

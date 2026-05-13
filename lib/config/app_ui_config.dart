@@ -34,11 +34,11 @@ final class ShellUiConfig {
   static const double gridYStart = 15;
 
   static const double headerMinHeight = 56;
-  static const double headerMaxWidth = 980;
+  static const double headerMaxWidth = 700;
   static const double headerLogoWidth = 44;
   static const double headerLogoHeight = 36;
   static const double headerToggleSize = 42;
-  static const EdgeInsets headerPadding = EdgeInsets.fromLTRB(5.5, 3.3, 5.5, 2.7);
+  static const EdgeInsets headerPadding = EdgeInsets.symmetric(horizontal: 11);
 
   static const double footerMinHeight = 50;
   static const EdgeInsets footerPadding = EdgeInsets.symmetric(
