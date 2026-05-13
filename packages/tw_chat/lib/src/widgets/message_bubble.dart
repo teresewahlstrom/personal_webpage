@@ -366,6 +366,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     if (uri == null) {
       return;
     }
+
     final onOpenLink = widget.onOpenLink;
     if (onOpenLink != null) {
       onOpenLink(uri);
