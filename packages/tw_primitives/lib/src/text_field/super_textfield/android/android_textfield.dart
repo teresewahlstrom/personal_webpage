@@ -54,6 +54,7 @@ class SuperAndroidTextField extends StatefulWidget {
     this.popoverToolbarBuilder = _defaultAndroidToolbarBuilder,
     this.showDebugPaint = false,
     this.padding,
+    this.scrollController,
   }) : super(key: key);
 
   /// [FocusNode] attached to this text field.
@@ -169,6 +170,12 @@ class SuperAndroidTextField extends StatefulWidget {
   /// Padding placed around the text content of this text field, but within the
   /// scrollable viewport.
   final EdgeInsets? padding;
+
+  /// An optional [ScrollController] for the internal scroll view.
+  ///
+  /// When provided, the same controller can be passed to a scrollbar widget
+  /// that wraps this text field.
+  final ScrollController? scrollController;
 
   @override
   State createState() => SuperAndroidTextFieldState();
@@ -607,6 +614,7 @@ class SuperAndroidTextFieldState extends State<SuperAndroidTextField>
               textScrollController: _textScrollController,
               textKey: _textContentKey,
               textEditingController: _textEditingController,
+              scrollController: widget.scrollController,
               textAlign: _textAlign,
               minLines: widget.minLines,
               maxLines: widget.maxLines,

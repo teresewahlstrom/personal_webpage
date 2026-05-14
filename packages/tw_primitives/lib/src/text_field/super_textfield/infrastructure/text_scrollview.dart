@@ -32,6 +32,7 @@ class TextScrollView extends StatefulWidget {
     required this.textScrollController,
     required this.textKey,
     required this.textEditingController,
+    this.scrollController,
     this.minLines,
     this.maxLines,
     this.lineHeight,
@@ -45,6 +46,16 @@ class TextScrollView extends StatefulWidget {
   /// Controller that sets the scroll offset and orchestrates
   /// auto-scrolling behavior.
   final TextScrollController textScrollController;
+
+  /// An optional [ScrollController] for the internal [SingleChildScrollView].
+  ///
+  /// When provided, the same controller can be passed to a scrollbar widget
+  /// (e.g. [ChatFadingScrollbar]) that wraps this text field, allowing the
+  /// scrollbar to observe and drive the text scroll position.
+  ///
+  /// If `null`, an internal controller is used and the scroll position is
+  /// not directly accessible from outside.
+  final ScrollController? scrollController;
 
   /// [GlobalKey] that references the widget that contains the scrolling text.
   final GlobalKey<ProseTextState> textKey;
@@ -118,11 +129,19 @@ class _TextScrollViewState extends State<TextScrollView>
 
   final _textFieldViewportKey = GlobalKey();
 
-  final _scrollController = ScrollController();
+  // Owned only when widget.scrollController is null.
+  ScrollController? _ownedScrollController;
+
+  ScrollController get _scrollController =>
+      widget.scrollController ?? _ownedScrollController!;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.scrollController == null) {
+      _ownedScrollController = ScrollController();
+    }
 
     widget.textScrollController
       ..delegate = this
@@ -134,6 +153,16 @@ class _TextScrollViewState extends State<TextScrollView>
   @override
   void didUpdateWidget(TextScrollView oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    // Reconcile owned controller when the external controller changes.
+    if (widget.scrollController != oldWidget.scrollController) {
+      if (widget.scrollController == null) {
+        _ownedScrollController ??= ScrollController();
+      } else {
+        _ownedScrollController?.dispose();
+        _ownedScrollController = null;
+      }
+    }
 
     if (widget.textScrollController != oldWidget.textScrollController) {
       oldWidget.textScrollController
@@ -158,6 +187,9 @@ class _TextScrollViewState extends State<TextScrollView>
       ..removeListener(_onTextScrollChange);
 
     widget.textEditingController.removeListener(_onTextOrSelectionChanged);
+
+    _ownedScrollController?.dispose();
+    _ownedScrollController = null;
 
     super.dispose();
   }

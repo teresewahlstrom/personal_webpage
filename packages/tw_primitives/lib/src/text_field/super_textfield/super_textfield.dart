@@ -82,6 +82,7 @@ class SuperTextField extends StatefulWidget {
     this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline,
+    this.scrollController,
   }) : super(key: key);
 
   final FocusNode? focusNode;
@@ -219,6 +220,12 @@ class SuperTextField extends StatefulWidget {
   /// Padding placed around the text content of this text field, but within the
   /// scrollable viewport.
   final EdgeInsets? padding;
+
+  /// An optional [ScrollController] for the internal scroll view.
+  ///
+  /// When provided, the same controller can be passed to a scrollbar widget
+  /// that wraps this text field.
+  final ScrollController? scrollController;
 
   /// The main action for the virtual keyboard, e.g. [TextInputAction.done].
   ///
@@ -434,6 +441,7 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
             imeConfiguration: widget.imeConfiguration,
             showComposingUnderline: widget.showComposingUnderline ?? true,
             padding: widget.padding,
+            scrollController: widget.scrollController,
             blinkTimingMode: widget.blinkTimingMode,
           ),
         );

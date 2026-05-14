@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/chat_api.dart';
 
 import '../config/config.dart';
+import '../config/scrollbar.dart';
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({
@@ -35,10 +36,12 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
+  late final ScrollController _composerScrollController;
 
   @override
   void initState() {
     super.initState();
+    _composerScrollController = ScrollController();
     widget.controller.addListener(_scheduleHeightSync);
     _scheduleHeightSync();
   }
@@ -59,6 +62,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   void dispose() {
     widget.controller.removeListener(_scheduleHeightSync);
+    _composerScrollController.dispose();
     super.dispose();
   }
 
@@ -116,31 +120,43 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           widget.maxInputHeight,
         );
 
-    final inputField = ScrollConfiguration(
-      behavior: const ChatNoScrollbarBehavior(),
-      child: SuperTextField(
-        focusNode: widget.inputFocusNode,
-        textController: widget.controller,
-        textStyleBuilder: (_) => composerTextStyle,
-        hintBehavior: HintBehavior.displayHintUntilTextEntered,
-        hintBuilder: (context) => Text(
-          'Ask me anything...',
-          style: composerHintStyle,
+    final inputField = ChatFadingScrollbar(
+      controller: _composerScrollController,
+      thickness: tokens.scrollbarThickness,
+      minThumbLength: tokens.scrollbarMinThumbLength,
+      crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
+      mainAxisMargin: 0,
+      radius: tokens.scrollbarRadius,
+      thumbVisibility: true,
+      interactive: true,
+      trackVisibility: false,
+      child: ScrollConfiguration(
+        behavior: const ChatNoScrollbarBehavior(),
+        child: SuperTextField(
+          scrollController: _composerScrollController,
+          focusNode: widget.inputFocusNode,
+          textController: widget.controller,
+          textStyleBuilder: (_) => composerTextStyle,
+          hintBehavior: HintBehavior.displayHintUntilTextEntered,
+          hintBuilder: (context) => Text(
+            'Ask me anything...',
+            style: composerHintStyle,
+          ),
+          minLines: 1,
+          maxLines: null,
+          padding: EdgeInsets.fromLTRB(
+            tokens.composerTextInsetLeft,
+            tokens.composerInputTextInsetTop,
+            tokens.composerTextInsetRight,
+            tokens.composerInputTextInsetTopBottom,
+          ),
+          controlsColor: ChatComposerLayout.cursorColor(context),
+          caretStyle: CaretStyle(
+            color: ChatComposerLayout.cursorColor(context),
+            width: tokens.composerCaretWidth,
+          ),
+          handlesRadius: tokens.composerHandleRadius,
         ),
-        minLines: 1,
-        maxLines: null,
-        padding: EdgeInsets.fromLTRB(
-          tokens.composerTextInsetLeft,
-          tokens.composerInputTextInsetTop,
-          tokens.composerTextInsetRight,
-          tokens.composerInputTextInsetTopBottom,
-        ),
-        controlsColor: ChatComposerLayout.cursorColor(context),
-        caretStyle: CaretStyle(
-          color: ChatComposerLayout.cursorColor(context),
-          width: tokens.composerCaretWidth,
-        ),
-        handlesRadius: tokens.composerHandleRadius,
       ),
     );
 

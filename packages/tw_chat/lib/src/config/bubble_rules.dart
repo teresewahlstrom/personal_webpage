@@ -26,7 +26,7 @@ class ChatBubbleRules {
   ///
   /// Ensures short messages still occupy a recognisable pill-shaped area
   /// without growing taller than necessary.
-  static const minWidthFactor = 0.25;
+  static const minWidthFactor = 0.1667;
 
   /// Number of lines required before the collapse control appears.
   ///

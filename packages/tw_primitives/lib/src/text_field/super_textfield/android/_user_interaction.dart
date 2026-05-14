@@ -625,17 +625,23 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: _textViewportOffsetLink,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: widget.showDebugPaint ? Border.all(color: Colors.purple) : const Border(),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            widget.child,
-            if (widget.textController.selection.extentOffset >= 0) _buildExtentTrackerForMagnifier(),
-            _buildTapAndDragDetector(),
-          ],
+      child: GestureDetector(
+        onTap: () {
+          _log.fine('Intercepting single tap');
+          // Prevents taps from bubbling to ancestor Scrollables.
+        },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: widget.showDebugPaint ? Border.all(color: Colors.purple) : const Border(),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              widget.child,
+              if (widget.textController.selection.extentOffset >= 0) _buildExtentTrackerForMagnifier(),
+              _buildTapAndDragDetector(),
+            ],
+          ),
         ),
       ),
     );
@@ -649,7 +655,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
       right: 0,
       bottom: 0,
       child: RawGestureDetector(
-        behavior: HitTestBehavior.opaque,
+        behavior: HitTestBehavior.translucent,
         gestures: <Type, GestureRecognizerFactory>{
           TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
             () => TapSequenceGestureRecognizer(),
