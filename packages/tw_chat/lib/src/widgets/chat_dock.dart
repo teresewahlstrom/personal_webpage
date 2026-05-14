@@ -156,6 +156,7 @@ class _ChatDockState extends State<ChatDock> {
       viewportSize: viewportSize,
       viewInsets: mediaQuery.viewInsets,
       viewPadding: mediaQuery.viewPadding,
+      minimumTopInset: chatMargin,
     );
 
     final baseRightInset = mediaQuery.viewPadding.right + chatMargin;

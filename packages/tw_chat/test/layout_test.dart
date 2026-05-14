@@ -46,6 +46,28 @@ void main() {
     expect(height, 576);
   });
 
+  test('compact mode can reserve a top inset while keyboard is open', () {
+    final height = ChatLayout.maxDockHeight(
+      viewportSize: const Size(620, 740),
+      viewInsets: const EdgeInsets.only(bottom: 220),
+      viewPadding: EdgeInsets.zero,
+      minimumTopInset: 4,
+    );
+
+    expect(height, 516);
+  });
+
+  test('safe area still wins over a smaller reserved top inset', () {
+    final height = ChatLayout.maxDockHeight(
+      viewportSize: const Size(620, 740),
+      viewInsets: const EdgeInsets.only(bottom: 220),
+      viewPadding: const EdgeInsets.only(top: 24),
+      minimumTopInset: 4,
+    );
+
+    expect(height, 496);
+  });
+
   test('height transition band smooths around compact threshold', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 760),
