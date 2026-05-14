@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:tw_keywords/tw_keywords.dart';
 
@@ -7,64 +8,249 @@ final class SubjectRegistry {
   static const String _indexAssetPath = 'assets/data/subjects/index.json';
 
   static Map<String, SubjectKeywordData>? _cache;
-  static String? _defaultSubjectId;
+  static final Map<String, SubjectKeywordData> _subjectCache =
+      <String, SubjectKeywordData>{};
+  static _SubjectIndex? _indexCache;
 
+  /// Returns every subject listed in the asset index.
   static Future<Map<String, SubjectKeywordData>> all() async {
     if (_cache != null) {
       return _cache!;
     }
 
-    final String indexContent = await rootBundle.loadString(_indexAssetPath);
-    final Map<String, dynamic> indexJson =
-        jsonDecode(indexContent) as Map<String, dynamic>;
+    final _SubjectIndex index = await _loadIndex();
+    final List<MapEntry<String, SubjectKeywordData>> loadedEntries =
+        await Future.wait(
+      index.subjectRefs.values.map(( _SubjectRef ref) async {
+        final SubjectKeywordData subject =
+            _subjectCache[ref.id] ?? await _loadSubject(ref.file);
+        _subjectCache[ref.id] = subject;
+        return MapEntry<String, SubjectKeywordData>(ref.id, subject);
+      }),
+    );
 
-    _defaultSubjectId = indexJson['defaultSubjectId'] as String?;
-    final List<dynamic> entries =
-        (indexJson['subjects'] as List<dynamic>? ?? <dynamic>[]);
-
-    final Map<String, SubjectKeywordData> loaded = <String, SubjectKeywordData>{};
-
-    for (final dynamic entry in entries) {
-      final Map<String, dynamic> subjectRef = entry as Map<String, dynamic>;
-      final String id = subjectRef['id'] as String;
-      final String file = subjectRef['file'] as String;
-
-      final String content = await rootBundle.loadString(file);
-      final Map<String, dynamic> json = jsonDecode(content) as Map<String, dynamic>;
-      final SubjectKeywordData subject = SubjectKeywordData.fromJson(json);
-      loaded[id] = subject;
-    }
+    final Map<String, SubjectKeywordData> loaded =
+        Map<String, SubjectKeywordData>.fromEntries(loadedEntries);
 
     _cache = loaded;
     return loaded;
   }
 
+  /// Returns the subject with the given id, or `null` if no such subject exists.
   static Future<SubjectKeywordData?> byId(String id) async {
-    final Map<String, SubjectKeywordData> subjects = await all();
-    return subjects[id];
+    if (_cache != null) {
+      return _cache![id];
+    }
+
+    final SubjectKeywordData? cached = _subjectCache[id];
+    if (cached != null) {
+      return cached;
+    }
+
+    final _SubjectIndex index = await _loadIndex();
+    final _SubjectRef? ref = index.subjectRefs[id];
+    if (ref == null) {
+      return null;
+    }
+
+    final SubjectKeywordData subject = await _loadSubject(ref.file);
+    _subjectCache[id] = subject;
+    return subject;
   }
 
+  /// Returns the default subject declared by the index, or the first subject.
   static Future<SubjectKeywordData> defaultSubject() async {
-    final Map<String, SubjectKeywordData> subjects = await all();
-    if (subjects.isEmpty) {
-      throw StateError('No subjects available in assets/data/subjects/index.json');
+    final _SubjectIndex index = await _loadIndex();
+    if (index.subjectRefs.isEmpty) {
+      throw StateError(
+        'No subjects available in assets/data/subjects/index.json',
+      );
     }
 
-    final String? preferred = _defaultSubjectId;
-    if (preferred != null && subjects.containsKey(preferred)) {
-      return subjects[preferred]!;
+    final String? preferred = index.defaultSubjectId;
+    if (preferred != null) {
+      final _SubjectRef? ref = index.subjectRefs[preferred];
+      if (ref != null) {
+        return _subjectCache[preferred] ??= await _loadSubject(ref.file);
+      }
     }
 
-    return subjects.values.first;
+    final _SubjectRef firstRef = index.subjectRefs.values.first;
+    return _subjectCache[firstRef.id] ??= await _loadSubject(firstRef.file);
   }
 
+  /// Returns the ids declared in the subject index.
   static Future<List<String>> ids() async {
-    final Map<String, SubjectKeywordData> subjects = await all();
-    return subjects.keys.toList(growable: false);
+    final _SubjectIndex index = await _loadIndex();
+    return index.subjectRefs.keys.toList(growable: false);
   }
 
+  /// Clears the cached index and subject data.
   static void clearCache() {
     _cache = null;
-    _defaultSubjectId = null;
+    _subjectCache.clear();
+    _indexCache = null;
   }
+
+  static Future<_SubjectIndex> _loadIndex() async {
+    final _SubjectIndex? cachedIndex = _indexCache;
+    if (cachedIndex != null) {
+      return cachedIndex;
+    }
+
+    try {
+      final String indexContent = await rootBundle.loadString(_indexAssetPath);
+      final dynamic decoded = jsonDecode(indexContent);
+      if (decoded is! Map<String, dynamic>) {
+        throw FormatException(
+          'Expected $_indexAssetPath to contain a JSON object.',
+        );
+      }
+
+      final String? defaultSubjectId = _readOptionalString(
+        decoded,
+        'defaultSubjectId',
+        _indexAssetPath,
+      );
+      final List<dynamic> entries = _readRequiredList(
+        decoded,
+        'subjects',
+        _indexAssetPath,
+      );
+
+      final Map<String, _SubjectRef> subjectRefs = <String, _SubjectRef>{};
+      for (int index = 0; index < entries.length; index++) {
+        final dynamic entry = entries[index];
+        if (entry is! Map<String, dynamic>) {
+          throw FormatException(
+            'Expected subjects[$index] in $_indexAssetPath to be a JSON object.',
+          );
+        }
+
+        final String id = _readRequiredString(
+          entry,
+          'id',
+          'subjects[$index] in $_indexAssetPath',
+        );
+        final String file = _readRequiredString(
+          entry,
+          'file',
+          'subjects[$index] in $_indexAssetPath',
+        );
+
+        if (subjectRefs.containsKey(id)) {
+          throw FormatException(
+            'Duplicate subject id "$id" in $_indexAssetPath.',
+          );
+        }
+
+        subjectRefs[id] = _SubjectRef(id: id, file: file);
+      }
+
+      final _SubjectIndex index = _SubjectIndex(
+        defaultSubjectId: defaultSubjectId,
+        subjectRefs: subjectRefs,
+      );
+      _indexCache = index;
+      return index;
+    } catch (error, stackTrace) {
+      final FormatException wrappedError = FormatException(
+        'Failed to load subjects from $_indexAssetPath: $error',
+      );
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: wrappedError,
+          stack: stackTrace,
+          library: 'subject registry',
+          context: ErrorDescription('while loading subject index'),
+        ),
+      );
+      Error.throwWithStackTrace(wrappedError, stackTrace);
+    }
+  }
+
+  static Future<SubjectKeywordData> _loadSubject(String file) async {
+    try {
+      final String content = await rootBundle.loadString(file);
+      final dynamic decoded = jsonDecode(content);
+      if (decoded is! Map<String, dynamic>) {
+        throw FormatException('Expected $file to contain a JSON object.');
+      }
+
+      return SubjectKeywordData.fromJson(decoded);
+    } catch (error, stackTrace) {
+      final FormatException wrappedError = FormatException(
+        'Failed to load subject asset "$file": $error',
+      );
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: wrappedError,
+          stack: stackTrace,
+          library: 'subject registry',
+          context: ErrorDescription('while loading a subject'),
+        ),
+      );
+      Error.throwWithStackTrace(wrappedError, stackTrace);
+    }
+  }
+
+  static List<dynamic> _readRequiredList(
+    Map<String, dynamic> json,
+    String key,
+    String source,
+  ) {
+    final dynamic value = json[key];
+    if (value is! List<dynamic>) {
+      throw FormatException('Expected "$key" in $source to be a list.');
+    }
+    return value;
+  }
+
+  static String _readRequiredString(
+    Map<String, dynamic> json,
+    String key,
+    String source,
+  ) {
+    final dynamic value = json[key];
+    if (value is! String || value.isEmpty) {
+      throw FormatException(
+        'Expected "$key" in $source to be a non-empty string.',
+      );
+    }
+    return value;
+  }
+
+  static String? _readOptionalString(
+    Map<String, dynamic> json,
+    String key,
+    String source,
+  ) {
+    final dynamic value = json[key];
+    if (value == null) {
+      return null;
+    }
+    if (value is! String || value.isEmpty) {
+      throw FormatException(
+        'Expected "$key" in $source to be a string or null.',
+      );
+    }
+    return value;
+  }
+}
+
+final class _SubjectIndex {
+  const _SubjectIndex({
+    required this.defaultSubjectId,
+    required this.subjectRefs,
+  });
+
+  final String? defaultSubjectId;
+  final Map<String, _SubjectRef> subjectRefs;
+}
+
+final class _SubjectRef {
+  const _SubjectRef({required this.id, required this.file});
+
+  final String id;
+  final String file;
 }

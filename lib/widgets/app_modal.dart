@@ -16,6 +16,7 @@ Future<void> showAppModal({
   return showDialog<void>(
     context: context,
     barrierColor: ModalUiConfig.barrierColor,
+    useSafeArea: true,
     builder: (BuildContext dialogContext) {
       void close() => Navigator.of(dialogContext).pop();
 

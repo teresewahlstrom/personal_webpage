@@ -7,7 +7,10 @@ export 'app_color_theme.dart';
 export 'app_line_theme.dart';
 
 final class AppRuntimeConfig {
-  static const bool useChatBackend = true;
+  static const bool useChatBackend = bool.fromEnvironment(
+    'USE_CHAT_BACKEND',
+    defaultValue: true,
+  );
   static const bool showChatInUi = true;
   static const String appBuildSha = String.fromEnvironment(
     'APP_BUILD_SHA',
@@ -26,7 +29,7 @@ final class AppRuntimeConfig {
     defaultValue: 'http://localhost:8787',
   );
   static const String backendDisabledReply =
-      'Chat backend is disabled in this build. Set AppRuntimeConfig.useChatBackend to true to re-enable server replies.';
+      'Chat backend is disabled in this build. Rebuild with --dart-define=USE_CHAT_BACKEND=true to re-enable server replies.';
 }
 
 final class ShellUiConfig {

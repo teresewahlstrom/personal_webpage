@@ -63,14 +63,23 @@ class PageFooter extends StatelessWidget {
 
   Future<void> _launchUrl(BuildContext context, String rawUrl) async {
     final Uri uri = Uri.parse(rawUrl);
-    final bool launched = await launchUrl(
-      uri,
-      mode: LaunchMode.platformDefault,
-    );
-    if (!launched && context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Could not open $rawUrl')));
+    try {
+      final bool launched = await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault,
+      );
+      if (!launched && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open $rawUrl')),
+        );
+      }
+    } catch (_) {
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open $rawUrl')),
+      );
     }
   }
 

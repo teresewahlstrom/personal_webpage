@@ -22,7 +22,7 @@ void main() {
 }
 
 class _TestTextInputConnectionDecorator extends TextInputConnectionDecorator {
-  _TestTextInputConnectionDecorator(TextInputConnection connection) : super(connection);
+  _TestTextInputConnectionDecorator(TextInputConnection super.connection);
 }
 
 class _RecordingTextInputConnection implements TextInputConnection {

@@ -33,15 +33,31 @@ class _LandingPageState extends State<LandingPage> {
 
   Future<void> _launchUrl(String rawUrl) async {
     final Uri uri = Uri.parse(rawUrl);
-    final bool launched = await launchUrl(
-      uri,
-      mode: LaunchMode.platformDefault,
-    );
-    if (!launched && mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Could not open $rawUrl")));
+    try {
+      final bool launched = await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault,
+      );
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open $rawUrl')),
+        );
+      }
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open $rawUrl')),
+      );
     }
+  }
+
+  void _retrySubjectLoad() {
+    SubjectRegistry.clearCache();
+    setState(() {
+      _subjectFuture = SubjectRegistry.defaultSubject();
+    });
   }
 
   void _openNewsletterModal() {
@@ -76,7 +92,30 @@ class _LandingPageState extends State<LandingPage> {
 
         if (snapshot.hasError) {
           content = Center(
-            child: Text('Failed to load subject data: ${snapshot.error}'),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Failed to load subject data.',
+                    textAlign: TextAlign.center,
+                    style: PageTextStyles.h2(context),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    snapshot.error.toString(),
+                    textAlign: TextAlign.center,
+                    style: PageTextStyles.body(context),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: _retrySubjectLoad,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
           );
         } else if (!snapshot.hasData) {
           content = SizedBox(
