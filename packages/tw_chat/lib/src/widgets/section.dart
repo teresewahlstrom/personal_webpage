@@ -257,15 +257,13 @@ class _ChatSectionState extends State<ChatSection> {
                         child: FilledButton(
                           onPressed: _coordinator.jumpToLatest,
                           style: FilledButton.styleFrom(
-                            backgroundColor: colors.shellBackgroundStart,
-                            foregroundColor: ChatComposerLayout.sendIconColor(
+                            backgroundColor: ChatComposerLayout.fillColor(
                               context,
                             ),
+                            foregroundColor: colors.bubbleText,
                             shape: const CircleBorder(),
                             side: BorderSide(
-                              color: ChatComposerLayout.sendIconColor(
-                                context,
-                              ),
+                              color: ChatComposerLayout.borderColor(context),
                               width: 0.5,
                             ),
                             elevation: tokens.jumpToLatestButtonElevation,
@@ -276,9 +274,7 @@ class _ChatSectionState extends State<ChatSection> {
                             textStyle: textStyles
                                 .composerHintStyle(textScale, colors)
                                 .copyWith(
-                                  color: ChatComposerLayout.sendIconColor(
-                                    context,
-                                  ),
+                                  color: colors.bubbleText,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
