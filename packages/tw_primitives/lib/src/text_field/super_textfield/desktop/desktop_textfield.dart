@@ -2060,6 +2060,9 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview> with
 
   @override
   Widget build(BuildContext context) {
+    final ScrollPhysics platformPhysics =
+        ScrollConfiguration.of(context).getScrollPhysics(context);
+
     return SizedBox(
       height: widget.viewportHeight,
       // As we handle the scrolling gestures ourselves,
@@ -2074,7 +2077,11 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview> with
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           controller: widget.scrollController,
-          physics: const NeverScrollableScrollPhysics(),
+          // Keep single-line behavior unchanged, but allow normal platform
+          // scrolling for multi-line fields (e.g., chat composer).
+          physics: widget.isMultiline
+              ? platformPhysics
+              : const NeverScrollableScrollPhysics(),
           scrollDirection: widget.isMultiline ? Axis.vertical : Axis.horizontal,
           child: widget.child,
         ),
