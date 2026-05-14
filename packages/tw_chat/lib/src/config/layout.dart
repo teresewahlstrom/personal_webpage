@@ -142,6 +142,7 @@ class ChatLayout {
     required Size viewportSize,
     required EdgeInsets viewInsets,
     required EdgeInsets viewPadding,
+    double minimumTopInset = 0,
   }) {
     final bool isLandscape = viewportSize.width > viewportSize.height;
     final safeViewportHeight =
@@ -160,7 +161,15 @@ class ChatLayout {
     final baseVerticalGutter = viewportSize.width <= phoneBreakpoint
         ? tokens.phoneVerticalHeightGutter
         : tokens.verticalHeightGutter;
-    final verticalGutter = _lerp(0.0, baseVerticalGutter, transitionProgress);
+    final minimumVerticalGutter = (minimumTopInset - viewPadding.top).clamp(
+      0.0,
+      double.infinity,
+    );
+    final verticalGutter = _lerp(
+      minimumVerticalGutter,
+      baseVerticalGutter,
+      transitionProgress,
+    );
     final clampedSafeUsableHeight = (clampedSafeViewportHeight - verticalGutter)
         .clamp(0.0, double.infinity);
 
