@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tw_super_editor/src/infrastructure/flutter/scrollbar.dart'
-    as se_scrollbar show ScrollbarPainter;
+import 'package:tw_primitives/chat_api.dart' as se_scrollbar show ScrollbarPainter;
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {

@@ -12,8 +12,8 @@ dependencies:
   google_fonts: ^6.2.1
   web: ^1.1.1
   url_launcher: ^6.3.1
-  tw_super_editor:
-    path: ../../packages/tw_super_editor
+  tw_primitives:
+    path: ../../packages/tw_primitives
 
 dev_dependencies:
   flutter_test:

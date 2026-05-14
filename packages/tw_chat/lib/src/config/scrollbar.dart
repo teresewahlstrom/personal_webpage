@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:tw_super_editor/super_editor.dart'
+import 'package:tw_primitives/chat_api.dart'
   show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
 
 import 'skin.dart';
