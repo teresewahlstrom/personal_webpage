@@ -128,6 +128,7 @@ class _TextScrollViewState extends State<TextScrollView>
   final _mulitlineFieldAutoScrollGap = 20.0;
 
   final _textFieldViewportKey = GlobalKey();
+  bool _ensureExtentVisibleScheduled = false;
 
   // Owned only when widget.scrollController is null.
   ScrollController? _ownedScrollController;
@@ -446,11 +447,16 @@ class _TextScrollViewState extends State<TextScrollView>
   }
 
   void _onTextScrollChange() {
+    if (!_scrollController.hasClients) {
+      return;
+    }
+
+    final targetScrollOffset = widget.textScrollController.targetScrollOffset;
     if (widget.perLineAutoScrollDuration == Duration.zero || !isMultiline) {
-      _scrollController.jumpTo(widget.textScrollController.scrollOffset);
+      _scrollController.jumpTo(targetScrollOffset);
     } else {
       _scrollController.animateTo(
-        widget.textScrollController.scrollOffset,
+        targetScrollOffset,
         duration: widget.perLineAutoScrollDuration,
         curve: Curves.easeOut,
       );
@@ -475,6 +481,31 @@ class _TextScrollViewState extends State<TextScrollView>
     // After the text changes, the user might have entered new lines.
     // Schedule a rebuild so our size is updated.
     scheduleBuildAfterBuild();
+    _scheduleEnsureExtentVisibleAfterLayout();
+  }
+
+  void _scheduleEnsureExtentVisibleAfterLayout() {
+    if (_ensureExtentVisibleScheduled) {
+      return;
+    }
+
+    _ensureExtentVisibleScheduled = true;
+    onNextFrame((_) {
+      if (!mounted) {
+        return;
+      }
+
+      widget.textScrollController.ensureExtentIsVisible();
+
+      onNextFrame((_) {
+        _ensureExtentVisibleScheduled = false;
+        if (!mounted) {
+          return;
+        }
+
+        widget.textScrollController.ensureExtentIsVisible();
+      });
+    });
   }
 
   @override
@@ -627,9 +658,11 @@ class TextScrollController with ChangeNotifier {
   // viewport ScrollController as the source of truth for the current offset.
   double _targetScrollOffset = 0.0;
   double get scrollOffset => _delegate?.currentScrollOffset ?? _targetScrollOffset;
+  double get targetScrollOffset => _targetScrollOffset;
 
   void _setScrollOffset(double newValue) {
-    if (newValue == _targetScrollOffset) {
+    final currentScrollOffset = _delegate?.currentScrollOffset ?? _targetScrollOffset;
+    if (newValue == _targetScrollOffset && newValue == currentScrollOffset) {
       return;
     }
 
