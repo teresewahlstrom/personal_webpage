@@ -20,6 +20,10 @@ void clearPlatformTextInputFocusForBackgroundTransition() {
   clearBrowserTextInputFocus();
 }
 
+/// Clears platform text-input state before the app leaves the foreground.
+///
+/// This protects Flutter Web/mobile browsers from resuming with a stale hidden
+/// editable element or IME connection after the software keyboard has gone away.
 void clearTextInputForBackgroundTransition({
   required FocusNode focusNode,
   required ImeAttributedTextEditingController textEditingController,
@@ -45,12 +49,29 @@ void clearTextInputForBackgroundTransition({
     }
 
     runStateUpdate(() {
-      textEditingController.detachFromIme();
-      textEditingController.selection = const TextSelection.collapsed(
-        offset: -1,
+      resetTextInputEditingStateForBackgroundTransition(
+        detachFromIme: textEditingController.detachFromIme,
+        setSelection: (selection) {
+          textEditingController.selection = selection;
+        },
+        setComposingRegion: (composingRegion) {
+          textEditingController.composingRegion = composingRegion;
+        },
+        removeEditingOverlayControls: removeEditingOverlayControls,
       );
-      textEditingController.composingRegion = TextRange.empty;
-      removeEditingOverlayControls();
     });
   }, debugLabel: 'clear text input for background transition');
+}
+
+@visibleForTesting
+void resetTextInputEditingStateForBackgroundTransition({
+  required VoidCallback detachFromIme,
+  required ValueChanged<TextSelection> setSelection,
+  required ValueChanged<TextRange> setComposingRegion,
+  required VoidCallback removeEditingOverlayControls,
+}) {
+  detachFromIme();
+  setSelection(const TextSelection.collapsed(offset: -1));
+  setComposingRegion(TextRange.empty);
+  removeEditingOverlayControls();
 }
