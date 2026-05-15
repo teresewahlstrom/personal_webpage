@@ -7,7 +7,7 @@ import 'package:tw_chat/src/widgets/message_bubble.dart';
 import 'package:tw_chat/src/widgets/message_list_area.dart';
 
 void main() {
-  testWidgets('overflowing transcript keeps the trailing edge gap symmetric', (
+  testWidgets('overflowing transcript uses the configured trailing edge gap', (
     tester,
   ) async {
     final chatScroll = ScrollController();
@@ -102,7 +102,7 @@ void main() {
 
     expect(
       viewportRect.bottom - lastBubbleRect.bottom,
-      closeTo(tokens.bubbleViewportPadding.bottom, 0.1),
+      closeTo(tokens.chatListTrailingGap, 0.1),
     );
   });
 }

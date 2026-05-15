@@ -113,8 +113,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 tokens.bubbleWidthCompensation)
             .clamp(tokens.bubbleMinMaxWidth, widget.availableWidth);
     final bubbleMinWidth =
-        (widget.availableWidth * ChatBubbleRules.minWidthFactor)
-            .clamp(0.0, bubbleMaxWidth);
+        (widget.availableWidth * ChatBubbleRules.minWidthFactor).clamp(
+          0.0,
+          bubbleMaxWidth,
+        );
     final textScaler = MediaQuery.textScalerOf(context);
     final parsedMarkup = widget.isTypingIndicator
         ? null
@@ -136,35 +138,39 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         ? 0.0
         : tokens.bubbleVerticalMargin;
     final collapseButtonOverflowLeft = tokens.collapseButtonRightInset < 0
-      ? -tokens.collapseButtonRightInset
+        ? -tokens.collapseButtonRightInset
         : 0.0;
     final collapseButtonOverflowBottom = tokens.collapseButtonBottomInset < 0
         ? -tokens.collapseButtonBottomInset
         : 0.0;
     final collapseButtonReservedBottom = isTruncatable
-      ? collapseButtonOverflowBottom * 2
-      : collapseButtonOverflowBottom;
+        ? collapseButtonOverflowBottom * 2
+        : collapseButtonOverflowBottom;
     final toggleButtonBackgroundColor = widget.isTruncated
-      ? ChatBubbleRules.collapseButtonColor(context)
-      : colors.shellBackgroundStart;
+        ? ChatBubbleRules.collapseButtonColor(context)
+        : colors.shellBackgroundStart;
     final toggleButtonIconColor = widget.isTruncated
-      ? ChatBubbleRules.collapseButtonIconColor(context)
-      : ChatBubbleRules.collapseButtonColor(context);
+        ? ChatBubbleRules.collapseButtonIconColor(context)
+        : ChatBubbleRules.collapseButtonColor(context);
     final toggleButtonBorderSide = widget.isTruncated
         ? BorderSide.none
-      : BorderSide(
-        color: ChatBubbleRules.collapseButtonColor(context),
-        width: 0.5,
-        );
+        : BorderSide(
+            color: ChatBubbleRules.collapseButtonColor(context),
+            width: 0.5,
+          );
     final align = widget.isUser ? Alignment.centerRight : Alignment.centerLeft;
     final bubbleColor = widget.isUser
-      ? ChatBubbleRules.userFill(context)
-      : ChatBubbleRules.botFill(context);
+        ? ChatBubbleRules.userFill(context)
+        : ChatBubbleRules.botFill(context);
     final borderColor = widget.isUser
-      ? ChatBubbleRules.userBorder(context)
-      : ChatBubbleRules.botBorder(context);
+        ? ChatBubbleRules.userBorder(context)
+        : ChatBubbleRules.botBorder(context);
     final bubbleBorderSide = BorderSide(
       color: borderColor,
+      width: tokens.bubbleBorderWidth,
+    );
+    final botBottomBorderSide = BorderSide(
+      color: ChatComposerLayout.borderColor(context),
       width: tokens.bubbleBorderWidth,
     );
 
@@ -186,10 +192,14 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                   children: [
                     Container(
                       padding: EdgeInsets.fromLTRB(
-                        widget.isUser ? horizontalInset : tokens.composerTextInsetLeft,
+                        widget.isUser
+                            ? horizontalInset
+                            : tokens.composerTextInsetLeft,
                         verticalInset,
                         horizontalInset,
-                        (isTruncatable && widget.isTruncated) ? 0.0 : verticalInset,
+                        (isTruncatable && widget.isTruncated)
+                            ? 0.0
+                            : verticalInset,
                       ),
                       constraints: widget.isUser
                           ? BoxConstraints(
@@ -212,7 +222,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                   : Border.fromBorderSide(bubbleBorderSide),
                               boxShadow: [tokens.surfaceShadow(colors)],
                             )
-                          : null,
+                          : BoxDecoration(
+                              border: Border(bottom: botBottomBorderSide),
+                            ),
                       child: _buildBubbleText(
                         parsedMarkup,
                         style: bubbleTextStyle,
@@ -620,10 +632,7 @@ class _PlusMinusPainter extends CustomPainter {
 }
 
 class _DashedLinePainter extends CustomPainter {
-  const _DashedLinePainter({
-    required this.color,
-    required this.strokeWidth,
-  });
+  const _DashedLinePainter({required this.color, required this.strokeWidth});
 
   final Color color;
   final double strokeWidth;

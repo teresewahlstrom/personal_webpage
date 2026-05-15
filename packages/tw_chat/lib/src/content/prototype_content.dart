@@ -23,10 +23,6 @@ Dummy text.
 >
 > They also keep paragraph spacing.
 Dummy text.
-
----
-
-Dummy text.
 # H1
 Dummy text.
 ## H2

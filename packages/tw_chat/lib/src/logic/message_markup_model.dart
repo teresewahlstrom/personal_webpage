@@ -1,4 +1,4 @@
- import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 typedef GestureRecognizerFactory = GestureRecognizer? Function(String href);
@@ -275,21 +275,6 @@ class ChatMarkupListBlock extends ChatMarkupBlock {
     }
 
     return TextSpan(style: theme.baseStyle, children: itemChildren);
-  }
-}
-
-class ChatMarkupHorizontalRuleBlock extends ChatMarkupBlock {
-  const ChatMarkupHorizontalRuleBlock();
-
-  @override
-  String toPlainText() => '';
-
-  @override
-  TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
-  }) {
-    return TextSpan(text: '', style: theme.baseStyle);
   }
 }
 

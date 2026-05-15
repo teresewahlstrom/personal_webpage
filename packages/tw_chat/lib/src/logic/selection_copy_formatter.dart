@@ -36,7 +36,10 @@ String formatChatSelectionCopy({
 
     if (wroteAny || start == 0) {
       buffer.write(
-        _buildSelectionCopyMessageHeader(message, isFirstMessage: entry.$1 == 0),
+        _buildSelectionCopyMessageHeader(
+          message,
+          isFirstMessage: entry.$1 == 0,
+        ),
       );
     }
     buffer.write(projection.copySlice(start: start, end: end));
@@ -183,7 +186,13 @@ List<_SelectionCopySegment> _buildBlockSegments(ChatMarkupBlock block) {
     return _buildInlineSegments(block.inlines);
   }
   if (block is ChatMarkupHeadingBlock) {
-    return _buildInlineSegments(block.inlines);
+    final segments = _buildInlineSegments(block.inlines);
+    final prefix = _markdownHeadingPrefix(block.level);
+    if (prefix.isEmpty || segments.isEmpty) {
+      return segments;
+    }
+    segments[0] = segments[0].prependLeadingCopy(prefix);
+    return segments;
   }
   if (block is ChatMarkupBlockQuoteBlock) {
     return _prefixCopyLines(
@@ -206,7 +215,7 @@ List<_SelectionCopySegment> _buildListSegments(ChatMarkupListBlock block) {
   final segments = <_SelectionCopySegment>[];
 
   for (final entry in block.items.indexed) {
-    final marker = block.ordered ? '${block.startingIndex + entry.$1}. ' : '• ';
+    final marker = block.ordered ? '${block.startingIndex + entry.$1}. ' : '- ';
 
     segments.add(
       _SelectionCopySegment(
@@ -232,14 +241,69 @@ List<_SelectionCopySegment> _buildInlineSegments(
   final segments = <_SelectionCopySegment>[];
 
   for (final inline in inlines) {
-    final href = inline.href;
-    final trailingCopy = href == null || href.isEmpty || href == inline.text
-        ? ''
-        : ' ($href)';
-    segments.addAll(_splitVisibleText(inline.text, trailingCopy: trailingCopy));
+    segments.addAll(
+      _splitVisibleText(
+        inline.text,
+        leadingCopy: _inlineLeadingMarkdown(inline),
+        trailingCopy: _inlineTrailingMarkdown(inline),
+      ),
+    );
   }
 
   return segments;
+}
+
+String _markdownHeadingPrefix(int level) {
+  return switch (level) {
+    1 => '# ',
+    2 => '## ',
+    _ => '',
+  };
+}
+
+String _inlineLeadingMarkdown(ChatMarkupInline inline) {
+  final buffer = StringBuffer();
+  if (inline.isStrong) {
+    buffer.write('**');
+  }
+  if (inline.isEmphasis) {
+    buffer.write('*');
+  }
+  if (inline.isStrikethrough) {
+    buffer.write('~~');
+  }
+  if (inline.isUnderline) {
+    buffer.write('<u>');
+  }
+  if (_shouldWriteMarkdownLink(inline)) {
+    buffer.write('[');
+  }
+  return buffer.toString();
+}
+
+String _inlineTrailingMarkdown(ChatMarkupInline inline) {
+  final buffer = StringBuffer();
+  if (_shouldWriteMarkdownLink(inline)) {
+    buffer.write('](${inline.href})');
+  }
+  if (inline.isUnderline) {
+    buffer.write('</u>');
+  }
+  if (inline.isStrikethrough) {
+    buffer.write('~~');
+  }
+  if (inline.isEmphasis) {
+    buffer.write('*');
+  }
+  if (inline.isStrong) {
+    buffer.write('**');
+  }
+  return buffer.toString();
+}
+
+bool _shouldWriteMarkdownLink(ChatMarkupInline inline) {
+  final href = inline.href;
+  return href != null && href.isNotEmpty && href != inline.text;
 }
 
 List<_SelectionCopySegment> _splitVisibleText(
@@ -391,8 +455,8 @@ String _buildSelectionCopyMessageHeader(
   ChatMessage message, {
   required bool isFirstMessage,
 }) {
-  final transcriptPrefix = isFirstMessage ? '' : '\n\n---\n';
-  return '$transcriptPrefix${_roleLabel(message.role)} (${_formattedTimestamp(message.createdAt)})\n\n';
+  final transcriptPrefix = isFirstMessage ? '' : '\n\n';
+  return '$transcriptPrefix## ${_roleLabel(message.role)} (${_formattedTimestamp(message.createdAt)})\n\n';
 }
 
 String _roleLabel(ChatRole role) {

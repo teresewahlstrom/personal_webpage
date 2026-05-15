@@ -28,10 +28,9 @@ class ChatLayout {
   /// Preferred dock width whenever the viewport has enough room.
   static const stableExpandedDockWidth = 560.0;
 
-  /// Height factors by breakpoint band for dock max-height resolution.
+  /// Height factor for floating dock max-height resolution.
   static const phoneHeightFactor = 0.82;
-  static const tabletHeightFactor = 0.78;
-  static const desktopHeightFactor = 0.74;
+  static const floatingHeightFactor = 0.78;
 
   /// Height threshold where compact mode starts in portrait orientation.
   static const compactHeightFillViewportThresholdPortrait = 640.0;
@@ -177,16 +176,9 @@ class ChatLayout {
       return clampedSafeUsableHeight;
     }
 
-    final safeViewportWidth = _safeViewportWidth(
-      viewportWidth: viewportSize.width,
-      viewPadding: viewPadding,
-    );
-    final widthBasedFactor = _heightFactor(safeViewportWidth);
     final targetFactor =
-        (widthBasedFactor + (isLandscape ? landscapeHeightBoost : 0.0)).clamp(
-          0.55,
-          0.95,
-        );
+        (floatingHeightFactor + (isLandscape ? landscapeHeightBoost : 0.0))
+            .clamp(0.55, 0.95);
     final targetHeight = clampedSafeUsableHeight * targetFactor;
     final minHeight = isLandscape
         ? minWindowHeightLandscape
@@ -237,15 +229,5 @@ class ChatLayout {
 
   static double _lerp(double a, double b, double t) {
     return lerpDouble(a, b, t) ?? b;
-  }
-
-  static double _heightFactor(double viewportWidth) {
-    if (viewportWidth <= phoneBreakpoint) {
-      return phoneHeightFactor;
-    }
-    if (viewportWidth <= desktopBreakpoint) {
-      return tabletHeightFactor;
-    }
-    return desktopHeightFactor;
   }
 }

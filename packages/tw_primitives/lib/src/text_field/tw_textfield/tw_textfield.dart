@@ -237,7 +237,9 @@ class TwTextField extends StatefulWidget {
   /// and when in multi-line mode, the action will be  [TextInputAction.newline].
   ///
   /// Only used on mobile.
-  @Deprecated('This will be removed in a future release. Use imeConfiguration instead')
+  @Deprecated(
+    'This will be removed in a future release. Use imeConfiguration instead',
+  )
   final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
@@ -264,8 +266,11 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
 
     _controller = widget.textController != null
         ? widget.textController is ImeAttributedTextEditingController
-            ? (widget.textController as ImeAttributedTextEditingController)
-            : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
+              ? (widget.textController as ImeAttributedTextEditingController)
+              : ImeAttributedTextEditingController(
+                  controller: widget.textController,
+                  disposeClientController: false,
+                )
         : ImeAttributedTextEditingController();
   }
 
@@ -283,8 +288,11 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
     if (widget.textController != oldWidget.textController) {
       _controller = widget.textController != null
           ? widget.textController is ImeAttributedTextEditingController
-              ? (widget.textController as ImeAttributedTextEditingController)
-              : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
+                ? (widget.textController as ImeAttributedTextEditingController)
+                : ImeAttributedTextEditingController(
+                    controller: widget.textController,
+                    disposeClientController: false,
+                  )
           : ImeAttributedTextEditingController();
     }
   }
@@ -305,26 +313,33 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
   AttributedTextEditingController get controller => _controller;
 
   @visibleForTesting
-  ProseTextLayout get textLayout => (_platformFieldKey.currentState as ProseTextBlock).textLayout;
+  ProseTextLayout get textLayout =>
+      (_platformFieldKey.currentState as ProseTextBlock).textLayout;
 
   @visibleForTesting
   @override
   DeltaTextInputClient get imeClient {
     switch (_configuration) {
       case TwTextFieldPlatformConfiguration.desktop:
-        // ignore: invalid_use_of_visible_for_testing_member
-        return (_platformFieldKey.currentState as TwDesktopTextFieldState).imeClient;
+        return (_platformFieldKey.currentState as TwDesktopTextFieldState)
+            // ignore: invalid_use_of_visible_for_testing_member
+            .imeClient;
       case TwTextFieldPlatformConfiguration.android:
-        return (_platformFieldKey.currentState as TwAndroidTextFieldState).imeClient;
+        return (_platformFieldKey.currentState as TwAndroidTextFieldState)
+            // ignore: invalid_use_of_visible_for_testing_member
+            .imeClient;
       case TwTextFieldPlatformConfiguration.iOS:
-        return (_platformFieldKey.currentState as TwIOSTextFieldState).imeClient;
+        return (_platformFieldKey.currentState as TwIOSTextFieldState)
+            // ignore: invalid_use_of_visible_for_testing_member
+            .imeClient;
     }
   }
 
   bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
 
   TextInputAction get _textInputAction =>
-      widget.textInputAction ?? (_isMultiline ? TextInputAction.newline : TextInputAction.done);
+      widget.textInputAction ??
+      (_isMultiline ? TextInputAction.newline : TextInputAction.done);
 
   TwTextFieldPlatformConfiguration get _configuration {
     if (widget.configuration != null) {
@@ -372,11 +387,16 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
   /// pressing [LogicalKeyboardKey.space] scrolls the scrollview.
   final Map<LogicalKeySet, Intent> _scrollShortcutOverrides = kIsWeb
       ? {
-          LogicalKeySet(LogicalKeyboardKey.space): const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowUp): const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowDown): const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowLeft): const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowRight): const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.space):
+              const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowUp):
+              const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowDown):
+              const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowLeft):
+              const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowRight):
+              const DoNothingAndStopPropagationIntent(),
         }
       : const <LogicalKeySet, Intent>{};
 
@@ -397,7 +417,8 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
           selectionHighlightStyle: SelectionHighlightStyle(
             color: widget.selectionColor ?? defaultSelectionColor,
           ),
-          caretStyle: widget.caretStyle ??
+          caretStyle:
+              widget.caretStyle ??
               CaretStyle(
                 color: widget.controlsColor ?? defaultDesktopCaretColor,
                 width: 1,
@@ -412,7 +433,9 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
           inputSource: _inputSource,
           textInputAction: _textInputAction,
           imeConfiguration: widget.imeConfiguration,
-          showComposingUnderline: widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS,
+          showComposingUnderline:
+              widget.showComposingUnderline ??
+              defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
           scrollController: widget.scrollController,
         );
@@ -430,13 +453,15 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             inlineWidgetBuilders: widget.inlineWidgetBuilders,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
+            caretStyle:
+                widget.caretStyle ??
                 CaretStyle(
                   color: widget.controlsColor ?? defaultAndroidControlsColor,
                 ),
             selectionColor: widget.selectionColor ?? defaultSelectionColor,
             handlesColor: widget.controlsColor ?? defaultAndroidControlsColor,
-            handlesRadius: widget.handlesRadius ?? AndroidSelectionHandle.defaultRadius,
+            handlesRadius:
+                widget.handlesRadius ?? AndroidSelectionHandle.defaultRadius,
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             lineHeight: widget.lineHeight,
@@ -463,7 +488,8 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             padding: widget.padding,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
+            caretStyle:
+                widget.caretStyle ??
                 CaretStyle(
                   color: widget.controlsColor ?? defaultIOSControlsColor,
                 ),
@@ -477,6 +503,7 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             imeConfiguration: widget.imeConfiguration,
             showComposingUnderline: widget.showComposingUnderline ?? true,
             blinkTimingMode: widget.blinkTimingMode,
+            scrollController: widget.scrollController,
           ),
         );
     }
@@ -489,9 +516,4 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
 ///
 /// Desktop uses a blinking caret, while mobile uses a draggable caret
 /// and selection handles, styled per platform.
-enum TwTextFieldPlatformConfiguration {
-  desktop,
-  android,
-  iOS,
-}
-
+enum TwTextFieldPlatformConfiguration { desktop, android, iOS }

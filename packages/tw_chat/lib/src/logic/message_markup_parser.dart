@@ -62,12 +62,6 @@ class ChatMarkupParser {
         continue;
       }
 
-      if (_matchHorizontalRule(line, baseIndent: baseIndent)) {
-        blocks.add(const ChatMarkupHorizontalRuleBlock());
-        index += 1;
-        continue;
-      }
-
       final listMarker = _matchListMarker(line, minimumIndent: baseIndent);
       if (listMarker != null) {
         final result = _parseListBlock(
@@ -264,15 +258,7 @@ class ChatMarkupParser {
   bool _startsNewBlock(String line, {required int baseIndent}) {
     return _stripBlockQuotePrefix(line, baseIndent: baseIndent) != null ||
         _matchHeading(line, baseIndent: baseIndent) != null ||
-        _matchListMarker(line, minimumIndent: baseIndent) != null ||
-        _matchHorizontalRule(line, baseIndent: baseIndent);
-  }
-
-  bool _matchHorizontalRule(String line, {required int baseIndent}) {
-    if (_leadingSpaces(line) < baseIndent) {
-      return false;
-    }
-    return RegExp(r'^\s{0,3}-{3,}\s*$').hasMatch(line.substring(baseIndent));
+        _matchListMarker(line, minimumIndent: baseIndent) != null;
   }
 
   _HeadingMatch? _matchHeading(String line, {required int baseIndent}) {

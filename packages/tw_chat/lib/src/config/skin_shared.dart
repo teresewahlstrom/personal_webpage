@@ -105,12 +105,7 @@ class ChatSkinTokens {
   final double phoneVerticalHeightGutter = 4.0;
   final double verticalHeightGutter = 12.0;
   final double composerGap = 9.0;
-  final EdgeInsets shellContentPadding = const EdgeInsets.fromLTRB(
-    9,
-    0,
-    2,
-    10,
-  );
+  final EdgeInsets shellContentPadding = const EdgeInsets.fromLTRB(9, 0, 2, 10);
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
     0,
@@ -119,15 +114,36 @@ class ChatSkinTokens {
     10,
   );
   final double chatListTopShadowHeight = 32.0;
-  final double chatListBottomShadowHeight = 30;
+  final double chatListBottomShadowHeight = 24;
+  final double chatListTrailingGap = 33.75;
 
   // Top shadow gradient
-  final List<double> shellTopShadowGradientStops = const <double>[0.0, 0.45, 0.82, 1.0];
-  final List<int> shellTopShadowGradientAlphas = const <int>[0xFF, 0xED, 0xCD, 0x33];
+  final List<double> shellTopShadowGradientStops = const <double>[
+    0.0,
+    0.45,
+    0.82,
+    1.0,
+  ];
+  final List<int> shellTopShadowGradientAlphas = const <int>[
+    0xFF,
+    0xED,
+    0xCD,
+    0x33,
+  ];
 
   // Bottom shadow gradient
-  final List<double> shellBottomShadowGradientStops = const <double>[0.0, 0.24, 0.88, 1.0];
-  final List<int> shellBottomShadowGradientAlphas = const <int>[0xFF, 0xEF, 0xD3, 0x4D];
+  final List<double> shellBottomShadowGradientStops = const <double>[
+    0.0,
+    0.24,
+    0.88,
+    1.0,
+  ];
+  final List<int> shellBottomShadowGradientAlphas = const <int>[
+    0xFF,
+    0xEF,
+    0xD3,
+    0x4D,
+  ];
   final EdgeInsets appBarPaddingMinimized = const EdgeInsets.fromLTRB(
     14,
     15,
@@ -166,6 +182,7 @@ class ChatSkinTokens {
   final double composerInputTextInsetTopBottom = 6.3;
   final double composerInputTextInsetTop = 6.3;
   final double composerCaretWidth = 1.0;
+
   /// The radius of the selection drag handles in the composer text field.
   ///
   /// For Android, this controls the teardrop handle radius.
@@ -185,6 +202,7 @@ class ChatSkinTokens {
   final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
+  final double markupStrikethroughThicknessBias = 0.5;
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
@@ -287,6 +305,12 @@ class ChatSkinTokens {
     );
   }
 
+  double shellBottomShadowHeight(double composerHeight) {
+    return shellContentPadding.bottom +
+        composerHeight +
+        (composerGap + composerRowTopSpacing) * 0.8;
+  }
+
   BoxShadow shellShadow(ChatSkinColors colors) {
     return BoxShadow(
       color: colors.shellOuterShadow,
@@ -305,7 +329,9 @@ class ChatSkinTokens {
 
   BoxShadow jumpToLatestButtonShadow(ChatSkinColors colors) {
     return BoxShadow(
-      color: colors.bubbleShadow.withValues(alpha: colors.bubbleShadow.a * 0.25),
+      color: colors.bubbleShadow.withValues(
+        alpha: colors.bubbleShadow.a * 0.25,
+      ),
       blurRadius: 8,
       spreadRadius: 2,
       offset: const Offset(0, 1),
@@ -410,7 +436,9 @@ class ChatSkinTextStyles {
     return baseStyle.copyWith(
       decoration: TextDecoration.lineThrough,
       decorationColor: baseStyle.color,
-      decorationThickness: markdownDecorationThickness(tokens),
+      decorationThickness:
+          markdownDecorationThickness(tokens) +
+          tokens.markupStrikethroughThicknessBias,
     );
   }
 
@@ -426,9 +454,7 @@ class ChatSkinTextStyles {
     TextStyle baseStyle,
     ChatSkinColors colors,
   ) {
-    return baseStyle.copyWith(
-      fontStyle: FontStyle.italic,
-    );
+    return baseStyle.copyWith(fontStyle: FontStyle.italic);
   }
 
   TextStyle markdownHeadingStyle(

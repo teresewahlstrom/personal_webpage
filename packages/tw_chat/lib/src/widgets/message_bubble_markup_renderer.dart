@@ -310,8 +310,8 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       final railColor = chromeVisible
           ? ChatSkin.dataOf(context).colors.bubbleText
           : ChatSkin.dataOf(context).colors.transparent;
-        final tokens = ChatSkin.tokens;
-        final fontSize = theme.baseStyle.fontSize ?? 12.0;
+      final tokens = ChatSkin.tokens;
+      final fontSize = theme.baseStyle.fontSize ?? 12.0;
       return Padding(
         padding: EdgeInsets.only(
           left: fontSize * tokens.markupBlockquoteIndentFactor,
@@ -339,23 +339,13 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       );
     }
 
-    if (block is ChatMarkupHorizontalRuleBlock) {
-      final hrColor = chromeVisible
-          ? ChatSkin.dataOf(context).colors.bubbleText
-          : ChatSkin.dataOf(context).colors.transparent;
-      return Container(height: ChatSkin.tokens.markupBlockquoteRailWidth, color: hrColor);
-    }
-
     if (block is ChatMarkupListBlock) {
       final children = <Widget>[];
       for (final entry in block.items.indexed) {
         if (entry.$1 > 0) {
           children.add(
             SizedBox(
-              height: _listItemSpacing(
-                theme.baseStyle,
-                listDepth: listDepth,
-              ),
+              height: _listItemSpacing(theme.baseStyle, listDepth: listDepth),
             ),
           );
         }
@@ -529,12 +519,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     if (nextBlock is ChatMarkupBlockQuoteBlock) {
       spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
     }
-    if (previousBlock is ChatMarkupHorizontalRuleBlock) {
-      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
-    }
-    if (nextBlock is ChatMarkupHorizontalRuleBlock) {
-      spacing += fontSize * tokens.markupBlockQuoteExtraSpacing;
-    }
     if (!inListItem &&
         nextBlock is ChatMarkupListBlock &&
         previousBlock is! ChatMarkupHeadingBlock &&
@@ -544,17 +528,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     if (!inListItem && previousBlock is ChatMarkupListBlock) {
       spacing += fontSize * tokens.markupListBottomSpacingAdjustment;
     }
-    if (previousBlock is ChatMarkupHorizontalRuleBlock ||
-        nextBlock is ChatMarkupHorizontalRuleBlock) {
-      spacing *= 2 / 3;
-    }
     return spacing < 0 ? 0 : spacing;
   }
 
-  double _listItemSpacing(
-    TextStyle style, {
-    required int listDepth,
-  }) {
+  double _listItemSpacing(TextStyle style, {required int listDepth}) {
     final fontSize = style.fontSize ?? 12.0;
     final tokens = ChatSkin.tokens;
 

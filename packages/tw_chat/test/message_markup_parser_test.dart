@@ -198,14 +198,14 @@ void main() {
   });
 
   group('block parser — horizontal rule', () {
-    test('--- produces a horizontal rule block', () {
+    test('--- is treated as literal paragraph text', () {
       final result = blocks('---');
       expect(result, hasLength(1));
-      expect(result.first, isA<ChatMarkupHorizontalRuleBlock>());
+      expect(result.first, isA<ChatMarkupParagraphBlock>());
     });
 
-    test('horizontal rule plain text is empty', () {
-      expect(plainText('---').trim(), isEmpty);
+    test('horizontal rule plain text keeps the marker', () {
+      expect(plainText('---').trim(), '---');
     });
   });
 

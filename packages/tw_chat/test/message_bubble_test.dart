@@ -118,7 +118,7 @@ Paragraph eight carries enough words to wrap through the bubble width for trunca
 
     expect(
       clipboardData?.text,
-      contains('2. Second parent\n    • Child item\n    • Second child'),
+      contains('2. Second parent\n   - Child item\n   - Second child'),
     );
   });
 
@@ -133,10 +133,7 @@ Line three carries enough words to wrap through the bubble width for truncation.
 
 Line four carries enough words to wrap through the bubble width for truncation.''';
 
-    await _pumpTruncatedBubble(
-      tester,
-      text: rawText,
-    );
+    await _pumpTruncatedBubble(tester, text: rawText);
 
     final visibleLink = find.byWidgetPredicate(
       (widget) =>
@@ -156,11 +153,11 @@ Line four carries enough words to wrap through the bubble width for truncation.'
         ChatMessage(
           id: 'bot-1',
           role: ChatRole.bot,
-          text: '''Prototype Mode
+          text: '''# Prototype Mode
 
 I answer from a fixed Terese context and keep in-session chat memory while the local backend is running.
 
-Markdown Showcase
+## Markdown Showcase
 
 1. Ordered lists work
 2. Nested lists work too
@@ -236,13 +233,18 @@ Markdown Showcase
 
       expect(
         clipboardData?.text,
-        'Twin (12:49, 16th of April 2026)\n\n'
-        '${ChatMessageMarkup.toPlainText(messages[0].text).trim()}\n\n'
-        '---\n'
-        'You (12:50, 16th of April 2026)\n\n'
+        '## Twin (12:49, 16th of April 2026)\n\n'
+        '# Prototype Mode\n\n'
+        'I answer from a fixed Terese context and keep in-session chat memory while the local backend is running.\n\n'
+        '## Markdown Showcase\n\n'
+        '1. Ordered lists work\n'
+        '2. Nested lists work too\n'
+        '   - Child item\n'
+        '   - Second child item\n'
+        '3. Here is another top-level item after nested list\n\n'
+        '## You (12:50, 16th of April 2026)\n\n'
         '${messages[1].text}\n\n'
-        '---\n'
-        'You (12:51, 16th of April 2026)\n\n'
+        '## You (12:51, 16th of April 2026)\n\n'
         '${messages[2].text}',
       );
     },
@@ -322,13 +324,12 @@ Markdown Showcase
 
     expect(
       clipboardData?.text,
-      'Twin (15:13, 16th of April 2026)\n\n'
+      '## Twin (15:13, 16th of April 2026)\n\n'
       'Prototype Mode\n\n'
       '> Blockquotes render as callouts.\n'
       '> \n'
       '> They also keep paragraph spacing.\n\n'
-      '---\n'
-      'You (15:15, 16th of April 2026)\n\n'
+      '## You (15:15, 16th of April 2026)\n\n'
       'User message #1',
     );
   });

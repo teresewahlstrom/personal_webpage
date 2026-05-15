@@ -6,7 +6,7 @@ import 'package:tw_chat/src/logic/message_markup.dart';
 import 'package:tw_chat/src/widgets/message_bubble_markup_renderer.dart';
 
 void main() {
-  testWidgets('horizontal rules keep tighter spacing above and below', (
+  testWidgets('horizontal rule syntax is rendered as literal text', (
     tester,
   ) async {
     const style = TextStyle(fontSize: 12, height: 1);
@@ -38,25 +38,20 @@ void main() {
         (widget) => widget is RichText && widget.text.toPlainText() == 'Before',
       ),
     );
+    final ruleRect = tester.getRect(
+      find.byWidgetPredicate(
+        (widget) => widget is RichText && widget.text.toPlainText() == '---',
+      ),
+    );
     final afterRect = tester.getRect(
       find.byWidgetPredicate(
         (widget) => widget is RichText && widget.text.toPlainText() == 'After',
       ),
     );
 
-    final tokens = ChatSkin.tokens;
-    final fontSize = style.fontSize ?? 12.0;
-    final expectedPerSideSpacing =
-        fontSize *
-        (tokens.markupBlockBaseSpacingFactor +
-            tokens.markupBlockQuoteExtraSpacing) *
-        (2 / 3);
-    final expectedVerticalGap =
-        expectedPerSideSpacing * 2 + tokens.markupBlockquoteRailWidth;
-
-    expect(
-      afterRect.top - beforeRect.bottom,
-      closeTo(expectedVerticalGap, 0.5),
-    );
+    final expectedSpacing =
+        (style.fontSize ?? 12.0) * ChatSkin.tokens.markupBlockBaseSpacingFactor;
+    expect(ruleRect.top - beforeRect.bottom, closeTo(expectedSpacing, 0.5));
+    expect(afterRect.top - ruleRect.bottom, closeTo(expectedSpacing, 0.5));
   });
 }

@@ -145,6 +145,21 @@ void main() {
     expect(width, lessThan(1300));
   });
 
+  test('floating dock height is stable across non-compact widths', () {
+    final mediumWidthHeight = ChatLayout.maxDockHeight(
+      viewportSize: const Size(700, 900),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
+    final wideWidthHeight = ChatLayout.maxDockHeight(
+      viewportSize: const Size(850, 900),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
+
+    expect(mediumWidthHeight, closeTo(wideWidthHeight, 0.1));
+  });
+
   test('dock width shrinks only when available width is below fixed width', () {
     const viewportSize = Size(580, 900);
     final margin = margin0(viewportSize: viewportSize);

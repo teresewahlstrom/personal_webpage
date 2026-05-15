@@ -153,9 +153,8 @@ class ChatMessageListArea extends StatelessWidget {
                           key: messageBubbleKeys[entry.$2.id],
                           availableWidth: availableWidth,
                           text: entry.$2.text,
-                          selectionListenerNotifier: selectionNotifierForMessage(
-                            entry.$2.id,
-                          ),
+                          selectionListenerNotifier:
+                              selectionNotifierForMessage(entry.$2.id),
                           isUser: entry.$2.role == ChatRole.user,
                           isTypingIndicator:
                               entry.$2.role == ChatRole.bot &&
@@ -168,9 +167,7 @@ class ChatMessageListArea extends StatelessWidget {
                         ),
                       SizedBox(
                         height:
-                            scrollbarBottomInset +
-                            tokens.chatListBottomShadowHeight +
-                            15,
+                            scrollbarBottomInset + tokens.chatListTrailingGap,
                       ),
                     ],
                   ),

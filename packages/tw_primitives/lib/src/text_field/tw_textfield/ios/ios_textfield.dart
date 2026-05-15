@@ -67,6 +67,7 @@ class TwIOSTextField extends StatefulWidget {
     this.showComposingUnderline = true,
     this.popoverToolbarBuilder = defaultIosPopoverToolbarBuilder,
     this.showDebugPaint = false,
+    this.scrollController,
   }) : super(key: key);
 
   /// [FocusNode] attached to this text field.
@@ -184,6 +185,9 @@ class TwIOSTextField extends StatefulWidget {
 
   /// Whether to paint debug guides.
   final bool showDebugPaint;
+
+  /// An optional [ScrollController] for the internal scroll view.
+  final ScrollController? scrollController;
 
   @override
   State createState() => TwIOSTextFieldState();
@@ -663,6 +667,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
               textScrollController: _textScrollController,
               textKey: _textContentKey,
               textEditingController: _textEditingController,
+              scrollController: widget.scrollController,
               textAlign: _textAlign,
               minLines: widget.minLines,
               maxLines: widget.maxLines,
@@ -889,10 +894,7 @@ Widget defaultIosPopoverToolbarBuilder(
 }
 
 class IOSTwTextFieldSystemContextMenu extends StatefulWidget {
-  const IOSTwTextFieldSystemContextMenu({
-    super.key,
-    required this.controller,
-  });
+  const IOSTwTextFieldSystemContextMenu({super.key, required this.controller});
 
   final IOSEditingOverlayController controller;
 

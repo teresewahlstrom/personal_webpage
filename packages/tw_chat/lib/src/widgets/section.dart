@@ -145,13 +145,20 @@ class _ChatSectionState extends State<ChatSection> {
           panelHeight: constraints.maxHeight,
           textScale: textScale,
         );
-        final composerHeight = (_composerMeasuredHeight > 0
-                ? _composerMeasuredHeight
-                : composerMetrics.minInputHeight)
-            .clamp(composerMetrics.minInputHeight, composerMetrics.maxInputHeight);
+        final composerHeight =
+            (_composerMeasuredHeight > 0
+                    ? _composerMeasuredHeight
+                    : composerMetrics.minInputHeight)
+                .clamp(
+                  composerMetrics.minInputHeight,
+                  composerMetrics.maxInputHeight,
+                );
         final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
         final chatScrollbarBottomInset =
-            tokens.shellContentPadding.bottom + composerHeight + tokens.composerGap + tokens.composerRowTopSpacing;
+            tokens.shellContentPadding.bottom +
+            composerHeight +
+            tokens.composerGap +
+            tokens.composerRowTopSpacing;
 
         return Stack(
           children: [
@@ -166,7 +173,8 @@ class _ChatSectionState extends State<ChatSection> {
                   builder: (_, _, _) {
                     return ChatMessageListArea(
                       messages: widget.messages,
-                      availableWidth: constraints.maxWidth -
+                      availableWidth:
+                          constraints.maxWidth -
                           tokens.shellContentPadding.left -
                           tokens.shellContentPadding.right -
                           tokens.bubbleViewportPadding.left -
@@ -175,15 +183,16 @@ class _ChatSectionState extends State<ChatSection> {
                       chatFocusNode: _coordinator.chatFocusNode,
                       chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
                       messageBubbleKeys: _coordinator.messageBubbleKeys,
-                      showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
+                      showChatScrollbarTrack:
+                          _coordinator.showChatScrollbarTrack,
                       isMessageTruncated: _coordinator.isMessageTruncated,
                       onToggleTruncation: _coordinator.toggleMessageTruncation,
                       onChatSelectionChanged:
                           _coordinator.handleChatSelectionChanged,
                       selectionNotifierForMessage:
                           _coordinator.selectionNotifierForMessage,
-                      onCopySelectionRequested: () =>
-                          _coordinator.resolveSelectionCopyText(widget.messages),
+                      onCopySelectionRequested: () => _coordinator
+                          .resolveSelectionCopyText(widget.messages),
                       onRequestChatKeyboardTarget:
                           widget.onSetChatKeyboardScrollTarget,
                       onChatPointerInteractionStart:
@@ -193,18 +202,19 @@ class _ChatSectionState extends State<ChatSection> {
                       scrollbarTopInset: chatScrollbarTopInset,
                       scrollbarBottomInset: chatScrollbarBottomInset,
                       jumpToLatestButton: null,
-                      buildScrollbarTrack: ({
-                        required double thickness,
-                        required double crossAxisInset,
-                        required double topInset,
-                        required double bottomInset,
-                      }) => ChatScrollbar.buildTrack(
-                        context: context,
-                        thickness: thickness,
-                        crossAxisInset: crossAxisInset,
-                        topInset: topInset,
-                        bottomInset: bottomInset,
-                      ),
+                      buildScrollbarTrack:
+                          ({
+                            required double thickness,
+                            required double crossAxisInset,
+                            required double topInset,
+                            required double bottomInset,
+                          }) => ChatScrollbar.buildTrack(
+                            context: context,
+                            thickness: thickness,
+                            crossAxisInset: crossAxisInset,
+                            topInset: topInset,
+                            bottomInset: bottomInset,
+                          ),
                     );
                   },
                 ),
@@ -223,9 +233,7 @@ class _ChatSectionState extends State<ChatSection> {
               right: 0,
               bottom: 0,
               height: chatScrollbarBottomInset,
-              child: AbsorbPointer(
-                child: const SizedBox.expand(),
-              ),
+              child: AbsorbPointer(child: const SizedBox.expand()),
             ),
             Positioned(
               left: 0,
@@ -240,7 +248,8 @@ class _ChatSectionState extends State<ChatSection> {
                 child: ValueListenableBuilder<int>(
                   valueListenable: _coordinator.chatViewListenable,
                   builder: (_, _, _) {
-                    final bool showJumpToLatest = !_coordinator.isNearChatBottom;
+                    final bool showJumpToLatest =
+                        !_coordinator.isNearChatBottom;
                     if (!showJumpToLatest) {
                       return const SizedBox.shrink();
                     }
@@ -264,7 +273,7 @@ class _ChatSectionState extends State<ChatSection> {
                             shape: const CircleBorder(),
                             side: BorderSide(
                               color: ChatComposerLayout.borderColor(context),
-                              width: 0.75,
+                              width: 1.0,
                             ),
                             elevation: tokens.jumpToLatestButtonElevation,
                             padding: tokens.jumpToLatestButtonPadding,
@@ -278,9 +287,14 @@ class _ChatSectionState extends State<ChatSection> {
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
-                          child: Icon(
-                            Icons.south_rounded,
-                            size: buttonSize * tokens.jumpToLatestButtonIconRatio,
+                          child: Tooltip(
+                            message: 'Jump to bottom',
+                            child: Icon(
+                              Icons.south_rounded,
+                              size:
+                                  buttonSize *
+                                  tokens.jumpToLatestButtonIconRatio,
+                            ),
                           ),
                         ),
                       ),
@@ -306,10 +320,7 @@ class _ChatSectionState extends State<ChatSection> {
               left: 0,
               right: 0,
               bottom: 0,
-              height: tokens.shellContentPadding.bottom +
-                  composerHeight +
-                  tokens.composerGap +
-                  tokens.composerRowTopSpacing,
+              height: tokens.shellBottomShadowHeight(composerHeight),
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
