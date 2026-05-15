@@ -48,7 +48,6 @@ class TwAndroidTextField extends StatefulWidget {
     required this.selectionColor,
     required this.handlesColor,
     this.handlesRadius = AndroidSelectionHandle.defaultRadius,
-    this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline = true,
     this.tapHandlers = const [],
@@ -145,15 +144,6 @@ class TwAndroidTextField extends StatefulWidget {
   /// text field viewport is sized as a multiple of the line-height of the
   /// first line of text.
   final double? lineHeight;
-
-  /// The type of action associated with the action button on the mobile
-  /// keyboard.
-  ///
-  /// This property is ignored when an [imeConfiguration] is provided.
-  @Deprecated(
-    'This will be removed in a future release. Use imeConfiguration instead',
-  )
-  final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
   final TextInputConfiguration? imeConfiguration;
@@ -293,18 +283,6 @@ class TwAndroidTextFieldState extends State<TwAndroidTextField>
       _focusNode.removeListener(_updateSelectionAndImeConnectionOnFocusChange);
       _focusNode = (widget.focusNode ?? FocusNode())
         ..addListener(_updateSelectionAndImeConnectionOnFocusChange);
-    }
-
-    if (widget.textInputAction != oldWidget.textInputAction &&
-        widget.textInputAction != null &&
-        _textEditingController.isAttachedToIme) {
-      _textEditingController.updateTextInputConfiguration(
-        viewId: View.of(context).viewId,
-        textInputAction: widget.textInputAction!,
-        textInputType: _isMultiline
-            ? TextInputType.multiline
-            : TextInputType.text,
-      );
     }
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
@@ -497,7 +475,8 @@ class TwAndroidTextFieldState extends State<TwAndroidTextField>
             } else {
               _textEditingController.attachToIme(
                 viewId: View.of(context).viewId,
-                textInputAction: widget.textInputAction ?? TextInputAction.done,
+                textInputAction:
+                    _isMultiline ? TextInputAction.newline : TextInputAction.done,
                 textInputType: _isMultiline
                     ? TextInputType.multiline
                     : TextInputType.text,

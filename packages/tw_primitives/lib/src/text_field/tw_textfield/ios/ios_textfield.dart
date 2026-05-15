@@ -62,7 +62,6 @@ class TwIOSTextField extends StatefulWidget {
     required this.selectionColor,
     required this.handlesColor,
     this.handlesRadius,
-    this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline = true,
     this.popoverToolbarBuilder = defaultIosPopoverToolbarBuilder,
@@ -164,15 +163,6 @@ class TwIOSTextField extends StatefulWidget {
   /// text field viewport is sized as a multiple of the line-height of the
   /// first line of text.
   final double? lineHeight;
-
-  /// The type of action associated with the action button on the mobile
-  /// keyboard.
-  ///
-  /// This property is ignored when an [imeConfiguration] is provided.
-  @Deprecated(
-    'This will be removed in a future release. Use imeConfiguration instead',
-  )
-  final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
   final TextInputConfiguration? imeConfiguration;
@@ -509,7 +499,8 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
             } else {
               _textEditingController.attachToIme(
                 viewId: View.of(context).viewId,
-                textInputAction: widget.textInputAction ?? TextInputAction.done,
+                textInputAction:
+                    _isMultiline ? TextInputAction.newline : TextInputAction.done,
                 textInputType: _isMultiline
                     ? TextInputType.multiline
                     : TextInputType.text,

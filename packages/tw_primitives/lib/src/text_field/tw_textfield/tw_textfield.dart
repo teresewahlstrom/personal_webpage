@@ -81,7 +81,6 @@ class TwTextField extends StatefulWidget {
     this.selectorHandlers,
     this.tapHandlers = const [],
     this.padding,
-    this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline,
     this.scrollController,
@@ -229,19 +228,6 @@ class TwTextField extends StatefulWidget {
   /// that wraps this text field.
   final ScrollController? scrollController;
 
-  /// The main action for the virtual keyboard, e.g. [TextInputAction.done].
-  ///
-  /// This property is ignored when an [imeConfiguration] is provided.
-  ///
-  /// When `null`, and in single-line mode, the action will be [TextInputAction.done],
-  /// and when in multi-line mode, the action will be  [TextInputAction.newline].
-  ///
-  /// Only used on mobile.
-  @Deprecated(
-    'This will be removed in a future release. Use imeConfiguration instead',
-  )
-  final TextInputAction? textInputAction;
-
   /// Preferences for how the platform IME should look and behave during editing.
   final TextInputConfiguration? imeConfiguration;
 
@@ -337,10 +323,6 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
 
   bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
 
-  TextInputAction get _textInputAction =>
-      widget.textInputAction ??
-      (_isMultiline ? TextInputAction.newline : TextInputAction.done);
-
   TwTextFieldPlatformConfiguration get _configuration {
     if (widget.configuration != null) {
       return widget.configuration!;
@@ -431,7 +413,6 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
           tapHandlers: widget.tapHandlers,
           padding: widget.padding ?? EdgeInsets.zero,
           inputSource: _inputSource,
-          textInputAction: _textInputAction,
           imeConfiguration: widget.imeConfiguration,
           showComposingUnderline:
               widget.showComposingUnderline ??
@@ -465,7 +446,6 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             lineHeight: widget.lineHeight,
-            textInputAction: _textInputAction,
             imeConfiguration: widget.imeConfiguration,
             showComposingUnderline: widget.showComposingUnderline ?? true,
             padding: widget.padding,
@@ -499,7 +479,6 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             minLines: widget.minLines,
             maxLines: widget.maxLines,
             lineHeight: widget.lineHeight,
-            textInputAction: _textInputAction,
             imeConfiguration: widget.imeConfiguration,
             showComposingUnderline: widget.showComposingUnderline ?? true,
             blinkTimingMode: widget.blinkTimingMode,

@@ -68,9 +68,7 @@ class TwDesktopTextField extends StatefulWidget {
     this.minLines,
     this.maxLines = 1,
     this.decorationBuilder,
-    this.onRightClick,
     this.inputSource = TextInputSource.keyboard,
-    this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline,
     this.selectorHandlers,
@@ -129,9 +127,6 @@ class TwDesktopTextField extends StatefulWidget {
 
   final DecorationBuilder? decorationBuilder;
 
-  @Deprecated('Use tapHandlers instead')
-  final RightClickListener? onRightClick;
-
   /// The [TwDesktopTextField] input source, e.g., keyboard or Input Method Engine.
   final TextInputSource inputSource;
 
@@ -154,12 +149,6 @@ class TwDesktopTextField extends StatefulWidget {
 
   /// Optional controller for the internal scroll view.
   final ScrollController? scrollController;
-
-  /// The type of action associated with ENTER key.
-  ///
-  /// This property is ignored when an [imeConfiguration] is provided.
-  @Deprecated('This will be removed in a future release. Use imeConfiguration instead')
-  final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
   final TextInputConfiguration? imeConfiguration;
@@ -454,7 +443,6 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       textKey: _textKey,
       textScrollKey: _textScrollKey,
       isMultiline: isMultiline,
-      onRightClick: widget.onRightClick,
       tapHandlers: widget.tapHandlers,
       child: MultiListenableBuilder(
         listenables: {
@@ -533,7 +521,6 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
                 textFieldContext: _textFieldContext,
                 isMultiline: isMultiline,
                 selectorHandlers: widget.selectorHandlers ?? defaultTextFieldSelectorHandlers,
-                textInputAction: widget.textInputAction,
                 imeConfiguration: widget.imeConfiguration,
                 textStyleBuilder: widget.textStyleBuilder,
                 textAlign: widget.textAlign,
@@ -631,7 +618,6 @@ class TwTextFieldGestureInteractor extends StatefulWidget {
     required this.textKey,
     required this.textScrollKey,
     required this.isMultiline,
-    this.onRightClick,
     this.tapHandlers = const [],
     required this.child,
   }) : super(key: key);
@@ -653,10 +639,6 @@ class TwTextFieldGestureInteractor extends StatefulWidget {
 
   /// Whether or not this text field supports multiple lines of text.
   final bool isMultiline;
-
-  /// Callback invoked when the user right clicks on this text field.
-  @Deprecated('Use tapHandlers instead')
-  final RightClickListener? onRightClick;
 
   /// {@macro super_text_field_tap_handlers}
   final List<TwTextFieldTapHandler> tapHandlers;
@@ -966,7 +948,6 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
         return;
       }
     }
-    widget.onRightClick?.call(context, widget.textController, details.localPosition);
   }
 
   void _onRightClickCancel() {
@@ -1454,7 +1435,6 @@ class TwTextFieldImeInteractor extends StatefulWidget {
     required this.textFieldContext,
     required this.isMultiline,
     required this.selectorHandlers,
-    this.textInputAction,
     this.imeConfiguration,
     required this.textStyleBuilder,
     this.textAlign,
@@ -1479,9 +1459,6 @@ class TwTextFieldImeInteractor extends StatefulWidget {
   /// The IME reports selectors as unique `String`s, therefore selector handlers are
   /// defined as a mapping from selector names to handler functions.
   final Map<String, TwTextFieldSelectorHandler> selectorHandlers;
-
-  /// The type of action associated with ENTER key.
-  final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
   final TextInputConfiguration? imeConfiguration;
@@ -1600,8 +1577,7 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
             _textController.attachToIme(
               viewId: View.of(context).viewId,
               textInputType: widget.isMultiline ? TextInputType.multiline : TextInputType.text,
-              textInputAction:
-                  widget.textInputAction ?? (widget.isMultiline ? TextInputAction.newline : TextInputAction.done),
+              textInputAction: widget.isMultiline ? TextInputAction.newline : TextInputAction.done,
             );
           }
         });
@@ -2108,9 +2084,6 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     );
   }
 }
-
-typedef RightClickListener = void Function(
-    BuildContext textFieldContext, AttributedTextEditingController textController, Offset textFieldOffset);
 
 enum _SelectionType {
   /// The selection bound is set on a per-character basis.
