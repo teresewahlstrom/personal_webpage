@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tw_chat/chat.dart' show ChatSkinMode;
+import 'package:tw_chat/chat.dart' show ChatSkin, ChatSkinMode;
 import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import '../../config/app_ui_config.dart';
@@ -110,6 +110,8 @@ class _PageScaffoldState extends State<PageScaffold>
     final ThemeData theme = Theme.of(context);
     final Brightness brightness = theme.brightness;
     final TargetPlatform platform = theme.platform;
+    final chatSkin = ChatSkin.dataForMode(widget.initialChatSkinMode);
+    final chatTokens = chatSkin.tokens;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final double floatingTopInset =
       mediaQuery.viewPadding.top + 10.0;
@@ -145,7 +147,22 @@ class _PageScaffoldState extends State<PageScaffold>
                                 builder: (context, constraints) {
                                   return TwScrollArea.scrollView(
                                     controller: _pageScrollController,
-                                    thumbVisibility: false,
+                                    thumbColor:
+                                      ShellUiConfig.pageScrollbarThumbFor(brightness),
+                                    thumbInactiveColor:
+                                      ShellUiConfig.pageScrollbarThumbInactiveFor(brightness),
+                                    trackColor:
+                                      ShellUiConfig.pageScrollbarTrackFor(brightness),
+                                    thickness:
+                                      ShellUiConfig.pageScrollbarThickness,
+                                    minThumbLength:
+                                        chatTokens.scrollbarMinThumbLength,
+                                    crossAxisMargin:
+                                        ShellUiConfig.pageScrollbarCrossAxisMargin,
+                                    radius: chatTokens.scrollbarRadius,
+                                    thumbVisibility: true,
+                                    interactive: true,
+                                    trackVisibility: false,
                                     physics: ScrollConfiguration.of(
                                       context,
                                     ).getScrollPhysics(context),

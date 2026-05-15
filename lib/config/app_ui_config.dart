@@ -36,6 +36,9 @@ final class ShellUiConfig {
   static const double gridSpacing = 25;
   static const double gridYStart = 15;
 
+  static const double pageScrollbarCrossAxisMargin = 0.0;
+  static const double pageScrollbarThickness = 7.0;
+
   static const double headerMinHeight = 56;
   static const double headerMaxWidth = 700;
   static const double headerLogoWidth = 44;
@@ -74,6 +77,18 @@ final class ShellUiConfig {
 
   static Color buttonBackgroundFor(Brightness brightness) {
     return AppColorTheme.buttonBackgroundFor(brightness);
+  }
+
+  static Color pageScrollbarThumbFor(Brightness brightness) {
+    return AppColorTheme.pageScrollbarThumbFor(brightness);
+  }
+
+  static Color pageScrollbarThumbInactiveFor(Brightness brightness) {
+    return AppColorTheme.pageScrollbarThumbInactiveFor(brightness);
+  }
+
+  static Color pageScrollbarTrackFor(Brightness brightness) {
+    return AppColorTheme.pageScrollbarTrackFor(brightness);
   }
 
   static Color footerBackgroundFor(Brightness brightness) {

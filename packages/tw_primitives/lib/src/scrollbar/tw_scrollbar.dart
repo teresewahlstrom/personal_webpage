@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
@@ -87,6 +88,7 @@ class TwScrollbar extends StatelessWidget {
     super.key,
     required this.controller,
     required this.child,
+    this.activationPulse,
     this.thumbColor = TwScrollbarDefaults.thumbColor,
     this.thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
     this.trackColor = TwScrollbarDefaults.trackColor,
@@ -106,6 +108,7 @@ class TwScrollbar extends StatelessWidget {
 
   final ScrollController controller;
   final Widget child;
+  final ValueListenable<Object?>? activationPulse;
   final Color thumbColor;
   final Color thumbInactiveColor;
   final Color trackColor;
@@ -126,6 +129,7 @@ class TwScrollbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return _TwRawScrollbar(
       controller: controller,
+      activationPulse: activationPulse,
       thumbVisibility: thumbVisibility,
       interactive: interactive,
       trackVisibility: trackVisibility,
@@ -150,6 +154,7 @@ class _TwRawScrollbar extends RawScrollbarWithCustomPhysics {
   const _TwRawScrollbar({
     required super.controller,
     required super.child,
+    required this.activationPulse,
     required super.thumbVisibility,
     required super.interactive,
     required super.trackVisibility,
@@ -173,6 +178,7 @@ class _TwRawScrollbar extends RawScrollbarWithCustomPhysics {
 
   final Color thumbInactiveColor;
   final Color activeTrackColor;
+  final ValueListenable<Object?>? activationPulse;
 
   @override
   _TwRawScrollbarState createState() => _TwRawScrollbarState();
@@ -184,6 +190,21 @@ class _TwRawScrollbarState
   bool _isScrollbarHovered = false;
   bool _isScrollbarPressed = false;
   bool _isUserScrollActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.activationPulse?.addListener(_handleActivationPulse);
+  }
+
+  @override
+  void didUpdateWidget(covariant _TwRawScrollbar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.activationPulse != widget.activationPulse) {
+      oldWidget.activationPulse?.removeListener(_handleActivationPulse);
+      widget.activationPulse?.addListener(_handleActivationPulse);
+    }
+  }
 
   bool get _isScrollbarActive =>
       _isScrollbarHovered || _isScrollbarPressed || _isUserScrollActive;
@@ -249,8 +270,14 @@ class _TwRawScrollbarState
 
   @override
   void dispose() {
+    widget.activationPulse?.removeListener(_handleActivationPulse);
     _thumbFadeTimer?.cancel();
     super.dispose();
+  }
+
+  void _handleActivationPulse() {
+    _setUserScrollActive();
+    _scheduleUserScrollFadeOut();
   }
 
   void _setScrollbarInteraction({bool? isHovered, bool? isPressed}) {

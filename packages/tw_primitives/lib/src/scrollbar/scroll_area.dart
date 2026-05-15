@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 
 import 'tw_scrollbar.dart';
@@ -8,6 +9,7 @@ class TwScrollArea extends StatefulWidget {
     super.key,
     required ScrollController controller,
     required Widget child,
+    this.activationPulse,
     this.track,
     this.overlayChildren = const <Widget>[],
     this.hideSystemScrollbars = true,
@@ -37,6 +39,7 @@ class TwScrollArea extends StatefulWidget {
     required Widget child,
     Axis scrollDirection = Axis.vertical,
     bool primary = false,
+    ValueListenable<Object?>? activationPulse,
     Widget? track,
     List<Widget> overlayChildren = const <Widget>[],
     bool hideSystemScrollbars = true,
@@ -61,6 +64,7 @@ class TwScrollArea extends StatefulWidget {
       controller: controller,
       scrollDirection: scrollDirection,
       primary: primary,
+      activationPulse: activationPulse,
       track: track,
       overlayChildren: overlayChildren,
       hideSystemScrollbars: hideSystemScrollbars,
@@ -89,6 +93,7 @@ class TwScrollArea extends StatefulWidget {
     required Widget child,
     required Axis scrollDirection,
     required bool primary,
+    this.activationPulse,
     this.track,
     this.overlayChildren = const <Widget>[],
     this.hideSystemScrollbars = true,
@@ -114,8 +119,9 @@ class TwScrollArea extends StatefulWidget {
 
   final ScrollController? _controller;
   final Widget _child;
-    final Axis? _scrollDirection;
-    final bool _primary;
+  final Axis? _scrollDirection;
+  final bool _primary;
+  final ValueListenable<Object?>? activationPulse;
   final Widget? track;
   final List<Widget> overlayChildren;
   final bool hideSystemScrollbars;
@@ -171,6 +177,7 @@ class _TwScrollAreaState extends State<TwScrollArea> {
 
     final scrollbar = TwScrollbar(
       controller: controller,
+      activationPulse: widget.activationPulse,
       thumbColor: widget.thumbColor,
       thumbInactiveColor: widget.thumbInactiveColor,
       trackColor: widget.trackColor,

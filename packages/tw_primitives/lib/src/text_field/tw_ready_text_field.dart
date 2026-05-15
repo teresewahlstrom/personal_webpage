@@ -143,6 +143,10 @@ class TwReadyTextField extends StatefulWidget {
 class _TwReadyTextFieldState extends State<TwReadyTextField> {
   late final TwReadyTextController _ownedController;
   late final ScrollController _ownedScrollController;
+  final ValueNotifier<Object?> _scrollbarActivationPulse =
+      ValueNotifier<Object?>(null);
+  bool _overflowSyncScheduled = false;
+  double _lastMaxScrollExtent = 0.0;
 
   TwReadyTextController get _textController =>
       widget.controller ?? _ownedController;
@@ -154,12 +158,16 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
 
   bool get _ownsScrollController => widget.scrollController == null;
 
+  ScrollController get _effectiveScrollController =>
+      widget.scrollController ?? _ownedScrollController;
+
   @override
   void initState() {
     super.initState();
     _ownedController = TwReadyTextController(text: widget.initialText);
     _ownedScrollController = ScrollController();
     _textController.addListener(_notifyTextChanged);
+    _scheduleOverflowSync();
   }
 
   @override
@@ -175,6 +183,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
   @override
   void dispose() {
     _textController.removeListener(_notifyTextChanged);
+    _scrollbarActivationPulse.dispose();
     if (_ownsTextController) {
       _ownedController.dispose();
     }
@@ -221,6 +230,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
 
     return TwScrollArea(
       controller: _scrollController,
+      activationPulse: _scrollbarActivationPulse,
       hideSystemScrollbars: widget.hideSystemScrollbars,
       thumbColor: widget.thumbColor,
       thumbInactiveColor: widget.thumbInactiveColor,
@@ -253,6 +263,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
 
   void _notifyTextChanged() {
     widget.onTextChanged?.call(_textController.text);
+    _scheduleOverflowSync();
   }
 
   CaretStyle? _resolveCaretStyle() {
@@ -263,5 +274,34 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
       color: widget.caretColor ?? widget.controlsColor ?? Colors.black,
       width: widget.caretWidth ?? 1,
     );
+  }
+
+  void _scheduleOverflowSync() {
+    if (_overflowSyncScheduled) {
+      return;
+    }
+    _overflowSyncScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _overflowSyncScheduled = false;
+      if (!mounted) {
+        return;
+      }
+      _syncScrollbarActivation();
+    });
+  }
+
+  void _syncScrollbarActivation() {
+    if (!_effectiveScrollController.hasClients) {
+      _lastMaxScrollExtent = 0.0;
+      return;
+    }
+    final nextMaxScrollExtent = _effectiveScrollController.position.maxScrollExtent
+        .clamp(0.0, double.infinity)
+        .toDouble();
+    final grew = nextMaxScrollExtent > _lastMaxScrollExtent + 0.5;
+    _lastMaxScrollExtent = nextMaxScrollExtent;
+    if (grew && nextMaxScrollExtent > 0.0) {
+      _scrollbarActivationPulse.value = Object();
+    }
   }
 }

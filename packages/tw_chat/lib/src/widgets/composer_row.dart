@@ -123,9 +123,9 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       thumbColor: ChatScrollbar.thumbColor(context),
       thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
       trackColor: ChatScrollbar.trackColor(context),
-      thickness: tokens.scrollbarThickness,
+      thickness: tokens.composerScrollbarThickness,
       minThumbLength: tokens.scrollbarMinThumbLength,
-      crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
+      crossAxisMargin: tokens.composerScrollbarCrossAxisMargin,
       mainAxisMargin: 0,
       radius: tokens.scrollbarRadius,
       thumbVisibility: true,
@@ -235,7 +235,9 @@ class _CornerAccentPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = (Offset.zero & size).deflate(strokeWidth / 2);
+    // Center the accent on the shell edge so the stroke shares the outline
+    // and only the overhang extends outside the composer shell.
+    final rect = Offset.zero & size;
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke

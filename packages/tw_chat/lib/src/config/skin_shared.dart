@@ -174,7 +174,9 @@ class ChatSkinTokens {
   final double collapseButtonStroke = 2.4;
 
   final double scrollbarThickness = 7.0;
-  final double scrollbarThumbCrossAxisMargin = 1.0;
+  final double composerScrollbarThickness = 5.5;
+  final double scrollbarThumbCrossAxisMargin = 0.0;
+  final double composerScrollbarCrossAxisMargin = 3.0;
   final double scrollbarTrackLeftShift = 3.0;
   final double scrollbarMinThumbLength = 15.0;
   final double composerScrollbarReservedWidth = 10.0;
@@ -312,9 +314,17 @@ class ChatSkinTokens {
   }
 
   BoxShadow shellShadow(ChatSkinColors colors) {
+    final baseShadow = colors.shellOuterShadow;
+    final boostedBase = baseShadow.withValues(
+      alpha: (baseShadow.a * 1.35).clamp(0.16, 0.62),
+    );
+    final accentTint = colors.composerSendIcon.withValues(
+      alpha: boostedBase.a * 0.32,
+    );
+    final shadowColor = Color.alphaBlend(accentTint, boostedBase);
     return BoxShadow(
-      color: colors.shellOuterShadow,
-      blurRadius: 24,
+      color: shadowColor,
+      blurRadius: 26,
       offset: const Offset(0, 12),
     );
   }
@@ -370,7 +380,7 @@ class ChatSkinTextStyles {
     );
     final base = GoogleFonts.nunito(
       fontSize: 14,
-      height: 1.3,
+      height: 1.5,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
     );

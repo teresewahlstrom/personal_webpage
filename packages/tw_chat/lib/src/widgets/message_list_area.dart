@@ -109,7 +109,7 @@ class ChatMessageListArea extends StatelessWidget {
           track: showChatScrollbarTrack
               ? buildScrollbarTrack(
                   thickness: tokens.scrollbarThickness,
-                  crossAxisInset: 0,
+                  crossAxisInset: tokens.scrollbarThumbCrossAxisMargin,
                   topInset: scrollbarTopInset,
                   bottomInset: scrollbarBottomInset,
                 )

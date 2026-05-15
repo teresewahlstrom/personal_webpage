@@ -34,6 +34,9 @@ final class _AppLightColors {
   static const Color footerText = Color(0xFF555764);
   static const Color modalContentText = Color(0xFF252525);
   static const Color pageBodyText = Color(0xFF252525);
+  static const Color pageScrollbarThumb = Color(0xFFE1E4F2);
+  static const Color pageScrollbarThumbInactive = Color(0xFFE8EAF4);
+  static const Color pageScrollbarTrack = Color(0x00F8F9F7);
 
   // clickable accent colors
   static const Color _interactive = Color(0xFF394183);
@@ -69,6 +72,9 @@ final class _AppDarkColors {
   static const Color footerText = Color(0xD6DCF6F8);
   static const Color modalContentText = Color(0xFFEAF7FF);
   static const Color pageBodyText = Color(0xD6DCF6F8);
+  static const Color pageScrollbarThumb = Color(0x397199FF);
+  static const Color pageScrollbarThumbInactive = Color(0xFF283143);
+  static const Color pageScrollbarTrack = Color(0x004EF0FF);
 
 
   // clickable accent colors
@@ -157,6 +163,18 @@ final class AppColorTheme {
     _AppLightColors.pageBodyText,
     _AppDarkColors.pageBodyText,
   );
+  static const _ThemeColor _pageScrollbarThumb = _ThemeColor(
+    _AppLightColors.pageScrollbarThumb,
+    _AppDarkColors.pageScrollbarThumb,
+  );
+  static const _ThemeColor _pageScrollbarThumbInactive = _ThemeColor(
+    _AppLightColors.pageScrollbarThumbInactive,
+    _AppDarkColors.pageScrollbarThumbInactive,
+  );
+  static const _ThemeColor _pageScrollbarTrack = _ThemeColor(
+    _AppLightColors.pageScrollbarTrack,
+    _AppDarkColors.pageScrollbarTrack,
+  );
 
   // Line theme colors
   static const _ThemeColor _lineSubtle = _ThemeColor(
@@ -233,6 +251,15 @@ final class AppColorTheme {
 
   static Color pageBodyTextFor(Brightness brightness) =>
       _pageBodyText.resolve(brightness);
+
+    static Color pageScrollbarThumbFor(Brightness brightness) =>
+      _pageScrollbarThumb.resolve(brightness);
+
+    static Color pageScrollbarThumbInactiveFor(Brightness brightness) =>
+      _pageScrollbarThumbInactive.resolve(brightness);
+
+    static Color pageScrollbarTrackFor(Brightness brightness) =>
+      _pageScrollbarTrack.resolve(brightness);
 
   static Color lineSubtleFor(Brightness brightness) =>
       _lineSubtle.resolve(brightness);
