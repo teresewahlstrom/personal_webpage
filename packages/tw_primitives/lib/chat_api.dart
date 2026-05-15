@@ -9,5 +9,9 @@ export 'src/text_field/tw_textfield/tw_textfield.dart'
 export 'src/text_field/tw_textfield/infrastructure/attributed_text_editing_controller.dart'
     show AttributedTextEditingController;
 
-export 'src/text_field/infrastructure/flutter/scrollbar.dart'
-    show RawScrollbarWithCustomPhysics, RawScrollbarWithCustomPhysicsState;
+export 'src/scrollbar/tw_scrollbar.dart'
+    show
+        TwNoScrollbarBehavior,
+        TwScrollbar,
+        TwScrollbarDefaults,
+        TwScrollbarTrack;

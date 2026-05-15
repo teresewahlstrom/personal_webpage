@@ -119,8 +119,11 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           widget.maxInputHeight,
         );
 
-    final inputField = ChatFadingScrollbar(
+    final inputField = TwScrollbar(
       controller: _composerScrollController,
+      thumbColor: ChatScrollbar.thumbColor(context),
+      thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
+      trackColor: ChatScrollbar.trackColor(context),
       thickness: tokens.scrollbarThickness,
       minThumbLength: tokens.scrollbarMinThumbLength,
       crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
@@ -130,17 +133,15 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       interactive: true,
       trackVisibility: false,
       child: ScrollConfiguration(
-        behavior: const ChatNoScrollbarBehavior(),
+        behavior: const TwNoScrollbarBehavior(),
         child: TwTextField(
           scrollController: _composerScrollController,
           focusNode: widget.inputFocusNode,
           textController: widget.controller,
           textStyleBuilder: (_) => composerTextStyle,
           hintBehavior: HintBehavior.displayHintUntilTextEntered,
-          hintBuilder: (context) => Text(
-            'Ask me anything...',
-            style: composerHintStyle,
-          ),
+          hintBuilder: (context) =>
+              Text('Ask me anything...', style: composerHintStyle),
           minLines: 1,
           maxLines: null,
           padding: EdgeInsets.fromLTRB(
@@ -286,4 +287,3 @@ class _CornerAccentPainter extends CustomPainter {
         segmentLength != oldDelegate.segmentLength;
   }
 }
-

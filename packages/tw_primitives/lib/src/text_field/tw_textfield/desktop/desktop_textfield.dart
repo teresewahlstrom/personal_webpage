@@ -75,6 +75,7 @@ class TwDesktopTextField extends StatefulWidget {
     this.showComposingUnderline,
     this.selectorHandlers,
     this.tapHandlers = const [],
+    this.scrollController,
     List<TextFieldKeyboardHandler>? keyboardHandlers,
   })  : keyboardHandlers = keyboardHandlers ??
             (inputSource == TextInputSource.keyboard
@@ -151,6 +152,9 @@ class TwDesktopTextField extends StatefulWidget {
   /// {@macro super_text_field_tap_handlers}
   final List<TwTextFieldTapHandler> tapHandlers;
 
+  /// Optional controller for the internal scroll view.
+  final ScrollController? scrollController;
+
   /// The type of action associated with ENTER key.
   ///
   /// This property is ignored when an [imeConfiguration] is provided.
@@ -193,6 +197,7 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
           : TextAlign.right);
 
   late ScrollController _scrollController;
+  late bool _ownsScrollController;
   late TextFieldScroller _textFieldScroller;
 
   double? _viewportHeight;
@@ -212,7 +217,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
         : ImeAttributedTextEditingController();
     _controller.addListener(_onSelectionOrContentChange);
 
-    _scrollController = ScrollController();
+    _ownsScrollController = widget.scrollController == null;
+    _scrollController = widget.scrollController ?? ScrollController();
     _textFieldScroller = TextFieldScroller() //
       ..attach(_scrollController);
 
@@ -257,6 +263,17 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       _createTextFieldContext();
     }
 
+    if (widget.scrollController != oldWidget.scrollController) {
+      final oldScrollController = _scrollController;
+      _textFieldScroller.detach();
+      _ownsScrollController = widget.scrollController == null;
+      _scrollController = widget.scrollController ?? ScrollController();
+      _textFieldScroller.attach(_scrollController);
+      if (oldWidget.scrollController == null) {
+        oldScrollController.dispose();
+      }
+    }
+
     if (widget.padding != oldWidget.padding ||
         widget.minLines != oldWidget.minLines ||
         widget.maxLines != oldWidget.maxLines) {
@@ -267,7 +284,9 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   @override
   void dispose() {
     _textFieldScroller.detach();
-    _scrollController.dispose();
+    if (_ownsScrollController) {
+      _scrollController.dispose();
+    }
     _focusNode.removeListener(_updateSelectionAndComposingRegionOnFocusChange);
     if (widget.focusNode == null) {
       _focusNode.dispose();
@@ -429,60 +448,64 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
 
     final isMultiline = widget.minLines != 1 || widget.maxLines != 1;
 
+    final textField = TwTextFieldGestureInteractor(
+      focusNode: _focusNode,
+      textController: _controller,
+      textKey: _textKey,
+      textScrollKey: _textScrollKey,
+      isMultiline: isMultiline,
+      onRightClick: widget.onRightClick,
+      tapHandlers: widget.tapHandlers,
+      child: MultiListenableBuilder(
+        listenables: {
+          _focusNode,
+          _controller,
+        },
+        builder: (context) {
+          return _buildDecoration(
+            child: TwTextFieldScrollview(
+              key: _textScrollKey,
+              textKey: _textKey,
+              textController: _controller,
+              textAlign: _textAlign,
+              scrollController: _scrollController,
+              viewportHeight: _viewportHeight,
+              estimatedLineHeight: _getEstimatedLineHeight(),
+              isMultiline: isMultiline,
+              child: FillWidthIfConstrained(
+                child: Padding(
+                  // WARNING: Padding within the text scroll view must be placed here, under
+                  // FillWidthIfConstrained, rather than around it, because FillWidthIfConstrained makes
+                  // decisions about sizing that expects its child to fill all available space in the
+                  // ancestor Scrollable.
+                  padding: widget.padding,
+                  child: _buildSelectableText(),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+
     return TapRegion(
       groupId: widget.tapRegionGroupId,
       child: _buildTextInputSystem(
         isMultiline: isMultiline,
-        // As we handle the scrolling gestures ourselves,
-        // we use NeverScrollableScrollPhysics to prevent SingleChildScrollView
-        // from scrolling. This also prevents the user from interacting
-        // with the scrollbar.
-        // ScrollbarWithCustomPhysics keeps the scrollbar interactive even when
-        // the scroll view uses custom physics for gesture handling.
-        child: ScrollbarWithCustomPhysics(
-          controller: _scrollController,
-          physics: ScrollConfiguration.of(context).getScrollPhysics(context),
-          child: TwTextFieldGestureInteractor(
-            focusNode: _focusNode,
-            textController: _controller,
-            textKey: _textKey,
-            textScrollKey: _textScrollKey,
-            isMultiline: isMultiline,
-            onRightClick: widget.onRightClick,
-            tapHandlers: widget.tapHandlers,
-            child: MultiListenableBuilder(
-              listenables: {
-                _focusNode,
-                _controller,
-              },
-              builder: (context) {
-                return _buildDecoration(
-                  child: TwTextFieldScrollview(
-                    key: _textScrollKey,
-                    textKey: _textKey,
-                    textController: _controller,
-                    textAlign: _textAlign,
-                    scrollController: _scrollController,
-                    viewportHeight: _viewportHeight,
-                    estimatedLineHeight: _getEstimatedLineHeight(),
-                    isMultiline: isMultiline,
-                    child: FillWidthIfConstrained(
-                      child: Padding(
-                        // WARNING: Padding within the text scroll view must be placed here, under
-                        // FillWidthIfConstrained, rather than around it, because FillWidthIfConstrained makes
-                        // decisions about sizing that expects its child to fill all available space in the
-                        // ancestor Scrollable.
-                        padding: widget.padding,
-                        child: _buildSelectableText(),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+        child: widget.scrollController == null
+            // As we handle the scrolling gestures ourselves,
+            // we use NeverScrollableScrollPhysics to prevent SingleChildScrollView
+            // from scrolling. This also prevents the user from interacting
+            // with the scrollbar.
+            // ScrollbarWithCustomPhysics keeps the scrollbar interactive even when
+            // the scroll view uses custom physics for gesture handling.
+            ? ScrollbarWithCustomPhysics(
+                controller: _scrollController,
+                physics: ScrollConfiguration.of(context).getScrollPhysics(context),
+                child: textField,
+              )
+            : textField,
           ),
-        ),
-      ),
     );
   }
 

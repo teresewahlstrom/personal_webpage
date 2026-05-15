@@ -87,7 +87,7 @@ class ChatMessageListArea extends StatelessWidget {
         onPointerUp: (_) => onChatPointerInteractionEnd(),
         onPointerCancel: (_) => onChatPointerInteractionEnd(),
         child: ScrollConfiguration(
-          behavior: const ChatNoScrollbarBehavior(),
+          behavior: const TwNoScrollbarBehavior(),
           child: Stack(
             fit: StackFit.expand,
             clipBehavior: Clip.none,
@@ -99,8 +99,11 @@ class ChatMessageListArea extends StatelessWidget {
                   topInset: scrollbarTopInset,
                   bottomInset: scrollbarBottomInset,
                 ),
-              ChatFadingScrollbar(
+              TwScrollbar(
                 controller: chatScroll,
+                thumbColor: ChatScrollbar.thumbColor(context),
+                thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
+                trackColor: ChatScrollbar.trackColor(context),
                 thickness: tokens.scrollbarThickness,
                 minThumbLength: tokens.scrollbarMinThumbLength,
                 crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
@@ -122,9 +125,7 @@ class ChatMessageListArea extends StatelessWidget {
                             if (copyText.trim().isEmpty) {
                               return null;
                             }
-                            Clipboard.setData(
-                              ClipboardData(text: copyText),
-                            );
+                            Clipboard.setData(ClipboardData(text: copyText));
                             return null;
                           },
                         ),
@@ -144,7 +145,9 @@ class ChatMessageListArea extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            SizedBox(height: tokens.chatListTopShadowHeight + 15),
+                            SizedBox(
+                              height: tokens.chatListTopShadowHeight + 15,
+                            ),
                             for (final entry in messages.indexed)
                               ChatMessageBubble(
                                 key: messageBubbleKeys[entry.$2.id],
@@ -158,8 +161,7 @@ class ChatMessageListArea extends StatelessWidget {
                                     entry.$2.isPending,
                                 isTruncated: isMessageTruncated(entry.$2.id),
                                 isFirstMessage: entry.$1 == 0,
-                                isLastMessage:
-                                    entry.$1 == messages.length - 1,
+                                isLastMessage: entry.$1 == messages.length - 1,
                                 onToggleTruncation: () =>
                                     onToggleTruncation(entry.$2.id),
                               ),

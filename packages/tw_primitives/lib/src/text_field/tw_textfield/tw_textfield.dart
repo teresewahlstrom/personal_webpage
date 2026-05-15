@@ -414,6 +414,7 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
           imeConfiguration: widget.imeConfiguration,
           showComposingUnderline: widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
+          scrollController: widget.scrollController,
         );
       case TwTextFieldPlatformConfiguration.android:
         return Shortcuts(
