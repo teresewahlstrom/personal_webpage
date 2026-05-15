@@ -216,8 +216,11 @@ class _TextScrollViewState extends State<TextScrollView>
 
   @override
   Offset get textLayoutOffsetInViewport {
-    final viewportBox = context.findRenderObject() as RenderBox;
-    final textContentBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+    final viewportBox = _viewportRenderBox;
+    final textContentBox = _textContentRenderBox;
+    if (viewportBox == null || textContentBox == null) {
+      return Offset.zero;
+    }
     final textOffsetInViewport = textContentBox.localToGlobal(Offset.zero, ancestor: viewportBox);
 
     if (isMultiline) {
@@ -276,8 +279,11 @@ class _TextScrollViewState extends State<TextScrollView>
 
       // Find where the text sits from the edges of the viewport. This calculation implicitly
       // includes any padding around the content, as well as the current scroll offset.
-      final viewportBox = context.findRenderObject() as RenderBox;
-      final textContentBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+      final viewportBox = _viewportRenderBox;
+      final textContentBox = _textContentRenderBox;
+      if (viewportBox == null || textContentBox == null) {
+        return false;
+      }
       final textOffsetInViewport = textContentBox.localToGlobal(Offset.zero, ancestor: viewportBox);
 
       // Find the offset of the text position within the viewport.
@@ -328,8 +334,11 @@ class _TextScrollViewState extends State<TextScrollView>
 
   @override
   Rect getViewportCharacterRectAtPosition(TextPosition position) {
-    final viewportBox = context.findRenderObject() as RenderBox;
-    final textBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+    final viewportBox = _viewportRenderBox;
+    final textBox = _textContentRenderBox;
+    if (viewportBox == null || textBox == null) {
+      return Rect.fromLTWH(0, 0, 0, _textLayout.estimatedLineHeight);
+    }
     final textOffsetInViewport = textBox.localToGlobal(Offset.zero, ancestor: viewportBox);
 
     final characterBoxInTextLayout =
@@ -353,7 +362,11 @@ class _TextScrollViewState extends State<TextScrollView>
 
   @override
   double getHorizontalOffsetForEndOfCharacterRightOfViewport() {
-    final viewportWidth = (context.findRenderObject() as RenderBox).size.width;
+    final viewportBox = _viewportRenderBox;
+    if (viewportBox == null) {
+      return 0.0;
+    }
+    final viewportWidth = viewportBox.size.width;
     // Note: we look for an offset that is slightly further down than zero
     // to avoid any issues with the layout system differentiating between lines.
     final textOffsetInViewport = textLayoutOffsetInViewport;
@@ -406,6 +419,16 @@ class _TextScrollViewState extends State<TextScrollView>
   /// Returns the [ProseTextLayout] that lays out and renders the
   /// text in this text field.
   ProseTextLayout get _textLayout => widget.textKey.currentState!.textLayout;
+
+  RenderBox? get _viewportRenderBox {
+    final renderObject = context.findRenderObject();
+    return renderObject is RenderBox ? renderObject : null;
+  }
+
+  RenderBox? get _textContentRenderBox {
+    final renderObject = widget.textKey.currentContext?.findRenderObject();
+    return renderObject is RenderBox ? renderObject : null;
+  }
 
   void _onTextOrSelectionChanged() {
     // After the text changes, the user might have entered new lines.

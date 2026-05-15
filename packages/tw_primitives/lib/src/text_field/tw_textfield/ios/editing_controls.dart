@@ -150,7 +150,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     scheduleBuildAfterBuild();
   }
 
-  ProseTextLayout get _textLayout => widget.textContentKey.currentState!.textLayout;
+  ProseTextLayout? get _textLayoutOrNull => widget.textContentKey.currentState?.textLayout;
 
   void _rebuildOnNextFrame() {
     // We request a rebuild at the end of this frame so that the editing
@@ -162,6 +162,11 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   void _onBasePanStart(DragStartDetails details) {
     _log.fine('_onBasePanStart');
 
+    final overlayRenderBox = _overlayRenderBox;
+    if (overlayRenderBox == null) {
+      return;
+    }
+
     _onHandleDragStart(details);
 
     setState(() {
@@ -170,30 +175,41 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
       _globalDragOffset = details.globalPosition;
       // We map global to local instead of using  details.localPosition because
       // this drag event started in a handle, not within this overall widget.
-      _localDragOffset = (context.findRenderObject() as RenderBox).globalToLocal(details.globalPosition);
+      _localDragOffset = overlayRenderBox.globalToLocal(details.globalPosition);
     });
   }
 
   void _onExtentPanStart(DragStartDetails details) {
     _log.fine('_onExtentPanStart');
 
+    final overlayRenderBox = _overlayRenderBox;
+    if (overlayRenderBox == null) {
+      return;
+    }
+
     _onHandleDragStart(details);
 
     setState(() {
       _isDraggingBase = false;
       _isDraggingExtent = true;
-      _localDragOffset = (context.findRenderObject() as RenderBox).globalToLocal(details.globalPosition);
+      _localDragOffset = overlayRenderBox.globalToLocal(details.globalPosition);
     });
   }
 
   void _onHandleDragStart(DragStartDetails details) {
     _log.fine('_onHandleDragStart()');
 
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (textFieldRenderBox == null) {
+      return;
+    }
+
     widget.editingController.hideToolbar();
 
     widget.textScrollController.updateAutoScrollingForTouchOffset(
-      userInteractionOffsetInViewport:
-          (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(details.globalPosition),
+      userInteractionOffsetInViewport: textFieldRenderBox.globalToLocal(
+        details.globalPosition,
+      ),
     );
     widget.textScrollController.addListener(_updateSelectionForNewDragHandleLocation);
 
@@ -208,10 +224,14 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     _globalDragOffset = details.globalPosition;
     _updateSelectionForNewDragHandleLocation();
 
-    widget.textScrollController.updateAutoScrollingForTouchOffset(
-      userInteractionOffsetInViewport:
-          (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(details.globalPosition),
-    );
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (textFieldRenderBox != null) {
+      widget.textScrollController.updateAutoScrollingForTouchOffset(
+        userInteractionOffsetInViewport: textFieldRenderBox.globalToLocal(
+          details.globalPosition,
+        ),
+      );
+    }
 
     setState(() {
       _localDragOffset = _localDragOffset! + details.delta;
@@ -220,9 +240,13 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   }
 
   void _updateSelectionForNewDragHandleLocation() {
-    final textBox = (widget.textContentKey.currentContext!.findRenderObject() as RenderBox);
-    final textOffset = textBox.globalToLocal(_globalDragOffset!);
-    final textLayout = _textLayout;
+    final globalDragOffset = _globalDragOffset;
+    final textBox = _textContentRenderBox;
+    final textLayout = _textLayoutOrNull;
+    if (globalDragOffset == null || textBox == null || textLayout == null) {
+      return;
+    }
+    final textOffset = textBox.globalToLocal(globalDragOffset);
     if (_isDraggingBase) {
       widget.editingController.textController.selection = widget.editingController.textController.selection.copyWith(
         baseOffset: textLayout.getPositionNearestToOffset(textOffset).offset,
@@ -267,20 +291,33 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   }
 
   Offset _textPositionToViewportOffset(TextPosition position) {
-    final textOffset = _textLayout.getOffsetAtPosition(position);
-    final globalOffset =
-        (widget.textContentKey.currentContext!.findRenderObject() as RenderBox).localToGlobal(textOffset);
-    return (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(globalOffset);
+    final textLayout = _textLayoutOrNull;
+    final textContentRenderBox = _textContentRenderBox;
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (textLayout == null || textContentRenderBox == null || textFieldRenderBox == null) {
+      return Offset.zero;
+    }
+    final textOffset = textLayout.getOffsetAtPosition(position);
+    final globalOffset = textContentRenderBox.localToGlobal(textOffset);
+    return textFieldRenderBox.globalToLocal(globalOffset);
   }
 
   Offset _textOffsetToViewportOffset(Offset textOffset) {
-    final globalOffset =
-        (widget.textContentKey.currentContext!.findRenderObject() as RenderBox).localToGlobal(textOffset);
-    return (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(globalOffset);
+    final textContentRenderBox = _textContentRenderBox;
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (textContentRenderBox == null || textFieldRenderBox == null) {
+      return Offset.zero;
+    }
+    final globalOffset = textContentRenderBox.localToGlobal(textOffset);
+    return textFieldRenderBox.globalToLocal(globalOffset);
   }
 
   Offset _textPositionToTextOffset(TextPosition position) {
-    return _textLayout.getOffsetAtPosition(position);
+    final textLayout = _textLayoutOrNull;
+    if (textLayout == null) {
+      return Offset.zero;
+    }
+    return textLayout.getOffsetAtPosition(position);
   }
 
   @override
@@ -310,6 +347,12 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   }
 
   Widget _buildToolbar() {
+    final textLayout = _textLayoutOrNull;
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (textLayout == null || textFieldRenderBox == null) {
+      return const SizedBox();
+    }
+
     if (widget.editingController.textController.selection.extentOffset < 0) {
       return const SizedBox();
     }
@@ -324,13 +367,13 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     if (widget.editingController.textController.selection.isCollapsed) {
       final extentOffsetInViewport =
           _textPositionToViewportOffset(widget.editingController.textController.selection.extent);
-      final lineHeight = _textLayout.getLineHeightAtPosition(widget.editingController.textController.selection.extent);
+      final lineHeight = textLayout.getLineHeightAtPosition(widget.editingController.textController.selection.extent);
 
       toolbarTopAnchor = extentOffsetInViewport - const Offset(0, gapBetweenToolbarAndContent);
       toolbarBottomAnchor =
           extentOffsetInViewport + Offset(0, lineHeight) + const Offset(0, gapBetweenToolbarAndContent);
     } else {
-      final selectionBoxes = _textLayout.getBoxesForSelection(widget.editingController.textController.selection);
+      final selectionBoxes = textLayout.getBoxesForSelection(widget.editingController.textController.selection);
       Rect selectionBounds = selectionBoxes.first.toRect();
       for (int i = 1; i < selectionBoxes.length; ++i) {
         selectionBounds = selectionBounds.expandToInclude(selectionBoxes[i].toRect());
@@ -358,7 +401,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     // The selection might end below the visible area in a scrollable
     // text field. In that case, we don't want the toolbar to sit more
     // than [gapBetweenToolbarAndContent] below the text field.
-    final viewportHeight = (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox).size.height;
+    final viewportHeight = textFieldRenderBox.size.height;
     toolbarTopAnchor = Offset(
       toolbarTopAnchor.dx,
       min(
@@ -366,8 +409,6 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
         viewportHeight + gapBetweenToolbarAndContent,
       ),
     );
-
-    final textFieldRenderBox = (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox);
 
     final textFieldGlobalOffset = textFieldRenderBox.localToGlobal(Offset.zero);
 
@@ -398,6 +439,12 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   }
 
   List<Widget> _buildDraggableOverlayHandles() {
+    final textLayout = _textLayoutOrNull;
+    if (textLayout == null) {
+      _scheduleRebuildBecauseTextIsNotLaidOutYet();
+      return [];
+    }
+
     if (widget.editingController.textController.selection.extentOffset < 0) {
       _log.finer('Not building expanded handles because there is no selection');
       // There is no selection. Draw nothing.
@@ -431,17 +478,17 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     late final Offset downstreamHandleOffsetInText;
     late final double downstreamLineHeight;
 
-    final selectionBoxes = _textLayout.getBoxesForSelection(widget.editingController.textController.selection);
+    final selectionBoxes = textLayout.getBoxesForSelection(widget.editingController.textController.selection);
     if (selectionBoxes.isEmpty) {
       // It's not documented if getBoxesForSelection is guaranteed to return a non-empty list. Therefore,
       // fallback to using character box to get the handle's offset and height.
       upstreamHandleOffsetInText = _textPositionToTextOffset(upstreamTextPosition);
       upstreamLineHeight =
-          _textLayout.getCharacterBox(upstreamTextPosition)?.toRect().height ?? _textLayout.estimatedLineHeight;
+          textLayout.getCharacterBox(upstreamTextPosition)?.toRect().height ?? textLayout.estimatedLineHeight;
 
       downstreamHandleOffsetInText = _textPositionToTextOffset(downstreamTextPosition);
       downstreamLineHeight =
-          _textLayout.getCharacterBox(downstreamTextPosition)?.toRect().height ?? _textLayout.estimatedLineHeight;
+          textLayout.getCharacterBox(downstreamTextPosition)?.toRect().height ?? textLayout.estimatedLineHeight;
     } else {
       final upstreamSelectionBox = selectionBoxes.first;
       final downstreamSelectionBox = selectionBoxes.last;
@@ -572,6 +619,21 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
 
   void _scheduleRebuildBecauseTextIsNotLaidOutYet() {
     scheduleBuildAfterBuild();
+  }
+
+  RenderBox? get _overlayRenderBox {
+    final renderObject = context.findRenderObject();
+    return renderObject is RenderBox ? renderObject : null;
+  }
+
+  RenderBox? get _textFieldRenderBox {
+    final renderObject = widget.textFieldKey.currentContext?.findRenderObject();
+    return renderObject is RenderBox ? renderObject : null;
+  }
+
+  RenderBox? get _textContentRenderBox {
+    final renderObject = widget.textContentKey.currentContext?.findRenderObject();
+    return renderObject is RenderBox ? renderObject : null;
   }
 }
 
