@@ -60,20 +60,22 @@ class PageHeader extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Semantics(
-                button: true,
-                label: 'Open t1grid.com home page',
-                child: Tooltip(
-                  message: 'Open t1grid.com home page',
-                  child: GestureDetector(
-                    onTap: () => _launchUrl(context),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Image.asset(
-                        logoAssetPath,
-                        width: ShellUiConfig.headerLogoWidth,
-                        height: ShellUiConfig.headerLogoHeight,
-                        fit: BoxFit.contain,
+              SelectionContainer.disabled(
+                child: Semantics(
+                  button: true,
+                  label: 'Open t1grid.com home page',
+                  child: Tooltip(
+                    message: 'Open t1grid.com home page',
+                    child: GestureDetector(
+                      onTap: () => _launchUrl(context),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Image.asset(
+                          logoAssetPath,
+                          width: ShellUiConfig.headerLogoWidth,
+                          height: ShellUiConfig.headerLogoHeight,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),

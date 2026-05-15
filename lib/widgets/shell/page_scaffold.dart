@@ -113,6 +113,10 @@ class _PageScaffoldState extends State<PageScaffold>
     final double floatingInset = FloatingControlInset.forViewportWidth(
       mediaQuery.size.width,
     );
+    final double floatingTopInset =
+        mediaQuery.viewPadding.top +
+        ShellUiConfig.headerMinHeight +
+        floatingInset;
     return GridBackground(
       backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
       gridLineStyle: ShellUiConfig.gridLineFor(brightness),
@@ -194,7 +198,7 @@ class _PageScaffoldState extends State<PageScaffold>
             if (widget.showThemeToggle && widget.onToggleTheme != null)
               Positioned(
                 right: mediaQuery.viewPadding.right + floatingInset,
-                top: mediaQuery.viewPadding.top + floatingInset,
+                top: floatingTopInset,
                 child: ThemeToggleControlButton(
                   isDarkMode: widget.isDarkMode,
                   onTap: widget.onToggleTheme!,

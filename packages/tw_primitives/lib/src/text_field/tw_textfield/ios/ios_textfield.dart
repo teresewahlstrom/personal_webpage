@@ -535,6 +535,8 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       _editingOverlayController.hideToolbar();
     }
 
+    onNextFrame((_) => _textScrollController.ensureExtentIsVisible());
+
     setState(() {
       _contentTextDirection = getParagraphDirection(
         _textEditingController.text.toPlainText(),

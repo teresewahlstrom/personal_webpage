@@ -527,6 +527,8 @@ class TwAndroidTextFieldState extends State<TwAndroidTextField>
       _editingOverlayController.hideToolbar();
     }
 
+    onNextFrame((_) => _textScrollController.ensureExtentIsVisible());
+
     setState(() {
       _contentTextDirection = getParagraphDirection(
         _textEditingController.text.toPlainText(),
