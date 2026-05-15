@@ -45,6 +45,35 @@ class _WebKeyboardViewportBridge implements KeyboardViewportBridge {
   }
 
   @override
+  bool get canTrackTextInputFocus => true;
+
+  @override
+  bool get isTextInputFocused {
+    final html.Element? activeElement = html.document.activeElement;
+    return _isEditableElement(activeElement);
+  }
+
+  @override
+  void clearTextInputFocus() {
+    final html.Element? activeElement = html.document.activeElement;
+    if (!_isEditableElement(activeElement)) {
+      return;
+    }
+    activeElement?.blur();
+  }
+
+  bool _isEditableElement(html.Element? element) {
+    if (element == null || element == html.document.body) {
+      return false;
+    }
+
+    final String tagName = element.tagName.toLowerCase();
+    return tagName == 'input' ||
+        tagName == 'textarea' ||
+        element.isContentEditable == true;
+  }
+
+  @override
   void start(KeyboardViewportChangeCallback onChange) {
     _onChange = onChange;
 

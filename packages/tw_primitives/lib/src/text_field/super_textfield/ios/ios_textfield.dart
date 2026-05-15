@@ -410,6 +410,19 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
     });
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.detached:
+        return;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        _clearFocusAndImeForBackgroundTransition();
+    }
+  }
+
   @visibleForTesting
   TextScrollController get scrollController => _textScrollController;
 
@@ -444,6 +457,33 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 
   @override
   DeltaTextInputClient get imeClient => _textEditingController;
+
+  void _clearFocusAndImeForBackgroundTransition() {
+    if (!_focusNode.hasFocus && !_textEditingController.isAttachedToIme) {
+      return;
+    }
+
+    WidgetsBinding.instance.runAsSoonAsPossible(() {
+      if (!mounted) {
+        return;
+      }
+
+      _focusNode.unfocus();
+
+      if (!_textEditingController.isAttachedToIme) {
+        return;
+      }
+
+      setState(() {
+        _textEditingController.detachFromIme();
+        _textEditingController.selection = const TextSelection.collapsed(
+          offset: -1,
+        );
+        _textEditingController.composingRegion = TextRange.empty;
+        _removeEditingOverlayControls();
+      });
+    });
+  }
 
   void _updateSelectionAndImeConnectionOnFocusChange() {
     // The focus change callback might be invoked in the build phase, usually when used inside

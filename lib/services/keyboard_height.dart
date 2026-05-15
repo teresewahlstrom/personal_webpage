@@ -45,8 +45,6 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   bool _isQueued = false;
   bool _isDisposed = false;
-  bool _hadPrimaryFocusBeforePause = false;
-  DateTime? _suppressStaleInsetsUntil;
 
   @override
   void initState() {
@@ -72,18 +70,18 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
-      _hadPrimaryFocusBeforePause =
-          FocusManager.instance.primaryFocus != null;
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.paused) {
+      if (FocusManager.instance.primaryFocus != null) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      }
+      _viewportBridge.clearTextInputFocus();
+      _scheduleStabilizationBurst();
       return;
     }
 
     if (state == AppLifecycleState.resumed) {
-      if (_hadPrimaryFocusBeforePause) {
-        FocusManager.instance.primaryFocus?.unfocus();
-        _suppressStaleInsetsUntil =
-            DateTime.now().add(const Duration(milliseconds: 1200));
-      }
       _scheduleStabilizationBurst();
     }
   }
@@ -121,7 +119,7 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
     final double clampedFlutterInset = _clampInset(flutterInset, screenHeight);
     final double clampedWebInset = _clampInset(webInset, screenHeight);
-    final double nextValue = _shouldSuppressStaleInsets()
+    final double nextValue = !_hasTextInputFocus()
         ? 0
         : math.max(clampedFlutterInset, clampedWebInset);
 
@@ -130,23 +128,11 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
     }
   }
 
-  bool _shouldSuppressStaleInsets() {
-    final DateTime? suppressUntil = _suppressStaleInsetsUntil;
-    if (suppressUntil == null) {
-      return false;
+  bool _hasTextInputFocus() {
+    if (_viewportBridge.canTrackTextInputFocus) {
+      return _viewportBridge.isTextInputFocused;
     }
-
-    if (FocusManager.instance.primaryFocus != null) {
-      _suppressStaleInsetsUntil = null;
-      return false;
-    }
-
-    if (DateTime.now().isAfter(suppressUntil)) {
-      _suppressStaleInsetsUntil = null;
-      return false;
-    }
-
-    return true;
+    return FocusManager.instance.primaryFocus != null;
   }
 
   double _clampInset(double inset, double screenHeight) {

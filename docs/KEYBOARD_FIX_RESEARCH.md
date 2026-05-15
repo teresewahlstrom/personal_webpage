@@ -1,244 +1,253 @@
-# White Keyboard Area Fix: Research & Implementation Log
+# White Keyboard Area Fix: Research and Implementation Log
 
 ## Problem Statement
 
-When the user locks their phone with a keyboard actively open (due to interaction with a text field in the app), and then unlocks after a period, a persistent white area appears where the keyboard was. This occurs specifically on iOS Safari and Android Chrome in Flutter Web.
+When a user locks a phone while the chat composer keyboard is open, then unlocks later, a persistent white keyboard-height area remains on screen. The gap clears only after another interaction.
 
-**Trigger path:**
-1. User interacts with text input field (keyboard opens)
-2. User locks device (with keyboard still open)
-3. User waits
-4. User unlocks device
-5. White keyboard-height gap appears on screen and persists until interaction
+Observed trigger:
 
-## Initial Codebase State
+1. Open the chat composer.
+2. Tap the input so the software keyboard opens.
+3. Lock the phone while the keyboard is still open.
+4. Wait briefly.
+5. Unlock the phone.
+6. The physical keyboard is gone, but a white gap remains where the keyboard was.
 
-- App uses `MediaQuery.of(context).viewInsets.bottom` directly in multiple places
-- [app_modal.dart](app_modal.dart#L84): Modal dialog sizing based on raw insets
-- [packages/tw_chat/lib/src/widgets/chat_dock.dart](../packages/tw_chat/lib/src/widgets/chat_dock.dart#L80): Chat dock positioning and height calculations
-- [packages/tw_chat/lib/src/config/layout.dart](../packages/tw_chat/lib/src/config/layout.dart#L149): Chat layout calculations
+The issue has reproduced in Flutter Web on mobile browsers, including iOS Safari and Android Chrome.
 
-No lifecycle recovery or cross-source validation of keyboard metrics.
+## Current Working Theory
 
-## Research Findings
+This is not just a chat layout bug. It is a lifecycle/focus/viewport desynchronization bug across three layers:
 
-### Targeted Search Scope
+- Flutter focus and `TextInputConnection` state.
+- Flutter Web engine metrics (`View.viewInsets`, `MediaQuery.viewInsets`).
+- Browser viewport state (`window.innerHeight`, `visualViewport`, and the hidden DOM input used by Flutter Web).
 
-Deep investigation into:
-- Flutter GitHub issues (keyboard, viewInsets, viewport)
-- Flutter engine issues related to iOS Safari lifecycle/keyboard handling
-- StackOverflow and DuckDuckGo cached content on iOS white space/keyboard bugs
-- MDN VisualViewport API documentation
+The white area appears when the app resumes with at least one layer still believing a text input or keyboard is active after the real keyboard has disappeared.
 
-### Key Issues Found
+## External References
 
-**Flutter Issue #131840** — "White space shown when app is backgrounded and foreground"
-- Repro: nearly identical to user's lock/unlock scenario
-- Status: closed during triage, no definitive upstream fix
-- Symptom: white keyboard-height gap persists after lifecycle transition
+- Flutter issue #131840: iOS reports white keyboard space after background/foreground with a focused `TextField`.
+  https://github.com/flutter/flutter/issues/131840
+- Flutter issue #124205: Flutter Web text input/viewport offset behavior when keyboard opens.
+  https://github.com/flutter/flutter/issues/124205
+- Flutter issue #135800: iOS Safari keyboard/layout instability for Flutter Web.
+  https://github.com/flutter/flutter/issues/135800
+- MDN viewport meta tag: `interactive-widget` can change whether the keyboard resizes visual viewport, layout viewport, or neither.
+  https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
+- MDN VirtualKeyboard API: browsers can opt out of automatic viewport resizing, but support is limited and not a reliable iOS Safari solution.
+  https://developer.mozilla.org/en-US/docs/Web/API/VirtualKeyboard_API
 
-**Flutter Issue #124205** (umbrella) — Viewport/insets desynchronization
-- Affects both iOS Safari and Android Chrome on Flutter Web
-- Related duplicates: #179208, #178354, #180921
-- Pattern: "white/blank area remains until extra tap/scroll"
+## What We Tried
 
-**Flutter Issue #135800** — iOS Safari keyboard/layout instability
-- Still actively reported; suggests ongoing platform-specific behavior
+### 1. Global KeyboardHeight Observer
 
-**Android Web Fix (PR #179581)** — Concrete engine fix applied
-- References issue #175074
-- Improved Android Chrome, but iOS Safari remains unstable
+Files:
 
-### Root Cause Identified
+- [lib/services/keyboard_height.dart](../lib/services/keyboard_height.dart)
+- [lib/services/keyboard_viewport_bridge.dart](../lib/services/keyboard_viewport_bridge.dart)
+- [lib/services/keyboard_viewport_bridge_stub.dart](../lib/services/keyboard_viewport_bridge_stub.dart)
+- [lib/services/keyboard_viewport_bridge_web.dart](../lib/services/keyboard_viewport_bridge_web.dart)
 
-**The core issue: metric desynchronization during lifecycle transitions**
+The observer was added at the app root in [lib/main.dart](../lib/main.dart). It combined Flutter's inset with a web `visualViewport` estimate.
 
-When the app transitions from background to foreground:
-1. MediaQuery.viewInsets.bottom may become stale or lag behind actual keyboard state
-2. The DOM VisualViewport API (Web only) provides an alternative measurement: `window.innerHeight - visualViewport.height - visualViewport.offsetTop`
-3. These two sources can drift, especially during iOS Safari's complex keyboard show/hide lifecycle
-4. UI code trusts one stale source, sizes layout incorrectly, leaves white gap
+Initial strategy:
 
-**Why it happens:**
-- Lock/unlock is a full app pause/resume cycle
-- Lifecycle events (didChangeAppLifecycleState) and layout events (didChangeMetrics) may arrive out of order or with stale cached values
-- On iOS Safari in particular, the soft keyboard can remain "remembered" by the browser engine even after the physical keyboard is dismissed
+- Compute Flutter inset from `View.viewInsets.bottom`.
+- Compute web inset from `window.innerHeight - visualViewport.height - visualViewport.offsetTop`.
+- Publish `max(flutterInset, webInset)`.
+- Recompute after lifecycle changes and metric changes.
 
-**Why existing code fails:**
-- Direct `viewInsets.bottom` usage provides no fallback when stale
-- No recovery mechanism on app resume
-- Chat package calculates layout using outdated inset, compounds the error
+Result:
 
-## Solution Architecture
+- Did not fix the lock/unlock bug.
+- Likely weakness: `max(...)` preserves stale positive values. If either Flutter or the browser remains stuck at keyboard height, the app continues to reserve keyboard space.
 
-### Phase 1: Global Keyboard Height Observer (Implemented ✅)
+### 2. Consumer Migration Away From Raw viewInsets
 
-**Files created:**
+Files:
 
-1. **[lib/services/keyboard_viewport_bridge.dart](keyboard_viewport_bridge.dart)** — Abstract interface
-   - Platform-agnostic contract for keyboard height estimation
-   - Methods: `start()`, `stop()`, getter `estimatedBottomInset`
+- [lib/widgets/app_modal.dart](../lib/widgets/app_modal.dart)
+- [lib/widgets/shell/_chat_overlay.dart](../lib/widgets/shell/_chat_overlay.dart)
+- [packages/tw_chat/lib/src/widgets/chat_dock.dart](../packages/tw_chat/lib/src/widgets/chat_dock.dart)
+- [packages/tw_chat/lib/src/config/layout.dart](../packages/tw_chat/lib/src/config/layout.dart)
+- [packages/tw_chat/test/layout_test.dart](../packages/tw_chat/test/layout_test.dart)
 
-2. **[lib/services/keyboard_viewport_bridge_stub.dart](keyboard_viewport_bridge_stub.dart)** — Non-web no-op
-   - Returns 0 for all platforms except web
-   - Allows conditional compilation without duplication
+The app modal and chat dock stopped reading raw `MediaQuery.viewInsets.bottom` and instead consumed `KeyboardHeight`.
 
-3. **[lib/services/keyboard_viewport_bridge_web.dart](keyboard_viewport_bridge_web.dart)** — Web-specific implementation
-   - Listens to DOM `visualViewport` resize/scroll events
-   - Computes: `window.innerHeight - visualViewport.height - visualViewport.offsetTop`
-   - Includes null-safety guards and lint suppressions for web-only library
+Result:
 
-4. **[lib/services/keyboard_height.dart](keyboard_height.dart)** — Primary observer service
-   - `KeyboardHeight` (InheritedNotifier) provides double value to widget tree
-   - `KeyboardHeightObserver` (StatefulWidget) manages lifecycle and computation
-   - `_KeyboardHeightObserverState` implements core logic:
-     - Subscribes to `WidgetsBinding.instance` for metrics and lifecycle changes
-     - Computes: `max(flutterInset, webEstimate)` with clamping to 60% screen height
-     - Uses 0.5px jitter threshold to filter noise
-     - On lifecycle pause: records focus state
-     - On lifecycle resume: unfocuses if previously focused, schedules stabilization burst
-     - Stabilization burst: recomputes at 16ms, 80ms, 180ms post-resume intervals
+- Cleaner data flow.
+- Did not fix the persisted white area.
+- This suggests the bad state can exist below normal widget layout, either in Flutter Web's text input connection or browser viewport state.
 
-**Key features:**
-- Cross-source validation (max of two independent measurements)
-- Lifecycle-aware recovery (resume handling with unfocus + burst recompute)
-- Platform-specific bridges without main-app dependency
-- Efficient state distribution via InheritedNotifier (no unnecessary rebuilds)
+### 3. Resume Suppression Window
 
-### Phase 2: Modal Migration (Implemented ✅)
+Attempt:
 
-**[lib/main.dart](../lib/main.dart#L52)** — Wired observer at app root
-- Wrapped `MaterialApp` with `KeyboardHeightObserver`
-- Observer now provides unified keyboard height to entire app tree
+- On resume, unfocus Flutter focus.
+- Temporarily suppress positive keyboard insets for about 1200 ms.
+- Add more delayed recompute passes.
 
-**[lib/widgets/app_modal.dart](../lib/widgets/app_modal.dart#L84)** — Switched to observer
-- Replaced `MediaQuery.of(context).viewInsets.bottom` with `KeyboardHeight.of(context)`
-- Modal now reads from unified, cross-checked source instead of raw insets
+Result:
 
-### Phase 3: Chat Package Integration (Implemented ✅)
+- Deployed and verified by UI test.
+- White area persisted.
 
-**Architecture decision:** `tw_chat` is a reusable package, so it cannot depend directly on app services. Instead, it accepts keyboard height as a parameter.
+Likely weakness:
 
-**[packages/tw_chat/lib/src/widgets/chat_dock.dart](../packages/tw_chat/lib/src/widgets/chat_dock.dart)** — Added parameter
-- New required parameter: `keyboardHeight: double`
-- Replaced `mq.viewInsets.bottom` checks with `widget.keyboardHeight`
-- Updated stability computation for viewport height calculation
+- A timed suppression window is probabilistic. If stale browser/engine state persists longer than the window, the positive inset comes back.
+- It also adds complexity without telling us which layer is wrong.
 
-**[packages/tw_chat/lib/src/config/layout.dart](../packages/tw_chat/lib/src/config/layout.dart#L141)** — Updated API
-- Changed `maxDockHeight()` signature: from `viewInsets: EdgeInsets` to `keyboardHeight: double`
-- Computation: `safeViewportHeight = viewportSize.height - keyboardHeight - viewPadding.top`
-- Eliminates intermediate inset object, works directly with unified height
+### 4. Host Page Viewport Script
 
-**[packages/tw_chat/test/layout_test.dart](../packages/tw_chat/test/layout_test.dart)** — Updated all tests
-- 8 test cases updated to pass `keyboardHeight` directly
-- Maintains test coverage without breaking API expectations
+File:
 
-**[lib/widgets/shell/_chat_overlay.dart](../lib/widgets/shell/_chat_overlay.dart)** — Wired integration
-- Added import: `KeyboardHeight` service
-- In `build()`: reads `KeyboardHeight.of(context)` once per frame
-- Passes unified height to `ChatDock` constructor
-- Chat now receives accurate, cross-checked keyboard height at build time
+- [web/index.html](../web/index.html)
 
-## Implementation Status
+Attempt:
 
-### Completed ✅
+- Add `interactive-widget=resizes-content`.
+- Add a CSS `--app-height` driven by `visualViewport.height`.
+- Force `html`, `body`, `#app`, `flt-glass-pane`, and `flutter-view` to that height.
+- Blur focused DOM inputs on resume-like browser events.
+- Repeat viewport recovery at several delays.
 
-- ✅ KeyboardHeight observer service with VisualViewport bridge
-- ✅ Platform-specific bridge implementations (stub + web)
-- ✅ Lifecycle recovery with resume unfocus and stabilization burst
-- ✅ Modal sizing migration to observer
-- ✅ Chat dock parameter added and consumer wired
-- ✅ Chat layout API migrated to accept keyboard height directly
-- ✅ Test suite updated for new chat layout API
-- ✅ All changes validated clean by Flutter analyzer
+Result:
 
-### Test Results
+- Deployed and verified by UI test.
+- White area persisted.
 
-- **flutter analyze lib**: No issues
-- **flutter analyze packages/tw_chat/**: No issues (only pre-existing unused import in composer_row.dart)
-- **flutter pub get**: Dependencies resolved successfully
+Audit conclusion:
 
-### Changes Summary
+- This likely made the system harder to reason about. The browser, host page, and Flutter layout were all trying to own keyboard resizing.
+- `interactive-widget=resizes-content` is Android-oriented and not a reliable iOS Safari escape hatch.
+- Driving the Flutter host height from `visualViewport.height` can preserve a stale shrunken viewport if `visualViewport` itself is the lying metric.
 
-**New files (4):**
-- lib/services/keyboard_viewport_bridge.dart
-- lib/services/keyboard_viewport_bridge_stub.dart
-- lib/services/keyboard_viewport_bridge_web.dart
-- lib/services/keyboard_height.dart
+This experiment has been removed.
 
-**Modified files (4):**
-- lib/main.dart (added KeyboardHeightObserver wrapper)
-- lib/widgets/app_modal.dart (switched to KeyboardHeight.of())
-- packages/tw_chat/lib/src/widgets/chat_dock.dart (added keyboardHeight parameter)
-- packages/tw_chat/lib/src/config/layout.dart (changed maxDockHeight() API)
-- packages/tw_chat/test/layout_test.dart (updated 8 test cases)
-- lib/widgets/shell/_chat_overlay.dart (wired observer to ChatDock)
+## Full Audit Findings
 
-## Known Limitations & Next Steps
+### Finding 1: iOS SuperTextField Did Not Clear IME On Background
 
-### Current State
-The fix is **complete and deployed in code**, but **not yet validated on real devices**.
+Android implementation:
 
-### Testing Required
+- [packages/tw_primitives/lib/src/text_field/super_textfield/android/android_textfield.dart](../packages/tw_primitives/lib/src/text_field/super_textfield/android/android_textfield.dart)
+- Registers `WidgetsBindingObserver`.
+- On `inactive`, `hidden`, or `paused`, it unfocuses and detaches from IME.
 
-1. **Lock/unlock test on iOS Safari**
-   - Open text field (keyboard opens)
-   - Lock device
-   - Wait 10-30 seconds
-   - Unlock device
-   - Observe: white area should NOT appear
+iOS implementation before the latest fix:
 
-2. **Lock/unlock test on Android Chrome**
-   - Same repro steps
-   - Observe for consistency across platforms
+- [packages/tw_primitives/lib/src/text_field/super_textfield/ios/ios_textfield.dart](../packages/tw_primitives/lib/src/text_field/super_textfield/ios/ios_textfield.dart)
+- Registered `WidgetsBindingObserver`.
+- Reacted to metrics changes.
+- Did not implement lifecycle cleanup.
 
-3. **Edge cases to verify**
-   - Multiple keyboard open/close cycles
-   - Lock/unlock during IME transition
-   - Orientation change with keyboard open
+Why this matters:
 
-### If Issue Persists
+- The failing scenario is specifically background/foreground with an active text input.
+- Flutter issue #131840 is also about white keyboard space after background/foreground with a focused text field.
+- If the iOS text field keeps its `TextInputConnection` alive during lock/background, Flutter Web can keep the hidden DOM text input or engine keyboard metrics in a stale state.
 
-**Diagnostic steps:**
-1. Log keyboard height values on resume:
-   - `KeyboardHeight.of(context)` current value
-   - Flutter inset value (internal to observer)
-   - Web VisualViewport estimate (internal to observer)
-2. Check if any other widgets are still reading stale `viewInsets.bottom`
-3. Verify app resume hook is being triggered (add telemetry to `didChangeAppLifecycleState`)
+Latest change:
 
-**Potential additional fixes:**
-1. Add explicit CSS viewport-fit handling in web shell (index.html)
-2. Force keyboard hide on app pause (via platform channel)
-3. Disable Firefox focus recovery if running on web
+- iOS now mirrors Android and calls `_clearFocusAndImeForBackgroundTransition()` on `inactive`, `hidden`, and `paused`.
 
-## Architecture Notes
+### Finding 2: KeyboardHeight Should Not Publish Keyboard Space Without Text Input Focus
 
-**Why this approach is robust:**
+Previous behavior:
 
-1. **Cross-source validation** — Max of two independent measurements catches single-source failures
-2. **Lifecycle-aware** — Resume recovery directly targets the lock/unlock trigger
-3. **Jitter-resistant** — 0.5px threshold prevents noise-driven rebuilds
-4. **Platform-agnostic for reuse** — ChatDock accepts parameter, works on any platform
-5. **No temporary code** — Full migration, no debug toggles or residual diagnostics
-6. **Minimal surface area** — Changes concentrated in one service + two consuming sites
+- Positive keyboard height could be republished after resume even when the text input was unfocused, as long as Flutter or the browser still reported stale positive metrics.
 
-**Design decisions made:**
+Latest change:
 
-- Observer at app root (not tw_primitives) — keyboard layout is app-level concern, not primitive-level
-- Parameter-based for tw_chat — packages should not depend on app services, only receive values
-- Max-of-sources strategy — more defensive than single source with fallback, avoids edge case races
-- Stabilization burst — probabilistic but practical; catches the 16-80ms range where metrics often settle post-resume
+- The web viewport bridge now reports whether the actual browser editable element is focused.
+- `KeyboardHeight` publishes `0` unless a real web text input/editing element is focused.
+- On background transitions, `KeyboardHeightObserver` unfocuses Flutter focus and also asks the web bridge to blur the active editable DOM element.
 
-## References
+Why this is simpler:
 
-- Flutter issue #131840: https://github.com/flutter/flutter/issues/131840
-- Flutter issue #124205 (umbrella): https://github.com/flutter/flutter/issues/124205
-- Flutter issue #135800 (iOS Safari): https://github.com/flutter/flutter/issues/135800
-- MDN VisualViewport API: https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport
+- It removes the timed stale-inset suppression window.
+- It makes stale viewport metrics advisory only; they cannot create keyboard space unless text input focus is still real.
+
+### Finding 3: The Host Page Should Not Own Keyboard Layout
+
+Latest direction:
+
+- [web/index.html](../web/index.html) is back to a simple fixed full-height Flutter host.
+- Keep `viewport-fit=cover`.
+- Remove `interactive-widget=resizes-content`.
+- Remove the `--app-height` script.
+
+Reason:
+
+- The app already has Flutter-side keyboard-aware layout.
+- Adding host-page visual viewport sizing creates a second layout owner.
+- The white bug is easier to isolate if the browser shell is boring and Flutter/input lifecycle owns the recovery.
+
+## Current Candidate Fix
+
+The latest code changes are:
+
+1. Add iOS text field lifecycle cleanup in `SuperIOSTextField`.
+2. Simplify `web/index.html` back to full-height host only.
+3. Change `KeyboardHeight` to publish keyboard height only while a real text input is focused.
+4. Add web bridge helpers for detecting and clearing focused editable DOM elements.
+
+This is a root-cause-oriented attempt, not another delayed resize patch.
+
+## Next Things To Try If This Still Fails
+
+### Option A: Replace SuperTextField In The Chat Composer Temporarily
+
+Use Flutter's built-in `TextField` for the chat composer behind a small switch.
+
+Purpose:
+
+- If the bug disappears, the problem is in our internal `SuperTextField` IME lifecycle.
+- If the bug remains, the problem is likely Flutter Web/browser viewport behavior outside `SuperTextField`.
+
+This is the most valuable isolation test.
+
+### Option B: Add A Temporary On-Screen Keyboard Debug Panel
+
+Show these values in a small debug-only overlay:
+
+- `KeyboardHeight.of(context)`
+- Flutter `View.viewInsets.bottom`
+- Web `visualViewport.height`
+- Web `visualViewport.offsetTop`
+- `window.innerHeight`
+- Whether the DOM active element is editable
+- Flutter `FocusManager.instance.primaryFocus?.debugLabel`
+
+Purpose:
+
+- Real-device lock/unlock is hard to inspect remotely.
+- This would tell us whether the stuck white area is caused by stale app layout, stale Flutter metrics, stale visual viewport, or a focused hidden DOM input.
+
+### Option C: Make Chat Composer Close On App Background At The Package Boundary
+
+Add an explicit callback or lifecycle observer in `tw_chat` that clears composer focus and selection on app background.
+
+Purpose:
+
+- Defense in depth if platform text field cleanup is not enough.
+- Lower-level than app overlay code, higher-level than primitive IME internals.
+
+### Option D: Remove KeyboardHeight From Floating Dock Positioning
+
+Try letting the browser/Flutter viewport resize drive layout naturally, with no `bottom: keyboardHeight`.
+
+Purpose:
+
+- Tests whether our manual chat movement is double-counting keyboard space.
+- This should be treated as an experiment because it may regress keyboard avoidance while typing.
+
+## Current Recommendation
+
+Test the latest candidate fix first. If the white area still persists, do Option A next: temporarily replace the composer `SuperTextField` with Flutter's standard `TextField`. That will split the problem cleanly between internal text field lifecycle and Flutter Web/browser behavior.
 
 ---
 
-**Document created:** May 15, 2026  
-**Implementation complete:** May 15, 2026  
-**Real device testing:** Pending
+Last updated: May 15, 2026
