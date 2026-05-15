@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:tw_primitives/src/text_field/core/attributions.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/document_gestures_interaction_overrides.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/links.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
 
 /// A [TwTextFieldTapHandler] that opens links when the user taps text with
 /// a [LinkAttribution].

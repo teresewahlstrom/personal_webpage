@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_input_lifecycle.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine/_ime_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_input_lifecycle.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
 
 void main() {
   group('shouldClearTextInputForLifecycleState', () {

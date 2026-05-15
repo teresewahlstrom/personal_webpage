@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_scheduler.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/web/browser_text_input_stub.dart'
     if (dart.library.html) 'package:tw_primitives/src/text_field/infrastructure/platforms/web/browser_text_input_web.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine/_ime_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
 
 bool shouldClearTextInputForLifecycleState(AppLifecycleState state) {
   switch (state) {

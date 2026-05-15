@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/attributed_text_editing_controller.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_scroller.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine/_ime_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/attributed_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_field_scroller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 /// Collection of core artifacts used to interact with, and edit, a text field.

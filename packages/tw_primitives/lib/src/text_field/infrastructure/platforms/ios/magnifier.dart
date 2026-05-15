@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/outer_box_shadow.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/outer_box_shadow.dart';
 
 const defaultIosMagnifierEnterAnimationDuration = Duration(milliseconds: 180);
 const defaultIosMagnifierExitAnimationDuration = Duration(milliseconds: 150);

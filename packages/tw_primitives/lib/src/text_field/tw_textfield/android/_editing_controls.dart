@@ -10,14 +10,14 @@ import 'package:tw_primitives/src/text_field/infrastructure/multi_listenable_bui
 import 'package:tw_primitives/src/text_field/infrastructure/_logging.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/magnifier.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/selection_handles.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/android/drag_handle_selection.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/attributed_text_editing_controller.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_scrollview.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/android/drag_handle_selection.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/attributed_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_scrollview.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/toolbar_position_delegate.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/touch_controls.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
-import 'package:tw_primitives/src/text_field/super_textfield/metrics.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/metrics.dart';
 
 final _log = androidTextFieldLog;
 

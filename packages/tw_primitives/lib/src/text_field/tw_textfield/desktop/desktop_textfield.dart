@@ -23,8 +23,8 @@ import 'package:tw_primitives/src/text_field/infrastructure/multi_tap_gesture.da
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/mac/mac_ime.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/platform.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/text_input.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_scroller.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_field_scroller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../infrastructure/fill_width_if_constrained.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 /// An iOS floating cursor.

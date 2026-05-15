@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/_logging.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_scheduler.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 final _log = scrollingTextFieldLog;

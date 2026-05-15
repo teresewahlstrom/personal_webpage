@@ -10,7 +10,7 @@ import 'package:tw_primitives/src/text_field/infrastructure/platforms/ios/select
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/mobile_documents.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/toolbar_position_delegate.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/ios/magnifier.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../metrics.dart';

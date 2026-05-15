@@ -4,9 +4,9 @@ Internal primitives package for the personal_webpage Flutter app. Contains reusa
 
 ## Structure
 
-### `text_field`
+### `tw_textfield`
 
-Provides styled text input components with platform-specific support (Android, iOS, desktop). The module now contains the extracted text-field implementation used by `tw_chat`, giving consumers a stable interface without exposing unrelated editor subsystems.
+Provides styled text input components with platform-specific support (Android, iOS, desktop). This subtree contains the extracted text-field implementation used by `tw_chat`, and future unrelated code should live beside it as a separate sibling subtree.
 
 **Public API:**
 - `TwTextField` — platform-adaptive text field with attributed text support

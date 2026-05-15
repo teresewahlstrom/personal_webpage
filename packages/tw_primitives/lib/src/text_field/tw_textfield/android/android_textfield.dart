@@ -2,56 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/text_tools.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/_logging.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/build_context.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_scheduler.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/text_input_configuration.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/ime_input_owner.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/platforms/ios/toolbar.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/platforms/mobile_documents.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/selection_handles.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/toolbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/signal_notifier.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/fill_width_if_constrained.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/hint_text.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_input_lifecycle.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_scrollview.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine/_ime_text_editing_controller.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/ios/editing_controls.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/touch_controls.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/android/_editing_controls.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/android/_user_interaction.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/fill_width_if_constrained.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/hint_text.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_input_lifecycle.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_scrollview.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
+import '../../infrastructure/_logging.dart';
 import '../metrics.dart';
 import '../styles.dart';
-import 'floating_cursor.dart';
-import '../../infrastructure/platforms/ios/ios_system_context_menu.dart';
-import 'user_interaction.dart';
 
-export '../infrastructure/magnifier.dart';
-export 'caret.dart';
-export 'editing_controls.dart';
-export '../../infrastructure/platforms/ios/ios_system_context_menu.dart';
-export 'user_interaction.dart';
+export '_caret.dart';
 
-final _log = iosTextFieldLog;
+final _log = androidTextFieldLog;
 
-const _defaultIosSystemMenuItems = <IOSSystemContextMenuItemData>[
-  IOSSystemContextMenuItemDataCut(),
-  IOSSystemContextMenuItemDataCopy(),
-  IOSSystemContextMenuItemDataPaste(),
-  IOSSystemContextMenuItemDataSelectAll(),
-];
-
-class TwIOSTextField extends StatefulWidget {
-  const TwIOSTextField({
+class TwAndroidTextField extends StatefulWidget {
+  const TwAndroidTextField({
     Key? key,
     this.focusNode,
     this.tapRegionGroupId,
-    this.tapHandlers = const [],
     this.textController,
+    this.textAlign,
     this.textStyleBuilder = defaultTextFieldStyleBuilder,
     this.inlineWidgetBuilders = const [],
-    this.textAlign = TextAlign.left,
-    this.padding,
     this.hintBehavior = HintBehavior.displayHintUntilFocus,
     this.hintBuilder,
     this.minLines,
@@ -61,12 +47,15 @@ class TwIOSTextField extends StatefulWidget {
     this.blinkTimingMode = BlinkTimingMode.ticker,
     required this.selectionColor,
     required this.handlesColor,
-    this.handlesRadius,
+    this.handlesRadius = AndroidSelectionHandle.defaultRadius,
     this.textInputAction,
     this.imeConfiguration,
     this.showComposingUnderline = true,
-    this.popoverToolbarBuilder = defaultIosPopoverToolbarBuilder,
+    this.tapHandlers = const [],
+    this.popoverToolbarBuilder = _defaultAndroidToolbarBuilder,
     this.showDebugPaint = false,
+    this.padding,
+    this.scrollController,
   }) : super(key: key);
 
   /// [FocusNode] attached to this text field.
@@ -74,9 +63,6 @@ class TwIOSTextField extends StatefulWidget {
 
   /// {@macro super_text_field_tap_region_group_id}
   final String? tapRegionGroupId;
-
-  /// {@macro super_text_field_tap_handlers}
-  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// Controller that owns the text content and text selection for
   /// this text field.
@@ -94,10 +80,6 @@ class TwIOSTextField extends StatefulWidget {
 
   /// {@macro super_text_field_inline_widget_builders}
   final InlineWidgetBuilderChain inlineWidgetBuilders;
-
-  /// Padding placed around the text content of this text field, but within the
-  /// scrollable viewport.
-  final EdgeInsets? padding;
 
   /// Policy for when the hint should be displayed.
   final HintBehavior hintBehavior;
@@ -121,10 +103,10 @@ class TwIOSTextField extends StatefulWidget {
   /// Color of the selection handles.
   final Color handlesColor;
 
-  /// The radius of the selection handle balls in logical pixels.
+  /// The radius of the selection handles in logical pixels.
   ///
-  /// When `null`, the default [defaultIosHandleBallDiameter] / 2 is used.
-  final double? handlesRadius;
+  /// Defaults to [AndroidSelectionHandle.defaultRadius].
+  final double handlesRadius;
 
   /// The minimum height of this text field, represented as a
   /// line count.
@@ -179,17 +161,35 @@ class TwIOSTextField extends StatefulWidget {
   /// Whether to show an underline beneath the text in the composing region.
   final bool showComposingUnderline;
 
-  /// Builder that creates the popover toolbar widget that appears when text is selected.
-  final IOSPopoverToolbarBuilder popoverToolbarBuilder;
+  /// {@macro super_text_field_tap_handlers}
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// Whether to paint debug guides.
   final bool showDebugPaint;
 
+  /// Builder that creates the popover toolbar widget that appears when text is selected.
+  final Widget Function(
+    BuildContext,
+    AndroidEditingOverlayController,
+    ToolbarConfig,
+  )
+  popoverToolbarBuilder;
+
+  /// Padding placed around the text content of this text field, but within the
+  /// scrollable viewport.
+  final EdgeInsets? padding;
+
+  /// An optional [ScrollController] for the internal scroll view.
+  ///
+  /// When provided, the same controller can be passed to a scrollbar widget
+  /// that wraps this text field.
+  final ScrollController? scrollController;
+
   @override
-  State createState() => TwIOSTextFieldState();
+  State createState() => TwAndroidTextFieldState();
 }
 
-class TwIOSTextFieldState extends State<TwIOSTextField>
+class TwAndroidTextFieldState extends State<TwAndroidTextField>
     with TickerProviderStateMixin, WidgetsBindingObserver
     implements ProseTextBlock, ImeInputOwner {
   static const Duration _autoScrollAnimationDuration = Duration(
@@ -200,7 +200,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   final _textFieldKey = GlobalKey();
   final _textFieldLayerLink = LayerLink();
   final _textContentLayerLink = LayerLink();
-  final _scrollKey = GlobalKey<IOSTextFieldTouchInteractorState>();
+  final _scrollKey = GlobalKey<AndroidTextFieldTouchInteractorState>();
   final _textContentKey = GlobalKey<ProseTextState>();
 
   late FocusNode _focusNode;
@@ -223,15 +223,10 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
           ? TextAlign.left
           : TextAlign.right);
 
-  late FloatingCursorController _floatingCursorController;
-
-  final _toolbarLeaderLink = LeaderLink();
-  final _magnifierLeaderLink = LeaderLink();
-  late IOSEditingOverlayController _editingOverlayController;
+  final _magnifierLayerLink = LeaderLink();
+  late AndroidEditingOverlayController _editingOverlayController;
 
   late TextScrollController _textScrollController;
-
-  late MagnifierAndToolbarController _overlayController;
 
   /// Opens/closes the popover that displays the toolbar and magnifier, and
   // positions the invisible touch targets for base/extent dragging.
@@ -240,7 +235,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   late final BlinkController _caretBlinkController;
 
   /// Notifies the popover toolbar to rebuild itself.
-  final _overlayControlsRebuildSignal = SignalNotifier();
+  final _popoverRebuildSignal = SignalNotifier();
 
   @override
   void initState() {
@@ -259,7 +254,6 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
     _textEditingController =
         (widget.textController ?? ImeAttributedTextEditingController())
           ..addListener(_onTextOrSelectionChange)
-          ..onIOSFloatingCursorChange = _onFloatingCursorChange
           ..onPerformActionPressed ??= _onPerformActionPressed;
 
     _textScrollController = TextScrollController(
@@ -267,18 +261,10 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       tickerProvider: this,
     )..addListener(_onTextScrollChange);
 
-    _floatingCursorController = FloatingCursorController(
-      textController: _textEditingController,
-    );
-
-    _overlayController = MagnifierAndToolbarController();
-
-    _editingOverlayController = IOSEditingOverlayController(
+    _editingOverlayController = AndroidEditingOverlayController(
       textController: _textEditingController,
       caretBlinkController: _caretBlinkController,
-      toolbarFocalPoint: _toolbarLeaderLink,
-      magnifierFocalPoint: _magnifierLeaderLink,
-      overlayController: _overlayController,
+      magnifierFocalPoint: _magnifierLayerLink,
     );
 
     _contentTextDirection = getParagraphDirection(
@@ -300,38 +286,25 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   }
 
   @override
-  void didUpdateWidget(TwIOSTextField oldWidget) {
+  void didUpdateWidget(TwAndroidTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
       _focusNode.removeListener(_updateSelectionAndImeConnectionOnFocusChange);
-      if (widget.focusNode != null) {
-        _focusNode = widget.focusNode!;
-      } else {
-        _focusNode = FocusNode();
-      }
-      _focusNode.addListener(_updateSelectionAndImeConnectionOnFocusChange);
+      _focusNode = (widget.focusNode ?? FocusNode())
+        ..addListener(_updateSelectionAndImeConnectionOnFocusChange);
     }
 
-    if (widget.textController != oldWidget.textController) {
-      _textEditingController
-        ..removeListener(_onTextOrSelectionChange)
-        ..onIOSFloatingCursorChange = null;
-      if (_textEditingController.onPerformActionPressed ==
-          _onPerformActionPressed) {
-        _textEditingController.onPerformActionPressed = null;
-      }
-
-      if (widget.textController != null) {
-        _textEditingController = widget.textController!;
-      } else {
-        _textEditingController = ImeAttributedTextEditingController();
-      }
-
-      _textEditingController
-        ..addListener(_onTextOrSelectionChange)
-        ..onIOSFloatingCursorChange = _onFloatingCursorChange
-        ..onPerformActionPressed ??= _onPerformActionPressed;
+    if (widget.textInputAction != oldWidget.textInputAction &&
+        widget.textInputAction != null &&
+        _textEditingController.isAttachedToIme) {
+      _textEditingController.updateTextInputConfiguration(
+        viewId: View.of(context).viewId,
+        textInputAction: widget.textInputAction!,
+        textInputType: _isMultiline
+            ? TextInputType.multiline
+            : TextInputType.text,
+      );
     }
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
@@ -352,8 +325,24 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       );
     }
 
+    if (widget.textController != oldWidget.textController) {
+      _textEditingController.removeListener(_onTextOrSelectionChange);
+      if (_textEditingController.onPerformActionPressed ==
+          _onPerformActionPressed) {
+        _textEditingController.onPerformActionPressed = null;
+      }
+      if (widget.textController != null) {
+        _textEditingController = widget.textController!;
+      } else {
+        _textEditingController = ImeAttributedTextEditingController();
+      }
+      _textEditingController
+        ..addListener(_onTextOrSelectionChange)
+        ..onPerformActionPressed ??= _onPerformActionPressed;
+    }
+
     if (widget.showDebugPaint != oldWidget.showDebugPaint) {
-      onNextFrame((_) => _rebuildHandles());
+      onNextFrame((_) => _rebuildEditingOverlayControls());
     }
   }
 
@@ -367,7 +356,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
     // available upon Hot Reload. Accessing it results in an exception.
     _removeEditingOverlayControls();
 
-    onNextFrame((_) => _showHandles());
+    onNextFrame((_) => _showEditingControlsOverlay());
   }
 
   @override
@@ -378,12 +367,10 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       // Dispose after the current frame so that other widgets have
       // time to remove their listeners.
       _editingOverlayController.dispose();
-      _overlayController.dispose();
     });
 
     _textEditingController
       ..removeListener(_onTextOrSelectionChange)
-      ..onIOSFloatingCursorChange = null
       ..detachFromIme();
     if (widget.textController == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -404,9 +391,9 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
 
     _caretBlinkController.dispose();
 
-    WidgetsBinding.instance.removeObserver(this);
+    _popoverRebuildSignal.dispose();
 
-    _overlayControlsRebuildSignal.dispose();
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -446,6 +433,11 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
     return textLayoutBox.localToGlobal(Offset.zero, ancestor: fieldBox);
   }
 
+  @visibleForTesting
+  bool get isCollapsedHandleVisible =>
+      _editingOverlayController.areHandlesVisible &&
+      !_editingOverlayController.isCollapsedHandleAutoHidden;
+
   Rect? _getGlobalCaretRect() {
     if (!_textEditingController.selection.isValid ||
         !_textEditingController.selection.isCollapsed) {
@@ -465,10 +457,10 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
     return Rect.fromLTWH(caretOffset.dx, caretOffset.dy, 1, caretHeight);
   }
 
-  bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
-
   @override
   DeltaTextInputClient get imeClient => _textEditingController;
+
+  bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
 
   void _clearFocusAndImeForBackgroundTransition() {
     clearTextInputForBackgroundTransition(
@@ -513,7 +505,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
             }
 
             _autoScrollToKeepTextFieldVisible();
-            _showHandles();
+            _showEditingControlsOverlay();
           });
         }
       } else {
@@ -544,39 +536,32 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
 
   void _onTextScrollChange() {
     if (_popoverController.isShowing) {
-      _rebuildHandles();
+      _rebuildEditingOverlayControls();
     }
   }
 
-  /// Displays [IOSEditingControls] in the [OverlayPortal], if not already
+  /// Displays [AndroidEditingOverlayControls] in the [OverlayPortal], if not already
   /// displayed.
-  void _showHandles() {
+  void _showEditingControlsOverlay() {
     if (!_popoverController.isShowing) {
       _popoverController.show();
     }
   }
 
-  /// Rebuilds the [IOSEditingControls] in the [OverlayPortal], if
+  /// Rebuilds the [AndroidEditingOverlayControls] in the [OverlayPortal], if
   /// they're currently displayed.
-  void _rebuildHandles() {
-    if (!_popoverController.isShowing) {
-      _overlayControlsRebuildSignal.notifyListeners();
+  void _rebuildEditingOverlayControls() {
+    if (_popoverController.isShowing) {
+      _popoverRebuildSignal.notifyListeners();
     }
   }
 
-  /// Hides the [IOSEditingControls] in the [OverlayPortal], if they're
+  /// Hides the [AndroidEditingOverlayControls] in the [OverlayPortal], if they're
   /// currently displayed.
   void _removeEditingOverlayControls() {
     if (_popoverController.isShowing) {
       _popoverController.hide();
     }
-  }
-
-  void _onFloatingCursorChange(RawFloatingCursorPoint point) {
-    _floatingCursorController.updateFloatingCursor(
-      _textContentKey.currentState!.textLayout,
-      point,
-    );
   }
 
   /// Handles actions from the IME
@@ -594,6 +579,29 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       default:
         _log.warning("User pressed unhandled action button: $action");
     }
+  }
+
+  /// Handles key presses
+  ///
+  /// Some third party keyboards report backspace as a key press
+  /// rather than a deletion delta, so we need to handle them manually
+  KeyEventResult _onKeyEventPressed(FocusNode focusNode, KeyEvent keyEvent) {
+    _log.finer('_onKeyEventPressed - keyEvent: ${keyEvent.character}');
+    if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
+      _log.finer('_onKeyEventPressed - not a "down" event. Ignoring.');
+      return KeyEventResult.ignored;
+    }
+    if (keyEvent.logicalKey != LogicalKeyboardKey.backspace) {
+      return KeyEventResult.ignored;
+    }
+
+    if (_textEditingController.selection.isCollapsed) {
+      _textEditingController.deletePreviousCharacter();
+    } else {
+      _textEditingController.deleteSelection();
+    }
+
+    return KeyEventResult.handled;
   }
 
   /// Scrolls the ancestor [Scrollable], if any, so [TwTextField]
@@ -642,12 +650,13 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       child: Focus(
         key: _textFieldKey,
         focusNode: _focusNode,
+        onKeyEvent: _onKeyEventPressed,
         child: CompositedTransformTarget(
           link: _textFieldLayerLink,
-          child: IOSTextFieldTouchInteractor(
+          child: AndroidTextFieldTouchInteractor(
             focusNode: _focusNode,
             tapHandlers: widget.tapHandlers,
-            selectableTextKey: _textContentKey,
+            textKey: _textContentKey,
             getGlobalCaretRect: _getGlobalCaretRect,
             textFieldLayerLink: _textFieldLayerLink,
             textController: _textEditingController,
@@ -661,6 +670,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
               textScrollController: _textScrollController,
               textKey: _textContentKey,
               textEditingController: _textEditingController,
+              scrollController: widget.scrollController,
               textAlign: _textAlign,
               minLines: widget.minLines,
               maxLines: widget.maxLines,
@@ -696,22 +706,13 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   }
 
   Widget _buildSelectableText() {
-    final textSpan = _textEditingController
-        .text //
-        .computeInlineSpan(
-          context,
-          widget.textStyleBuilder,
-          widget.inlineWidgetBuilders,
-        );
-
-    CaretStyle caretStyle = widget.caretStyle;
-
-    final caretColorOverride = _floatingCursorController.isShowingFloatingCursor
-        ? Colors.grey
-        : null;
-    if (caretColorOverride != null) {
-      caretStyle = caretStyle.copyWith(color: caretColorOverride);
-    }
+    final textSpan = _textEditingController.text.isNotEmpty
+        ? _textEditingController.text.computeInlineSpan(
+            context,
+            widget.textStyleBuilder,
+            widget.inlineWidgetBuilders,
+          )
+        : TextSpan(text: "", style: widget.textStyleBuilder({}));
 
     return Directionality(
       textDirection: _textDirection,
@@ -734,17 +735,16 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
                           HintBehavior.displayHintUntilFocus));
 
           return Stack(
-            clipBehavior: Clip.none,
             children: [
-              if (_textEditingController.selection.isValid == true)
+              if (widget.textController?.selection.isValid == true)
                 // Selection highlight beneath the text.
                 TextLayoutSelectionHighlight(
                   textLayout: textLayout,
                   style: SelectionHighlightStyle(color: widget.selectionColor),
-                  selection: _textEditingController.selection,
+                  selection: widget.textController?.selection,
                 ),
               // Underline beneath the composing region.
-              if (_textEditingController.composingRegion.isValid == true &&
+              if (widget.textController?.composingRegion.isValid == true &&
                   widget.showComposingUnderline)
                 TextUnderlineLayer(
                   textLayout: textLayout,
@@ -757,7 +757,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
                   ),
                   underlines: [
                     TextLayoutUnderline(
-                      range: _textEditingController.composingRegion,
+                      range: widget.textController!.composingRegion,
                     ),
                   ],
                 ),
@@ -773,23 +773,17 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
 
           return OverlayPortal(
             controller: _popoverController,
-            overlayChildBuilder: _buildOverlayIosControls,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                TextLayoutCaret(
-                  textLayout: textLayout,
-                  style: widget.caretStyle,
-                  position:
-                      _textEditingController
-                          .selection
-                          .isCollapsed //
-                      ? _textEditingController.selection.extent
-                      : null,
-                  blinkController: _caretBlinkController,
-                ),
-                IOSFloatingCursor(controller: _floatingCursorController),
-              ],
+            overlayChildBuilder: _buildPopoverToolbar,
+            child: TextLayoutCaret(
+              textLayout: textLayout,
+              style: widget.caretStyle,
+              position:
+                  _textEditingController
+                      .selection
+                      .isCollapsed //
+                  ? _textEditingController.selection.extent
+                  : null,
+              blinkController: _caretBlinkController,
             ),
           );
         },
@@ -797,11 +791,11 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
     );
   }
 
-  Widget _buildOverlayIosControls(BuildContext context) {
+  Widget _buildPopoverToolbar(BuildContext context) {
     return ListenableBuilder(
-      listenable: _overlayControlsRebuildSignal,
+      listenable: _popoverRebuildSignal,
       builder: (context, _) {
-        return IOSEditingControls(
+        return AndroidEditingOverlayControls(
           editingController: _editingOverlayController,
           textScrollController: _textScrollController,
           textFieldLayerLink: _textFieldLayerLink,
@@ -810,7 +804,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
           textContentKey: _textContentKey,
           tapRegionGroupId: widget.tapRegionGroupId,
           handleColor: widget.handlesColor,
-          handleBallRadius: widget.handlesRadius,
+          handleRadius: widget.handlesRadius,
           popoverToolbarBuilder: widget.popoverToolbarBuilder,
           showDebugPaint: widget.showDebugPaint,
         );
@@ -819,151 +813,69 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   }
 }
 
-/// Builder that returns a widget for an iOS-style popover editing toolbar.
-typedef IOSPopoverToolbarBuilder =
-    Widget Function(BuildContext, IOSEditingOverlayController);
-
-/// An [IOSPopoverToolbarBuilder] that displays the iOS system popover toolbar, if the version of
-/// iOS is recent enough, otherwise builds [defaultIosPopoverToolbarBuilder].
-Widget iOSSystemPopoverTextFieldToolbarWithFallback(
+Widget _defaultAndroidToolbarBuilder(
   BuildContext context,
-  IOSEditingOverlayController controller,
+  AndroidEditingOverlayController controller,
+  ToolbarConfig config,
 ) {
-  if (IOSSystemContextMenu.isSupported(context)) {
-    return IOSTwTextFieldSystemContextMenu(controller: controller);
-  }
+  final isSelectionExpanded = !controller.textController.selection.isCollapsed;
 
-  return defaultIosPopoverToolbarBuilder(context, controller);
-}
-
-/// Returns a widget for the default/standard iOS-style popover provided by Super Text Field.
-Widget defaultIosPopoverToolbarBuilder(
-  BuildContext context,
-  IOSEditingOverlayController controller,
-) {
-  return IOSTextEditingFloatingToolbar(
-    focalPoint: controller.toolbarFocalPoint,
-    onCutPressed: () {
-      final textController = controller.textController;
-      final selection = textController.selection;
-      if (selection.isCollapsed) {
-        return;
-      }
-
-      final selectedText = selection.textInside(
-        textController.text.toPlainText(),
-      );
-
-      textController.deleteSelectedText();
-
-      Clipboard.setData(ClipboardData(text: selectedText));
-    },
-    onCopyPressed: () {
-      final textController = controller.textController;
-      final selection = textController.selection;
-      final selectedText = selection.textInside(
-        textController.text.toPlainText(),
-      );
-
-      Clipboard.setData(ClipboardData(text: selectedText));
-    },
-    onPastePressed: () async {
-      final clipboardContent = await Clipboard.getData('text/plain');
-      if (clipboardContent == null || clipboardContent.text == null) {
-        return;
-      }
-
-      final textController = controller.textController;
-      final selection = textController.selection;
-      if (selection.isCollapsed) {
-        textController.insertAtCaret(text: clipboardContent.text!);
-      } else {
-        textController.replaceSelectionWithUnstyledText(
-          replacementText: clipboardContent.text!,
-        );
-      }
-    },
+  return AndroidTextEditingFloatingToolbar(
+    onCutPressed:
+        isSelectionExpanded //
+        ? () => _onToolbarCutPressed(controller)
+        : null,
+    onCopyPressed:
+        isSelectionExpanded //
+        ? () => _onToolbarCopyPressed(controller)
+        : null,
+    onPastePressed: () => _onToolbarPastePressed(controller),
+    onSelectAllPressed: () => _onToolbarSelectAllPressed(controller),
   );
 }
 
-class IOSTwTextFieldSystemContextMenu extends StatefulWidget {
-  const IOSTwTextFieldSystemContextMenu({
-    super.key,
-    required this.controller,
-  });
+void _onToolbarCutPressed(AndroidEditingOverlayController controller) {
+  final textController = controller.textController;
 
-  final IOSEditingOverlayController controller;
+  final selection = textController.selection;
+  if (selection.isCollapsed) {
+    return;
+  }
 
-  @override
-  State<IOSTwTextFieldSystemContextMenu> createState() =>
-      _IOSTwTextFieldSystemContextMenuState();
+  final selectedText = selection.textInside(textController.text.toPlainText());
+
+  textController.deleteSelectedText();
+
+  Clipboard.setData(ClipboardData(text: selectedText));
 }
 
-class _IOSTwTextFieldSystemContextMenuState
-    extends State<IOSTwTextFieldSystemContextMenu> {
-  late final SystemContextMenuController _systemContextMenuController;
+void _onToolbarCopyPressed(AndroidEditingOverlayController controller) {
+  final textController = controller.textController;
+  final selection = textController.selection;
+  final selectedText = selection.textInside(textController.text.toPlainText());
 
-  @override
-  void initState() {
-    super.initState();
-    _systemContextMenuController = SystemContextMenuController();
-    widget.controller.addListener(_onControllerChanged);
-    onNextFrame((_) {
-      _positionSystemMenu();
-    });
+  Clipboard.setData(ClipboardData(text: selectedText));
+}
+
+Future<void> _onToolbarPastePressed(
+  AndroidEditingOverlayController controller,
+) async {
+  final clipboardContent = await Clipboard.getData('text/plain');
+  if (clipboardContent == null || clipboardContent.text == null) {
+    return;
   }
 
-  @override
-  void didUpdateWidget(covariant IOSTwTextFieldSystemContextMenu oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      oldWidget.controller.removeListener(_onControllerChanged);
-      widget.controller.addListener(_onControllerChanged);
-    }
-    onNextFrame((_) {
-      _positionSystemMenu();
-    });
-  }
-
-  @override
-  void dispose() {
-    widget.controller.removeListener(_onControllerChanged);
-    _systemContextMenuController.dispose();
-    super.dispose();
-  }
-
-  void _onControllerChanged() {
-    onNextFrame((_) {
-      _positionSystemMenu();
-    });
-  }
-
-  void _positionSystemMenu() {
-    // The size reported by the controller's toolbarFocalPoint is one frame behind. Query the information
-    // overlayController instead.
-    final topAnchor = widget.controller.overlayController.toolbarTopAnchor;
-    final bottomAnchor = widget.controller.overlayController.toolbarTopAnchor;
-
-    if (topAnchor == null || bottomAnchor == null) {
-      // We don't expect the toolbar builder to be called without having the anchors
-      // defined. But, since these properties are nullable, we account for that.
-      return;
-    }
-
-    _systemContextMenuController.showWithItems(
-      Rect.fromLTRB(
-        topAnchor.dx,
-        topAnchor.dy,
-        bottomAnchor.dx,
-        bottomAnchor.dy,
-      ),
-      _defaultIosSystemMenuItems,
+  final textController = controller.textController;
+  final selection = textController.selection;
+  if (selection.isCollapsed) {
+    textController.insertAtCaret(text: clipboardContent.text!);
+  } else {
+    textController.replaceSelectionWithUnstyledText(
+      replacementText: clipboardContent.text!,
     );
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    assert(IOSSystemContextMenu.isSupported(context));
-    return const SizedBox.shrink();
-  }
+void _onToolbarSelectAllPressed(AndroidEditingOverlayController controller) {
+  controller.textController.selectAll();
 }

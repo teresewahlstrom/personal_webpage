@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tw_primitives/src/text_field/core/document_layout.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../../infrastructure/_logging.dart';

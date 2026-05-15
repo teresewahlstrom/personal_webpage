@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/document_gestures_interaction_overrides.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 /// Tap handler that can (optionally) respond to single, double, and triple taps, as well as dictate the cursor

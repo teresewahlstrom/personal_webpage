@@ -6,7 +6,7 @@ import 'package:tw_primitives/src/text_field/infrastructure/_logging.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/document_gestures_interaction_overrides.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_scheduler.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/multi_tap_gesture.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/super_textfield.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '_editing_controls.dart';

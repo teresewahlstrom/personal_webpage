@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/magnifier.dart';
-import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/outer_box_shadow.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/magnifier.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/outer_box_shadow.dart';
 
 /// An Android magnifying glass that follows a [LeaderLink].
 class AndroidFollowingMagnifier extends StatelessWidget {
