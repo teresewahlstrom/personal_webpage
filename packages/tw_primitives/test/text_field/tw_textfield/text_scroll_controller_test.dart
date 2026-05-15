@@ -1,8 +1,6 @@
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:super_text_layout/super_text_layout.dart';
-import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_scrollview.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 
 void main() {
