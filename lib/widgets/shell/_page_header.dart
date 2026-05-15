@@ -1,5 +1,4 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_ui_config.dart';
 
@@ -10,32 +9,6 @@ class PageHeader extends StatelessWidget {
   });
 
   final String logoAssetPath;
-
-  Future<void> _launchUrl(BuildContext context) async {
-    final Uri uri = Uri.parse('https://www.t1grid.com');
-    try {
-      final bool launched = await launchUrl(
-        uri,
-        mode: LaunchMode.platformDefault,
-      );
-      if (!launched && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not open https://www.t1grid.com'),
-          ),
-        );
-      }
-    } catch (_) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not open https://www.t1grid.com'),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +33,11 @@ class PageHeader extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              SelectionContainer.disabled(
-                child: Semantics(
-                  button: true,
-                  label: 'Open t1grid.com home page',
-                  child: Tooltip(
-                    message: 'Open t1grid.com home page',
-                    child: GestureDetector(
-                      onTap: () => _launchUrl(context),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Image.asset(
-                          logoAssetPath,
-                          width: ShellUiConfig.headerLogoWidth,
-                          height: ShellUiConfig.headerLogoHeight,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              Image.asset(
+                logoAssetPath,
+                width: ShellUiConfig.headerLogoWidth,
+                height: ShellUiConfig.headerLogoHeight,
+                fit: BoxFit.contain,
               ),
               const Spacer(),
             ],
@@ -89,4 +47,3 @@ class PageHeader extends StatelessWidget {
     );
   }
 }
-
