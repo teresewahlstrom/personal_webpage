@@ -1,6 +1,6 @@
 class ChatRuntimeConfig {
   const ChatRuntimeConfig({
-    this.minimumPendingReplyDuration = const Duration(milliseconds: 180),
+    this.minimumPendingReplyDuration = const Duration(milliseconds: 700),
   });
 
   static const defaults = ChatRuntimeConfig();

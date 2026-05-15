@@ -117,6 +117,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
           0.0,
           bubbleMaxWidth,
         );
+    final contentMaxWidth = widget.isUser
+        ? bubbleMaxWidth
+        : widget.availableWidth;
+    final textMeasureHorizontalInset = widget.isUser
+        ? horizontalInset * 2
+        : tokens.composerTextInsetLeft + horizontalInset;
     final textScaler = MediaQuery.textScalerOf(context);
     final parsedMarkup = widget.isTypingIndicator
         ? null
@@ -125,13 +131,14 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       text: parsedMarkup?.plainText ?? widget.text,
       style: bubbleTextStyle,
       textScaler: textScaler,
-      maxTextWidth: (bubbleMaxWidth - horizontalInset * 2).clamp(
+      maxTextWidth: (contentMaxWidth - textMeasureHorizontalInset).clamp(
         0.0,
         double.infinity,
       ),
     );
     final isTruncatable =
         measuredLayout.lineCount > ChatBubbleRules.collapsibleLineThreshold;
+    final isCollapsed = isTruncatable && widget.isTruncated;
     final truncatedContentHeight =
         measuredLayout.lineHeight * ChatBubbleRules.collapsedVisibleLines;
     final bubbleTopMargin = widget.isFirstMessage
@@ -185,64 +192,74 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 ),
                 child: Stack(
                   children: [
-                    Container(
-                      width: widget.isUser ? null : bubbleMaxWidth,
-                      padding: EdgeInsets.fromLTRB(
-                        widget.isUser
-                            ? horizontalInset
-                            : tokens.composerTextInsetLeft,
-                        verticalInset,
-                        horizontalInset,
-                        (isTruncatable && widget.isTruncated)
-                            ? 0.0
-                            : verticalInset,
-                      ),
-                      constraints: widget.isUser
-                          ? BoxConstraints(
-                              minWidth: bubbleMinWidth,
-                              maxWidth: bubbleMaxWidth,
-                            )
-                          : null,
-                      decoration: widget.isUser
-                          ? BoxDecoration(
-                              color: bubbleColor,
-                              borderRadius: BorderRadius.circular(
-                                tokens.bubbleRadius,
-                              ),
-                              border: (isTruncatable && widget.isTruncated)
-                                  ? Border(
-                                      top: bubbleBorderSide,
-                                      left: bubbleBorderSide,
-                                      right: bubbleBorderSide,
-                                    )
-                                  : Border.fromBorderSide(bubbleBorderSide),
-                              boxShadow: [tokens.surfaceShadow(colors)],
-                            )
-                          : null,
-                      child: _buildBubbleText(
-                        parsedMarkup,
-                        style: bubbleTextStyle,
-                        bubbleColor: bubbleColor,
-                        isUserBubble: widget.isUser,
-                        truncatedContentHeight: truncatedContentHeight,
-                        isTruncated: isTruncatable && widget.isTruncated,
-                      ),
-                    ),
-                    if (!widget.isUser)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        height: 1.0,
-                        child: IgnorePointer(
-                          child: CustomPaint(
-                            painter: _DashedLinePainter(
-                              color: ChatComposerLayout.borderColor(context),
-                              strokeWidth: 0.25,
+                    SizedBox(
+                      width: widget.isUser ? null : contentMaxWidth,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: widget.isUser ? null : contentMaxWidth,
+                            padding: EdgeInsets.fromLTRB(
+                              widget.isUser
+                                  ? horizontalInset
+                                  : tokens.composerTextInsetLeft,
+                              verticalInset,
+                              horizontalInset,
+                              isCollapsed ? 0.0 : verticalInset,
+                            ),
+                            constraints: widget.isUser
+                                ? BoxConstraints(
+                                    minWidth: bubbleMinWidth,
+                                    maxWidth: bubbleMaxWidth,
+                                  )
+                                : null,
+                            decoration: widget.isUser
+                                ? BoxDecoration(
+                                    color: bubbleColor,
+                                    borderRadius: BorderRadius.circular(
+                                      tokens.bubbleRadius,
+                                    ),
+                                    border: isCollapsed
+                                        ? Border(
+                                            top: bubbleBorderSide,
+                                            left: bubbleBorderSide,
+                                            right: bubbleBorderSide,
+                                          )
+                                        : Border.fromBorderSide(
+                                            bubbleBorderSide,
+                                          ),
+                                    boxShadow: [tokens.surfaceShadow(colors)],
+                                  )
+                                : null,
+                            child: _buildBubbleText(
+                              parsedMarkup,
+                              style: bubbleTextStyle,
+                              bubbleColor: bubbleColor,
+                              isUserBubble: widget.isUser,
+                              truncatedContentHeight: truncatedContentHeight,
+                              isTruncated: isCollapsed,
                             ),
                           ),
-                        ),
+                          if (!widget.isUser)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              height: tokens.bubbleBorderWidth,
+                              child: IgnorePointer(
+                                child: CustomPaint(
+                                  painter: _BottomLinePainter(
+                                    color: ChatComposerLayout.borderColor(
+                                      context,
+                                    ),
+                                    strokeWidth: tokens.bubbleBorderWidth,
+                                    dashed: isCollapsed,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -625,11 +642,16 @@ class _PlusMinusPainter extends CustomPainter {
   }
 }
 
-class _DashedLinePainter extends CustomPainter {
-  const _DashedLinePainter({required this.color, required this.strokeWidth});
+class _BottomLinePainter extends CustomPainter {
+  const _BottomLinePainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.dashed,
+  });
 
   final Color color;
   final double strokeWidth;
+  final bool dashed;
 
   static const double _dashWidth = 12.0;
   static const double _gapWidth = 8.0;
@@ -643,6 +665,11 @@ class _DashedLinePainter extends CustomPainter {
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.square;
     final y = size.height / 2;
+    if (!dashed) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+      return;
+    }
+
     double x = 0;
     while (x < size.width) {
       final end = (x + _dashWidth).clamp(0.0, size.width);
@@ -652,8 +679,10 @@ class _DashedLinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _DashedLinePainter oldDelegate) {
+  bool shouldRepaint(covariant _BottomLinePainter oldDelegate) {
     // _dashWidth and _gapWidth are static constants so they never change.
-    return oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
+    return oldDelegate.color != color ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.dashed != dashed;
   }
 }

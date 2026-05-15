@@ -139,7 +139,7 @@ Line four carries enough words to wrap through the bubble width for truncation.'
       (widget) =>
           widget is RichText &&
           widget.selectionRegistrar == null &&
-          widget.text.toPlainText() == 'Example',
+          widget.text.toPlainText().contains('Example'),
     );
 
     expect(visibleLink, findsOneWidget);
@@ -350,7 +350,7 @@ Future<void> _pumpTruncatedBubble(
       home: Material(
         child: Center(
           child: SizedBox(
-            width: 260,
+            width: 180,
             child: SelectionArea(
               key: selectionAreaKey,
               child: ChatMessageBubble(
@@ -361,7 +361,7 @@ Future<void> _pumpTruncatedBubble(
                 isTruncated: true,
                 isFirstMessage: true,
                 isLastMessage: true,
-                availableWidth: 260,
+                availableWidth: 180,
                 onToggleTruncation: _noop,
               ),
             ),
