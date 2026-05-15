@@ -140,7 +140,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       padding: EdgeInsets.fromLTRB(
         tokens.composerTextInsetLeft + 2.0,
         tokens.composerInputTextInsetTop,
-        tokens.composerTextInsetRight,
+        tokens.composerTextInsetRight + 2.0,
         tokens.composerInputTextInsetTopBottom,
       ),
       controlsColor: ChatComposerLayout.cursorColor(context),
