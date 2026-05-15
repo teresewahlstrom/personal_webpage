@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config/app_ui_config.dart';
+import '../services/keyboard_height.dart';
 import 'arrow_key_scroll_wrapper.dart';
 
 typedef AppModalChildBuilder =
@@ -80,7 +81,7 @@ class _AppModalFrameState extends State<_AppModalFrame> {
   @override
   Widget build(BuildContext context) {
     final Size viewportSize = MediaQuery.of(context).size;
-    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final double keyboardHeight = KeyboardHeight.of(context);
     final double availableHeight = viewportSize.height - keyboardHeight;
     return Dialog(
       backgroundColor: widget.backgroundColor,

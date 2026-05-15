@@ -3,6 +3,7 @@ import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
+import 'services/keyboard_height.dart';
 import 'widgets/shell/page_scaffold.dart';
 
 void main() {
@@ -48,44 +49,46 @@ class _T1GridAppState extends State<T1GridApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "T1 grid",
-      themeAnimationDuration: Duration.zero,
-      theme: ThemeData(
-        useMaterial3: false,
-        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
-          Brightness.light,
+    return KeyboardHeightObserver(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "T1 grid",
+        themeAnimationDuration: Duration.zero,
+        theme: ThemeData(
+          useMaterial3: false,
+          scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+            Brightness.light,
+          ),
+          colorScheme: ColorScheme.fromSeed(
+            brightness: Brightness.light,
+            seedColor: AppColorTheme.seedColorFor(Brightness.light),
+          ),
+          fontFamily: "Inter18pt",
         ),
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.light,
-          seedColor: AppColorTheme.seedColorFor(Brightness.light),
-        ),
-        fontFamily: "Inter18pt",
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: false,
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
-          Brightness.dark,
-        ),
-        colorScheme: ColorScheme.fromSeed(
+        darkTheme: ThemeData(
+          useMaterial3: false,
           brightness: Brightness.dark,
-          seedColor: AppColorTheme.seedColorFor(Brightness.dark),
+          scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+            Brightness.dark,
+          ),
+          colorScheme: ColorScheme.fromSeed(
+            brightness: Brightness.dark,
+            seedColor: AppColorTheme.seedColorFor(Brightness.dark),
+          ),
+          fontFamily: "Inter18pt",
         ),
-        fontFamily: "Inter18pt",
-      ),
-      themeMode: _themeMode,
-      home: PageScaffold(
-        showThemeToggle: true,
-        isDarkMode: _isDarkMode,
-        onToggleTheme: _toggleThemeMode,
-        isPageLoading: !_isPageContentReady,
-        showFooter: true,
-        initialChatSkinMode: _isDarkMode
-            ? ChatSkinMode.dark
-            : ChatSkinMode.light,
-        child: LandingPage(onContentReadyChanged: _setPageContentReady),
+        themeMode: _themeMode,
+        home: PageScaffold(
+          showThemeToggle: true,
+          isDarkMode: _isDarkMode,
+          onToggleTheme: _toggleThemeMode,
+          isPageLoading: !_isPageContentReady,
+          showFooter: true,
+          initialChatSkinMode: _isDarkMode
+              ? ChatSkinMode.dark
+              : ChatSkinMode.light,
+          child: LandingPage(onContentReadyChanged: _setPageContentReady),
+        ),
       ),
     );
   }
