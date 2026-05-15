@@ -6,6 +6,53 @@ import 'package:tw_primitives/src/scrollbar/tw_scrollbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart' show AttributionStyleBuilder;
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 
+/// Beginner-friendly controller for [TwReadyTextField].
+///
+/// Exposes plain-text and selection APIs while wrapping the richer attributed
+/// editing controller internally.
+class TwReadyTextController extends ChangeNotifier {
+  TwReadyTextController({String text = ''})
+    : _raw = AttributedTextEditingController(text: AttributedText(text)) {
+    _raw.addListener(_handleRawChange);
+  }
+
+  final AttributedTextEditingController _raw;
+
+  String get text => _raw.text.toPlainText();
+
+  set text(String value) {
+    _raw.text = AttributedText(value);
+  }
+
+  TextSelection get selection => _raw.selection;
+
+  set selection(TextSelection value) {
+    _raw.selection = value;
+  }
+
+  bool get isEmpty => text.isEmpty;
+
+  bool get isBlank => text.trim().isEmpty;
+
+  void clear() {
+    text = '';
+    selection = const TextSelection.collapsed(offset: 0);
+  }
+
+  AttributedTextEditingController get raw => _raw;
+
+  @override
+  void dispose() {
+    _raw.removeListener(_handleRawChange);
+    _raw.dispose();
+    super.dispose();
+  }
+
+  void _handleRawChange() {
+    notifyListeners();
+  }
+}
+
 /// A ready-to-use text input that wires [TwTextField] with [TwScrollArea].
 ///
 /// This widget is intended as the default entry point for callers that want
@@ -20,12 +67,13 @@ class TwReadyTextField extends StatefulWidget {
     this.scrollController,
     this.textAlign,
     this.textStyleBuilder = defaultTextFieldStyleBuilder,
-    this.hintBehavior = HintBehavior.displayHintUntilFocus,
+    this.displayHintUntilTextEntered = false,
     this.hintBuilder,
     this.hintText,
     this.hintTextStyle,
     this.controlsColor,
-    this.caretStyle,
+    this.caretColor,
+    this.caretWidth,
     this.handlesRadius,
     this.selectionColor,
     this.minLines = 1,
@@ -50,19 +98,20 @@ class TwReadyTextField extends StatefulWidget {
     this.scrollPhysics = const ClampingScrollPhysics(),
   });
 
-  final AttributedTextEditingController? controller;
+  final TwReadyTextController? controller;
   final String initialText;
   final ValueChanged<String>? onTextChanged;
   final FocusNode? focusNode;
   final ScrollController? scrollController;
   final TextAlign? textAlign;
   final AttributionStyleBuilder textStyleBuilder;
-  final HintBehavior hintBehavior;
+  final bool displayHintUntilTextEntered;
   final WidgetBuilder? hintBuilder;
   final String? hintText;
   final TextStyle? hintTextStyle;
   final Color? controlsColor;
-  final CaretStyle? caretStyle;
+  final Color? caretColor;
+  final double? caretWidth;
   final double? handlesRadius;
   final Color? selectionColor;
   final int? minLines;
@@ -92,10 +141,10 @@ class TwReadyTextField extends StatefulWidget {
 }
 
 class _TwReadyTextFieldState extends State<TwReadyTextField> {
-  late final AttributedTextEditingController _ownedController;
+  late final TwReadyTextController _ownedController;
   late final ScrollController _ownedScrollController;
 
-  AttributedTextEditingController get _textController =>
+  TwReadyTextController get _textController =>
       widget.controller ?? _ownedController;
 
   bool get _ownsTextController => widget.controller == null;
@@ -108,9 +157,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
   @override
   void initState() {
     super.initState();
-    _ownedController = AttributedTextEditingController(
-      text: AttributedText(widget.initialText),
-    );
+    _ownedController = TwReadyTextController(text: widget.initialText);
     _ownedScrollController = ScrollController();
     _textController.addListener(_notifyTextChanged);
   }
@@ -140,16 +187,20 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
   @override
   Widget build(BuildContext context) {
     final resolvedHintBuilder = _resolveHintBuilder();
+    final hintBehavior = widget.displayHintUntilTextEntered
+        ? HintBehavior.displayHintUntilTextEntered
+        : HintBehavior.displayHintUntilFocus;
+    final resolvedCaretStyle = _resolveCaretStyle();
     final textField = TwTextField(
       scrollController: _scrollController,
       focusNode: widget.focusNode,
-      textController: _textController,
+      textController: _textController.raw,
       textAlign: widget.textAlign,
       textStyleBuilder: widget.textStyleBuilder,
-      hintBehavior: widget.hintBehavior,
+      hintBehavior: hintBehavior,
       hintBuilder: resolvedHintBuilder,
       controlsColor: widget.controlsColor,
-      caretStyle: widget.caretStyle,
+      caretStyle: resolvedCaretStyle,
       handlesRadius: widget.handlesRadius,
       selectionColor: widget.selectionColor,
       minLines: widget.minLines,
@@ -201,6 +252,16 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
   }
 
   void _notifyTextChanged() {
-    widget.onTextChanged?.call(_textController.text.toPlainText());
+    widget.onTextChanged?.call(_textController.text);
+  }
+
+  CaretStyle? _resolveCaretStyle() {
+    if (widget.caretColor == null && widget.caretWidth == null) {
+      return null;
+    }
+    return CaretStyle(
+      color: widget.caretColor ?? widget.controlsColor ?? Colors.black,
+      width: widget.caretWidth ?? 1,
+    );
   }
 }

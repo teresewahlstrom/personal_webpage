@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tw_primitives/text_field_advanced.dart'
-  show AttributedText, AttributedTextEditingController;
+import 'package:tw_primitives/text_field.dart' show TwReadyTextController;
 
 import '../config/config.dart';
 import '../logic/message_diff.dart';
@@ -30,7 +29,7 @@ class SectionCoordinator extends ChangeNotifier {
   final Map<String, ChatMessage> _messagesById = <String, ChatMessage>{};
   final Map<String, bool> _messageTruncationOverrides = <String, bool>{};
 
-  final AttributedTextEditingController controller = AttributedTextEditingController();
+  final TwReadyTextController controller = TwReadyTextController();
   final ScrollController chatScroll = ScrollController();
   final FocusNode inputFocusNode = FocusNode();
   final FocusNode chatFocusNode = FocusNode(debugLabel: 'chat_list');
@@ -191,14 +190,13 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void submitMessage({required void Function(String text) onSend}) {
-    if (controller.text.toPlainText().trim().isEmpty) {
+    if (controller.isBlank) {
       return;
     }
     _deferredRevealMessageId = null;
     _deferredStickToBottom = false;
-    onSend(controller.text.toPlainText());
-    controller.text = AttributedText();
-    controller.selection = const TextSelection.collapsed(offset: 0);
+    onSend(controller.text);
+    controller.clear();
     inputFocusNode.requestFocus();
     _stickChatToBottom();
   }
@@ -214,7 +212,7 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void insertCharacterIntoInput(String character) {
-    final currentText = controller.text.toPlainText();
+    final currentText = controller.text;
     final selection = controller.selection;
     final hasValidSelection =
         selection.isValid &&
@@ -234,7 +232,7 @@ class SectionCoordinator extends ChangeNotifier {
     );
     final caretOffset = normalizedStart + character.length;
 
-    controller.text = AttributedText(nextText);
+    controller.text = nextText;
     controller.selection = TextSelection.collapsed(offset: caretOffset);
   }
 

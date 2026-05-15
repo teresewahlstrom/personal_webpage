@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/text_field.dart' show TwReadyTextField;
-import 'package:tw_primitives/text_field_advanced.dart'
-  show AttributedTextEditingController, CaretStyle, HintBehavior;
+import 'package:tw_primitives/text_field.dart'
+    show TwReadyTextController, TwReadyTextField;
 
 import '../config/config.dart';
 
@@ -19,7 +18,7 @@ class ChatComposerRow extends StatefulWidget {
     this.onMeasuredHeight,
   });
 
-  final AttributedTextEditingController controller;
+  final TwReadyTextController controller;
   final FocusNode inputFocusNode;
   final double minInputHeight;
   final double maxInputHeight;
@@ -133,7 +132,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       interactive: true,
       trackVisibility: false,
       textStyleBuilder: (_) => composerTextStyle,
-      hintBehavior: HintBehavior.displayHintUntilTextEntered,
+        displayHintUntilTextEntered: true,
       hintBuilder: (context) =>
           Text('Ask me anything...', style: composerHintStyle),
       minLines: 1,
@@ -145,10 +144,8 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         tokens.composerInputTextInsetTopBottom,
       ),
       controlsColor: ChatComposerLayout.cursorColor(context),
-      caretStyle: CaretStyle(
-        color: ChatComposerLayout.cursorColor(context),
-        width: tokens.composerCaretWidth,
-      ),
+      caretColor: ChatComposerLayout.cursorColor(context),
+      caretWidth: tokens.composerCaretWidth,
       handlesRadius: tokens.composerHandleRadius,
     );
 
