@@ -18,10 +18,10 @@ Provides styled text input components with platform-specific support (Android, i
 
 ## Usage
 
-Import the package API from `chat_api.dart`:
+Import the text field API from `text_field.dart`:
 
 ```dart
-import 'package:tw_primitives/chat_api.dart';
+import 'package:tw_primitives/text_field.dart';
 ```
 
 This provides a stable API boundary and makes the dependency relationship clearer: `tw_chat` depends on `tw_primitives`, which now owns the extracted text-field code.
