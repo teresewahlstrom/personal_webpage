@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../config/runtime.dart';
 import '../models/message.dart';
 import 'reply_client.dart';
 
@@ -11,7 +12,7 @@ class ConversationController extends ChangeNotifier {
     required ReplyClient replyClient,
     bool ownsReplyClient = false,
     String? sessionId,
-    this.minimumPendingReplyDuration = const Duration(milliseconds: 180),
+    this.runtimeConfig = ChatRuntimeConfig.defaults,
   }) {
     _replyClient = replyClient;
     _ownsReplyClient = ownsReplyClient;
@@ -22,7 +23,7 @@ class ConversationController extends ChangeNotifier {
   }
 
   final String introText;
-  final Duration minimumPendingReplyDuration;
+  final ChatRuntimeConfig runtimeConfig;
   late final ReplyClient _replyClient;
   late final bool _ownsReplyClient;
   late final String _sessionId;
@@ -126,12 +127,13 @@ class ConversationController extends ChangeNotifier {
   }
 
   Future<void> _waitForMinimumPendingReplyDuration(DateTime startedAt) async {
-    if (minimumPendingReplyDuration <= Duration.zero) {
+    final minimumDuration = runtimeConfig.minimumPendingReplyDuration;
+    if (minimumDuration <= Duration.zero) {
       return;
     }
 
     final elapsed = DateTime.now().difference(startedAt);
-    final remaining = minimumPendingReplyDuration - elapsed;
+    final remaining = minimumDuration - elapsed;
     if (remaining > Duration.zero) {
       await Future<void>.delayed(remaining);
     }

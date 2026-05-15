@@ -47,6 +47,40 @@ class ChatLayout {
 
   /// Number of post-frame passes used to force final bottom settle.
   static const forcedBottomPasses = 3;
+
+  static ChatLayoutMetrics resolveMetrics({
+    required Size viewportSize,
+    required EdgeInsets viewPadding,
+    required double keyboardHeight,
+    double minimizedRightInset = 0,
+  }) {
+    final chatMargin = dockHorizontalMargin(
+      viewportSize: viewportSize,
+      viewPadding: viewPadding,
+    );
+    final dockWidth = expandedDockWidth(
+      viewportSize: viewportSize,
+      viewPadding: viewPadding,
+      dockHorizontalMargin: chatMargin,
+    );
+    final dockHeight = maxDockHeight(
+      viewportSize: viewportSize,
+      keyboardHeight: keyboardHeight,
+      viewPadding: viewPadding,
+      minimumTopInset: chatMargin,
+    );
+    return ChatLayoutMetrics(
+      dockHorizontalMargin: chatMargin,
+      expandedDockWidth: dockWidth,
+      maxDockHeight: dockHeight,
+      expandedRightInset: viewPadding.right + chatMargin,
+      minimizedRightInset:
+          viewPadding.right +
+          (chatMargin > minimizedRightInset ? chatMargin : minimizedRightInset),
+      keyboardHeight: keyboardHeight,
+    );
+  }
+
   static Color shellFill(BuildContext context) {
     return ChatSkin.dataOf(context).colors.shellBackgroundStart;
   }
@@ -206,4 +240,22 @@ class ChatLayout {
   static double _lerp(double a, double b, double t) {
     return lerpDouble(a, b, t) ?? b;
   }
+}
+
+class ChatLayoutMetrics {
+  const ChatLayoutMetrics({
+    required this.dockHorizontalMargin,
+    required this.expandedDockWidth,
+    required this.maxDockHeight,
+    required this.expandedRightInset,
+    required this.minimizedRightInset,
+    required this.keyboardHeight,
+  });
+
+  final double dockHorizontalMargin;
+  final double expandedDockWidth;
+  final double maxDockHeight;
+  final double expandedRightInset;
+  final double minimizedRightInset;
+  final double keyboardHeight;
 }

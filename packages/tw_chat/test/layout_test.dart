@@ -193,4 +193,19 @@ void main() {
 
     expect(height, 756);
   });
+
+  test('layout metrics centralize dock width height and right insets', () {
+    final metrics = ChatLayout.resolveMetrics(
+      viewportSize: const Size(1200, 1000),
+      viewPadding: const EdgeInsets.only(right: 10),
+      keyboardHeight: 24,
+      minimizedRightInset: 80,
+    );
+
+    expect(metrics.expandedDockWidth, closeTo(560, 0.1));
+    expect(metrics.maxDockHeight, closeTo(560, 0.1));
+    expect(metrics.expandedRightInset, greaterThan(10));
+    expect(metrics.minimizedRightInset, 90);
+    expect(metrics.keyboardHeight, 24);
+  });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:tw_chat/src/config/runtime.dart';
 import 'package:tw_chat/src/controllers/conversation_controller.dart';
 import 'package:tw_chat/src/controllers/reply_client.dart';
 
@@ -8,7 +9,9 @@ void main() {
     final controller = ConversationController(
       introText: 'intro',
       replyClient: const FixedReplyClient(replyText: 'fixed'),
-      minimumPendingReplyDuration: Duration.zero,
+      runtimeConfig: const ChatRuntimeConfig(
+        minimumPendingReplyDuration: Duration.zero,
+      ),
     );
 
     expect(controller.messages.length, 1);
@@ -25,7 +28,9 @@ void main() {
         replyText: 'fixed',
         replyDelay: Duration(milliseconds: 5),
       ),
-      minimumPendingReplyDuration: Duration.zero,
+      runtimeConfig: const ChatRuntimeConfig(
+        minimumPendingReplyDuration: Duration.zero,
+      ),
     );
 
     controller.sendMessage('hello');
@@ -69,7 +74,9 @@ void main() {
       final controller = ConversationController(
         introText: 'intro',
         replyClient: _ThrowingReplyClient(),
-        minimumPendingReplyDuration: Duration.zero,
+        runtimeConfig: const ChatRuntimeConfig(
+          minimumPendingReplyDuration: Duration.zero,
+        ),
       );
 
       controller.sendMessage('hello');
@@ -90,7 +97,9 @@ void main() {
     final controller = ConversationController(
       introText: 'intro',
       replyClient: const FixedReplyClient(replyText: 'fixed'),
-      minimumPendingReplyDuration: const Duration(milliseconds: 40),
+      runtimeConfig: const ChatRuntimeConfig(
+        minimumPendingReplyDuration: Duration(milliseconds: 40),
+      ),
     );
 
     controller.sendMessage('hello');

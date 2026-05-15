@@ -89,38 +89,21 @@ class _ChatDockState extends State<ChatDock> {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final mediaQuery = MediaQuery.of(context);
-    final viewportSize = mediaQuery.size;
-
-    final chatMargin = ChatLayout.dockHorizontalMargin(
-      viewportSize: viewportSize,
+    final layoutMetrics = ChatLayout.resolveMetrics(
+      viewportSize: mediaQuery.size,
       viewPadding: mediaQuery.viewPadding,
+      keyboardHeight: widget.keyboardHeight,
+      minimizedRightInset: widget.minimizedRightInset,
     );
-    final floatingChatWidth = ChatLayout.expandedDockWidth(
-      viewportSize: viewportSize,
-      viewPadding: mediaQuery.viewPadding,
-      dockHorizontalMargin: chatMargin,
-    );
-    final keyboardHeight = widget.keyboardHeight;
-    final availableChatHeight = ChatLayout.maxDockHeight(
-      viewportSize: viewportSize,
-      keyboardHeight: keyboardHeight,
-      viewPadding: mediaQuery.viewPadding,
-      minimumTopInset: chatMargin,
-    );
-
-    final baseRightInset = mediaQuery.viewPadding.right + chatMargin;
-    final minimizedRightInset =
-        mediaQuery.viewPadding.right +
-        (chatMargin > widget.minimizedRightInset
-            ? chatMargin
-            : widget.minimizedRightInset);
 
     return ChatSkinScope(
       mode: widget.skinMode,
       child: Positioned(
-        right: _isExpanded ? baseRightInset : minimizedRightInset,
+        right: _isExpanded
+            ? layoutMetrics.expandedRightInset
+            : layoutMetrics.minimizedRightInset,
         bottom:
-            keyboardHeight +
+            layoutMetrics.keyboardHeight +
             (_isExpanded ? 0 : widget.minimizedBottomOffset),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -133,7 +116,7 @@ class _ChatDockState extends State<ChatDock> {
                 child: Offstage(
                   offstage: !_isExpanded,
                   child: SizedBox(
-                    width: floatingChatWidth,
+                    width: layoutMetrics.expandedDockWidth,
                     child: FloatingChatWindow(
                       messages: widget.messages,
                       onSend: widget.onSend,
@@ -142,7 +125,7 @@ class _ChatDockState extends State<ChatDock> {
                           widget.isChatKeyboardScrollTarget,
                       onSetChatKeyboardScrollTarget:
                           widget.onSetChatKeyboardScrollTarget,
-                      maxHeight: availableChatHeight,
+                      maxHeight: layoutMetrics.maxDockHeight,
                       isVisible: _isExpanded,
                       onMinimize: _minimizeChat,
                       tokens: tokens,

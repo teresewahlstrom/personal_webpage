@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart';
 import 'package:tw_chat/content.dart';
 
-import '../../config/app_ui_config.dart';
-import '../../services/http_twin_reply_client.dart';
+import '../../services/chat_reply_client_factory.dart';
 import '../../services/keyboard_height.dart';
 import '_chat_keyboard_scroll_target.dart';
 import '_floating_controls.dart';
@@ -28,11 +27,9 @@ class _ChatOverlayState extends State<ChatOverlay> {
   @override
   void initState() {
     super.initState();
-    final ReplyClient replyClient = AppRuntimeConfig.useChatBackend
-        ? HttpReplyClient(baseUri: Uri.parse(widget.twinBackendUrl))
-        : const FixedReplyClient(
-            replyText: AppRuntimeConfig.backendDisabledReply,
-          );
+    final ReplyClient replyClient = ChatReplyClientFactory.create(
+      backendUrl: widget.twinBackendUrl,
+    );
 
     _conversationController = ConversationController(
       introText: prototypeIntroText,
