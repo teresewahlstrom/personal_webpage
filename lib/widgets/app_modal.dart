@@ -80,6 +80,8 @@ class _AppModalFrameState extends State<_AppModalFrame> {
   @override
   Widget build(BuildContext context) {
     final Size viewportSize = MediaQuery.of(context).size;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final double availableHeight = viewportSize.height - keyboardHeight;
     return Dialog(
       backgroundColor: widget.backgroundColor,
       insetPadding: widget.insetPadding,
@@ -87,7 +89,7 @@ class _AppModalFrameState extends State<_AppModalFrame> {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: widget.maxWidth,
-          maxHeight: viewportSize.height * widget.maxHeightFactor,
+          maxHeight: availableHeight * widget.maxHeightFactor,
         ),
         child: Column(
           children: <Widget>[

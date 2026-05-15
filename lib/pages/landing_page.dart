@@ -22,6 +22,8 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   late Future<SubjectKeywordData> _subjectFuture;
   bool? _lastReportedContentReady;
+  double _cachedCloudHeightRatio = 0.80;
+  double _lastCloudHeightRatioWidth = double.infinity;
 
   @override
   void initState() {
@@ -58,6 +60,16 @@ class _LandingPageState extends State<LandingPage> {
     setState(() {
       _subjectFuture = SubjectRegistry.defaultSubject();
     });
+  }
+
+  double _getCloudHeightRatio(double viewportWidth) {
+    // Only recalculate ratio when viewport width crosses the 900px breakpoint
+    // This prevents unnecessary recalculations from scrollbar toggling or transient changes
+    if ((viewportWidth - _lastCloudHeightRatioWidth).abs() > 50.0) {
+      _lastCloudHeightRatioWidth = viewportWidth;
+      _cachedCloudHeightRatio = viewportWidth >= 900 ? 0.52 : 0.80;
+    }
+    return _cachedCloudHeightRatio;
   }
 
   void _openNewsletterModal() {
@@ -133,7 +145,7 @@ class _LandingPageState extends State<LandingPage> {
             brightness,
           );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
-          final double cloudHeightRatio = viewport.width >= 900 ? 0.52 : 0.80;
+          final double cloudHeightRatio = _getCloudHeightRatio(viewport.width);
 
           content = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

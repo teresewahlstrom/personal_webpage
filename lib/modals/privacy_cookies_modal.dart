@@ -11,11 +11,14 @@ class PrivacyCookiesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle h3Style = ModalTextStyles.h3(context);
     final TextStyle linkStyle = ModalTextStyles.link(context);
-    return SingleChildScrollView(
-      primary: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: SingleChildScrollView(
+        primary: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
           Text("Controller: Terese Wahlstrom (EU resident)"),
           const SizedBox(height: 16),
           Text("Cookies", style: h3Style),
@@ -96,8 +99,7 @@ class PrivacyCookiesContent extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
+      ),    ),    );
   }
 }
 

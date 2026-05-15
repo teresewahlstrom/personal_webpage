@@ -264,7 +264,7 @@ class _ChatSectionState extends State<ChatSection> {
                             shape: const CircleBorder(),
                             side: BorderSide(
                               color: ChatComposerLayout.borderColor(context),
-                              width: 0.5,
+                              width: 0.75,
                             ),
                             elevation: tokens.jumpToLatestButtonElevation,
                             padding: tokens.jumpToLatestButtonPadding,
