@@ -350,6 +350,35 @@ class _TextScrollViewState extends State<TextScrollView>
   }
 
   @override
+  Rect getViewportCaretRectAtPosition(TextPosition position) {
+    final viewportBox = _viewportRenderBox;
+    final textBox = _textContentRenderBox;
+    if (viewportBox == null || textBox == null) {
+      return Rect.fromLTWH(0, 0, 0, _textLayout.estimatedLineHeight);
+    }
+
+    final textLength = widget.textEditingController.text.length;
+    final clampedOffset = position.offset.clamp(0, textLength);
+    final clampedPosition = TextPosition(
+      offset: clampedOffset,
+      affinity: position.affinity,
+    );
+    final caretOffsetInTextLayout = _textLayout.getOffsetForCaret(clampedPosition);
+    final caretHeight =
+        _textLayout.getHeightForCaret(clampedPosition) ?? _textLayout.getLineHeightAtPosition(clampedPosition);
+    final textOffsetInViewport = textBox.localToGlobal(Offset.zero, ancestor: viewportBox);
+
+    // The caret is a line marker, so we expose a zero-width rect positioned at
+    // the current insertion point.
+    return Rect.fromLTWH(
+      caretOffsetInTextLayout.dx + textOffsetInViewport.dx,
+      caretOffsetInTextLayout.dy + textOffsetInViewport.dy,
+      0,
+      caretHeight,
+    );
+  }
+
+  @override
   double getHorizontalOffsetForStartOfCharacterLeftOfViewport() {
     // Note: we look for an offset that is slightly further down than zero
     // to avoid any issues with the layout system differentiating between lines.
@@ -940,15 +969,10 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    final characterIndex = _textController.selection.extentOffset >= _textController.text.length
-        ? _textController.text.length - 1
-        : _textController.selection.extentOffset;
-
-    final extentCharacterRectInViewportSpace =
-        _delegate!.getViewportCharacterRectAtPosition(TextPosition(offset: characterIndex));
-
-    final extentCharacterRectInContentSpace = _toContentSpace(extentCharacterRectInViewportSpace);
-    _ensureRectIsVisible(_expandRectForCaretVisibility(extentCharacterRectInContentSpace));
+    final extentCaretRectInViewportSpace =
+      _delegate!.getViewportCaretRectAtPosition(_textController.selection.extent);
+    final extentCaretRectInContentSpace = _toContentSpace(extentCaretRectInViewportSpace);
+    _ensureRectIsVisible(_expandRectForCaretVisibility(extentCaretRectInContentSpace));
   }
 
   Rect _toContentSpace(Rect rectInViewportSpace) {
@@ -1079,6 +1103,10 @@ abstract class TextScrollControllerDelegate {
   /// The viewport coordinates implicitly include any padding between the
   /// viewport edges and the text, as well as the current scroll offset.
   Rect getViewportCharacterRectAtPosition(TextPosition position);
+
+  /// Returns the caret rectangle (in viewport coordinates) for the given text
+  /// [position].
+  Rect getViewportCaretRectAtPosition(TextPosition position);
 }
 
 enum _AutoScrollDirection {
