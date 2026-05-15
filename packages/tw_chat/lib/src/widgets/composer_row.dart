@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/text_field.dart';
+import 'package:tw_primitives/text_field.dart' show TwReadyTextField;
+import 'package:tw_primitives/text_field_advanced.dart'
+  show AttributedTextEditingController, CaretStyle, HintBehavior;
 
 import '../config/config.dart';
 
@@ -35,12 +37,10 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   final GlobalKey _inputShellKey = GlobalKey();
   bool _heightSyncScheduled = false;
   double _actionHeight = 0.0;
-  late final ScrollController _composerScrollController;
 
   @override
   void initState() {
     super.initState();
-    _composerScrollController = ScrollController();
     widget.controller.addListener(_scheduleHeightSync);
     _scheduleHeightSync();
   }
@@ -61,7 +61,6 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
   @override
   void dispose() {
     widget.controller.removeListener(_scheduleHeightSync);
-    _composerScrollController.dispose();
     super.dispose();
   }
 
@@ -119,8 +118,9 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           widget.maxInputHeight,
         );
 
-    final inputField = TwScrollArea(
-      controller: _composerScrollController,
+    final inputField = TwReadyTextField(
+      controller: widget.controller,
+      focusNode: widget.inputFocusNode,
       thumbColor: ChatScrollbar.thumbColor(context),
       thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
       trackColor: ChatScrollbar.trackColor(context),
@@ -132,29 +132,24 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       thumbVisibility: true,
       interactive: true,
       trackVisibility: false,
-      child: TwTextField(
-        scrollController: _composerScrollController,
-        focusNode: widget.inputFocusNode,
-        textController: widget.controller,
-        textStyleBuilder: (_) => composerTextStyle,
-        hintBehavior: HintBehavior.displayHintUntilTextEntered,
-        hintBuilder: (context) =>
-            Text('Ask me anything...', style: composerHintStyle),
-        minLines: 1,
-        maxLines: null,
-        padding: EdgeInsets.fromLTRB(
-          tokens.composerTextInsetLeft,
-          tokens.composerInputTextInsetTop,
-          tokens.composerTextInsetRight,
-          tokens.composerInputTextInsetTopBottom,
-        ),
-        controlsColor: ChatComposerLayout.cursorColor(context),
-        caretStyle: CaretStyle(
-          color: ChatComposerLayout.cursorColor(context),
-          width: tokens.composerCaretWidth,
-        ),
-        handlesRadius: tokens.composerHandleRadius,
+      textStyleBuilder: (_) => composerTextStyle,
+      hintBehavior: HintBehavior.displayHintUntilTextEntered,
+      hintBuilder: (context) =>
+          Text('Ask me anything...', style: composerHintStyle),
+      minLines: 1,
+      maxLines: null,
+      padding: EdgeInsets.fromLTRB(
+        tokens.composerTextInsetLeft,
+        tokens.composerInputTextInsetTop,
+        tokens.composerTextInsetRight,
+        tokens.composerInputTextInsetTopBottom,
       ),
+      controlsColor: ChatComposerLayout.cursorColor(context),
+      caretStyle: CaretStyle(
+        color: ChatComposerLayout.cursorColor(context),
+        width: tokens.composerCaretWidth,
+      ),
+      handlesRadius: tokens.composerHandleRadius,
     );
 
     return ConstrainedBox(

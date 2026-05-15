@@ -9,19 +9,24 @@ Internal primitives package for the personal_webpage Flutter app. Contains reusa
 Provides styled text input components with platform-specific support (Android, iOS, desktop). This subtree contains the extracted text-field implementation used by `tw_chat`, and future unrelated code should live beside it as a separate sibling subtree.
 
 **Public API:**
-- `TwTextField` — platform-adaptive text field with attributed text support
-- `AttributedTextEditingController` — manages styled text with metadata
-- `HintBehavior` — controls hint text display timing
-- `CaretStyle` — caret appearance configuration
-- `BlinkTimingMode` — cursor blink behavior
-- And related infrastructure components
+- `TwReadyTextField` — ready-to-use input that includes scrolling + scrollbar
+- `text_field_advanced.dart` — low-level and infrastructure APIs for advanced use
 
 ## Usage
 
-Import the text field API from `text_field.dart`:
+Import the beginner API from `text_field.dart`:
 
 ```dart
 import 'package:tw_primitives/text_field.dart';
+```
+
+For most screens, start with `TwReadyTextField` so you do not need to manually
+compose `TwTextField` with a scrollbar.
+
+Import advanced APIs only when needed:
+
+```dart
+import 'package:tw_primitives/text_field_advanced.dart';
 ```
 
 This provides a stable API boundary and makes the dependency relationship clearer: `tw_chat` depends on `tw_primitives`, which now owns the extracted text-field code.
