@@ -3,9 +3,6 @@ import 'package:tw_primitives/scrollbar.dart';
 
 import 'skin.dart';
 
-export 'package:tw_primitives/scrollbar.dart'
-  show TwNoScrollbarBehavior, TwScrollArea, TwScrollbar, TwScrollbarTrack;
-
 class ChatScrollbar {
   const ChatScrollbar._();
 

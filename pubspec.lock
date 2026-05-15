@@ -644,7 +644,7 @@ packages:
     source: path
     version: "0.1.0"
   tw_primitives:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/tw_primitives"
       relative: true

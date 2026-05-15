@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import 'embed.dart';
 
@@ -14,10 +15,12 @@ class NewsletterModalContent extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
           final Widget centeredEmbed = Center(child: buildNewsletterEmbed());
 
-          return SingleChildScrollView(
+          return TwScrollArea.scrollView(
+            thumbVisibility: false,
             primary: true,
-            child: SingleChildScrollView(
+            child: TwScrollArea.scrollView(
               scrollDirection: Axis.horizontal,
+              thumbVisibility: false,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: constraints.maxWidth),
                 child: centeredEmbed,

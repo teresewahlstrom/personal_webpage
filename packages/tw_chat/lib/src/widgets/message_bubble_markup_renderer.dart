@@ -432,9 +432,11 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     TextSpan text, {
     bool softWrap = true,
     bool selectable = true,
+    TextAlign textAlign = TextAlign.justify,
   }) {
     return RichText(
       text: text,
+      textAlign: textAlign,
       softWrap: softWrap,
       selectionRegistrar: selectable
           ? SelectionContainer.maybeOf(context)

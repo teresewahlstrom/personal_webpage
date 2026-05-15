@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import '../models/message.dart';
 import '../config/config.dart';
@@ -88,7 +89,7 @@ class ChatMessageListArea extends StatelessWidget {
         },
         onPointerUp: (_) => onChatPointerInteractionEnd(),
         onPointerCancel: (_) => onChatPointerInteractionEnd(),
-        child: TwScrollArea(
+        child: TwScrollArea.scrollView(
           controller: chatScroll,
           thumbColor: ChatScrollbar.thumbColor(context),
           thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
@@ -138,40 +139,31 @@ class ChatMessageListArea extends StatelessWidget {
               key: chatSelectionAreaKey,
               onSelectionChanged: onChatSelectionChanged,
               magnifierConfiguration: TextMagnifierConfiguration.disabled,
-              child: SingleChildScrollView(
-                controller: chatScroll,
-                physics: const ClampingScrollPhysics(),
-                child: Padding(
-                  padding: tokens.bubbleViewportPadding.copyWith(
-                    top: 0,
-                    bottom: 0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: tokens.chatListTopShadowHeight + 15),
-                      for (final entry in messages.indexed)
-                        ChatMessageBubble(
-                          key: messageBubbleKeys[entry.$2.id],
-                          availableWidth: availableWidth,
-                          text: entry.$2.text,
-                          selectionListenerNotifier:
-                              selectionNotifierForMessage(entry.$2.id),
-                          isUser: entry.$2.role == ChatRole.user,
-                          isTypingIndicator:
-                              entry.$2.role == ChatRole.bot &&
-                              entry.$2.isPending,
-                          isTruncated: isMessageTruncated(entry.$2.id),
-                          isFirstMessage: entry.$1 == 0,
-                          isLastMessage: entry.$1 == messages.length - 1,
-                          onToggleTruncation: () =>
-                              onToggleTruncation(entry.$2.id),
-                        ),
-                      SizedBox(
-                        height: contentBottomInset + tokens.chatListTrailingGap,
+              child: Padding(
+                padding: tokens.bubbleViewportPadding.copyWith(top: 0, bottom: 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: tokens.chatListTopShadowHeight + 15),
+                    for (final entry in messages.indexed)
+                      ChatMessageBubble(
+                        key: messageBubbleKeys[entry.$2.id],
+                        availableWidth: availableWidth,
+                        text: entry.$2.text,
+                        selectionListenerNotifier:
+                            selectionNotifierForMessage(entry.$2.id),
+                        isUser: entry.$2.role == ChatRole.user,
+                        isTypingIndicator:
+                            entry.$2.role == ChatRole.bot && entry.$2.isPending,
+                        isTruncated: isMessageTruncated(entry.$2.id),
+                        isFirstMessage: entry.$1 == 0,
+                        isLastMessage: entry.$1 == messages.length - 1,
+                        onToggleTruncation: () => onToggleTruncation(entry.$2.id),
                       ),
-                    ],
-                  ),
+                    SizedBox(
+                      height: contentBottomInset + tokens.chatListTrailingGap,
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -14,6 +14,8 @@ dependencies:
   url_launcher: ^6.3.1
   tw_chat:
     path: packages/tw_chat
+  tw_primitives:
+    path: packages/tw_primitives
   tw_keywords:
     path: packages/tw_keywords
   flutter_svg: ^2.2.0
