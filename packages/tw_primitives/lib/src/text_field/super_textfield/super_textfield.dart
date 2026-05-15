@@ -43,21 +43,21 @@ export "super_text_field_keys.dart";
 
 /// Text field that supports styled text.
 ///
-/// [SuperTextField] adapts to the expectations of the current platform, or
+/// [TwTextField] adapts to the expectations of the current platform, or
 /// conforms to a specified [configuration].
 ///
 ///  - desktop uses a blinking cursor and mouse gestures
 ///  - Android uses draggable handles in the Android style
 ///  - iOS uses draggable handles in the iOS style
 ///
-/// [SuperTextField] is built on top of platform-specific text field implementations,
-/// which may offer additional customization beyond that of [SuperTextField]:
+/// [TwTextField] is built on top of platform-specific text field implementations,
+/// which may offer additional customization beyond that of [TwTextField]:
 ///
-///  - [SuperDesktopTextField], configured for a typical desktop experience.
-///  - [SuperAndroidTextField], configured for a typical Android experience.
-///  - [SuperIOSTextField], configured for a typical iOS experience.
-class SuperTextField extends StatefulWidget {
-  const SuperTextField({
+///  - [TwDesktopTextField], configured for a typical desktop experience.
+///  - [TwAndroidTextField], configured for a typical Android experience.
+///  - [TwIOSTextField], configured for a typical iOS experience.
+class TwTextField extends StatefulWidget {
+  const TwTextField({
     Key? key,
     this.focusNode,
     this.tapRegionGroupId,
@@ -97,7 +97,7 @@ class SuperTextField extends StatefulWidget {
 
   /// The platform-style configuration for this text field, or `null` to
   /// automatically configure for the current platform.
-  final SuperTextFieldPlatformConfiguration? configuration;
+  final TwTextFieldPlatformConfiguration? configuration;
 
   /// Controller that holds the current text and selection for this field,
   /// similar to a standard Flutter `TextEditingController`.
@@ -193,7 +193,7 @@ class SuperTextField extends StatefulWidget {
   /// provided and used for all text field height calculations.
   final double? lineHeight;
 
-  /// The [SuperTextField] input source, e.g., keyboard or Input Method Engine.
+  /// The [TwTextField] input source, e.g., keyboard or Input Method Engine.
   ///
   /// Only used on desktop. On mobile platforms, only [TextInputSource.ime] is available.
   final TextInputSource? inputSource;
@@ -208,7 +208,7 @@ class SuperTextField extends StatefulWidget {
   ///
   /// The IME reports selectors as unique `String`s, therefore selector handlers are
   /// defined as a mapping from selector names to handler functions.
-  final Map<String, SuperTextFieldSelectorHandler>? selectorHandlers;
+  final Map<String, TwTextFieldSelectorHandler>? selectorHandlers;
 
   /// {@template super_text_field_tap_handlers}
   /// Optional list of handlers that respond to taps on content, e.g., opening
@@ -217,7 +217,7 @@ class SuperTextField extends StatefulWidget {
   /// If a handler returns [TapHandlingInstruction.halt], no subsequent handlers
   /// nor the default tap behavior will be executed.
   /// {@endtemplate}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// Padding placed around the text content of this text field, but within the
   /// scrollable viewport.
@@ -244,14 +244,14 @@ class SuperTextField extends StatefulWidget {
   final TextInputConfiguration? imeConfiguration;
 
   /// Whether to show an underline beneath the text in the composing region, or `null`
-  /// to let [SuperTextField] decide when to show the underline.
+  /// to let [TwTextField] decide when to show the underline.
   final bool? showComposingUnderline;
 
   @override
-  State<SuperTextField> createState() => SuperTextFieldState();
+  State<TwTextField> createState() => TwTextFieldState();
 }
 
-class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner {
+class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
   final _platformFieldKey = GlobalKey();
   late FocusNode _focusNode;
   late ImeAttributedTextEditingController _controller;
@@ -270,7 +270,7 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
   }
 
   @override
-  void didUpdateWidget(SuperTextField oldWidget) {
+  void didUpdateWidget(TwTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
@@ -311,13 +311,13 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
   @override
   DeltaTextInputClient get imeClient {
     switch (_configuration) {
-      case SuperTextFieldPlatformConfiguration.desktop:
+      case TwTextFieldPlatformConfiguration.desktop:
         // ignore: invalid_use_of_visible_for_testing_member
-        return (_platformFieldKey.currentState as SuperDesktopTextFieldState).imeClient;
-      case SuperTextFieldPlatformConfiguration.android:
-        return (_platformFieldKey.currentState as SuperAndroidTextFieldState).imeClient;
-      case SuperTextFieldPlatformConfiguration.iOS:
-        return (_platformFieldKey.currentState as SuperIOSTextFieldState).imeClient;
+        return (_platformFieldKey.currentState as TwDesktopTextFieldState).imeClient;
+      case TwTextFieldPlatformConfiguration.android:
+        return (_platformFieldKey.currentState as TwAndroidTextFieldState).imeClient;
+      case TwTextFieldPlatformConfiguration.iOS:
+        return (_platformFieldKey.currentState as TwIOSTextFieldState).imeClient;
     }
   }
 
@@ -326,21 +326,21 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
   TextInputAction get _textInputAction =>
       widget.textInputAction ?? (_isMultiline ? TextInputAction.newline : TextInputAction.done);
 
-  SuperTextFieldPlatformConfiguration get _configuration {
+  TwTextFieldPlatformConfiguration get _configuration {
     if (widget.configuration != null) {
       return widget.configuration!;
     }
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return SuperTextFieldPlatformConfiguration.android;
+        return TwTextFieldPlatformConfiguration.android;
       case TargetPlatform.iOS:
-        return SuperTextFieldPlatformConfiguration.iOS;
+        return TwTextFieldPlatformConfiguration.iOS;
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
-        return SuperTextFieldPlatformConfiguration.desktop;
+        return TwTextFieldPlatformConfiguration.desktop;
     }
   }
 
@@ -366,9 +366,9 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
 
   /// Shortcuts that should be ignored on web.
   ///
-  /// Without this we can't handle space and arrow keys inside [SuperTextField].
+  /// Without this we can't handle space and arrow keys inside [TwTextField].
   ///
-  /// For exemple, when [SuperTextField] is inside a [ScrollView],
+  /// For exemple, when [TwTextField] is inside a [ScrollView],
   /// pressing [LogicalKeyboardKey.space] scrolls the scrollview.
   final Map<LogicalKeySet, Intent> _scrollShortcutOverrides = kIsWeb
       ? {
@@ -383,8 +383,8 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
   @override
   Widget build(BuildContext context) {
     switch (_configuration) {
-      case SuperTextFieldPlatformConfiguration.desktop:
-        return SuperDesktopTextField(
+      case TwTextFieldPlatformConfiguration.desktop:
+        return TwDesktopTextField(
           key: _platformFieldKey,
           focusNode: _focusNode,
           tapRegionGroupId: widget.tapRegionGroupId,
@@ -415,10 +415,10 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
           showComposingUnderline: widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
         );
-      case SuperTextFieldPlatformConfiguration.android:
+      case TwTextFieldPlatformConfiguration.android:
         return Shortcuts(
           shortcuts: _scrollShortcutOverrides,
-          child: SuperAndroidTextField(
+          child: TwAndroidTextField(
             key: _platformFieldKey,
             focusNode: _focusNode,
             tapRegionGroupId: widget.tapRegionGroupId,
@@ -447,10 +447,10 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
             blinkTimingMode: widget.blinkTimingMode,
           ),
         );
-      case SuperTextFieldPlatformConfiguration.iOS:
+      case TwTextFieldPlatformConfiguration.iOS:
         return Shortcuts(
           shortcuts: _scrollShortcutOverrides,
-          child: SuperIOSTextField(
+          child: TwIOSTextField(
             key: _platformFieldKey,
             focusNode: _focusNode,
             tapRegionGroupId: widget.tapRegionGroupId,
@@ -482,13 +482,13 @@ class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner
   }
 }
 
-/// Configures a [SuperTextField] for the given platform.
+/// Configures a [TwTextField] for the given platform.
 ///
 /// Desktop uses physical keyboard handlers, while mobile uses the IME.
 ///
 /// Desktop uses a blinking caret, while mobile uses a draggable caret
 /// and selection handles, styled per platform.
-enum SuperTextFieldPlatformConfiguration {
+enum TwTextFieldPlatformConfiguration {
   desktop,
   android,
   iOS,

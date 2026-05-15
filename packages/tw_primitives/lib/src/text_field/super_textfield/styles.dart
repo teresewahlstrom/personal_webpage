@@ -9,7 +9,7 @@ const defaultAndroidControlsColor = Color(0xFFA4C639);
 
 const defaultIOSControlsColor = Color(0xFF2196F3);
 
-/// Default [TextStyles] for [SuperTextField].
+/// Default [TextStyles] for [TwTextField].
 TextStyle defaultTextFieldStyleBuilder(Set<Attribution> attributions) {
   TextStyle newStyle = const TextStyle(
     fontSize: 16,

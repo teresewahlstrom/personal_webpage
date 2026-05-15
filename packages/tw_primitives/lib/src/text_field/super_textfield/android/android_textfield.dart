@@ -29,8 +29,8 @@ export '_caret.dart';
 
 final _log = androidTextFieldLog;
 
-class SuperAndroidTextField extends StatefulWidget {
-  const SuperAndroidTextField({
+class TwAndroidTextField extends StatefulWidget {
+  const TwAndroidTextField({
     Key? key,
     this.focusNode,
     this.tapRegionGroupId,
@@ -162,7 +162,7 @@ class SuperAndroidTextField extends StatefulWidget {
   final bool showComposingUnderline;
 
   /// {@macro super_text_field_tap_handlers}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// Whether to paint debug guides.
   final bool showDebugPaint;
@@ -186,10 +186,10 @@ class SuperAndroidTextField extends StatefulWidget {
   final ScrollController? scrollController;
 
   @override
-  State createState() => SuperAndroidTextFieldState();
+  State createState() => TwAndroidTextFieldState();
 }
 
-class SuperAndroidTextFieldState extends State<SuperAndroidTextField>
+class TwAndroidTextFieldState extends State<TwAndroidTextField>
     with TickerProviderStateMixin, WidgetsBindingObserver
     implements ProseTextBlock, ImeInputOwner {
   static const Duration _autoScrollAnimationDuration = Duration(
@@ -286,7 +286,7 @@ class SuperAndroidTextFieldState extends State<SuperAndroidTextField>
   }
 
   @override
-  void didUpdateWidget(SuperAndroidTextField oldWidget) {
+  void didUpdateWidget(TwAndroidTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
@@ -604,7 +604,7 @@ class SuperAndroidTextFieldState extends State<SuperAndroidTextField>
     return KeyEventResult.handled;
   }
 
-  /// Scrolls the ancestor [Scrollable], if any, so [SuperTextField]
+  /// Scrolls the ancestor [Scrollable], if any, so [TwTextField]
   /// is visible on the viewport when it's focused
   void _autoScrollToKeepTextFieldVisible() {
     // If we are not inside a [Scrollable] we don't autoscroll

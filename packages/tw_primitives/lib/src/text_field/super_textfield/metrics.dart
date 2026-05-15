@@ -1,5 +1,5 @@
 /// Minimum distance that should be maintained between the bottom of the caret
-/// and the software keyboard when editing a `SuperTextField`.
+/// and the software keyboard when editing a `TwTextField`.
 const gapBetweenCaretAndKeyboard = 30;
 
 /// Gap between a floating toolbar and the content related to the toolbar.

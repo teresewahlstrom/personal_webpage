@@ -33,19 +33,19 @@ final _log = textFieldLog;
 
 /// Highly configurable text field intended for web and desktop uses.
 ///
-/// [SuperDesktopTextField] provides two advantages over a typical [TextField].
-/// First, [SuperDesktopTextField] is based on [AttributedText], which is a far
+/// [TwDesktopTextField] provides two advantages over a typical [TextField].
+/// First, [TwDesktopTextField] is based on [AttributedText], which is a far
 /// more useful foundation for styled text display than [TextSpan]. Second,
-/// [SuperDesktopTextField] provides deeper control over various visual properties
+/// [TwDesktopTextField] provides deeper control over various visual properties
 /// including selection painting, caret painting, hint display, and keyboard
 /// interaction.
 ///
-/// If [SuperDesktopTextField] does not provide the desired level of configuration,
-/// look at its implementation. Unlike Flutter's [TextField], [SuperDesktopTextField]
+/// If [TwDesktopTextField] does not provide the desired level of configuration,
+/// look at its implementation. Unlike Flutter's [TextField], [TwDesktopTextField]
 /// is composed of a few widgets that you can recompose to create your own
 /// flavor of a text field.
-class SuperDesktopTextField extends StatefulWidget {
-  const SuperDesktopTextField({
+class TwDesktopTextField extends StatefulWidget {
+  const TwDesktopTextField({
     Key? key,
     this.focusNode,
     this.tapRegionGroupId,
@@ -131,7 +131,7 @@ class SuperDesktopTextField extends StatefulWidget {
   @Deprecated('Use tapHandlers instead')
   final RightClickListener? onRightClick;
 
-  /// The [SuperDesktopTextField] input source, e.g., keyboard or Input Method Engine.
+  /// The [TwDesktopTextField] input source, e.g., keyboard or Input Method Engine.
   final TextInputSource inputSource;
 
   /// Priority list of handlers that process all physical keyboard
@@ -146,10 +146,10 @@ class SuperDesktopTextField extends StatefulWidget {
   ///
   /// The IME reports selectors as unique `String`s, therefore selector handlers are
   /// defined as a mapping from selector names to handler functions.
-  final Map<String, SuperTextFieldSelectorHandler>? selectorHandlers;
+  final Map<String, TwTextFieldSelectorHandler>? selectorHandlers;
 
   /// {@macro super_text_field_tap_handlers}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// The type of action associated with ENTER key.
   ///
@@ -161,20 +161,20 @@ class SuperDesktopTextField extends StatefulWidget {
   final TextInputConfiguration? imeConfiguration;
 
   /// Whether to show an underline beneath the text in the composing region, or `null`
-  /// to let [SuperDesktopTextField] decide when to show the underline.
+  /// to let [TwDesktopTextField] decide when to show the underline.
   final bool? showComposingUnderline;
 
   @override
-  SuperDesktopTextFieldState createState() => SuperDesktopTextFieldState();
+  TwDesktopTextFieldState createState() => TwDesktopTextFieldState();
 }
 
-class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements ProseTextBlock, ImeInputOwner {
+class TwDesktopTextFieldState extends State<TwDesktopTextField> implements ProseTextBlock, ImeInputOwner {
   final _textKey = GlobalKey<ProseTextState>();
-  final _textScrollKey = GlobalKey<SuperTextFieldScrollviewState>();
+  final _textScrollKey = GlobalKey<TwTextFieldScrollviewState>();
   late FocusNode _focusNode;
   bool _hasFocus = false; // cache whether we have focus so we know when it changes
 
-  late SuperTextFieldContext _textFieldContext;
+  late TwTextFieldContext _textFieldContext;
   late ImeAttributedTextEditingController _controller;
 
   /// The text direction of the first character in the text.
@@ -225,7 +225,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
   }
 
   @override
-  void didUpdateWidget(SuperDesktopTextField oldWidget) {
+  void didUpdateWidget(TwDesktopTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
@@ -283,7 +283,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
   }
 
   void _createTextFieldContext() {
-    _textFieldContext = SuperTextFieldContext(
+    _textFieldContext = TwTextFieldContext(
       textFieldBuildContext: context,
       focusNode: _focusNode,
       controller: _controller,
@@ -442,7 +442,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
         child: ScrollbarWithCustomPhysics(
           controller: _scrollController,
           physics: ScrollConfiguration.of(context).getScrollPhysics(context),
-          child: SuperTextFieldGestureInteractor(
+          child: TwTextFieldGestureInteractor(
             focusNode: _focusNode,
             textController: _controller,
             textKey: _textKey,
@@ -457,7 +457,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
               },
               builder: (context) {
                 return _buildDecoration(
-                  child: SuperTextFieldScrollview(
+                  child: TwTextFieldScrollview(
                     key: _textScrollKey,
                     textKey: _textKey,
                     textController: _controller,
@@ -498,13 +498,13 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
   }) {
     return IntentBlocker(
       intents: CurrentPlatform.isApple ? appleBlockedIntents : nonAppleBlockedIntents,
-      child: SuperTextFieldKeyboardInteractor(
+      child: TwTextFieldKeyboardInteractor(
         focusNode: _focusNode,
         textFieldContext: _textFieldContext,
         textKey: _textKey,
         keyboardActions: widget.keyboardHandlers,
         child: widget.inputSource == TextInputSource.ime
-            ? SuperTextFieldImeInteractor(
+            ? TwTextFieldImeInteractor(
                 textKey: _textKey,
                 focusNode: _focusNode,
                 textFieldContext: _textFieldContext,
@@ -589,19 +589,19 @@ typedef DecorationBuilder = Widget Function(BuildContext, Widget child);
 
 /// Handles all user gesture interactions for text entry.
 ///
-/// [SuperTextFieldGestureInteractor] is intended to operate as a piece within
-/// a larger composition that behaves as a text field. [SuperTextFieldGestureInteractor]
+/// [TwTextFieldGestureInteractor] is intended to operate as a piece within
+/// a larger composition that behaves as a text field. [TwTextFieldGestureInteractor]
 /// is defined on its own so that it can be replaced with a widget that handles
 /// gestures differently.
 ///
 /// The gestures are applied to a [SuperSelectableText] widget that is
 /// tied to [textKey].
 ///
-/// A [SuperTextFieldScrollview] must sit between this [SuperTextFieldGestureInteractor]
-/// and the underlying [SuperSelectableText]. That [SuperTextFieldScrollview] must
+/// A [TwTextFieldScrollview] must sit between this [TwTextFieldGestureInteractor]
+/// and the underlying [SuperSelectableText]. That [TwTextFieldScrollview] must
 /// be tied to [textScrollKey].
-class SuperTextFieldGestureInteractor extends StatefulWidget {
-  const SuperTextFieldGestureInteractor({
+class TwTextFieldGestureInteractor extends StatefulWidget {
+  const TwTextFieldGestureInteractor({
     Key? key,
     required this.focusNode,
     required this.textController,
@@ -619,14 +619,14 @@ class SuperTextFieldGestureInteractor extends StatefulWidget {
   /// [TextController] for the text/selection within this text field.
   final AttributedTextEditingController textController;
 
-  /// [GlobalKey] that links this [SuperTextFieldGestureInteractor] to
+  /// [GlobalKey] that links this [TwTextFieldGestureInteractor] to
   /// the [ProseTextLayout] widget that paints the text for this text field.
   final GlobalKey<ProseTextState> textKey;
 
-  /// [GlobalKey] that links this [SuperTextFieldGestureInteractor] to
-  /// the [SuperTextFieldScrollview] that's responsible for scrolling
+  /// [GlobalKey] that links this [TwTextFieldGestureInteractor] to
+  /// the [TwTextFieldScrollview] that's responsible for scrolling
   /// content that exceeds the available space within this text field.
-  final GlobalKey<SuperTextFieldScrollviewState> textScrollKey;
+  final GlobalKey<TwTextFieldScrollviewState> textScrollKey;
 
   /// Whether or not this text field supports multiple lines of text.
   final bool isMultiline;
@@ -636,16 +636,16 @@ class SuperTextFieldGestureInteractor extends StatefulWidget {
   final RightClickListener? onRightClick;
 
   /// {@macro super_text_field_tap_handlers}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// The rest of the subtree for this text field.
   final Widget child;
 
   @override
-  State createState() => _SuperTextFieldGestureInteractorState();
+  State createState() => _TwTextFieldGestureInteractorState();
 }
 
-class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureInteractor> {
+class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInteractor> {
   _SelectionType _selectionType = _SelectionType.position;
   Offset? _dragStartInViewport;
   Offset? _dragStartInText;
@@ -661,7 +661,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
   ProseTextLayout get _textLayout => widget.textKey.currentState!.textLayout;
 
-  SuperTextFieldScrollviewState get _textScroll => widget.textScrollKey.currentState!;
+  TwTextFieldScrollviewState get _textScroll => widget.textScrollKey.currentState!;
 
   final _mouseCursor = ValueNotifier<MouseCursor>(SystemMouseCursors.text);
 
@@ -675,7 +675,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final cursorForContent = handler.mouseCursorForContentHover(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textController: widget.textController,
           textLayout: _textLayout,
           globalOffset: globalPosition,
@@ -693,13 +693,13 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
   }
 
   void _onTapDown(TapDownDetails details) {
-    _log.fine('Tap down on SuperTextField');
+    _log.fine('Tap down on TwTextField');
 
     final textOffset = _getTextOffset(details.localPosition);
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -741,7 +741,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
     final textOffset = _getTextOffset(details.localPosition);
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -773,7 +773,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -806,7 +806,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
     final textOffset = _getTextOffset(details.localPosition);
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -842,7 +842,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -876,7 +876,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -910,7 +910,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onSecondaryTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -930,7 +930,7 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onSecondaryTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -1283,8 +1283,8 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 
 /// Handles all keyboard interactions for text entry in a text field.
 ///
-/// [SuperTextFieldKeyboardInteractor] is intended to operate as a piece within
-/// a larger composition that behaves as a text field. [SuperTextFieldKeyboardInteractor]
+/// [TwTextFieldKeyboardInteractor] is intended to operate as a piece within
+/// a larger composition that behaves as a text field. [TwTextFieldKeyboardInteractor]
 /// is defined on its own so that it can be replaced with a widget that handles
 /// key events differently.
 ///
@@ -1293,8 +1293,8 @@ class _SuperTextFieldGestureInteractorState extends State<SuperTextFieldGestureI
 /// text content, and a [TextLayout] via the [textKey], which can be used to make
 /// decisions about manipulations, such as moving the caret to the beginning/end
 /// of a line.
-class SuperTextFieldKeyboardInteractor extends StatefulWidget {
-  const SuperTextFieldKeyboardInteractor({
+class TwTextFieldKeyboardInteractor extends StatefulWidget {
+  const TwTextFieldKeyboardInteractor({
     Key? key,
     required this.focusNode,
     required this.textFieldContext,
@@ -1307,9 +1307,9 @@ class SuperTextFieldKeyboardInteractor extends StatefulWidget {
   final FocusNode focusNode;
 
   /// Shared control over the text field.
-  final SuperTextFieldContext textFieldContext;
+  final TwTextFieldContext textFieldContext;
 
-  /// [GlobalKey] that links this [SuperTextFieldGestureInteractor] to
+  /// [GlobalKey] that links this [TwTextFieldGestureInteractor] to
   /// the [ProseTextLayout] widget that paints the text for this text field.
   final GlobalKey<ProseTextState> textKey;
 
@@ -1339,10 +1339,10 @@ class SuperTextFieldKeyboardInteractor extends StatefulWidget {
   final Widget child;
 
   @override
-  State createState() => _SuperTextFieldKeyboardInteractorState();
+  State createState() => _TwTextFieldKeyboardInteractorState();
 }
 
-class _SuperTextFieldKeyboardInteractorState extends State<SuperTextFieldKeyboardInteractor> {
+class _TwTextFieldKeyboardInteractorState extends State<TwTextFieldKeyboardInteractor> {
   @override
   void initState() {
     super.initState();
@@ -1350,7 +1350,7 @@ class _SuperTextFieldKeyboardInteractorState extends State<SuperTextFieldKeyboar
   }
 
   @override
-  void didUpdateWidget(SuperTextFieldKeyboardInteractor oldWidget) {
+  void didUpdateWidget(TwTextFieldKeyboardInteractor oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.focusNode != oldWidget.focusNode) {
       oldWidget.focusNode.removeListener(_onFocusChange);
@@ -1369,7 +1369,7 @@ class _SuperTextFieldKeyboardInteractorState extends State<SuperTextFieldKeyboar
       return;
     }
 
-    _log.fine("Clearing selection because SuperTextField lost focus");
+    _log.fine("Clearing selection because TwTextField lost focus");
     widget.textFieldContext.controller.selection = const TextSelection.collapsed(offset: -1);
   }
 
@@ -1423,8 +1423,8 @@ class _SuperTextFieldKeyboardInteractorState extends State<SuperTextFieldKeyboar
 /// placed at the end of the text.
 ///
 /// When [focusNode] loses focus, the [textController]'s selection is cleared.
-class SuperTextFieldImeInteractor extends StatefulWidget {
-  const SuperTextFieldImeInteractor({
+class TwTextFieldImeInteractor extends StatefulWidget {
+  const TwTextFieldImeInteractor({
     Key? key,
     required this.textKey,
     required this.focusNode,
@@ -1442,12 +1442,12 @@ class SuperTextFieldImeInteractor extends StatefulWidget {
   /// [FocusNode] for this text field.
   final FocusNode focusNode;
 
-  final SuperTextFieldContext textFieldContext;
+  final TwTextFieldContext textFieldContext;
 
   /// Whether or not this text field supports multiple lines of text.
   final bool isMultiline;
 
-  /// [GlobalKey] that links this [SuperTextFieldGestureInteractor] to
+  /// [GlobalKey] that links this [TwTextFieldGestureInteractor] to
   /// the [ProseTextLayout] widget that paints the text for this text field.
   final GlobalKey<ProseTextState> textKey;
 
@@ -1455,7 +1455,7 @@ class SuperTextFieldImeInteractor extends StatefulWidget {
   ///
   /// The IME reports selectors as unique `String`s, therefore selector handlers are
   /// defined as a mapping from selector names to handler functions.
-  final Map<String, SuperTextFieldSelectorHandler> selectorHandlers;
+  final Map<String, TwTextFieldSelectorHandler> selectorHandlers;
 
   /// The type of action associated with ENTER key.
   final TextInputAction? textInputAction;
@@ -1483,10 +1483,10 @@ class SuperTextFieldImeInteractor extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SuperTextFieldImeInteractor> createState() => _SuperTextFieldImeInteractorState();
+  State<TwTextFieldImeInteractor> createState() => _TwTextFieldImeInteractorState();
 }
 
-class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteractor> {
+class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
   late ImeAttributedTextEditingController _textController;
 
   @override
@@ -1506,7 +1506,7 @@ class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteracto
   }
 
   @override
-  void didUpdateWidget(SuperTextFieldImeInteractor oldWidget) {
+  void didUpdateWidget(TwTextFieldImeInteractor oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.focusNode != oldWidget.focusNode) {
       oldWidget.focusNode.removeListener(_updateSelectionAndImeConnectionOnFocusChange);
@@ -1615,7 +1615,7 @@ class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteracto
     _reportTextStyleToIme();
 
     // Without showing the keyboard, the panel is always positioned at the screen center after the first time.
-    // I'm not sure why this is needed in SuperTextField, but not in SuperEditor.
+    // I'm not sure why this is needed in TwTextField, but not in the original implementation.
     _textController.showKeyboard();
 
     // There are some operations that might affect our transform or the caret rect but we can't react to them.
@@ -1750,15 +1750,15 @@ class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteracto
 
 /// Handles all scrolling behavior for a text field.
 ///
-/// [SuperTextFieldScrollview] is intended to operate as a piece within
-/// a larger composition that behaves as a text field. [SuperTextFieldScrollview]
+/// [TwTextFieldScrollview] is intended to operate as a piece within
+/// a larger composition that behaves as a text field. [TwTextFieldScrollview]
 /// is defined on its own so that it can be replaced with a widget that handles
 /// scrolling differently.
 ///
-/// [SuperTextFieldScrollview] determines when and where to scroll by working
+/// [TwTextFieldScrollview] determines when and where to scroll by working
 /// with a corresponding [SuperSelectableText] widget that is tied to [textKey].
-class SuperTextFieldScrollview extends StatefulWidget {
-  const SuperTextFieldScrollview({
+class TwTextFieldScrollview extends StatefulWidget {
+  const TwTextFieldScrollview({
     Key? key,
     required this.textKey,
     required this.textController,
@@ -1773,11 +1773,11 @@ class SuperTextFieldScrollview extends StatefulWidget {
   /// [TextController] for the text/selection within this text field.
   final AttributedTextEditingController textController;
 
-  /// [GlobalKey] that links this [SuperTextFieldScrollview] to
+  /// [GlobalKey] that links this [TwTextFieldScrollview] to
   /// the [ProseTextLayout] widget that paints the text for this text field.
   final GlobalKey<ProseTextState> textKey;
 
-  /// [ScrollController] that controls the scroll offset of this [SuperTextFieldScrollview].
+  /// [ScrollController] that controls the scroll offset of this [TwTextFieldScrollview].
   final ScrollController scrollController;
 
   /// The height of the viewport for this text field.
@@ -1799,10 +1799,10 @@ class SuperTextFieldScrollview extends StatefulWidget {
   final Widget child;
 
   @override
-  SuperTextFieldScrollviewState createState() => SuperTextFieldScrollviewState();
+  TwTextFieldScrollviewState createState() => TwTextFieldScrollviewState();
 }
 
-class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview> with SingleTickerProviderStateMixin {
+class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with SingleTickerProviderStateMixin {
   bool _scrollToStartOnTick = false;
   bool _scrollToEndOnTick = false;
   double _scrollAmountPerFrame = 0;
@@ -1817,7 +1817,7 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview> with
   }
 
   @override
-  void didUpdateWidget(SuperTextFieldScrollview oldWidget) {
+  void didUpdateWidget(TwTextFieldScrollview oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.textController != oldWidget.textController) {
@@ -2146,7 +2146,7 @@ enum TextFieldKeyboardHandlerResult {
 }
 
 typedef TextFieldKeyboardHandler = TextFieldKeyboardHandlerResult Function({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
   required KeyEvent keyEvent,
 });
 
@@ -2154,7 +2154,7 @@ typedef TextFieldKeyboardHandler = TextFieldKeyboardHandlerResult Function({
 /// for any key combination that matches one of the given [keys].
 TextFieldKeyboardHandler ignoreTextFieldKeyCombos(List<ShortcutActivator> keys) {
   return ({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     for (final key in keys) {
@@ -2166,14 +2166,14 @@ TextFieldKeyboardHandler ignoreTextFieldKeyCombos(List<ShortcutActivator> keys) 
   };
 }
 
-/// The keyboard actions that a [SuperTextField] uses by default.
+/// The keyboard actions that a [TwTextField] uses by default.
 ///
 /// It's common for developers to want all of these actions, but also
 /// want to add more actions that take priority. To achieve that,
 /// add the new actions to the front of the list:
 ///
 /// ```
-/// SuperTextField(
+/// TwTextField(
 ///   keyboardActions: [
 ///     myNewAction1,
 ///     myNewAction2,
@@ -2182,29 +2182,29 @@ TextFieldKeyboardHandler ignoreTextFieldKeyCombos(List<ShortcutActivator> keys) 
 /// );
 /// ```
 const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
-  DefaultSuperTextFieldKeyboardHandlers.scrollOnPageUp,
-  DefaultSuperTextFieldKeyboardHandlers.scrollOnPageDown,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
-  DefaultSuperTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
-  DefaultSuperTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
-  DefaultSuperTextFieldKeyboardHandlers.moveToLineStartWithHome,
-  DefaultSuperTextFieldKeyboardHandlers.moveToLineEndWithEnd,
-  DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
-  DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
-  DefaultSuperTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.insertNewlineWhenEnterIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.blockControlKeys,
-  DefaultSuperTextFieldKeyboardHandlers.insertCharacterWhenKeyIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.scrollOnPageUp,
+  DefaultTwTextFieldKeyboardHandlers.scrollOnPageDown,
+  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
+  DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
+  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
+  DefaultTwTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
+  DefaultTwTextFieldKeyboardHandlers.moveToLineStartWithHome,
+  DefaultTwTextFieldKeyboardHandlers.moveToLineEndWithEnd,
+  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
+  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
+  DefaultTwTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.insertNewlineWhenEnterIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.blockControlKeys,
+  DefaultTwTextFieldKeyboardHandlers.insertCharacterWhenKeyIsPressed,
 ];
 
-/// The keyboard actions that a [SuperTextField] uses by default when using [TextInputSource.ime].
+/// The keyboard actions that a [TwTextField] uses by default when using [TextInputSource.ime].
 ///
 /// Using the IME on desktop involves partial input from the IME and partial input from non-content keys,
 /// like arrow keys.
@@ -2217,7 +2217,7 @@ const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
 /// add the new actions to the front of the list:
 ///
 /// ```
-/// SuperTextField(
+/// TwTextField(
 ///   keyboardActions: [
 ///     myNewAction1,
 ///     myNewAction2,
@@ -2226,35 +2226,35 @@ const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
 /// );
 /// ```
 const defaultTextFieldImeKeyboardHandlers = <TextFieldKeyboardHandler>[
-  DefaultSuperTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
+  DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
+  DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
   // WARNING: No keyboard handlers below this point will run on Mac. On Mac, most
-  // common shortcuts are recognized by the OS. This line short circuits SuperTextField
+  // common shortcuts are recognized by the OS. This line short circuits TwTextField
   // handlers, passing the key combo to the OS on Mac. Place all custom Mac key
   // combos above this handler.
-  DefaultSuperTextFieldKeyboardHandlers.sendKeyEventToMacOs,
-  DefaultSuperTextFieldKeyboardHandlers.scrollOnPageUp,
-  DefaultSuperTextFieldKeyboardHandlers.scrollOnPageDown,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
-  DefaultSuperTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
-  DefaultSuperTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
-  DefaultSuperTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
-  DefaultSuperTextFieldKeyboardHandlers.moveToLineStartWithHome,
-  DefaultSuperTextFieldKeyboardHandlers.moveToLineEndWithEnd,
-  DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
-  DefaultSuperTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
-  DefaultSuperTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
-  DefaultSuperTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.sendKeyEventToMacOs,
+  DefaultTwTextFieldKeyboardHandlers.scrollOnPageUp,
+  DefaultTwTextFieldKeyboardHandlers.scrollOnPageDown,
+  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
+  DefaultTwTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
+  DefaultTwTextFieldKeyboardHandlers.moveToLineStartWithHome,
+  DefaultTwTextFieldKeyboardHandlers.moveToLineEndWithEnd,
+  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
+  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
+  DefaultTwTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
+  DefaultTwTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
 ];
 
-class DefaultSuperTextFieldKeyboardHandlers {
+class DefaultTwTextFieldKeyboardHandlers {
   /// [copyTextWhenCmdCIsPressed] copies text to clipboard when primary shortcut key
   /// (CMD on Mac, CTL on Windows) + C is pressed.
   static TextFieldKeyboardHandlerResult copyTextWhenCmdCIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (!keyEvent.isPrimaryShortcutKeyPressed) {
@@ -2275,7 +2275,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// [pasteTextWhenCmdVIsPressed] pastes text from clipboard to document when primary shortcut key
   /// (CMD on Mac, CTL on Windows) + V is pressed.
   static TextFieldKeyboardHandlerResult pasteTextWhenCmdVIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (!keyEvent.isPrimaryShortcutKeyPressed) {
@@ -2300,7 +2300,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// [selectAllTextFieldWhenCmdAIsPressed] selects all text when primary shortcut key
   /// (CMD on Mac, CTL on Windows) + A is pressed.
   static TextFieldKeyboardHandlerResult selectAllTextFieldWhenCmdAIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (!keyEvent.isPrimaryShortcutKeyPressed) {
@@ -2318,7 +2318,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// [moveCaretToStartOrEnd] moves caret to start (using CTL+A) or end of line (using CTL+E)
   /// on MacOS platforms. This is part of expected behavior on MacOS. Not applicable to Windows.
   static TextFieldKeyboardHandlerResult moveCaretToStartOrEnd({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     bool moveLeft = false;
@@ -2354,7 +2354,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// [moveUpDownLeftAndRightWithArrowKeys] moves caret according to the directional key which was pressed.
   /// If there is no caret selection. it does nothing.
   static TextFieldKeyboardHandlerResult moveUpDownLeftAndRightWithArrowKeys({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     const arrowKeys = [
@@ -2451,7 +2451,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   }
 
   static TextFieldKeyboardHandlerResult moveToLineStartWithHome({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
@@ -2472,7 +2472,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   }
 
   static TextFieldKeyboardHandlerResult moveToLineEndWithEnd({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
@@ -2496,7 +2496,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Certain keys are currently checked against a blacklist of characters for web
   /// since their behavior is unexpected. Check definition for more details.
   static TextFieldKeyboardHandlerResult insertCharacterWhenKeyIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) {
@@ -2530,7 +2530,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Deletes text between the beginning of the line and the caret, when the user
   /// presses CMD + Backspace, or CTL + Backspace.
   static TextFieldKeyboardHandlerResult deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (!keyEvent.isPrimaryShortcutKeyPressed || keyEvent.logicalKey != LogicalKeyboardKey.backspace) {
@@ -2563,7 +2563,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
   /// [deleteTextWhenBackspaceOrDeleteIsPressed] deletes single characters when delete or backspace is pressed.
   static TextFieldKeyboardHandlerResult deleteTextWhenBackspaceOrDeleteIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     ProseTextLayout? textLayout,
     required KeyEvent keyEvent,
   }) {
@@ -2587,7 +2587,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Alt+Backspace is pressed on Mac.
   static TextFieldKeyboardHandlerResult deleteWordWhenAltBackSpaceIsPressedOnMac({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (defaultTargetPlatform != TargetPlatform.macOS) {
@@ -2608,7 +2608,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Ctl+Backspace is pressed on Windows/Linux.
   static TextFieldKeyboardHandlerResult deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
@@ -2644,7 +2644,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
   /// [insertNewlineWhenEnterIsPressed] inserts a new line character when the enter key is pressed.
   static TextFieldKeyboardHandlerResult insertNewlineWhenEnterIsPressed({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     ProseTextLayout? textLayout,
     required KeyEvent keyEvent,
   }) {
@@ -2661,14 +2661,14 @@ class DefaultSuperTextFieldKeyboardHandlers {
   }
 
   static TextFieldKeyboardHandlerResult sendKeyEventToMacOs({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (defaultTargetPlatform == TargetPlatform.macOS && !CurrentPlatform.isWeb) {
       // On macOS, we let the IME handle all key events. Then, the IME might generate
       // selectors which express the user intent, e.g, moveLeftAndModifySelection:.
       //
-      // For the full list of selectors handled by SuperEditor, see the MacOsSelectors class.
+      // For the full list of selectors handled by the IME integration, see the MacOsSelectors class.
       //
       // This is needed for the interaction with the accent panel to work.
       return TextFieldKeyboardHandlerResult.sendToOperatingSystem;
@@ -2683,7 +2683,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls the
   /// ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollOnPageUp({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2707,7 +2707,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls the
   /// ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollOnPageDown({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2731,7 +2731,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollToBeginningOfDocumentOnCtrlOrCmdAndHome({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2763,7 +2763,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// bottom of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollToEndOfDocumentOnCtrlOrCmdAndEnd({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2795,7 +2795,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollToBeginningOfDocumentOnHomeOnMacOrWeb({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2823,7 +2823,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// bottom of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult scrollToEndOfDocumentOnEndOnMacOrWeb({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent is! KeyDownEvent) {
@@ -2851,7 +2851,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Without this action in place pressing one of the above mentioned keys
   /// would display an unknown '?' character in the textfield.
   static TextFieldKeyboardHandlerResult blockControlKeys({
-    required SuperTextFieldContext textFieldContext,
+    required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
     if (keyEvent.logicalKey == LogicalKeyboardKey.escape ||
@@ -2867,7 +2867,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
     return TextFieldKeyboardHandlerResult.notHandled;
   }
 
-  DefaultSuperTextFieldKeyboardHandlers._();
+  DefaultTwTextFieldKeyboardHandlers._();
 }
 
 /// Computes the estimated line height of a [TextStyle].
@@ -2911,11 +2911,11 @@ class _EstimatedLineHeight {
 }
 
 /// A callback to handle a `performSelector` call.
-typedef SuperTextFieldSelectorHandler = void Function({
-  required SuperTextFieldContext textFieldContext,
+typedef TwTextFieldSelectorHandler = void Function({
+  required TwTextFieldContext textFieldContext,
 });
 
-const defaultTextFieldSelectorHandlers = <String, SuperTextFieldSelectorHandler>{
+const defaultTextFieldSelectorHandlers = <String, TwTextFieldSelectorHandler>{
   // Control.
   MacOsSelectors.insertTab: _moveFocusNext,
   MacOsSelectors.cancelOperation: _giveUpFocus,
@@ -2959,19 +2959,19 @@ const defaultTextFieldSelectorHandlers = <String, SuperTextFieldSelectorHandler>
 };
 
 void _giveUpFocus({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.focusNode.unfocus();
 }
 
 void _moveFocusNext({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.focusNode.nextFocus();
 }
 
 void _moveCaretUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -2982,7 +2982,7 @@ void _moveCaretUpstream({
 }
 
 void _moveCaretDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -2993,7 +2993,7 @@ void _moveCaretDownstream({
 }
 
 void _moveCaretUp({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
@@ -3003,7 +3003,7 @@ void _moveCaretUp({
 }
 
 void _moveCaretDown({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
@@ -3013,7 +3013,7 @@ void _moveCaretDown({
 }
 
 void _moveWordUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3024,7 +3024,7 @@ void _moveWordUpstream({
 }
 
 void _moveWordDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3035,7 +3035,7 @@ void _moveWordDownstream({
 }
 
 void _moveLineBeginning({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3046,7 +3046,7 @@ void _moveLineBeginning({
 }
 
 void _moveLineEnd({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3057,7 +3057,7 @@ void _moveLineEnd({
 }
 
 void _expandSelectionUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3068,7 +3068,7 @@ void _expandSelectionUpstream({
 }
 
 void _expandSelectionDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3079,7 +3079,7 @@ void _expandSelectionDownstream({
 }
 
 void _expandSelectionLineUp({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
@@ -3089,7 +3089,7 @@ void _expandSelectionLineUp({
 }
 
 void _expandSelectionLineDown({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
@@ -3099,7 +3099,7 @@ void _expandSelectionLineDown({
 }
 
 void _expandSelectionWordUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3110,7 +3110,7 @@ void _expandSelectionWordUpstream({
 }
 
 void _expandSelectionWordDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3121,7 +3121,7 @@ void _expandSelectionWordDownstream({
 }
 
 void _expandSelectionLineUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3132,7 +3132,7 @@ void _expandSelectionLineUpstream({
 }
 
 void _expandSelectionLineDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
@@ -3143,7 +3143,7 @@ void _expandSelectionLineDownstream({
 }
 
 void _deleteUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.upstream);
@@ -3153,7 +3153,7 @@ void _deleteUpstream({
 }
 
 void _deleteDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.downstream);
@@ -3163,7 +3163,7 @@ void _deleteDownstream({
 }
 
 void _deleteWordUpstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
@@ -3180,7 +3180,7 @@ void _deleteWordUpstream({
 }
 
 void _deleteWordDownstream({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
@@ -3198,7 +3198,7 @@ void _deleteWordDownstream({
 }
 
 void _deleteToBeginningOfLine({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelection();
@@ -3217,7 +3217,7 @@ void _deleteToBeginningOfLine({
 }
 
 void _deleteToEndOfLine({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelection();
@@ -3241,7 +3241,7 @@ void _deleteToEndOfLine({
 ///
 /// Returns `true` if the scroll is performed, otherwise 'false'.
 bool _scrollToBeginningOfDocument({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable =
@@ -3287,7 +3287,7 @@ bool _scrollToBeginningOfDocument({
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
 bool _scrollToEndOfDocument({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable =
@@ -3339,7 +3339,7 @@ bool _scrollToEndOfDocument({
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
 bool _scrollPageUp({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable =
@@ -3386,7 +3386,7 @@ bool _scrollPageUp({
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
 bool _scrollPageDown({
-  required SuperTextFieldContext textFieldContext,
+  required TwTextFieldContext textFieldContext,
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable =

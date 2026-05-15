@@ -97,7 +97,7 @@ class AndroidTextFieldTouchInteractor extends StatefulWidget {
   final Color handleColor;
 
   /// {@macro super_text_field_tap_handlers}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// Whether to paint debugging guides and regions.
   final bool showDebugPaint;
@@ -218,7 +218,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -240,7 +240,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -342,7 +342,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -384,7 +384,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -416,7 +416,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -450,7 +450,7 @@ class AndroidTextFieldTouchInteractorState extends State<AndroidTextFieldTouchIn
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,

@@ -4,11 +4,11 @@ import 'package:tw_primitives/src/text_field/infrastructure/document_gestures_in
 import 'package:tw_primitives/src/text_field/infrastructure/links.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
 
-/// A [SuperTextFieldTapHandler] that opens links when the user taps text with
+/// A [TwTextFieldTapHandler] that opens links when the user taps text with
 /// a [LinkAttribution].
-class SuperTextFieldLaunchLinkTapHandler extends SuperTextFieldTapHandler {
+class TwTextFieldLaunchLinkTapHandler extends TwTextFieldTapHandler {
   @override
-  MouseCursor? mouseCursorForContentHover(SuperTextFieldGestureDetails details) {
+  MouseCursor? mouseCursorForContentHover(TwTextFieldGestureDetails details) {
     final linkAttribution = _getLinkAttribution(details);
     if (linkAttribution == null) {
       return null;
@@ -18,7 +18,7 @@ class SuperTextFieldLaunchLinkTapHandler extends SuperTextFieldTapHandler {
   }
 
   @override
-  TapHandlingInstruction onTapUp(SuperTextFieldGestureDetails details) {
+  TapHandlingInstruction onTapUp(TwTextFieldGestureDetails details) {
     final linkAttribution = _getLinkAttribution(details);
     if (linkAttribution == null) {
       return TapHandlingInstruction.continueHandling;
@@ -32,7 +32,7 @@ class SuperTextFieldLaunchLinkTapHandler extends SuperTextFieldTapHandler {
   }
 
   /// Returns the [LinkAttribution] at the given [details.textOffset], if any.
-  LinkAttribution? _getLinkAttribution(SuperTextFieldGestureDetails details) {
+  LinkAttribution? _getLinkAttribution(TwTextFieldGestureDetails details) {
     final textPosition = details.textLayout.getPositionNearestToOffset(details.textOffset);
 
     final attributions = details.textController.text //

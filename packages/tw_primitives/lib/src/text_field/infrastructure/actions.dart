@@ -77,7 +77,7 @@ class IntentBlocker extends StatelessWidget {
 ///
 ///     IntentBlocker(
 ///       intents: nonAppleBlockedIntents,
-///       child: SuperEditor(),
+///       child: TwTextField(),
 ///     )
 ///
 /// See [WidgetsApp.defaultShortcuts] for the list of keybindings that Flutter
@@ -100,7 +100,7 @@ final Set<Type> nonAppleBlockedIntents = {
 ///
 ///     IntentBlocker(
 ///       intents: appleBlockedIntents,
-///       child: SuperEditor(),
+///       child: TwTextField(),
 ///     )
 ///
 /// See [WidgetsApp.defaultShortcuts] for the list of keybindings that Flutter

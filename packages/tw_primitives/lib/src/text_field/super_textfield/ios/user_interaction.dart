@@ -65,7 +65,7 @@ class IOSTextFieldTouchInteractor extends StatefulWidget {
   final FocusNode focusNode;
 
   /// {@macro super_text_field_tap_handlers}
-  final List<SuperTextFieldTapHandler> tapHandlers;
+  final List<TwTextFieldTapHandler> tapHandlers;
 
   /// [LayerLink] that follows the text field that contains this
   /// [IOSExtFieldInteractor].
@@ -229,7 +229,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -251,7 +251,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -364,7 +364,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -404,7 +404,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onDoubleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -434,7 +434,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapDown(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,
@@ -460,7 +460,7 @@ class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor
 
     for (final handler in widget.tapHandlers) {
       final result = handler.onTripleTapUp(
-        SuperTextFieldGestureDetails(
+        TwTextFieldGestureDetails(
           textLayout: _textLayout,
           textController: widget.textController,
           globalOffset: details.globalPosition,

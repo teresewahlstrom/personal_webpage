@@ -131,7 +131,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       trackVisibility: false,
       child: ScrollConfiguration(
         behavior: const ChatNoScrollbarBehavior(),
-        child: SuperTextField(
+        child: TwTextField(
           scrollController: _composerScrollController,
           focusNode: widget.inputFocusNode,
           textController: widget.controller,

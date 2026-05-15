@@ -146,7 +146,7 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
       return;
     }
 
-    // Delta model is required for SuperTextField to work.
+    // Delta model is required for TwTextField to work.
     final imeConfig = configuration.copyWith(enableDeltaModel: true);
     final inputConnection = _inputConnectionFactory?.call(this, imeConfig) ?? TextInput.attach(this, imeConfig);
     inputConnection.show();

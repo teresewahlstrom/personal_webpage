@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Portions of tw_primitives text field code are derived from super_editor.
+Portions of the TwTextField subtree in tw_primitives are derived from super_editor.
 
 super_editor
 Copyright (c) 2021 Superlist, SuperDeclarative! and the contributors

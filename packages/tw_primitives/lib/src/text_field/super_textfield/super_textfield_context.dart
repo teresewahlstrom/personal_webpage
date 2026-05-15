@@ -5,8 +5,8 @@ import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine
 import 'package:super_text_layout/super_text_layout.dart';
 
 /// Collection of core artifacts used to interact with, and edit, a text field.
-class SuperTextFieldContext {
-  SuperTextFieldContext({
+class TwTextFieldContext {
+  TwTextFieldContext({
     required this.textFieldBuildContext,
     required this.focusNode,
     required this.controller,
@@ -39,7 +39,7 @@ class SuperTextFieldContext {
   /// Returns a `Function`, which, when invoked, returns a reference to the
   /// text field's [ProseTextLayout], which can be used to query the visual
   /// bounds of text.
-  final SuperTextFieldLayoutResolver getTextLayout;
+  final TwTextFieldLayoutResolver getTextLayout;
 
   /// Controller to query and change the scroll offset within the associated
   /// text field.
@@ -47,5 +47,5 @@ class SuperTextFieldContext {
 }
 
 /// Function that returns the text layout for a text field.
-typedef SuperTextFieldLayoutResolver = ProseTextLayout Function();
+typedef TwTextFieldLayoutResolver = ProseTextLayout Function();
 
