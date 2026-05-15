@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/chat_api.dart';
+import 'package:tw_primitives/scrollbar.dart';
 
 import 'skin.dart';
 
-export 'package:tw_primitives/chat_api.dart'
+export 'package:tw_primitives/scrollbar.dart'
   show TwNoScrollbarBehavior, TwScrollArea, TwScrollbar, TwScrollbarTrack;
 
 class ChatScrollbar {

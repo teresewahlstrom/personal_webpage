@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/chat_api.dart';
+import 'package:tw_primitives/text_field.dart';
 
 import '../config/config.dart';
 

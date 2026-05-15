@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tw_primitives/chat_api.dart';
+import 'package:tw_primitives/text_field.dart';
 
 import '../config/config.dart';
 import '../logic/message_diff.dart';
