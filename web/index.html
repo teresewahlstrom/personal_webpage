@@ -1,28 +1,119 @@
 <!DOCTYPE html>
-<html style="height: 100%; margin: 0;">
+<html style="height: 100%; margin: 0; background: #F8F9F7;">
   <head>
     <base href="$FLUTTER_BASE_HREF" />
     <meta charset="UTF-8" />
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
     <meta name="description" content="T1 grid" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
     <meta name="theme-color" content="#F8F9F7" />
     <title>T1 grid</title>
     <style>
       html, body {
-        height: 100%;
+        height: var(--app-height, 100%);
+        min-height: var(--app-height, 100%);
         margin: 0;
         padding: 0;
         overflow: hidden;
+        background: #F8F9F7;
       }
       #app {
-        height: 100%;
+        height: var(--app-height, 100%);
+        min-height: var(--app-height, 100%);
         width: 100%;
         position: fixed;
         top: 0;
         left: 0;
+        background: #F8F9F7;
+      }
+      flt-glass-pane,
+      flutter-view {
+        height: var(--app-height, 100%) !important;
+        min-height: var(--app-height, 100%) !important;
       }
     </style>
+    <script>
+      (function () {
+        var recoveryTimers = [];
+
+        function viewportHeight(preferLayoutViewport) {
+          if (preferLayoutViewport && window.innerHeight) {
+            return window.innerHeight + 'px';
+          }
+
+          var visualViewport = window.visualViewport;
+          if (visualViewport && visualViewport.height) {
+            return Math.round(visualViewport.height) + 'px';
+          }
+          return window.innerHeight + 'px';
+        }
+
+        function setAppHeight(preferLayoutViewport) {
+          document.documentElement.style.setProperty(
+            '--app-height',
+            viewportHeight(preferLayoutViewport)
+          );
+        }
+
+        function blurFocusedInput() {
+          var active = document.activeElement;
+          if (!active || active === document.body) {
+            return;
+          }
+
+          var tagName = active.tagName;
+          var isEditable =
+            tagName === 'INPUT' ||
+            tagName === 'TEXTAREA' ||
+            active.isContentEditable;
+
+          if (isEditable && typeof active.blur === 'function') {
+            active.blur();
+          }
+        }
+
+        function scheduleViewportRecovery(blurInput) {
+          if (blurInput) {
+            blurFocusedInput();
+          }
+
+          recoveryTimers.forEach(clearTimeout);
+          recoveryTimers = [0, 16, 80, 180, 350, 700, 1200].map(function (delay) {
+            return setTimeout(function () {
+              setAppHeight(blurInput);
+              window.scrollTo(0, 0);
+            }, delay);
+          });
+        }
+
+        setAppHeight(false);
+
+        window.addEventListener('resize', function () {
+          scheduleViewportRecovery(false);
+        });
+        window.addEventListener('orientationchange', function () {
+          scheduleViewportRecovery(false);
+        });
+        window.addEventListener('pageshow', function () {
+          scheduleViewportRecovery(true);
+        });
+        window.addEventListener('focus', function () {
+          scheduleViewportRecovery(true);
+        });
+        document.addEventListener('visibilitychange', function () {
+          scheduleViewportRecovery(document.visibilityState !== 'visible');
+        });
+
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', function () {
+            scheduleViewportRecovery(false);
+          });
+          window.visualViewport.addEventListener('scroll', function () {
+            scheduleViewportRecovery(false);
+          });
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
