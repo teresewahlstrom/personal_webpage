@@ -169,11 +169,6 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       color: borderColor,
       width: tokens.bubbleBorderWidth,
     );
-    final botBottomBorderSide = BorderSide(
-      color: ChatComposerLayout.borderColor(context),
-      width: tokens.bubbleBorderWidth,
-    );
-
     return SizedBox(
       width: double.infinity,
       child: Align(
@@ -191,6 +186,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 child: Stack(
                   children: [
                     Container(
+                      width: widget.isUser ? null : bubbleMaxWidth,
                       padding: EdgeInsets.fromLTRB(
                         widget.isUser
                             ? horizontalInset
@@ -222,9 +218,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                   : Border.fromBorderSide(bubbleBorderSide),
                               boxShadow: [tokens.surfaceShadow(colors)],
                             )
-                          : BoxDecoration(
-                              border: Border(bottom: botBottomBorderSide),
-                            ),
+                          : null,
                       child: _buildBubbleText(
                         parsedMarkup,
                         style: bubbleTextStyle,
@@ -234,7 +228,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                         isTruncated: isTruncatable && widget.isTruncated,
                       ),
                     ),
-                    if (isTruncatable && widget.isTruncated)
+                    if (!widget.isUser)
                       Positioned(
                         left: 0,
                         right: 0,
@@ -243,7 +237,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                         child: IgnorePointer(
                           child: CustomPaint(
                             painter: _DashedLinePainter(
-                              color: colors.composerCornerAccent,
+                              color: ChatComposerLayout.borderColor(context),
                               strokeWidth: 0.25,
                             ),
                           ),

@@ -202,7 +202,7 @@ class ChatSkinTokens {
   final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupStrikethroughThicknessBias = 0.5;
+  final double markupStrikethroughThicknessBias = 0.98;
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;

@@ -233,7 +233,8 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
 
       expect(
         clipboardData?.text,
-        '## Twin (12:49, 16th of April 2026)\n\n'
+        '---\n'
+        'Twin (12:49, 16th of April 2026)\n\n'
         '# Prototype Mode\n\n'
         'I answer from a fixed Terese context and keep in-session chat memory while the local backend is running.\n\n'
         '## Markdown Showcase\n\n'
@@ -242,9 +243,11 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
         '   - Child item\n'
         '   - Second child item\n'
         '3. Here is another top-level item after nested list\n\n'
-        '## You (12:50, 16th of April 2026)\n\n'
+        '---\n'
+        'You (12:50, 16th of April 2026)\n\n'
         '${messages[1].text}\n\n'
-        '## You (12:51, 16th of April 2026)\n\n'
+        '---\n'
+        'You (12:51, 16th of April 2026)\n\n'
         '${messages[2].text}',
       );
     },
@@ -324,12 +327,14 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
 
     expect(
       clipboardData?.text,
-      '## Twin (15:13, 16th of April 2026)\n\n'
+      '---\n'
+      'Twin (15:13, 16th of April 2026)\n\n'
       'Prototype Mode\n\n'
       '> Blockquotes render as callouts.\n'
       '> \n'
       '> They also keep paragraph spacing.\n\n'
-      '## You (15:15, 16th of April 2026)\n\n'
+      '---\n'
+      'You (15:15, 16th of April 2026)\n\n'
       'User message #1',
     );
   });

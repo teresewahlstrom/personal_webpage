@@ -455,8 +455,8 @@ String _buildSelectionCopyMessageHeader(
   ChatMessage message, {
   required bool isFirstMessage,
 }) {
-  final transcriptPrefix = isFirstMessage ? '' : '\n\n';
-  return '$transcriptPrefix## ${_roleLabel(message.role)} (${_formattedTimestamp(message.createdAt)})\n\n';
+  final transcriptPrefix = isFirstMessage ? '---\n' : '\n\n---\n';
+  return '$transcriptPrefix${_roleLabel(message.role)} (${_formattedTimestamp(message.createdAt)})\n\n';
 }
 
 String _roleLabel(ChatRole role) {
