@@ -29,7 +29,7 @@ void main() {
   test('fills full safe height on compact desktop viewport', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 620),
-      viewInsets: EdgeInsets.zero,
+      keyboardHeight: 0,
       viewPadding: EdgeInsets.zero,
     );
 
@@ -39,7 +39,7 @@ void main() {
   test('compact mode still respects safe area and keyboard insets', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 620),
-      viewInsets: const EdgeInsets.only(bottom: 20),
+      keyboardHeight: 20,
       viewPadding: const EdgeInsets.only(top: 24),
     );
 
@@ -49,7 +49,7 @@ void main() {
   test('compact mode can reserve a top inset while keyboard is open', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(620, 740),
-      viewInsets: const EdgeInsets.only(bottom: 220),
+      keyboardHeight: 220,
       viewPadding: EdgeInsets.zero,
       minimumTopInset: 4,
     );
@@ -60,7 +60,7 @@ void main() {
   test('safe area still wins over a smaller reserved top inset', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(620, 740),
-      viewInsets: const EdgeInsets.only(bottom: 220),
+      keyboardHeight: 220,
       viewPadding: const EdgeInsets.only(top: 24),
       minimumTopInset: 4,
     );
@@ -71,7 +71,7 @@ void main() {
   test('height transition band smooths around compact threshold', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 760),
-      viewInsets: EdgeInsets.zero,
+      keyboardHeight: 0,
       viewPadding: EdgeInsets.zero,
     );
 
@@ -82,7 +82,7 @@ void main() {
   test('tall desktop viewport keeps floating-height behavior', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 1000),
-      viewInsets: EdgeInsets.zero,
+      keyboardHeight: 0,
       viewPadding: EdgeInsets.zero,
     );
 
@@ -160,12 +160,12 @@ void main() {
     () {
       final landscapeHeight = ChatLayout.maxDockHeight(
         viewportSize: const Size(900, 680),
-        viewInsets: EdgeInsets.zero,
+        keyboardHeight: 0,
         viewPadding: EdgeInsets.zero,
       );
       final portraitHeight = ChatLayout.maxDockHeight(
         viewportSize: const Size(680, 900),
-        viewInsets: const EdgeInsets.only(bottom: 220),
+        keyboardHeight: 220,
         viewPadding: EdgeInsets.zero,
       );
 

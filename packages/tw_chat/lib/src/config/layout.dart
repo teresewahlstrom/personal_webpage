@@ -140,13 +140,13 @@ class ChatLayout {
 
   static double maxDockHeight({
     required Size viewportSize,
-    required EdgeInsets viewInsets,
+    required double keyboardHeight,
     required EdgeInsets viewPadding,
     double minimumTopInset = 0,
   }) {
     final bool isLandscape = viewportSize.width > viewportSize.height;
     final safeViewportHeight =
-        viewportSize.height - viewInsets.bottom - viewPadding.top;
+        viewportSize.height - keyboardHeight - viewPadding.top;
     final clampedSafeViewportHeight = safeViewportHeight.clamp(
       0.0,
       double.infinity,

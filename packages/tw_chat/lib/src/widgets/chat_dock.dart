@@ -47,6 +47,7 @@ class ChatDock extends StatefulWidget {
     required this.isChatKeyboardScrollTarget,
     required this.onSetChatKeyboardScrollTarget,
     required this.onSetPageKeyboardScrollTarget,
+    required this.keyboardHeight,
     this.minimizedBottomOffset = 25,
     this.minimizedRightInset = 0,
     this.skinMode = ChatSkinMode.light,
@@ -59,6 +60,7 @@ class ChatDock extends StatefulWidget {
   final ValueListenable<bool> isChatKeyboardScrollTarget;
   final VoidCallback onSetChatKeyboardScrollTarget;
   final VoidCallback onSetPageKeyboardScrollTarget;
+  final double keyboardHeight;
   final double minimizedBottomOffset;
   final double minimizedRightInset;
   final ChatSkinMode skinMode;
@@ -121,7 +123,7 @@ class _ChatDockState extends State<ChatDock> {
 
     // Allow the height to shrink only when the software keyboard is open so
     // the dock still yields space for keyboard insets.
-    if (mq.viewInsets.bottom > 0) {
+    if (widget.keyboardHeight > 0) {
       _stableViewportHeight = h;
     }
     // Otherwise ignore the shrinkage — it is the browser URL bar appearing
@@ -152,9 +154,10 @@ class _ChatDockState extends State<ChatDock> {
       viewPadding: mediaQuery.viewPadding,
       dockHorizontalMargin: chatMargin,
     );
+    final keyboardHeight = widget.keyboardHeight;
     final availableChatHeight = ChatLayout.maxDockHeight(
       viewportSize: viewportSize,
-      viewInsets: mediaQuery.viewInsets,
+      keyboardHeight: keyboardHeight,
       viewPadding: mediaQuery.viewPadding,
       minimumTopInset: chatMargin,
     );
@@ -171,7 +174,7 @@ class _ChatDockState extends State<ChatDock> {
       child: Positioned(
         right: _isExpanded ? baseRightInset : minimizedRightInset,
         bottom:
-            mediaQuery.viewInsets.bottom +
+            keyboardHeight +
             (_isExpanded ? 0 : widget.minimizedBottomOffset),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

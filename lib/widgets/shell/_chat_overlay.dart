@@ -4,6 +4,7 @@ import 'package:tw_chat/content.dart';
 
 import '../../config/app_ui_config.dart';
 import '../../services/http_twin_reply_client.dart';
+import '../../services/keyboard_height.dart';
 import '_chat_keyboard_scroll_target.dart';
 import '_floating_controls.dart';
 
@@ -78,6 +79,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
     final Size currentViewport = MediaQuery.of(context).size;
     final Size viewport = _getCachedViewportSize(currentViewport);
     final double floatingInset = _getFloatingInset(viewport.width);
+    final double keyboardHeight = KeyboardHeight.of(context);
     return AnimatedBuilder(
       animation: _conversationController,
       builder: (BuildContext context, Widget? child) {
@@ -90,6 +92,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
               ChatKeyboardScrollTarget.setChatTarget(true),
           onSetPageKeyboardScrollTarget: () =>
               ChatKeyboardScrollTarget.setChatTarget(false),
+          keyboardHeight: keyboardHeight,
           minimizedBottomOffset: floatingInset,
           minimizedRightInset: floatingInset,
           skinMode: widget.chatSkinMode,
