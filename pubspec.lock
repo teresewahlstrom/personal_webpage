@@ -113,22 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
-  dart_quill_delta:
-    dependency: transitive
-    description:
-      name: dart_quill_delta
-      sha256: "6aa89f0903ca3e70f5ceeb1d75d722f6ca583e87a2a8893c7b9f42f7a947f6e5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.6.0"
-  diff_match_patch:
-    dependency: transitive
-    description:
-      name: diff_match_patch
-      sha256: "2efc9e6e8f449d0abe15be240e2c2a3bcd977c8d126cfd70598aee60af35c0a4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
   fake_async:
     dependency: transitive
     description:
@@ -153,14 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
-  fixnum:
-    dependency: transitive
-    description:
-      name: fixnum
-      sha256: b6dc7065e46c974bc7c5f143080a6764ec7a4be6da1285ececdc37be96de53be
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -328,14 +304,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  linkify:
-    dependency: transitive
-    description:
-      name: linkify
-      sha256: "4139ea77f4651ab9c315b577da2dd108d9aa0bd84b5d03d33323f1970c645832"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
   lints:
     dependency: transitive
     description:
@@ -352,14 +320,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  markdown:
-    dependency: transitive
-    description:
-      name: markdown
-      sha256: ee85086ad7698b42522c6ad42fe195f1b9898e4d974a1af4576c1a3a176cada9
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.3.1"
   matcher:
     dependency: transitive
     description:
@@ -536,14 +496,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: ea0b925899e64ecdfbf9c7becb60d5b50e706ade44a85b2363be2a22d88117d2
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.2"
   shelf:
     dependency: transitive
     description:
@@ -770,14 +722,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.5"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      sha256: "1fef9e8e11e2991bb773070d4656b7bd5d850967a2456cfc83cf47925ba79489"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.5.3"
   vector_graphics:
     dependency: transitive
     description:
