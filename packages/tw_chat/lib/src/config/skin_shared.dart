@@ -370,7 +370,7 @@ class ChatSkinTextStyles {
     );
     final base = GoogleFonts.nunito(
       fontSize: 14,
-      height: 1.5,
+      height: 1.3,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
     );
