@@ -13,6 +13,7 @@ import 'package:tw_primitives/src/text_field/infrastructure/platforms/mobile_doc
 import 'package:tw_primitives/src/text_field/infrastructure/signal_notifier.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/fill_width_if_constrained.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/hint_text.dart';
+import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_input_lifecycle.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/infrastructure/text_scrollview.dart';
 import 'package:tw_primitives/src/text_field/super_textfield/input_method_engine/_ime_text_editing_controller.dart';
@@ -425,14 +426,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-      case AppLifecycleState.detached:
-        return;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.hidden:
-      case AppLifecycleState.paused:
-        _clearFocusAndImeForBackgroundTransition();
+    if (shouldClearTextInputForLifecycleState(state)) {
+      _clearFocusAndImeForBackgroundTransition();
     }
   }
 
@@ -476,6 +471,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
   DeltaTextInputClient get imeClient => _textEditingController;
 
   void _clearFocusAndImeForBackgroundTransition() {
+    clearPlatformTextInputFocusForBackgroundTransition();
+
     if (!_focusNode.hasFocus && !_textEditingController.isAttachedToIme) {
       return;
     }

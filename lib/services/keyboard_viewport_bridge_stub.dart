@@ -9,15 +9,6 @@ class _NoopKeyboardViewportBridge implements KeyboardViewportBridge {
   double get estimatedBottomInset => 0;
 
   @override
-  bool get canTrackTextInputFocus => false;
-
-  @override
-  bool get isTextInputFocused => false;
-
-  @override
-  void clearTextInputFocus() {}
-
-  @override
   void start(KeyboardViewportChangeCallback onChange) {}
 
   @override

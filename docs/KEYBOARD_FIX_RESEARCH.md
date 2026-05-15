@@ -25,6 +25,11 @@ This is not just a chat layout bug. It is a lifecycle/focus/viewport desynchroni
 
 The white area appears when the app resumes with at least one layer still believing a text input or keyboard is active after the real keyboard has disappeared.
 
+Confirmed fix direction after real-device testing:
+
+- The durable fix is to clear mobile/web text-input state at the text-field primitive layer.
+- App-level keyboard layout observers should measure keyboard height only; they should not own text-input focus recovery.
+
 ## External References
 
 - Flutter issue #131840: iOS reports white keyboard space after background/foreground with a focused `TextField`.
@@ -149,26 +154,30 @@ Why this matters:
 - Flutter issue #131840 is also about white keyboard space after background/foreground with a focused text field.
 - If the iOS text field keeps its `TextInputConnection` alive during lock/background, Flutter Web can keep the hidden DOM text input or engine keyboard metrics in a stale state.
 
-Latest change:
+Fix:
 
 - iOS now mirrors Android and calls `_clearFocusAndImeForBackgroundTransition()` on `inactive`, `hidden`, and `paused`.
+- Shared lifecycle decisions now live in [packages/tw_primitives/lib/src/text_field/super_textfield/infrastructure/text_input_lifecycle.dart](../packages/tw_primitives/lib/src/text_field/super_textfield/infrastructure/text_input_lifecycle.dart).
+- Web DOM editable focus cleanup now lives in `tw_primitives` under [packages/tw_primitives/lib/src/text_field/infrastructure/platforms/web/](../packages/tw_primitives/lib/src/text_field/infrastructure/platforms/web/).
 
-### Finding 2: KeyboardHeight Should Not Publish Keyboard Space Without Text Input Focus
+### Finding 2: App-Level DOM Focus Cleanup Was The Wrong Long-Term Owner
 
 Previous behavior:
 
 - Positive keyboard height could be republished after resume even when the text input was unfocused, as long as Flutter or the browser still reported stale positive metrics.
+- `KeyboardHeightObserver` briefly took responsibility for clearing Flutter focus and browser DOM editable focus.
 
-Latest change:
+Final cleanup:
 
-- The web viewport bridge now reports whether the actual browser editable element is focused.
-- `KeyboardHeight` publishes `0` unless a real web text input/editing element is focused.
-- On background transitions, `KeyboardHeightObserver` unfocuses Flutter focus and also asks the web bridge to blur the active editable DOM element.
+- The DOM focus cleanup moved out of the app service and into `tw_primitives`.
+- `KeyboardHeightObserver` is back to measuring keyboard height for layout.
+- The app web viewport bridge no longer knows about DOM focus.
 
 Why this is simpler:
 
-- It removes the timed stale-inset suppression window.
-- It makes stale viewport metrics advisory only; they cannot create keyboard space unless text input focus is still real.
+- Text fields own text-input lifecycle.
+- App layout owns app layout.
+- This removes cross-layer coupling between `KeyboardHeight` and Flutter Web's hidden editable DOM element.
 
 ### Finding 3: The Host Page Should Not Own Keyboard Layout
 
@@ -185,16 +194,17 @@ Reason:
 - Adding host-page visual viewport sizing creates a second layout owner.
 - The white bug is easier to isolate if the browser shell is boring and Flutter/input lifecycle owns the recovery.
 
-## Current Candidate Fix
+## Confirmed Fix
 
-The latest code changes are:
+The bug was fixed by moving cleanup to the text-input lifecycle:
 
 1. Add iOS text field lifecycle cleanup in `SuperIOSTextField`.
-2. Simplify `web/index.html` back to full-height host only.
-3. Change `KeyboardHeight` to publish keyboard height only while a real text input is focused.
-4. Add web bridge helpers for detecting and clearing focused editable DOM elements.
+2. Keep Android and iOS lifecycle behavior aligned through `text_input_lifecycle.dart`.
+3. Add primitive-level web DOM editable blur on background transitions.
+4. Simplify `web/index.html` back to a full-height host only.
+5. Remove app-level DOM focus cleanup from `KeyboardHeightObserver`.
 
-This is a root-cause-oriented attempt, not another delayed resize patch.
+This was validated in the lock/unlock scenario that had been reproducing the persistent white keyboard area.
 
 ## Next Things To Try If This Still Fails
 
@@ -246,7 +256,13 @@ Purpose:
 
 ## Current Recommendation
 
-Test the latest candidate fix first. If the white area still persists, do Option A next: temporarily replace the composer `SuperTextField` with Flutter's standard `TextField`. That will split the problem cleanly between internal text field lifecycle and Flutter Web/browser behavior.
+Keep the responsibility split:
+
+- `tw_primitives` text fields own focus, IME, and web DOM editable cleanup.
+- App-level `KeyboardHeight` owns keyboard-height measurement for layout.
+- `tw_chat` owns chat-specific placement above a legitimate keyboard.
+
+If the issue ever returns, use Option A as the next isolation test: temporarily replace the composer `SuperTextField` with Flutter's standard `TextField`.
 
 ---
 

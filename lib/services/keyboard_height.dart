@@ -66,17 +66,6 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.hidden ||
-        state == AppLifecycleState.paused) {
-      if (FocusManager.instance.primaryFocus != null) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      }
-      _viewportBridge.clearTextInputFocus();
-      _scheduleStabilizationBurst();
-      return;
-    }
-
     if (state == AppLifecycleState.resumed) {
       _scheduleStabilizationBurst();
     }
@@ -116,20 +105,11 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
     final double clampedFlutterInset = _clampInset(flutterInset, screenHeight);
     final double clampedWebInset = _clampInset(webInset, screenHeight);
-    final double nextValue = !_hasTextInputFocus()
-        ? 0
-        : math.max(clampedFlutterInset, clampedWebInset);
+    final double nextValue = math.max(clampedFlutterInset, clampedWebInset);
 
     if ((nextValue - _keyboardHeight.value).abs() > 0.5) {
       _keyboardHeight.value = nextValue;
     }
-  }
-
-  bool _hasTextInputFocus() {
-    if (_viewportBridge.canTrackTextInputFocus) {
-      return _viewportBridge.isTextInputFocused;
-    }
-    return FocusManager.instance.primaryFocus != null;
   }
 
   double _clampInset(double inset, double screenHeight) {
