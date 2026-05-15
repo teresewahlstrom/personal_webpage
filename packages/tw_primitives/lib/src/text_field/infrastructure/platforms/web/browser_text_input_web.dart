@@ -1,22 +1,20 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
-
-import 'dart:html' as html;
+import 'package:web/web.dart' as web;
 
 void clearBrowserTextInputFocus() {
-  final html.Element? activeElement = html.document.activeElement;
+  final web.Element? activeElement = web.document.activeElement;
   if (!_isEditableElement(activeElement)) {
     return;
   }
-  activeElement?.blur();
+  (activeElement as web.HTMLElement).blur();
 }
 
-bool _isEditableElement(html.Element? element) {
-  if (element == null || element == html.document.body) {
+bool _isEditableElement(web.Element? element) {
+  if (element == null || element == web.document.body) {
     return false;
   }
 
   final String tagName = element.tagName.toLowerCase();
   return tagName == 'input' ||
       tagName == 'textarea' ||
-      element.isContentEditable == true;
+      (element is web.HTMLElement && element.isContentEditable);
 }

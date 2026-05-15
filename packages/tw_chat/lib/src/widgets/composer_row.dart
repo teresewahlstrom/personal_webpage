@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/chat_api.dart';
 
 import '../config/config.dart';
-import '../config/scrollbar.dart';
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({

@@ -471,32 +471,13 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
   DeltaTextInputClient get imeClient => _textEditingController;
 
   void _clearFocusAndImeForBackgroundTransition() {
-    clearPlatformTextInputFocusForBackgroundTransition();
-
-    if (!_focusNode.hasFocus && !_textEditingController.isAttachedToIme) {
-      return;
-    }
-
-    WidgetsBinding.instance.runAsSoonAsPossible(() {
-      if (!mounted) {
-        return;
-      }
-
-      _focusNode.unfocus();
-
-      if (!_textEditingController.isAttachedToIme) {
-        return;
-      }
-
-      setState(() {
-        _textEditingController.detachFromIme();
-        _textEditingController.selection = const TextSelection.collapsed(
-          offset: -1,
-        );
-        _textEditingController.composingRegion = TextRange.empty;
-        _removeEditingOverlayControls();
-      });
-    });
+    clearTextInputForBackgroundTransition(
+      focusNode: _focusNode,
+      textEditingController: _textEditingController,
+      isMounted: () => mounted,
+      runStateUpdate: setState,
+      removeEditingOverlayControls: _removeEditingOverlayControls,
+    );
   }
 
   void _updateSelectionAndImeConnectionOnFocusChange() {
