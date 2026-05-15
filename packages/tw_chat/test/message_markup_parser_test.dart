@@ -181,14 +181,9 @@ void main() {
       expect(heading.level, 2);
     });
 
-    test('### H3 is parsed', () {
-      final heading = blocks('### Third').first as ChatMarkupHeadingBlock;
-      expect(heading.level, 3);
-    });
-
-    test('#### beyond max level is treated as paragraph', () {
-      // _maxHeadingLevel is 3; #### should not produce a heading
-      final result = blocks('#### Too deep');
+    test('### beyond max level is treated as paragraph', () {
+      // _maxHeadingLevel is 2; ### should not produce a heading
+      final result = blocks('### Too deep');
       expect(result.first, isA<ChatMarkupParagraphBlock>());
     });
 

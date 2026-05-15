@@ -314,7 +314,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       final fontSize = theme.baseStyle.fontSize ?? 12.0;
       return Padding(
         padding: EdgeInsets.only(
-          left: fontSize * tokens.markupBlockquoteIndentFactor,
+          left: fontSize * tokens.markupBlockquoteIndentFactor * 3.0,
         ),
         child: CustomPaint(
           foregroundPainter: _BlockQuoteRailPainter(

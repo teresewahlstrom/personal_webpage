@@ -321,8 +321,6 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
     }
   }
 
-  bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
-
   TwTextFieldPlatformConfiguration get _configuration {
     if (widget.configuration != null) {
       return widget.configuration!;

@@ -138,7 +138,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       minLines: 1,
       maxLines: null,
       padding: EdgeInsets.fromLTRB(
-        tokens.composerTextInsetLeft,
+        tokens.composerTextInsetLeft + 2.0,
         tokens.composerInputTextInsetTop,
         tokens.composerTextInsetRight,
         tokens.composerInputTextInsetTopBottom,

@@ -110,9 +110,9 @@ class ChatSkinTokens {
   final EdgeInsets shellContentPadding = const EdgeInsets.fromLTRB(9, 0, 2, 10);
   final double shellOuterBorderWidth = 1.0;
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
-    0,
+    2,
     18,
-    18.75,
+    20.75,
     10,
   );
   final double chatListTopShadowHeight = 32.0;
@@ -212,19 +212,17 @@ class ChatSkinTokens {
   final double markupNestedListTopSpacingAdjustment = -0.59;
   final double markupNestedListBottomSpacingAdjustment = -0.55;
   final double markupBlockQuoteTopSpacingAdjustment = 0.0;
-  final double markupListBottomSpacingAdjustment = 0.9;
+  final double markupListBottomSpacingAdjustment = 1.05;
   final List<double> markupHeadingBottomSpacingFactors = const <double>[
+    -0.3,
     -0.4,
-    -0.4,
-    -0.5,
   ];
   final List<double> markupHeadingTopSpacingFactors = const <double>[
     1.0,
     1.0,
-    1.0,
   ];
   final double markupListItemBaseSpacingFactor = 0.26;
-  final double markupTopLevelListItemSpacingAdjustment = 0.39;
+  final double markupTopLevelListItemSpacingAdjustment = 0.52;
   final double markupListMarkerGapFactor = 0.3333333333;
   final double markupTopLevelListMarkerSlotFactor = 2.0;
   final double markupNestedListMarkerSlotFactor = 1.75;
@@ -464,23 +462,15 @@ class ChatSkinTextStyles {
     int level,
     ChatSkinColors colors,
   ) {
-    // Heading scales for levels 1..3 (H1, H2, H3).
-    // We'll treat H3 as removed (render as normal text),
-    // and make H2 exactly 1.0 logical pixel smaller than before.
-    const scales = <double>[1.55, 1.36, 1.22];
+    // Heading scales for levels 1..2 (H1, H2).
+    const scales = <double>[1.55, 1.36];
     const weights = <FontWeight>[
       FontWeight.w600,
       FontWeight.w700,
-      FontWeight.w900,
     ];
 
-    final clampedLevel = level.clamp(1, 3);
+    final clampedLevel = level.clamp(1, 2);
     final index = clampedLevel - 1;
-
-    // Remove H3 entirely: render it using the base style (no heading styling).
-    if (clampedLevel == 3) {
-      return baseStyle;
-    }
 
     final strongStyle = markdownStrongStyle(baseStyle, colors);
     double? fontSize = baseStyle.fontSize == null
