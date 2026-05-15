@@ -1,3 +1,5 @@
+// Portions of this text-field subtree are derived from super_editor.
+// See packages/tw_primitives/THIRD_PARTY_NOTICES.md for attribution and license details.
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

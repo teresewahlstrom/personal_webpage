@@ -246,17 +246,14 @@ typedef DocumentFloatingToolbarBuilder = Widget Function(
 typedef DocumentMagnifierBuilder = Widget Function(
     BuildContext, Key magnifierKey, LeaderLink focalPoint, bool isVisible);
 
-/// Global flag that disables long-press selection for Android and iOS, as a hack for Superlist, because
-/// Superlist has a custom long-press behavior per-component.
+/// Global flag that disables long-press selection on Android and iOS when a
+/// component needs to own its own long-press behavior.
 ///
-/// This is a hack and is expected to be replaced ASAP. Issue: https://github.com/superlistapp/super_editor/issues/1547
-///
-/// The underlying issue is that the document layout components have a gesture mode of "translucent", which
-/// lets both the document component and the overall document gesture interactor both respond to the touch
-/// event. As a result, if a user long-presses on a component to re-order it, that long-press also triggers
-/// the long-press text selection behavior within the standard document interactor.
-@Deprecated("Don't use this unless you're Superlist. This will be removed ASAP. See issue #1547.")
-bool disableLongPressSelectionForSuperlist = false;
+/// The document layout uses translucent gesture handling, so a component
+/// long-press can otherwise reach both the component gesture handler and the
+/// standard document selection interactor.
+@Deprecated("Deprecated: prefer component-specific long-press handling.")
+bool disableLongPressSelection = false;
 
 /// Controls the display and position of a magnifier and a floating toolbar.
 class MagnifierAndToolbarController with ChangeNotifier {

@@ -72,7 +72,7 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
   final AttributedTextEditingController _realController;
 
-  @Deprecated("this property is exposed temporarily as super_editor evaluates what to do with controllers")
+  @Deprecated("This property is exposed temporarily while controller ownership is being finalized.")
   AttributedTextEditingController get innerController => _realController;
 
   final bool _disposeClientController;
@@ -408,7 +408,6 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     // is reported, and we need to handle the new line insertion to let users replace the selected content
     // with a new line.
     //
-    // See https://github.com/superlistapp/super_editor/issues/2004 for more information.
     _hasPerformedNonNewLineTextInputActionThisFrame = action != TextInputAction.newline;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _hasPerformedNonNewLineTextInputActionThisFrame = false;

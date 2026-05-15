@@ -437,10 +437,8 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField> implements
         // we use NeverScrollableScrollPhysics to prevent SingleChildScrollView
         // from scrolling. This also prevents the user from interacting
         // with the scrollbar.
-        // We use a modified version of Flutter's Scrollbar that allows
-        // configuring it with a different scroll physics.
-        //
-        // See https://github.com/superlistapp/super_editor/issues/1628 for more details.
+        // ScrollbarWithCustomPhysics keeps the scrollbar interactive even when
+        // the scroll view uses custom physics for gesture handling.
         child: ScrollbarWithCustomPhysics(
           controller: _scrollController,
           physics: ScrollConfiguration.of(context).getScrollPhysics(context),
@@ -2069,10 +2067,8 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview> with
       // we use NeverScrollableScrollPhysics to prevent SingleChildScrollView
       // from scrolling. This also prevents the user from interacting
       // with the scrollbar.
-      // We use a modified version of Flutter's Scrollbar that allows
-      // configuring it with a different scroll physics.
-      //
-      // See https://github.com/superlistapp/super_editor/issues/1628 for more details.
+      // ScrollbarWithCustomPhysics keeps the scrollbar interactive even when
+      // the scroll view uses custom physics for gesture handling.
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
