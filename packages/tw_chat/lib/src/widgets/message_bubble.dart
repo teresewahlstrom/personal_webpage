@@ -237,82 +237,20 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                               isUserBubble: widget.isUser,
                               truncatedContentHeight: truncatedContentHeight,
                               isTruncated: isCollapsed,
+                              showBotFooter: !widget.isUser && !widget.isTypingIndicator,
+                              isTruncatable: isTruncatable,
+                              onToggleTruncation: widget.onToggleTruncation,
+                              toggleButtonBackgroundColor: toggleButtonBackgroundColor,
+                              toggleButtonIconColor: toggleButtonIconColor,
+                              toggleButtonBorderSide: toggleButtonBorderSide,
                             ),
                           ),
-                          if (!widget.isUser)
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              height: tokens.bubbleBorderWidth,
-                              child: IgnorePointer(
-                                child: CustomPaint(
-                                  painter: _BottomLinePainter(
-                                    color: ChatComposerLayout.borderColor(
-                                      context,
-                                    ),
-                                    strokeWidth: isCollapsed
-                                        ? tokens.bubbleBorderWidth * 2
-                                        : tokens.bubbleBorderWidth,
-                                    dashed: isCollapsed,
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              if (isTruncatable)
-                Positioned(
-                  left: collapseButtonOverflowLeft,
-                  bottom: 0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Tooltip(
-                        message: widget.isTruncated ? 'Show more' : 'Show less',
-                        child: SizedBox(
-                          width: tokens.collapseButtonDiameter,
-                          height: tokens.collapseButtonDiameter,
-                          child: Material(
-                            color: toggleButtonBackgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                tokens.collapseButtonRadius,
-                              ),
-                              side: toggleButtonBorderSide,
-                            ),
-                            child: InkWell(
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  tokens.collapseButtonRadius,
-                                ),
-                                side: toggleButtonBorderSide,
-                              ),
-                              onTap: widget.onToggleTruncation,
-                              child: Center(
-                                child: SizedBox(
-                                  width: tokens.collapseButtonIconSize,
-                                  height: tokens.collapseButtonIconSize,
-                                  child: CustomPaint(
-                                    painter: _PlusMinusPainter(
-                                      isPlus: widget.isTruncated,
-                                      color: toggleButtonIconColor,
-                                      strokeWidth: tokens.collapseButtonStroke,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
         ),
@@ -327,6 +265,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required bool isUserBubble,
     required double truncatedContentHeight,
     required bool isTruncated,
+    required bool showBotFooter,
+    required bool isTruncatable,
+    required VoidCallback onToggleTruncation,
+    required Color toggleButtonBackgroundColor,
+    required Color toggleButtonIconColor,
+    required BorderSide toggleButtonBorderSide,
   }) {
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
@@ -351,14 +295,30 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     }
     return SelectionListener(
       selectionNotifier: widget.selectionListenerNotifier,
-      child: bubble_markup_renderer.MessageBubbleMarkupRenderer(
-        document: parsedMarkup!.document,
-        style: style,
-        bubbleColor: bubbleColor,
-        isUserBubble: isUserBubble,
-        truncatedContentHeight: truncatedContentHeight,
-        isTruncated: isTruncated,
-        gestureRecognizerFactory: _createLinkRecognizer,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          bubble_markup_renderer.MessageBubbleMarkupRenderer(
+            document: parsedMarkup!.document,
+            style: style,
+            bubbleColor: bubbleColor,
+            isUserBubble: isUserBubble,
+            truncatedContentHeight: truncatedContentHeight,
+            isTruncated: isTruncated,
+            gestureRecognizerFactory: _createLinkRecognizer,
+          ),
+          if (showBotFooter) const SizedBox(height: 10),
+          if (showBotFooter)
+            _BotBubbleFooter(
+              isCollapsed: isTruncated,
+              isTruncatable: isTruncatable,
+              onToggleTruncation: onToggleTruncation,
+              toggleButtonBackgroundColor: toggleButtonBackgroundColor,
+              toggleButtonIconColor: toggleButtonIconColor,
+              toggleButtonBorderSide: toggleButtonBorderSide,
+            ),
+        ],
       ),
     );
   }
@@ -471,6 +431,91 @@ class _ParsedMarkupPayload {
 
   final ChatMarkupDocument document;
   final String plainText;
+}
+
+class _BotBubbleFooter extends StatelessWidget {
+  const _BotBubbleFooter({
+    required this.isCollapsed,
+    required this.isTruncatable,
+    required this.onToggleTruncation,
+    required this.toggleButtonBackgroundColor,
+    required this.toggleButtonIconColor,
+    required this.toggleButtonBorderSide,
+  });
+
+  final bool isCollapsed;
+  final bool isTruncatable;
+  final VoidCallback onToggleTruncation;
+  final Color toggleButtonBackgroundColor;
+  final Color toggleButtonIconColor;
+  final BorderSide toggleButtonBorderSide;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = ChatSkin.tokens;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: tokens.bubbleBorderWidth,
+          width: double.infinity,
+          child: IgnorePointer(
+            child: CustomPaint(
+              painter: _BottomLinePainter(
+                color: ChatComposerLayout.borderColor(context),
+                strokeWidth: isCollapsed
+                    ? tokens.bubbleBorderWidth * 2
+                    : tokens.bubbleBorderWidth,
+                dashed: isCollapsed,
+              ),
+            ),
+          ),
+        ),
+        if (isTruncatable)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Tooltip(
+              message: isCollapsed ? 'Show more' : 'Show less',
+              child: SizedBox(
+                width: tokens.collapseButtonDiameter,
+                height: tokens.collapseButtonDiameter,
+                child: Material(
+                  color: toggleButtonBackgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      tokens.collapseButtonRadius,
+                    ),
+                    side: toggleButtonBorderSide,
+                  ),
+                  child: InkWell(
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        tokens.collapseButtonRadius,
+                      ),
+                      side: toggleButtonBorderSide,
+                    ),
+                    onTap: onToggleTruncation,
+                    child: Center(
+                      child: SizedBox(
+                        width: tokens.collapseButtonIconSize,
+                        height: tokens.collapseButtonIconSize,
+                        child: CustomPaint(
+                          painter: _PlusMinusPainter(
+                            isPlus: isCollapsed,
+                            color: toggleButtonIconColor,
+                            strokeWidth: tokens.collapseButtonStroke,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class _TypingDotsIndicator extends StatefulWidget {

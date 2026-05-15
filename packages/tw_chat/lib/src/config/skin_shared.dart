@@ -117,7 +117,7 @@ class ChatSkinTokens {
   );
   final double chatListTopShadowHeight = 32.0;
   final double chatListBottomShadowHeight = 24;
-  final double chatListTrailingGap = 33.75;
+  final double chatListTrailingGap = 10.0;
 
   // Top shadow gradient
   final List<double> shellTopShadowGradientStops = const <double>[
@@ -204,7 +204,7 @@ class ChatSkinTokens {
   final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupStrikethroughThicknessBias = 0.98;
+  final double markupStrikethroughThicknessBias = 1.8;
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
@@ -214,7 +214,7 @@ class ChatSkinTokens {
   final double markupBlockQuoteTopSpacingAdjustment = 0.0;
   final double markupListBottomSpacingAdjustment = 1.05;
   final List<double> markupHeadingBottomSpacingFactors = const <double>[
-    -0.3,
+    -0.2,
     -0.4,
   ];
   final List<double> markupHeadingTopSpacingFactors = const <double>[

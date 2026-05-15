@@ -111,13 +111,8 @@ class _PageScaffoldState extends State<PageScaffold>
     final Brightness brightness = theme.brightness;
     final TargetPlatform platform = theme.platform;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final double floatingInset = FloatingControlInset.forViewportWidth(
-      mediaQuery.size.width,
-    );
     final double floatingTopInset =
-        mediaQuery.viewPadding.top +
-        ShellUiConfig.headerMinHeight +
-        floatingInset;
+      mediaQuery.viewPadding.top + 10.0;
     return GridBackground(
       backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
       gridLineStyle: ShellUiConfig.gridLineFor(brightness),
@@ -195,7 +190,7 @@ class _PageScaffoldState extends State<PageScaffold>
             ),
             if (widget.showThemeToggle && widget.onToggleTheme != null)
               Positioned(
-                right: mediaQuery.viewPadding.right + floatingInset,
+                right: mediaQuery.viewPadding.right + 10.0,
                 top: floatingTopInset,
                 child: ThemeToggleControlButton(
                   isDarkMode: widget.isDarkMode,

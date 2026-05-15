@@ -205,7 +205,13 @@ class ChatAppBar extends StatelessWidget {
           child: InkWell(
             onTap: onDisplayStateToggle,
             child: Center(
-              child: Icon(displayStateToggleIcon, color: iconColor),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Icon(displayStateToggleIcon, color: iconColor),
+                ),
+              ),
             ),
           ),
         ),
