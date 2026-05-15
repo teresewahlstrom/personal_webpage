@@ -249,12 +249,24 @@ class _TextScrollViewState extends State<TextScrollView>
       return 0;
     }
 
-    final lastCharacterPosition = TextPosition(offset: widget.textEditingController.text.length - 1);
-    return isMultiline
-        ? (_textLayout.getCharacterBox(lastCharacterPosition)?.bottom ?? _textLayout.estimatedLineHeight) -
-            viewportHeight +
-            (widget.padding?.vertical ?? 0.0)
-        : _scrollController.position.maxScrollExtent;
+    if (!isMultiline) {
+      return _scrollController.position.maxScrollExtent;
+    }
+
+    final textLength = widget.textEditingController.text.length;
+    final caretAtEnd = TextPosition(offset: textLength);
+    final caretBottomAtEnd =
+      (_textLayout.getOffsetForCaret(caretAtEnd).dy) +
+      (_textLayout.getHeightForCaret(caretAtEnd) ?? _textLayout.getLineHeightAtPosition(caretAtEnd));
+
+    // Some platforms report the last rendered caret position one visual line beyond
+    // the last character (e.g., trailing newline). Use whichever boundary is lower.
+    final lastCharacterBottom = textLength > 0
+      ? (_textLayout.getCharacterBox(TextPosition(offset: textLength - 1))?.bottom ?? 0.0)
+      : 0.0;
+    final contentBottom = max(caretBottomAtEnd, lastCharacterBottom);
+
+    return max(contentBottom - viewportHeight + (widget.padding?.vertical ?? 0.0), 0.0);
   }
 
   @override
