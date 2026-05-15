@@ -73,17 +73,6 @@ class ChatDock extends StatefulWidget {
 class _ChatDockState extends State<ChatDock> {
   ChatDockDisplayState _displayState = ChatDockDisplayState.minimized;
 
-  // Stable viewport height used to prevent the dock from jumping when the
-  // mobile browser URL bar shows/hides (which transiently changes
-  // window.innerHeight and therefore MediaQuery.size.height).
-  //
-  // On phone-width viewports the dock fills the full viewport height, so even
-  // a ~56 px change causes a visible jump.  We allow the stable height to
-  // shrink only when the software keyboard is open (keyboardHeight > 0) or
-  // when the orientation has flipped (large width change).
-  double _stableViewportHeight = 0;
-  double _lastSeenWidth = 0;
-
   bool get _isExpanded => _displayState == ChatDockDisplayState.expanded;
 
   void _expandChat() {
@@ -97,61 +86,10 @@ class _ChatDockState extends State<ChatDock> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateStableViewportHeight();
-  }
-
-  @override
-  void didUpdateWidget(covariant ChatDock oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if ((oldWidget.keyboardHeight - widget.keyboardHeight).abs() > 0.5) {
-      _updateStableViewportHeight();
-    }
-  }
-
-  void _updateStableViewportHeight() {
-    final mq = MediaQuery.of(context);
-    final h = mq.size.height;
-    final w = mq.size.width;
-
-    // Reset on a significant width change (portrait ↔ landscape rotation).
-    if ((w - _lastSeenWidth).abs() > 50) {
-      _stableViewportHeight = h;
-      _lastSeenWidth = w;
-      return;
-    }
-    _lastSeenWidth = w;
-
-    // Always accept a larger height (URL bar hidden / more space available).
-    if (h > _stableViewportHeight) {
-      _stableViewportHeight = h;
-      return;
-    }
-
-    // Allow the height to shrink only when the software keyboard is open so
-    // the dock still yields space for keyboard insets.
-    if (widget.keyboardHeight > 0) {
-      _stableViewportHeight = h;
-    }
-    // Otherwise ignore the shrinkage — it is the browser URL bar appearing
-    // transiently (e.g. after switching tabs), not a real layout change.
-  }
-
-  @override
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final mediaQuery = MediaQuery.of(context);
-    final rawViewportSize = mediaQuery.size;
-
-    // On phone-width viewports the dock fills the full viewport height.  Use
-    // the stabilized height so that transient URL-bar visibility changes don't
-    // cause the dock to jump up/down.
-    final bool isPhoneWidth =
-        rawViewportSize.width <= ChatLayout.phoneBreakpoint;
-    final viewportSize = isPhoneWidth
-        ? Size(rawViewportSize.width, _stableViewportHeight)
-        : rawViewportSize;
+    final viewportSize = mediaQuery.size;
 
     final chatMargin = ChatLayout.dockHorizontalMargin(
       viewportSize: viewportSize,

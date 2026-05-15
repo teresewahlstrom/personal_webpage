@@ -561,7 +561,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
   /// Rebuilds the [IOSEditingControls] in the [OverlayPortal], if
   /// they're currently displayed.
   void _rebuildHandles() {
-    if (!_popoverController.isShowing) {
+    if (_popoverController.isShowing) {
       _overlayControlsRebuildSignal.notifyListeners();
     }
   }

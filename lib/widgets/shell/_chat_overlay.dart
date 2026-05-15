@@ -24,10 +24,6 @@ class ChatOverlay extends StatefulWidget {
 
 class _ChatOverlayState extends State<ChatOverlay> {
   late final ConversationController _conversationController;
-  double _cachedFloatingInset = 25.0;
-  double _lastViewportWidth = double.infinity;
-  late Size _cachedViewportSize;
-  double _lastCachedViewportWidth = double.infinity;
 
   @override
   void initState() {
@@ -43,28 +39,6 @@ class _ChatOverlayState extends State<ChatOverlay> {
       replyClient: replyClient,
       ownsReplyClient: true,
     );
-    _cachedViewportSize = Size.zero;
-  }
-
-  double _getFloatingInset(double viewportWidth) {
-    // Only recalculate if viewport width crosses a breakpoint threshold (±5 pixels tolerance)
-    // This prevents chattering from scrollbar micro-adjustments or transient viewport changes
-    const double breakpointTolerance = 5.0;
-    if ((viewportWidth - _lastViewportWidth).abs() > breakpointTolerance) {
-      _lastViewportWidth = viewportWidth;
-      _cachedFloatingInset = FloatingControlInset.forViewportWidth(viewportWidth);
-    }
-    return _cachedFloatingInset;
-  }
-
-  Size _getCachedViewportSize(Size currentViewport) {
-    // Only update cached size when width changes significantly (breakpoint crossings)
-    // This reduces cascade effects from transient viewport changes
-    if ((currentViewport.width - _lastCachedViewportWidth).abs() > 5.0) {
-      _lastCachedViewportWidth = currentViewport.width;
-      _cachedViewportSize = currentViewport;
-    }
-    return _cachedViewportSize;
   }
 
   @override
@@ -76,9 +50,10 @@ class _ChatOverlayState extends State<ChatOverlay> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Size currentViewport = MediaQuery.of(context).size;
-    final Size viewport = _getCachedViewportSize(currentViewport);
-    final double floatingInset = _getFloatingInset(viewport.width);
+    final Size viewport = MediaQuery.of(context).size;
+    final double floatingInset = FloatingControlInset.forViewportWidth(
+      viewport.width,
+    );
     final double keyboardHeight = KeyboardHeight.of(context);
     return AnimatedBuilder(
       animation: _conversationController,
