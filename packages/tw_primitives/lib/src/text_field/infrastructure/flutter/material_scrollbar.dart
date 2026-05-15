@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/cupertino_scrollbar.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/flutter/scrollbar.dart';
+import 'package:tw_primitives/src/scrollbar/raw_scrollbar_with_custom_physics.dart';
 
 const double _kScrollbarThickness = 8.0;
 const double _kScrollbarThicknessWithTrack = 12.0;

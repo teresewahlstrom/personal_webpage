@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollDirection;
-import 'package:tw_primitives/src/text_field/infrastructure/flutter/scrollbar.dart';
+import 'package:tw_primitives/src/scrollbar/raw_scrollbar_with_custom_physics.dart';
 
 class TwScrollbarDefaults {
   const TwScrollbarDefaults._();

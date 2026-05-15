@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tw_chat/chat.dart' show ChatSkinMode;
+import 'package:tw_chat/chat.dart' show ChatSkinMode, TwScrollArea;
 
 import '../../config/app_ui_config.dart';
 import '../arrow_key_scroll_wrapper.dart';
@@ -134,52 +134,50 @@ class _PageScaffoldState extends State<PageScaffold>
                           absorbing: widget.isPageLoading,
                           child: PrimaryScrollController(
                             controller: _pageScrollController,
-                            child: ScrollConfiguration(
-                              behavior: ScrollConfiguration.of(
+                            child: TwScrollArea(
+                              controller: _pageScrollController,
+                              thumbVisibility: false,
+                              physics: ScrollConfiguration.of(
                                 context,
-                              ).copyWith(scrollbars: false),
-                              child: Scrollbar(
-                                controller: _pageScrollController,
-                                interactive: true,
-                                child: SelectableRegion(
-                                  key: _pageSelectionAreaKey,
-                                  focusNode: _pageSelectionFocusNode,
-                                  selectionControls: platform == TargetPlatform.iOS ||
-                                      platform == TargetPlatform.macOS
-                                      ? cupertinoTextSelectionControls
-                                      : materialTextSelectionControls,
-                                  child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      return SingleChildScrollView(
-                                        controller: _pageScrollController,
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            minHeight: constraints.maxHeight,
-                                          ),
-                                          child: ArrowKeyScrollWrapper(
-                                            controller: _pageScrollController,
-                                            onTap: () {
-                                              _pageSelectionAreaKey.currentState
-                                                  ?.clearSelection();
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: <Widget>[
-                                                const PageHeader(),
-                                                widget.child,
-                                                if (widget.showFooter && !widget.isPageLoading)
-                                                  const PageFooter(
-                                                    brandName: 'T1 grid',
-                                                    privacyLabel: 'Privacy & Cookies Note.',
-                                                  ),
-                                              ],
-                                            ),
+                              ).getScrollPhysics(context),
+                              child: SelectableRegion(
+                                key: _pageSelectionAreaKey,
+                                focusNode: _pageSelectionFocusNode,
+                                selectionControls: platform == TargetPlatform.iOS ||
+                                    platform == TargetPlatform.macOS
+                                    ? cupertinoTextSelectionControls
+                                    : materialTextSelectionControls,
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    return SingleChildScrollView(
+                                      controller: _pageScrollController,
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minHeight: constraints.maxHeight,
+                                        ),
+                                        child: ArrowKeyScrollWrapper(
+                                          controller: _pageScrollController,
+                                          onTap: () {
+                                            _pageSelectionAreaKey.currentState
+                                                ?.clearSelection();
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              const PageHeader(),
+                                              widget.child,
+                                              if (widget.showFooter && !widget.isPageLoading)
+                                                const PageFooter(
+                                                  brandName: 'T1 grid',
+                                                  privacyLabel: 'Privacy & Cookies Note.',
+                                                ),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

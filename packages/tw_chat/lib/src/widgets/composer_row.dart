@@ -119,7 +119,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           widget.maxInputHeight,
         );
 
-    final inputField = TwScrollbar(
+    final inputField = TwScrollArea(
       controller: _composerScrollController,
       thumbColor: ChatScrollbar.thumbColor(context),
       thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
@@ -132,31 +132,28 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       thumbVisibility: true,
       interactive: true,
       trackVisibility: false,
-      child: ScrollConfiguration(
-        behavior: const TwNoScrollbarBehavior(),
-        child: TwTextField(
-          scrollController: _composerScrollController,
-          focusNode: widget.inputFocusNode,
-          textController: widget.controller,
-          textStyleBuilder: (_) => composerTextStyle,
-          hintBehavior: HintBehavior.displayHintUntilTextEntered,
-          hintBuilder: (context) =>
-              Text('Ask me anything...', style: composerHintStyle),
-          minLines: 1,
-          maxLines: null,
-          padding: EdgeInsets.fromLTRB(
-            tokens.composerTextInsetLeft,
-            tokens.composerInputTextInsetTop,
-            tokens.composerTextInsetRight,
-            tokens.composerInputTextInsetTopBottom,
-          ),
-          controlsColor: ChatComposerLayout.cursorColor(context),
-          caretStyle: CaretStyle(
-            color: ChatComposerLayout.cursorColor(context),
-            width: tokens.composerCaretWidth,
-          ),
-          handlesRadius: tokens.composerHandleRadius,
+      child: TwTextField(
+        scrollController: _composerScrollController,
+        focusNode: widget.inputFocusNode,
+        textController: widget.controller,
+        textStyleBuilder: (_) => composerTextStyle,
+        hintBehavior: HintBehavior.displayHintUntilTextEntered,
+        hintBuilder: (context) =>
+            Text('Ask me anything...', style: composerHintStyle),
+        minLines: 1,
+        maxLines: null,
+        padding: EdgeInsets.fromLTRB(
+          tokens.composerTextInsetLeft,
+          tokens.composerInputTextInsetTop,
+          tokens.composerTextInsetRight,
+          tokens.composerInputTextInsetTopBottom,
         ),
+        controlsColor: ChatComposerLayout.cursorColor(context),
+        caretStyle: CaretStyle(
+          color: ChatComposerLayout.cursorColor(context),
+          width: tokens.composerCaretWidth,
+        ),
+        handlesRadius: tokens.composerHandleRadius,
       ),
     );
 

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/flutter/scrollbar.dart';
+import 'package:tw_primitives/src/scrollbar/raw_scrollbar_with_custom_physics.dart';
 
 // All values eyeballed.
 const double _kScrollbarMinLength = 36.0;
