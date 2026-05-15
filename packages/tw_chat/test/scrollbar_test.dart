@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tw_primitives/chat_api.dart' as se_scrollbar show ScrollbarPainter;
 import 'package:tw_chat/src/config/config.dart';
 
 void main() {
@@ -52,10 +51,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    List<se_scrollbar.ScrollbarPainter> findScrollbarPainters() => tester
+    List<ScrollbarPainter> findScrollbarPainters() => tester
         .widgetList<CustomPaint>(find.byType(CustomPaint))
         .map((widget) => widget.foregroundPainter)
-        .whereType<se_scrollbar.ScrollbarPainter>()
+        .whereType<ScrollbarPainter>()
         .toList();
 
     var painters = findScrollbarPainters();
