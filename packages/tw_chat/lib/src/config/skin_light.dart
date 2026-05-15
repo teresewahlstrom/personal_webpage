@@ -9,6 +9,7 @@ const ChatSkinData chatLightSkin = ChatSkinData(
     shellTopShadowSoft: Color(0x02000000),
     appBarTitle: Color(0xFF161C45),
     bubbleText: Color(0xFF000000),
+    typingIndicatorDot: Color(0xFF000000),
     shellBackgroundBaseStart: Color(0xFFF8F9F7),
     shellBackgroundBaseEnd: Color(0xFFF8F9F7),
     shellBackgroundStart: Color(0xFFF8F9F7),

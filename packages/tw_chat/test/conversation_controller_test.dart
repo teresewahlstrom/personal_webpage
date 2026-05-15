@@ -8,6 +8,7 @@ void main() {
     final controller = ConversationController(
       introText: 'intro',
       replyClient: const FixedReplyClient(replyText: 'fixed'),
+      minimumPendingReplyDuration: Duration.zero,
     );
 
     expect(controller.messages.length, 1);
@@ -24,6 +25,7 @@ void main() {
         replyText: 'fixed',
         replyDelay: Duration(milliseconds: 5),
       ),
+      minimumPendingReplyDuration: Duration.zero,
     );
 
     controller.sendMessage('hello');
@@ -67,6 +69,7 @@ void main() {
       final controller = ConversationController(
         introText: 'intro',
         replyClient: _ThrowingReplyClient(),
+        minimumPendingReplyDuration: Duration.zero,
       );
 
       controller.sendMessage('hello');
@@ -82,6 +85,27 @@ void main() {
       controller.dispose();
     },
   );
+
+  test('controller keeps immediate replies pending briefly', () async {
+    final controller = ConversationController(
+      introText: 'intro',
+      replyClient: const FixedReplyClient(replyText: 'fixed'),
+      minimumPendingReplyDuration: const Duration(milliseconds: 40),
+    );
+
+    controller.sendMessage('hello');
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    expect(controller.messages.length, 3);
+    expect(controller.messages.last.isPending, isTrue);
+
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+
+    expect(controller.messages.last.isPending, isFalse);
+    expect(controller.messages.last.text, 'fixed');
+
+    controller.dispose();
+  });
 }
 
 class _ThrowingReplyClient extends ReplyClient {

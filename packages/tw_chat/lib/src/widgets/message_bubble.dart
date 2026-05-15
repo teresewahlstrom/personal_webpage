@@ -315,7 +315,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         child: Padding(
           padding: tokens.typingIndicatorPadding,
           child: _TypingDotsIndicator(
-            color: colors.scrollbarThumb,
+            color: colors.typingIndicatorDot,
             dotDiameter:
                 ((style.fontSize ?? tokens.typingIndicatorDefaultFontSize) *
                         0.5)

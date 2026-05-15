@@ -11,6 +11,7 @@ class ConversationController extends ChangeNotifier {
     required ReplyClient replyClient,
     bool ownsReplyClient = false,
     String? sessionId,
+    this.minimumPendingReplyDuration = const Duration(milliseconds: 180),
   }) {
     _replyClient = replyClient;
     _ownsReplyClient = ownsReplyClient;
@@ -21,6 +22,7 @@ class ConversationController extends ChangeNotifier {
   }
 
   final String introText;
+  final Duration minimumPendingReplyDuration;
   late final ReplyClient _replyClient;
   late final bool _ownsReplyClient;
   late final String _sessionId;
@@ -63,11 +65,13 @@ class ConversationController extends ChangeNotifier {
 
     final token = Object();
     _pendingReplyTokens[pendingReplyMessage.id] = token;
+    final pendingReplyStartedAt = DateTime.now();
     unawaited(
       _resolvePendingReply(
         pendingMessageId: pendingReplyMessage.id,
         originalMessage: trimmedText,
         token: token,
+        pendingReplyStartedAt: pendingReplyStartedAt,
       ),
     );
   }
@@ -89,40 +93,47 @@ class ConversationController extends ChangeNotifier {
     required String pendingMessageId,
     required String originalMessage,
     required Object token,
+    required DateTime pendingReplyStartedAt,
   }) async {
+    late final String replyText;
     try {
-      final reply = await _replyClient.fetchReply(
+      replyText = await _replyClient.fetchReply(
         sessionId: _sessionId,
         message: originalMessage,
       );
       _clearLastReplyFailure();
-      _completePendingReply(
-        pendingMessageId: pendingMessageId,
-        token: token,
-        replyText: reply,
-      );
     } on ReplyException catch (error, stackTrace) {
       _recordReplyFailure(
         error: error,
         stackTrace: stackTrace,
         clientError: true,
       );
-      _completePendingReply(
-        pendingMessageId: pendingMessageId,
-        token: token,
-        replyText: _fallbackReplyText,
-      );
+      replyText = _fallbackReplyText;
     } catch (error, stackTrace) {
       _recordReplyFailure(
         error: error,
         stackTrace: stackTrace,
         clientError: false,
       );
-      _completePendingReply(
-        pendingMessageId: pendingMessageId,
-        token: token,
-        replyText: _fallbackReplyText,
-      );
+      replyText = _fallbackReplyText;
+    }
+    await _waitForMinimumPendingReplyDuration(pendingReplyStartedAt);
+    _completePendingReply(
+      pendingMessageId: pendingMessageId,
+      token: token,
+      replyText: replyText,
+    );
+  }
+
+  Future<void> _waitForMinimumPendingReplyDuration(DateTime startedAt) async {
+    if (minimumPendingReplyDuration <= Duration.zero) {
+      return;
+    }
+
+    final elapsed = DateTime.now().difference(startedAt);
+    final remaining = minimumPendingReplyDuration - elapsed;
+    if (remaining > Duration.zero) {
+      await Future<void>.delayed(remaining);
     }
   }
 

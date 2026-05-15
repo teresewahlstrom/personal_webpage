@@ -68,15 +68,14 @@ void main() {
     expect(height, 496);
   });
 
-  test('height transition band smooths around compact threshold', () {
+  test('height resolves to floating size after compact transition band', () {
     final height = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 760),
       keyboardHeight: 0,
       viewPadding: EdgeInsets.zero,
     );
 
-    expect(height, greaterThan(560));
-    expect(height, lessThan(760));
+    expect(height, 560);
   });
 
   test('tall desktop viewport keeps floating-height behavior', () {
@@ -160,8 +159,23 @@ void main() {
     expect(mediumWidthHeight, closeTo(wideWidthHeight, 0.1));
   });
 
+  test('floating dock height ignores landscape and portrait width changes', () {
+    final landscapeWidthHeight = ChatLayout.maxDockHeight(
+      viewportSize: const Size(1100, 900),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
+    final portraitWidthHeight = ChatLayout.maxDockHeight(
+      viewportSize: const Size(700, 900),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
+
+    expect(landscapeWidthHeight, closeTo(portraitWidthHeight, 0.1));
+  });
+
   test('dock width shrinks only when available width is below fixed width', () {
-    const viewportSize = Size(580, 900);
+    const viewportSize = Size(552, 900);
     final margin = margin0(viewportSize: viewportSize);
     final width = width0(viewportSize: viewportSize, dockMargin: margin);
     final available = viewportSize.width - margin * 2;
@@ -170,22 +184,13 @@ void main() {
     expect(width, closeTo(available, 0.1));
   });
 
-  test(
-    'landscape compact-height threshold is more forgiving than portrait',
-    () {
-      final landscapeHeight = ChatLayout.maxDockHeight(
-        viewportSize: const Size(900, 680),
-        keyboardHeight: 0,
-        viewPadding: EdgeInsets.zero,
-      );
-      final portraitHeight = ChatLayout.maxDockHeight(
-        viewportSize: const Size(680, 900),
-        keyboardHeight: 220,
-        viewPadding: EdgeInsets.zero,
-      );
+  test('phone-width layout fills available safe height', () {
+    final height = ChatLayout.maxDockHeight(
+      viewportSize: const Size(620, 760),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
 
-      expect(landscapeHeight, 680);
-      expect(portraitHeight, lessThan(680));
-    },
-  );
+    expect(height, 756);
+  });
 }

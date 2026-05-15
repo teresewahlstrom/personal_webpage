@@ -154,11 +154,14 @@ class _ChatSectionState extends State<ChatSection> {
                   composerMetrics.maxInputHeight,
                 );
         final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
-        final chatScrollbarBottomInset =
+        final chatContentBottomInset =
             tokens.shellContentPadding.bottom +
             composerHeight +
             tokens.composerGap +
             tokens.composerRowTopSpacing;
+        final chatScrollbarBottomInset = tokens.shellBottomShadowHeight(
+          composerHeight,
+        );
 
         return Stack(
           children: [
@@ -201,6 +204,7 @@ class _ChatSectionState extends State<ChatSection> {
                           _coordinator.handleChatPointerInteractionEnd,
                       scrollbarTopInset: chatScrollbarTopInset,
                       scrollbarBottomInset: chatScrollbarBottomInset,
+                      contentBottomInset: chatContentBottomInset,
                       jumpToLatestButton: null,
                       buildScrollbarTrack:
                           ({

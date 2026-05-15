@@ -32,23 +32,15 @@ class ChatLayout {
   static const phoneHeightFactor = 0.82;
   static const floatingHeightFactor = 0.78;
 
-  /// Height threshold where compact mode starts in portrait orientation.
-  static const compactHeightFillViewportThresholdPortrait = 640.0;
-
-  /// Height threshold where compact mode starts in landscape orientation.
-  static const compactHeightFillViewportThresholdLandscape = 720.0;
+  /// Height threshold where compact mode starts.
+  static const compactHeightFillViewportThreshold = 640.0;
 
   /// Transition range used to avoid hard snap when resizing around compact mode.
   static const compactHeightTransitionBand = 120.0;
 
-  /// Additional vertical budget in landscape to offset reduced line counts.
-  static const landscapeHeightBoost = 0.10;
-
-  /// Min/max dock height clamps per orientation.
-  static const minWindowHeightPortrait = 280.0;
-  static const maxWindowHeightPortrait = 720.0;
-  static const minWindowHeightLandscape = 240.0;
-  static const maxWindowHeightLandscape = 560.0;
+  /// Min/max dock height clamps for floating layouts.
+  static const minWindowHeight = 280.0;
+  static const maxWindowHeight = 560.0;
 
   /// Distance from bottom that still counts as "at tail" for auto-follow.
   static const nearBottomThreshold = 24.0;
@@ -143,17 +135,15 @@ class ChatLayout {
     required EdgeInsets viewPadding,
     double minimumTopInset = 0,
   }) {
-    final bool isLandscape = viewportSize.width > viewportSize.height;
     final safeViewportHeight =
         viewportSize.height - keyboardHeight - viewPadding.top;
     final clampedSafeViewportHeight = safeViewportHeight.clamp(
       0.0,
       double.infinity,
     );
-    final heightThreshold = _compactHeightThreshold(isLandscape: isLandscape);
     final transitionProgress = _transitionProgress(
       value: clampedSafeViewportHeight,
-      compactThreshold: heightThreshold,
+      compactThreshold: compactHeightFillViewportThreshold,
       transitionBand: compactHeightTransitionBand,
     );
     final tokens = ChatSkin.tokens;
@@ -176,17 +166,9 @@ class ChatLayout {
       return clampedSafeUsableHeight;
     }
 
-    final targetFactor =
-        (floatingHeightFactor + (isLandscape ? landscapeHeightBoost : 0.0))
-            .clamp(0.55, 0.95);
+    final targetFactor = floatingHeightFactor.clamp(0.55, 0.95);
     final targetHeight = clampedSafeUsableHeight * targetFactor;
-    final minHeight = isLandscape
-        ? minWindowHeightLandscape
-        : minWindowHeightPortrait;
-    final maxHeight = isLandscape
-        ? maxWindowHeightLandscape
-        : maxWindowHeightPortrait;
-    final floatingHeight = targetHeight.clamp(minHeight, maxHeight);
+    final floatingHeight = targetHeight.clamp(minWindowHeight, maxWindowHeight);
     return _lerp(clampedSafeUsableHeight, floatingHeight, transitionProgress);
   }
 
@@ -208,12 +190,6 @@ class ChatLayout {
     return isLandscape
         ? compactWidthFillViewportThresholdLandscape
         : compactWidthFillViewportThresholdPortrait;
-  }
-
-  static double _compactHeightThreshold({required bool isLandscape}) {
-    return isLandscape
-        ? compactHeightFillViewportThresholdLandscape
-        : compactHeightFillViewportThresholdPortrait;
   }
 
   static double _transitionProgress({

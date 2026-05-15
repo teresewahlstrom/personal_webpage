@@ -43,33 +43,39 @@ void main() {
             height: 280,
             child: Column(
               children: [
-                ChatMessageListArea(
-                  messages: messages,
-                  availableWidth: 360,
-                  chatScroll: chatScroll,
-                  chatFocusNode: chatFocusNode,
-                  chatSelectionAreaKey: selectionAreaKey,
-                  messageBubbleKeys: messageBubbleKeys,
-                  showChatScrollbarTrack: false,
-                  isMessageTruncated: (_) => false,
-                  onToggleTruncation: (_) {},
-                  onChatSelectionChanged: (_) {},
-                  selectionNotifierForMessage: (messageId) => selectionNotifiers
-                      .putIfAbsent(messageId, SelectionListenerNotifier.new),
-                  onCopySelectionRequested: () => '',
-                  onRequestChatKeyboardTarget: () {},
-                  onChatPointerInteractionStart: () {},
-                  onChatPointerInteractionEnd: () {},
-                  jumpToLatestButton: null,
-                  scrollbarTopInset: 0,
-                  scrollbarBottomInset: 0,
-                  buildScrollbarTrack:
-                      ({
-                        required double thickness,
-                        required double crossAxisInset,
-                        required double topInset,
-                        required double bottomInset,
-                      }) => const SizedBox.shrink(),
+                Expanded(
+                  child: ChatMessageListArea(
+                    messages: messages,
+                    availableWidth: 360,
+                    chatScroll: chatScroll,
+                    chatFocusNode: chatFocusNode,
+                    chatSelectionAreaKey: selectionAreaKey,
+                    messageBubbleKeys: messageBubbleKeys,
+                    showChatScrollbarTrack: false,
+                    isMessageTruncated: (_) => false,
+                    onToggleTruncation: (_) {},
+                    onChatSelectionChanged: (_) {},
+                    selectionNotifierForMessage: (messageId) =>
+                        selectionNotifiers.putIfAbsent(
+                          messageId,
+                          SelectionListenerNotifier.new,
+                        ),
+                    onCopySelectionRequested: () => '',
+                    onRequestChatKeyboardTarget: () {},
+                    onChatPointerInteractionStart: () {},
+                    onChatPointerInteractionEnd: () {},
+                    jumpToLatestButton: null,
+                    scrollbarTopInset: 0,
+                    scrollbarBottomInset: 0,
+                    contentBottomInset: 0,
+                    buildScrollbarTrack:
+                        ({
+                          required double thickness,
+                          required double crossAxisInset,
+                          required double topInset,
+                          required double bottomInset,
+                        }) => const SizedBox.shrink(),
+                  ),
                 ),
               ],
             ),
@@ -91,7 +97,7 @@ void main() {
 
     expect(
       initialFirstBubbleRect.top - initialViewportRect.top,
-      closeTo(tokens.bubbleViewportPadding.top, 0.1),
+      closeTo(tokens.chatListTopShadowHeight + 15, 0.1),
     );
 
     chatScroll.jumpTo(chatScroll.position.maxScrollExtent);

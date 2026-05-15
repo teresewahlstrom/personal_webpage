@@ -28,6 +28,7 @@ class ChatMessageListArea extends StatelessWidget {
     required this.onChatPointerInteractionEnd,
     required this.scrollbarTopInset,
     required this.scrollbarBottomInset,
+    required this.contentBottomInset,
     required this.jumpToLatestButton,
     required this.buildScrollbarTrack,
   });
@@ -50,6 +51,7 @@ class ChatMessageListArea extends StatelessWidget {
   final VoidCallback onChatPointerInteractionEnd;
   final double scrollbarTopInset;
   final double scrollbarBottomInset;
+  final double contentBottomInset;
   final Widget? jumpToLatestButton;
   final Widget Function({
     required double thickness,
@@ -166,8 +168,7 @@ class ChatMessageListArea extends StatelessWidget {
                               onToggleTruncation(entry.$2.id),
                         ),
                       SizedBox(
-                        height:
-                            scrollbarBottomInset + tokens.chatListTrailingGap,
+                        height: contentBottomInset + tokens.chatListTrailingGap,
                       ),
                     ],
                   ),

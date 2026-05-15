@@ -22,6 +22,7 @@ class ChatSkinColors {
     required this.shellTopShadowSoft,
     required this.appBarTitle,
     required this.bubbleText,
+    required this.typingIndicatorDot,
     required this.shellBackgroundBaseStart,
     required this.shellBackgroundBaseEnd,
     required this.shellBackgroundStart,
@@ -57,6 +58,7 @@ class ChatSkinColors {
   final Color shellTopShadowSoft;
   final Color appBarTitle;
   final Color bubbleText;
+  final Color typingIndicatorDot;
   final Color shellBackgroundBaseStart;
   final Color shellBackgroundBaseEnd;
   final Color shellBackgroundStart;
