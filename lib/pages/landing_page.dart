@@ -118,8 +118,10 @@ class _LandingPageState extends State<LandingPage> {
             ),
           );
         } else if (!snapshot.hasData) {
-          content = SizedBox(
-            height: (viewport.height * 0.72).clamp(320.0, 860.0),
+          // Use stable placeholder height to prevent jump when viewport changes (keyboard show/hide)
+          // Fallback to 400px instead of dynamic viewport calculation
+          content = const SizedBox(
+            height: 400.0,
           );
         } else {
           final SubjectKeywordData subject = snapshot.data!;

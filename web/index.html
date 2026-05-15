@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%; margin: 0;">
   <head>
     <base href="$FLUTTER_BASE_HREF" />
     <meta charset="UTF-8" />
@@ -8,8 +8,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#F8F9F7" />
     <title>T1 grid</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      #app {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+    </style>
   </head>
   <body>
+    <div id="app"></div>
     <script src="flutter_bootstrap.js" async></script>
   </body>
 </html>

@@ -120,72 +120,78 @@ class _PageScaffoldState extends State<PageScaffold>
         opacity: _themeFadeOpacity,
         child: Stack(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      AbsorbPointer(
-                        absorbing: widget.isPageLoading,
-                        child: PrimaryScrollController(
-                          controller: _pageScrollController,
-                          child: ScrollConfiguration(
-                            behavior: ScrollConfiguration.of(
-                              context,
-                            ).copyWith(scrollbars: false),
-                            child: Scrollbar(
-                              controller: _pageScrollController,
-                              interactive: true,
-                              child: SelectableRegion(
-                                key: _pageSelectionAreaKey,
-                                focusNode: _pageSelectionFocusNode,
-                                selectionControls: platform == TargetPlatform.iOS ||
-                                    platform == TargetPlatform.macOS
-                                    ? cupertinoTextSelectionControls
-                                    : materialTextSelectionControls,
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    return SingleChildScrollView(
-                                      controller: _pageScrollController,
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          minHeight: constraints.maxHeight,
-                                        ),
-                                        child: ArrowKeyScrollWrapper(
-                                          controller: _pageScrollController,
-                                          onTap: () {
-                                            _pageSelectionAreaKey.currentState
-                                                ?.clearSelection();
-                                          },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: <Widget>[
-                                              const PageHeader(),
-                                              widget.child,
-                                              if (widget.showFooter && !widget.isPageLoading)
-                                                const PageFooter(
-                                                  brandName: 'T1 grid',
-                                                  privacyLabel: 'Privacy & Cookies Note.',
-                                                ),
-                                            ],
+            SafeArea(
+              bottom: true,
+              top: false,
+              left: false,
+              right: false,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Stack(
+                      children: <Widget>[
+                        AbsorbPointer(
+                          absorbing: widget.isPageLoading,
+                          child: PrimaryScrollController(
+                            controller: _pageScrollController,
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(
+                                context,
+                              ).copyWith(scrollbars: false),
+                              child: Scrollbar(
+                                controller: _pageScrollController,
+                                interactive: true,
+                                child: SelectableRegion(
+                                  key: _pageSelectionAreaKey,
+                                  focusNode: _pageSelectionFocusNode,
+                                  selectionControls: platform == TargetPlatform.iOS ||
+                                      platform == TargetPlatform.macOS
+                                      ? cupertinoTextSelectionControls
+                                      : materialTextSelectionControls,
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return SingleChildScrollView(
+                                        controller: _pageScrollController,
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: constraints.maxHeight,
+                                          ),
+                                          child: ArrowKeyScrollWrapper(
+                                            controller: _pageScrollController,
+                                            onTap: () {
+                                              _pageSelectionAreaKey.currentState
+                                                  ?.clearSelection();
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: <Widget>[
+                                                const PageHeader(),
+                                                widget.child,
+                                                if (widget.showFooter && !widget.isPageLoading)
+                                                  const PageFooter(
+                                                    brandName: 'T1 grid',
+                                                    privacyLabel: 'Privacy & Cookies Note.',
+                                                  ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      if (widget.isPageLoading)
-                        const Center(child: _PageLoadingIndicator()),
-                    ],
+                        if (widget.isPageLoading)
+                          const Center(child: _PageLoadingIndicator()),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             if (widget.showThemeToggle && widget.onToggleTheme != null)
               Positioned(

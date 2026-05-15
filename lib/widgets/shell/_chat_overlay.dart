@@ -23,6 +23,8 @@ class ChatOverlay extends StatefulWidget {
 
 class _ChatOverlayState extends State<ChatOverlay> {
   late final ConversationController _conversationController;
+  double _cachedFloatingInset = 25.0;
+  double _lastViewportWidth = double.infinity;
 
   @override
   void initState() {
@@ -40,6 +42,17 @@ class _ChatOverlayState extends State<ChatOverlay> {
     );
   }
 
+  double _getFloatingInset(double viewportWidth) {
+    // Only recalculate if viewport width crosses a breakpoint threshold (±5 pixels tolerance)
+    // This prevents chattering from scrollbar micro-adjustments or transient viewport changes
+    const double breakpointTolerance = 5.0;
+    if ((viewportWidth - _lastViewportWidth).abs() > breakpointTolerance) {
+      _lastViewportWidth = viewportWidth;
+      _cachedFloatingInset = FloatingControlInset.forViewportWidth(viewportWidth);
+    }
+    return _cachedFloatingInset;
+  }
+
   @override
   void dispose() {
     _conversationController.dispose();
@@ -50,9 +63,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Size viewport = MediaQuery.of(context).size;
-    final double floatingInset = FloatingControlInset.forViewportWidth(
-      viewport.width,
-    );
+    final double floatingInset = _getFloatingInset(viewport.width);
     return AnimatedBuilder(
       animation: _conversationController,
       builder: (BuildContext context, Widget? child) {
