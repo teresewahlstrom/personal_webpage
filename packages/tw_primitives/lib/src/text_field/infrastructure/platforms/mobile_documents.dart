@@ -246,15 +246,6 @@ typedef DocumentFloatingToolbarBuilder = Widget Function(
 typedef DocumentMagnifierBuilder = Widget Function(
     BuildContext, Key magnifierKey, LeaderLink focalPoint, bool isVisible);
 
-/// Global flag that disables long-press selection on Android and iOS when a
-/// component needs to own its own long-press behavior.
-///
-/// The document layout uses translucent gesture handling, so a component
-/// long-press can otherwise reach both the component gesture handler and the
-/// standard document selection interactor.
-@Deprecated("Deprecated: prefer component-specific long-press handling.")
-bool disableLongPressSelection = false;
-
 /// Controls the display and position of a magnifier and a floating toolbar.
 class MagnifierAndToolbarController with ChangeNotifier {
   /// Whether the magnifier should be displayed.

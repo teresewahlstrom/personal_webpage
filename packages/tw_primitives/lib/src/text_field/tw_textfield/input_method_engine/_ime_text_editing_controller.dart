@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tw_primitives/src/text_field/core/document_layout.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
@@ -71,9 +70,6 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   void Function(String selectorName)? onPerformSelector;
 
   final AttributedTextEditingController _realController;
-
-  @Deprecated("This property is exposed temporarily while controller ownership is being finalized.")
-  AttributedTextEditingController get innerController => _realController;
 
   final bool _disposeClientController;
 
@@ -634,11 +630,6 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  TextSpan buildTextSpan(AttributionStyleBuilder styleBuilder) {
-    return _realController.buildTextSpan(styleBuilder);
-  }
-
-  @override
   void clearText() {
     _realController.clearText();
   }
@@ -646,13 +637,6 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   @override
   void clearTextAndSelection() {
     _realController.clearTextAndSelection();
-  }
-
-  @override
-  @Deprecated('This will be removed in a future release. Use clearText or clearTextAndSelection instead')
-  void clear() {
-    // ignore: deprecated_member_use_from_same_package
-    _realController.clear();
   }
 
   @override

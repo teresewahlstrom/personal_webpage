@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:tw_primitives/src/text_field/core/document_layout.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/_logging.dart';
@@ -653,11 +652,6 @@ class AttributedTextEditingController with ChangeNotifier {
     notifyListeners();
   }
 
-  @Deprecated('Use text.computeInlineSpan() instead, which adds support for inline widgets.')
-  TextSpan buildTextSpan(AttributionStyleBuilder styleBuilder) {
-    return text.computeTextSpan(styleBuilder);
-  }
-
   /// Clears the text, composing attributions, composing region, and moves
   /// the collapsed selection to the start of the now empty text controller.
   void clearText() {
@@ -677,12 +671,6 @@ class AttributedTextEditingController with ChangeNotifier {
     _composingRegion = TextRange.empty;
 
     notifyListeners();
-  }
-
-  /// Clears the text, selection, composing attributions, and composing region.
-  @Deprecated('This will be removed in a future release. Use clearText or clearTextAndSelection instead')
-  void clear() {
-    clearTextAndSelection();
   }
 
   //------ START: Methods moved here from extension methods ---------

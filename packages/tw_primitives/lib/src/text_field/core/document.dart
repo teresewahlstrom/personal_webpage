@@ -42,34 +42,15 @@ abstract class Document implements Iterable<DocumentNode> {
   /// if no such node exists.
   DocumentNode? getNodeAt(int index);
 
-  /// Returns the index of the given [node], or [-1] if the [node]
-  /// does not exist within this [Document].
-  @Deprecated("Use getNodeIndexById() instead")
-  int getNodeIndex(DocumentNode node);
-
   /// Returns the index of the `DocumentNode` in this `Document` that
   /// has the given [nodeId], or `-1` if the node does not exist.
   int getNodeIndexById(String nodeId);
-
-  /// Returns the [DocumentNode] that appears immediately before the
-  /// given [node] in this [Document], or null if the given [node]
-  /// is the first node, or the given [node] does not exist in this
-  /// [Document].
-  @Deprecated("Use getNodeBeforeById() instead")
-  DocumentNode? getNodeBefore(DocumentNode node);
 
   /// Returns the [DocumentNode] that appears immediately before the
   /// node with the given [nodeId] in this [Document], or `null` if
   /// the matching node is the first node in the document, or no such
   /// node exists.
   DocumentNode? getNodeBeforeById(String nodeId);
-
-  /// Returns the [DocumentNode] that appears immediately after the
-  /// given [node] in this [Document], or null if the given [node]
-  /// is the last node, or the given [node] does not exist in this
-  /// [Document].
-  @Deprecated("Use getNodeAfterById() instead")
-  DocumentNode? getNodeAfter(DocumentNode node);
 
   /// Returns the [DocumentNode] that appears immediately after the
   /// node with the given [nodeId] in this [Document], or `null` if

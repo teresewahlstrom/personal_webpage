@@ -374,9 +374,6 @@ class LinkAttribution implements Attribution {
   @override
   String get id => 'link';
 
-  @Deprecated("Use plainTextUri instead. The term 'url' was a lie - it could always have been a URI.")
-  String get url => plainTextUri;
-
   /// The URI associated with the attributed text, as a `String`.
   final String plainTextUri;
 
