@@ -343,8 +343,8 @@ class FloatingChatWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: maxHeight),
+    return SizedBox(
+      height: maxHeight,
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (event) {

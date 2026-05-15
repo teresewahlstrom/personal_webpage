@@ -112,7 +112,7 @@ class ChatSkinTokens {
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
     0,
     18,
-    15,
+    18.75,
     10,
   );
   final double chatListTopShadowHeight = 32.0;
@@ -223,8 +223,8 @@ class ChatSkinTokens {
     1.0,
     1.0,
   ];
-  final double markupListItemBaseSpacingFactor = 0.14;
-  final double markupTopLevelListItemSpacingAdjustment = 0.28;
+  final double markupListItemBaseSpacingFactor = 0.26;
+  final double markupTopLevelListItemSpacingAdjustment = 0.39;
   final double markupListMarkerGapFactor = 0.3333333333;
   final double markupTopLevelListMarkerSlotFactor = 2.0;
   final double markupNestedListMarkerSlotFactor = 1.75;

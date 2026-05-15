@@ -28,7 +28,7 @@ class ChatLayout {
   /// Preferred dock width whenever the viewport has enough room.
   static const stableExpandedDockWidth = 560.0;
 
-  /// Height factor for floating dock max-height resolution.
+  /// Height factor for compact/phone transition behavior.
   static const phoneHeightFactor = 0.82;
   static const floatingHeightFactor = 0.78;
 
@@ -40,7 +40,10 @@ class ChatLayout {
 
   /// Min/max dock height clamps for floating layouts.
   static const minWindowHeight = 280.0;
-  static const maxWindowHeight = 560.0;
+  static const maxWindowHeight = 550000.0;
+
+  /// Desktop dock cap is based on available height minus this inset.
+  static const desktopHeightCapInset = 5.0;
 
   /// Distance from bottom that still counts as "at tail" for auto-follow.
   static const nearBottomThreshold = 24.0;
@@ -175,11 +178,8 @@ class ChatLayout {
       0.0,
       double.infinity,
     );
-    final transitionProgress = _transitionProgress(
-      value: clampedSafeViewportHeight,
-      compactThreshold: compactHeightFillViewportThreshold,
-      transitionBand: compactHeightTransitionBand,
-    );
+    final isCompactHeightMode =
+        clampedSafeViewportHeight <= compactHeightFillViewportThreshold;
     final tokens = ChatSkin.tokens;
     final baseVerticalGutter = viewportSize.width <= phoneBreakpoint
         ? tokens.phoneVerticalHeightGutter
@@ -188,11 +188,9 @@ class ChatLayout {
       0.0,
       double.infinity,
     );
-    final verticalGutter = _lerp(
-      minimumVerticalGutter,
-      baseVerticalGutter,
-      transitionProgress,
-    );
+    final verticalGutter = isCompactHeightMode
+        ? minimumVerticalGutter
+        : baseVerticalGutter;
     final clampedSafeUsableHeight = (clampedSafeViewportHeight - verticalGutter)
         .clamp(0.0, double.infinity);
 
@@ -200,10 +198,13 @@ class ChatLayout {
       return clampedSafeUsableHeight;
     }
 
-    final targetFactor = floatingHeightFactor.clamp(0.55, 0.95);
-    final targetHeight = clampedSafeUsableHeight * targetFactor;
-    final floatingHeight = targetHeight.clamp(minWindowHeight, maxWindowHeight);
-    return _lerp(clampedSafeUsableHeight, floatingHeight, transitionProgress);
+    final desktopRelativeCap = (clampedSafeUsableHeight - desktopHeightCapInset)
+      .clamp(minWindowHeight, maxWindowHeight);
+    if (isCompactHeightMode) {
+      return clampedSafeUsableHeight;
+    }
+
+    return desktopRelativeCap;
   }
 
   static double _safeViewportWidth({

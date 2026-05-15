@@ -251,7 +251,9 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                     color: ChatComposerLayout.borderColor(
                                       context,
                                     ),
-                                    strokeWidth: tokens.bubbleBorderWidth,
+                                    strokeWidth: isCollapsed
+                                        ? tokens.bubbleBorderWidth * 2
+                                        : tokens.bubbleBorderWidth,
                                     dashed: isCollapsed,
                                   ),
                                 ),
@@ -265,47 +267,50 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
               ),
               if (isTruncatable)
                 Positioned(
-                  left:
-                      tokens.collapseButtonRightInset +
-                      collapseButtonOverflowLeft,
+                  left: collapseButtonOverflowLeft,
                   bottom: 0,
-                  child: Tooltip(
-                    message: widget.isTruncated ? 'Show more' : 'Show less',
-                    child: SizedBox(
-                      width: tokens.collapseButtonDiameter,
-                      height: tokens.collapseButtonDiameter,
-                      child: Material(
-                        color: toggleButtonBackgroundColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            tokens.collapseButtonRadius,
-                          ),
-                          side: toggleButtonBorderSide,
-                        ),
-                        child: InkWell(
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              tokens.collapseButtonRadius,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Tooltip(
+                        message: widget.isTruncated ? 'Show more' : 'Show less',
+                        child: SizedBox(
+                          width: tokens.collapseButtonDiameter,
+                          height: tokens.collapseButtonDiameter,
+                          child: Material(
+                            color: toggleButtonBackgroundColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                tokens.collapseButtonRadius,
+                              ),
+                              side: toggleButtonBorderSide,
                             ),
-                            side: toggleButtonBorderSide,
-                          ),
-                          onTap: widget.onToggleTruncation,
-                          child: Center(
-                            child: SizedBox(
-                              width: tokens.collapseButtonIconSize,
-                              height: tokens.collapseButtonIconSize,
-                              child: CustomPaint(
-                                painter: _PlusMinusPainter(
-                                  isPlus: widget.isTruncated,
-                                  color: toggleButtonIconColor,
-                                  strokeWidth: tokens.collapseButtonStroke,
+                            child: InkWell(
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  tokens.collapseButtonRadius,
+                                ),
+                                side: toggleButtonBorderSide,
+                              ),
+                              onTap: widget.onToggleTruncation,
+                              child: Center(
+                                child: SizedBox(
+                                  width: tokens.collapseButtonIconSize,
+                                  height: tokens.collapseButtonIconSize,
+                                  child: CustomPaint(
+                                    painter: _PlusMinusPainter(
+                                      isPlus: widget.isTruncated,
+                                      color: toggleButtonIconColor,
+                                      strokeWidth: tokens.collapseButtonStroke,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
             ],
