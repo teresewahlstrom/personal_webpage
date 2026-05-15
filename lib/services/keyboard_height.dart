@@ -46,6 +46,7 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
   bool _isQueued = false;
   bool _isDisposed = false;
   bool _hadPrimaryFocusBeforePause = false;
+  DateTime? _suppressStaleInsetsUntil;
 
   @override
   void initState() {
@@ -80,6 +81,8 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
     if (state == AppLifecycleState.resumed) {
       if (_hadPrimaryFocusBeforePause) {
         FocusManager.instance.primaryFocus?.unfocus();
+        _suppressStaleInsetsUntil =
+            DateTime.now().add(const Duration(milliseconds: 1200));
       }
       _scheduleStabilizationBurst();
     }
@@ -87,7 +90,7 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   void _scheduleStabilizationBurst() {
     _scheduleUpdate();
-    for (final int delayMs in <int>[16, 80, 180]) {
+    for (final int delayMs in <int>[16, 80, 180, 350, 700, 1200]) {
       Future<void>.delayed(Duration(milliseconds: delayMs), _scheduleUpdate);
     }
   }
@@ -118,11 +121,32 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
     final double clampedFlutterInset = _clampInset(flutterInset, screenHeight);
     final double clampedWebInset = _clampInset(webInset, screenHeight);
-    final double nextValue = math.max(clampedFlutterInset, clampedWebInset);
+    final double nextValue = _shouldSuppressStaleInsets()
+        ? 0
+        : math.max(clampedFlutterInset, clampedWebInset);
 
     if ((nextValue - _keyboardHeight.value).abs() > 0.5) {
       _keyboardHeight.value = nextValue;
     }
+  }
+
+  bool _shouldSuppressStaleInsets() {
+    final DateTime? suppressUntil = _suppressStaleInsetsUntil;
+    if (suppressUntil == null) {
+      return false;
+    }
+
+    if (FocusManager.instance.primaryFocus != null) {
+      _suppressStaleInsetsUntil = null;
+      return false;
+    }
+
+    if (DateTime.now().isAfter(suppressUntil)) {
+      _suppressStaleInsetsUntil = null;
+      return false;
+    }
+
+    return true;
   }
 
   double _clampInset(double inset, double screenHeight) {

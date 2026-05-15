@@ -79,7 +79,7 @@ class _ChatDockState extends State<ChatDock> {
   //
   // On phone-width viewports the dock fills the full viewport height, so even
   // a ~56 px change causes a visible jump.  We allow the stable height to
-  // shrink only when the software keyboard is open (viewInsets.bottom > 0) or
+  // shrink only when the software keyboard is open (keyboardHeight > 0) or
   // when the orientation has flipped (large width change).
   double _stableViewportHeight = 0;
   double _lastSeenWidth = 0;
@@ -100,6 +100,14 @@ class _ChatDockState extends State<ChatDock> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _updateStableViewportHeight();
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatDock oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if ((oldWidget.keyboardHeight - widget.keyboardHeight).abs() > 0.5) {
+      _updateStableViewportHeight();
+    }
   }
 
   void _updateStableViewportHeight() {
