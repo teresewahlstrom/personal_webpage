@@ -24,6 +24,7 @@ class _LandingPageState extends State<LandingPage> {
   bool? _lastReportedContentReady;
   double _cachedCloudHeightRatio = 0.80;
   double _lastCloudHeightRatioWidth = double.infinity;
+  bool? _lastCloudInWideLayout;
 
   @override
   void initState() {
@@ -63,11 +64,15 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   double _getCloudHeightRatio(double viewportWidth) {
-    // Only recalculate ratio when viewport width crosses the 900px breakpoint
-    // This prevents unnecessary recalculations from scrollbar toggling or transient changes
-    if ((viewportWidth - _lastCloudHeightRatioWidth).abs() > 50.0) {
+    // Recalculate when width changes enough to matter, and always when crossing
+    // the 900px layout breakpoint.
+    final bool isWideLayout = viewportWidth >= 900;
+    if (_lastCloudInWideLayout == null ||
+        _lastCloudInWideLayout != isWideLayout ||
+        (viewportWidth - _lastCloudHeightRatioWidth).abs() > 50.0) {
+      _lastCloudInWideLayout = isWideLayout;
       _lastCloudHeightRatioWidth = viewportWidth;
-      _cachedCloudHeightRatio = viewportWidth >= 900 ? 0.52 : 0.80;
+      _cachedCloudHeightRatio = isWideLayout ? 0.52 : 0.80;
     }
     return _cachedCloudHeightRatio;
   }
