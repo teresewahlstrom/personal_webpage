@@ -15,8 +15,8 @@ class KeyboardHeight extends InheritedNotifier<ValueNotifier<double>> {
   }) : super(notifier: notifier);
 
   static double of(BuildContext context) {
-    final KeyboardHeight? inherited =
-        context.dependOnInheritedWidgetOfExactType<KeyboardHeight>();
+    final KeyboardHeight? inherited = context
+        .dependOnInheritedWidgetOfExactType<KeyboardHeight>();
     final ValueNotifier<double>? notifier = inherited?.notifier;
     if (notifier == null) {
       return MediaQuery.of(context).viewInsets.bottom;
@@ -26,16 +26,12 @@ class KeyboardHeight extends InheritedNotifier<ValueNotifier<double>> {
 }
 
 class KeyboardHeightObserver extends StatefulWidget {
-  const KeyboardHeightObserver({
-    super.key,
-    required this.child,
-  });
+  const KeyboardHeightObserver({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<KeyboardHeightObserver> createState() =>
-      _KeyboardHeightObserverState();
+  State<KeyboardHeightObserver> createState() => _KeyboardHeightObserverState();
 }
 
 class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
@@ -109,7 +105,8 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   void _recomputeKeyboardHeight() {
     final view = View.of(context);
-    final double screenHeight = view.physicalSize.height / view.devicePixelRatio;
+    final double screenHeight =
+        view.physicalSize.height / view.devicePixelRatio;
 
     final double flutterInset = math.max(
       0,
@@ -142,9 +139,6 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardHeight(
-      notifier: _keyboardHeight,
-      child: widget.child,
-    );
+    return KeyboardHeight(notifier: _keyboardHeight, child: widget.child);
   }
 }
