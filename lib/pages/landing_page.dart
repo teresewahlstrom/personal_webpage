@@ -269,10 +269,6 @@ class _HeroStatement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
-    final AppLineStyle gridLineStyle = ShellUiConfig.gridLineFor(brightness);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
