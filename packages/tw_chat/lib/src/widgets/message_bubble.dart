@@ -179,6 +179,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final showFooter = !widget.isTypingIndicator;
     Widget buildFooter() {
       return _BubbleFooter(
+        borderColor: borderColor,
         isCollapsed: isCollapsed,
         isTruncatable: isTruncatable,
         onToggleTruncation: widget.onToggleTruncation,
@@ -230,7 +231,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                       borderRadius: BorderRadius.circular(
                                         tokens.bubbleRadius,
                                       ),
-                                      border: isCollapsed
+                                      border: showFooter || isCollapsed
                                           ? Border(
                                               top: bubbleBorderSide,
                                               left: bubbleBorderSide,
@@ -467,6 +468,7 @@ class _ParsedMarkupPayload {
 
 class _BubbleFooter extends StatelessWidget {
   const _BubbleFooter({
+    required this.borderColor,
     required this.isCollapsed,
     required this.isTruncatable,
     required this.onToggleTruncation,
@@ -475,6 +477,7 @@ class _BubbleFooter extends StatelessWidget {
     required this.toggleButtonBorderSide,
   });
 
+  final Color borderColor;
   final bool isCollapsed;
   final bool isTruncatable;
   final VoidCallback onToggleTruncation;
@@ -488,17 +491,20 @@ class _BubbleFooter extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: tokens.bubbleBorderWidth,
-          width: double.infinity,
-          child: IgnorePointer(
-            child: CustomPaint(
-              painter: _BottomLinePainter(
-                color: ChatComposerLayout.borderColor(context),
-                strokeWidth: isCollapsed
-                    ? tokens.bubbleBorderWidth * 2
-                    : tokens.bubbleBorderWidth,
-                dashed: isCollapsed,
+        Transform.translate(
+          offset: Offset(0, -tokens.bubbleBorderWidth),
+          child: SizedBox(
+            height: tokens.bubbleBorderWidth,
+            width: double.infinity,
+            child: IgnorePointer(
+              child: CustomPaint(
+                painter: _BottomLinePainter(
+                  color: borderColor,
+                  strokeWidth: isCollapsed
+                      ? tokens.bubbleBorderWidth * 2
+                      : tokens.bubbleBorderWidth,
+                  dashed: isCollapsed,
+                ),
               ),
             ),
           ),

@@ -338,6 +338,50 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
       'User message #1',
     );
   });
+
+  testWidgets(
+    'expanded user bubbles remove the bottom border and let the footer line own that edge',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Center(
+              child: SizedBox(
+                width: 320,
+                child: ChatMessageBubble(
+                  text: 'Short user message',
+                  selectionListenerNotifier: SelectionListenerNotifier(),
+                  isUser: true,
+                  isTypingIndicator: false,
+                  isTruncated: false,
+                  isFirstMessage: true,
+                  isLastMessage: true,
+                  availableWidth: 320,
+                  onToggleTruncation: _noop,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final bubbleContainer = tester.widget<Container>(
+        find.byWidgetPredicate((widget) {
+          if (widget is! Container) {
+            return false;
+          }
+          final decoration = widget.decoration;
+          return decoration is BoxDecoration && decoration.border != null;
+        }).first,
+      );
+      final border = (bubbleContainer.decoration! as BoxDecoration).border! as Border;
+
+      expect(border.top.style, BorderStyle.solid);
+      expect(border.left.style, BorderStyle.solid);
+      expect(border.right.style, BorderStyle.solid);
+      expect(border.bottom.style, BorderStyle.none);
+    },
+  );
 }
 
 Future<void> _pumpTruncatedBubble(

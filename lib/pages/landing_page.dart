@@ -317,6 +317,9 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
+    final AppLineStyle gridLineStyle = ShellUiConfig.gridLineFor(brightness);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -332,6 +335,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 _expandedStates[index] = !_expandedStates[index];
               });
             },
+            frameFill: frameFill,
+            gridLineStyle: gridLineStyle,
           ),
           if (index < _projectCards.length - 1) const SizedBox(height: 12),
         ],
@@ -346,12 +351,16 @@ class _ExpandableProjectCard extends StatefulWidget {
     required this.content,
     required this.isExpanded,
     required this.onTap,
+    required this.frameFill,
+    required this.gridLineStyle,
   });
 
   final String title;
   final String content;
   final bool isExpanded;
   final VoidCallback onTap;
+  final Color frameFill;
+  final AppLineStyle gridLineStyle;
 
   @override
   State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
@@ -400,11 +409,11 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color cardFill = AppColorTheme.projectCardFillFor(brightness);
-    final Border cardBorder = Border.all(
-      color: AppColorTheme.projectCardBorderFor(brightness),
-      width: AppLineTheme.subtleWidth,
-    );
+    final Color cardFill = Color.lerp(
+      widget.frameFill,
+      widget.gridLineStyle.color,
+      AppColorTheme.projectCardFillAlphaFor(brightness),
+    )!;
     final Color baseIconColor =
       PageTextStyles.body(context).color ??
       Theme.of(context).textTheme.bodyMedium?.color ??
@@ -421,7 +430,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: cardFill,
-            border: cardBorder,
+            border: widget.gridLineStyle.borderAll,
             borderRadius: BorderRadius.zero,
           ),
           child: Padding(
