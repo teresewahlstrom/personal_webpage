@@ -117,7 +117,7 @@ class AutoScroller {
     stopScrollingDown();
   }
 
-  void _onTick(elapsedTime) {
+  void _onTick(Duration elapsedTime) {
     if (_scrollUpOnTick) {
       _scrollUp();
     }

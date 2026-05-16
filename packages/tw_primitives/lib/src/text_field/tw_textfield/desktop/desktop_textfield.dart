@@ -2045,7 +2045,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     }
   }
 
-  void _onTick(elapsedTime) {
+  void _onTick(Duration elapsedTime) {
     if (_scrollToStartOnTick) {
       scrollToStart();
     }

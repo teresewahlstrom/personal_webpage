@@ -14,7 +14,9 @@ bool _isEditableElement(web.Element? element) {
   }
 
   final String tagName = element.tagName.toLowerCase();
+  final String? contentEditableAttr = element.getAttribute('contenteditable')?.toLowerCase();
+  final bool isContentEditable = contentEditableAttr != null && contentEditableAttr != 'false';
   return tagName == 'input' ||
       tagName == 'textarea' ||
-      (element is web.HTMLElement && element.isContentEditable);
+      isContentEditable;
 }
