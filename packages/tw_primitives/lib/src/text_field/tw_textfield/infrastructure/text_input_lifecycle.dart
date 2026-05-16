@@ -8,8 +8,8 @@ bool shouldClearTextInputForLifecycleState(AppLifecycleState state) {
   switch (state) {
     case AppLifecycleState.resumed:
     case AppLifecycleState.detached:
-      return false;
     case AppLifecycleState.inactive:
+      return false;
     case AppLifecycleState.hidden:
     case AppLifecycleState.paused:
       return true;

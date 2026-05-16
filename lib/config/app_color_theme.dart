@@ -22,7 +22,6 @@ final class _AppLightColors {
   static const Color buttonBackground = Color(0xFFF8F9F7);
   static const Color footerBackground = Color(0xFFF8F9F7);
   static const Color modalBackground = Color(0xFFF8F9F7);
-  static const double projectCardFillAlpha = 0.7;
 
   // line colors
   static const Color lineSubtle = Color(0xFFE1E4F2);
@@ -62,7 +61,6 @@ final class _AppDarkColors {
   static const Color buttonBackground = Color(0xFF212835);
   static const Color footerBackground = Color(0xFF212835);
   static const Color modalBackground = Color(0xFF101B34);
-  static const double projectCardFillAlpha = 0.75;
 
   // line colors
   static const Color lineSubtle = Color(0xFF2B364A);
