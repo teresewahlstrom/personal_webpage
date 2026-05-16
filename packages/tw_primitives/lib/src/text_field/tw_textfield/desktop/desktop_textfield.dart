@@ -46,7 +46,7 @@ final _log = textFieldLog;
 /// flavor of a text field.
 class TwDesktopTextField extends StatefulWidget {
   const TwDesktopTextField({
-    Key? key,
+    super.key,
     this.focusNode,
     this.tapRegionGroupId,
     this.textController,
@@ -78,8 +78,7 @@ class TwDesktopTextField extends StatefulWidget {
   })  : keyboardHandlers = keyboardHandlers ??
             (inputSource == TextInputSource.keyboard
                 ? defaultTextFieldKeyboardHandlers
-                : defaultTextFieldImeKeyboardHandlers),
-        super(key: key);
+                : defaultTextFieldImeKeyboardHandlers);
 
   final FocusNode? focusNode;
 
@@ -612,7 +611,7 @@ typedef DecorationBuilder = Widget Function(BuildContext, Widget child);
 /// be tied to [textScrollKey].
 class TwTextFieldGestureInteractor extends StatefulWidget {
   const TwTextFieldGestureInteractor({
-    Key? key,
+    super.key,
     required this.focusNode,
     required this.textController,
     required this.textKey,
@@ -620,7 +619,7 @@ class TwTextFieldGestureInteractor extends StatefulWidget {
     required this.isMultiline,
     this.tapHandlers = const [],
     required this.child,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] for this text field.
   final FocusNode focusNode;
@@ -1299,13 +1298,13 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 /// of a line.
 class TwTextFieldKeyboardInteractor extends StatefulWidget {
   const TwTextFieldKeyboardInteractor({
-    Key? key,
+    super.key,
     required this.focusNode,
     required this.textFieldContext,
     required this.textKey,
     required this.keyboardActions,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] for this text field.
   final FocusNode focusNode;
@@ -1429,7 +1428,7 @@ class _TwTextFieldKeyboardInteractorState extends State<TwTextFieldKeyboardInter
 /// When [focusNode] loses focus, the [textController]'s selection is cleared.
 class TwTextFieldImeInteractor extends StatefulWidget {
   const TwTextFieldImeInteractor({
-    Key? key,
+    super.key,
     required this.textKey,
     required this.focusNode,
     required this.textFieldContext,
@@ -1440,7 +1439,7 @@ class TwTextFieldImeInteractor extends StatefulWidget {
     this.textAlign,
     this.textDirection,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] for this text field.
   final FocusNode focusNode;
@@ -1758,7 +1757,7 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
 /// with a corresponding [SuperSelectableText] widget that is tied to [textKey].
 class TwTextFieldScrollview extends StatefulWidget {
   const TwTextFieldScrollview({
-    Key? key,
+    super.key,
     required this.textKey,
     required this.textController,
     required this.scrollController,
@@ -1767,7 +1766,7 @@ class TwTextFieldScrollview extends StatefulWidget {
     required this.isMultiline,
     this.textAlign = TextAlign.left,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// [TextController] for the text/selection within this text field.
   final AttributedTextEditingController textController;

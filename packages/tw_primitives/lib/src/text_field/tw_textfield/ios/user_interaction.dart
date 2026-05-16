@@ -41,7 +41,7 @@ class IOSTextFieldTouchInteractor extends StatefulWidget {
   static bool useIosSelectionHeuristics = true;
 
   const IOSTextFieldTouchInteractor({
-    Key? key,
+    super.key,
     required this.focusNode,
     this.tapHandlers = const [],
     required this.textFieldLayerLink,
@@ -54,7 +54,7 @@ class IOSTextFieldTouchInteractor extends StatefulWidget {
     required this.handleColor,
     this.showDebugPaint = false,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] for the text field that contains this [IOSTextFieldInteractor].
   ///

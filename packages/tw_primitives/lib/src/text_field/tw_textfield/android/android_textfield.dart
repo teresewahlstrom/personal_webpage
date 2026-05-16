@@ -31,7 +31,7 @@ final _log = androidTextFieldLog;
 
 class TwAndroidTextField extends StatefulWidget {
   const TwAndroidTextField({
-    Key? key,
+    super.key,
     this.focusNode,
     this.tapRegionGroupId,
     this.textController,
@@ -55,7 +55,7 @@ class TwAndroidTextField extends StatefulWidget {
     this.showDebugPaint = false,
     this.padding,
     this.scrollController,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] attached to this text field.
   final FocusNode? focusNode;

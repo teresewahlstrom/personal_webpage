@@ -32,7 +32,7 @@ final _log = androidTextFieldLog;
 /// Android-style toolbar, magnifier, and expanded selection handles.
 class AndroidEditingOverlayControls extends StatefulWidget {
   const AndroidEditingOverlayControls({
-    Key? key,
+    super.key,
     required this.editingController,
     required this.textScrollController,
     required this.textFieldKey,
@@ -44,7 +44,7 @@ class AndroidEditingOverlayControls extends StatefulWidget {
     this.handleRadius = AndroidSelectionHandle.defaultRadius,
     required this.popoverToolbarBuilder,
     this.showDebugPaint = false,
-  }) : super(key: key);
+  });
 
   /// Controller that determines whether the toolbar,
   /// magnifier, and/or selection handles are visible in

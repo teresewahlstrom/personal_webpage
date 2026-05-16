@@ -31,14 +31,14 @@ class IOSFollowingMagnifier extends StatefulWidget {
   }) : magnifierBuilder = _circleMagnifierBuilder;
 
   const IOSFollowingMagnifier({
-    Key? key,
+    super.key,
     this.magnifierKey,
     required this.leaderLink,
     this.show = true,
     this.offsetFromFocalPoint = Offset.zero,
     this.handleColor,
     required this.magnifierBuilder,
-  }) : super(key: key);
+  });
 
   final Key? magnifierKey;
   final LeaderLink leaderLink;

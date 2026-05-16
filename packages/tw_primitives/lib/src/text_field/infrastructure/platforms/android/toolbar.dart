@@ -4,14 +4,14 @@ import 'package:tw_primitives/src/text_field/infrastructure/flutter/android_tool
 
 class AndroidTextEditingFloatingToolbar extends StatefulWidget {
   const AndroidTextEditingFloatingToolbar({
-    Key? key,
+    super.key,
     this.focalPoint,
     this.floatingToolbarKey,
     this.onCutPressed,
     this.onCopyPressed,
     this.onPastePressed,
     this.onSelectAllPressed,
-  }) : super(key: key);
+  });
 
   final Key? floatingToolbarKey;
   final LeaderLink? focalPoint;

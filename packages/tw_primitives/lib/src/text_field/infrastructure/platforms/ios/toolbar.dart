@@ -6,13 +6,13 @@ import 'package:tw_primitives/src/text_field/infrastructure/platforms/ios/colors
 
 class IOSTextEditingFloatingToolbar extends StatelessWidget {
   const IOSTextEditingFloatingToolbar({
-    Key? key,
+    super.key,
     this.floatingToolbarKey,
     required this.focalPoint,
     this.onCutPressed,
     this.onCopyPressed,
     this.onPastePressed,
-  }) : super(key: key);
+  });
 
   final Key? floatingToolbarKey;
 

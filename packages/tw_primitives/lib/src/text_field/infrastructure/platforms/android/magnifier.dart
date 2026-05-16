@@ -7,10 +7,10 @@ import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/outer_b
 /// An Android magnifying glass that follows a [LeaderLink].
 class AndroidFollowingMagnifier extends StatelessWidget {
   const AndroidFollowingMagnifier({
-    Key? key,
+    super.key,
     required this.layerLink,
     this.offsetFromFocalPoint = Offset.zero,
-  }) : super(key: key);
+  });
 
   final LeaderLink layerLink;
   final Offset offsetFromFocalPoint;

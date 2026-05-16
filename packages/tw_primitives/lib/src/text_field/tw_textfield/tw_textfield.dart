@@ -58,7 +58,7 @@ export "tw_text_field_keys.dart";
 ///  - [TwIOSTextField], configured for a typical iOS experience.
 class TwTextField extends StatefulWidget {
   const TwTextField({
-    Key? key,
+    super.key,
     this.focusNode,
     this.tapRegionGroupId,
     this.configuration,
@@ -84,7 +84,7 @@ class TwTextField extends StatefulWidget {
     this.imeConfiguration,
     this.showComposingUnderline,
     this.scrollController,
-  }) : super(key: key);
+  });
 
   final FocusNode? focusNode;
 

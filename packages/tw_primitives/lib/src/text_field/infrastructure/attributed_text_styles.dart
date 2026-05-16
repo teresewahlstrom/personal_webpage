@@ -125,9 +125,9 @@ typedef InlineWidgetBuilder = Widget? Function(
 /// the build pipeline will already mark the layout as dirty.
 class _LayoutOptimizedWidgetSpan extends WidgetSpan {
   const _LayoutOptimizedWidgetSpan({
-    required Widget child,
-    required PlaceholderAlignment alignment,
-  }) : super(child: child, alignment: alignment);
+    required super.child,
+    required super.alignment,
+  });
 
   @override
   RenderComparison compareTo(InlineSpan other) {

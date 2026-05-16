@@ -18,24 +18,18 @@ class TextNodeSelection extends TextSelection implements NodeSelection {
 
   const TextNodeSelection.collapsed({
     required int offset,
-    TextAffinity affinity = TextAffinity.downstream,
+    super.affinity,
   }) : super(
           baseOffset: offset,
           extentOffset: offset,
-          affinity: affinity,
         );
 
   const TextNodeSelection({
-    required int baseOffset,
-    required int extentOffset,
-    TextAffinity affinity = TextAffinity.downstream,
-    bool isDirectional = false,
-  }) : super(
-          baseOffset: baseOffset,
-          extentOffset: extentOffset,
-          affinity: affinity,
-          isDirectional: isDirectional,
-        );
+    required super.baseOffset,
+    required super.extentOffset,
+    super.affinity,
+    super.isDirectional,
+  });
 
   @override
   TextNodePosition get base => TextNodePosition(offset: baseOffset, affinity: affinity);
@@ -50,9 +44,9 @@ class TextNodePosition extends TextPosition implements NodePosition {
       : super(offset: position.offset, affinity: position.affinity);
 
   const TextNodePosition({
-    required int offset,
-    TextAffinity affinity = TextAffinity.downstream,
-  }) : super(offset: offset, affinity: affinity);
+    required super.offset,
+    super.affinity,
+  });
 
   @override
   bool isEquivalentTo(NodePosition other) {

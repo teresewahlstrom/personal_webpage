@@ -1,5 +1,3 @@
-library tw_primitives_text_field_advanced;
-
 export 'package:attributed_text/attributed_text.dart' show AttributedText;
 export 'package:super_text_layout/super_text_layout.dart' show CaretStyle;
 

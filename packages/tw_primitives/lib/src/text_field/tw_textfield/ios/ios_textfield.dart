@@ -43,7 +43,7 @@ const _defaultIosSystemMenuItems = <IOSSystemContextMenuItemData>[
 
 class TwIOSTextField extends StatefulWidget {
   const TwIOSTextField({
-    Key? key,
+    super.key,
     this.focusNode,
     this.tapRegionGroupId,
     this.tapHandlers = const [],
@@ -67,7 +67,7 @@ class TwIOSTextField extends StatefulWidget {
     this.popoverToolbarBuilder = defaultIosPopoverToolbarBuilder,
     this.showDebugPaint = false,
     this.scrollController,
-  }) : super(key: key);
+  });
 
   /// [FocusNode] attached to this text field.
   final FocusNode? focusNode;

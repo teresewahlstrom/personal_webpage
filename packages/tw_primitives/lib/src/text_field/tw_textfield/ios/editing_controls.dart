@@ -28,7 +28,7 @@ final _log = iosTextFieldLog;
 /// iOS-style toolbar, magnifier, and expanded selection handles.
 class IOSEditingControls extends StatefulWidget {
   const IOSEditingControls({
-    Key? key,
+    super.key,
     required this.editingController,
     required this.textScrollController,
     required this.textFieldKey,
@@ -40,7 +40,7 @@ class IOSEditingControls extends StatefulWidget {
     this.handleBallRadius,
     required this.popoverToolbarBuilder,
     this.showDebugPaint = false,
-  }) : super(key: key);
+  });
 
   /// Controller that determines whether the toolbar,
   /// magnifier, and/or selection handles are visible in
