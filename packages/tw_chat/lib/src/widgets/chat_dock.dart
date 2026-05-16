@@ -180,6 +180,23 @@ class ChatAppBar extends StatelessWidget {
     final pad = shrinkWrap
         ? tokens.appBarPaddingMinimized
         : tokens.appBarPaddingExpanded;
+    final titlePill = DecoratedBox(
+      key: const ValueKey('chat-app-bar-title-pill'),
+      decoration: ShapeDecoration(
+        color: ChatComposerLayout.fillColor(context),
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: ChatComposerLayout.borderColor(context),
+            width: 1.0,
+          ),
+        ),
+        shadows: [tokens.jumpToLatestButtonShadow(colors)],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        child: Text('Chat with Twin', style: titleStyle),
+      ),
+    );
     final titleArea = Padding(
       padding: EdgeInsets.fromLTRB(
         pad.left,
@@ -190,7 +207,7 @@ class ChatAppBar extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text('Chat with Twin', style: titleStyle)],
+        children: [titlePill],
       ),
     );
     final action = Positioned(

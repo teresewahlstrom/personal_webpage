@@ -14,7 +14,6 @@ final class _ThemeColor {
 final class _AppLightColors {
   static const Color seedColor = Color(0xFF394183);
   static const Color pageLoader = pageBodyText;
-  static const double composerLikePanelFillLerpT = 0.70;
 
   // background colors
   static const Color pageBackground = Color(0xFFF8F9F7);
@@ -38,8 +37,6 @@ final class _AppLightColors {
   static const Color pageScrollbarThumb = Color(0xFFE1E4F2);
   static const Color pageScrollbarThumbInactive = Color(0xFFE8EAF4);
   static const Color pageScrollbarTrack = Color(0x00F8F9F7);
-  static const Color projectCardBorder = Color(0xFFE1E4F2);
-
   // clickable accent colors
   static const Color _interactive = Color(0xFF394183);
   static const Color _interactiveHover = Color(0xFF843F02);
@@ -54,7 +51,6 @@ final class _AppLightColors {
 final class _AppDarkColors {
   static const Color seedColor = Color(0xFF90E8F8);
   static const Color pageLoader = Color(0xFF90E8F8);
-  static const double composerLikePanelFillLerpT = 0.65;
 
   // background colors
   static const Color pageBackground = Color(0xFF212835);
@@ -78,9 +74,6 @@ final class _AppDarkColors {
   static const Color pageScrollbarThumb = Color(0x397199FF);
   static const Color pageScrollbarThumbInactive = Color(0xFF283143);
   static const Color pageScrollbarTrack = Color(0x004EF0FF);
-  static const Color projectCardBorder = Color(0x397199FF);
-
-
   // clickable accent colors
   static const Color _interactive = Color(0xFF90E8F8);
   static const Color _interactiveHover = Color(0xFF90E8F8);
@@ -179,11 +172,6 @@ final class AppColorTheme {
     _AppLightColors.pageScrollbarTrack,
     _AppDarkColors.pageScrollbarTrack,
   );
-  static const _ThemeColor _projectCardBorder = _ThemeColor(
-    _AppLightColors.projectCardBorder,
-    _AppDarkColors.projectCardBorder,
-  );
-
   // Line theme colors
   static const _ThemeColor _lineSubtle = _ThemeColor(
     _AppLightColors.lineSubtle,
@@ -205,6 +193,12 @@ final class AppColorTheme {
     _AppLightColors.lineInteractiveHover,
     _AppDarkColors.lineInteractiveHover,
   );
+
+  static double projectCardFillAlphaFor(Brightness brightness) {
+    return brightness == Brightness.dark
+        ? _AppDarkColors.projectCardFillAlpha
+        : _AppLightColors.projectCardFillAlpha;
+  }
 
     static Color seedColorFor(Brightness brightness) =>
       _seedColor.resolve(brightness);
@@ -253,21 +247,6 @@ final class AppColorTheme {
 
   static Color pageBodyTextFor(Brightness brightness) =>
       _pageBodyText.resolve(brightness);
-
-  static Color projectCardFillFor(Brightness brightness) {
-    final t = brightness == Brightness.dark
-        ? _AppDarkColors.composerLikePanelFillLerpT
-        : _AppLightColors.composerLikePanelFillLerpT;
-    return Color.lerp(
-          pageBackgroundFor(brightness),
-          lineSubtleFor(brightness),
-          t,
-        ) ??
-        pageBackgroundFor(brightness);
-  }
-
-  static Color projectCardBorderFor(Brightness brightness) =>
-      _projectCardBorder.resolve(brightness);
 
     static Color pageScrollbarThumbFor(Brightness brightness) =>
       _pageScrollbarThumb.resolve(brightness);
