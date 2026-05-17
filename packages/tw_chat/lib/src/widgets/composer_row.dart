@@ -179,10 +179,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
                   minHeight: widget.minInputHeight,
                   maxHeight: widget.maxInputHeight,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(tokens.composerRadius),
-                  child: inputField,
-                ),
+                child: inputField,
               ),
             ),
           ),
