@@ -197,7 +197,7 @@ class _PageScaffoldState extends State<PageScaffold>
                                                 widget.child,
                                               ],
                                             ),
-                                            if (footer != null) footer,
+                                            ...[footer].whereType<Widget>(),
                                           ],
                                         ),
                                       ),
