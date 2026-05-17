@@ -9,6 +9,12 @@ class _NoopKeyboardViewportBridge implements KeyboardViewportBridge {
   double get estimatedBottomInset => 0;
 
   @override
+  double? get layoutViewportHeight => null;
+
+  @override
+  double? get visualViewportOffsetTop => null;
+
+  @override
   void start(KeyboardViewportChangeCallback onChange) {}
 
   @override
