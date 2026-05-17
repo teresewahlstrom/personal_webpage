@@ -32,6 +32,7 @@ void main() {
 
     expect(summary.visibleIncomingMessages, 1);
     expect(summary.resolvedPendingBotId, isNull);
+    expect(summary.latestVisibleBotId, 'm2');
     expect(summary.hasNewContent, isTrue);
   });
 
@@ -51,6 +52,21 @@ void main() {
 
     expect(summary.visibleIncomingMessages, 1);
     expect(summary.resolvedPendingBotId, 'm2');
+    expect(summary.latestVisibleBotId, 'm2');
     expect(summary.hasNewContent, isTrue);
+  });
+
+  test('tracks the latest newly visible bot message id', () {
+    final summary = ChatMessageDiff.summarize(
+      previousMessages: [message(id: 'm0', role: ChatRole.bot, text: 'intro')],
+      currentMessages: [
+        message(id: 'm0', role: ChatRole.bot, text: 'intro'),
+        message(id: 'm1', role: ChatRole.bot, text: 'first reply'),
+        message(id: 'm2', role: ChatRole.bot, text: 'second reply'),
+      ],
+    );
+
+    expect(summary.visibleIncomingMessages, 2);
+    expect(summary.latestVisibleBotId, 'm2');
   });
 }

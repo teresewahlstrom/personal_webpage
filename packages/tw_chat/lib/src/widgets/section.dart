@@ -7,6 +7,7 @@ import '../logic/keyboard_event_router.dart';
 import '../logic/web_copy_interceptor.dart';
 import '../models/message.dart';
 import 'section_coordinator.dart';
+import 'chat_jump_button.dart';
 import 'composer_row.dart';
 import 'message_list_area.dart';
 
@@ -138,7 +139,6 @@ class _ChatSectionState extends State<ChatSection> {
         final skin = ChatSkin.dataOf(context);
         final colors = skin.colors;
         final tokens = skin.tokens;
-        final textStyles = ChatSkin.textStyles;
         final textScale = MediaQuery.textScalerOf(context).scale(1.0);
         final composerMetrics = ChatComposerLayout.resolveMetrics(
           context: context,
@@ -252,56 +252,15 @@ class _ChatSectionState extends State<ChatSection> {
                 child: ValueListenableBuilder<int>(
                   valueListenable: _coordinator.chatViewListenable,
                   builder: (_, _, _) {
-                    final bool showJumpToLatest =
+                    final bool showJumpButton =
                         !_coordinator.isNearChatBottom;
-                    if (!showJumpToLatest) {
+                    if (!showJumpButton) {
                       return const SizedBox.shrink();
                     }
-
-                    final double buttonSize =
-                        tokens.jumpToLatestButtonFixedSize;
-                    return SizedBox.square(
-                      dimension: buttonSize,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [tokens.jumpToLatestButtonShadow(colors)],
-                        ),
-                        child: FilledButton(
-                          onPressed: _coordinator.jumpToLatest,
-                          style: FilledButton.styleFrom(
-                            backgroundColor: ChatComposerLayout.fillColor(
-                              context,
-                            ),
-                            foregroundColor: colors.bubbleText,
-                            shape: const CircleBorder(),
-                            side: BorderSide(
-                              color: ChatComposerLayout.borderColor(context),
-                              width: 1.0,
-                            ),
-                            elevation: tokens.jumpToLatestButtonElevation,
-                            padding: tokens.jumpToLatestButtonPadding,
-                            minimumSize: Size.zero,
-                            maximumSize: Size.square(buttonSize),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            textStyle: textStyles
-                                .composerHintStyle(textScale, colors)
-                                .copyWith(
-                                  color: colors.bubbleText,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          child: Tooltip(
-                            message: 'Jump to bottom',
-                            child: Icon(
-                              Icons.south_rounded,
-                              size:
-                                  buttonSize *
-                                  tokens.jumpToLatestButtonIconRatio,
-                            ),
-                          ),
-                        ),
-                      ),
+                    return ChatJumpButton(
+                      showNewMessage: _coordinator.hasUnseenLatestBotMessage,
+                      onJumpToLatest: _coordinator.jumpToLatest,
+                      onJumpToBottom: _coordinator.jumpToBottom,
                     );
                   },
                 ),

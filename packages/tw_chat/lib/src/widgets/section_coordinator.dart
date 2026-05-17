@@ -37,9 +37,12 @@ class SectionCoordinator extends ChangeNotifier {
   bool _showChatScrollbarTrack = false;
   bool _isChatPointerInteractionActive = false;
   bool _isNearBottomCache = true;
+  String? _latestCompletedBotMessageId;
+  String? _unseenLatestBotMessageId;
 
   bool get showChatScrollbarTrack => _showChatScrollbarTrack;
   bool get isChatPointerInteractionActive => _isChatPointerInteractionActive;
+  bool get hasUnseenLatestBotMessage => _unseenLatestBotMessageId != null;
 
   List<ChatMessage> _previousMessagesSnapshot = const <ChatMessage>[];
   String? _deferredRevealMessageId;
@@ -80,7 +83,7 @@ class SectionCoordinator extends ChangeNotifier {
         visibilityOverflowThreshold: ChatScrollbar.visibilityOverflowThreshold,
       );
       if (messages.isNotEmpty) {
-        _stickChatToBottom();
+        _jumpToLatestMessageTop();
       }
       _refreshNearBottomCache(notify: false);
     });
@@ -114,6 +117,7 @@ class SectionCoordinator extends ChangeNotifier {
       previousMessages: _previousMessagesSnapshot,
       currentMessages: messages,
     );
+    final latestVisibleBotId = messageDiff.latestVisibleBotId;
     final shouldAutoFollow =
         wasNearBottom && !shouldPauseAutoFollow && messageDiff.hasNewContent;
     _previousMessagesSnapshot = List<ChatMessage>.unmodifiable(messages);
@@ -121,8 +125,8 @@ class SectionCoordinator extends ChangeNotifier {
     _scheduleChatScrollbarVisibilitySync();
     if (shouldAutoFollow) {
       if (!isVisible) {
-        if (messageDiff.resolvedPendingBotId != null) {
-          _deferredRevealMessageId = messageDiff.resolvedPendingBotId;
+        if (latestVisibleBotId != null) {
+          _deferredRevealMessageId = latestVisibleBotId;
           _deferredStickToBottom = false;
         } else {
           _deferredRevealMessageId = null;
@@ -130,12 +134,17 @@ class SectionCoordinator extends ChangeNotifier {
         }
         return;
       }
-      if (messageDiff.resolvedPendingBotId != null) {
-        _revealMessageTopIfPossible(messageDiff.resolvedPendingBotId!);
+      _clearUnseenLatestBotMessage();
+      if (latestVisibleBotId != null) {
+        _revealMessageTopIfPossible(latestVisibleBotId);
       } else {
         _stickChatToBottom();
       }
       return;
+    }
+
+    if (latestVisibleBotId != null && !wasNearBottom) {
+      _setUnseenLatestBotMessage(latestVisibleBotId);
     }
 
     if (!becameVisible && (!wasNearBottom || shouldPauseAutoFollow)) {
@@ -186,6 +195,15 @@ class SectionCoordinator extends ChangeNotifier {
 
   void jumpToLatest() {
     focusChatKeyboardTarget();
+    if (_clearUnseenLatestBotMessage()) {
+      _notifyChatView();
+    }
+    _jumpToLatestMessageTop();
+  }
+
+  void jumpToBottom() {
+    focusChatKeyboardTarget();
+    _clearUnseenLatestBotMessage();
     _stickChatToBottom();
   }
 
@@ -297,6 +315,7 @@ class SectionCoordinator extends ChangeNotifier {
     _messagesById
       ..clear()
       ..addEntries(messages.map((message) => MapEntry(message.id, message)));
+    _latestCompletedBotMessageId = _latestCompletedBotMessageIdFor(messages);
 
     final activeMessageIds = _messagesById.keys.toSet();
     for (final message in messages) {
@@ -314,6 +333,10 @@ class SectionCoordinator extends ChangeNotifier {
     if (_deferredRevealMessageId != null &&
         !activeMessageIds.contains(_deferredRevealMessageId)) {
       _deferredRevealMessageId = null;
+    }
+    if (_unseenLatestBotMessageId != null &&
+        !activeMessageIds.contains(_unseenLatestBotMessageId)) {
+      _unseenLatestBotMessageId = null;
     }
   }
 
@@ -351,10 +374,12 @@ class SectionCoordinator extends ChangeNotifier {
 
   void _refreshNearBottomCache({bool notify = true}) {
     final bool nextValue = _isNearChatBottom();
-    if (_isNearBottomCache == nextValue) {
+    final bool nearBottomChanged = _isNearBottomCache != nextValue;
+    _isNearBottomCache = nextValue;
+    final bool unreadChanged = nextValue && _clearUnseenLatestBotMessage();
+    if (!nearBottomChanged && !unreadChanged) {
       return;
     }
-    _isNearBottomCache = nextValue;
     if (notify) {
       _notifyChatView();
     }
@@ -418,6 +443,40 @@ class SectionCoordinator extends ChangeNotifier {
         _revealMessageTopIfPossible(messageId, remainingPasses - 1);
       }
     });
+  }
+
+  String? _latestCompletedBotMessageIdFor(List<ChatMessage> messages) {
+    for (final message in messages.reversed) {
+      if (message.role == ChatRole.bot && !message.isPending) {
+        return message.id;
+      }
+    }
+    return null;
+  }
+
+  void _jumpToLatestMessageTop() {
+    final latestCompletedBotMessageId = _latestCompletedBotMessageId;
+    if (latestCompletedBotMessageId != null) {
+      _revealMessageTopIfPossible(latestCompletedBotMessageId);
+      return;
+    }
+    _stickChatToBottom();
+  }
+
+  bool _setUnseenLatestBotMessage(String messageId) {
+    if (_unseenLatestBotMessageId == messageId) {
+      return false;
+    }
+    _unseenLatestBotMessageId = messageId;
+    return true;
+  }
+
+  bool _clearUnseenLatestBotMessage() {
+    if (_unseenLatestBotMessageId == null) {
+      return false;
+    }
+    _unseenLatestBotMessageId = null;
+    return true;
   }
 
   bool _defaultMessageTruncation(ChatMessage message) {
