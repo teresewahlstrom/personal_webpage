@@ -1046,8 +1046,8 @@ class TextScrollController with ChangeNotifier {
 
       final lastCharRect =
           _delegate!.getViewportCharacterRectAtPosition(TextPosition(offset: _textController.text.length - 1));
-      final isAtLastLine = rectInContentSpace.top == lastCharRect.top;
-      final extraSpacingBelowBottom = (isAtLastLine ? rectInContentSpace.height / 2 : 0);
+      final isAtOrPastLastLine = rectInContentSpace.top >= lastCharRect.top;
+      final extraSpacingBelowBottom = (isAtOrPastLastLine ? rectInContentSpace.height / 2 : 0);
       if (rectInContentSpace.top - extraSpacingAboveTop - scrollOffset < 0) {
         // The character is entirely or partially above the top of the viewport.
         // Scroll the content down.
@@ -1057,8 +1057,14 @@ class TextScrollController with ChangeNotifier {
       } else if (rectInContentSpace.bottom - scrollOffset + extraSpacingBelowBottom > _delegate!.viewportHeight!) {
         // The character is entirely or partially below the bottom of the viewport.
         // Scroll the content up.
-        _setScrollOffset(min(rectInContentSpace.bottom - _delegate!.viewportHeight! + extraSpacingBelowBottom,
-            _delegate!.endScrollOffset));
+        _setScrollOffset(
+          isAtOrPastLastLine
+              ? _delegate!.endScrollOffset
+              : min(
+                  rectInContentSpace.bottom - _delegate!.viewportHeight! + extraSpacingBelowBottom,
+                  _delegate!.endScrollOffset,
+                ),
+        );
         _log.finer(' - updated scroll offset to $scrollOffset');
         return;
       }
