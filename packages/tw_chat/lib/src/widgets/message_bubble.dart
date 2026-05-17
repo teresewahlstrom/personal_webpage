@@ -188,6 +188,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         toggleButtonBorderSide: toggleButtonBorderSide,
       );
     }
+
     return SizedBox(
       width: double.infinity,
       child: Align(
@@ -209,52 +210,56 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                       child: Stack(
                         children: [
                           if (widget.isUser)
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: bubbleMinWidth,
-                                maxWidth: bubbleMaxWidth,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.fromLTRB(
-                                      horizontalInset,
-                                      verticalInset,
-                                      horizontalInset,
-                                      isCollapsed ? 0.0 : verticalInset,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: bubbleColor,
-                                      borderRadius: BorderRadius.circular(
-                                        tokens.bubbleRadius,
+                            IntrinsicWidth(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: bubbleMinWidth,
+                                  maxWidth: bubbleMaxWidth,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.fromLTRB(
+                                        horizontalInset,
+                                        verticalInset,
+                                        horizontalInset,
+                                        isCollapsed ? 0.0 : verticalInset,
                                       ),
-                                      border: showFooter || isCollapsed
-                                          ? Border(
-                                              top: bubbleBorderSide,
-                                              left: bubbleBorderSide,
-                                              right: bubbleBorderSide,
-                                            )
-                                          : Border.fromBorderSide(
-                                              bubbleBorderSide,
-                                            ),
-                                      boxShadow: [tokens.surfaceShadow(colors)],
+                                      decoration: BoxDecoration(
+                                        color: bubbleColor,
+                                        borderRadius: BorderRadius.circular(
+                                          tokens.bubbleRadius,
+                                        ),
+                                        border: showFooter || isCollapsed
+                                            ? Border(
+                                                top: bubbleBorderSide,
+                                                left: bubbleBorderSide,
+                                                right: bubbleBorderSide,
+                                              )
+                                            : Border.fromBorderSide(
+                                                bubbleBorderSide,
+                                              ),
+                                        boxShadow: [
+                                          tokens.surfaceShadow(colors),
+                                        ],
+                                      ),
+                                      child: _buildBubbleText(
+                                        parsedMarkup,
+                                        style: bubbleTextStyle,
+                                        bubbleColor: bubbleColor,
+                                        isUserBubble: true,
+                                        truncatedContentHeight:
+                                            truncatedContentHeight,
+                                        isTruncated: isCollapsed,
+                                      ),
                                     ),
-                                    child: _buildBubbleText(
-                                      parsedMarkup,
-                                      style: bubbleTextStyle,
-                                      bubbleColor: bubbleColor,
-                                      isUserBubble: true,
-                                      truncatedContentHeight:
-                                          truncatedContentHeight,
-                                      isTruncated: isCollapsed,
-                                    ),
-                                  ),
-                                  if (showFooter)
-                                    buildFooter(),
-                                ],
+                                    if (showFooter) buildFooter(),
+                                  ],
+                                ),
                               ),
                             )
                           else
@@ -551,16 +556,12 @@ class _BubbleTruncationToggleButton extends StatelessWidget {
         child: Material(
           color: toggleButtonBackgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              tokens.collapseButtonRadius,
-            ),
+            borderRadius: BorderRadius.circular(tokens.collapseButtonRadius),
             side: toggleButtonBorderSide,
           ),
           child: InkWell(
             customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                tokens.collapseButtonRadius,
-              ),
+              borderRadius: BorderRadius.circular(tokens.collapseButtonRadius),
               side: toggleButtonBorderSide,
             ),
             onTap: onToggleTruncation,

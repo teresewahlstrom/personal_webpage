@@ -333,10 +333,12 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
           widget.editingController,
         },
         builder: (context) {
+          final draggableHandles = _buildDraggableOverlayHandles();
           return Stack(
             children: [
               // Build the base and extent draggable handles
-              ..._buildDraggableOverlayHandles(),
+              if (draggableHandles.isNotEmpty)
+                _clipHandlesToTextFieldBounds(Stack(children: draggableHandles)),
               // Build the editing toolbar
               _buildToolbar(),
               // Build the magnifier
@@ -344,6 +346,18 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
             ],
           );
         });
+  }
+
+  Widget _clipHandlesToTextFieldBounds(Widget child) {
+    final textFieldRect = _textFieldRectInOverlay;
+    if (textFieldRect == null) {
+      return child;
+    }
+
+    return ClipRect(
+      clipper: _TextFieldBoundsClipper(textFieldRect),
+      child: child,
+    );
   }
 
   Widget _buildToolbar() {
@@ -631,9 +645,36 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     return renderObject is RenderBox ? renderObject : null;
   }
 
+  Rect? get _textFieldRectInOverlay {
+    final overlayRenderBox = _overlayRenderBox;
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (overlayRenderBox == null || textFieldRenderBox == null) {
+      return null;
+    }
+
+    final topLeft = overlayRenderBox.globalToLocal(
+      textFieldRenderBox.localToGlobal(Offset.zero),
+    );
+    return topLeft & textFieldRenderBox.size;
+  }
+
   RenderBox? get _textContentRenderBox {
     final renderObject = widget.textContentKey.currentContext?.findRenderObject();
     return renderObject is RenderBox ? renderObject : null;
+  }
+}
+
+class _TextFieldBoundsClipper extends CustomClipper<Rect> {
+  const _TextFieldBoundsClipper(this.rect);
+
+  final Rect rect;
+
+  @override
+  Rect getClip(Size size) => rect;
+
+  @override
+  bool shouldReclip(covariant _TextFieldBoundsClipper oldClipper) {
+    return oldClipper.rect != rect;
   }
 }
 

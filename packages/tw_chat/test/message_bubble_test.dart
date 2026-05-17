@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:tw_chat/src/config/bubble_rules.dart';
+import 'package:tw_chat/src/config/skin.dart';
 import 'package:tw_chat/src/logic/message_markup.dart';
 import 'package:tw_chat/src/logic/selection_copy_formatter.dart';
 import 'package:tw_chat/src/models/message.dart';
@@ -374,12 +376,63 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
           return decoration is BoxDecoration && decoration.border != null;
         }).first,
       );
-      final border = (bubbleContainer.decoration! as BoxDecoration).border! as Border;
+      final border =
+          (bubbleContainer.decoration! as BoxDecoration).border! as Border;
 
       expect(border.top.style, BorderStyle.solid);
       expect(border.left.style, BorderStyle.solid);
       expect(border.right.style, BorderStyle.solid);
       expect(border.bottom.style, BorderStyle.none);
+    },
+  );
+
+  testWidgets(
+    'short user bubbles stay below the max width while honoring the minimum width',
+    (tester) async {
+      const availableWidth = 320.0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: Center(
+              child: SizedBox(
+                width: availableWidth,
+                child: ChatMessageBubble(
+                  text: 'OK',
+                  selectionListenerNotifier: SelectionListenerNotifier(),
+                  isUser: true,
+                  isTypingIndicator: false,
+                  isTruncated: false,
+                  isFirstMessage: true,
+                  isLastMessage: true,
+                  availableWidth: availableWidth,
+                  onToggleTruncation: _noop,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final bubbleContainer = find.byWidgetPredicate((widget) {
+        if (widget is! Container) {
+          return false;
+        }
+        final decoration = widget.decoration;
+        return decoration is BoxDecoration && decoration.border != null;
+      }).first;
+      final bubbleWidth = tester.getSize(bubbleContainer).width;
+      final maxWidth =
+          (availableWidth * ChatBubbleRules.maxWidthFactor +
+                  ChatSkin.tokens.bubbleWidthCompensation)
+              .clamp(ChatSkin.tokens.bubbleMinMaxWidth, availableWidth);
+      final minWidth = (availableWidth * ChatBubbleRules.minWidthFactor).clamp(
+        0.0,
+        maxWidth,
+      );
+
+      expect(bubbleWidth, greaterThanOrEqualTo(minWidth - 0.1));
+      expect(bubbleWidth, lessThan(maxWidth - 1));
     },
   );
 }

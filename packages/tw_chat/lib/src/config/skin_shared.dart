@@ -112,7 +112,7 @@ class ChatSkinTokens {
   final EdgeInsets bubbleViewportPadding = const EdgeInsets.fromLTRB(
     2,
     18,
-    20.75,
+    20.75 * 5 / 6,
     10,
   );
   final double chatListTopShadowHeight = 32.0;
@@ -219,10 +219,7 @@ class ChatSkinTokens {
     -0.2,
     -0.4,
   ];
-  final List<double> markupHeadingTopSpacingFactors = const <double>[
-    1.0,
-    1.0,
-  ];
+  final List<double> markupHeadingTopSpacingFactors = const <double>[1.0, 1.0];
   final double markupListItemBaseSpacingFactor = 0.26;
   final double markupTopLevelListItemSpacingAdjustment = 0.52;
   final double markupListMarkerGapFactor = 0.3333333333;
@@ -386,8 +383,8 @@ class ChatSkinTextStyles {
       maxTextScale: defaultMaxTextScale,
     );
     final base = GoogleFonts.nunito(
-      fontSize: 14,
-      height: 1.5,
+      fontSize: 15,
+      height: 1.4,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
     );
@@ -481,10 +478,7 @@ class ChatSkinTextStyles {
   ) {
     // Heading scales for levels 1..2 (H1, H2).
     const scales = <double>[1.55, 1.36];
-    const weights = <FontWeight>[
-      FontWeight.w600,
-      FontWeight.w700,
-    ];
+    const weights = <FontWeight>[FontWeight.w600, FontWeight.w700];
 
     final clampedLevel = level.clamp(1, 2);
     final index = clampedLevel - 1;
