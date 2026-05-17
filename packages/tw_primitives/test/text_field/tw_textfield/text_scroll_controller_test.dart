@@ -34,6 +34,26 @@ void main() {
 
     expect(notifications, 2);
   });
+
+  test('ensureExtentIsVisible scrolls fully to the bottom when the caret is on the last line', () {
+    final textController = AttributedTextEditingController(
+      text: AttributedText('abc'),
+    )..selection = const TextSelection.collapsed(offset: 3);
+    final scrollController = TextScrollController(
+      textController: textController,
+      tickerProvider: const TestVSync(),
+    );
+    final delegate = _FakeTextScrollControllerDelegate(
+      caretRect: const Rect.fromLTWH(0, 40, 0, 10),
+      lastCharacterRect: const Rect.fromLTWH(0, 40, 0, 10),
+      endScrollOffsetValue: 45,
+    );
+    scrollController.delegate = delegate;
+
+    scrollController.ensureExtentIsVisible();
+
+    expect(scrollController.targetScrollOffset, 45);
+  });
 }
 
 class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate {
@@ -41,7 +61,18 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   static const _lineHeight = 10.0;
   static const _caretContentTop = 50.0;
 
+  _FakeTextScrollControllerDelegate({
+    Rect? caretRect,
+    Rect? lastCharacterRect,
+    double? endScrollOffsetValue,
+  }) : _caretRect = caretRect,
+       _lastCharacterRect = lastCharacterRect,
+       _endScrollOffsetValue = endScrollOffsetValue;
+
   double currentScrollOffsetValue = 0;
+  final Rect? _caretRect;
+  final Rect? _lastCharacterRect;
+  final double? _endScrollOffsetValue;
 
   @override
   double? get viewportWidth => 100;
@@ -62,7 +93,7 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   double get currentScrollOffset => currentScrollOffsetValue;
 
   @override
-  double get endScrollOffset => 100;
+  double get endScrollOffset => _endScrollOffsetValue ?? 100;
 
   @override
   bool isTextPositionVisible(TextPosition position) => false;
@@ -93,6 +124,10 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
 
   @override
   Rect getViewportCharacterRectAtPosition(TextPosition position) {
+    if (_lastCharacterRect != null && position.offset > 0) {
+      return _lastCharacterRect!;
+    }
+
     final top = position.offset == 0 ? 0.0 : _caretContentTop;
     return Rect.fromLTWH(
       0,
@@ -104,6 +139,10 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
 
   @override
   Rect getViewportCaretRectAtPosition(TextPosition position) {
+    if (_caretRect != null) {
+      return _caretRect!;
+    }
+
     return Rect.fromLTWH(
       0,
       _caretContentTop - currentScrollOffsetValue,
