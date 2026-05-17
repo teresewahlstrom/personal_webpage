@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_scheduler.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/multi_listenable_builder.dart';
@@ -333,10 +334,12 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
           widget.editingController,
         },
         builder: (context) {
+          final draggableHandles = _buildDraggableOverlayHandles();
           return Stack(
             children: [
               // Build the base and extent draggable handles
-              ..._buildDraggableOverlayHandles(),
+              if (draggableHandles.isNotEmpty)
+                _buildHandlesWithVisualClipping(Stack(children: draggableHandles)),
               // Build the editing toolbar
               _buildToolbar(),
               // Build the magnifier
@@ -344,6 +347,19 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
             ],
           );
         });
+  }
+
+  Widget _buildHandlesWithVisualClipping(Widget child) {
+    final textFieldRect = _textFieldRectInOverlay;
+    if (textFieldRect == null) {
+      return child;
+    }
+
+    // Use custom render object to clip visually without affecting hit testing
+    return _HitTestPassthroughClip(
+      clipRect: textFieldRect,
+      child: child,
+    );
   }
 
   Widget _buildToolbar() {
@@ -631,9 +647,80 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     return renderObject is RenderBox ? renderObject : null;
   }
 
+  Rect? get _textFieldRectInOverlay {
+    final overlayRenderBox = _overlayRenderBox;
+    final textFieldRenderBox = _textFieldRenderBox;
+    if (overlayRenderBox == null || textFieldRenderBox == null) {
+      return null;
+    }
+
+    final topLeft = overlayRenderBox.globalToLocal(
+      textFieldRenderBox.localToGlobal(Offset.zero),
+    );
+    return topLeft & textFieldRenderBox.size;
+  }
+
   RenderBox? get _textContentRenderBox {
     final renderObject = widget.textContentKey.currentContext?.findRenderObject();
     return renderObject is RenderBox ? renderObject : null;
+  }
+}
+
+class _HitTestPassthroughClip extends SingleChildRenderObjectWidget {
+  const _HitTestPassthroughClip({
+    required this.clipRect,
+    required Widget child,
+  }) : super(child: child);
+
+  final Rect clipRect;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return _RenderHitTestPassthroughClip(clipRect: clipRect);
+  }
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderHitTestPassthroughClip renderObject,
+  ) {
+    renderObject.clipRect = clipRect;
+  }
+}
+
+class _RenderHitTestPassthroughClip extends RenderProxyBox {
+  _RenderHitTestPassthroughClip({required Rect clipRect}) : _clipRect = clipRect;
+
+  Rect _clipRect;
+
+  set clipRect(Rect value) {
+    if (_clipRect != value) {
+      _clipRect = value;
+      markNeedsPaint();
+    }
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    // Save the canvas state
+    context.canvas.save();
+    // Apply clipping to visual rendering only
+    context.canvas.clipRect(
+      _clipRect.shift(offset),
+      doAntiAlias: true,
+    );
+    // Paint the child
+    super.paint(context, offset);
+    // Restore canvas state
+    context.canvas.restore();
+  }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    // Allow hit testing to pass through without clipping
+    // This allows pointer events to reach the handles even if they're
+    // rendered partially outside the clip rect
+    return super.hitTest(result, position: position);
   }
 }
 
