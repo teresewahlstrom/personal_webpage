@@ -22,6 +22,11 @@ void main() {
     );
   });
 
+  test('project card fill alphas stay aligned with the tinted panel theme', () {
+    expect(AppColorTheme.projectCardFillAlphaFor(Brightness.light), 0.70);
+    expect(AppColorTheme.projectCardFillAlphaFor(Brightness.dark), 0.65);
+  });
+
   test('dark chat accents use the send-button cyan', () {
     final colors = ChatSkin.dataForMode(ChatSkinMode.dark).colors;
 

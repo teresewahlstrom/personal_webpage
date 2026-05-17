@@ -36,6 +36,7 @@ final class _AppLightColors {
   static const Color pageScrollbarThumb = Color(0xFFE1E4F2);
   static const Color pageScrollbarThumbInactive = Color(0xFFE8EAF4);
   static const Color pageScrollbarTrack = Color(0x00F8F9F7);
+  static const double projectCardFillAlpha = 0.70;
   // clickable accent colors
   static const Color _interactive = Color(0xFF394183);
   static const Color _interactiveHover = Color(0xFF843F02);
@@ -72,6 +73,7 @@ final class _AppDarkColors {
   static const Color pageScrollbarThumb = Color(0x397199FF);
   static const Color pageScrollbarThumbInactive = Color(0xFF283143);
   static const Color pageScrollbarTrack = Color(0x004EF0FF);
+  static const double projectCardFillAlpha = 0.65;
   // clickable accent colors
   static const Color _interactive = Color(0xFF90E8F8);
   static const Color _interactiveHover = Color(0xFF90E8F8);
