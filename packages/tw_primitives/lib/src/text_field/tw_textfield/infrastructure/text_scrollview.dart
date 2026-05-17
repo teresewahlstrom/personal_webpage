@@ -278,14 +278,14 @@ class _TextScrollViewState extends State<TextScrollView>
         return false;
       }
 
-      final characterBox = _textLayout.getCharacterBox(position);
-      final scrolledCharacterTop = (characterBox?.top ?? 0.0) - _scrollController.offset;
-      final scrolledCharacterBottom =
-          (characterBox?.bottom ?? _textLayout.estimatedLineHeight) - _scrollController.offset;
-      // A position should be considered visible if any part of its line intersects
-      // the viewport. Requiring full containment hides first/last-line handles when
-      // a line is partially clipped at the viewport edge.
-      return scrolledCharacterBottom > 0 && scrolledCharacterTop < viewportHeight;
+      final caretRect = getViewportCaretRectAtPosition(position);
+      // A position should be considered visible if any part of its caret line
+      // intersects the viewport. Using caret geometry (instead of character
+      // boxes) keeps visibility stable for positions that don't map to a
+      // character box, such as trailing newlines and end-of-text selections.
+      final caretTop = caretRect.top;
+      final caretBottom = caretRect.bottom;
+      return caretBottom > 0 && caretTop < viewportHeight;
     } else {
       final viewportWidth = this.viewportWidth;
       if (viewportWidth == null) {
