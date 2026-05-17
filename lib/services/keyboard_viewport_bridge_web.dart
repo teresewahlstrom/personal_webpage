@@ -45,6 +45,13 @@ class _WebKeyboardViewportBridge implements KeyboardViewportBridge {
   }
 
   @override
+  double? get layoutViewportHeight => html.window.innerHeight?.toDouble();
+
+  @override
+  double? get visualViewportOffsetTop =>
+      html.window.visualViewport?.offsetTop?.toDouble();
+
+  @override
   void start(KeyboardViewportChangeCallback onChange) {
     _onChange = onChange;
 

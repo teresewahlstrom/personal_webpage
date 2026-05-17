@@ -113,8 +113,13 @@ class _PageScaffoldState extends State<PageScaffold>
     final chatSkin = ChatSkin.dataForMode(widget.initialChatSkinMode);
     final chatTokens = chatSkin.tokens;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final double floatingTopInset =
-      mediaQuery.viewPadding.top + 10.0;
+    final Widget? footer = widget.showFooter && !widget.isPageLoading
+        ? const PageFooter(
+            brandName: 'T1 grid',
+            privacyLabel: 'Privacy & Cookies Note.',
+          )
+        : null;
+    final double floatingTopInset = mediaQuery.viewPadding.top + 10.0;
     return GridBackground(
       backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
       gridLineStyle: ShellUiConfig.gridLineFor(brightness),
@@ -177,16 +182,22 @@ class _PageScaffoldState extends State<PageScaffold>
                                               ?.clearSelection();
                                         },
                                         child: Column(
+                                          mainAxisAlignment: footer != null
+                                              ? MainAxisAlignment.spaceBetween
+                                              : MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
                                           children: <Widget>[
-                                            const PageHeader(),
-                                            widget.child,
-                                            if (widget.showFooter && !widget.isPageLoading)
-                                              const PageFooter(
-                                                brandName: 'T1 grid',
-                                                privacyLabel: 'Privacy & Cookies Note.',
-                                              ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                const PageHeader(),
+                                                widget.child,
+                                              ],
+                                            ),
+                                            if (footer != null) footer,
                                           ],
                                         ),
                                       ),

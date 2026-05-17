@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -94,7 +95,7 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
 
   void _recomputeKeyboardHeight() {
     final view = View.of(context);
-    final double screenHeight =
+    final double viewportHeight =
         view.physicalSize.height / view.devicePixelRatio;
 
     final double flutterInset = math.max(
@@ -102,9 +103,22 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
       view.viewInsets.bottom / view.devicePixelRatio,
     );
     final double webInset = math.max(0, _viewportBridge.estimatedBottomInset);
+    final double viewportConsumedBottomInset =
+        estimateViewportConsumedBottomInset(
+          viewportHeight: viewportHeight,
+          layoutViewportHeight: _viewportBridge.layoutViewportHeight,
+          visualViewportOffsetTop: _viewportBridge.visualViewportOffsetTop,
+        );
+    final double adjustedWebInset = math.max(
+      0,
+      webInset - viewportConsumedBottomInset,
+    );
 
-    final double clampedFlutterInset = _clampInset(flutterInset, screenHeight);
-    final double clampedWebInset = _clampInset(webInset, screenHeight);
+    final double clampedFlutterInset = _clampInset(
+      flutterInset,
+      viewportHeight,
+    );
+    final double clampedWebInset = _clampInset(adjustedWebInset, viewportHeight);
     final double nextValue = math.max(clampedFlutterInset, clampedWebInset);
 
     if ((nextValue - _keyboardHeight.value).abs() > 0.5) {
@@ -121,4 +135,24 @@ class _KeyboardHeightObserverState extends State<KeyboardHeightObserver>
   Widget build(BuildContext context) {
     return KeyboardHeight(notifier: _keyboardHeight, child: widget.child);
   }
+}
+
+@visibleForTesting
+double estimateViewportConsumedBottomInset({
+  required double viewportHeight,
+  double? layoutViewportHeight,
+  double? visualViewportOffsetTop,
+}) {
+  if (layoutViewportHeight == null || !layoutViewportHeight.isFinite) {
+    return 0;
+  }
+
+  final double safeViewportOffsetTop =
+      visualViewportOffsetTop != null && visualViewportOffsetTop.isFinite
+      ? math.max(0, visualViewportOffsetTop)
+      : 0;
+  return math.max(
+    0,
+    layoutViewportHeight - viewportHeight - safeViewportOffsetTop,
+  );
 }
