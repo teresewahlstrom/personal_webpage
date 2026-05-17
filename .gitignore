@@ -39,6 +39,7 @@ node_modules/
 .pub/
 /build/
 /packages/tw_chat/build/
+/packages/tw_primitives/build/
 /coverage/
 **/__pycache__/
 **/.pytest_cache/

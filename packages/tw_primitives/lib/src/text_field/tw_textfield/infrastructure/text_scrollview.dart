@@ -282,8 +282,10 @@ class _TextScrollViewState extends State<TextScrollView>
       final scrolledCharacterTop = (characterBox?.top ?? 0.0) - _scrollController.offset;
       final scrolledCharacterBottom =
           (characterBox?.bottom ?? _textLayout.estimatedLineHeight) - _scrollController.offset;
-      // Round the top/bottom values to avoid false negatives due to floating point accuracy.
-      return scrolledCharacterTop.round() >= 0 && scrolledCharacterBottom.round() <= viewportHeight;
+      // A position should be considered visible if any part of its line intersects
+      // the viewport. Requiring full containment hides first/last-line handles when
+      // a line is partially clipped at the viewport edge.
+      return scrolledCharacterBottom > 0 && scrolledCharacterTop < viewportHeight;
     } else {
       final viewportWidth = this.viewportWidth;
       if (viewportWidth == null) {
@@ -302,8 +304,7 @@ class _TextScrollViewState extends State<TextScrollView>
       // Find the offset of the text position within the viewport.
       final offsetInViewport = textOffsetInViewport + _textLayout.getOffsetAtPosition(position);
 
-      // Round the top/bottom values to avoid false negatives due to floating point accuracy.
-      return offsetInViewport.dx.round() >= 0 && offsetInViewport.dx.round() <= viewportWidth;
+      return offsetInViewport.dx >= 0 && offsetInViewport.dx <= viewportWidth;
     }
   }
 
