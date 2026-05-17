@@ -20,3 +20,12 @@ bool _isEditableElement(web.Element? element) {
       tagName == 'textarea' ||
       isContentEditable;
 }
+
+bool browserReportsTouchInput() {
+  final navigator = web.window.navigator;
+  final hasTouchPoints = navigator.maxTouchPoints > 0;
+  final usesCoarsePointer =
+      web.window.matchMedia('(pointer: coarse)').matches ||
+      web.window.matchMedia('(any-pointer: coarse)').matches;
+  return hasTouchPoints && usesCoarsePointer;
+}

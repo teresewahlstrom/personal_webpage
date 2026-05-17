@@ -4,6 +4,9 @@ import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/platform.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/web/browser_text_input_stub.dart'
+    if (dart.library.html) 'package:tw_primitives/src/text_field/infrastructure/platforms/web/browser_text_input_web.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/ime_input_owner.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/selection_handles.dart';
@@ -347,16 +350,10 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
     if (widget.inputSource != null) {
       return widget.inputSource!;
     }
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.iOS:
-        return TextInputSource.ime;
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        return TextInputSource.keyboard;
-    }
+    return defaultTextInputSourceForPlatform(
+      defaultTargetPlatform,
+      useImeOnWebTouchDevice: CurrentPlatform.isWeb && browserReportsTouchInput(),
+    );
   }
 
   /// Shortcuts that should be ignored on web.
@@ -494,3 +491,24 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
 /// Desktop uses a blinking caret, while mobile uses a draggable caret
 /// and selection handles, styled per platform.
 enum TwTextFieldPlatformConfiguration { desktop, android, iOS }
+
+@visibleForTesting
+TextInputSource defaultTextInputSourceForPlatform(
+  TargetPlatform platform, {
+  required bool useImeOnWebTouchDevice,
+}) {
+  if (useImeOnWebTouchDevice) {
+    return TextInputSource.ime;
+  }
+
+  switch (platform) {
+    case TargetPlatform.android:
+    case TargetPlatform.iOS:
+      return TextInputSource.ime;
+    case TargetPlatform.fuchsia:
+    case TargetPlatform.linux:
+    case TargetPlatform.macOS:
+    case TargetPlatform.windows:
+      return TextInputSource.keyboard;
+  }
+}
