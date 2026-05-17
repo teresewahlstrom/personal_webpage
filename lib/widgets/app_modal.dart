@@ -22,7 +22,8 @@ Future<void> showAppModal({
       void close() => Navigator.of(dialogContext).pop();
 
       return _AppModalFrame(
-        backgroundColor: ModalUiConfig.backgroundFor(brightness),
+        backgroundColor: ModalUiConfig.frameFillFor(brightness),
+        frameBorder: ModalUiConfig.frameBorderFor(brightness),
         headerBorderColor: ModalUiConfig.headerBorderFor(brightness),
         closeIconColor: ModalUiConfig.closeIconFor(brightness),
         closeIconHoverColor: ModalUiConfig.closeIconHoverFor(brightness),
@@ -41,6 +42,7 @@ Future<void> showAppModal({
 class _AppModalFrame extends StatefulWidget {
   const _AppModalFrame({
     required this.backgroundColor,
+    required this.frameBorder,
     required this.headerBorderColor,
     required this.closeIconColor,
     required this.closeIconHoverColor,
@@ -54,6 +56,7 @@ class _AppModalFrame extends StatefulWidget {
   });
 
   final Color backgroundColor;
+  final AppLineStyle frameBorder;
   final Color headerBorderColor;
   final Color closeIconColor;
   final Color closeIconHoverColor;
@@ -86,7 +89,11 @@ class _AppModalFrameState extends State<_AppModalFrame> {
     return Dialog(
       backgroundColor: widget.backgroundColor,
       insetPadding: widget.insetPadding,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+        side: widget.frameBorder.borderSide,
+      ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: widget.maxWidth,
