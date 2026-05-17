@@ -131,6 +131,18 @@ final class ModalUiConfig {
     return AppColorTheme.modalBackgroundFor(brightness);
   }
 
+  static AppLineStyle frameBorderFor(Brightness brightness) {
+    return AppLineTheme.subtleFor(brightness);
+  }
+
+  static Color frameFillFor(Brightness brightness) {
+    return Color.lerp(
+      backgroundFor(brightness),
+      frameBorderFor(brightness).color,
+      AppColorTheme.projectCardFillAlphaFor(brightness),
+    )!;
+  }
+
   static Color headerBorderFor(Brightness brightness) {
     return AppColorTheme.modalHeaderBorderFor(brightness);
   }

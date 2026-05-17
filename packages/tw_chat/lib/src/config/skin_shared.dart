@@ -384,7 +384,7 @@ class ChatSkinTextStyles {
     );
     final base = GoogleFonts.nunito(
       fontSize: 15,
-      height: 1.4,
+      height: 1.3,
       color: colors.bubbleText,
       fontWeight: FontWeight.w300,
     );
@@ -487,6 +487,10 @@ class ChatSkinTextStyles {
     double? fontSize = baseStyle.fontSize == null
         ? null
         : baseStyle.fontSize! * scales[index];
+
+    if (clampedLevel == 1 && fontSize != null) {
+      fontSize += 2.0;
+    }
 
     // Make H2 (level == 2) 1.0 logical pixel smaller than the computed size.
     if (clampedLevel == 2 && fontSize != null) {
