@@ -10,7 +10,9 @@ void main() {
     'composer text field is not clipped so selection handles can extend outside the shell',
     (tester) async {
       final controller = TwReadyTextController(text: 'Hello world');
+      final focusNode = FocusNode();
       addTearDown(controller.dispose);
+      addTearDown(focusNode.dispose);
 
       await tester.pumpWidget(
         ChatSkinScope(
@@ -19,7 +21,7 @@ void main() {
             home: Material(
               child: ChatComposerRow(
                 controller: controller,
-                inputFocusNode: FocusNode(),
+                inputFocusNode: focusNode,
                 minInputHeight: 40,
                 maxInputHeight: 132,
                 sendButtonMinWidth: 50,
