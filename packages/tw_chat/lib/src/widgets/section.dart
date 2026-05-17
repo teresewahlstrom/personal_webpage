@@ -273,9 +273,7 @@ class _ChatSectionState extends State<ChatSection> {
               height: tokens.chatListTopShadowHeight,
               child: IgnorePointer(
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: tokens.shellTopShadowGradient(colors),
-                  ),
+                  decoration: tokens.shellTopShadowDecoration(colors),
                 ),
               ),
             ),

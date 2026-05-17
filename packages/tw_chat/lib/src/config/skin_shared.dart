@@ -296,6 +296,13 @@ class ChatSkinTokens {
     );
   }
 
+  BoxDecoration shellTopShadowDecoration(ChatSkinColors colors) {
+    return BoxDecoration(
+      color: colors.shellBackgroundStart,
+      gradient: shellTopShadowGradient(colors),
+    );
+  }
+
   LinearGradient shellBottomShadowGradient(ChatSkinColors colors) {
     return LinearGradient(
       begin: Alignment.bottomCenter,
