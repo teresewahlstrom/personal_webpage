@@ -501,6 +501,7 @@ class _AndroidEditingOverlayControlsState extends State<AndroidEditingOverlayCon
         },
         builder: (context) {
           return Stack(
+            clipBehavior: Clip.none,
             children: [
               // Build the focal point for the magnifier
               if (_isDraggingCollapsed || _isDraggingBase || _isDraggingExtent) _buildMagnifierFocalPoint(),

@@ -334,6 +334,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
         },
         builder: (context) {
           return Stack(
+            clipBehavior: Clip.none,
             children: [
               // Build the base and extent draggable handles
               ..._buildDraggableOverlayHandles(),
