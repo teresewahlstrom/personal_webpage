@@ -17,7 +17,7 @@ void main() {
                   showAppModal(
                     context: context,
                     headerTitle: 'Subscribe',
-                    builder: (_, __) => const Text('Modal body'),
+                    builder: (_, _) => const Text('Modal body'),
                   );
                 },
                 child: const Text('Open'),

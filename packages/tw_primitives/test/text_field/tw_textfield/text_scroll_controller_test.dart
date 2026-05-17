@@ -125,7 +125,7 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   @override
   Rect getViewportCharacterRectAtPosition(TextPosition position) {
     if (_lastCharacterRect != null && position.offset > 0) {
-      return _lastCharacterRect!;
+      return _lastCharacterRect;
     }
 
     final top = position.offset == 0 ? 0.0 : _caretContentTop;
@@ -140,7 +140,7 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   @override
   Rect getViewportCaretRectAtPosition(TextPosition position) {
     if (_caretRect != null) {
-      return _caretRect!;
+      return _caretRect;
     }
 
     return Rect.fromLTWH(
