@@ -500,7 +500,6 @@ class _AndroidEditingOverlayControlsState extends State<AndroidEditingOverlayCon
           widget.editingController,
         },
         builder: (context) {
-          final draggableHandles = _buildDraggableOverlayHandles();
           return Stack(
             children: [
               // Build the focal point for the magnifier
@@ -509,25 +508,12 @@ class _AndroidEditingOverlayControlsState extends State<AndroidEditingOverlayCon
               // the handles so that the magnifier doesn't show the handles
               if (widget.editingController.isMagnifierVisible) _buildMagnifier(),
               // Build the base and extent draggable handles
-              if (draggableHandles.isNotEmpty)
-                _clipHandlesToTextFieldBounds(Stack(children: draggableHandles)),
+              ..._buildDraggableOverlayHandles(),
               // Build the editing toolbar
               _buildToolbar(),
             ],
           );
         });
-  }
-
-  Widget _clipHandlesToTextFieldBounds(Widget child) {
-    final textFieldRect = _textFieldRectInOverlay;
-    if (textFieldRect == null) {
-      return child;
-    }
-
-    return ClipRect(
-      clipper: _TextFieldBoundsClipper(textFieldRect),
-      child: child,
-    );
   }
 
   Widget _buildToolbar() {
@@ -823,42 +809,6 @@ class _AndroidEditingOverlayControlsState extends State<AndroidEditingOverlayCon
     scheduleBuildAfterBuild();
   }
 
-  RenderBox? get _overlayRenderBox {
-    final renderObject = context.findRenderObject();
-    return renderObject is RenderBox ? renderObject : null;
-  }
-
-  RenderBox? get _textFieldRenderBox {
-    final renderObject = widget.textFieldKey.currentContext?.findRenderObject();
-    return renderObject is RenderBox ? renderObject : null;
-  }
-
-  Rect? get _textFieldRectInOverlay {
-    final overlayRenderBox = _overlayRenderBox;
-    final textFieldRenderBox = _textFieldRenderBox;
-    if (overlayRenderBox == null || textFieldRenderBox == null) {
-      return null;
-    }
-
-    final topLeft = overlayRenderBox.globalToLocal(
-      textFieldRenderBox.localToGlobal(Offset.zero),
-    );
-    return topLeft & textFieldRenderBox.size;
-  }
-}
-
-class _TextFieldBoundsClipper extends CustomClipper<Rect> {
-  const _TextFieldBoundsClipper(this.rect);
-
-  final Rect rect;
-
-  @override
-  Rect getClip(Size size) => rect;
-
-  @override
-  bool shouldReclip(covariant _TextFieldBoundsClipper oldClipper) {
-    return oldClipper.rect != rect;
-  }
 }
 
 class AndroidEditingOverlayController with ChangeNotifier {
