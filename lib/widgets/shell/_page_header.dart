@@ -14,33 +14,42 @@ class PageHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      constraints: const BoxConstraints(
-        minHeight: ShellUiConfig.headerMinHeight,
-      ),
-      padding: ShellUiConfig.headerPadding,
-      decoration: BoxDecoration(
-        color: ShellUiConfig.headerBackgroundFor(brightness),
-        border: Border(
-          bottom: headerLine.borderSide,
-        ),
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: ShellUiConfig.headerMaxWidth,
+      height: ShellUiConfig.headerMinHeight,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: ShellUiConfig.headerBackgroundFor(brightness),
+          border: Border(
+            bottom: headerLine.borderSide,
           ),
-          child: Row(
-            children: <Widget>[
-              Image.asset(
-                logoAssetPath,
-                width: ShellUiConfig.headerLogoWidth,
-                height: ShellUiConfig.headerLogoHeight,
-                fit: BoxFit.contain,
+        ),
+        child: Padding(
+          padding: ShellUiConfig.headerPadding,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: ShellUiConfig.headerMaxWidth,
               ),
-              const Spacer(),
-            ],
+              child: Row(
+                children: <Widget>[
+                  RepaintBoundary(
+                    child: SizedBox(
+                      width: ShellUiConfig.headerLogoWidth,
+                      height: ShellUiConfig.headerLogoHeight,
+                      child: Image.asset(
+                        logoAssetPath,
+                        fit: BoxFit.contain,
+                        gaplessPlayback: true,
+                        isAntiAlias: true,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
