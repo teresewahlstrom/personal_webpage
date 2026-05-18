@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/composer.dart'
+    show TwComposer, TwComposerSkin;
 import 'package:tw_primitives/text_field.dart'
     show TwReadyTextController, TwReadyTextField;
 
@@ -132,7 +134,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       interactive: true,
       trackVisibility: false,
       textStyleBuilder: (_) => composerTextStyle,
-        displayHintUntilTextEntered: true,
+      displayHintUntilTextEntered: true,
       hintBuilder: (context) =>
           Text('Ask me anything...', style: composerHintStyle),
       minLines: 1,
@@ -149,132 +151,31 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       handlesRadius: tokens.composerHandleRadius,
     );
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        minHeight: widget.minInputHeight,
-        maxHeight: widget.maxInputHeight,
+    return TwComposer(
+      shellKey: _inputShellKey,
+      input: inputField,
+      skin: TwComposerSkin(
+        fillColor: ChatComposerLayout.fillColor(context),
+        outlineColor: ChatComposerLayout.borderColor(context),
+        accentColor: ChatComposerLayout.sendIconColor(context),
+        outlineWidth: tokens.composerOutlineStroke,
+        cornerStrokeWidth: tokens.composerCornerAccentStroke,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: CustomPaint(
-              foregroundPainter: _CornerAccentPainter(
-                color: ChatComposerLayout.cornerAccentColor(context),
-                radius: tokens.composerCornerAccentRadius,
-                strokeWidth: tokens.composerCornerAccentStroke,
-                segmentLength: tokens.composerCornerAccentSegment,
-              ),
-              child: Container(
-                key: _inputShellKey,
-                decoration: BoxDecoration(
-                  color: ChatComposerLayout.fillColor(context),
-                  borderRadius: BorderRadius.circular(tokens.composerRadius),
-                  border: Border.all(
-                    color: ChatComposerLayout.borderColor(context),
-                  ),
-                  boxShadow: [tokens.surfaceShadow(colors)],
-                ),
-                constraints: BoxConstraints(
-                  minHeight: widget.minInputHeight,
-                  maxHeight: widget.maxInputHeight,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(tokens.composerRadius),
-                  child: inputField,
-                ),
-              ),
-            ),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: widget.sendButtonMinWidth,
-              minHeight: actionHeight,
-              maxHeight: actionHeight,
-            ),
-            child: Material(
-              color: colors.transparent,
-              child: Tooltip(
-                message: composerButtonTooltip,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(
-                    tokens.composerSendButtonRadius,
-                  ),
-                  onTap: widget.isAwaitingResponse
-                      ? widget.onStop
-                      : widget.onSubmit,
-                  child: Center(
-                    child: Icon(
-                      composerButtonIcon,
-                      size: tokens.composerSendIconSize,
-                      color: ChatComposerLayout.sendIconColor(context),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      actionIcon: composerButtonIcon,
+      actionTooltip: composerButtonTooltip,
+      onActionPressed: widget.isAwaitingResponse
+          ? widget.onStop
+          : widget.onSubmit,
+      minHeight: widget.minInputHeight,
+      maxHeight: widget.maxInputHeight,
+      actionMinWidth: widget.sendButtonMinWidth,
+      actionHeight: actionHeight,
+      radius: tokens.composerRadius,
+      cornerRadius: tokens.composerCornerAccentRadius,
+      cornerSegmentLength: tokens.composerCornerAccentSegment,
+      actionRadius: tokens.composerSendButtonRadius,
+      actionIconSize: tokens.composerSendIconSize,
+      boxShadow: [tokens.surfaceShadow(colors)],
     );
-  }
-}
-
-class _CornerAccentPainter extends CustomPainter {
-  const _CornerAccentPainter({
-    required this.color,
-    required this.radius,
-    required this.strokeWidth,
-    required this.segmentLength,
-  });
-
-  final Color color;
-  final double radius;
-  final double strokeWidth;
-  final double segmentLength;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Center the accent on the shell edge so the stroke shares the outline
-    // and only the overhang extends outside the composer shell.
-    final rect = Offset.zero & size;
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.square;
-
-    final left = rect.left;
-    final right = rect.right;
-    final top = rect.top;
-    final bottom = rect.bottom;
-
-    final path = Path()
-      ..moveTo(left + radius, top)
-      ..lineTo(left + radius + segmentLength, top)
-      ..moveTo(left, top + radius)
-      ..lineTo(left, top + radius + segmentLength)
-      ..moveTo(right - radius - segmentLength, top)
-      ..lineTo(right - radius, top)
-      ..moveTo(right, top + radius)
-      ..lineTo(right, top + radius + segmentLength)
-      ..moveTo(left + radius, bottom)
-      ..lineTo(left + radius + segmentLength, bottom)
-      ..moveTo(left, bottom - radius)
-      ..lineTo(left, bottom - radius - segmentLength)
-      ..moveTo(right - radius - segmentLength, bottom)
-      ..lineTo(right - radius, bottom)
-      ..moveTo(right, bottom - radius)
-      ..lineTo(right, bottom - radius - segmentLength);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _CornerAccentPainter oldDelegate) {
-    return color != oldDelegate.color ||
-        radius != oldDelegate.radius ||
-        strokeWidth != oldDelegate.strokeWidth ||
-        segmentLength != oldDelegate.segmentLength;
   }
 }

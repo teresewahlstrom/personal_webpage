@@ -185,6 +185,7 @@ class ChatSkinTokens {
   final double composerTextInsetRight = 6.3;
   final double composerInputTextInsetTopBottom = 6.3;
   final double composerInputTextInsetTop = 6.3;
+  final double composerOutlineStroke = 1.0;
   final double composerCaretWidth = 1.0;
 
   /// The radius of the selection drag handles in the composer text field.
