@@ -492,11 +492,6 @@ class ChatSkinTextStyles {
       fontSize += 2.0;
     }
 
-    // Make H2 (level == 2) 1.0 logical pixel smaller than the computed size.
-    if (clampedLevel == 2 && fontSize != null) {
-      fontSize = (fontSize - 1.0).clamp(4.0, double.infinity);
-    }
-
     return strongStyle.copyWith(
       fontSize: fontSize,
       fontWeight: weights[index],
