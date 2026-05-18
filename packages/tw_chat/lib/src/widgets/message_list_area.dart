@@ -62,7 +62,7 @@ class ChatMessageListArea extends StatelessWidget {
   })
   buildScrollbarTrack;
 
-  bool _isPrimaryActivationPointer(PointerDownEvent event) {
+  bool _startsPointerInteraction(PointerDownEvent event) {
     final kind = event.kind;
     if (kind == PointerDeviceKind.touch ||
         kind == PointerDeviceKind.stylus ||
@@ -70,6 +70,11 @@ class ChatMessageListArea extends StatelessWidget {
       return true;
     }
     return event.buttons == kPrimaryButton;
+  }
+
+  bool _shouldRequestChatKeyboardTarget(PointerDownEvent event) {
+    return event.kind == PointerDeviceKind.mouse &&
+        event.buttons == kPrimaryButton;
   }
 
   @override
@@ -81,11 +86,13 @@ class ChatMessageListArea extends StatelessWidget {
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (event) {
-          if (!_isPrimaryActivationPointer(event)) {
+          if (!_startsPointerInteraction(event)) {
             return;
           }
           onChatPointerInteractionStart();
-          onRequestChatKeyboardTarget();
+          if (_shouldRequestChatKeyboardTarget(event)) {
+            onRequestChatKeyboardTarget();
+          }
         },
         onPointerUp: (_) => onChatPointerInteractionEnd(),
         onPointerCancel: (_) => onChatPointerInteractionEnd(),

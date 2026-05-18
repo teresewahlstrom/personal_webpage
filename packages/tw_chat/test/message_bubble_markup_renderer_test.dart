@@ -54,4 +54,17 @@ void main() {
     expect(ruleRect.top - beforeRect.bottom, closeTo(expectedSpacing, 0.5));
     expect(afterRect.top - ruleRect.bottom, closeTo(expectedSpacing, 0.5));
   });
+
+  test('H2 heading style uses the computed size without the old -1 offset', () {
+    const baseStyle = TextStyle(fontSize: 12, height: 1);
+    final skin = ChatSkin.dataForBrightness(Brightness.light);
+
+    final headingStyle = skin.textStyles.markdownHeadingStyle(
+      baseStyle,
+      2,
+      skin.colors,
+    );
+
+    expect(headingStyle.fontSize, closeTo(12 * 1.36, 0.001));
+  });
 }
