@@ -4,9 +4,12 @@ import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
 import 'services/keyboard_height.dart';
+import 'widgets/shell/header_logo_asset.dart';
 import 'widgets/shell/page_scaffold.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await precacheHeaderLogoAsset();
   runApp(const T1GridApp());
 }
 

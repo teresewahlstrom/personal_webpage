@@ -1,12 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../config/app_ui_config.dart';
+import 'header_logo_asset.dart';
 
 class PageHeader extends StatefulWidget {
-  const PageHeader({
-    super.key,
-    this.logoAssetPath = 'assets/images/logo.png',
-  });
+  const PageHeader({super.key, this.logoAssetPath = kHeaderLogoAssetPath});
 
   final String logoAssetPath;
 
@@ -20,7 +18,9 @@ class _PageHeaderState extends State<PageHeader> {
   @override
   void initState() {
     super.initState();
-    _logoImage = AssetImage(widget.logoAssetPath);
+    _logoImage = widget.logoAssetPath == kHeaderLogoAssetPath
+        ? kHeaderLogoImage
+        : AssetImage(widget.logoAssetPath);
   }
 
   @override
@@ -39,9 +39,7 @@ class _PageHeaderState extends State<PageHeader> {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: ShellUiConfig.headerBackgroundFor(brightness),
-          border: Border(
-            bottom: headerLine.borderSide,
-          ),
+          border: Border(bottom: headerLine.borderSide),
         ),
         child: Padding(
           padding: ShellUiConfig.headerPadding,
@@ -62,17 +60,18 @@ class _PageHeaderState extends State<PageHeader> {
                         gaplessPlayback: true,
                         isAntiAlias: true,
                         filterQuality: FilterQuality.high,
-                        frameBuilder: (
-                          BuildContext context,
-                          Widget child,
-                          int? frame,
-                          bool wasSynchronouslyLoaded,
-                        ) {
-                          if (wasSynchronouslyLoaded || frame != null) {
-                            return child;
-                          }
-                          return const SizedBox.shrink();
-                        },
+                        frameBuilder:
+                            (
+                              BuildContext context,
+                              Widget child,
+                              int? frame,
+                              bool wasSynchronouslyLoaded,
+                            ) {
+                              if (wasSynchronouslyLoaded || frame != null) {
+                                return child;
+                              }
+                              return const SizedBox.shrink();
+                            },
                       ),
                     ),
                   ),
