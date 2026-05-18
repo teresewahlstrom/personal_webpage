@@ -148,6 +148,7 @@ class _TextScrollViewState extends State<TextScrollView>
       ..delegate = this
       ..addListener(_onTextScrollChange);
 
+    _scrollController.addListener(_onViewportScrollChange);
     widget.textEditingController.addListener(_onTextOrSelectionChanged);
   }
 
@@ -157,12 +158,18 @@ class _TextScrollViewState extends State<TextScrollView>
 
     // Reconcile owned controller when the external controller changes.
     if (widget.scrollController != oldWidget.scrollController) {
+      final oldScrollController =
+          oldWidget.scrollController ?? _ownedScrollController!;
+      oldScrollController.removeListener(_onViewportScrollChange);
+
       if (widget.scrollController == null) {
         _ownedScrollController ??= ScrollController();
       } else {
         _ownedScrollController?.dispose();
         _ownedScrollController = null;
       }
+
+      _scrollController.addListener(_onViewportScrollChange);
     }
 
     if (widget.textScrollController != oldWidget.textScrollController) {
@@ -187,6 +194,7 @@ class _TextScrollViewState extends State<TextScrollView>
       ..delegate = null
       ..removeListener(_onTextScrollChange);
 
+    _scrollController.removeListener(_onViewportScrollChange);
     widget.textEditingController.removeListener(_onTextOrSelectionChanged);
 
     _ownedScrollController?.dispose();
@@ -222,7 +230,10 @@ class _TextScrollViewState extends State<TextScrollView>
     if (viewportBox == null || textContentBox == null) {
       return Offset.zero;
     }
-    final textOffsetInViewport = textContentBox.localToGlobal(Offset.zero, ancestor: viewportBox);
+    final textOffsetInViewport = textContentBox.localToGlobal(
+      Offset.zero,
+      ancestor: viewportBox,
+    );
 
     if (isMultiline) {
       return textOffsetInViewport.translate(0, _scrollController.offset);
@@ -240,7 +251,8 @@ class _TextScrollViewState extends State<TextScrollView>
   double get startScrollOffset => 0.0;
 
   @override
-  double get currentScrollOffset => _scrollController.hasClients ? _scrollController.offset : 0.0;
+  double get currentScrollOffset =>
+      _scrollController.hasClients ? _scrollController.offset : 0.0;
 
   @override
   double get endScrollOffset {
@@ -257,17 +269,24 @@ class _TextScrollViewState extends State<TextScrollView>
     final textLength = widget.textEditingController.text.length;
     final caretAtEnd = TextPosition(offset: textLength);
     final caretBottomAtEnd =
-      (_textLayout.getOffsetForCaret(caretAtEnd).dy) +
-      (_textLayout.getHeightForCaret(caretAtEnd) ?? _textLayout.getLineHeightAtPosition(caretAtEnd));
+        (_textLayout.getOffsetForCaret(caretAtEnd).dy) +
+        (_textLayout.getHeightForCaret(caretAtEnd) ??
+            _textLayout.getLineHeightAtPosition(caretAtEnd));
 
     // Some platforms report the last rendered caret position one visual line beyond
     // the last character (e.g., trailing newline). Use whichever boundary is lower.
     final lastCharacterBottom = textLength > 0
-      ? (_textLayout.getCharacterBox(TextPosition(offset: textLength - 1))?.bottom ?? 0.0)
-      : 0.0;
+        ? (_textLayout
+                  .getCharacterBox(TextPosition(offset: textLength - 1))
+                  ?.bottom ??
+              0.0)
+        : 0.0;
     final contentBottom = max(caretBottomAtEnd, lastCharacterBottom);
 
-    return max(contentBottom - viewportHeight + (widget.padding?.vertical ?? 0.0), 0.0);
+    return max(
+      contentBottom - viewportHeight + (widget.padding?.vertical ?? 0.0),
+      0.0,
+    );
   }
 
   @override
@@ -299,10 +318,14 @@ class _TextScrollViewState extends State<TextScrollView>
       if (viewportBox == null || textContentBox == null) {
         return false;
       }
-      final textOffsetInViewport = textContentBox.localToGlobal(Offset.zero, ancestor: viewportBox);
+      final textOffsetInViewport = textContentBox.localToGlobal(
+        Offset.zero,
+        ancestor: viewportBox,
+      );
 
       // Find the offset of the text position within the viewport.
-      final offsetInViewport = textOffsetInViewport + _textLayout.getOffsetAtPosition(position);
+      final offsetInViewport =
+          textOffsetInViewport + _textLayout.getOffsetAtPosition(position);
 
       return offsetInViewport.dx >= 0 && offsetInViewport.dx <= viewportWidth;
     }
@@ -310,39 +333,57 @@ class _TextScrollViewState extends State<TextScrollView>
 
   @override
   bool isInAutoScrollToStartRegion(Offset offsetInViewport) {
-    return calculateDistanceBeyondStartingAutoScrollBoundary(offsetInViewport) > 0;
+    return calculateDistanceBeyondStartingAutoScrollBoundary(offsetInViewport) >
+        0;
   }
 
   @override
-  double calculateDistanceBeyondStartingAutoScrollBoundary(Offset offsetInViewport) {
+  double calculateDistanceBeyondStartingAutoScrollBoundary(
+    Offset offsetInViewport,
+  ) {
     if (isMultiline) {
-      return max(_mulitlineFieldAutoScrollGap - offsetInViewport.dy, 0).abs().toDouble();
+      return max(
+        _mulitlineFieldAutoScrollGap - offsetInViewport.dy,
+        0,
+      ).abs().toDouble();
     } else {
-      return max(_singleLineFieldAutoScrollGap - offsetInViewport.dx, 0).abs().toDouble();
+      return max(
+        _singleLineFieldAutoScrollGap - offsetInViewport.dx,
+        0,
+      ).abs().toDouble();
     }
   }
 
   @override
   bool isInAutoScrollToEndRegion(Offset offsetInViewport) {
-    return calculateDistanceBeyondEndingAutoScrollBoundary(offsetInViewport) > 0;
+    return calculateDistanceBeyondEndingAutoScrollBoundary(offsetInViewport) >
+        0;
   }
 
   @override
-  double calculateDistanceBeyondEndingAutoScrollBoundary(Offset offsetInViewport) {
+  double calculateDistanceBeyondEndingAutoScrollBoundary(
+    Offset offsetInViewport,
+  ) {
     if (isMultiline) {
       final viewportHeight = this.viewportHeight;
       if (viewportHeight == null) {
         return 0;
       }
 
-      return max(offsetInViewport.dy - (viewportHeight - _mulitlineFieldAutoScrollGap), 0);
+      return max(
+        offsetInViewport.dy - (viewportHeight - _mulitlineFieldAutoScrollGap),
+        0,
+      );
     } else {
       final viewportWidth = this.viewportWidth;
       if (viewportWidth == null) {
         return 0;
       }
 
-      return max(offsetInViewport.dx - (viewportWidth - _singleLineFieldAutoScrollGap), 0);
+      return max(
+        offsetInViewport.dx - (viewportWidth - _singleLineFieldAutoScrollGap),
+        0,
+      );
     }
   }
 
@@ -353,14 +394,21 @@ class _TextScrollViewState extends State<TextScrollView>
     if (viewportBox == null || textBox == null) {
       return Rect.fromLTWH(0, 0, 0, _textLayout.estimatedLineHeight);
     }
-    final textOffsetInViewport = textBox.localToGlobal(Offset.zero, ancestor: viewportBox);
+    final textOffsetInViewport = textBox.localToGlobal(
+      Offset.zero,
+      ancestor: viewportBox,
+    );
 
     final characterBoxInTextLayout =
-        _textLayout.getCharacterBox(position)?.toRect() ?? Rect.fromLTRB(0, 0, 0, _textLayout.estimatedLineHeight);
+        _textLayout.getCharacterBox(position)?.toRect() ??
+        Rect.fromLTRB(0, 0, 0, _textLayout.estimatedLineHeight);
 
     // The padding is applied inside of the scrollable area,
     // so we need to adjust the rect to account for it.
-    return characterBoxInTextLayout.translate(textOffsetInViewport.dx, textOffsetInViewport.dy);
+    return characterBoxInTextLayout.translate(
+      textOffsetInViewport.dx,
+      textOffsetInViewport.dy,
+    );
   }
 
   @override
@@ -377,10 +425,16 @@ class _TextScrollViewState extends State<TextScrollView>
       offset: clampedOffset,
       affinity: position.affinity,
     );
-    final caretOffsetInTextLayout = _textLayout.getOffsetForCaret(clampedPosition);
+    final caretOffsetInTextLayout = _textLayout.getOffsetForCaret(
+      clampedPosition,
+    );
     final caretHeight =
-        _textLayout.getHeightForCaret(clampedPosition) ?? _textLayout.getLineHeightAtPosition(clampedPosition);
-    final textOffsetInViewport = textBox.localToGlobal(Offset.zero, ancestor: viewportBox);
+        _textLayout.getHeightForCaret(clampedPosition) ??
+        _textLayout.getLineHeightAtPosition(clampedPosition);
+    final textOffsetInViewport = textBox.localToGlobal(
+      Offset.zero,
+      ancestor: viewportBox,
+    );
 
     // The caret is a line marker, so we expose a zero-width rect positioned at
     // the current insertion point.
@@ -396,7 +450,9 @@ class _TextScrollViewState extends State<TextScrollView>
   double getHorizontalOffsetForStartOfCharacterLeftOfViewport() {
     // Note: we look for an offset that is slightly further down than zero
     // to avoid any issues with the layout system differentiating between lines.
-    final textPositionAtLeftEnd = _textLayout.getPositionNearestToOffset(Offset(_scrollController.offset, 5));
+    final textPositionAtLeftEnd = _textLayout.getPositionNearestToOffset(
+      Offset(_scrollController.offset, 5),
+    );
     final nextPosition = textPositionAtLeftEnd.offset <= 0
         ? textPositionAtLeftEnd
         : TextPosition(offset: textPositionAtLeftEnd.offset - 1);
@@ -414,12 +470,18 @@ class _TextScrollViewState extends State<TextScrollView>
     // to avoid any issues with the layout system differentiating between lines.
     final textOffsetInViewport = textLayoutOffsetInViewport;
     final textPositionAtRightEnd = _textLayout.getPositionNearestToOffset(
-      Offset(viewportWidth + _scrollController.offset + textOffsetInViewport.dx, 5),
+      Offset(
+        viewportWidth + _scrollController.offset + textOffsetInViewport.dx,
+        5,
+      ),
     );
-    final nextPosition = textPositionAtRightEnd.offset >= widget.textEditingController.text.length - 1
+    final nextPosition =
+        textPositionAtRightEnd.offset >=
+            widget.textEditingController.text.length - 1
         ? textPositionAtRightEnd
         : TextPosition(offset: textPositionAtRightEnd.offset + 1);
-    return _textLayout.getOffsetAtPosition(nextPosition).dx + textOffsetInViewport.dx;
+    return _textLayout.getOffsetAtPosition(nextPosition).dx +
+        textOffsetInViewport.dx;
   }
 
   @override
@@ -427,23 +489,30 @@ class _TextScrollViewState extends State<TextScrollView>
     final topOfFirstLine = _scrollController.offset;
     // Note: we nudge the vertical offset up a few pixels to see if we
     // find a text position in the line above.
-    final textPositionOneLineUp = _textLayout.getPositionNearestToOffset(Offset(0, topOfFirstLine - 5));
+    final textPositionOneLineUp = _textLayout.getPositionNearestToOffset(
+      Offset(0, topOfFirstLine - 5),
+    );
     return _textLayout.getOffsetAtPosition(textPositionOneLineUp).dy;
   }
 
   @override
   double getVerticalOffsetForBottomOfLineBelowViewport() {
     if (viewportHeight == null) {
-      _log.warning('Tried to calculate line below viewport but viewportHeight is null');
+      _log.warning(
+        'Tried to calculate line below viewport but viewportHeight is null',
+      );
       return 0.0;
     }
 
     final bottomOfLastLine = viewportHeight! + _scrollController.offset;
     // Note: we nudge the vertical offset down a few pixels to see if we
     // find a text position in the line below.
-    final textPositionOneLineDown = _textLayout.getPositionNearestToOffset(Offset(0, bottomOfLastLine + 5));
+    final textPositionOneLineDown = _textLayout.getPositionNearestToOffset(
+      Offset(0, bottomOfLastLine + 5),
+    );
     final bottomOfCharacter =
-        (_textLayout.getCharacterBox(textPositionOneLineDown)?.bottom ?? _textLayout.estimatedLineHeight);
+        (_textLayout.getCharacterBox(textPositionOneLineDown)?.bottom ??
+        _textLayout.estimatedLineHeight);
     return bottomOfCharacter;
   }
 
@@ -462,6 +531,10 @@ class _TextScrollViewState extends State<TextScrollView>
         curve: Curves.easeOut,
       );
     }
+  }
+
+  void _onViewportScrollChange() {
+    widget.textScrollController.notifyViewportScrolled();
   }
 
   /// Returns the [ProseTextLayout] that lays out and renders the
@@ -520,9 +593,7 @@ class _TextScrollViewState extends State<TextScrollView>
       padding: widget.padding,
       child: Stack(
         children: [
-          _buildScrollView(
-            child: widget.child,
-          ),
+          _buildScrollView(child: widget.child),
           if (widget.showDebugPaint) ..._buildDebugScrollRegions(),
         ],
       ),
@@ -539,15 +610,17 @@ class _TextScrollViewState extends State<TextScrollView>
       case TextAlign.center:
         return Alignment.topCenter;
       case TextAlign.start:
-        return Directionality.of(context) == TextDirection.ltr ? Alignment.topLeft : Alignment.topRight;
+        return Directionality.of(context) == TextDirection.ltr
+            ? Alignment.topLeft
+            : Alignment.topRight;
       case TextAlign.end:
-        return Directionality.of(context) == TextDirection.ltr ? Alignment.topRight : Alignment.topLeft;
+        return Directionality.of(context) == TextDirection.ltr
+            ? Alignment.topRight
+            : Alignment.topLeft;
     }
   }
 
-  Widget _buildScrollView({
-    required Widget child,
-  }) {
+  Widget _buildScrollView({required Widget child}) {
     return Align(
       alignment: _getAlignment(),
       child: SingleChildScrollView(
@@ -619,11 +692,7 @@ class _TextScrollViewState extends State<TextScrollView>
   }
 }
 
-enum TextFieldSizePolicy {
-  singleLine,
-  multiLineBounded,
-  multiLineUnbounded,
-}
+enum TextFieldSizePolicy { singleLine, multiLineBounded, multiLineUnbounded }
 
 class TextScrollController with ChangeNotifier {
   static const _autoScrollTimePerLine = Duration(milliseconds: 500);
@@ -658,11 +727,13 @@ class TextScrollController with ChangeNotifier {
   // This controller stores a target offset and relies on the delegate's
   // viewport ScrollController as the source of truth for the current offset.
   double _targetScrollOffset = 0.0;
-  double get scrollOffset => _delegate?.currentScrollOffset ?? _targetScrollOffset;
+  double get scrollOffset =>
+      _delegate?.currentScrollOffset ?? _targetScrollOffset;
   double get targetScrollOffset => _targetScrollOffset;
 
   void _setScrollOffset(double newValue) {
-    final currentScrollOffset = _delegate?.currentScrollOffset ?? _targetScrollOffset;
+    final currentScrollOffset =
+        _delegate?.currentScrollOffset ?? _targetScrollOffset;
     if (newValue == _targetScrollOffset && newValue == currentScrollOffset) {
       return;
     }
@@ -681,11 +752,30 @@ class TextScrollController with ChangeNotifier {
 
   double get endScrollOffset => _delegate!.endScrollOffset;
 
-  bool isTextPositionVisible(TextPosition position) => _delegate!.isTextPositionVisible(position);
+  bool isTextPositionVisible(TextPosition position) =>
+      _delegate!.isTextPositionVisible(position);
+
+  final Set<VoidCallback> _viewportScrollListeners = <VoidCallback>{};
+
+  void addViewportScrollListener(VoidCallback listener) {
+    _viewportScrollListeners.add(listener);
+  }
+
+  void removeViewportScrollListener(VoidCallback listener) {
+    _viewportScrollListeners.remove(listener);
+  }
+
+  void notifyViewportScrolled() {
+    for (final listener in List<VoidCallback>.of(_viewportScrollListeners)) {
+      listener();
+    }
+  }
 
   void jumpToStart() {
     if (_delegate == null) {
-      _log.warning("Can't calculate start scroll offset. The auto-scroll delegate is null.");
+      _log.warning(
+        "Can't calculate start scroll offset. The auto-scroll delegate is null.",
+      );
       return;
     }
 
@@ -700,7 +790,9 @@ class TextScrollController with ChangeNotifier {
 
   void jumpToEnd() {
     if (_delegate == null) {
-      _log.warning("Can't calculate end scroll offset. The auto-scroll delegate is null.");
+      _log.warning(
+        "Can't calculate end scroll offset. The auto-scroll delegate is null.",
+      );
       return;
     }
 
@@ -722,9 +814,13 @@ class TextScrollController with ChangeNotifier {
     }
 
     _userInteractionOffsetInViewport = userInteractionOffsetInViewport;
-    if (_delegate!.isInAutoScrollToStartRegion(userInteractionOffsetInViewport)) {
+    if (_delegate!.isInAutoScrollToStartRegion(
+      userInteractionOffsetInViewport,
+    )) {
       startScrollingToStart();
-    } else if (_delegate!.isInAutoScrollToEndRegion(userInteractionOffsetInViewport)) {
+    } else if (_delegate!.isInAutoScrollToEndRegion(
+      userInteractionOffsetInViewport,
+    )) {
       startScrollingToEnd();
     } else {
       stopScrolling();
@@ -808,7 +904,9 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    _log.finer('auto-scroll tick, is multiline: ${_delegate!.isMultiline}, direction: $_autoScrollDirection');
+    _log.finer(
+      'auto-scroll tick, is multiline: ${_delegate!.isMultiline}, direction: $_autoScrollDirection',
+    );
     final dt = elapsedTime - _timeOfPreviousAutoScroll;
     _timeOfPreviousAutoScroll = elapsedTime;
     final offsetBeforeScroll = scrollOffset;
@@ -823,12 +921,16 @@ class TextScrollController with ChangeNotifier {
       if (_autoScrollDirection == _AutoScrollDirection.start) {
         _autoScrollToTheLeft(
           dt,
-          _delegate!.calculateDistanceBeyondStartingAutoScrollBoundary(_userInteractionOffsetInViewport!),
+          _delegate!.calculateDistanceBeyondStartingAutoScrollBoundary(
+            _userInteractionOffsetInViewport!,
+          ),
         );
       } else {
         _autoScrollToTheRight(
           dt,
-          _delegate!.calculateDistanceBeyondEndingAutoScrollBoundary(_userInteractionOffsetInViewport!),
+          _delegate!.calculateDistanceBeyondEndingAutoScrollBoundary(
+            _userInteractionOffsetInViewport!,
+          ),
         );
       }
     }
@@ -840,7 +942,10 @@ class TextScrollController with ChangeNotifier {
     }
   }
 
-  void _autoScrollToTheLeft(Duration dt, double distanceFromAutoScrollBoundary) {
+  void _autoScrollToTheLeft(
+    Duration dt,
+    double distanceFromAutoScrollBoundary,
+  ) {
     if (_delegate == null) {
       _log.warning("Can't auto-scroll left. The scroll delegate is null.");
       return;
@@ -852,16 +957,24 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    _log.finer('_autoScrollOneCharacterLeft. Scroll offset before: $scrollOffset');
+    _log.finer(
+      '_autoScrollOneCharacterLeft. Scroll offset before: $scrollOffset',
+    );
     _timeOfNextAutoScroll += _autoScrollTimePerCharacter;
-    _setScrollOffset(max(
-      scrollOffset - _calculateAutoScrollDistance(dt, distanceFromAutoScrollBoundary),
-      0,
-    ));
+    _setScrollOffset(
+      max(
+        scrollOffset -
+            _calculateAutoScrollDistance(dt, distanceFromAutoScrollBoundary),
+        0,
+      ),
+    );
     _log.finer(' - scroll offset after: $scrollOffset');
   }
 
-  void _autoScrollToTheRight(Duration dt, double distanceFromAutoScrollBoundary) {
+  void _autoScrollToTheRight(
+    Duration dt,
+    double distanceFromAutoScrollBoundary,
+  ) {
     if (_delegate == null) {
       _log.warning("Can't auto-scroll right. The scroll delegate is null.");
       return;
@@ -879,13 +992,17 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    _log.finer('Scrolling right - current scroll offset: $scrollOffset, max scroll: ${_delegate?.endScrollOffset}');
+    _log.finer(
+      'Scrolling right - current scroll offset: $scrollOffset, max scroll: ${_delegate?.endScrollOffset}',
+    );
     _timeOfNextAutoScroll += _autoScrollTimePerCharacter;
-    final scrollDistance = _calculateAutoScrollDistance(dt, distanceFromAutoScrollBoundary);
-    _setScrollOffset(min(
-      scrollOffset + scrollDistance,
-      _delegate!.endScrollOffset,
-    ));
+    final scrollDistance = _calculateAutoScrollDistance(
+      dt,
+      distanceFromAutoScrollBoundary,
+    );
+    _setScrollOffset(
+      min(scrollOffset + scrollDistance, _delegate!.endScrollOffset),
+    );
     _log.finer(' - scroll offset after: $scrollOffset');
   }
 
@@ -897,16 +1014,25 @@ class TextScrollController with ChangeNotifier {
   ///
   /// The larger [distanceFromAutoScrollBound], the larger the auto-scroll, capped at
   /// a sane value.
-  double _calculateAutoScrollDistance(Duration dt, double distanceFromAutoScrollBound) {
+  double _calculateAutoScrollDistance(
+    Duration dt,
+    double distanceFromAutoScrollBound,
+  ) {
     const minPixelsPerSecond = 50;
     const maxPixelsPerSecond = 1500;
     const maxDistanceFromScrollBound = 75;
 
-    final speedPercent = min(distanceFromAutoScrollBound, maxDistanceFromScrollBound) / maxDistanceFromScrollBound;
+    final speedPercent =
+        min(distanceFromAutoScrollBound, maxDistanceFromScrollBound) /
+        maxDistanceFromScrollBound;
     // Apply an exponential curve to the percent so that the user has more control over
     // slower speeds, but is also able to drag far away and achieve high speeds.
     final exponentialPercent = Curves.easeIn.transform(speedPercent);
-    final speed = lerpDouble(minPixelsPerSecond, maxPixelsPerSecond, exponentialPercent)!;
+    final speed = lerpDouble(
+      minPixelsPerSecond,
+      maxPixelsPerSecond,
+      exponentialPercent,
+    )!;
     return speed * (dt.inMilliseconds / 1000);
   }
 
@@ -924,9 +1050,12 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    final verticalOffsetForTopOfLineAboveViewport = _delegate!.getVerticalOffsetForTopOfLineAboveViewport();
+    final verticalOffsetForTopOfLineAboveViewport = _delegate!
+        .getVerticalOffsetForTopOfLineAboveViewport();
     if (verticalOffsetForTopOfLineAboveViewport == null) {
-      _log.warning("Can't auto-scroll up. Couldn't calculate the offset for the line above the viewport");
+      _log.warning(
+        "Can't auto-scroll up. Couldn't calculate the offset for the line above the viewport",
+      );
       return;
     }
 
@@ -934,10 +1063,14 @@ class TextScrollController with ChangeNotifier {
 
     _log.finer('Old offset: $scrollOffset.');
     _log.finer('Viewport height: $viewportHeight');
-    _log.finer('Vertical offset for top of line above viewport: $verticalOffsetForTopOfLineAboveViewport');
+    _log.finer(
+      'Vertical offset for top of line above viewport: $verticalOffsetForTopOfLineAboveViewport',
+    );
     _timeOfNextAutoScroll += _autoScrollTimePerLine;
     _setScrollOffset(verticalOffsetForTopOfLineAboveViewport);
-    _log.fine('New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll');
+    _log.fine(
+      'New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll',
+    );
   }
 
   /// Updates the scroll offset so that a new line of text is
@@ -954,9 +1087,12 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    final verticalOffsetForBottomOfLineBelowViewport = _delegate!.getVerticalOffsetForBottomOfLineBelowViewport();
+    final verticalOffsetForBottomOfLineBelowViewport = _delegate!
+        .getVerticalOffsetForBottomOfLineBelowViewport();
     if (verticalOffsetForBottomOfLineBelowViewport == null) {
-      _log.warning("Can't auto-scroll down. Couldn't calculate the offset for the line below the viewport");
+      _log.warning(
+        "Can't auto-scroll down. Couldn't calculate the offset for the line below the viewport",
+      );
       return;
     }
 
@@ -964,10 +1100,16 @@ class TextScrollController with ChangeNotifier {
 
     _log.finer('Old offset: $scrollOffset.');
     _log.finer('Viewport height: ${_delegate!.viewportHeight}');
-    _log.finer('Vertical offset for bottom of line below viewport: $verticalOffsetForBottomOfLineBelowViewport');
+    _log.finer(
+      'Vertical offset for bottom of line below viewport: $verticalOffsetForBottomOfLineBelowViewport',
+    );
     _timeOfNextAutoScroll += _autoScrollTimePerLine;
-    _setScrollOffset(verticalOffsetForBottomOfLineBelowViewport - viewportHeight);
-    _log.fine('New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll');
+    _setScrollOffset(
+      verticalOffsetForBottomOfLineBelowViewport - viewportHeight,
+    );
+    _log.fine(
+      'New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll',
+    );
   }
 
   /// Updates the scroll offset so that the current selection base
@@ -976,7 +1118,9 @@ class TextScrollController with ChangeNotifier {
   /// Does nothing if the base position is already visible.
   void ensureBaseIsVisible() {
     if (_delegate == null) {
-      _log.warning("Can't make base selection visible. The scroll delegate is null.");
+      _log.warning(
+        "Can't make base selection visible. The scroll delegate is null.",
+      );
       return;
     }
 
@@ -990,9 +1134,14 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    final baseCharacterRectInViewportSpace = _delegate!.getViewportCharacterRectAtPosition(_textController.selection.base);
-    final baseCharacterRectInContentSpace = _toContentSpace(baseCharacterRectInViewportSpace);
-    _ensureRectIsVisible(_expandRectForCaretVisibility(baseCharacterRectInContentSpace));
+    final baseCharacterRectInViewportSpace = _delegate!
+        .getViewportCharacterRectAtPosition(_textController.selection.base);
+    final baseCharacterRectInContentSpace = _toContentSpace(
+      baseCharacterRectInViewportSpace,
+    );
+    _ensureRectIsVisible(
+      _expandRectForCaretVisibility(baseCharacterRectInContentSpace),
+    );
   }
 
   /// Updates the scroll offset so that the current selection extent
@@ -1001,7 +1150,9 @@ class TextScrollController with ChangeNotifier {
   /// Does nothing if the extent position is already visible.
   void ensureExtentIsVisible() {
     if (_delegate == null) {
-      _log.warning("Can't make extent selection visible. The scroll delegate is null.");
+      _log.warning(
+        "Can't make extent selection visible. The scroll delegate is null.",
+      );
       return;
     }
 
@@ -1015,10 +1166,14 @@ class TextScrollController with ChangeNotifier {
       return;
     }
 
-    final extentCaretRectInViewportSpace =
-      _delegate!.getViewportCaretRectAtPosition(_textController.selection.extent);
-    final extentCaretRectInContentSpace = _toContentSpace(extentCaretRectInViewportSpace);
-    _ensureRectIsVisible(_expandRectForCaretVisibility(extentCaretRectInContentSpace));
+    final extentCaretRectInViewportSpace = _delegate!
+        .getViewportCaretRectAtPosition(_textController.selection.extent);
+    final extentCaretRectInContentSpace = _toContentSpace(
+      extentCaretRectInViewportSpace,
+    );
+    _ensureRectIsVisible(
+      _expandRectForCaretVisibility(extentCaretRectInContentSpace),
+    );
   }
 
   Rect _toContentSpace(Rect rectInViewportSpace) {
@@ -1041,28 +1196,40 @@ class TextScrollController with ChangeNotifier {
 
     _log.finer('Ensuring rect is visible: $rectInContentSpace');
     if (_delegate!.isMultiline) {
-      final firstCharRect = _delegate!.getViewportCharacterRectAtPosition(const TextPosition(offset: 0));
+      final firstCharRect = _delegate!.getViewportCharacterRectAtPosition(
+        const TextPosition(offset: 0),
+      );
       final isAtFirstLine = rectInContentSpace.top == firstCharRect.top;
-      final extraSpacingAboveTop = (isAtFirstLine ? rectInContentSpace.height / 2 : 0);
+      final extraSpacingAboveTop = (isAtFirstLine
+          ? rectInContentSpace.height / 2
+          : 0);
 
-      final lastCharRect =
-          _delegate!.getViewportCharacterRectAtPosition(TextPosition(offset: _textController.text.length - 1));
+      final lastCharRect = _delegate!.getViewportCharacterRectAtPosition(
+        TextPosition(offset: _textController.text.length - 1),
+      );
       final isAtOrPastLastLine = rectInContentSpace.top >= lastCharRect.top;
-      final extraSpacingBelowBottom = (isAtOrPastLastLine ? rectInContentSpace.height / 2 : 0);
+      final extraSpacingBelowBottom = (isAtOrPastLastLine
+          ? rectInContentSpace.height / 2
+          : 0);
       if (rectInContentSpace.top - extraSpacingAboveTop - scrollOffset < 0) {
         // The character is entirely or partially above the top of the viewport.
         // Scroll the content down.
         _setScrollOffset(max(rectInContentSpace.top - extraSpacingAboveTop, 0));
         _log.finer(' - updated scroll offset to $scrollOffset');
         return;
-      } else if (rectInContentSpace.bottom - scrollOffset + extraSpacingBelowBottom > _delegate!.viewportHeight!) {
+      } else if (rectInContentSpace.bottom -
+              scrollOffset +
+              extraSpacingBelowBottom >
+          _delegate!.viewportHeight!) {
         // The character is entirely or partially below the bottom of the viewport.
         // Scroll the content up.
         _setScrollOffset(
           isAtOrPastLastLine
               ? _delegate!.endScrollOffset
               : min(
-                  rectInContentSpace.bottom - _delegate!.viewportHeight! + extraSpacingBelowBottom,
+                  rectInContentSpace.bottom -
+                      _delegate!.viewportHeight! +
+                      extraSpacingBelowBottom,
                   _delegate!.endScrollOffset,
                 ),
         );
@@ -1075,15 +1242,27 @@ class TextScrollController with ChangeNotifier {
       if (rectInViewportSpace.left < 0) {
         // The character is entirely or partially before the start of the viewport.
         // Scroll the content right.
-        _log.finer('Auto-scrolling to the left by ${rectInViewportSpace.left} to show a desired rectangle');
-        _setScrollOffset((scrollOffset + rectInViewportSpace.left).clamp(0, _delegate!.endScrollOffset));
+        _log.finer(
+          'Auto-scrolling to the left by ${rectInViewportSpace.left} to show a desired rectangle',
+        );
+        _setScrollOffset(
+          (scrollOffset + rectInViewportSpace.left).clamp(
+            0,
+            _delegate!.endScrollOffset,
+          ),
+        );
         return;
       } else if (rectInViewportSpace.right > _delegate!.viewportWidth!) {
         // The character is entirely or partially after the end of the viewport.
         // Scroll the content left.
-        final scrollAmount = rectInViewportSpace.right - _delegate!.viewportWidth!;
-        _log.finer('Auto-scrolling to the right by $scrollAmount to show a desired rectangle');
-        _setScrollOffset((scrollOffset + scrollAmount).clamp(0, _delegate!.endScrollOffset));
+        final scrollAmount =
+            rectInViewportSpace.right - _delegate!.viewportWidth!;
+        _log.finer(
+          'Auto-scrolling to the right by $scrollAmount to show a desired rectangle',
+        );
+        _setScrollOffset(
+          (scrollOffset + scrollAmount).clamp(0, _delegate!.endScrollOffset),
+        );
       }
     }
   }
@@ -1127,7 +1306,9 @@ abstract class TextScrollControllerDelegate {
   ///
   /// This value might be used, for example, to increase/decrease
   /// the auto-scroll velocity.
-  double calculateDistanceBeyondStartingAutoScrollBoundary(Offset offsetInViewport);
+  double calculateDistanceBeyondStartingAutoScrollBoundary(
+    Offset offsetInViewport,
+  );
 
   /// Whether the given [offsetInViewport] is sitting in the
   /// area where the user expects an auto-scroll to happen
@@ -1139,7 +1320,9 @@ abstract class TextScrollControllerDelegate {
   ///
   /// This value might be used, for example, to increase/decrease
   /// the auto-scroll velocity.
-  double calculateDistanceBeyondEndingAutoScrollBoundary(Offset offsetInViewport);
+  double calculateDistanceBeyondEndingAutoScrollBoundary(
+    Offset offsetInViewport,
+  );
 
   double? getHorizontalOffsetForStartOfCharacterLeftOfViewport();
 
@@ -1161,10 +1344,7 @@ abstract class TextScrollControllerDelegate {
   Rect getViewportCaretRectAtPosition(TextPosition position);
 }
 
-enum _AutoScrollDirection {
-  start,
-  end,
-}
+enum _AutoScrollDirection { start, end }
 
 /// Sizes the [child] so its height falls within [minLines] and [maxLines], multiplied by the
 /// given [lineHeight].
@@ -1226,7 +1406,10 @@ class _TextLinesLimiter extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderTextViewport renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderTextViewport renderObject,
+  ) {
     renderObject
       ..textKey = textKey
       ..scrollController = scrollController
@@ -1245,12 +1428,12 @@ class _RenderTextViewport extends RenderProxyBox {
     int? maxLines,
     double? lineHeight,
     EdgeInsets? padding,
-  })  : _textKey = textKey,
-        _scrollController = scrollController,
-        _minLines = minLines,
-        _maxLines = maxLines,
-        _lineHeight = lineHeight,
-        _padding = padding;
+  }) : _textKey = textKey,
+       _scrollController = scrollController,
+       _minLines = minLines,
+       _maxLines = maxLines,
+       _lineHeight = lineHeight,
+       _padding = padding;
 
   GlobalKey<ProseTextState> _textKey;
   set textKey(GlobalKey<ProseTextState> value) {
@@ -1352,7 +1535,10 @@ class _RenderTextViewport extends RenderProxyBox {
     //
     // We layout instead of computing the child's intrinsic height, because RenderFlex doesn't
     // support calling getMinIntrinsicHeight if it has baseline cross-axis alignment.
-    child!.layout(childConstraints.copyWith(maxHeight: double.infinity), parentUsesSize: true);
+    child!.layout(
+      childConstraints.copyWith(maxHeight: double.infinity),
+      parentUsesSize: true,
+    );
     final childIntrinsicHeight = child!.size.height;
 
     if (childIntrinsicHeight < minHeight) {
@@ -1364,7 +1550,10 @@ class _RenderTextViewport extends RenderProxyBox {
     if (adjustedChildHeight == null) {
       // The child's intrinsic height already respects the line restrictions.
       // Layout the text subtree again, this time forcing the child to be exactly its instrinsic height tall.
-      child!.layout(childConstraints.tighten(height: childIntrinsicHeight), parentUsesSize: true);
+      child!.layout(
+        childConstraints.tighten(height: childIntrinsicHeight),
+        parentUsesSize: true,
+      );
 
       // Forcibly restore the scroll offset to the original pre-layout value.
       _scrollController.position.correctPixels(scrollOffsetBeforeLayout);
@@ -1374,7 +1563,10 @@ class _RenderTextViewport extends RenderProxyBox {
     }
 
     // Layout the text subtree again, this time with forced height constraints.
-    child!.layout(childConstraints.tighten(height: adjustedChildHeight), parentUsesSize: true);
+    child!.layout(
+      childConstraints.tighten(height: adjustedChildHeight),
+      parentUsesSize: true,
+    );
 
     // Forcibly restore the scroll offset to the original pre-layout value.
     _scrollController.position.correctPixels(scrollOffsetBeforeLayout);
@@ -1383,7 +1575,9 @@ class _RenderTextViewport extends RenderProxyBox {
   }
 
   double _computeMinHeight(double lineHeight) {
-    final minContentHeight = _minLines != null //
+    final minContentHeight =
+        _minLines !=
+            null //
         ? _minLines! * lineHeight
         : lineHeight; // Can't be shorter than 1 line.
 
@@ -1408,7 +1602,8 @@ class _RenderTextViewport extends RenderProxyBox {
     // We don't expect getHeightForCaret to ever return null, but since its return type is nullable,
     // we use getLineHeightAtPosition as a backup.
     // More information in https://github.com/flutter/flutter/issues/145507.
-    double lineHeight = textLayout.getHeightForCaret(const TextPosition(offset: 0)) ??
+    double lineHeight =
+        textLayout.getHeightForCaret(const TextPosition(offset: 0)) ??
         textLayout.getLineHeightAtPosition(const TextPosition(offset: 0));
     _log.finer(' - line height at position 0: $lineHeight');
 

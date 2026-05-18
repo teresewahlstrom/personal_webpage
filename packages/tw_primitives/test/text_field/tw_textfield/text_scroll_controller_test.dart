@@ -4,59 +4,97 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 
 void main() {
-  test('ensureExtentIsVisible retries when target and actual scroll offsets differ', () {
-    final textController = AttributedTextEditingController(
-      text: AttributedText('abc'),
-    )..selection = const TextSelection.collapsed(offset: 3);
-    final scrollController = TextScrollController(
-      textController: textController,
-      tickerProvider: const TestVSync(),
-    );
-    final delegate = _FakeTextScrollControllerDelegate()
-      ..currentScrollOffsetValue = 0;
-    scrollController.delegate = delegate;
+  test(
+    'ensureExtentIsVisible retries when target and actual scroll offsets differ',
+    () {
+      final textController = AttributedTextEditingController(
+        text: AttributedText('abc'),
+      )..selection = const TextSelection.collapsed(offset: 3);
+      final scrollController = TextScrollController(
+        textController: textController,
+        tickerProvider: const TestVSync(),
+      );
+      final delegate = _FakeTextScrollControllerDelegate()
+        ..currentScrollOffsetValue = 0;
+      scrollController.delegate = delegate;
 
-    var notifications = 0;
-    scrollController.addListener(() => notifications += 1);
+      var notifications = 0;
+      scrollController.addListener(() => notifications += 1);
 
-    scrollController.ensureExtentIsVisible();
+      scrollController.ensureExtentIsVisible();
 
-    expect(scrollController.targetScrollOffset, 45);
-    expect(notifications, 1);
+      expect(scrollController.targetScrollOffset, 45);
+      expect(notifications, 1);
 
-    scrollController.ensureExtentIsVisible();
+      scrollController.ensureExtentIsVisible();
 
-    expect(scrollController.targetScrollOffset, 45);
-    expect(notifications, 2);
+      expect(scrollController.targetScrollOffset, 45);
+      expect(notifications, 2);
 
-    delegate.currentScrollOffsetValue = scrollController.targetScrollOffset;
-    scrollController.ensureExtentIsVisible();
+      delegate.currentScrollOffsetValue = scrollController.targetScrollOffset;
+      scrollController.ensureExtentIsVisible();
 
-    expect(notifications, 2);
-  });
+      expect(notifications, 2);
+    },
+  );
 
-  test('ensureExtentIsVisible scrolls fully to the bottom when the caret is on the last line', () {
-    final textController = AttributedTextEditingController(
-      text: AttributedText('abc'),
-    )..selection = const TextSelection.collapsed(offset: 3);
-    final scrollController = TextScrollController(
-      textController: textController,
-      tickerProvider: const TestVSync(),
-    );
-    final delegate = _FakeTextScrollControllerDelegate(
-      caretRect: const Rect.fromLTWH(0, 40, 0, 10),
-      lastCharacterRect: const Rect.fromLTWH(0, 40, 0, 10),
-      endScrollOffsetValue: 45,
-    );
-    scrollController.delegate = delegate;
+  test(
+    'ensureExtentIsVisible scrolls fully to the bottom when the caret is on the last line',
+    () {
+      final textController = AttributedTextEditingController(
+        text: AttributedText('abc'),
+      )..selection = const TextSelection.collapsed(offset: 3);
+      final scrollController = TextScrollController(
+        textController: textController,
+        tickerProvider: const TestVSync(),
+      );
+      final delegate = _FakeTextScrollControllerDelegate(
+        caretRect: const Rect.fromLTWH(0, 40, 0, 10),
+        lastCharacterRect: const Rect.fromLTWH(0, 40, 0, 10),
+        endScrollOffsetValue: 45,
+      );
+      scrollController.delegate = delegate;
 
-    scrollController.ensureExtentIsVisible();
+      scrollController.ensureExtentIsVisible();
 
-    expect(scrollController.targetScrollOffset, 45);
-  });
+      expect(scrollController.targetScrollOffset, 45);
+    },
+  );
+
+  test(
+    'notifies viewport scroll listeners independently of target scroll listeners',
+    () {
+      final textController = AttributedTextEditingController(
+        text: AttributedText('abc'),
+      );
+      final scrollController = TextScrollController(
+        textController: textController,
+        tickerProvider: const TestVSync(),
+      );
+
+      var viewportNotifications = 0;
+      var targetNotifications = 0;
+      void onViewportScrolled() => viewportNotifications += 1;
+
+      scrollController
+        ..addViewportScrollListener(onViewportScrolled)
+        ..addListener(() => targetNotifications += 1);
+
+      scrollController.notifyViewportScrolled();
+
+      expect(viewportNotifications, 1);
+      expect(targetNotifications, 0);
+
+      scrollController.removeViewportScrollListener(onViewportScrolled);
+      scrollController.notifyViewportScrolled();
+
+      expect(viewportNotifications, 1);
+    },
+  );
 }
 
-class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate {
+class _FakeTextScrollControllerDelegate
+    implements TextScrollControllerDelegate {
   static const _viewportHeight = 20.0;
   static const _lineHeight = 10.0;
   static const _caretContentTop = 50.0;
@@ -93,7 +131,7 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   double get currentScrollOffset => currentScrollOffsetValue;
 
   @override
-  double get endScrollOffset => _endScrollOffsetValue ?? 100;
+  double get endScrollOffset => _endScrollOffsetValue ?? 45;
 
   @override
   bool isTextPositionVisible(TextPosition position) => false;
@@ -102,13 +140,17 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
   bool isInAutoScrollToStartRegion(Offset offsetInViewport) => false;
 
   @override
-  double calculateDistanceBeyondStartingAutoScrollBoundary(Offset offsetInViewport) => 0;
+  double calculateDistanceBeyondStartingAutoScrollBoundary(
+    Offset offsetInViewport,
+  ) => 0;
 
   @override
   bool isInAutoScrollToEndRegion(Offset offsetInViewport) => false;
 
   @override
-  double calculateDistanceBeyondEndingAutoScrollBoundary(Offset offsetInViewport) => 0;
+  double calculateDistanceBeyondEndingAutoScrollBoundary(
+    Offset offsetInViewport,
+  ) => 0;
 
   @override
   double? getHorizontalOffsetForStartOfCharacterLeftOfViewport() => 0;
@@ -129,12 +171,7 @@ class _FakeTextScrollControllerDelegate implements TextScrollControllerDelegate 
     }
 
     final top = position.offset == 0 ? 0.0 : _caretContentTop;
-    return Rect.fromLTWH(
-      0,
-      top - currentScrollOffsetValue,
-      0,
-      _lineHeight,
-    );
+    return Rect.fromLTWH(0, top - currentScrollOffsetValue, 0, _lineHeight);
   }
 
   @override
