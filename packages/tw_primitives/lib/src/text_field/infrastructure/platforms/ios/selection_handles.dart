@@ -22,10 +22,13 @@ import 'package:super_text_layout/super_text_layout.dart';
 ///   * handle drag gestures may need to co-exist with other gestures
 ///     related to text interaction
 class IOSSelectionHandle extends StatelessWidget {
+  static const double defaultOutlineWidth = 0.5;
+
   const IOSSelectionHandle.upstream({
     super.key,
     required this.color,
     required this.caretHeight,
+    this.outlineColor,
     this.caretWidth = 2,
     this.ballRadius = 4,
     this.handleType = HandleType.upstream,
@@ -35,6 +38,7 @@ class IOSSelectionHandle extends StatelessWidget {
     super.key,
     required this.color,
     required this.caretHeight,
+    this.outlineColor,
     this.caretWidth = 2,
     this.ballRadius = 4,
     this.handleType = HandleType.downstream,
@@ -42,6 +46,9 @@ class IOSSelectionHandle extends StatelessWidget {
 
   /// The color of the caret and ball in the handle.
   final Color color;
+
+  /// The color of the outline around the caret and ball.
+  final Color? outlineColor;
 
   /// The height of the caret, excluding the ball.
   final double caretHeight;
@@ -80,13 +87,17 @@ class IOSSelectionHandle extends StatelessWidget {
             height: ballDiameter,
             decoration: BoxDecoration(
               color: color,
+              border: _outlineBorder,
               shape: BoxShape.circle,
             ),
           ),
         Container(
           width: caretWidth,
           height: caretHeight,
-          color: color,
+          decoration: BoxDecoration(
+            color: color,
+            border: _outlineBorder,
+          ),
         ),
         // Show the ball on the bottom for a downstream handle
         if (handleType == HandleType.downstream)
@@ -95,12 +106,20 @@ class IOSSelectionHandle extends StatelessWidget {
             height: ballDiameter,
             decoration: BoxDecoration(
               color: color,
+              border: _outlineBorder,
               shape: BoxShape.circle,
             ),
           ),
       ],
     );
   }
+
+  Border? get _outlineBorder => outlineColor == null
+      ? null
+      : Border.all(
+          color: outlineColor!,
+          width: defaultOutlineWidth,
+        );
 }
 
 /// An iOS-style caret/collapsed selection handle.
@@ -110,6 +129,7 @@ class IOSCollapsedHandle extends StatelessWidget {
     this.controller,
     required this.color,
     required this.caretHeight,
+    this.outlineColor,
     this.caretWidth = 2,
   });
 
@@ -119,6 +139,9 @@ class IOSCollapsedHandle extends StatelessWidget {
   /// The color of the caret and ball in the handle.
   final Color color;
 
+  /// The color of the outline around the caret handle.
+  final Color? outlineColor;
+
   /// The height of the caret, excluding the ball.
   final double caretHeight;
 
@@ -127,7 +150,7 @@ class IOSCollapsedHandle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlinkingCaret(
+    final caret = BlinkingCaret(
       controller: controller,
       caretOffset: Offset.zero,
       caretHeight: caretHeight,
@@ -137,6 +160,19 @@ class IOSCollapsedHandle extends StatelessWidget {
       isTextEmpty: false,
       showCaret: true,
     );
+
+    if (outlineColor == null) {
+      return caret;
+    }
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: outlineColor!,
+          width: IOSSelectionHandle.defaultOutlineWidth,
+        ),
+      ),
+      child: caret,
+    );
   }
 }
-

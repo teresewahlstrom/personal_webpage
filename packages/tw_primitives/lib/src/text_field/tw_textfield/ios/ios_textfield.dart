@@ -61,6 +61,7 @@ class TwIOSTextField extends StatefulWidget {
     this.blinkTimingMode = BlinkTimingMode.ticker,
     required this.selectionColor,
     required this.handlesColor,
+    this.handleOutlineColor,
     this.handlesRadius,
     this.imeConfiguration,
     this.showComposingUnderline = true,
@@ -120,6 +121,9 @@ class TwIOSTextField extends StatefulWidget {
 
   /// Color of the selection handles.
   final Color handlesColor;
+
+  /// Color of the outline around the selection handles.
+  final Color? handleOutlineColor;
 
   /// The radius of the selection handle balls in logical pixels.
   ///
@@ -808,6 +812,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
           textContentKey: _textContentKey,
           tapRegionGroupId: widget.tapRegionGroupId,
           handleColor: widget.handlesColor,
+          handleOutlineColor: widget.handleOutlineColor,
           handleBallRadius: widget.handlesRadius,
           popoverToolbarBuilder: widget.popoverToolbarBuilder,
           showDebugPaint: widget.showDebugPaint,

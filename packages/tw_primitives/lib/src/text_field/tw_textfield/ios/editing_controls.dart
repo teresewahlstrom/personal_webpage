@@ -37,6 +37,7 @@ class IOSEditingControls extends StatefulWidget {
     required this.textContentLayerLink,
     this.tapRegionGroupId,
     required this.handleColor,
+    this.handleOutlineColor,
     this.handleBallRadius,
     required this.popoverToolbarBuilder,
     this.showDebugPaint = false,
@@ -73,6 +74,9 @@ class IOSEditingControls extends StatefulWidget {
 
   /// The color of the selection handles.
   final Color handleColor;
+
+  /// The color of the outline around the selection handles.
+  final Color? handleOutlineColor;
 
   /// The radius of the ball on selection handles in logical pixels.
   ///
@@ -657,11 +661,13 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
                         ? IOSSelectionHandle.upstream(
                             ballRadius: ballRadius,
                             color: widget.handleColor,
+                            outlineColor: widget.handleOutlineColor,
                             caretHeight: lineHeight,
                           )
                         : IOSSelectionHandle.downstream(
                             ballRadius: ballRadius,
                             color: widget.handleColor,
+                            outlineColor: widget.handleOutlineColor,
                             caretHeight: lineHeight,
                           )
                   : const SizedBox(),

@@ -72,6 +72,7 @@ class TwTextField extends StatefulWidget {
     this.hintBehavior = HintBehavior.displayHintUntilFocus,
     this.hintBuilder,
     this.controlsColor,
+    this.handleOutlineColor,
     this.caretStyle,
     this.handlesRadius,
     this.blinkTimingMode = BlinkTimingMode.ticker,
@@ -135,6 +136,9 @@ class TwTextField extends StatefulWidget {
   ///
   /// The color in [caretStyle] overrides the [controlsColor].
   final Color? controlsColor;
+
+  /// The color of the outline around mobile drag handles.
+  final Color? handleOutlineColor;
 
   /// The visual representation of the caret.
   ///
@@ -436,6 +440,7 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
                 ),
             selectionColor: widget.selectionColor ?? defaultSelectionColor,
             handlesColor: widget.controlsColor ?? defaultAndroidControlsColor,
+            handleOutlineColor: widget.handleOutlineColor,
             handlesRadius:
                 widget.handlesRadius ?? AndroidSelectionHandle.defaultRadius,
             minLines: widget.minLines,
@@ -470,6 +475,7 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
                 ),
             selectionColor: widget.selectionColor ?? defaultSelectionColor,
             handlesColor: widget.controlsColor ?? defaultIOSControlsColor,
+            handleOutlineColor: widget.handleOutlineColor,
             handlesRadius: widget.handlesRadius,
             minLines: widget.minLines,
             maxLines: widget.maxLines,

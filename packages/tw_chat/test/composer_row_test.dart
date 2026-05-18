@@ -37,8 +37,12 @@ void main() {
     );
     await tester.pump();
 
+    final composer = tester.widget<TwComposer>(find.byType(TwComposer));
+    final textField = tester.widget<TwReadyTextField>(find.byType(TwReadyTextField));
+
     expect(find.byType(TwComposer), findsOneWidget);
     expect(find.byIcon(Icons.send_rounded), findsOneWidget);
+    expect(textField.handleOutlineColor, composer.skin.fillColor);
   });
 }
 

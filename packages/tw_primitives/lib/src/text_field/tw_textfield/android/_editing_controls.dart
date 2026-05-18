@@ -41,6 +41,7 @@ class AndroidEditingOverlayControls extends StatefulWidget {
     required this.textContentLayerLink,
     this.tapRegionGroupId,
     required this.handleColor,
+    this.handleOutlineColor,
     this.handleRadius = AndroidSelectionHandle.defaultRadius,
     required this.popoverToolbarBuilder,
     this.showDebugPaint = false,
@@ -77,6 +78,9 @@ class AndroidEditingOverlayControls extends StatefulWidget {
 
   /// The color of the selection handles.
   final Color handleColor;
+
+  /// The color of the outline around the selection handles.
+  final Color? handleOutlineColor;
 
   /// The radius of the selection handles in logical pixels.
   ///
@@ -874,6 +878,7 @@ class _AndroidEditingOverlayControlsState
                       child: AndroidSelectionHandle(
                         handleType: handleType,
                         color: widget.handleColor,
+                        outlineColor: widget.handleOutlineColor,
                         radius: widget.handleRadius,
                       ),
                     ),
