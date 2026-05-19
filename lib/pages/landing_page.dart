@@ -497,7 +497,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                           borderRadius: BorderRadius.zero,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           child: _ProjectCardMarkdownBody(
                             document: widget.contentDocument,
                           ),
@@ -593,7 +593,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
         decoration: TextDecoration.lineThrough,
         decorationColor: baseStyle.color,
         decorationStyle: TextDecorationStyle.solid,
-        decorationThickness: 1.0,
+        decorationThickness: 1 / 3,
       ),
       underlineStyle: baseStyle.copyWith(decoration: TextDecoration.underline),
       linkStyle: baseStyle.copyWith(
