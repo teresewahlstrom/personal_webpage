@@ -548,7 +548,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: ShellUiConfig.pageBackgroundFor(brightness),
+                        color: ShellUiConfig.projectCardFillFor(brightness),
                         border: widget.gridLineStyle.borderAll,
                         borderRadius: BorderRadius.zero,
                       ),
