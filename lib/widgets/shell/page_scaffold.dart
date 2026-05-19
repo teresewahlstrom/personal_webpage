@@ -53,55 +53,24 @@ class PageScaffold extends StatefulWidget {
   State<PageScaffold> createState() => _PageScaffoldState();
 }
 
-class _PageScaffoldState extends State<PageScaffold>
-    with SingleTickerProviderStateMixin {
+class _PageScaffoldState extends State<PageScaffold> {
   final ScrollController _pageScrollController = ScrollController();
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
   final FocusNode _pageSelectionFocusNode = FocusNode(
     debugLabel: 'page-selectable-region',
   );
-  late final AnimationController _themeFadeController;
-  late final Animation<double> _themeFadeOpacity;
 
   @override
   void initState() {
     super.initState();
-    _themeFadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 220),
-    )..value = 1;
-    _themeFadeOpacity = TweenSequence<double>(<TweenSequenceItem<double>>[
-      TweenSequenceItem<double>(
-        tween: Tween<double>(
-          begin: 1,
-          end: 0.88,
-        ).chain(CurveTween(curve: Curves.easeOutCubic)),
-        weight: 45,
-      ),
-      TweenSequenceItem<double>(
-        tween: Tween<double>(
-          begin: 0.88,
-          end: 1,
-        ).chain(CurveTween(curve: Curves.easeInOutCubic)),
-        weight: 55,
-      ),
-    ]).animate(_themeFadeController);
   }
 
-  @override
-  void didUpdateWidget(covariant PageScaffold oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.isDarkMode != widget.isDarkMode) {
-      _themeFadeController.forward(from: 0);
-    }
-  }
 
   @override
   void dispose() {
     _pageScrollController.dispose();
     _pageSelectionFocusNode.dispose();
-    _themeFadeController.dispose();
     super.dispose();
   }
 
@@ -123,9 +92,7 @@ class _PageScaffoldState extends State<PageScaffold>
     return GridBackground(
       backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
       gridLineStyle: ShellUiConfig.gridLineFor(brightness),
-      child: FadeTransition(
-        opacity: _themeFadeOpacity,
-        child: Stack(
+      child: Stack(
           children: <Widget>[
             SafeArea(
               bottom: true,
@@ -232,7 +199,6 @@ class _PageScaffoldState extends State<PageScaffold>
               ),
           ],
         ),
-      ),
     );
   }
 }
