@@ -91,6 +91,8 @@ lib/generated_plugin_registrant.dart
 /.venv
 /tmp_twin
 /backend/twin/repo/
+/backend/twin/repo_new/
+/backend/twin/repo_new.git-backup-*/
 /backend/twin/repo_old/
 /docs/tmp/
 /.tmp_compare/
