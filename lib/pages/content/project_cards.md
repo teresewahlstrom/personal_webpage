@@ -1,16 +1,40 @@
-## Professional Twin with Advanced Retrieval
-
-A data-driven professional twin that turns structured career data into an explorable chat and interactive keyword map. Designed as a richer alternative to a static resume, it helps users understand experience, capabilities, and cross-domain strengths quickly. The chat in this app is powered by that system.
-
----
 
 ## Knowledge Management
 
-A recurring pattern across Terese's work is identifying where operational knowledge is fragile - where systems depend on expert memory, informal workarounds, or workflows that fail when the right person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
+A recurring pattern across Terese's work is identifying where operational knowledge is fragile - where systems depend on expert memory, informal workarounds, or workflows that fail when the key person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
 
-Her approach has been to convert that fragility into operational infrastructure. At Markforged she built failure taxonomies, process-monitoring systems, and training frameworks that reduced dependency on senior experts and made production knowledge reusable across teams. Similar patterns appeared earlier at GE Additive and Volvo Cars, where configuration logic, qualification knowledge, and technology evaluation processes often depended on isolated expertise. That same operational instinct now drives her work on AI-assisted workflow intelligence and structured professional twins: systems where human knowledge becomes retrievable, transferable, and actionable within real workflows rather than locked in individual context.
+She has experienced very different types of knowledge environments. 
+* Structured and mature -> bismal knowledge
+* Kind -> weaponized knowledge
+* Distilled -> fragmented knowledge
+
+So when she got the opportunity to from scratch design the training and knowledge management at Markforged, she jumped at it because she had seen the importance of it.
+
+* Instead of throwing away defect manufactured goods, she started to gather them, sort them per failure mechanism together with relevant documents and make it accessible. That table of defects became a natural point of discussions across departments at Markforged. Leading to fewer missunderstandings and greater depth of discussions.
+
+* Instead of service department blindly outsourcing certain types of service emails to people who's core task is not to get to the bottom of things. sending emails to experts outside of the service department, she ... Freeing up time from senior engineers to do high value research instead. making operators more seen. unifying beliefs. 
+
+* Instead of bad workflows, add some structure and knowledge to it. She has done wonders to sales, marketing, as well as operations, service and customer onboarding.
+
+Her experiences has shaped her to at her core believe 
+
+* you will in the end save time and make people more motivated 
+* convert that fragility into operational infrastructure and you get...
+* be inlove with thought leadership
+* given the right environment, anyone can thrive
+* many people might hold pieces of the puzzle of what the true knowledge is
+* knowledge needs to be democratised, synthesized, made paletable to the users
+* knowledge needs to be a continuous effort
+* knowledge when people are ready for it will transform the person and the company
+* you just need to get started and begin to collect and never stop being curious
+* you will be surprised at the kind of positive effects good knowledge will have.
+
+That same operational instinct now drives her studies on AI-assisted workflow intelligence, and structured data.
 
 ---
+## Commercial & Leadership
+
+
 
 ## Production Cost Modelling
 
