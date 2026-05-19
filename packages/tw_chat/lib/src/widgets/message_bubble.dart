@@ -795,7 +795,11 @@ class _BubbleFooter extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Transform.translate(
-          offset: Offset(0, -tokens.bubbleBorderWidth),
+          offset: Offset(
+            0,
+            tokens.bubbleBorderWidth *
+                bubbleFooterCollapsedLineTranslationFactor,
+          ),
           child: SizedBox(
             height: tokens.bubbleBorderWidth,
             width: double.infinity,
@@ -1013,6 +1017,52 @@ class _TypingDot extends StatelessWidget {
   }
 }
 
+const double bubbleFooterCollapsedLineTranslationFactor = -0.35;
+const double bubbleFooterDashWidth = 12.0;
+const double bubbleFooterGapWidth = 8.0;
+
+List<({double start, double end})> bubbleFooterDashSegmentsForWidth(
+  double width, {
+  double dashWidth = bubbleFooterDashWidth,
+  double gapWidth = bubbleFooterGapWidth,
+}) {
+  if (width <= 0 || dashWidth <= 0) {
+    return const <({double start, double end})>[];
+  }
+
+  final double boundedWidth = width.clamp(0.0, double.infinity).toDouble();
+  int dashCount = ((boundedWidth + gapWidth) / (dashWidth + gapWidth)).round();
+  if (dashCount < 1) {
+    dashCount = 1;
+  }
+
+  final int maxDashCount = (boundedWidth / dashWidth)
+      .floor()
+      .clamp(1, 1 << 20)
+      .toInt();
+  if (dashCount > maxDashCount) {
+    dashCount = maxDashCount;
+  }
+
+  if (dashCount == 1) {
+    return <({double start, double end})>[
+      (start: 0.0, end: boundedWidth),
+    ];
+  }
+
+  final double gapWidthForCount =
+      (boundedWidth - dashCount * dashWidth) / (dashCount - 1);
+  double x = 0.0;
+  final List<({double start, double end})> segments =
+      <({double start, double end})>[];
+  for (int index = 0; index < dashCount; index++) {
+    final double end = index == dashCount - 1 ? boundedWidth : x + dashWidth;
+    segments.add((start: x, end: end));
+    x = end + gapWidthForCount;
+  }
+  return segments;
+}
+
 class _PlusMinusPainter extends CustomPainter {
   const _PlusMinusPainter({
     required this.isPlus,
@@ -1068,9 +1118,6 @@ class _BottomLinePainter extends CustomPainter {
   final double strokeWidth;
   final bool dashed;
 
-  static const double _dashWidth = 12.0;
-  static const double _gapWidth = 8.0;
-
   @override
   void paint(Canvas canvas, Size size) {
     if (color.a == 0.0) return;
@@ -1085,17 +1132,18 @@ class _BottomLinePainter extends CustomPainter {
       return;
     }
 
-    double x = 0;
-    while (x < size.width) {
-      final end = (x + _dashWidth).clamp(0.0, size.width);
-      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
-      x += _dashWidth + _gapWidth;
+    for (final ({double start, double end}) segment
+        in bubbleFooterDashSegmentsForWidth(size.width)) {
+      canvas.drawLine(
+        Offset(segment.start, y),
+        Offset(segment.end, y),
+        paint,
+      );
     }
   }
 
   @override
   bool shouldRepaint(covariant _BottomLinePainter oldDelegate) {
-    // _dashWidth and _gapWidth are static constants so they never change.
     return oldDelegate.color != color ||
         oldDelegate.strokeWidth != strokeWidth ||
         oldDelegate.dashed != dashed;

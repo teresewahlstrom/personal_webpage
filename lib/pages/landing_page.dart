@@ -479,13 +479,18 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color cardFill = ShellUiConfig.projectCardFillFor(brightness);
+    final TextStyle pageBodyStyle = PageTextStyles.body(context);
     final Color baseIconColor =
-        PageTextStyles.body(context).color ??
+        pageBodyStyle.color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         PagePalette.bodyFor(brightness);
     final Color iconColor = _isHovered
         ? ShellUiConfig.linkTextHoverFor(brightness)
         : baseIconColor;
+    final TextStyle projectTitleStyle = pageBodyStyle.copyWith(
+      fontSize: (pageBodyStyle.fontSize ?? 17.3) - 1,
+      fontWeight: FontWeight.w700,
+    );
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -516,9 +521,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                         Expanded(
                           child: Text(
                             widget.title,
-                            style: PageTextStyles.body(
-                              context,
-                            ).copyWith(fontWeight: FontWeight.w700),
+                            style: projectTitleStyle,
                           ),
                         ),
                         RotationTransition(
@@ -545,7 +548,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return child!;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: ShellUiConfig.pageBackgroundFor(brightness),
