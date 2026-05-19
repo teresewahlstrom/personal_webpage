@@ -34,12 +34,11 @@ class _PageHeaderState extends State<PageHeader> {
     final Brightness brightness = Theme.of(context).brightness;
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
     final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
-    final EdgeInsets contentPadding = ShellUiConfig.headerPadding.add(
-      EdgeInsets.only(
-        top: safeInsets.top,
-        left: safeInsets.left,
-        right: safeInsets.right,
-      ),
+    final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
+      ShellUiConfig.headerPadding.left + safeInsets.left,
+      ShellUiConfig.headerPadding.top + safeInsets.top,
+      ShellUiConfig.headerPadding.right + safeInsets.right,
+      ShellUiConfig.headerPadding.bottom,
     );
     return SizedBox(
       width: double.infinity,
