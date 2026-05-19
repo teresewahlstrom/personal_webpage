@@ -453,29 +453,32 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
             borderRadius: BorderRadius.zero,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        widget.title,
-                        style: PageTextStyles.body(
-                          context,
-                        ).copyWith(fontWeight: FontWeight.w700),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          widget.title,
+                          style: PageTextStyles.body(
+                            context,
+                          ).copyWith(fontWeight: FontWeight.w700),
+                        ),
                       ),
-                    ),
-                    RotationTransition(
-                      turns: Tween<double>(
-                        begin: 0,
-                        end: 0.5,
-                      ).animate(_heightAnimation),
-                      child: Icon(Icons.expand_more, color: iconColor),
-                    ),
-                  ],
+                      RotationTransition(
+                        turns: Tween<double>(
+                          begin: 0,
+                          end: 0.5,
+                        ).animate(_heightAnimation),
+                        child: Icon(Icons.expand_more, color: iconColor),
+                      ),
+                    ],
+                  ),
                 ),
                 SizeTransition(
                   sizeFactor: _heightAnimation,
@@ -497,7 +500,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                           borderRadius: BorderRadius.zero,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.all(12),
                           child: _ProjectCardMarkdownBody(
                             document: widget.contentDocument,
                           ),
