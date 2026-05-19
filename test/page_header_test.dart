@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:personal_webpage/config/app_ui_config.dart';
 import 'package:personal_webpage/widgets/shell/_page_header.dart';
 
 void main() {
@@ -51,4 +52,39 @@ void main() {
       );
     },
   );
+
+  testWidgets('page header keeps the logo below mobile safe-area padding', (
+    WidgetTester tester,
+  ) async {
+    const EdgeInsets safeInsets = EdgeInsets.only(top: 44, left: 8, right: 6);
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(viewPadding: safeInsets),
+          child: Scaffold(
+            body: PageHeader(),
+          ),
+        ),
+      ),
+    );
+
+    final Finder imageFinder = find.byType(Image);
+    final Finder headerFinder = find.byType(PageHeader);
+
+    expect(
+      tester.getRect(headerFinder).height,
+      ShellUiConfig.headerMinHeight + safeInsets.top,
+    );
+    expect(
+      tester.getTopLeft(imageFinder).dy,
+      greaterThanOrEqualTo(safeInsets.top),
+    );
+    expect(
+      tester.getTopLeft(imageFinder).dx,
+      greaterThanOrEqualTo(
+        ShellUiConfig.headerPadding.left + safeInsets.left,
+      ),
+    );
+  });
 }

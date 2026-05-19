@@ -33,16 +33,24 @@ class _PageHeaderState extends State<PageHeader> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
+    final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
+    final EdgeInsets contentPadding = ShellUiConfig.headerPadding.add(
+      EdgeInsets.only(
+        top: safeInsets.top,
+        left: safeInsets.left,
+        right: safeInsets.right,
+      ),
+    );
     return SizedBox(
       width: double.infinity,
-      height: ShellUiConfig.headerMinHeight,
+      height: ShellUiConfig.headerMinHeight + safeInsets.top,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: ShellUiConfig.headerBackgroundFor(brightness),
           border: Border(bottom: headerLine.borderSide),
         ),
         child: Padding(
-          padding: ShellUiConfig.headerPadding,
+          padding: contentPadding,
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
