@@ -301,9 +301,24 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
           "A recurring pattern across Terese’s work is identifying where operational knowledge is fragile — where systems depend on expert memory, informal workarounds, or workflows that fail when the right person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.\n\nHer approach has been to convert that fragility into operational infrastructure. At Markforged she built failure taxonomies, process-monitoring systems, and training frameworks that reduced dependency on senior experts and made production knowledge reusable across teams. Similar patterns appeared earlier at GE Additive and Volvo Cars, where configuration logic, qualification knowledge, and technology evaluation processes often depended on isolated expertise. That same operational instinct now drives her work on AI-assisted workflow intelligence and structured professional twins: systems where human knowledge becomes retrievable, transferable, and actionable within real workflows rather than locked in individual context.",
     ),
     _ProjectCardData(
-      title: "Production Cost Estimation",
+      title: "Production Cost Modelling",
       content:
           "A systematic framework for forecasting manufacturing and production costs with high accuracy. Combines bottom-up cost modelling, parametric estimating, and scenario analysis to support pricing decisions, investment appraisals, and operational planning — bridging the gap between engineering specifications and financial targets.",
+    ),
+    _ProjectCardData(
+      title: "Technology Adoption and Decision Translation",
+      content:
+          "Terese reduces uncertainty around technically complex decisions by turning evaluation into decision-ready structure. Her work includes feasibility framing, qualification logic, ROI and configuration models, and cross-functional coordination during adoption and launch efforts. The result is clearer investment logic and stronger execution under commercial pressure.",
+    ),
+    _ProjectCardData(
+      title: "Production and Process Reliability",
+      content:
+          "Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.",
+    ),
+    _ProjectCardData(
+      title: "AI-Assisted Workflow Intelligence",
+      content:
+          "Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.",
     ),
   ];
 
