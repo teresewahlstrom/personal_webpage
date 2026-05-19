@@ -20,6 +20,8 @@ void main() {
       final Image image = tester.widget<Image>(imageFinder);
       expect(image.image, isA<AssetImage>());
       expect((image.image as AssetImage).assetName, 'assets/images/logo.png');
+      expect(image.frameBuilder, isNull);
+      expect(image.gaplessPlayback, isFalse);
 
       expect(
         find.ancestor(of: imageFinder, matching: find.byType(Tooltip)),
@@ -37,6 +39,13 @@ void main() {
         find.ancestor(
           of: imageFinder,
           matching: find.byType(SelectionContainer),
+        ),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(PageHeader),
+          matching: find.byType(RepaintBoundary),
         ),
         findsNothing,
       );

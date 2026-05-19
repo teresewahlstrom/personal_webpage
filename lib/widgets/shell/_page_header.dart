@@ -50,29 +50,12 @@ class _PageHeaderState extends State<PageHeader> {
               ),
               child: Row(
                 children: <Widget>[
-                  RepaintBoundary(
-                    child: SizedBox(
-                      width: ShellUiConfig.headerLogoWidth,
-                      height: ShellUiConfig.headerLogoHeight,
-                      child: Image(
-                        image: _logoImage,
-                        fit: BoxFit.contain,
-                        gaplessPlayback: true,
-                        isAntiAlias: true,
-                        filterQuality: FilterQuality.high,
-                        frameBuilder:
-                            (
-                              BuildContext context,
-                              Widget child,
-                              int? frame,
-                              bool wasSynchronouslyLoaded,
-                            ) {
-                              if (wasSynchronouslyLoaded || frame != null) {
-                                return child;
-                              }
-                              return const SizedBox.shrink();
-                            },
-                      ),
+                  SizedBox(
+                    width: ShellUiConfig.headerLogoWidth,
+                    height: ShellUiConfig.headerLogoHeight,
+                    child: Image(
+                      image: _logoImage,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const Spacer(),
