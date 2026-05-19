@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart' hide GestureRecognizerFactory;
+import 'package:tw_primitives/markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
-import '../logic/message_markup.dart';
-import 'message_bubble_markup_renderer.dart' as bubble_markup_renderer;
 
 class ChatMessageBubble extends StatefulWidget {
   const ChatMessageBubble({
@@ -347,7 +346,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          bubble_markup_renderer.MessageBubbleMarkupRenderer(
+          _TruncatedMessageBubbleMarkupRenderer(
             document: parsedMarkup!.document,
             style: style,
             bubbleColor: bubbleColor,
@@ -469,6 +468,292 @@ class _ParsedMarkupPayload {
 
   final ChatMarkupDocument document;
   final String plainText;
+}
+
+class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
+  const _TruncatedMessageBubbleMarkupRenderer({
+    required this.document,
+    required this.style,
+    required this.bubbleColor,
+    required this.isUserBubble,
+    required this.truncatedContentHeight,
+    required this.isTruncated,
+    required this.gestureRecognizerFactory,
+  });
+
+  final ChatMarkupDocument document;
+  final TextStyle style;
+  final Color bubbleColor;
+  final bool isUserBubble;
+  final double truncatedContentHeight;
+  final bool isTruncated;
+  final GestureRecognizerFactory gestureRecognizerFactory;
+
+  @override
+  Widget build(BuildContext context) {
+    final skin = ChatSkin.dataOf(context);
+    final colors = skin.colors;
+    final tokens = skin.tokens;
+    final markupTheme = _buildMarkupTheme(context, style);
+    final viewStyle = ChatMarkupViewStyle(
+      blockquoteRailWidth: tokens.markupBlockquoteRailWidth,
+      blockBaseSpacingFactor: tokens.markupBlockBaseSpacingFactor,
+      blockQuoteExtraSpacing: tokens.markupBlockQuoteExtraSpacing,
+      listTopSpacingAdjustment: tokens.markupListTopSpacingAdjustment,
+      nestedListTopSpacingAdjustment:
+          tokens.markupNestedListTopSpacingAdjustment,
+      nestedListBottomSpacingAdjustment:
+          tokens.markupNestedListBottomSpacingAdjustment,
+      blockQuoteTopSpacingAdjustment:
+          tokens.markupBlockQuoteTopSpacingAdjustment,
+      listBottomSpacingAdjustment: tokens.markupListBottomSpacingAdjustment,
+      headingBottomSpacingFactors: tokens.markupHeadingBottomSpacingFactors,
+      headingTopSpacingFactors: tokens.markupHeadingTopSpacingFactors,
+      listItemBaseSpacingFactor: tokens.markupListItemBaseSpacingFactor,
+      topLevelListItemSpacingAdjustment:
+          tokens.markupTopLevelListItemSpacingAdjustment,
+      listMarkerGapFactor: tokens.markupListMarkerGapFactor,
+      topLevelListMarkerSlotFactor: tokens.markupTopLevelListMarkerSlotFactor,
+      nestedListMarkerSlotFactor: tokens.markupNestedListMarkerSlotFactor,
+      blockquoteIndentFactor: tokens.markupBlockquoteIndentFactor,
+      blockquoteCapLength: tokens.composerCornerAccentSegment,
+    );
+
+    if (!isTruncated) {
+      final Widget visibleMarkupLayer = ChatMarkupView(
+        document: document,
+        theme: markupTheme,
+        gestureRecognizerFactory: gestureRecognizerFactory,
+        style: viewStyle,
+        selectable: false,
+        chromeVisible: true,
+        blockquoteRailColor: colors.bubbleText,
+      );
+      final Widget hiddenSelectionLayer = Positioned.fill(
+        child: ChatMarkupView(
+          document: document,
+          theme: _transparentMarkupTheme(markupTheme),
+          gestureRecognizerFactory: gestureRecognizerFactory,
+          style: viewStyle,
+          selectable: true,
+          chromeVisible: false,
+          blockquoteRailColor: colors.transparent,
+        ),
+      );
+
+      return Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[hiddenSelectionLayer, visibleMarkupLayer],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final Widget hiddenSelectionLayer = _buildTruncatedMarkupLayer(
+          document: document,
+          theme: _transparentMarkupTheme(markupTheme),
+          maxWidth: constraints.maxWidth,
+          selectable: true,
+          chromeVisible: false,
+          viewStyle: viewStyle,
+          blockquoteRailColor: colors.transparent,
+        );
+        final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
+          document: document,
+          theme: markupTheme,
+          maxWidth: constraints.maxWidth,
+          selectable: false,
+          chromeVisible: true,
+          viewStyle: viewStyle,
+          blockquoteRailColor: colors.bubbleText,
+        );
+        final double fadeHeight =
+            truncatedContentHeight < tokens.markupTruncationMaxFadeHeight
+            ? truncatedContentHeight
+            : tokens.markupTruncationMaxFadeHeight;
+        final double overlayMidAlpha = isUserBubble
+            ? tokens.markupTruncationOverlayMidAlphaUser
+            : tokens.markupTruncationOverlayMidAlphaBot;
+        final double overlayLateAlpha = isUserBubble
+            ? tokens.markupTruncationOverlayLateAlphaUser
+            : tokens.markupTruncationOverlayLateAlphaBot;
+        final double midFadeFactor = isUserBubble
+            ? tokens.markupFadeMaskMidFactorUser
+            : tokens.markupFadeMaskMidFactorBot;
+        final double lateFadeFactor = isUserBubble
+            ? tokens.markupFadeMaskLateFactorUser
+            : tokens.markupFadeMaskLateFactorBot;
+        final List<double> overlayStops = isUserBubble
+            ? tokens.markupTruncationOverlayStopsUser
+            : tokens.markupTruncationOverlayStopsBot;
+
+        return SizedBox(
+          height: truncatedContentHeight,
+          child: ClipRect(
+            child: Stack(
+              children: <Widget>[
+                hiddenSelectionLayer,
+                ShaderMask(
+                  blendMode: BlendMode.dstIn,
+                  shaderCallback: (Rect bounds) {
+                    final double normalizedFadeStart = bounds.height <= 0
+                        ? 0.0
+                        : ((bounds.height - fadeHeight) / bounds.height).clamp(
+                            0.0,
+                            1.0,
+                          );
+                    final double midFadeStart =
+                        (normalizedFadeStart +
+                                (1.0 - normalizedFadeStart) * midFadeFactor)
+                            .clamp(0.0, 1.0);
+                    final double lateFadeStart =
+                        (normalizedFadeStart +
+                                (1.0 - normalizedFadeStart) * lateFadeFactor)
+                            .clamp(0.0, 1.0);
+
+                    return LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskOpaque,
+                        colors.markupFadeMaskSoft,
+                        colors.transparent,
+                      ],
+                      stops: <double>[
+                        0.0,
+                        normalizedFadeStart,
+                        midFadeStart,
+                        lateFadeStart,
+                        1.0,
+                      ],
+                    ).createShader(bounds);
+                  },
+                  child: visibleMarkupLayer,
+                ),
+                if (isUserBubble)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    height: fadeHeight,
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              bubbleColor.withValues(
+                                alpha: tokens.alphaTransparent,
+                              ),
+                              bubbleColor.withValues(alpha: overlayMidAlpha),
+                              bubbleColor.withValues(alpha: overlayLateAlpha),
+                              bubbleColor,
+                            ],
+                            stops: overlayStops,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
+    final skin = ChatSkin.dataOf(context);
+    final colors = skin.colors;
+    final tokens = skin.tokens;
+    final textStyles = skin.textStyles;
+    final TextStyle linkStyle = baseStyle.copyWith(
+      color: colors.markupLink,
+      decoration: TextDecoration.underline,
+      decorationColor: colors.markupLinkDecoration,
+      decorationThickness: textStyles.markdownDecorationThickness(tokens),
+    );
+    return ChatMarkupTheme(
+      baseStyle: baseStyle,
+      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
+      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
+      strikethroughStyle: textStyles.markdownStrikethroughStyle(
+        baseStyle,
+        tokens,
+      ),
+      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
+      linkStyle: linkStyle,
+      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
+      headingStyleResolver: (int level) =>
+          textStyles.markdownHeadingStyle(baseStyle, level, colors),
+    );
+  }
+
+  Widget _buildTruncatedMarkupLayer({
+    required ChatMarkupDocument document,
+    required ChatMarkupTheme theme,
+    required double maxWidth,
+    required bool selectable,
+    required bool chromeVisible,
+    required ChatMarkupViewStyle viewStyle,
+    required Color blockquoteRailColor,
+  }) {
+    return PrimaryScrollController.none(
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        primary: false,
+        clipBehavior: Clip.hardEdge,
+        child: Align(
+          alignment: Alignment.topLeft,
+          widthFactor: 1.0,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: ChatMarkupView(
+              document: document,
+              theme: theme,
+              gestureRecognizerFactory: gestureRecognizerFactory,
+              style: viewStyle,
+              selectable: selectable,
+              chromeVisible: chromeVisible,
+              blockquoteRailColor: blockquoteRailColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ChatMarkupTheme _transparentMarkupTheme(ChatMarkupTheme theme) {
+    TextStyle transparent(TextStyle style) {
+      return _transparentTextStyle(style);
+    }
+
+    return ChatMarkupTheme(
+      baseStyle: transparent(theme.baseStyle),
+      strongStyle: transparent(theme.strongStyle),
+      emphasisStyle: transparent(theme.emphasisStyle),
+      strikethroughStyle: transparent(theme.strikethroughStyle),
+      underlineStyle: transparent(theme.underlineStyle),
+      linkStyle: transparent(theme.linkStyle),
+      blockquoteStyle: transparent(theme.blockquoteStyle),
+      headingStyleResolver: (int level) =>
+          transparent(theme.headingStyleResolver(level)),
+    );
+  }
+
+  TextStyle _transparentTextStyle(TextStyle style) {
+    const Color transparent = Colors.transparent;
+    return style.copyWith(
+      color: transparent,
+      backgroundColor: transparent,
+      decorationColor: transparent,
+      shadows: const <Shadow>[],
+    );
+  }
 }
 
 class _BubbleFooter extends StatelessWidget {

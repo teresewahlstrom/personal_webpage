@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
+import 'package:tw_primitives/markdown.dart';
 
 import '../models/message.dart';
-import 'message_markup.dart';
 
 String formatChatSelectionCopy({
   required List<ChatMessage> messages,

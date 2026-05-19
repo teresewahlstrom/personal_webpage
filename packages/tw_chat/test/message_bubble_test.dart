@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tw_chat/src/config/bubble_rules.dart';
 import 'package:tw_chat/src/config/skin.dart';
-import 'package:tw_chat/src/logic/message_markup.dart';
 import 'package:tw_chat/src/logic/selection_copy_formatter.dart';
 import 'package:tw_chat/src/models/message.dart';
 import 'package:tw_chat/src/widgets/message_bubble.dart';
+import 'package:tw_primitives/markdown.dart';
 
 void main() {
   testWidgets('collapsed bubble copies the full plain text transcript body', (

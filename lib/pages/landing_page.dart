@@ -1,6 +1,9 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:flutter/gestures.dart' show TapGestureRecognizer;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_keywords/tw_keywords.dart';
+import 'package:tw_primitives/markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/app_ui_config.dart';
@@ -42,17 +45,17 @@ class _LandingPageState extends State<LandingPage> {
         mode: LaunchMode.platformDefault,
       );
       if (!launched && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open $rawUrl')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open $rawUrl')));
       }
     } catch (_) {
       if (!mounted) {
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open $rawUrl')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not open $rawUrl')));
     }
   }
 
@@ -137,9 +140,7 @@ class _LandingPageState extends State<LandingPage> {
         } else if (!snapshot.hasData) {
           // Use stable placeholder height to prevent jump when viewport changes (keyboard show/hide)
           // Fallback to 400px instead of dynamic viewport calculation
-          content = const SizedBox(
-            height: 400.0,
-          );
+          content = const SizedBox(height: 400.0);
         } else {
           final SubjectKeywordData subject = snapshot.data!;
           final Brightness brightness = Theme.of(context).brightness;
@@ -192,7 +193,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              
+
               Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
@@ -289,45 +290,26 @@ class _ProjectsSection extends StatefulWidget {
 
 class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _title = "Projects Portfolio";
-  static const List<_ProjectCardData> _projectCards = <_ProjectCardData>[
-    _ProjectCardData(
-      title: "Professional Twin with Advanced Retrieval",
-      content:
-        "A data-driven professional twin that turns structured career data into an explorable chat and interactive keyword map. Designed as a richer alternative to a static resume, it helps users understand experience, capabilities, and cross-domain strengths quickly. The chat in this app is powered by that system.",
-    ),
-    _ProjectCardData(
-      title: "Knowledge Management",
-      content:
-          "A recurring pattern across Terese’s work is identifying where operational knowledge is fragile — where systems depend on expert memory, informal workarounds, or workflows that fail when the right person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.\n\nHer approach has been to convert that fragility into operational infrastructure. At Markforged she built failure taxonomies, process-monitoring systems, and training frameworks that reduced dependency on senior experts and made production knowledge reusable across teams. Similar patterns appeared earlier at GE Additive and Volvo Cars, where configuration logic, qualification knowledge, and technology evaluation processes often depended on isolated expertise. That same operational instinct now drives her work on AI-assisted workflow intelligence and structured professional twins: systems where human knowledge becomes retrievable, transferable, and actionable within real workflows rather than locked in individual context.",
-    ),
-    _ProjectCardData(
-      title: "Production Cost Modelling",
-      content:
-          "A systematic framework for forecasting manufacturing and production costs with high accuracy. Combines bottom-up cost modelling, parametric estimating, and scenario analysis to support pricing decisions, investment appraisals, and operational planning — bridging the gap between engineering specifications and financial targets.",
-    ),
-    _ProjectCardData(
-      title: "Technology Adoption and Decision Translation",
-      content:
-          "Terese reduces uncertainty around technically complex decisions by turning evaluation into decision-ready structure. Her work includes feasibility framing, qualification logic, ROI and configuration models, and cross-functional coordination during adoption and launch efforts. The result is clearer investment logic and stronger execution under commercial pressure.",
-    ),
-    _ProjectCardData(
-      title: "Production and Process Reliability",
-      content:
-          "Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.",
-    ),
-    _ProjectCardData(
-      title: "AI-Assisted Workflow Intelligence",
-      content:
-          "Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.",
-    ),
-  ];
+  static const String _projectCardsAssetPath =
+  'lib/pages/content/project_cards.md';
 
-  late List<bool> _expandedStates;
+  late Future<List<_ProjectCardData>> _projectCardsFuture;
+  List<bool> _expandedStates = <bool>[];
 
   @override
   void initState() {
     super.initState();
-    _expandedStates = List<bool>.filled(_projectCards.length, false);
+    _projectCardsFuture = _loadProjectCards();
+  }
+
+  Future<List<_ProjectCardData>> _loadProjectCards() async {
+    final String markdown = await rootBundle.loadString(_projectCardsAssetPath);
+    final List<_ProjectCardData> cards = _ProjectCardsMarkdownLoader.parse(
+      markdown,
+      sourceAssetPath: _projectCardsAssetPath,
+    );
+    _expandedStates = List<bool>.filled(cards.length, false);
+    return cards;
   }
 
   @override
@@ -340,21 +322,51 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
       children: <Widget>[
         Text(_title, style: PageTextStyles.h2(context)),
         const SizedBox(height: 10),
-        for (int index = 0; index < _projectCards.length; index++) ...<Widget>[
-          _ExpandableProjectCard(
-            title: _projectCards[index].title,
-            content: _projectCards[index].content,
-            isExpanded: _expandedStates[index],
-            onTap: () {
-              setState(() {
-                _expandedStates[index] = !_expandedStates[index];
-              });
-            },
-            frameFill: frameFill,
-            gridLineStyle: gridLineStyle,
-          ),
-          if (index < _projectCards.length - 1) const SizedBox(height: 12),
-        ],
+        FutureBuilder<List<_ProjectCardData>>(
+          future: _projectCardsFuture,
+          builder:
+              (
+                BuildContext context,
+                AsyncSnapshot<List<_ProjectCardData>> snapshot,
+              ) {
+                if (snapshot.hasError) {
+                  return Text(
+                    'Could not load project cards.',
+                    style: PageTextStyles.body(context),
+                  );
+                }
+                if (!snapshot.hasData) {
+                  return const SizedBox(height: 48);
+                }
+
+                final List<_ProjectCardData> projectCards = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    for (
+                      int index = 0;
+                      index < projectCards.length;
+                      index++
+                    ) ...<Widget>[
+                      _ExpandableProjectCard(
+                        title: projectCards[index].title,
+                        contentDocument: projectCards[index].contentDocument,
+                        isExpanded: _expandedStates[index],
+                        onTap: () {
+                          setState(() {
+                            _expandedStates[index] = !_expandedStates[index];
+                          });
+                        },
+                        frameFill: frameFill,
+                        gridLineStyle: gridLineStyle,
+                      ),
+                      if (index < projectCards.length - 1)
+                        const SizedBox(height: 12),
+                    ],
+                  ],
+                );
+              },
+        ),
       ],
     );
   }
@@ -363,7 +375,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
 class _ExpandableProjectCard extends StatefulWidget {
   const _ExpandableProjectCard({
     required this.title,
-    required this.content,
+    required this.contentDocument,
     required this.isExpanded,
     required this.onTap,
     required this.frameFill,
@@ -371,7 +383,7 @@ class _ExpandableProjectCard extends StatefulWidget {
   });
 
   final String title;
-  final String content;
+  final ChatMarkupDocument contentDocument;
   final bool isExpanded;
   final VoidCallback onTap;
   final Color frameFill;
@@ -430,12 +442,12 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
       AppColorTheme.projectCardFillAlphaFor(brightness),
     )!;
     final Color baseIconColor =
-      PageTextStyles.body(context).color ??
-      Theme.of(context).textTheme.bodyMedium?.color ??
-      PagePalette.bodyFor(brightness);
+        PageTextStyles.body(context).color ??
+        Theme.of(context).textTheme.bodyMedium?.color ??
+        PagePalette.bodyFor(brightness);
     final Color iconColor = _isHovered
         ? ShellUiConfig.linkTextHoverFor(brightness)
-      : baseIconColor;
+        : baseIconColor;
     return GestureDetector(
       onTap: widget.onTap,
       child: MouseRegion(
@@ -459,17 +471,17 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     Expanded(
                       child: Text(
                         widget.title,
-                        style: PageTextStyles.body(context)
-                            .copyWith(fontWeight: FontWeight.w700),
+                        style: PageTextStyles.body(
+                          context,
+                        ).copyWith(fontWeight: FontWeight.w700),
                       ),
                     ),
                     RotationTransition(
-                      turns: Tween<double>(begin: 0, end: 0.5)
-                          .animate(_heightAnimation),
-                      child: Icon(
-                        Icons.expand_more,
-                        color: iconColor,
-                      ),
+                      turns: Tween<double>(
+                        begin: 0,
+                        end: 0.5,
+                      ).animate(_heightAnimation),
+                      child: Icon(Icons.expand_more, color: iconColor),
                     ),
                   ],
                 ),
@@ -478,16 +490,16 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                   child: AnimatedBuilder(
                     animation: _heightAnimation,
                     builder: (BuildContext context, Widget? child) {
-                      if (_heightAnimation.status == AnimationStatus.dismissed) {
+                      if (_heightAnimation.status ==
+                          AnimationStatus.dismissed) {
                         return SelectionContainer.disabled(child: child!);
                       }
                       return child!;
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        widget.content,
-                        style: PageTextStyles.body(context),
+                      child: _ProjectCardMarkdownBody(
+                        document: widget.contentDocument,
                       ),
                     ),
                   ),
@@ -502,10 +514,172 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
 }
 
 class _ProjectCardData {
-  const _ProjectCardData({required this.title, required this.content});
+  const _ProjectCardData({required this.title, required this.contentDocument});
 
   final String title;
-  final String content;
+  final ChatMarkupDocument contentDocument;
+}
+
+class _ProjectCardMarkdownBody extends StatefulWidget {
+  const _ProjectCardMarkdownBody({required this.document});
+
+  final ChatMarkupDocument document;
+
+  @override
+  State<_ProjectCardMarkdownBody> createState() =>
+      _ProjectCardMarkdownBodyState();
+}
+
+class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
+  final Map<String, TapGestureRecognizer> _linkRecognizersByHref =
+      <String, TapGestureRecognizer>{};
+
+  @override
+  void dispose() {
+    for (final TapGestureRecognizer recognizer
+        in _linkRecognizersByHref.values) {
+      recognizer.dispose();
+    }
+    _linkRecognizersByHref.clear();
+    super.dispose();
+  }
+
+  Future<void> _openHref(String href) async {
+    final String normalizedHref =
+        href.startsWith('http://') ||
+            href.startsWith('https://') ||
+            href.startsWith('mailto:') ||
+            href.startsWith('tel:')
+        ? href
+        : 'https://$href';
+    final Uri uri = Uri.parse(normalizedHref);
+    try {
+      await launchUrl(uri, mode: LaunchMode.platformDefault);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not open $href')));
+    }
+  }
+
+  TapGestureRecognizer _recognizerForHref(String href) {
+    return _linkRecognizersByHref.putIfAbsent(href, () {
+      final TapGestureRecognizer recognizer = TapGestureRecognizer();
+      recognizer.onTap = () {
+        _openHref(href);
+      };
+      return recognizer;
+    });
+  }
+
+  ChatMarkupTheme _buildTheme(BuildContext context) {
+    final TextStyle baseStyle = PageTextStyles.body(context);
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color linkColor = ShellUiConfig.linkTextFor(brightness);
+    final TextStyle headingBase = PageTextStyles.body(
+      context,
+    ).copyWith(fontWeight: FontWeight.w700);
+
+    return ChatMarkupTheme(
+      baseStyle: baseStyle,
+      strongStyle: baseStyle.copyWith(fontWeight: FontWeight.w700),
+      emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
+      strikethroughStyle: baseStyle.copyWith(
+        decoration: TextDecoration.lineThrough,
+      ),
+      underlineStyle: baseStyle.copyWith(decoration: TextDecoration.underline),
+      linkStyle: baseStyle.copyWith(
+        color: linkColor,
+        decoration: TextDecoration.underline,
+        decorationColor: linkColor,
+      ),
+      blockquoteStyle: baseStyle.copyWith(
+        color: baseStyle.color?.withValues(alpha: 0.88),
+      ),
+      headingStyleResolver: (int level) {
+        final double baseSize = headingBase.fontSize ?? 16;
+        return headingBase.copyWith(
+          fontSize: level == 1 ? baseSize + 4 : baseSize + 2,
+          height: 1.2,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChatMarkupView(
+      document: widget.document,
+      theme: _buildTheme(context),
+      gestureRecognizerFactory: _recognizerForHref,
+      selectable: true,
+      chromeVisible: true,
+      blockquoteRailColor:
+          PageTextStyles.body(context).color ??
+          Theme.of(context).textTheme.bodyMedium?.color,
+    );
+  }
+}
+
+class _ProjectCardsMarkdownLoader {
+  const _ProjectCardsMarkdownLoader._();
+
+  static List<_ProjectCardData> parse(
+    String markdown, {
+    required String sourceAssetPath,
+  }) {
+    final List<String> normalizedSections = markdown
+        .replaceAll('\r\n', '\n')
+        .split('\n---\n')
+        .map((String section) => section.trim())
+        .where((String section) => section.isNotEmpty)
+        .toList(growable: false);
+
+    final List<_ProjectCardData> cards = normalizedSections
+        .map(
+          (String section) => _parseCardSection(
+            section,
+            sourceAssetPath: sourceAssetPath,
+          ),
+        )
+        .toList(growable: false);
+
+    if (cards.isEmpty) {
+      throw FormatException(
+        'Project card markdown did not contain any card sections in $sourceAssetPath.',
+      );
+    }
+
+    return cards;
+  }
+
+  static _ProjectCardData _parseCardSection(
+    String section, {
+    required String sourceAssetPath,
+  }) {
+    final List<String> lines = section.split('\n');
+    if (lines.isEmpty || !lines.first.startsWith('## ')) {
+      throw FormatException(
+        'Project card section missing level-2 heading in $sourceAssetPath.',
+      );
+    }
+
+    final String title = lines.first.substring(3).trim();
+    final String contentMarkdown = lines.skip(1).join('\n').trim();
+    if (title.isEmpty || contentMarkdown.isEmpty) {
+      throw FormatException(
+        'Project card section missing title or body in $sourceAssetPath.',
+      );
+    }
+
+    return _ProjectCardData(
+      title: title,
+      contentDocument: ChatMessageMarkup.parse(contentMarkdown),
+    );
+  }
 }
 
 class _SocialSection extends StatelessWidget {
@@ -519,10 +693,7 @@ class _SocialSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          title,
-          style: PageTextStyles.h2(context).copyWith(fontSize: 34),
-        ),
+        Text(title, style: PageTextStyles.h2(context).copyWith(fontSize: 34)),
         const SizedBox(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
           Padding(
@@ -555,7 +726,7 @@ class _SocialRowState extends State<_SocialRow> {
         PageTextStyles.h2(context).color ??
         PageTextStyles.body(context).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
-      PagePalette.bodyFor(brightness);
+        PagePalette.bodyFor(brightness);
     final Color color = _isHovered
         ? headingColor.withValues(alpha: 0.82)
         : headingColor;

@@ -34,6 +34,7 @@ flutter:
     - assets/images/logo.png
     - assets/data/subjects/index.json
     - assets/data/subjects/terese.json
+    - lib/pages/content/project_cards.md
 
   fonts:
     - family: Inter18pt

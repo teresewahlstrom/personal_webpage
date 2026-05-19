@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/composer.dart'
+import 'package:tw_chat/composer.dart'
     show TwComposer, TwComposerSkin;
 import 'package:tw_primitives/text_field.dart'
     show TwReadyTextController, TwReadyTextField;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide GestureRecognizerFactory;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tw_chat/src/config/config.dart';
-import 'package:tw_chat/src/logic/message_markup.dart';
+import 'package:tw_primitives/markdown.dart';
 import 'package:tw_chat/src/widgets/message_bubble_markup_renderer.dart';
 
 void main() {
@@ -33,21 +33,19 @@ void main() {
       ),
     );
 
-    final beforeRect = tester.getRect(
-      find.byWidgetPredicate(
-        (widget) => widget is RichText && widget.text.toPlainText() == 'Before',
-      ),
+    final beforeFinder = find.byWidgetPredicate(
+      (widget) => widget is RichText && widget.text.toPlainText() == 'Before',
     );
-    final ruleRect = tester.getRect(
-      find.byWidgetPredicate(
-        (widget) => widget is RichText && widget.text.toPlainText() == '---',
-      ),
+    final ruleFinder = find.byWidgetPredicate(
+      (widget) => widget is RichText && widget.text.toPlainText() == '---',
     );
-    final afterRect = tester.getRect(
-      find.byWidgetPredicate(
-        (widget) => widget is RichText && widget.text.toPlainText() == 'After',
-      ),
+    final afterFinder = find.byWidgetPredicate(
+      (widget) => widget is RichText && widget.text.toPlainText() == 'After',
     );
+
+    final beforeRect = tester.getRect(beforeFinder.first);
+    final ruleRect = tester.getRect(ruleFinder.first);
+    final afterRect = tester.getRect(afterFinder.first);
 
     final expectedSpacing =
         (style.fontSize ?? 12.0) * ChatSkin.tokens.markupBlockBaseSpacingFactor;

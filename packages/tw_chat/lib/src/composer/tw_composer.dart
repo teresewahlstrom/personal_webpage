@@ -64,7 +64,7 @@ class TwComposer extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
+        children: <Widget>[
           Expanded(
             child: CustomPaint(
               foregroundPainter: TwComposerCornerAccentPainter(
@@ -140,19 +140,19 @@ class TwComposerCornerAccentPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final paint = Paint()
+    final Rect rect = Offset.zero & size;
+    final Paint paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.square;
 
-    final left = rect.left;
-    final right = rect.right;
-    final top = rect.top;
-    final bottom = rect.bottom;
+    final double left = rect.left;
+    final double right = rect.right;
+    final double top = rect.top;
+    final double bottom = rect.bottom;
 
-    final path = Path()
+    final Path path = Path()
       ..moveTo(left + radius, top)
       ..lineTo(left + radius + segmentLength, top)
       ..moveTo(left, top + radius)

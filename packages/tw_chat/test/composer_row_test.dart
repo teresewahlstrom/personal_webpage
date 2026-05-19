@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tw_chat/composer.dart';
 import 'package:tw_chat/src/config/skin.dart';
 import 'package:tw_chat/src/widgets/composer_row.dart';
-import 'package:tw_primitives/composer.dart';
 import 'package:tw_primitives/text_field.dart';
 
 void main() {
-  testWidgets('composer row is built from the reusable tw_primitives composer', (
+  testWidgets('composer row is built from the reusable tw_chat composer', (
     tester,
   ) async {
     final controller = TwReadyTextController();
