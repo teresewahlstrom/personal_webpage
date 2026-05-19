@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "check:colors": "bash ./scripts/check-color-centralization.sh",
+    "check:colors": "node ./scripts/check-color-centralization.cjs",
     "deploy": "npm run check:colors && bash cloudflare-pages-build.sh",
     "build": "npm run check:colors && bash cloudflare-pages-build.sh"
   }

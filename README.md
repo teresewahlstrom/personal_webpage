@@ -47,7 +47,7 @@ In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vs
 The Cloudflare Pages build script uses:
 
 - `flutter build web --release --pwa-strategy=none --no-tree-shake-icons` to disable Flutter PWA worker generation and keep full Material icon coverage.
-- A cross-platform precheck wrapper (`scripts/check-color-centralization.sh`) so CI/CD environments without PowerShell do not fail before deploy.
+- A cross-platform precheck wrapper (`scripts/check-color-centralization.cjs`) so local Windows hooks can run the PowerShell audit while CI/CD environments without PowerShell do not fail before deploy.
 - Build metadata defines (`APP_BUILD_SHA`, `APP_BUILD_TIME_UTC`, `APP_BUILD_ID`) and writes `version.json` in the deployed artifact.
 - Strict no-store headers for entry files (`no-cache, no-store, must-revalidate`) including `index.html`, `flutter_bootstrap.js`, `main.dart.js`, and `version.json`.
 - Long-lived immutable cache for static assets (`/assets/*`, `/canvaskit/*`).
