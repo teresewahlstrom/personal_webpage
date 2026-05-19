@@ -33,16 +33,23 @@ class _PageHeaderState extends State<PageHeader> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
+    final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
+    final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
+      ShellUiConfig.headerPadding.left + safeInsets.left,
+      ShellUiConfig.headerPadding.top + safeInsets.top,
+      ShellUiConfig.headerPadding.right + safeInsets.right,
+      ShellUiConfig.headerPadding.bottom,
+    );
     return SizedBox(
       width: double.infinity,
-      height: ShellUiConfig.headerMinHeight,
+      height: ShellUiConfig.headerMinHeight + safeInsets.top,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: ShellUiConfig.headerBackgroundFor(brightness),
           border: Border(bottom: headerLine.borderSide),
         ),
         child: Padding(
-          padding: ShellUiConfig.headerPadding,
+          padding: contentPadding,
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
@@ -50,29 +57,12 @@ class _PageHeaderState extends State<PageHeader> {
               ),
               child: Row(
                 children: <Widget>[
-                  RepaintBoundary(
-                    child: SizedBox(
-                      width: ShellUiConfig.headerLogoWidth,
-                      height: ShellUiConfig.headerLogoHeight,
-                      child: Image(
-                        image: _logoImage,
-                        fit: BoxFit.contain,
-                        gaplessPlayback: true,
-                        isAntiAlias: true,
-                        filterQuality: FilterQuality.high,
-                        frameBuilder:
-                            (
-                              BuildContext context,
-                              Widget child,
-                              int? frame,
-                              bool wasSynchronouslyLoaded,
-                            ) {
-                              if (wasSynchronouslyLoaded || frame != null) {
-                                return child;
-                              }
-                              return const SizedBox.shrink();
-                            },
-                      ),
+                  SizedBox(
+                    width: ShellUiConfig.headerLogoWidth,
+                    height: ShellUiConfig.headerLogoHeight,
+                    child: Image(
+                      image: _logoImage,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const Spacer(),
