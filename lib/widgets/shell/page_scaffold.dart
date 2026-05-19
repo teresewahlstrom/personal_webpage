@@ -49,6 +49,12 @@ class PageScaffold extends StatefulWidget {
   /// Initial skin mode used by the twin chat widget.
   final ChatSkinMode initialChatSkinMode;
 
+  static void clearPageSelection(BuildContext context) {
+    final _PageScaffoldState? state =
+        context.findAncestorStateOfType<_PageScaffoldState>();
+    state?._clearPageSelection();
+  }
+
   @override
   State<PageScaffold> createState() => _PageScaffoldState();
 }
@@ -66,6 +72,9 @@ class _PageScaffoldState extends State<PageScaffold> {
     super.initState();
   }
 
+  void _clearPageSelection() {
+    _pageSelectionAreaKey.currentState?.clearSelection();
+  }
 
   @override
   void dispose() {
@@ -145,8 +154,7 @@ class _PageScaffoldState extends State<PageScaffold> {
                                       child: ArrowKeyScrollWrapper(
                                         controller: _pageScrollController,
                                         onTap: () {
-                                          _pageSelectionAreaKey.currentState
-                                              ?.clearSelection();
+                                          _clearPageSelection();
                                         },
                                         child: Column(
                                           mainAxisAlignment: footer != null

@@ -1,4 +1,5 @@
-﻿import 'package:flutter/gestures.dart' show TapGestureRecognizer;
+import 'package:flutter/gestures.dart'
+    show TapGestureRecognizer, kPrimaryButton, kTouchSlop;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +11,7 @@ import '../config/app_ui_config.dart';
 import '../modals/newsletter/newsletter_modal.dart';
 import '../services/subject_keywords_registry.dart';
 import '../widgets/app_modal.dart';
+import '../widgets/shell/page_scaffold.dart';
 
 class LandingPage extends StatefulWidget {
   /// The subject to display (defaults to Terese)
@@ -394,6 +396,9 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   late AnimationController _animationController;
   late Animation<double> _heightAnimation;
   bool _isHovered = false;
+  int? _headerPointer;
+  Offset? _headerPointerDownPosition;
+  bool _headerTapEligible = false;
 
   @override
   void initState() {
@@ -429,6 +434,47 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     super.dispose();
   }
 
+  void _clearHeaderPointerTracking() {
+    _headerPointer = null;
+    _headerPointerDownPosition = null;
+    _headerTapEligible = false;
+  }
+
+  void _handleCardTap() {
+    PageScaffold.clearPageSelection(context);
+    widget.onTap();
+  }
+
+  void _handleHeaderPointerDown(PointerDownEvent event) {
+    if (event.buttons != kPrimaryButton) {
+      _clearHeaderPointerTracking();
+      return;
+    }
+    _headerPointer = event.pointer;
+    _headerPointerDownPosition = event.position;
+    _headerTapEligible = true;
+  }
+
+  void _handleHeaderPointerMove(PointerMoveEvent event) {
+    if (!_headerTapEligible ||
+        event.pointer != _headerPointer ||
+        _headerPointerDownPosition == null) {
+      return;
+    }
+    if ((event.position - _headerPointerDownPosition!).distance > kTouchSlop) {
+      _headerTapEligible = false;
+    }
+  }
+
+  void _handleHeaderPointerUp(PointerUpEvent event) {
+    final bool shouldToggle =
+        _headerTapEligible && event.pointer == _headerPointer;
+    _clearHeaderPointerTracking();
+    if (shouldToggle) {
+      _handleCardTap();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
@@ -440,77 +486,86 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     final Color iconColor = _isHovered
         ? ShellUiConfig.linkTextHoverFor(brightness)
         : baseIconColor;
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: cardFill,
-            border: widget.gridLineStyle.borderAll,
-            borderRadius: BorderRadius.zero,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          widget.title,
-                          style: PageTextStyles.body(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w700),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cardFill,
+          border: widget.gridLineStyle.borderAll,
+          borderRadius: BorderRadius.zero,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Listener(
+                  behavior: HitTestBehavior.opaque,
+                  onPointerDown: _handleHeaderPointerDown,
+                  onPointerMove: _handleHeaderPointerMove,
+                  onPointerUp: _handleHeaderPointerUp,
+                  onPointerCancel: (_) => _clearHeaderPointerTracking(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            widget.title,
+                            style: PageTextStyles.body(
+                              context,
+                            ).copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                      RotationTransition(
-                        turns: Tween<double>(
-                          begin: 0,
-                          end: 0.5,
-                        ).animate(_heightAnimation),
-                        child: Icon(Icons.expand_more, color: iconColor),
-                      ),
-                    ],
+                        RotationTransition(
+                          turns: Tween<double>(
+                            begin: 0,
+                            end: 0.5,
+                          ).animate(_heightAnimation),
+                          child: Icon(Icons.expand_more, color: iconColor),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizeTransition(
-                  sizeFactor: _heightAnimation,
-                  child: AnimatedBuilder(
-                    animation: _heightAnimation,
-                    builder: (BuildContext context, Widget? child) {
-                      if (_heightAnimation.status ==
-                          AnimationStatus.dismissed) {
-                        return SelectionContainer.disabled(child: child!);
-                      }
-                      return child!;
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: ShellUiConfig.pageBackgroundFor(brightness),
-                          border: widget.gridLineStyle.borderAll,
-                          borderRadius: BorderRadius.zero,
+              ),
+              SizeTransition(
+                sizeFactor: _heightAnimation,
+                child: AnimatedBuilder(
+                  animation: _heightAnimation,
+                  builder: (BuildContext context, Widget? child) {
+                    if (_heightAnimation.status ==
+                        AnimationStatus.dismissed) {
+                      return SelectionContainer.disabled(child: child!);
+                    }
+                    return child!;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: ShellUiConfig.pageBackgroundFor(brightness),
+                        border: widget.gridLineStyle.borderAll,
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 12,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: _ProjectCardMarkdownBody(
-                            document: widget.contentDocument,
-                          ),
+                        child: _ProjectCardMarkdownBody(
+                          document: widget.contentDocument,
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -581,12 +636,15 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
   }
 
   ChatMarkupTheme _buildTheme(BuildContext context) {
-    final TextStyle baseStyle = PageTextStyles.body(context);
+    final TextStyle pageBodyStyle = PageTextStyles.body(context);
+    final TextStyle baseStyle = pageBodyStyle.copyWith(
+      fontSize: (pageBodyStyle.fontSize ?? 17.3) - 2,
+    );
     final Brightness brightness = Theme.of(context).brightness;
     final Color linkColor = ShellUiConfig.linkTextFor(brightness);
-    final TextStyle headingBase = PageTextStyles.body(
-      context,
-    ).copyWith(fontWeight: FontWeight.w700);
+    final TextStyle headingBase = baseStyle.copyWith(
+      fontWeight: FontWeight.w700,
+    );
 
     return ChatMarkupTheme(
       baseStyle: baseStyle,
