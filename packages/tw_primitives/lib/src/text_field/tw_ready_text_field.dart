@@ -72,6 +72,7 @@ class TwReadyTextField extends StatefulWidget {
     this.hintText,
     this.hintTextStyle,
     this.controlsColor,
+    this.handleOutlineColor,
     this.caretColor,
     this.caretWidth,
     this.handlesRadius,
@@ -110,6 +111,7 @@ class TwReadyTextField extends StatefulWidget {
   final String? hintText;
   final TextStyle? hintTextStyle;
   final Color? controlsColor;
+  final Color? handleOutlineColor;
   final Color? caretColor;
   final double? caretWidth;
   final double? handlesRadius;
@@ -209,6 +211,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
       hintBehavior: hintBehavior,
       hintBuilder: resolvedHintBuilder,
       controlsColor: widget.controlsColor,
+      handleOutlineColor: widget.handleOutlineColor,
       caretStyle: resolvedCaretStyle,
       handlesRadius: widget.handlesRadius,
       selectionColor: widget.selectionColor,

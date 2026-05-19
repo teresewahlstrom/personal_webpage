@@ -16,6 +16,7 @@ import 'package:tw_primitives/src/text_field/infrastructure/touch_controls.dart'
 ///  * Downstream: The pointy corner points to the upper left (marking the end of a selection).
 class AndroidSelectionHandle extends StatelessWidget {
   static const defaultTouchRegionExpansion = EdgeInsets.only(left: 16, right: 16, bottom: 16);
+  static const double defaultOutlineWidth = 0.5;
 
   /// The default radius for Android selection handles (10 logical pixels).
   static const double defaultRadius = 10.0;
@@ -24,6 +25,7 @@ class AndroidSelectionHandle extends StatelessWidget {
     super.key,
     required this.handleType,
     required this.color,
+    this.outlineColor,
     this.radius = 10,
     this.touchRegionExpansion = defaultTouchRegionExpansion,
     this.showDebugTouchRegion = false,
@@ -34,6 +36,9 @@ class AndroidSelectionHandle extends StatelessWidget {
 
   /// The color of the handle.
   final Color color;
+
+  /// The color of the outline around the handle.
+  final Color? outlineColor;
 
   /// The radius of the handle - each handle is essentially a circle with one pointy
   /// corner.
@@ -81,6 +86,7 @@ class AndroidSelectionHandle extends StatelessWidget {
         height: radius * 2,
         decoration: BoxDecoration(
           color: color,
+          border: _outlineBorder,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(radius),
             bottomLeft: Radius.circular(radius),
@@ -97,6 +103,7 @@ class AndroidSelectionHandle extends StatelessWidget {
       height: radius * 2,
       decoration: BoxDecoration(
         color: color,
+        border: _outlineBorder,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(radius),
           bottomLeft: Radius.circular(radius),
@@ -112,6 +119,7 @@ class AndroidSelectionHandle extends StatelessWidget {
       height: radius * 2,
       decoration: BoxDecoration(
         color: color,
+        border: _outlineBorder,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(radius),
           bottomLeft: Radius.circular(radius),
@@ -120,5 +128,11 @@ class AndroidSelectionHandle extends StatelessWidget {
       ),
     );
   }
-}
 
+  Border? get _outlineBorder => outlineColor == null
+      ? null
+      : Border.all(
+          color: outlineColor!,
+          width: defaultOutlineWidth,
+        );
+}

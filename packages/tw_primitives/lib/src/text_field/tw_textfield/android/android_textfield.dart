@@ -47,6 +47,7 @@ class TwAndroidTextField extends StatefulWidget {
     this.blinkTimingMode = BlinkTimingMode.ticker,
     required this.selectionColor,
     required this.handlesColor,
+    this.handleOutlineColor,
     this.handlesRadius = AndroidSelectionHandle.defaultRadius,
     this.imeConfiguration,
     this.showComposingUnderline = true,
@@ -101,6 +102,9 @@ class TwAndroidTextField extends StatefulWidget {
 
   /// Color of the selection handles.
   final Color handlesColor;
+
+  /// Color of the outline around the selection handles.
+  final Color? handleOutlineColor;
 
   /// The radius of the selection handles in logical pixels.
   ///
@@ -785,6 +789,7 @@ class TwAndroidTextFieldState extends State<TwAndroidTextField>
           textContentKey: _textContentKey,
           tapRegionGroupId: widget.tapRegionGroupId,
           handleColor: widget.handlesColor,
+          handleOutlineColor: widget.handleOutlineColor,
           handleRadius: widget.handlesRadius,
           popoverToolbarBuilder: widget.popoverToolbarBuilder,
           showDebugPaint: widget.showDebugPaint,
