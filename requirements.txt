@@ -1,7 +1,7 @@
-uvicorn==0.44.0
-fastapi==0.136.0
+uvicorn==0.47.0
+fastapi==0.136.1
 python-dotenv==1.2.2
-pydantic==2.13.3
-openai==1.68.2
-numpy==2.3.3
+pydantic==2.13.4
+openai==2.37.0
+numpy==2.4.6
 rank-bm25==0.2.2
