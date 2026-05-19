@@ -71,6 +71,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final layout = _RenderedTextLayout(
       lineCount: lines.length,
       lineHeight: painter.preferredLineHeight,
+      contentWidth: painter.width,
     );
     painter.dispose();
 
@@ -138,6 +139,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final isTruncatable =
         measuredLayout.lineCount > ChatBubbleRules.collapsibleLineThreshold;
     final isCollapsed = isTruncatable && widget.isTruncated;
+    final maxUserBubbleWidth = (bubbleMaxWidth - horizontalInset).clamp(
+      bubbleMinWidth,
+      bubbleMaxWidth,
+    );
+    final userBubbleWidth =
+        (measuredLayout.contentWidth + textMeasureHorizontalInset).clamp(
+          bubbleMinWidth,
+          maxUserBubbleWidth,
+        );
     final truncatedContentHeight =
         measuredLayout.lineHeight * ChatBubbleRules.collapsedVisibleLines;
     final bubbleTopMargin = widget.isFirstMessage
@@ -205,59 +215,60 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 child: Stack(
                   children: [
                     SizedBox(
-                      width: widget.isUser ? null : contentMaxWidth,
+                      width: contentMaxWidth,
                       child: Stack(
                         children: [
                           if (widget.isUser)
-                            IntrinsicWidth(
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minWidth: bubbleMinWidth,
-                                  maxWidth: bubbleMaxWidth,
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: EdgeInsets.fromLTRB(
-                                        horizontalInset,
-                                        verticalInset,
-                                        horizontalInset,
-                                        isCollapsed ? 0.0 : verticalInset,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: bubbleColor,
-                                        borderRadius: BorderRadius.circular(
-                                          tokens.bubbleRadius,
+                            Padding(
+                              padding: EdgeInsets.only(right: horizontalInset),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: SizedBox(
+                                  width: userBubbleWidth,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.fromLTRB(
+                                          horizontalInset,
+                                          verticalInset,
+                                          horizontalInset,
+                                          isCollapsed ? 0.0 : verticalInset,
                                         ),
-                                        border: showFooter || isCollapsed
-                                            ? Border(
-                                                top: bubbleBorderSide,
-                                                left: bubbleBorderSide,
-                                                right: bubbleBorderSide,
-                                              )
-                                            : Border.fromBorderSide(
-                                                bubbleBorderSide,
-                                              ),
-                                        boxShadow: [
-                                          tokens.surfaceShadow(colors),
-                                        ],
+                                        decoration: BoxDecoration(
+                                          color: bubbleColor,
+                                          borderRadius: BorderRadius.circular(
+                                            tokens.bubbleRadius,
+                                          ),
+                                          border: showFooter || isCollapsed
+                                              ? Border(
+                                                  top: bubbleBorderSide,
+                                                  left: bubbleBorderSide,
+                                                  right: bubbleBorderSide,
+                                                )
+                                              : Border.fromBorderSide(
+                                                  bubbleBorderSide,
+                                                ),
+                                          boxShadow: [
+                                            tokens.surfaceShadow(colors),
+                                          ],
+                                        ),
+                                        child: _buildBubbleText(
+                                          parsedMarkup,
+                                          style: bubbleTextStyle,
+                                          bubbleColor: bubbleColor,
+                                          isUserBubble: true,
+                                          truncatedContentHeight:
+                                              truncatedContentHeight,
+                                          isTruncated: isCollapsed,
+                                        ),
                                       ),
-                                      child: _buildBubbleText(
-                                        parsedMarkup,
-                                        style: bubbleTextStyle,
-                                        bubbleColor: bubbleColor,
-                                        isUserBubble: true,
-                                        truncatedContentHeight:
-                                            truncatedContentHeight,
-                                        isTruncated: isCollapsed,
-                                      ),
-                                    ),
-                                    if (showFooter) buildFooter(),
-                                  ],
+                                      if (showFooter) buildFooter(),
+                                    ],
+                                  ),
                                 ),
                               ),
                             )
@@ -419,10 +430,12 @@ class _RenderedTextLayout {
   const _RenderedTextLayout({
     required this.lineCount,
     required this.lineHeight,
+    required this.contentWidth,
   });
 
   final int lineCount;
   final double lineHeight;
+  final double contentWidth;
 }
 
 class _MeasurementKey {
