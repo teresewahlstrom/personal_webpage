@@ -78,20 +78,20 @@ class ThemeToggleControlButton extends StatelessWidget {
     final Brightness brightness = Theme.of(context).brightness;
     final FloatingControlVisualStyle visualStyle =
         floatingControlVisualStyleFor(brightness);
-    final IconData icon = widget.isDarkMode
+    final IconData icon = isDarkMode
         ? Icons.light_mode
         : Icons.dark_mode;
-    final String tooltip = widget.isDarkMode
+    final String tooltip = isDarkMode
         ? 'Switch app to light'
         : 'Switch app to dark';
-    final double buttonSize = widget.size ?? ShellUiConfig.headerToggleSize;
+    final double buttonSize = size ?? ShellUiConfig.headerToggleSize;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Tooltip(
         message: tooltip,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: onTap,
           child: AnimatedContainer(
             duration: FloatingControlTokens.animationDuration,
             width: buttonSize,
@@ -105,7 +105,7 @@ class ThemeToggleControlButton extends StatelessWidget {
             child: Icon(
               icon,
               color: visualStyle.iconColor,
-              size: widget.iconSize,
+              size: iconSize,
             ),
           ),
         ),
