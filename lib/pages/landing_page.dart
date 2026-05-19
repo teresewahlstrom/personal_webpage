@@ -545,7 +545,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return child!;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 0),
+                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: ShellUiConfig.pageBackgroundFor(brightness),

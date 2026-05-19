@@ -791,11 +791,14 @@ class _BubbleFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
+    final double footerLineYOffset = isCollapsed
+        ? 1.0
+        : -tokens.bubbleBorderWidth;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Transform.translate(
-          offset: Offset(0, -tokens.bubbleBorderWidth),
+          offset: Offset(0, footerLineYOffset),
           child: SizedBox(
             height: tokens.bubbleBorderWidth,
             width: double.infinity,
@@ -1085,11 +1088,28 @@ class _BottomLinePainter extends CustomPainter {
       return;
     }
 
-    double x = 0;
-    while (x < size.width) {
-      final end = (x + _dashWidth).clamp(0.0, size.width);
-      canvas.drawLine(Offset(x, y), Offset(end, y), paint);
-      x += _dashWidth + _gapWidth;
+    final double width = size.width;
+    if (width <= _dashWidth) {
+      canvas.drawLine(Offset(0, y), Offset(width, y), paint);
+      return;
+    }
+
+    final double nominalSegmentWidth = _dashWidth + _gapWidth;
+    final int dashCount = ((width + _gapWidth) / nominalSegmentWidth)
+        .round()
+        .clamp(1, (width / _dashWidth).floor());
+
+    if (dashCount <= 1) {
+      canvas.drawLine(Offset(0, y), Offset(width, y), paint);
+      return;
+    }
+
+    final double totalDashWidth = dashCount * _dashWidth;
+    final double gapWidth = (width - totalDashWidth) / (dashCount - 1);
+    double x = 0.0;
+    for (int index = 0; index < dashCount; index++) {
+      canvas.drawLine(Offset(x, y), Offset(x + _dashWidth, y), paint);
+      x += _dashWidth + gapWidth;
     }
   }
 

@@ -88,7 +88,10 @@ class ChatMarkupInline {
       effectiveStyle = effectiveStyle.merge(theme.emphasisStyle);
     }
     if (isStrikethrough) {
-      effectiveStyle = effectiveStyle.merge(theme.strikethroughStyle);
+      final TextStyle strikeStyle = effectiveStyle.merge(theme.strikethroughStyle);
+      effectiveStyle = strikeStyle.copyWith(
+        decorationThickness: _scaledStrikethroughThickness(strikeStyle),
+      );
     }
     if (isUnderline) {
       effectiveStyle = effectiveStyle.merge(theme.underlineStyle);
@@ -103,6 +106,12 @@ class ChatMarkupInline {
       semanticsLabel: isLink && href != text ? '$text ($href)' : null,
       recognizer: isLink ? gestureRecognizerFactory(href!) : null,
     );
+  }
+
+  double _scaledStrikethroughThickness(TextStyle style) {
+    final double fallbackThickness = (style.fontSize ?? 14.0) / 14.0;
+    final double baseThickness = style.decorationThickness ?? fallbackThickness;
+    return (baseThickness * (2.0 / 3.0)).clamp(0.5, double.infinity);
   }
 }
 
