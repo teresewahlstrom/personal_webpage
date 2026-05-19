@@ -16,12 +16,15 @@ class ChatLauncherStyle {
     this.foregroundColor = const Color(0xFF394183),
     this.hoverForegroundColor = const Color(0xFF843F02),
     this.backgroundColor = Colors.white,
+    this.borderColor,
+    this.hoverBorderColor,
     this.borderWidth = 1,
     this.animationDuration = const Duration(milliseconds: 180),
     this.idleShadowBlurRadius = 8,
     this.hoverShadowBlurRadius = 12,
     this.shadowOffset = const Offset(0, 3),
     this.shadowAlpha = 0.12,
+    this.boxShadow = const <BoxShadow>[],
   });
 
   final double size;
@@ -30,12 +33,15 @@ class ChatLauncherStyle {
   final Color foregroundColor;
   final Color hoverForegroundColor;
   final Color backgroundColor;
+  final Color? borderColor;
+  final Color? hoverBorderColor;
   final double borderWidth;
   final Duration animationDuration;
   final double idleShadowBlurRadius;
   final double hoverShadowBlurRadius;
   final Offset shadowOffset;
   final double shadowAlpha;
+  final List<BoxShadow> boxShadow;
 }
 
 class ChatDock extends StatefulWidget {
@@ -277,6 +283,24 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
     final foregroundColor = _isHovered
         ? launcherStyle.hoverForegroundColor
         : launcherStyle.foregroundColor;
+    final Color borderColor = _isHovered
+        ? launcherStyle.hoverBorderColor ??
+              launcherStyle.borderColor ??
+              foregroundColor
+        : launcherStyle.borderColor ?? foregroundColor;
+    final List<BoxShadow> boxShadow = launcherStyle.boxShadow.isNotEmpty
+        ? launcherStyle.boxShadow
+        : <BoxShadow>[
+            BoxShadow(
+              color: foregroundColor.withValues(
+                alpha: launcherStyle.shadowAlpha,
+              ),
+              blurRadius: _isHovered
+                  ? launcherStyle.hoverShadowBlurRadius
+                  : launcherStyle.idleShadowBlurRadius,
+              offset: launcherStyle.shadowOffset,
+            ),
+          ];
 
     return Material(
       color: colors.transparent,
@@ -303,20 +327,10 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
                   color: launcherStyle.backgroundColor,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: foregroundColor,
+                    color: borderColor,
                     width: launcherStyle.borderWidth,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: foregroundColor.withValues(
-                        alpha: launcherStyle.shadowAlpha,
-                      ),
-                      blurRadius: _isHovered
-                          ? launcherStyle.hoverShadowBlurRadius
-                          : launcherStyle.idleShadowBlurRadius,
-                      offset: launcherStyle.shadowOffset,
-                    ),
-                  ],
+                  boxShadow: boxShadow,
                 ),
                 child: Center(
                   child: Icon(

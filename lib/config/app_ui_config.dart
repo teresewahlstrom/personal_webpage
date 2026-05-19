@@ -59,6 +59,14 @@ final class ShellUiConfig {
     return AppLineTheme.subtleFor(brightness);
   }
 
+  static Color projectCardFillFor(Brightness brightness) {
+    return Color.lerp(
+      pageBackgroundFor(brightness),
+      gridLineFor(brightness).color,
+      AppColorTheme.projectCardFillAlphaFor(brightness),
+    )!;
+  }
+
   static Color headerBackgroundFor(Brightness brightness) {
     return AppColorTheme.headerBackgroundFor(brightness);
   }

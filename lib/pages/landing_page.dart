@@ -315,7 +315,6 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color frameFill = ShellUiConfig.pageBackgroundFor(brightness);
     final AppLineStyle gridLineStyle = ShellUiConfig.gridLineFor(brightness);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,7 +356,6 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                             _expandedStates[index] = !_expandedStates[index];
                           });
                         },
-                        frameFill: frameFill,
                         gridLineStyle: gridLineStyle,
                       ),
                       if (index < projectCards.length - 1)
@@ -378,7 +376,6 @@ class _ExpandableProjectCard extends StatefulWidget {
     required this.contentDocument,
     required this.isExpanded,
     required this.onTap,
-    required this.frameFill,
     required this.gridLineStyle,
   });
 
@@ -386,7 +383,6 @@ class _ExpandableProjectCard extends StatefulWidget {
   final ChatMarkupDocument contentDocument;
   final bool isExpanded;
   final VoidCallback onTap;
-  final Color frameFill;
   final AppLineStyle gridLineStyle;
 
   @override
@@ -436,11 +432,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color cardFill = Color.lerp(
-      widget.frameFill,
-      widget.gridLineStyle.color,
-      AppColorTheme.projectCardFillAlphaFor(brightness),
-    )!;
+    final Color cardFill = ShellUiConfig.projectCardFillFor(brightness);
     final Color baseIconColor =
         PageTextStyles.body(context).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
@@ -498,8 +490,18 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: _ProjectCardMarkdownBody(
-                        document: widget.contentDocument,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: ShellUiConfig.pageBackgroundFor(brightness),
+                          border: widget.gridLineStyle.borderAll,
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: _ProjectCardMarkdownBody(
+                            document: widget.contentDocument,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -589,6 +591,9 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       strikethroughStyle: baseStyle.copyWith(
         decoration: TextDecoration.lineThrough,
+        decorationColor: baseStyle.color,
+        decorationStyle: TextDecorationStyle.solid,
+        decorationThickness: 1.0,
       ),
       underlineStyle: baseStyle.copyWith(decoration: TextDecoration.underline),
       linkStyle: baseStyle.copyWith(
