@@ -1,18 +1,38 @@
 
 ## Knowledge Management
+A recurring pattern across Terese's work is identifying where operational knowledge is fragile where systems depend on expert memory, informal workarounds, or workflows that fail when the key person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
 
-A recurring pattern across Terese's work is identifying where operational knowledge is fragile - where systems depend on expert memory, informal workarounds, or workflows that fail when the key person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
+She has experienced very different types of knowledge environments:
 
-She has experienced very different types of knowledge environments. 
-* Structured and mature -> bismal knowledge
-* Kind -> weaponized knowledge
-* Distilled -> fragmented knowledge
+* Mature vs non-existent knowledge
+* Kind vs weaponized knowledge
+* Distilled vs fragmented knowledge
 
-So when she got the opportunity to from scratch design the training and knowledge management at Markforged, she jumped at it because she had seen the importance of it.
+So when she got the opportunity to redesign the knowledge experience from scratch at Markforged as Head of Training (for the modality metal Binder Jetting), she jumped at it because she had seen how important it was.
 
-* Instead of throwing away defect manufactured goods, she started to gather them, sort them per failure mechanism together with relevant documents and make it accessible. That table of defects became a natural point of discussions across departments at Markforged. Leading to fewer missunderstandings and greater depth of discussions.
+* Instead of throwing away defect-manufactured goods, she started gathering them, sorting them by failure mechanism together with relevant documents, and making them accessible. That defect table became a natural meeting point for discussions across departments at Markforged, leading to fewer misunderstandings and greater depth in technical discussions.
 
-* Instead of service department blindly outsourcing certain types of service emails to people who's core task is not to get to the bottom of things. sending emails to experts outside of the service department, she ... Freeing up time from senior engineers to do high value research instead. making operators more seen. unifying beliefs. 
+* Instead of the service department escalating certain types of service emails to other departments, she acted as the bridge until neither she nor the experts were needed any longer to answer the most common issues, This freed up time especially for senior engineers to focus on higher-value research, while also making operators more visible and helping unify beliefs around the root causes and best practices.
+
+
+
+
+Instead of accepting poor workflows as inevitable, she added structure, visibility, and knowledge to them. She contributed improvements across sales, marketing, operations, service, and customer onboarding.
+
+She also created a safer environment for other teachers and trainers to gradually step into their roles.
+
+These experiences shaped a set of core beliefs:
+
+
+
+
+
+
+
+
+Instead of accepting poor workflows as inevitable, she added structure, visibility, and knowledge to them. She contributed improvements across sales, marketing, operations, service, and customer onboarding.
+
+At her core, she believs....
 
 * Instead of bad workflows, add some structure and knowledge to it. She has done wonders to sales, marketing, as well as operations, service and customer onboarding.
 
