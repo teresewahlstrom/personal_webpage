@@ -30,7 +30,36 @@ class FloatingControlInset {
   }
 }
 
-class ThemeToggleControlButton extends StatefulWidget {
+final class FloatingControlVisualStyle {
+  const FloatingControlVisualStyle({
+    required this.fillColor,
+    required this.outlineStyle,
+    required this.iconColor,
+    required this.glow,
+  });
+
+  final Color fillColor;
+  final AppLineStyle outlineStyle;
+  final Color iconColor;
+  final BoxShadow glow;
+}
+
+FloatingControlVisualStyle floatingControlVisualStyleFor(
+  Brightness brightness,
+) {
+  final ChatSkinMode skinMode = brightness == Brightness.dark
+      ? ChatSkinMode.dark
+      : ChatSkinMode.light;
+  final skin = ChatSkin.dataForMode(skinMode);
+  return FloatingControlVisualStyle(
+    fillColor: ShellUiConfig.projectCardFillFor(brightness),
+    outlineStyle: ShellUiConfig.gridLineFor(brightness),
+    iconColor: PagePalette.bodyFor(brightness),
+    glow: skin.tokens.shellShadow(skin.colors),
+  );
+}
+
+class ThemeToggleControlButton extends StatelessWidget {
   const ThemeToggleControlButton({
     super.key,
     required this.isDarkMode,
@@ -45,57 +74,39 @@ class ThemeToggleControlButton extends StatefulWidget {
   final double iconSize;
 
   @override
-  State<ThemeToggleControlButton> createState() =>
-      _ThemeToggleControlButtonState();
-}
-
-class _ThemeToggleControlButtonState extends State<ThemeToggleControlButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color foregroundColor = _isHovered
-        ? ShellUiConfig.headerToggleHoverFor(brightness)
-        : ShellUiConfig.headerToggleFor(brightness);
-    final AppLineStyle outlineStyle = AppLineTheme.interactiveFor(
-      brightness,
-      hovered: _isHovered,
-    );
-    final IconData icon = widget.isDarkMode ? Icons.light_mode : Icons.dark_mode;
-    final String tooltip = widget.isDarkMode
+    final FloatingControlVisualStyle visualStyle =
+        floatingControlVisualStyleFor(brightness);
+    final IconData icon = isDarkMode
+        ? Icons.light_mode
+        : Icons.dark_mode;
+    final String tooltip = isDarkMode
         ? 'Switch app to light'
         : 'Switch app to dark';
-    final double buttonSize = widget.size ?? ShellUiConfig.headerToggleSize;
+    final double buttonSize = size ?? ShellUiConfig.headerToggleSize;
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
       child: Tooltip(
         message: tooltip,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: onTap,
           child: AnimatedContainer(
             duration: FloatingControlTokens.animationDuration,
             width: buttonSize,
             height: buttonSize,
             decoration: BoxDecoration(
-              color: ShellUiConfig.buttonBackgroundFor(brightness),
+              color: visualStyle.fillColor,
               shape: BoxShape.circle,
-              border: outlineStyle.borderAll,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: foregroundColor.withValues(
-                    alpha: FloatingControlTokens.shadowAlpha,
-                  ),
-                  blurRadius: _isHovered
-                      ? FloatingControlTokens.hoverShadowBlurRadius
-                      : FloatingControlTokens.idleShadowBlurRadius,
-                  offset: FloatingControlTokens.shadowOffset,
-                ),
-              ],
+              border: visualStyle.outlineStyle.borderAll,
+              boxShadow: <BoxShadow>[visualStyle.glow],
             ),
-            child: Icon(icon, color: foregroundColor, size: widget.iconSize),
+            child: Icon(
+              icon,
+              color: visualStyle.iconColor,
+              size: iconSize,
+            ),
           ),
         ),
       ),
@@ -104,18 +115,23 @@ class _ThemeToggleControlButtonState extends State<ThemeToggleControlButton> {
 }
 
 ChatLauncherStyle buildChatLauncherStyle(Brightness brightness) {
+  final FloatingControlVisualStyle visualStyle =
+      floatingControlVisualStyleFor(brightness);
   return ChatLauncherStyle(
     size: ShellUiConfig.headerToggleSize * 1.5,
     iconSize: 30,
     icon: Icons.chat,
-    foregroundColor: ShellUiConfig.headerToggleFor(brightness),
-    hoverForegroundColor: ShellUiConfig.headerToggleHoverFor(brightness),
-    backgroundColor: ShellUiConfig.buttonBackgroundFor(brightness),
-    borderWidth: 1,
+    foregroundColor: visualStyle.iconColor,
+    hoverForegroundColor: visualStyle.iconColor,
+    backgroundColor: visualStyle.fillColor,
+    borderColor: visualStyle.outlineStyle.color,
+    hoverBorderColor: visualStyle.outlineStyle.color,
+    borderWidth: visualStyle.outlineStyle.width,
     animationDuration: FloatingControlTokens.animationDuration,
     idleShadowBlurRadius: FloatingControlTokens.idleShadowBlurRadius,
     hoverShadowBlurRadius: FloatingControlTokens.hoverShadowBlurRadius,
     shadowOffset: FloatingControlTokens.shadowOffset,
     shadowAlpha: FloatingControlTokens.shadowAlpha,
+    boxShadow: <BoxShadow>[visualStyle.glow],
   );
 }
