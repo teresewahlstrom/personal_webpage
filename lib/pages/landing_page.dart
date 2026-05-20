@@ -291,7 +291,7 @@ class _ProjectsSection extends StatefulWidget {
 }
 
 class _ProjectsSectionState extends State<_ProjectsSection> {
-  static const String _title = "Work Highlights";
+  static const String _title = "Professional Story";
   static const String _projectCardsAssetPath =
       'lib/pages/content/project_cards.md';
 
