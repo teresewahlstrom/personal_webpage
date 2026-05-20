@@ -793,7 +793,7 @@ class _BubbleFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final double footerLineYOffset = isCollapsed
-        ? tokens.bubbleBorderWidth * 1.4 // Nudge down do that the dashed line does not appear to coincide with bubble shadow when truncated
+        ? tokens.bubbleBorderWidth * 1.1 // Nudge down do that the dashed line does not appear to coincide with bubble shadow when truncated
         : -tokens.bubbleBorderWidth;
     return Column(
       mainAxisSize: MainAxisSize.min,
