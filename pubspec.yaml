@@ -32,6 +32,7 @@ flutter:
 
   assets:
     - assets/images/logo.png
+    - assets/images/arrow.svg
     - assets/data/subjects/index.json
     - assets/data/subjects/terese.json
     - lib/pages/content/project_cards.md

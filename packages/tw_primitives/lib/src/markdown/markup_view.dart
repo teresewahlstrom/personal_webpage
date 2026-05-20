@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide GestureRecognizerFactory;
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'message_markup_model.dart';
 
@@ -22,6 +23,8 @@ class ChatMarkupViewStyle {
     this.blockquoteIndentFactor = 0.4,
     this.blockquoteCapLength = 12.0,
     this.blockquoteRailInset = 5.0,
+    this.unorderedListMarkerAssetPath = 'assets/images/arrow.svg',
+    this.unorderedListMarkerSizeFactor = 0.7,
   });
 
   final double blockquoteRailWidth;
@@ -42,6 +45,8 @@ class ChatMarkupViewStyle {
   final double blockquoteIndentFactor;
   final double blockquoteCapLength;
   final double blockquoteRailInset;
+  final String? unorderedListMarkerAssetPath;
+  final double unorderedListMarkerSizeFactor;
 
   double headingBottomSpacingFactorForLevel(int level) {
     return _factorByLevel(headingBottomSpacingFactors, level);
@@ -223,8 +228,13 @@ class ChatMarkupView extends StatelessWidget {
         final String marker = block.ordered
             ? '${block.startingIndex + itemIndex}. '
             : '• ';
+        final bool useAssetMarker =
+          !block.ordered &&
+          chromeVisible &&
+          style.unorderedListMarkerAssetPath != null;
         final List<ChatMarkupBlock> itemBlocks = item.blocks;
         final bool canUseBaseline =
+          !useAssetMarker &&
             itemBlocks.length == 1 &&
             (itemBlocks.first is ChatMarkupParagraphBlock ||
                 itemBlocks.first is ChatMarkupHeadingBlock);
@@ -244,12 +254,14 @@ class ChatMarkupView extends StatelessWidget {
                     alignment: block.ordered
                         ? const Alignment(0.78, 0.0)
                         : const Alignment(0.45, 0.0),
-                    child: _buildSelectableRichText(
-                      context,
-                      TextSpan(text: marker, style: theme.baseStyle),
-                      softWrap: false,
-                      selectable: selectable,
-                    ),
+                    child: useAssetMarker
+                        ? _buildUnorderedListAssetMarker(theme.baseStyle)
+                        : _buildSelectableRichText(
+                            context,
+                            TextSpan(text: marker, style: theme.baseStyle),
+                            softWrap: false,
+                            selectable: selectable,
+                          ),
                   ),
                 ),
                 SizedBox(width: _listMarkerGap(theme.baseStyle)),
@@ -408,6 +420,22 @@ class ChatMarkupView extends StatelessWidget {
   }) {
     final double? resolvedFontSize = theme.headingStyleResolver(level).fontSize;
     return resolvedFontSize ?? fallbackFontSize;
+  }
+
+  Widget _buildUnorderedListAssetMarker(TextStyle baseStyle) {
+    final double fontSize = baseStyle.fontSize ?? 12.0;
+    final double markerSize = fontSize * style.unorderedListMarkerSizeFactor;
+    final Color? markerColor = baseStyle.color;
+
+    return SvgPicture.asset(
+      style.unorderedListMarkerAssetPath!,
+      width: markerSize,
+      height: markerSize,
+      fit: BoxFit.contain,
+      colorFilter: markerColor == null
+          ? null
+          : ColorFilter.mode(markerColor, BlendMode.srcIn),
+    );
   }
 }
 
