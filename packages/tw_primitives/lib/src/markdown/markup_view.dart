@@ -23,8 +23,9 @@ class ChatMarkupViewStyle {
     this.blockquoteIndentFactor = 0.4,
     this.blockquoteCapLength = 12.0,
     this.blockquoteRailInset = 5.0,
-    this.unorderedListMarkerAssetPath = 'assets/images/arrow.svg',
-    this.unorderedListMarkerSizeFactor = 0.7,
+    this.unorderedListMarkerAssetPath = 'assets/images/arrow2.svg',
+    this.unorderedListMarkerAssetPackage = 'tw_primitives',
+    this.unorderedListMarkerSizeFactor = 1.05,
   });
 
   final double blockquoteRailWidth;
@@ -46,6 +47,7 @@ class ChatMarkupViewStyle {
   final double blockquoteCapLength;
   final double blockquoteRailInset;
   final String? unorderedListMarkerAssetPath;
+  final String? unorderedListMarkerAssetPackage;
   final double unorderedListMarkerSizeFactor;
 
   double headingBottomSpacingFactorForLevel(int level) {
@@ -429,6 +431,7 @@ class ChatMarkupView extends StatelessWidget {
 
     return SvgPicture.asset(
       style.unorderedListMarkerAssetPath!,
+      package: style.unorderedListMarkerAssetPackage,
       width: markerSize,
       height: markerSize,
       fit: BoxFit.contain,
