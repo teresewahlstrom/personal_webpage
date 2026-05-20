@@ -1,1 +1,1 @@
-export 'src/composer/tw_composer.dart';
+export 'src/composer/chat_composer.dart';

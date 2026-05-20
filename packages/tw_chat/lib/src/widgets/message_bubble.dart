@@ -10,7 +10,7 @@ class ChatMessageBubble extends StatefulWidget {
     super.key,
     required this.text,
     required this.selectionListenerNotifier,
-    required this.isUser,
+    required this.isUserBubble,
     required this.isTypingIndicator,
     required this.isTruncated,
     required this.isFirstMessage,
@@ -21,7 +21,7 @@ class ChatMessageBubble extends StatefulWidget {
 
   final String text;
   final SelectionListenerNotifier selectionListenerNotifier;
-  final bool isUser;
+  final bool isUserBubble;
   final bool isTypingIndicator;
   final bool isTruncated;
   final bool isFirstMessage;
@@ -119,16 +119,16 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final bubbleMaxWidth =
         (widget.availableWidth * ChatBubbleRules.maxWidthFactor +
                 tokens.bubbleWidthCompensation)
-            .clamp(tokens.bubbleMinMaxWidth, widget.availableWidth);
+        .clamp(tokens.bubbleMinWidthClamp, widget.availableWidth);
     final bubbleMinWidth =
         (widget.availableWidth * ChatBubbleRules.minWidthFactor).clamp(
           0.0,
           bubbleMaxWidth,
         );
-    final contentMaxWidth = widget.isUser
+    final contentMaxWidth = widget.isUserBubble
         ? bubbleMaxWidth
         : widget.availableWidth;
-    final textMeasureHorizontalInset = widget.isUser
+    final textMeasureHorizontalInset = widget.isUserBubble
         ? horizontalInset * 2
         : tokens.composerTextInsetLeft + horizontalInset;
     final textScaler = MediaQuery.textScalerOf(context);
@@ -176,11 +176,13 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             color: ChatBubbleRules.collapseButtonColor(context),
             width: 0.5,
           );
-    final align = widget.isUser ? Alignment.centerRight : Alignment.centerLeft;
-    final bubbleColor = widget.isUser
+    final align = widget.isUserBubble
+      ? Alignment.centerRight
+      : Alignment.centerLeft;
+    final bubbleColor = widget.isUserBubble
         ? ChatBubbleRules.userFill(context)
         : ChatBubbleRules.botFill(context);
-    final borderColor = widget.isUser
+    final borderColor = widget.isUserBubble
         ? ChatBubbleRules.userBorder(context)
         : ChatBubbleRules.botBorder(context);
     final bubbleBorderSide = BorderSide(
@@ -217,10 +219,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 child: Stack(
                   children: [
                     SizedBox(
-                      width: widget.isUser ? null : contentMaxWidth,
+                      width: widget.isUserBubble ? null : contentMaxWidth,
                       child: Stack(
                         children: [
-                          if (widget.isUser)
+                          if (widget.isUserBubble)
                             IntrinsicWidth(
                               child: ConstrainedBox(
                                 constraints: BoxConstraints(
@@ -373,31 +375,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 
   ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
-    final skin = ChatSkin.dataOf(context);
-    final colors = skin.colors;
-    final tokens = skin.tokens;
-    final textStyles = skin.textStyles;
-    final TextStyle linkStyle = baseStyle.copyWith(
-      color: colors.markupLink,
-      decoration: TextDecoration.underline,
-      decorationColor: colors.markupLinkDecoration,
-      decorationThickness: textStyles.markdownDecorationThickness(tokens),
-    );
-    return ChatMarkupTheme(
-      baseStyle: baseStyle,
-      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
-      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
-      strikethroughStyle: textStyles.markdownStrikethroughStyle(
-        baseStyle,
-        tokens,
-        isDark: ChatSkin.isDarkOf(context),
-      ),
-      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
-      linkStyle: linkStyle,
-      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
-      headingStyleResolver: (int level) =>
-          textStyles.markdownHeadingStyle(baseStyle, level, colors),
-    );
+    return _buildSharedMarkdownThemeForChat(context, baseStyle);
   }
 
   Future<void> _launchMarkdownLink(String href) async {
@@ -453,6 +431,30 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     _linkTextRecognizersByHref.clear();
     super.dispose();
   }
+}
+
+ChatMarkupTheme _buildSharedMarkdownThemeForChat(
+  BuildContext context,
+  TextStyle baseStyle,
+) {
+  final skin = ChatSkin.dataOf(context);
+  final colors = skin.colors;
+  final tokens = skin.tokens;
+  return buildTwinMarkdownTheme(
+    TwinMarkdownThemeConfig(
+      baseStyle: baseStyle,
+      baseTextColorFallback: colors.bubbleText,
+      linkColor: colors.markupLink,
+      linkDecorationColor: colors.markupLinkDecoration,
+      decorationThickness:
+          tokens.markupUnderlineThickness + tokens.markupDecorationThicknessBias,
+      strikethroughLightThicknessBias:
+          tokens.markupStrikethroughLightThicknessBias,
+      strikethroughDarkThicknessBias:
+          tokens.markupStrikethroughDarkThicknessBias,
+      isDark: ChatSkin.isDarkOf(context),
+    ),
+  );
 }
 
 class _RenderedTextLayout {
@@ -535,29 +537,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     final colors = skin.colors;
     final tokens = skin.tokens;
     final markupTheme = _buildMarkupTheme(context, style);
-    final viewStyle = ChatMarkupViewStyle(
-      blockquoteRailWidth: tokens.markupBlockquoteRailWidth,
-      blockBaseSpacingFactor: tokens.markupBlockBaseSpacingFactor,
-      blockQuoteExtraSpacing: tokens.markupBlockQuoteExtraSpacing,
-      listTopSpacingAdjustment: tokens.markupListTopSpacingAdjustment,
-      nestedListTopSpacingAdjustment:
-          tokens.markupNestedListTopSpacingAdjustment,
-      nestedListBottomSpacingAdjustment:
-          tokens.markupNestedListBottomSpacingAdjustment,
-      blockQuoteTopSpacingAdjustment:
-          tokens.markupBlockQuoteTopSpacingAdjustment,
-      listBottomSpacingAdjustment: tokens.markupListBottomSpacingAdjustment,
-      headingBottomSpacingFactors: tokens.markupHeadingBottomSpacingFactors,
-      headingTopSpacingFactors: tokens.markupHeadingTopSpacingFactors,
-      listItemBaseSpacingFactor: tokens.markupListItemBaseSpacingFactor,
-      topLevelListItemSpacingAdjustment:
-          tokens.markupTopLevelListItemSpacingAdjustment,
-      listMarkerGapFactor: tokens.markupListMarkerGapFactor,
-      topLevelListMarkerSlotFactor: tokens.markupTopLevelListMarkerSlotFactor,
-      nestedListMarkerSlotFactor: tokens.markupNestedListMarkerSlotFactor,
-      blockquoteIndentFactor: tokens.markupBlockquoteIndentFactor,
-      blockquoteCapLength: tokens.composerCornerAccentSegment,
-    );
+    const viewStyle = ChatMarkupViewStyle();
 
     if (!isTruncated) {
       final Widget visibleMarkupLayer = ChatMarkupView(
@@ -608,24 +588,24 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
           blockquoteRailColor: colors.bubbleText,
         );
         final double fadeHeight =
-            truncatedContentHeight < tokens.markupTruncationMaxFadeHeight
+            truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
             ? truncatedContentHeight
-            : tokens.markupTruncationMaxFadeHeight;
+            : tokens.bubbleTruncationMaxFadeHeight;
         final double overlayMidAlpha = isUserBubble
-            ? tokens.markupTruncationOverlayMidAlphaUser
-            : tokens.markupTruncationOverlayMidAlphaBot;
+            ? tokens.bubbleTruncationOverlayMidAlphaUser
+            : tokens.bubbleTruncationOverlayMidAlphaBot;
         final double overlayLateAlpha = isUserBubble
-            ? tokens.markupTruncationOverlayLateAlphaUser
-            : tokens.markupTruncationOverlayLateAlphaBot;
+            ? tokens.bubbleTruncationOverlayLateAlphaUser
+            : tokens.bubbleTruncationOverlayLateAlphaBot;
         final double midFadeFactor = isUserBubble
-            ? tokens.markupFadeMaskMidFactorUser
-            : tokens.markupFadeMaskMidFactorBot;
+            ? tokens.bubbleFadeMaskMidFactorUser
+            : tokens.bubbleFadeMaskMidFactorBot;
         final double lateFadeFactor = isUserBubble
-            ? tokens.markupFadeMaskLateFactorUser
-            : tokens.markupFadeMaskLateFactorBot;
+            ? tokens.bubbleFadeMaskLateFactorUser
+            : tokens.bubbleFadeMaskLateFactorBot;
         final List<double> overlayStops = isUserBubble
-            ? tokens.markupTruncationOverlayStopsUser
-            : tokens.markupTruncationOverlayStopsBot;
+            ? tokens.bubbleTruncationOverlayStopsUser
+            : tokens.bubbleTruncationOverlayStopsBot;
 
         return SizedBox(
           height: truncatedContentHeight,
@@ -655,10 +635,10 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: <Color>[
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskSoft,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskSoft,
                         colors.transparent,
                       ],
                       stops: <double>[
@@ -707,31 +687,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
   }
 
   ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
-    final skin = ChatSkin.dataOf(context);
-    final colors = skin.colors;
-    final tokens = skin.tokens;
-    final textStyles = skin.textStyles;
-    final TextStyle linkStyle = baseStyle.copyWith(
-      color: colors.markupLink,
-      decoration: TextDecoration.underline,
-      decorationColor: colors.markupLinkDecoration,
-      decorationThickness: textStyles.markdownDecorationThickness(tokens),
-    );
-    return ChatMarkupTheme(
-      baseStyle: baseStyle,
-      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
-      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
-      strikethroughStyle: textStyles.markdownStrikethroughStyle(
-        baseStyle,
-        tokens,
-        isDark: ChatSkin.isDarkOf(context),
-      ),
-      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
-      linkStyle: linkStyle,
-      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
-      headingStyleResolver: (int level) =>
-          textStyles.markdownHeadingStyle(baseStyle, level, colors),
-    );
+    return _buildSharedMarkdownThemeForChat(context, baseStyle);
   }
 
   Widget _buildTruncatedMarkupLayer({

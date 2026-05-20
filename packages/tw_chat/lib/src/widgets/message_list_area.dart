@@ -151,7 +151,7 @@ class ChatMessageListArea extends StatelessWidget {
                         text: entry.$2.text,
                         selectionListenerNotifier:
                             selectionNotifierForMessage(entry.$2.id),
-                        isUser: entry.$2.role == ChatRole.user,
+                        isUserBubble: entry.$2.role == ChatRole.user,
                         isTypingIndicator:
                             entry.$2.role == ChatRole.bot && entry.$2.isPending,
                         isTruncated: isMessageTruncated(entry.$2.id),

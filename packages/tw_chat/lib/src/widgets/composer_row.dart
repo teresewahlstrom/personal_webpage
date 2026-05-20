@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/composer.dart'
-    show TwComposer, TwComposerSkin;
+  show ChatComposer, ChatComposerSkin;
 import 'package:tw_primitives/text_field.dart'
     show TwReadyTextController, TwReadyTextField;
 
@@ -152,8 +152,8 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       handlesRadius: tokens.composerHandleRadius,
     );
 
-    return TwComposer(
-      skin: TwComposerSkin(
+    return ChatComposer(
+      skin: ChatComposerSkin(
         fillColor: ChatComposerLayout.fillColor(context),
         outlineColor: ChatComposerLayout.borderColor(context),
         accentColor: ChatComposerLayout.cornerAccentColor(context),

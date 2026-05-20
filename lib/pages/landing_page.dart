@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tw_chat/chat.dart';
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -496,7 +497,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
           borderRadius: BorderRadius.zero,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -508,28 +509,25 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                   onPointerMove: _handleHeaderPointerMove,
                   onPointerUp: _handleHeaderPointerUp,
                   onPointerCancel: (_) => _clearHeaderPointerTracking(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            widget.title,
-                            style: PageTextStyles.body(
-                              context,
-                            ).copyWith(fontWeight: FontWeight.w700),
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          widget.title,
+                          style: PageTextStyles.body(
+                            context,
+                          ).copyWith(fontWeight: FontWeight.w700),
                         ),
-                        RotationTransition(
-                          turns: Tween<double>(
-                            begin: 0,
-                            end: 0.5,
-                          ).animate(_heightAnimation),
-                          child: Icon(Icons.expand_more, color: iconColor),
-                        ),
-                      ],
-                    ),
+                      ),
+                      RotationTransition(
+                        turns: Tween<double>(
+                          begin: 0,
+                          end: 0.5,
+                        ).animate(_heightAnimation),
+                        child: Icon(Icons.expand_more, color: iconColor),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -544,7 +542,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return child!;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    padding: const EdgeInsets.only(top: 12),
                     child: _ProjectCardMarkdownBody(
                       document: widget.contentDocument,
                     ),
@@ -622,42 +620,28 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
   }
 
   ChatMarkupTheme _buildTheme(BuildContext context) {
-    final TextStyle pageBodyStyle = PageTextStyles.body(context);
-    final TextStyle baseStyle = pageBodyStyle.copyWith(
-      fontSize: (pageBodyStyle.fontSize ?? 17.3) - 2,
-    );
     final Brightness brightness = Theme.of(context).brightness;
-    final Color linkColor = ShellUiConfig.linkTextFor(brightness);
-    final TextStyle headingBase = baseStyle.copyWith(
-      fontWeight: FontWeight.w700,
+    final chatSkin = ChatSkin.dataForBrightness(brightness);
+    final double textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final TextStyle baseStyle = chatSkin.textStyles.bubbleTextStyle(
+      textScale,
+      chatSkin.colors,
     );
-
-    return ChatMarkupTheme(
-      baseStyle: baseStyle,
-      strongStyle: baseStyle.copyWith(fontWeight: FontWeight.w700),
-      emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
-      strikethroughStyle: baseStyle.copyWith(
-        decoration: TextDecoration.lineThrough,
-        decorationColor: baseStyle.color,
-        decorationStyle: TextDecorationStyle.solid,
-        decorationThickness: 1 / 3,
+    return buildTwinMarkdownTheme(
+      TwinMarkdownThemeConfig(
+        baseStyle: baseStyle,
+        baseTextColorFallback: chatSkin.colors.bubbleText,
+        linkColor: chatSkin.colors.markupLink,
+        linkDecorationColor: chatSkin.colors.markupLinkDecoration,
+        decorationThickness:
+            chatSkin.tokens.markupUnderlineThickness +
+            chatSkin.tokens.markupDecorationThicknessBias,
+        strikethroughLightThicknessBias:
+            chatSkin.tokens.markupStrikethroughLightThicknessBias,
+        strikethroughDarkThicknessBias:
+            chatSkin.tokens.markupStrikethroughDarkThicknessBias,
+        isDark: brightness == Brightness.dark,
       ),
-      underlineStyle: baseStyle.copyWith(decoration: TextDecoration.underline),
-      linkStyle: baseStyle.copyWith(
-        color: linkColor,
-        decoration: TextDecoration.underline,
-        decorationColor: linkColor,
-      ),
-      blockquoteStyle: baseStyle.copyWith(
-        color: baseStyle.color?.withValues(alpha: 0.88),
-      ),
-      headingStyleResolver: (int level) {
-        final double baseSize = headingBase.fontSize ?? 16;
-        return headingBase.copyWith(
-          fontSize: level == 1 ? baseSize + 4 : baseSize + 2,
-          height: 1.2,
-        );
-      },
     );
   }
 
@@ -667,6 +651,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       document: widget.document,
       theme: _buildTheme(context),
       gestureRecognizerFactory: _recognizerForHref,
+      textAlign: TextAlign.start,
       selectable: true,
       chromeVisible: true,
       blockquoteRailColor:

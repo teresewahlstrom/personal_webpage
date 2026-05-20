@@ -48,7 +48,7 @@ void main() {
     final afterRect = tester.getRect(afterFinder.first);
 
     final expectedSpacing =
-        (style.fontSize ?? 12.0) * ChatSkin.tokens.markupBlockBaseSpacingFactor;
+      (style.fontSize ?? 12.0) * const ChatMarkupViewStyle().blockBaseSpacingFactor;
     expect(ruleRect.top - beforeRect.bottom, closeTo(expectedSpacing, 0.5));
     expect(afterRect.top - ruleRect.bottom, closeTo(expectedSpacing, 0.5));
   });
@@ -56,36 +56,81 @@ void main() {
   test('H2 heading style uses the computed size without the old -1 offset', () {
     const baseStyle = TextStyle(fontSize: 12, height: 1);
     final skin = ChatSkin.dataForBrightness(Brightness.light);
-
-    final headingStyle = skin.textStyles.markdownHeadingStyle(
-      baseStyle,
-      2,
-      skin.colors,
+    final theme = buildTwinMarkdownTheme(
+      TwinMarkdownThemeConfig(
+        baseStyle: baseStyle,
+        baseTextColorFallback: skin.colors.bubbleText,
+        linkColor: skin.colors.markupLink,
+        linkDecorationColor: skin.colors.markupLinkDecoration,
+        decorationThickness:
+            skin.tokens.markupUnderlineThickness +
+            skin.tokens.markupDecorationThicknessBias,
+        strikethroughLightThicknessBias:
+            skin.tokens.markupStrikethroughLightThicknessBias,
+        strikethroughDarkThicknessBias:
+            skin.tokens.markupStrikethroughDarkThicknessBias,
+        isDark: false,
+      ),
     );
+
+    final headingStyle = theme.headingStyleResolver(2);
 
     expect(headingStyle.fontSize, closeTo(12 * 1.36, 0.001));
   });
 
   test('strikethrough thickness is balanced by skin mode', () {
     const baseStyle = TextStyle(fontSize: 12, height: 1, color: Colors.black);
-    final tokens = ChatSkin.tokens;
-    final textStyles = ChatSkin.textStyles;
-
-    final lightStyle = textStyles.markdownStrikethroughStyle(
-      baseStyle,
-      tokens,
-      isDark: false,
+    final skin = ChatSkin.dataForBrightness(Brightness.light);
+    final decorationThickness =
+        skin.tokens.markupUnderlineThickness +
+        skin.tokens.markupDecorationThicknessBias;
+    final lightTheme = buildTwinMarkdownTheme(
+      TwinMarkdownThemeConfig(
+        baseStyle: baseStyle,
+        baseTextColorFallback: skin.colors.bubbleText,
+        linkColor: skin.colors.markupLink,
+        linkDecorationColor: skin.colors.markupLinkDecoration,
+        decorationThickness: decorationThickness,
+        strikethroughLightThicknessBias:
+            skin.tokens.markupStrikethroughLightThicknessBias,
+        strikethroughDarkThicknessBias:
+            skin.tokens.markupStrikethroughDarkThicknessBias,
+        isDark: false,
+      ),
     );
-    final darkStyle = textStyles.markdownStrikethroughStyle(
-      baseStyle,
-      tokens,
-      isDark: true,
+    final darkTheme = buildTwinMarkdownTheme(
+      TwinMarkdownThemeConfig(
+        baseStyle: baseStyle,
+        baseTextColorFallback: skin.colors.bubbleText,
+        linkColor: skin.colors.markupLink,
+        linkDecorationColor: skin.colors.markupLinkDecoration,
+        decorationThickness: decorationThickness,
+        strikethroughLightThicknessBias:
+            skin.tokens.markupStrikethroughLightThicknessBias,
+        strikethroughDarkThicknessBias:
+            skin.tokens.markupStrikethroughDarkThicknessBias,
+        isDark: true,
+      ),
     );
 
-    expect(lightStyle.decorationThickness, closeTo(2.8, 0.001));
-    expect(darkStyle.decorationThickness, closeTo(4.2, 0.001));
-    expect(_renderedStrikeThickness(lightStyle), closeTo(1.4, 0.001));
-    expect(_renderedStrikeThickness(darkStyle), closeTo(2.1, 0.001));
+    final lightStyle = lightTheme.strikethroughStyle;
+    final darkStyle = darkTheme.strikethroughStyle;
+
+    final expectedLightThickness =
+        decorationThickness + skin.tokens.markupStrikethroughLightThicknessBias;
+    final expectedDarkThickness =
+        decorationThickness + skin.tokens.markupStrikethroughDarkThicknessBias;
+
+    expect(lightStyle.decorationThickness, closeTo(expectedLightThickness, 0.001));
+    expect(darkStyle.decorationThickness, closeTo(expectedDarkThickness, 0.001));
+    expect(
+      _renderedStrikeThickness(lightStyle),
+      closeTo(expectedLightThickness * 0.5, 0.001),
+    );
+    expect(
+      _renderedStrikeThickness(darkStyle),
+      closeTo(expectedDarkThickness * 0.5, 0.001),
+    );
   });
 }
 

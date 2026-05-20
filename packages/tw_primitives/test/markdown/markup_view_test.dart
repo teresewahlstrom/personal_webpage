@@ -16,7 +16,7 @@ void main() {
     final beforeRect = tester.getRect(_richTextWithPlainText('Before').first);
     final itemRect = tester.getRect(_richTextWithPlainText('One').first);
 
-    expect(itemRect.top - beforeRect.bottom, closeTo(13.4, 0.5));
+    expect(itemRect.top - beforeRect.bottom, closeTo(12.6, 0.5));
   });
 
   testWidgets('headers keep a little more space below', (tester) async {
@@ -32,7 +32,7 @@ void main() {
     final headingRect = tester.getRect(_richTextWithPlainText('Heading').first);
     final afterRect = tester.getRect(_richTextWithPlainText('After').first);
 
-    expect(afterRect.top - headingRect.bottom, closeTo(12.6, 0.5));
+    expect(afterRect.top - headingRect.bottom, closeTo(11.4, 0.5));
   });
 
   test('strikethrough thickness is scaled down to half the source stroke', () {

@@ -37,10 +37,10 @@ void main() {
     );
     await tester.pump();
 
-    final composer = tester.widget<TwComposer>(find.byType(TwComposer));
+    final composer = tester.widget<ChatComposer>(find.byType(ChatComposer));
     final textField = tester.widget<TwReadyTextField>(find.byType(TwReadyTextField));
 
-    expect(find.byType(TwComposer), findsOneWidget);
+    expect(find.byType(ChatComposer), findsOneWidget);
     expect(find.byIcon(Icons.send_rounded), findsOneWidget);
     expect(textField.handleOutlineColor, composer.skin.fillColor);
   });

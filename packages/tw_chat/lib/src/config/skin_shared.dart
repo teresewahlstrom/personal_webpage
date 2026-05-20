@@ -35,8 +35,8 @@ class ChatSkinColors {
     required this.composerCursor,
     required this.composerCornerAccent,
     required this.composerSendIcon,
-    required this.markupFadeMaskOpaque,
-    required this.markupFadeMaskSoft,
+    required this.bubbleFadeMaskOpaque,
+    required this.bubbleFadeMaskSoft,
     required this.markupLink,
     required this.markupLinkDecoration,
     required this.scrollbarThumb,
@@ -62,8 +62,8 @@ class ChatSkinColors {
   final Color composerCursor;
   final Color composerCornerAccent;
   final Color composerSendIcon;
-  final Color markupFadeMaskOpaque;
-  final Color markupFadeMaskSoft;
+  final Color bubbleFadeMaskOpaque;
+  final Color bubbleFadeMaskSoft;
   final Color markupLink;
   final Color markupLinkDecoration;
   final Color scrollbarThumb;
@@ -98,7 +98,6 @@ class ChatSkinTokens {
     10,
   );
   final double chatListTopShadowHeight = 32.0;
-  final double chatListBottomShadowHeight = 24;
   final double chatListTrailingGap = 10.0;
 
   // Top shadow gradient
@@ -140,7 +139,6 @@ class ChatSkinTokens {
     8,
     10,
   );
-  final double appBarLeadingGap = 2.0;
   final double appBarActionGap = 15.0;
   final double appBarActionWidth = 40.0;
   final double appBarActionHeightFactor = 0.75;
@@ -162,7 +160,6 @@ class ChatSkinTokens {
   final double composerScrollbarCrossAxisMargin = 3.0;
   final double scrollbarTrackLeftShift = 3.0;
   final double scrollbarMinThumbLength = 15.0;
-  final double composerScrollbarReservedWidth = 10.0;
 
   final double composerTextInsetLeft = 6.3;
   final double composerTextInsetRight = 6.3;
@@ -191,49 +188,30 @@ class ChatSkinTokens {
   final double markupDecorationThicknessBias = 0.15;
   final double markupStrikethroughLightThicknessBias = 0.9;
   final double markupStrikethroughDarkThicknessBias = 4.0;
-  final double markupBlockquoteRailWidth = 0.4;
-  final double markupBlockBaseSpacingFactor = 0.75;
-  final double markupBlockQuoteExtraSpacing = 1.2;
-  final double markupListTopSpacingAdjustment = -0.12;
-  final double markupNestedListTopSpacingAdjustment = -0.59;
-  final double markupNestedListBottomSpacingAdjustment = -0.55;
-  final double markupBlockQuoteTopSpacingAdjustment = 0.0;
-  final double markupListBottomSpacingAdjustment = 1.05;
-  final List<double> markupHeadingBottomSpacingFactors = const <double>[
-    -0.12,
-    -0.32,
-  ];
-  final List<double> markupHeadingTopSpacingFactors = const <double>[1.0, 1.0];
-  final double markupListItemBaseSpacingFactor = 0.26;
-  final double markupTopLevelListItemSpacingAdjustment = 0.52;
-  final double markupListMarkerGapFactor = 0.3333333333;
-  final double markupTopLevelListMarkerSlotFactor = 2.0;
-  final double markupNestedListMarkerSlotFactor = 1.75;
-  final double markupBlockquoteIndentFactor = 0.4;
 
-  final double markupTruncationMaxFadeHeight = 40.0;
-  final double markupTruncationOverlayMidAlphaUser = 0.28;
-  final double markupTruncationOverlayMidAlphaBot = 0.58;
-  final double markupTruncationOverlayLateAlphaUser = 0.82;
-  final double markupTruncationOverlayLateAlphaBot = 1.0;
-  final double markupFadeMaskMidFactorUser = 0.68;
-  final double markupFadeMaskMidFactorBot = 0.54;
-  final double markupFadeMaskLateFactorUser = 0.9;
-  final double markupFadeMaskLateFactorBot = 0.78;
-  final List<double> markupTruncationOverlayStopsUser = const <double>[
+  final double bubbleTruncationMaxFadeHeight = 40.0;
+  final double bubbleTruncationOverlayMidAlphaUser = 0.28;
+  final double bubbleTruncationOverlayMidAlphaBot = 0.58;
+  final double bubbleTruncationOverlayLateAlphaUser = 0.82;
+  final double bubbleTruncationOverlayLateAlphaBot = 1.0;
+  final double bubbleFadeMaskMidFactorUser = 0.68;
+  final double bubbleFadeMaskMidFactorBot = 0.54;
+  final double bubbleFadeMaskLateFactorUser = 0.9;
+  final double bubbleFadeMaskLateFactorBot = 0.78;
+  final List<double> bubbleTruncationOverlayStopsUser = const <double>[
     0.0,
     0.76,
     0.92,
     1.0,
   ];
-  final List<double> markupTruncationOverlayStopsBot = const <double>[
+  final List<double> bubbleTruncationOverlayStopsBot = const <double>[
     0.0,
     0.7,
     0.86,
     1.0,
   ];
   final double bubbleWidthCompensation = 15.0;
-  final double bubbleMinMaxWidth = 180.0;
+  final double bubbleMinWidthClamp = 180.0;
   final EdgeInsets typingIndicatorPadding = const EdgeInsets.symmetric(
     horizontal: 4.0,
     vertical: 8.0,
@@ -252,19 +230,6 @@ class ChatSkinTokens {
   final Duration typingIndicatorAnimationDuration = const Duration(
     milliseconds: 1400,
   );
-
-  double markupHeadingBottomSpacingFactorForLevel(int level) {
-    return _markupFactorByLevel(markupHeadingBottomSpacingFactors, level);
-  }
-
-  double markupHeadingTopSpacingFactorForLevel(int level) {
-    return _markupFactorByLevel(markupHeadingTopSpacingFactors, level);
-  }
-
-  double _markupFactorByLevel(List<double> factors, int level) {
-    final index = level.clamp(1, factors.length).toInt() - 1;
-    return factors[index];
-  }
 
   LinearGradient shellTopShadowGradient(ChatSkinColors colors) {
     return LinearGradient(
@@ -392,96 +357,6 @@ class ChatSkinTextStyles {
     return base.copyWith(
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
       height: _scaledLineHeight(base.height!, scale, 0.5),
-    );
-  }
-
-  TextStyle markdownStrongStyle(TextStyle baseStyle, ChatSkinColors colors) {
-    final baseColor = baseStyle.color ?? colors.bubbleText;
-    final hsl = HSLColor.fromColor(baseColor);
-    final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-    final baseLetterSpacing = baseStyle.letterSpacing ?? 0.0;
-    final bubbleFamily = GoogleFonts.nunito().fontFamily;
-    final bool matchesBubbleFamily = baseStyle.fontFamily == bubbleFamily;
-    final strongBase = matchesBubbleFamily
-        ? GoogleFonts.nunito(
-            fontSize: baseStyle.fontSize,
-            height: baseStyle.height,
-            color: baseColor,
-            fontWeight: FontWeight.w700,
-          )
-        : baseStyle;
-
-    return strongBase.copyWith(
-      fontWeight: FontWeight.w900,
-      color: lifted.toColor(),
-      letterSpacing: baseLetterSpacing + 0.45,
-    );
-  }
-
-  TextStyle markdownEmphasisStyle(TextStyle baseStyle) {
-    return baseStyle.copyWith(fontStyle: FontStyle.italic);
-  }
-
-  double markdownDecorationThickness(ChatSkinTokens tokens) {
-    return tokens.markupUnderlineThickness +
-        tokens.markupDecorationThicknessBias;
-  }
-
-  TextStyle markdownStrikethroughStyle(
-    TextStyle baseStyle,
-    ChatSkinTokens tokens, {
-    required bool isDark,
-  }) {
-    final double thicknessBias = isDark
-        ? tokens.markupStrikethroughDarkThicknessBias
-        : tokens.markupStrikethroughLightThicknessBias;
-    return baseStyle.copyWith(
-      decoration: TextDecoration.lineThrough,
-      decorationColor: baseStyle.color,
-      decorationThickness: markdownDecorationThickness(tokens) + thicknessBias,
-    );
-  }
-
-  TextStyle markdownUnderlineStyle(TextStyle baseStyle, ChatSkinTokens tokens) {
-    return baseStyle.copyWith(
-      decoration: TextDecoration.underline,
-      decorationColor: baseStyle.color,
-      decorationThickness: markdownDecorationThickness(tokens),
-    );
-  }
-
-  TextStyle markdownBlockquoteStyle(
-    TextStyle baseStyle,
-    ChatSkinColors colors,
-  ) {
-    return baseStyle.copyWith(fontStyle: FontStyle.italic);
-  }
-
-  TextStyle markdownHeadingStyle(
-    TextStyle baseStyle,
-    int level,
-    ChatSkinColors colors,
-  ) {
-    // Heading scales for levels 1..2 (H1, H2).
-    const scales = <double>[1.55, 1.36];
-    const weights = <FontWeight>[FontWeight.w600, FontWeight.w700];
-
-    final clampedLevel = level.clamp(1, 2);
-    final index = clampedLevel - 1;
-
-    final strongStyle = markdownStrongStyle(baseStyle, colors);
-    double? fontSize = baseStyle.fontSize == null
-        ? null
-        : baseStyle.fontSize! * scales[index];
-
-    if (clampedLevel == 1 && fontSize != null) {
-      fontSize += 2.0;
-    }
-
-    return strongStyle.copyWith(
-      fontSize: fontSize,
-      fontWeight: weights[index],
-      height: 1.2,
     );
   }
 

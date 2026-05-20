@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class TwComposerSkin {
-  const TwComposerSkin({
+class ChatComposerSkin {
+  const ChatComposerSkin({
     required this.fillColor,
     required this.outlineColor,
     required this.accentColor,
@@ -17,8 +17,8 @@ class TwComposerSkin {
   final double cornerStrokeWidth;
 }
 
-class TwComposer extends StatelessWidget {
-  const TwComposer({
+class ChatComposer extends StatelessWidget {
+  const ChatComposer({
     super.key,
     required this.skin,
     required this.textField,
@@ -38,7 +38,7 @@ class TwComposer extends StatelessWidget {
     this.boxShadow = const <BoxShadow>[],
   });
 
-  final TwComposerSkin skin;
+  final ChatComposerSkin skin;
   final Widget textField;
   final double minInputHeight;
   final double maxInputHeight;
@@ -67,7 +67,7 @@ class TwComposer extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: CustomPaint(
-              foregroundPainter: TwComposerCornerAccentPainter(
+              foregroundPainter: ChatComposerCornerAccentPainter(
                 color: skin.accentColor,
                 radius: cornerRadius,
                 strokeWidth: skin.cornerStrokeWidth,
@@ -125,8 +125,8 @@ class TwComposer extends StatelessWidget {
   }
 }
 
-class TwComposerCornerAccentPainter extends CustomPainter {
-  const TwComposerCornerAccentPainter({
+class ChatComposerCornerAccentPainter extends CustomPainter {
+  const ChatComposerCornerAccentPainter({
     required this.color,
     required this.radius,
     required this.strokeWidth,
@@ -174,7 +174,7 @@ class TwComposerCornerAccentPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant TwComposerCornerAccentPainter oldDelegate) {
+  bool shouldRepaint(covariant ChatComposerCornerAccentPainter oldDelegate) {
     return color != oldDelegate.color ||
         radius != oldDelegate.radius ||
         strokeWidth != oldDelegate.strokeWidth ||

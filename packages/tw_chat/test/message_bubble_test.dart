@@ -202,7 +202,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
                               _TestTranscriptSelectionArea.notifierFor(
                                 entry.$2.id,
                               ),
-                          isUser: entry.$2.role == ChatRole.user,
+                          isUserBubble: entry.$2.role == ChatRole.user,
                           isTypingIndicator: false,
                           isTruncated: entry.$1 == 0,
                           isFirstMessage: entry.$1 == 0,
@@ -298,7 +298,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
                             _TestTranscriptSelectionArea.notifierFor(
                               entry.$2.id,
                             ),
-                        isUser: entry.$2.role == ChatRole.user,
+                        isUserBubble: entry.$2.role == ChatRole.user,
                         isTypingIndicator: false,
                         isTruncated: false,
                         isFirstMessage: entry.$1 == 0,
@@ -353,7 +353,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
                 child: ChatMessageBubble(
                   text: 'Short user message',
                   selectionListenerNotifier: SelectionListenerNotifier(),
-                  isUser: true,
+                  isUserBubble: true,
                   isTypingIndicator: false,
                   isTruncated: false,
                   isFirstMessage: true,
@@ -443,7 +443,7 @@ Line five carries enough words to wrap through the bubble width for truncation.'
                 child: ChatMessageBubble(
                   text: 'OK',
                   selectionListenerNotifier: SelectionListenerNotifier(),
-                  isUser: true,
+                  isUserBubble: true,
                   isTypingIndicator: false,
                   isTruncated: false,
                   isFirstMessage: true,
@@ -468,7 +468,7 @@ Line five carries enough words to wrap through the bubble width for truncation.'
       final maxWidth =
           (availableWidth * ChatBubbleRules.maxWidthFactor +
                   ChatSkin.tokens.bubbleWidthCompensation)
-              .clamp(ChatSkin.tokens.bubbleMinMaxWidth, availableWidth);
+            .clamp(ChatSkin.tokens.bubbleMinWidthClamp, availableWidth);
       final minWidth = (availableWidth * ChatBubbleRules.minWidthFactor).clamp(
         0.0,
         maxWidth,
@@ -510,7 +510,7 @@ Future<void> _pumpTruncatedBubble(
               child: ChatMessageBubble(
                 text: text,
                 selectionListenerNotifier: SelectionListenerNotifier(),
-                isUser: false,
+                isUserBubble: false,
                 isTypingIndicator: false,
                 isTruncated: true,
                 isFirstMessage: true,

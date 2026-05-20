@@ -7,12 +7,12 @@ class ChatMarkupViewStyle {
     this.blockquoteRailWidth = 0.4,
     this.blockBaseSpacingFactor = 0.75,
     this.blockQuoteExtraSpacing = 1.2,
-    this.listTopSpacingAdjustment = -0.08,
+    this.listTopSpacingAdjustment = -0.12,
     this.nestedListTopSpacingAdjustment = -0.59,
     this.nestedListBottomSpacingAdjustment = -0.55,
     this.blockQuoteTopSpacingAdjustment = 0.0,
     this.listBottomSpacingAdjustment = 1.05,
-    this.headingBottomSpacingFactors = const <double>[-0.08, -0.26],
+    this.headingBottomSpacingFactors = const <double>[-0.12, -0.14],
     this.headingTopSpacingFactors = const <double>[1.0, 1.0],
     this.listItemBaseSpacingFactor = 0.26,
     this.topLevelListItemSpacingAdjustment = 0.52,
@@ -67,6 +67,7 @@ class ChatMarkupView extends StatelessWidget {
     this.selectable = true,
     this.chromeVisible = true,
     this.blockquoteRailColor,
+    this.textAlign = TextAlign.start,
   });
 
   final ChatMarkupDocument document;
@@ -76,6 +77,7 @@ class ChatMarkupView extends StatelessWidget {
   final bool selectable;
   final bool chromeVisible;
   final Color? blockquoteRailColor;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +302,6 @@ class ChatMarkupView extends StatelessWidget {
     TextSpan text, {
     bool softWrap = true,
     bool selectable = true,
-    TextAlign textAlign = TextAlign.start,
   }) {
     return RichText(
       text: text,

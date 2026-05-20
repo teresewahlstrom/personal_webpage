@@ -29,7 +29,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     final ChatSkinColors colors = skin.colors;
     final ChatSkinTokens tokens = skin.tokens;
     final ChatMarkupTheme markupTheme = _buildMarkupTheme(context, style);
-    final ChatMarkupViewStyle markupViewStyle = _buildMarkupViewStyle(tokens);
+    const ChatMarkupViewStyle markupViewStyle = ChatMarkupViewStyle();
 
     if (!isTruncated) {
       final Widget visibleMarkupLayer = _buildRenderedMarkupDocument(
@@ -78,24 +78,24 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           chromeVisible: true,
         );
         final double fadeHeight =
-            truncatedContentHeight < tokens.markupTruncationMaxFadeHeight
+            truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
             ? truncatedContentHeight
-            : tokens.markupTruncationMaxFadeHeight;
+            : tokens.bubbleTruncationMaxFadeHeight;
         final double overlayMidAlpha = isUserBubble
-            ? tokens.markupTruncationOverlayMidAlphaUser
-            : tokens.markupTruncationOverlayMidAlphaBot;
+            ? tokens.bubbleTruncationOverlayMidAlphaUser
+            : tokens.bubbleTruncationOverlayMidAlphaBot;
         final double overlayLateAlpha = isUserBubble
-            ? tokens.markupTruncationOverlayLateAlphaUser
-            : tokens.markupTruncationOverlayLateAlphaBot;
+            ? tokens.bubbleTruncationOverlayLateAlphaUser
+            : tokens.bubbleTruncationOverlayLateAlphaBot;
         final double midFadeFactor = isUserBubble
-            ? tokens.markupFadeMaskMidFactorUser
-            : tokens.markupFadeMaskMidFactorBot;
+            ? tokens.bubbleFadeMaskMidFactorUser
+            : tokens.bubbleFadeMaskMidFactorBot;
         final double lateFadeFactor = isUserBubble
-            ? tokens.markupFadeMaskLateFactorUser
-            : tokens.markupFadeMaskLateFactorBot;
+            ? tokens.bubbleFadeMaskLateFactorUser
+            : tokens.bubbleFadeMaskLateFactorBot;
         final List<double> overlayStops = isUserBubble
-            ? tokens.markupTruncationOverlayStopsUser
-            : tokens.markupTruncationOverlayStopsBot;
+            ? tokens.bubbleTruncationOverlayStopsUser
+            : tokens.bubbleTruncationOverlayStopsBot;
 
         return SizedBox(
           height: truncatedContentHeight,
@@ -125,10 +125,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: <Color>[
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskOpaque,
-                        colors.markupFadeMaskSoft,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskOpaque,
+                        colors.bubbleFadeMaskSoft,
                         colors.transparent,
                       ],
                       stops: <double>[
@@ -180,54 +180,21 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     final ChatSkinData skin = ChatSkin.dataOf(context);
     final ChatSkinColors colors = skin.colors;
     final ChatSkinTokens tokens = skin.tokens;
-    final ChatSkinTextStyles textStyles = skin.textStyles;
-    final TextStyle linkStyle = baseStyle.copyWith(
-      color: colors.markupLink,
-      decoration: TextDecoration.underline,
-      decorationColor: colors.markupLinkDecoration,
-      decorationThickness: textStyles.markdownDecorationThickness(tokens),
-    );
-    return ChatMarkupTheme(
-      baseStyle: baseStyle,
-      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
-      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
-      strikethroughStyle: textStyles.markdownStrikethroughStyle(
-        baseStyle,
-        tokens,
+    return buildTwinMarkdownTheme(
+      TwinMarkdownThemeConfig(
+        baseStyle: baseStyle,
+        baseTextColorFallback: colors.bubbleText,
+        linkColor: colors.markupLink,
+        linkDecorationColor: colors.markupLinkDecoration,
+        decorationThickness:
+            tokens.markupUnderlineThickness +
+            tokens.markupDecorationThicknessBias,
+        strikethroughLightThicknessBias:
+            tokens.markupStrikethroughLightThicknessBias,
+        strikethroughDarkThicknessBias:
+            tokens.markupStrikethroughDarkThicknessBias,
         isDark: ChatSkin.isDarkOf(context),
       ),
-      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
-      linkStyle: linkStyle,
-      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
-      headingStyleResolver: (int level) =>
-          textStyles.markdownHeadingStyle(baseStyle, level, colors),
-    );
-  }
-
-  ChatMarkupViewStyle _buildMarkupViewStyle(ChatSkinTokens tokens) {
-    return ChatMarkupViewStyle(
-      blockquoteRailWidth: tokens.markupBlockquoteRailWidth,
-      blockBaseSpacingFactor: tokens.markupBlockBaseSpacingFactor,
-      blockQuoteExtraSpacing: tokens.markupBlockQuoteExtraSpacing,
-      listTopSpacingAdjustment: tokens.markupListTopSpacingAdjustment,
-      nestedListTopSpacingAdjustment:
-          tokens.markupNestedListTopSpacingAdjustment,
-      nestedListBottomSpacingAdjustment:
-          tokens.markupNestedListBottomSpacingAdjustment,
-      blockQuoteTopSpacingAdjustment:
-          tokens.markupBlockQuoteTopSpacingAdjustment,
-      listBottomSpacingAdjustment: tokens.markupListBottomSpacingAdjustment,
-      headingBottomSpacingFactors: tokens.markupHeadingBottomSpacingFactors,
-      headingTopSpacingFactors: tokens.markupHeadingTopSpacingFactors,
-      listItemBaseSpacingFactor: tokens.markupListItemBaseSpacingFactor,
-      topLevelListItemSpacingAdjustment:
-          tokens.markupTopLevelListItemSpacingAdjustment,
-      listMarkerGapFactor: tokens.markupListMarkerGapFactor,
-      topLevelListMarkerSlotFactor: tokens.markupTopLevelListMarkerSlotFactor,
-      nestedListMarkerSlotFactor: tokens.markupNestedListMarkerSlotFactor,
-      blockquoteIndentFactor: tokens.markupBlockquoteIndentFactor,
-      blockquoteCapLength: tokens.composerCornerAccentSegment,
-      blockquoteRailInset: 5.0,
     );
   }
 
