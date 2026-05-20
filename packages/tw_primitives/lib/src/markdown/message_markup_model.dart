@@ -88,7 +88,9 @@ class ChatMarkupInline {
       effectiveStyle = effectiveStyle.merge(theme.emphasisStyle);
     }
     if (isStrikethrough) {
-      final TextStyle strikeStyle = effectiveStyle.merge(theme.strikethroughStyle);
+      final TextStyle strikeStyle = effectiveStyle.merge(
+        theme.strikethroughStyle,
+      );
       effectiveStyle = strikeStyle.copyWith(
         decorationThickness: _scaledStrikethroughThickness(strikeStyle),
       );
@@ -111,7 +113,7 @@ class ChatMarkupInline {
   double _scaledStrikethroughThickness(TextStyle style) {
     final double fallbackThickness = (style.fontSize ?? 14.0) / 14.0;
     final double baseThickness = style.decorationThickness ?? fallbackThickness;
-    return (baseThickness * (2.0 / 3.0)).clamp(0.5, double.infinity);
+    return (baseThickness * 0.5).clamp(0.5, double.infinity);
   }
 }
 

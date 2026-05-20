@@ -268,7 +268,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "About me";
   static const String _content =
-      "Turns complexity into clarity. A rare blend of creative systems thinker, cross-domain integrator, and driver of change.";
+      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +291,7 @@ class _ProjectsSection extends StatefulWidget {
 }
 
 class _ProjectsSectionState extends State<_ProjectsSection> {
-  static const String _title = "Projects Portfolio";
+  static const String _title = "Work Highlights";
   static const String _projectCardsAssetPath =
   'lib/pages/content/project_cards.md';
 

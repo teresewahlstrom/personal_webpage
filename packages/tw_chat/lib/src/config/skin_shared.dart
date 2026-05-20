@@ -210,14 +210,14 @@ class ChatSkinTokens {
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
-  final double markupListTopSpacingAdjustment = -0.3;
+  final double markupListTopSpacingAdjustment = -0.12;
   final double markupNestedListTopSpacingAdjustment = -0.59;
   final double markupNestedListBottomSpacingAdjustment = -0.55;
   final double markupBlockQuoteTopSpacingAdjustment = 0.0;
   final double markupListBottomSpacingAdjustment = 1.05;
   final List<double> markupHeadingBottomSpacingFactors = const <double>[
-    -0.2,
-    -0.4,
+    -0.12,
+    -0.32,
   ];
   final List<double> markupHeadingTopSpacingFactors = const <double>[1.0, 1.0];
   final double markupListItemBaseSpacingFactor = 0.26;

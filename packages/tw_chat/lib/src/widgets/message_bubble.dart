@@ -792,7 +792,7 @@ class _BubbleFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final double footerLineYOffset = isCollapsed
-        ? 1.0
+        ? tokens.bubbleBorderWidth * 2
         : -tokens.bubbleBorderWidth;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1081,7 +1081,7 @@ class _BottomLinePainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.square;
+      ..strokeCap = dashed ? StrokeCap.butt : StrokeCap.square;
     final y = size.height / 2;
     if (!dashed) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
@@ -1094,23 +1094,40 @@ class _BottomLinePainter extends CustomPainter {
       return;
     }
 
-    final double nominalSegmentWidth = _dashWidth + _gapWidth;
-    final int dashCount = ((width + _gapWidth) / nominalSegmentWidth)
-        .round()
-        .clamp(1, (width / _dashWidth).floor());
-
-    if (dashCount <= 1) {
+    final layout = _dashLayout(width);
+    if (layout.dashCount <= 1) {
       canvas.drawLine(Offset(0, y), Offset(width, y), paint);
       return;
     }
 
-    final double totalDashWidth = dashCount * _dashWidth;
-    final double gapWidth = (width - totalDashWidth) / (dashCount - 1);
     double x = 0.0;
-    for (int index = 0; index < dashCount; index++) {
+    for (int index = 0; index < layout.dashCount; index++) {
       canvas.drawLine(Offset(x, y), Offset(x + _dashWidth, y), paint);
-      x += _dashWidth + gapWidth;
+      x += _dashWidth + layout.gapWidth;
     }
+  }
+
+  ({int dashCount, double gapWidth}) _dashLayout(double width) {
+    final double nominalSegmentWidth = _dashWidth + _gapWidth;
+    final int maxDashCount = (width / _dashWidth).floor();
+    final int dashCount = ((width + _gapWidth) / nominalSegmentWidth)
+        .round()
+        .clamp(1, maxDashCount)
+        .toInt();
+    if (dashCount <= 1) {
+      return (dashCount: dashCount, gapWidth: 0.0);
+    }
+
+    final double totalDashWidth = dashCount * _dashWidth;
+    return (
+      dashCount: dashCount,
+      gapWidth: (width - totalDashWidth) / (dashCount - 1),
+    );
+  }
+
+  @visibleForTesting
+  ({int dashCount, double gapWidth}) dashLayoutForTesting(double width) {
+    return _dashLayout(width);
   }
 
   @override

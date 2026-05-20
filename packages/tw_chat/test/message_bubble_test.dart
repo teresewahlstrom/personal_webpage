@@ -387,6 +387,49 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
   );
 
   testWidgets(
+    'collapsed bubble footer sits below the fade and ends dashed lines solid',
+    (tester) async {
+      const rawText =
+          '''Line one carries enough words to wrap through the bubble width for truncation.
+
+Line two carries enough words to wrap through the bubble width for truncation.
+
+Line three carries enough words to wrap through the bubble width for truncation.
+
+Line four carries enough words to wrap through the bubble width for truncation.
+
+Line five carries enough words to wrap through the bubble width for truncation.''';
+
+      await _pumpTruncatedBubble(tester, text: rawText);
+
+      final footerLinePaint = _footerLinePaint(dashed: true);
+      expect(footerLinePaint, findsOneWidget);
+
+      final transform = tester.widget<Transform>(
+        find
+            .ancestor(of: footerLinePaint, matching: find.byType(Transform))
+            .first,
+      );
+      expect(
+        transform.transform.storage[13],
+        ChatSkin.tokens.bubbleBorderWidth * 2,
+      );
+
+      final customPaint = tester.widget<CustomPaint>(footerLinePaint);
+      final layout =
+          (customPaint.painter! as dynamic).dashLayoutForTesting(184.0)
+              as ({int dashCount, double gapWidth});
+
+      expect(layout.dashCount, 10);
+      expect(layout.gapWidth, closeTo(64.0 / 9.0, 0.001));
+      expect(
+        layout.dashCount * 12.0 + (layout.dashCount - 1) * layout.gapWidth,
+        closeTo(184.0, 0.001),
+      );
+    },
+  );
+
+  testWidgets(
     'short user bubbles stay below the max width while honoring the minimum width',
     (tester) async {
       const availableWidth = 320.0;
@@ -435,6 +478,20 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
       expect(bubbleWidth, lessThan(maxWidth - 1));
     },
   );
+}
+
+Finder _footerLinePaint({required bool dashed}) {
+  return find.byWidgetPredicate((Widget widget) {
+    if (widget is! CustomPaint || widget.painter == null) {
+      return false;
+    }
+
+    try {
+      return (widget.painter! as dynamic).dashed == dashed;
+    } on Object {
+      return false;
+    }
+  });
 }
 
 Future<void> _pumpTruncatedBubble(

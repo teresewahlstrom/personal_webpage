@@ -7,12 +7,12 @@ class ChatMarkupViewStyle {
     this.blockquoteRailWidth = 0.4,
     this.blockBaseSpacingFactor = 0.75,
     this.blockQuoteExtraSpacing = 1.2,
-    this.listTopSpacingAdjustment = -0.22,
+    this.listTopSpacingAdjustment = -0.08,
     this.nestedListTopSpacingAdjustment = -0.59,
     this.nestedListBottomSpacingAdjustment = -0.55,
     this.blockQuoteTopSpacingAdjustment = 0.0,
     this.listBottomSpacingAdjustment = 1.05,
-    this.headingBottomSpacingFactors = const <double>[-0.14, -0.32],
+    this.headingBottomSpacingFactors = const <double>[-0.08, -0.26],
     this.headingTopSpacingFactors = const <double>[1.0, 1.0],
     this.listItemBaseSpacingFactor = 0.26,
     this.topLevelListItemSpacingAdjustment = 0.52,
@@ -208,7 +208,8 @@ class ChatMarkupView extends StatelessWidget {
 
     if (block is ChatMarkupListBlock) {
       final List<Widget> children = <Widget>[];
-      for (final (int itemIndex, ChatMarkupListItem item) in block.items.indexed) {
+      for (final (int itemIndex, ChatMarkupListItem item)
+          in block.items.indexed) {
         if (itemIndex > 0) {
           children.add(
             SizedBox(
@@ -333,8 +334,8 @@ class ChatMarkupView extends StatelessWidget {
     }
 
     if (previousBlock is ChatMarkupHeadingBlock) {
-      final double headingBottomSpacingFactor =
-          style.headingBottomSpacingFactorForLevel(previousBlock.level);
+      final double headingBottomSpacingFactor = style
+          .headingBottomSpacingFactorForLevel(previousBlock.level);
       final double headingFontSize = _resolveHeadingFontSize(
         theme: theme,
         fallbackFontSize: fontSize,
@@ -343,8 +344,8 @@ class ChatMarkupView extends StatelessWidget {
       spacing += headingFontSize * headingBottomSpacingFactor;
     }
     if (nextBlock is ChatMarkupHeadingBlock) {
-      final double headingTopSpacingFactor =
-          style.headingTopSpacingFactorForLevel(nextBlock.level);
+      final double headingTopSpacingFactor = style
+          .headingTopSpacingFactorForLevel(nextBlock.level);
       final double headingFontSize = _resolveHeadingFontSize(
         theme: theme,
         fallbackFontSize: fontSize,
@@ -438,7 +439,10 @@ class _BlockQuoteRailPainter extends CustomPainter {
     final double railX = railInset + railThickness / 2;
     final double topY = -verticalOvershoot;
     final double bottomY = size.height + verticalOvershoot;
-    final double maxCapLength = (size.width - railX).clamp(0.0, double.infinity);
+    final double maxCapLength = (size.width - railX).clamp(
+      0.0,
+      double.infinity,
+    );
     final double boundedCapLength = capLength.clamp(0.0, maxCapLength);
 
     canvas.drawLine(Offset(railX, topY), Offset(railX, bottomY), paint);
