@@ -300,7 +300,7 @@ class ChatMarkupView extends StatelessWidget {
     TextSpan text, {
     bool softWrap = true,
     bool selectable = true,
-    TextAlign textAlign = TextAlign.justify,
+    TextAlign textAlign = TextAlign.start,
   }) {
     return RichText(
       text: text,

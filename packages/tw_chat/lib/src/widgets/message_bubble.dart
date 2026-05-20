@@ -42,13 +42,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       <String, TapGestureRecognizer>{};
 
   _RenderedTextLayout _getMeasuredLayout({
-    required String text,
+    required String rawText,
+    required _ParsedMarkupPayload? parsedMarkup,
     required TextStyle style,
     required TextScaler textScaler,
     required double maxTextWidth,
+    required ChatMarkupTheme markupTheme,
   }) {
     final key = _MeasurementKey(
-      text: text,
+      text: rawText,
       maxTextWidth: maxTextWidth,
       fontSize: style.fontSize,
       lineHeight: style.height,
@@ -62,8 +64,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       return _cachedLayout!;
     }
 
+    final TextSpan measuredText = parsedMarkup == null
+        ? TextSpan(text: _sanitizeTextForMeasurement(rawText), style: style)
+        : parsedMarkup.document.toTextSpan(
+            theme: markupTheme,
+            gestureRecognizerFactory: (_) => null,
+          );
+
     final painter = TextPainter(
-      text: TextSpan(text: _sanitizeTextForMeasurement(text), style: style),
+      text: measuredText,
       textDirection: TextDirection.ltr,
       textScaler: textScaler,
     )..layout(maxWidth: maxTextWidth);
@@ -71,7 +80,6 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final layout = _RenderedTextLayout(
       lineCount: lines.length,
       lineHeight: painter.preferredLineHeight,
-      contentWidth: painter.width,
     );
     painter.dispose();
 
@@ -127,27 +135,21 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final parsedMarkup = widget.isTypingIndicator
         ? null
         : _getParsedMarkup(widget.text);
+    final markupTheme = _buildMarkupTheme(context, bubbleTextStyle);
     final measuredLayout = _getMeasuredLayout(
-      text: parsedMarkup?.plainText ?? widget.text,
+      rawText: widget.text,
+      parsedMarkup: parsedMarkup,
       style: bubbleTextStyle,
       textScaler: textScaler,
       maxTextWidth: (contentMaxWidth - textMeasureHorizontalInset).clamp(
         0.0,
         double.infinity,
       ),
+      markupTheme: markupTheme,
     );
     final isTruncatable =
         measuredLayout.lineCount > ChatBubbleRules.collapsibleLineThreshold;
     final isCollapsed = isTruncatable && widget.isTruncated;
-    final maxUserBubbleWidth = (bubbleMaxWidth - horizontalInset).clamp(
-      bubbleMinWidth,
-      bubbleMaxWidth,
-    );
-    final userBubbleWidth =
-        (measuredLayout.contentWidth + textMeasureHorizontalInset).clamp(
-          bubbleMinWidth,
-          maxUserBubbleWidth,
-        );
     final truncatedContentHeight =
         measuredLayout.lineHeight * ChatBubbleRules.collapsedVisibleLines;
     final bubbleTopMargin = widget.isFirstMessage
@@ -215,60 +217,59 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                 child: Stack(
                   children: [
                     SizedBox(
-                      width: contentMaxWidth,
+                      width: widget.isUser ? null : contentMaxWidth,
                       child: Stack(
                         children: [
                           if (widget.isUser)
-                            Padding(
-                              padding: EdgeInsets.only(right: horizontalInset),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: SizedBox(
-                                  width: userBubbleWidth,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        padding: EdgeInsets.fromLTRB(
-                                          horizontalInset,
-                                          verticalInset,
-                                          horizontalInset,
-                                          isCollapsed ? 0.0 : verticalInset,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: bubbleColor,
-                                          borderRadius: BorderRadius.circular(
-                                            tokens.bubbleRadius,
-                                          ),
-                                          border: showFooter || isCollapsed
-                                              ? Border(
-                                                  top: bubbleBorderSide,
-                                                  left: bubbleBorderSide,
-                                                  right: bubbleBorderSide,
-                                                )
-                                              : Border.fromBorderSide(
-                                                  bubbleBorderSide,
-                                                ),
-                                          boxShadow: [
-                                            tokens.surfaceShadow(colors),
-                                          ],
-                                        ),
-                                        child: _buildBubbleText(
-                                          parsedMarkup,
-                                          style: bubbleTextStyle,
-                                          bubbleColor: bubbleColor,
-                                          isUserBubble: true,
-                                          truncatedContentHeight:
-                                              truncatedContentHeight,
-                                          isTruncated: isCollapsed,
-                                        ),
+                            IntrinsicWidth(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: bubbleMinWidth,
+                                  maxWidth: bubbleMaxWidth,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.fromLTRB(
+                                        horizontalInset,
+                                        verticalInset,
+                                        horizontalInset,
+                                        isCollapsed ? 0.0 : verticalInset,
                                       ),
-                                      if (showFooter) buildFooter(),
-                                    ],
-                                  ),
+                                      decoration: BoxDecoration(
+                                        color: bubbleColor,
+                                        borderRadius: BorderRadius.circular(
+                                          tokens.bubbleRadius,
+                                        ),
+                                        border: showFooter || isCollapsed
+                                            ? Border(
+                                                top: bubbleBorderSide,
+                                                left: bubbleBorderSide,
+                                                right: bubbleBorderSide,
+                                              )
+                                            : Border.fromBorderSide(
+                                                bubbleBorderSide,
+                                              ),
+                                        boxShadow: [
+                                          tokens.surfaceShadow(colors),
+                                        ],
+                                      ),
+                                      child: _buildBubbleText(
+                                        parsedMarkup,
+                                        style: bubbleTextStyle,
+                                        bubbleColor: bubbleColor,
+                                        isUserBubble: true,
+                                        truncatedContentHeight:
+                                            truncatedContentHeight,
+                                        isTruncated: isCollapsed,
+                                      ),
+                                    ),
+                                    if (showFooter) buildFooter(),
+                                  ],
                                 ),
                               ),
                             )
@@ -371,6 +372,34 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     );
   }
 
+  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
+    final skin = ChatSkin.dataOf(context);
+    final colors = skin.colors;
+    final tokens = skin.tokens;
+    final textStyles = skin.textStyles;
+    final TextStyle linkStyle = baseStyle.copyWith(
+      color: colors.markupLink,
+      decoration: TextDecoration.underline,
+      decorationColor: colors.markupLinkDecoration,
+      decorationThickness: textStyles.markdownDecorationThickness(tokens),
+    );
+    return ChatMarkupTheme(
+      baseStyle: baseStyle,
+      strongStyle: textStyles.markdownStrongStyle(baseStyle, colors),
+      emphasisStyle: textStyles.markdownEmphasisStyle(baseStyle),
+      strikethroughStyle: textStyles.markdownStrikethroughStyle(
+        baseStyle,
+        tokens,
+        isDark: ChatSkin.isDarkOf(context),
+      ),
+      underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
+      linkStyle: linkStyle,
+      blockquoteStyle: textStyles.markdownBlockquoteStyle(baseStyle, colors),
+      headingStyleResolver: (int level) =>
+          textStyles.markdownHeadingStyle(baseStyle, level, colors),
+    );
+  }
+
   Future<void> _launchMarkdownLink(String href) async {
     final uri = _normalizeLink(href);
     if (uri == null) {
@@ -430,12 +459,10 @@ class _RenderedTextLayout {
   const _RenderedTextLayout({
     required this.lineCount,
     required this.lineHeight,
-    required this.contentWidth,
   });
 
   final int lineCount;
   final double lineHeight;
-  final double contentWidth;
 }
 
 class _MeasurementKey {
