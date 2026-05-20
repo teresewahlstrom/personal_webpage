@@ -1,88 +1,61 @@
 
 ## Knowledge Management
-A recurring pattern across Terese's work is identifying where operational knowledge is fragile where systems depend on expert memory, informal workarounds, or workflows that fail when the key person is absent. The structural problem is rarely a lack of technical capability, but that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
+A recurring pattern across Terese's work is identifying where operational knowledge is fragile: where teams depend on expert memory, informal workarounds, or workflows that fail when a key person is absent. The structural problem is rarely a lack of technical capability. It is that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
 
-She has experienced very different types of knowledge environments:
+She has experienced sharply different knowledge environments:
 
-* Mature vs non-existent knowledge
-* Kind vs weaponized knowledge
-* Distilled vs fragmented knowledge
+* Mature vs non-existent
+* Democratized vs weaponized
+* Distilled vs fragmented
+* Global enterprises vs small teams
 
-So when she got the opportunity to redesign the knowledge experience from scratch at Markforged as Head of Training (for the modality metal Binder Jetting), she jumped at it because she had seen how important it was.
+When she had the opportunity to redesign the knowledge experience for metal binder jetting at Markforged, she took it seriously because she had seen how much knowledge infrastructure changes the operating reality.
 
-* Instead of throwing away defect-manufactured goods, she started gathering them, sorting them by failure mechanism together with relevant documents, and making them accessible. That defect table became a natural meeting point for discussions across departments at Markforged, leading to fewer misunderstandings and greater depth in technical discussions.
+* Instead of discarding defective manufactured parts, she collected them, classified them by failure mechanism, and paired them with engineering logs and educational material. The resulting defect table became a practical meeting point across departments at Markforged, reducing misunderstandings and deepening technical discussions.
 
-* Instead of the service department escalating certain types of service emails to other departments, she acted as the bridge until neither she nor the experts were needed any longer to answer the most common issues, This freed up time especially for senior engineers to focus on higher-value research, while also making operators more visible and helping unify beliefs around the root causes and best practices.
+* Instead of letting recurring service questions keep escalating to scarce experts, she acted as the bridge until the most common issues could be answered without her or them. This gave senior engineers more time for higher-value research, made operator knowledge more visible, and helped align teams around root causes and best practices.
 
+* Instead of treating poor workflows as inevitable, she added structure, automation through Excel and CAD scripts, and clearer templates that made work easier and less error-prone. The improvements touched sales, marketing, operations, service, and customer onboarding.
 
+Those experiences shaped a core belief:
 
+> Poor knowledge management is not just a source of confusion. It taxes the business through slower decisions, repeated work, missed opportunities, and avoidable dependence on key people.
 
-Instead of accepting poor workflows as inevitable, she added structure, visibility, and knowledge to them. She contributed improvements across sales, marketing, operations, service, and customer onboarding.
-
-She also created a safer environment for other teachers and trainers to gradually step into their roles.
-
-These experiences shaped a set of core beliefs:
-
-
-
-
-
-
-
-
-Instead of accepting poor workflows as inevitable, she added structure, visibility, and knowledge to them. She contributed improvements across sales, marketing, operations, service, and customer onboarding.
-
-At her core, she believs....
-
-* Instead of bad workflows, add some structure and knowledge to it. She has done wonders to sales, marketing, as well as operations, service and customer onboarding.
-
-Her experiences has shaped her to at her core believe 
-
-* you will in the end save time and make people more motivated 
-* convert that fragility into operational infrastructure and you get...
-* be inlove with thought leadership
-* given the right environment, anyone can thrive
-* many people might hold pieces of the puzzle of what the true knowledge is
-* knowledge needs to be democratised, synthesized, made paletable to the users
-* knowledge needs to be a continuous effort
-* knowledge when people are ready for it will transform the person and the company
-* you just need to get started and begin to collect and never stop being curious
-* you will be surprised at the kind of positive effects good knowledge will have.
-
-That same operational instinct now drives her studies on AI-assisted workflow intelligence, and structured data.
+That same operational instinct now drives her self-directed studies in AI-assisted workflow intelligence, data management, and structured information systems.
 
 ---
+
 ## Commercial & Leadership
-
-
-
-## Production Cost Modelling
-
-Terese's Production Cost Modelling experience is strongest in additive manufacturing adoption work, especially at GE Additive, with related work at Volvo Cars.
-
-She has used cost modelling as an engineering-decision tool, not just a finance exercise. The recurring pattern was:
-
-1. Converting technical process uncertainty into decision-ready economics. She built practical cost-estimation models, including configuration logic, to evaluate whether a manufacturing setup was viable for a specific use case.
-2. Linking engineering variables to commercial outcomes. Her modelling work sat between technical parameters and business decisions, helping teams assess feasibility, compare options, and justify or reject investments.
-3. Supporting high-stakes customer and internal decisions. In pre-sales and adoption contexts, the models were used to reduce ambiguity around qualification, setup choices, and expected production economics under real constraints.
-4. Embedding modelling in broader operational workflows. The cost models were part of a larger method that included benchmarking, cross-functional coordination, and execution planning, so outputs were actionable rather than theoretical.
-
-In short, her strength in production cost modelling is translating process-level engineering realities into structured economic logic that can drive confident adoption and execution decisions.
+soon comming
 
 ---
 
-## Technology Adoption and Decision Translation
+## Production Cost Modelling & Decision Support
 
-Terese reduces uncertainty around technically complex decisions by turning evaluation into decision-ready structure. Her work includes feasibility framing, qualification logic, ROI and configuration models, and cross-functional coordination during adoption and launch efforts. The result is clearer investment logic and stronger execution under commercial pressure.
+Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
+
+**Core impact areas:**
+
+* **Translating uncertainty into economics:** Converted technical process variables into decision-ready cost estimations, making it easier to evaluate whether a manufacturing setup was commercially viable for a specific use case.
+* **Making engineering trade-offs commercially legible:** Connected configuration, material, process, and workflow choices to cost, capacity, risk, and adoption consequences, allowing different stakeholders to compare options on a shared basis.
+* **De-risking high-stakes decisions:** Provided pre-sales and adoption tools that reduced ambiguity around qualification, setup choices, and expected production economics under real-world constraints.
+* **Embedding economic logic into execution:** Designed models to sit inside broader operational workflows, such as benchmarking, cross-functional coordination, and execution planning, so outputs became active decision support rather than theoretical finance artifacts.
+
+In short, her strength in production cost modelling has been more than calculating cost. **It has been building the shared economic logic that helps people make better adoption, investment, and execution decisions.**
 
 ---
 
-## Production and Process Reliability
+## Operations / Production and Process Reliability
 
 Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.
 
 ---
 
-## AI-Assisted Workflow Intelligence
+## AI-Assisted Workflows
 
 Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
+
+---
+
+## Metal Additive Manufacturing
+soon comming
