@@ -31,7 +31,7 @@ void main() {
     final shape = decoration.shape as StadiumBorder;
 
     expect(find.text('Chat with Twin'), findsOneWidget);
-    expect(shape.side.color, const Color(0xFFE1E4F2));
+    expect(shape.side.color, const Color(0xFFFFFFFF));
     expect(shape.side.width, 1.0);
   });
 

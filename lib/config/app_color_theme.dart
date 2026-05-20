@@ -16,27 +16,29 @@ final class _AppLightColors {
   static const Color pageLoader = pageBodyText;
 
   // background colors
-  static const Color pageBackground = Color(0xFFF8F9F7);
-  static const Color headerBackground = Color(0xFFF8F9F7);
-  static const Color buttonBackground = Color(0xFFF8F9F7);
-  static const Color footerBackground = Color(0xFFF8F9F7);
-  static const Color modalBackground = Color(0xFFF8F9F7);
+  static const Color _mainBackground = Color.fromARGB(255, 238, 238, 238);
+  static const Color pageBackground = _mainBackground;
+  static const Color headerBackground = _mainBackground;
+  static const Color buttonBackground = _mainBackground;
+  static const Color footerBackground = _mainBackground;
+  static const Color modalBackground = _mainBackground;
 
   // line colors
-  static const Color lineSubtle = Color(0xFFE1E4F2);
-  static const Color lineSubtleSecondary = Color(0x40394183);
-  static const Color lineSubtleTertiary = Color(0x40394183);
-  static const Color modalHeaderBorder = Color(0x1F394183);
+  static const Color lineSubtle = Color(0xFFFFFFFF);
+  static const Color lineSubtleSecondary = Color(0xFFFFFFFF);
+  static const Color lineSubtleTertiary = Color(0xFFFFFFFF);
+  static const Color modalHeaderBorder = Color(0xFFFFFFFF);
 
   // text colors
   static const Color pageHeadingText = Color(0xFF161C45);
   static const Color footerText = Color(0xFF555764);
   static const Color modalContentText = Color(0xFF252525);
   static const Color pageBodyText = Color(0xFF252525);
-  static const Color pageScrollbarThumb = Color(0xFFE1E4F2);
-  static const Color pageScrollbarThumbInactive = Color(0xFFE8EAF4);
+  static const Color pageScrollbarThumb = Color(0xFFFFFFFF);
+  static const Color pageScrollbarThumbInactive = Color(0xFFFFFFFF);
   static const Color pageScrollbarTrack = Color(0x00F8F9F7);
   static const double projectCardFillAlpha = 0.70;
+
   // clickable accent colors
   static const Color _interactive = Color(0xFF394183);
   static const Color _interactiveHover = Color(0xFF843F02);
@@ -53,11 +55,12 @@ final class _AppDarkColors {
   static const Color pageLoader = Color(0xFF90E8F8);
 
   // background colors
-  static const Color pageBackground = Color(0xFF212835);
-  static const Color headerBackground = Color(0xFF212835);
-  static const Color buttonBackground = Color(0xFF212835);
-  static const Color footerBackground = Color(0xFF212835);
-  static const Color modalBackground = Color(0xFF101B34);
+  static const Color _mainBackground = Color(0xFF212835);
+  static const Color pageBackground = _mainBackground;
+  static const Color headerBackground = _mainBackground;
+  static const Color buttonBackground = _mainBackground;
+  static const Color footerBackground = _mainBackground;
+  static const Color modalBackground = _mainBackground;
 
   // line colors
   static const Color lineSubtle = Color(0xFF2B364A);
@@ -74,6 +77,7 @@ final class _AppDarkColors {
   static const Color pageScrollbarThumbInactive = Color(0xFF283143);
   static const Color pageScrollbarTrack = Color(0x004EF0FF);
   static const double projectCardFillAlpha = 0.65;
+  
   // clickable accent colors
   static const Color _interactive = Color(0xFF90E8F8);
   static const Color _interactiveHover = Color(0xFF90E8F8);

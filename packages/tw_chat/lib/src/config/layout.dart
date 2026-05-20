@@ -85,7 +85,7 @@ class ChatLayout {
   }
 
   static Color shellFill(BuildContext context) {
-    return ChatSkin.dataOf(context).colors.shellBackgroundStart;
+    return ChatSkin.dataOf(context).colors.shellBackground;
   }
 
   static Color dividerColor(BuildContext context) =>

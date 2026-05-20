@@ -15,7 +15,8 @@ class ChatLauncherStyle {
     this.icon = Icons.chat_bubble,
     this.foregroundColor = const Color(0xFF394183),
     this.hoverForegroundColor = const Color(0xFF843F02),
-    this.backgroundColor = Colors.white,
+
+    this.backgroundColor = const Color.fromARGB(255, 248, 249, 247),
     this.borderColor,
     this.hoverBorderColor,
     this.borderWidth = 1,

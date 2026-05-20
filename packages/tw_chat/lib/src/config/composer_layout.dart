@@ -33,7 +33,7 @@ class ChatComposerLayout {
     final t = ChatSkin.isDarkOf(context)
         ? _composerFillLerpTDark
         : _composerFillLerpTLight;
-    return Color.lerp(colors.shellBackgroundStart, colors.shellDivider, t) ??
+    return Color.lerp(colors.shellBackground, colors.shellDivider, t) ??
         colors.composerFill;
   }
 

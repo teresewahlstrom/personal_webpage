@@ -164,7 +164,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         : collapseButtonOverflowBottom;
     final toggleButtonBackgroundColor = widget.isTruncated
         ? ChatBubbleRules.collapseButtonColor(context)
-        : colors.shellBackgroundStart;
+        : colors.shellBackground;
     final toggleButtonIconColor = widget.isTruncated
         ? ChatBubbleRules.collapseButtonIconColor(context)
         : ChatBubbleRules.collapseButtonColor(context);

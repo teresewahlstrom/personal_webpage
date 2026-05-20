@@ -18,20 +18,12 @@ class ChatSkinData {
 class ChatSkinColors {
   const ChatSkinColors({
     required this.transparent,
-    required this.shellTopShadowStrong,
-    required this.shellTopShadowSoft,
     required this.appBarTitle,
     required this.bubbleText,
-    required this.typingIndicatorDot,
-    required this.shellBackgroundBaseStart,
-    required this.shellBackgroundBaseEnd,
-    required this.shellBackgroundStart,
-    required this.shellBackgroundEnd,
+    required this.shellBackground,
     required this.shellOuterShadow,
     required this.shellOuterBorder,
     required this.shellDivider,
-    required this.userBubbleFill,
-    required this.userBubbleBorder,
     required this.botBubbleFill,
     required this.botBubbleBorder,
     required this.bubbleShadow,
@@ -45,7 +37,6 @@ class ChatSkinColors {
     required this.composerSendIcon,
     required this.markupFadeMaskOpaque,
     required this.markupFadeMaskSoft,
-    required this.markupBlockquoteRail,
     required this.markupLink,
     required this.markupLinkDecoration,
     required this.scrollbarThumb,
@@ -54,20 +45,12 @@ class ChatSkinColors {
   });
 
   final Color transparent;
-  final Color shellTopShadowStrong;
-  final Color shellTopShadowSoft;
   final Color appBarTitle;
   final Color bubbleText;
-  final Color typingIndicatorDot;
-  final Color shellBackgroundBaseStart;
-  final Color shellBackgroundBaseEnd;
-  final Color shellBackgroundStart;
-  final Color shellBackgroundEnd;
+  final Color shellBackground;
   final Color shellOuterShadow;
   final Color shellOuterBorder;
   final Color shellDivider;
-  final Color userBubbleFill;
-  final Color userBubbleBorder;
   final Color botBubbleFill;
   final Color botBubbleBorder;
   final Color bubbleShadow;
@@ -81,7 +64,6 @@ class ChatSkinColors {
   final Color composerSendIcon;
   final Color markupFadeMaskOpaque;
   final Color markupFadeMaskSoft;
-  final Color markupBlockquoteRail;
   final Color markupLink;
   final Color markupLinkDecoration;
   final Color scrollbarThumb;
@@ -289,7 +271,7 @@ class ChatSkinTokens {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: shellTopShadowGradientAlphas
-          .map((a) => colors.shellBackgroundStart.withAlpha(a))
+          .map((a) => colors.shellBackground.withAlpha(a))
           .toList(),
       stops: shellTopShadowGradientStops,
     );
@@ -297,7 +279,7 @@ class ChatSkinTokens {
 
   BoxDecoration shellTopShadowDecoration(ChatSkinColors colors) {
     return BoxDecoration(
-      color: colors.shellBackgroundStart,
+      color: colors.shellBackground,
       gradient: shellTopShadowGradient(colors),
     );
   }
@@ -307,7 +289,7 @@ class ChatSkinTokens {
       begin: Alignment.bottomCenter,
       end: Alignment.topCenter,
       colors: shellBottomShadowGradientAlphas
-          .map((a) => colors.shellBackgroundStart.withAlpha(a))
+          .map((a) => colors.shellBackground.withAlpha(a))
           .toList(),
       stops: shellBottomShadowGradientStops,
     );
