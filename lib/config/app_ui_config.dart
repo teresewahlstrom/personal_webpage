@@ -195,12 +195,19 @@ final class PagePalette {
 }
 
 final class PageTextStyles {
+  static const double minTextScale = 1.0;
+  static const double maxTextScale = 1.6;
+  static const double _bodyScaleIntensity = 0.7;
+  static const double _headingScaleIntensity = 0.5;
+
   static TextStyle body(BuildContext context) {
     final brightness = Theme.of(context).brightness;
+    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
+    final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
     return TextStyle(
       fontFamily: 'Inter18pt',
       fontWeight: FontWeight.w300,
-      fontSize: 17.3,
+      fontSize: scaledFontSize,
       height: 1.4,
       color: PagePalette.bodyFor(brightness),
     );
@@ -208,22 +215,37 @@ final class PageTextStyles {
 
   static TextStyle h2(BuildContext context) {
     final brightness = Theme.of(context).brightness;
+    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(35.0) / 35.0);
+    final scaledFontSize = _scaledFontSize(35.0, textScale, _headingScaleIntensity);
     return TextStyle(
       fontFamily: 'ComingSoon',
       fontWeight: FontWeight.w700,
-      fontSize: 35,
+      fontSize: scaledFontSize,
       height: 1,
       color: PagePalette.headingFor(brightness),
     );
   }
 
   static TextStyle socialLink(BuildContext context) {
-    return const TextStyle(
+    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
+    final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
+    return TextStyle(
       fontFamily: 'Inter18pt',
       fontWeight: FontWeight.w300,
-      fontSize: 17.3,
+      fontSize: scaledFontSize,
       height: 1.2,
     );
+  }
+
+  static double _scaledFontSize(double base, double scale, double intensity) {
+    return base * (1 + (scale - 1) * intensity);
+  }
+
+  static double _resolvedTextScale(double textScale) {
+    if (!textScale.isFinite || textScale <= 0) {
+      return minTextScale;
+    }
+    return textScale.clamp(minTextScale, maxTextScale).toDouble();
   }
 }
 

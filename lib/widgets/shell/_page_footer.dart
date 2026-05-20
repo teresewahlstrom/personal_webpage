@@ -45,7 +45,7 @@ class PageFooter extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Inter18pt',
                 fontWeight: FontWeight.w300,
-                fontSize: 14,
+                fontSize: 16,
                 color: ShellUiConfig.footerTextFor(brightness),
                 decoration: TextDecoration.none,
               ),
@@ -135,7 +135,7 @@ class _LinkTextButton extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'Inter18pt',
           fontWeight: FontWeight.w300,
-          fontSize: 14,
+          fontSize: 16,
           decoration: TextDecoration.underline,
           decorationStyle: TextDecorationStyle.solid,
           decorationColor: ShellUiConfig.linkTextFor(brightness),
