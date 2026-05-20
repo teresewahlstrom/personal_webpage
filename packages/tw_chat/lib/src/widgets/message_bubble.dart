@@ -697,6 +697,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       strikethroughStyle: textStyles.markdownStrikethroughStyle(
         baseStyle,
         tokens,
+        isDark: ChatSkin.isDarkOf(context),
       ),
       underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
       linkStyle: linkStyle,
@@ -792,7 +793,7 @@ class _BubbleFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final double footerLineYOffset = isCollapsed
-        ? tokens.bubbleBorderWidth * 2
+        ? tokens.bubbleBorderWidth * 1.4 // Nudge down do that the dashed line does not appear to coincide with bubble shadow when truncated
         : -tokens.bubbleBorderWidth;
     return Column(
       mainAxisSize: MainAxisSize.min,

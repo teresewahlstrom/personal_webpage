@@ -293,7 +293,7 @@ class _ProjectsSection extends StatefulWidget {
 class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _title = "Work Highlights";
   static const String _projectCardsAssetPath =
-  'lib/pages/content/project_cards.md';
+      'lib/pages/content/project_cards.md';
 
   late Future<List<_ProjectCardData>> _projectCardsFuture;
   List<bool> _expandedStates = <bool>[];
@@ -538,29 +538,15 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                 child: AnimatedBuilder(
                   animation: _heightAnimation,
                   builder: (BuildContext context, Widget? child) {
-                    if (_heightAnimation.status ==
-                        AnimationStatus.dismissed) {
+                    if (_heightAnimation.status == AnimationStatus.dismissed) {
                       return SelectionContainer.disabled(child: child!);
                     }
                     return child!;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: ShellUiConfig.projectCardFillFor(brightness),
-                        border: widget.gridLineStyle.borderAll,
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 12,
-                        ),
-                        child: _ProjectCardMarkdownBody(
-                          document: widget.contentDocument,
-                        ),
-                      ),
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: _ProjectCardMarkdownBody(
+                      document: widget.contentDocument,
                     ),
                   ),
                 ),
@@ -706,10 +692,8 @@ class _ProjectCardsMarkdownLoader {
 
     final List<_ProjectCardData> cards = normalizedSections
         .map(
-          (String section) => _parseCardSection(
-            section,
-            sourceAssetPath: sourceAssetPath,
-          ),
+          (String section) =>
+              _parseCardSection(section, sourceAssetPath: sourceAssetPath),
         )
         .toList(growable: false);
 

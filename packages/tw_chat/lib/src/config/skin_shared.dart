@@ -161,6 +161,7 @@ class ChatSkinTokens {
   final double appBarLeadingGap = 2.0;
   final double appBarActionGap = 15.0;
   final double appBarActionWidth = 40.0;
+  final double appBarActionHeightFactor = 0.75;
 
   final double bubbleVerticalMargin = 40.0;
   final double bubbleBorderWidth = 1.0;
@@ -206,7 +207,8 @@ class ChatSkinTokens {
   final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
   final double markupUnderlineThickness = 1.75;
   final double markupDecorationThicknessBias = 0.15;
-  final double markupStrikethroughThicknessBias = 1.8;
+  final double markupStrikethroughLightThicknessBias = 0.9;
+  final double markupStrikethroughDarkThicknessBias = 4.0;
   final double markupBlockquoteRailWidth = 0.4;
   final double markupBlockBaseSpacingFactor = 0.75;
   final double markupBlockQuoteExtraSpacing = 1.2;
@@ -445,14 +447,16 @@ class ChatSkinTextStyles {
 
   TextStyle markdownStrikethroughStyle(
     TextStyle baseStyle,
-    ChatSkinTokens tokens,
-  ) {
+    ChatSkinTokens tokens, {
+    required bool isDark,
+  }) {
+    final double thicknessBias = isDark
+        ? tokens.markupStrikethroughDarkThicknessBias
+        : tokens.markupStrikethroughLightThicknessBias;
     return baseStyle.copyWith(
       decoration: TextDecoration.lineThrough,
       decorationColor: baseStyle.color,
-      decorationThickness:
-          markdownDecorationThickness(tokens) +
-          tokens.markupStrikethroughThicknessBias,
+      decorationThickness: markdownDecorationThickness(tokens) + thicknessBias,
     );
   }
 

@@ -34,6 +34,48 @@ void main() {
     expect(shape.side.color, const Color(0xFFE1E4F2));
     expect(shape.side.width, 1.0);
   });
+
+  testWidgets('chat app bar toggle icon is vertically centered in hit area', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const ChatSkinScope(
+        mode: ChatSkinMode.light,
+        child: MaterialApp(
+          home: Material(
+            child: ChatAppBar(
+              onDisplayStateToggle: _noop,
+              displayStateToggleIcon: Icons.expand_more_rounded,
+              displayStateToggleTooltip: 'Minimize chat',
+              tokens: ChatSkin.tokens,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final Rect hitAreaRect = tester.getRect(find.byTooltip('Minimize chat'));
+    final Rect actionBoundsRect = tester.getRect(
+      find.byKey(const ValueKey('chat-app-bar-action-bounds')),
+    );
+    final Rect actionContainerRect = tester.getRect(
+      find.byKey(const ValueKey('chat-app-bar-action-container')),
+    );
+    final Rect iconRect = tester.getRect(
+      find.byIcon(Icons.expand_more_rounded),
+    );
+
+    expect(
+      actionContainerRect.height,
+      closeTo(
+        actionBoundsRect.height * ChatSkin.tokens.appBarActionHeightFactor,
+        0.5,
+      ),
+    );
+    expect(hitAreaRect.height, closeTo(actionContainerRect.height, 0.5));
+    expect(hitAreaRect.top, closeTo(actionBoundsRect.top, 0.5));
+    expect(iconRect.center.dy, closeTo(hitAreaRect.center.dy, 0.5));
+  });
 }
 
 void _noop() {}

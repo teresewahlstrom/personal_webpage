@@ -221,23 +221,32 @@ class ChatAppBar extends StatelessWidget {
       right: 0,
       bottom: 0,
       width: tokens.appBarActionWidth,
-      child: Material(
-        color: colors.transparent,
-        child: Tooltip(
-          message: displayStateToggleTooltip,
-          child: InkWell(
-            onTap: onDisplayStateToggle,
-            child: Center(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: Icon(displayStateToggleIcon, color: iconColor),
+      child: LayoutBuilder(
+        key: const ValueKey('chat-app-bar-action-bounds'),
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double actionHeight =
+              constraints.maxHeight * tokens.appBarActionHeightFactor;
+          return Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              key: const ValueKey('chat-app-bar-action-container'),
+              width: tokens.appBarActionWidth,
+              height: actionHeight,
+              child: Material(
+                color: colors.transparent,
+                child: Tooltip(
+                  message: displayStateToggleTooltip,
+                  child: InkWell(
+                    onTap: onDisplayStateToggle,
+                    child: Center(
+                      child: Icon(displayStateToggleIcon, color: iconColor),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
 

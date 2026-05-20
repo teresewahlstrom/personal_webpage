@@ -65,4 +65,46 @@ void main() {
 
     expect(headingStyle.fontSize, closeTo(12 * 1.36, 0.001));
   });
+
+  test('strikethrough thickness is balanced by skin mode', () {
+    const baseStyle = TextStyle(fontSize: 12, height: 1, color: Colors.black);
+    final tokens = ChatSkin.tokens;
+    final textStyles = ChatSkin.textStyles;
+
+    final lightStyle = textStyles.markdownStrikethroughStyle(
+      baseStyle,
+      tokens,
+      isDark: false,
+    );
+    final darkStyle = textStyles.markdownStrikethroughStyle(
+      baseStyle,
+      tokens,
+      isDark: true,
+    );
+
+    expect(lightStyle.decorationThickness, closeTo(2.8, 0.001));
+    expect(darkStyle.decorationThickness, closeTo(4.2, 0.001));
+    expect(_renderedStrikeThickness(lightStyle), closeTo(1.4, 0.001));
+    expect(_renderedStrikeThickness(darkStyle), closeTo(2.1, 0.001));
+  });
+}
+
+double? _renderedStrikeThickness(TextStyle strikeStyle) {
+  final theme = ChatMarkupTheme(
+    baseStyle: const TextStyle(fontSize: 12),
+    strongStyle: const TextStyle(fontWeight: FontWeight.bold),
+    emphasisStyle: const TextStyle(fontStyle: FontStyle.italic),
+    strikethroughStyle: strikeStyle,
+    underlineStyle: const TextStyle(decoration: TextDecoration.underline),
+    linkStyle: const TextStyle(color: Colors.blue),
+    blockquoteStyle: const TextStyle(fontStyle: FontStyle.italic),
+    headingStyleResolver: (int level) => const TextStyle(fontSize: 12),
+  );
+
+  final span = const ChatMarkupInline(
+    text: 'gone',
+    isStrikethrough: true,
+  ).toTextSpan(theme: theme, gestureRecognizerFactory: (_) => null);
+
+  return span.style?.decorationThickness;
 }

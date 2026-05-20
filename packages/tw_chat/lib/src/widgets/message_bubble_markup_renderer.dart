@@ -108,8 +108,10 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
                   shaderCallback: (Rect bounds) {
                     final double normalizedFadeStart = bounds.height <= 0
                         ? 0.0
-                        : ((bounds.height - fadeHeight) / bounds.height)
-                              .clamp(0.0, 1.0);
+                        : ((bounds.height - fadeHeight) / bounds.height).clamp(
+                            0.0,
+                            1.0,
+                          );
                     final double midFadeStart =
                         (normalizedFadeStart +
                                 (1.0 - normalizedFadeStart) * midFadeFactor)
@@ -192,6 +194,7 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
       strikethroughStyle: textStyles.markdownStrikethroughStyle(
         baseStyle,
         tokens,
+        isDark: ChatSkin.isDarkOf(context),
       ),
       underlineStyle: textStyles.markdownUnderlineStyle(baseStyle, tokens),
       linkStyle: linkStyle,
