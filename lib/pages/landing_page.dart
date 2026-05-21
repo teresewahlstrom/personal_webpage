@@ -267,9 +267,9 @@ class _LandingPageState extends State<LandingPage> {
 class _HeroStatement extends StatelessWidget {
   const _HeroStatement();
 
-  static const String _title = "About me";
+  static const String _title = "Terese Wahlström";
   static const String _content =
-      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
+      "Mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling.";
 
   @override
   Widget build(BuildContext context) {
