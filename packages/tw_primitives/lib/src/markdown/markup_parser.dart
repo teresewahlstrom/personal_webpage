@@ -1,14 +1,14 @@
-import 'message_markup_model.dart';
-import 'message_markup_tokenizer.dart';
+import 'markup_model.dart';
+import 'markup_tokenizer.dart';
 
-class ChatMarkupParser {
+class MarkupParser {
   static const int _maxHeadingLevel = 2;
 
-  ChatMarkupParser(String raw)
+  MarkupParser(String raw)
     : _lines = raw.replaceAll('\r\n', '\n').split('\n'),
       preserveSoftLineBreaks = false;
 
-  ChatMarkupParser.fromLines(
+  MarkupParser.fromLines(
     this._lines, {
     this.preserveSoftLineBreaks = false,
   });
@@ -16,15 +16,15 @@ class ChatMarkupParser {
   final List<String> _lines;
   final bool preserveSoftLineBreaks;
 
-  ChatMarkupDocument parse() {
-    return ChatMarkupDocument(_parseBlocks(start: 0, baseIndent: 0).blocks);
+  MarkupDocument parse() {
+    return MarkupDocument(_parseBlocks(start: 0, baseIndent: 0).blocks);
   }
 
   _BlockParseResult _parseBlocks({
     required int start,
     required int baseIndent,
   }) {
-    final blocks = <ChatMarkupBlock>[];
+    final blocks = <MarkupBlock>[];
     var index = start;
 
     while (index < _lines.length) {
@@ -53,9 +53,9 @@ class ChatMarkupParser {
       final headingMatch = _matchHeading(line, baseIndent: baseIndent);
       if (headingMatch != null) {
         blocks.add(
-          ChatMarkupHeadingBlock(
+          MarkupHeadingBlock(
             level: headingMatch.level,
-            inlines: ChatMarkupInlineTokenizer(headingMatch.text).tokenize(),
+            inlines: MarkupInlineTokenizer(headingMatch.text).tokenize(),
           ),
         );
         index += 1;
@@ -100,9 +100,6 @@ class ChatMarkupParser {
       if (index > start && _startsNewBlock(line, baseIndent: baseIndent)) {
         break;
       }
-      if (!preserveSoftLineBreaks && index > start) {
-        break;
-      }
 
       final content = line.substring(baseIndent);
       paragraphLines.add(
@@ -116,9 +113,7 @@ class ChatMarkupParser {
         : paragraphLines.join(' ');
 
     return _ParagraphParseResult(
-      block: ChatMarkupParagraphBlock(
-        ChatMarkupInlineTokenizer(paragraphText).tokenize(),
-      ),
+      block: MarkupParagraphBlock(MarkupInlineTokenizer(paragraphText).tokenize()),
       nextIndex: index,
     );
   }
@@ -128,7 +123,7 @@ class ChatMarkupParser {
     required int baseIndent,
     required _ListMarker firstMarker,
   }) {
-    final items = <ChatMarkupListItem>[];
+    final items = <MarkupListItem>[];
     var index = start;
     final ordered = firstMarker.ordered;
     final listIndent = firstMarker.indent;
@@ -159,10 +154,10 @@ class ChatMarkupParser {
     }
 
     return _ListParseResult(
-      block: ChatMarkupListBlock(
+      block: MarkupListBlock(
         ordered: ordered,
         startingIndex: startingIndex,
-        items: List<ChatMarkupListItem>.unmodifiable(items),
+        items: List<MarkupListItem>.unmodifiable(items),
       ),
       nextIndex: index,
     );
@@ -215,13 +210,13 @@ class ChatMarkupParser {
       index += 1;
     }
 
-    final blocks = ChatMarkupParser.fromLines(
+    final blocks = MarkupParser.fromLines(
       itemLines,
       preserveSoftLineBreaks: true,
     )._parseBlocks(start: 0, baseIndent: 0).blocks;
 
     return _ListItemParseResult(
-      item: ChatMarkupListItem(List<ChatMarkupBlock>.unmodifiable(blocks)),
+      item: MarkupListItem(List<MarkupBlock>.unmodifiable(blocks)),
       nextIndex: index,
     );
   }
@@ -243,14 +238,12 @@ class ChatMarkupParser {
       index += 1;
     }
 
-    final blocks = ChatMarkupParser.fromLines(
+    final blocks = MarkupParser.fromLines(
       quoteLines,
     )._parseBlocks(start: 0, baseIndent: 0).blocks;
 
     return _BlockQuoteParseResult(
-      block: ChatMarkupBlockQuoteBlock(
-        List<ChatMarkupBlock>.unmodifiable(blocks),
-      ),
+      block: MarkupBlockQuoteBlock(List<MarkupBlock>.unmodifiable(blocks)),
       nextIndex: index,
     );
   }
@@ -352,35 +345,35 @@ class ChatMarkupParser {
 class _BlockParseResult {
   const _BlockParseResult({required this.blocks, required this.nextIndex});
 
-  final List<ChatMarkupBlock> blocks;
+  final List<MarkupBlock> blocks;
   final int nextIndex;
 }
 
 class _ParagraphParseResult {
   const _ParagraphParseResult({required this.block, required this.nextIndex});
 
-  final ChatMarkupParagraphBlock block;
+  final MarkupParagraphBlock block;
   final int nextIndex;
 }
 
 class _ListParseResult {
   const _ListParseResult({required this.block, required this.nextIndex});
 
-  final ChatMarkupListBlock block;
+  final MarkupListBlock block;
   final int nextIndex;
 }
 
 class _ListItemParseResult {
   const _ListItemParseResult({required this.item, required this.nextIndex});
 
-  final ChatMarkupListItem item;
+  final MarkupListItem item;
   final int nextIndex;
 }
 
 class _BlockQuoteParseResult {
   const _BlockQuoteParseResult({required this.block, required this.nextIndex});
 
-  final ChatMarkupBlockQuoteBlock block;
+  final MarkupBlockQuoteBlock block;
   final int nextIndex;
 }
 

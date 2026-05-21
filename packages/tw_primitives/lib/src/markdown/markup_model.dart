@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-typedef GestureRecognizerFactory = GestureRecognizer? Function(String href);
-typedef ChatMarkupHeadingStyleResolver = TextStyle Function(int level);
+typedef LinkGestureRecognizerFactory = GestureRecognizer? Function(String href);
+typedef MarkupHeadingStyleResolver = TextStyle Function(int level);
 
-class ChatMarkupTheme {
-  const ChatMarkupTheme({
+class MarkupTheme {
+  const MarkupTheme({
     required this.baseStyle,
     required this.strongStyle,
     required this.emphasisStyle,
@@ -23,23 +23,23 @@ class ChatMarkupTheme {
   final TextStyle underlineStyle;
   final TextStyle linkStyle;
   final TextStyle blockquoteStyle;
-  final ChatMarkupHeadingStyleResolver headingStyleResolver;
+  final MarkupHeadingStyleResolver headingStyleResolver;
 }
 
-class ChatMarkupDocument {
-  const ChatMarkupDocument(this.blocks);
+class MarkupDocument {
+  const MarkupDocument(this.blocks);
 
   static const String blockSeparator = '\n\n';
 
-  final List<ChatMarkupBlock> blocks;
+  final List<MarkupBlock> blocks;
 
   String toPlainText() {
     return _joinBlockPlainText(blocks, separator: blockSeparator).trimRight();
   }
 
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     return _joinBlockTextSpan(
       blocks,
@@ -50,8 +50,8 @@ class ChatMarkupDocument {
   }
 }
 
-class ChatMarkupInline {
-  const ChatMarkupInline({
+class MarkupInline {
+  const MarkupInline({
     required this.text,
     this.isStrong = false,
     this.isEmphasis = false,
@@ -75,8 +75,8 @@ class ChatMarkupInline {
   }
 
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     final isLink = href != null && href!.isNotEmpty;
     var effectiveStyle = theme.baseStyle;
@@ -117,21 +117,21 @@ class ChatMarkupInline {
   }
 }
 
-abstract class ChatMarkupBlock {
-  const ChatMarkupBlock();
+abstract class MarkupBlock {
+  const MarkupBlock();
 
   String toPlainText();
 
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   });
 }
 
-class ChatMarkupParagraphBlock extends ChatMarkupBlock {
-  const ChatMarkupParagraphBlock(this.inlines);
+class MarkupParagraphBlock extends MarkupBlock {
+  const MarkupParagraphBlock(this.inlines);
 
-  final List<ChatMarkupInline> inlines;
+  final List<MarkupInline> inlines;
 
   @override
   String toPlainText() {
@@ -140,8 +140,8 @@ class ChatMarkupParagraphBlock extends ChatMarkupBlock {
 
   @override
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     return TextSpan(
       style: theme.baseStyle,
@@ -157,11 +157,11 @@ class ChatMarkupParagraphBlock extends ChatMarkupBlock {
   }
 }
 
-class ChatMarkupHeadingBlock extends ChatMarkupBlock {
-  const ChatMarkupHeadingBlock({required this.level, required this.inlines});
+class MarkupHeadingBlock extends MarkupBlock {
+  const MarkupHeadingBlock({required this.level, required this.inlines});
 
   final int level;
-  final List<ChatMarkupInline> inlines;
+  final List<MarkupInline> inlines;
 
   @override
   String toPlainText() {
@@ -170,11 +170,11 @@ class ChatMarkupHeadingBlock extends ChatMarkupBlock {
 
   @override
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     final headingStyle = theme.headingStyleResolver(level);
-    final headingTheme = ChatMarkupTheme(
+    final headingTheme = MarkupTheme(
       baseStyle: headingStyle,
       strongStyle: headingStyle.merge(theme.strongStyle),
       emphasisStyle: headingStyle.merge(theme.emphasisStyle),
@@ -199,15 +199,15 @@ class ChatMarkupHeadingBlock extends ChatMarkupBlock {
   }
 }
 
-class ChatMarkupBlockQuoteBlock extends ChatMarkupBlock {
-  const ChatMarkupBlockQuoteBlock(this.blocks);
+class MarkupBlockQuoteBlock extends MarkupBlock {
+  const MarkupBlockQuoteBlock(this.blocks);
 
-  final List<ChatMarkupBlock> blocks;
+  final List<MarkupBlock> blocks;
 
   @override
   String toPlainText() {
     return _prefixMultilinePlainText(
-      _joinBlockPlainText(blocks, separator: ChatMarkupDocument.blockSeparator),
+      _joinBlockPlainText(blocks, separator: MarkupDocument.blockSeparator),
       firstLinePrefix: '> ',
       continuationPrefix: '> ',
     );
@@ -215,12 +215,12 @@ class ChatMarkupBlockQuoteBlock extends ChatMarkupBlock {
 
   @override
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     final contentSpan = _joinBlockTextSpan(
       blocks,
-      separator: ChatMarkupDocument.blockSeparator,
+      separator: MarkupDocument.blockSeparator,
       theme: theme,
       gestureRecognizerFactory: gestureRecognizerFactory,
     );
@@ -235,8 +235,8 @@ class ChatMarkupBlockQuoteBlock extends ChatMarkupBlock {
   }
 }
 
-class ChatMarkupListBlock extends ChatMarkupBlock {
-  const ChatMarkupListBlock({
+class MarkupListBlock extends MarkupBlock {
+  const MarkupListBlock({
     required this.ordered,
     required this.startingIndex,
     required this.items,
@@ -244,7 +244,7 @@ class ChatMarkupListBlock extends ChatMarkupBlock {
 
   final bool ordered;
   final int startingIndex;
-  final List<ChatMarkupListItem> items;
+  final List<MarkupListItem> items;
 
   @override
   String toPlainText() {
@@ -262,8 +262,8 @@ class ChatMarkupListBlock extends ChatMarkupBlock {
 
   @override
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     final itemChildren = <InlineSpan>[];
 
@@ -289,18 +289,18 @@ class ChatMarkupListBlock extends ChatMarkupBlock {
   }
 }
 
-class ChatMarkupListItem {
-  const ChatMarkupListItem(this.blocks);
+class MarkupListItem {
+  const MarkupListItem(this.blocks);
 
-  final List<ChatMarkupBlock> blocks;
+  final List<MarkupBlock> blocks;
 
   String toPlainText() {
     return _joinBlockPlainText(blocks, separator: '\n');
   }
 
   TextSpan toTextSpan({
-    required ChatMarkupTheme theme,
-    required GestureRecognizerFactory gestureRecognizerFactory,
+    required MarkupTheme theme,
+    required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     return _joinBlockTextSpan(
       blocks,
@@ -312,7 +312,7 @@ class ChatMarkupListItem {
 }
 
 String _joinBlockPlainText(
-  List<ChatMarkupBlock> blocks, {
+  List<MarkupBlock> blocks, {
   required String separator,
 }) {
   return blocks
@@ -322,10 +322,10 @@ String _joinBlockPlainText(
 }
 
 TextSpan _joinBlockTextSpan(
-  List<ChatMarkupBlock> blocks, {
+  List<MarkupBlock> blocks, {
   required String separator,
-  required ChatMarkupTheme theme,
-  required GestureRecognizerFactory gestureRecognizerFactory,
+  required MarkupTheme theme,
+  required LinkGestureRecognizerFactory gestureRecognizerFactory,
 }) {
   final children = <InlineSpan>[];
   var wroteContent = false;
@@ -452,16 +452,16 @@ TextStyle? _mergeStyles(TextStyle? base, TextStyle? overlay) {
   return base.merge(overlay);
 }
 
-List<_ChatMarkupTextFragment> _flattenTextSpan(
+List<_MarkupTextFragment> _flattenTextSpan(
   TextSpan span, [
   TextStyle? inheritedStyle,
 ]) {
   final effectiveStyle = _mergeStyles(inheritedStyle, span.style);
-  final fragments = <_ChatMarkupTextFragment>[];
+  final fragments = <_MarkupTextFragment>[];
 
   if (span.text != null && span.text!.isNotEmpty) {
     fragments.add(
-      _ChatMarkupTextFragment(
+      _MarkupTextFragment(
         text: span.text!,
         style: effectiveStyle,
         recognizer: span.recognizer,
@@ -478,8 +478,8 @@ List<_ChatMarkupTextFragment> _flattenTextSpan(
   return fragments;
 }
 
-class _ChatMarkupTextFragment {
-  const _ChatMarkupTextFragment({
+class _MarkupTextFragment {
+  const _MarkupTextFragment({
     required this.text,
     this.style,
     this.recognizer,

@@ -1,54 +1,29 @@
-import 'package:flutter/material.dart' hide GestureRecognizerFactory;
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'message_markup_model.dart';
+import 'markup_model.dart';
 
-class ChatMarkupViewStyle {
-  const ChatMarkupViewStyle({
-    this.blockquoteRailWidth = 0.4,
-    this.blockBaseSpacingFactor = 0.75,
-    this.blockQuoteExtraSpacing = 1.2,
-    this.listTopSpacingAdjustment = -0.12,
-    this.nestedListTopSpacingAdjustment = -0.59,
-    this.nestedListBottomSpacingAdjustment = -0.55,
-    this.blockQuoteTopSpacingAdjustment = 0.0,
-    this.listBottomSpacingAdjustment = 1.05,
-    this.headingBottomSpacingFactors = const <double>[-0.12, -0.14],
-    this.headingTopSpacingFactors = const <double>[1.0, 1.0],
-    this.listItemBaseSpacingFactor = 0.26,
-    this.topLevelListItemSpacingAdjustment = 0.52,
-    this.listMarkerGapFactor = 0.3333333333,
-    this.topLevelListMarkerSlotFactor = 2.0,
-    this.nestedListMarkerSlotFactor = 1.75,
-    this.blockquoteIndentFactor = 0.4,
-    this.blockquoteCapLength = 12.0,
-    this.blockquoteRailInset = 5.0,
-    this.unorderedListMarkerAssetPath = 'assets/images/arrow2.svg',
-    this.unorderedListMarkerAssetPackage = 'tw_primitives',
-    this.unorderedListMarkerSizeFactor = 1.05,
-  });
+class _MarkupViewStyle {
+  const _MarkupViewStyle();
 
-  final double blockquoteRailWidth;
-  final double blockBaseSpacingFactor;
-  final double blockQuoteExtraSpacing;
-  final double listTopSpacingAdjustment;
-  final double nestedListTopSpacingAdjustment;
-  final double nestedListBottomSpacingAdjustment;
-  final double blockQuoteTopSpacingAdjustment;
-  final double listBottomSpacingAdjustment;
-  final List<double> headingBottomSpacingFactors;
-  final List<double> headingTopSpacingFactors;
-  final double listItemBaseSpacingFactor;
-  final double topLevelListItemSpacingAdjustment;
-  final double listMarkerGapFactor;
-  final double topLevelListMarkerSlotFactor;
-  final double nestedListMarkerSlotFactor;
-  final double blockquoteIndentFactor;
-  final double blockquoteCapLength;
-  final double blockquoteRailInset;
-  final String? unorderedListMarkerAssetPath;
-  final String? unorderedListMarkerAssetPackage;
-  final double unorderedListMarkerSizeFactor;
+  final double blockquoteRailWidth = 0.4;
+  final double blockBaseSpacingFactor = 0.75;
+  final double blockQuoteExtraSpacing = 1.2;
+  final double listTopSpacingAdjustment = -0.12;
+  final double nestedListTopSpacingAdjustment = -0.59;
+  final double nestedListBottomSpacingAdjustment = -0.55;
+  final double blockQuoteTopSpacingAdjustment = 0.0;
+  final double listBottomSpacingAdjustment = 1.05;
+  final List<double> headingBottomSpacingFactors = const <double>[-0.12, -0.14];
+  final List<double> headingTopSpacingFactors = const <double>[1.0, 1.0];
+  final double listItemBaseSpacingFactor = 0.26;
+  final double topLevelListItemSpacingAdjustment = 0.52;
+  final double listMarkerGapFactor = 0.3333333333;
+  final double topLevelListMarkerSlotFactor = 2.0;
+  final double nestedListMarkerSlotFactor = 1.75;
+  final double blockquoteIndentFactor = 0.4;
+  final double blockquoteCapLength = 12.0;
+  final double blockquoteRailInset = 5.0;
 
   double headingBottomSpacingFactorForLevel(int level) {
     return _factorByLevel(headingBottomSpacingFactors, level);
@@ -64,27 +39,31 @@ class ChatMarkupViewStyle {
   }
 }
 
-class ChatMarkupView extends StatelessWidget {
-  const ChatMarkupView({
+class MarkupView extends StatelessWidget {
+  const MarkupView({
     super.key,
     required this.document,
     required this.theme,
     required this.gestureRecognizerFactory,
-    this.style = const ChatMarkupViewStyle(),
     this.selectable = true,
     this.chromeVisible = true,
     this.blockquoteRailColor,
     this.textAlign = TextAlign.start,
   });
 
-  final ChatMarkupDocument document;
-  final ChatMarkupTheme theme;
-  final GestureRecognizerFactory gestureRecognizerFactory;
-  final ChatMarkupViewStyle style;
+  final MarkupDocument document;
+  final MarkupTheme theme;
+  final LinkGestureRecognizerFactory gestureRecognizerFactory;
   final bool selectable;
   final bool chromeVisible;
   final Color? blockquoteRailColor;
   final TextAlign textAlign;
+
+  static const _MarkupViewStyle _style = _MarkupViewStyle();
+  static const String _unorderedListMarkerAssetPath =
+      'assets/images/arrow2.svg';
+  static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
+  static const double _unorderedListMarkerSizeFactor = 1.05;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +84,8 @@ class ChatMarkupView extends StatelessWidget {
 
   Widget _buildRenderedMarkupDocument(
     BuildContext context,
-    ChatMarkupDocument document,
-    ChatMarkupTheme theme, {
+    MarkupDocument document,
+    MarkupTheme theme, {
     int listDepth = 0,
     bool inListItem = false,
     bool selectable = true,
@@ -114,7 +93,7 @@ class ChatMarkupView extends StatelessWidget {
   }) {
     final List<Widget> children = <Widget>[];
 
-    for (final (int index, ChatMarkupBlock block) in document.blocks.indexed) {
+    for (final (int index, MarkupBlock block) in document.blocks.indexed) {
       if (index > 0) {
         children.add(
           SizedBox(
@@ -149,14 +128,14 @@ class ChatMarkupView extends StatelessWidget {
 
   Widget _buildRenderedMarkupBlock(
     BuildContext context,
-    ChatMarkupBlock block, {
-    required ChatMarkupTheme theme,
+    MarkupBlock block, {
+    required MarkupTheme theme,
     required int listDepth,
     required bool inListItem,
     required bool selectable,
     required bool chromeVisible,
   }) {
-    if (block is ChatMarkupParagraphBlock || block is ChatMarkupHeadingBlock) {
+    if (block is MarkupParagraphBlock || block is MarkupHeadingBlock) {
       return _buildSelectableRichText(
         context,
         block.toTextSpan(
@@ -167,8 +146,8 @@ class ChatMarkupView extends StatelessWidget {
       );
     }
 
-    if (block is ChatMarkupBlockQuoteBlock) {
-      final ChatMarkupTheme quoteTheme = ChatMarkupTheme(
+    if (block is MarkupBlockQuoteBlock) {
+      final MarkupTheme quoteTheme = MarkupTheme(
         baseStyle: theme.blockquoteStyle,
         strongStyle: theme.blockquoteStyle.merge(theme.strongStyle),
         emphasisStyle: theme.blockquoteStyle.merge(theme.emphasisStyle),
@@ -190,20 +169,20 @@ class ChatMarkupView extends StatelessWidget {
       final double fontSize = theme.baseStyle.fontSize ?? 12.0;
       return Padding(
         padding: EdgeInsets.only(
-          left: fontSize * style.blockquoteIndentFactor * 3.0,
+          left: fontSize * _style.blockquoteIndentFactor * 3.0,
         ),
         child: CustomPaint(
           foregroundPainter: _BlockQuoteRailPainter(
             color: railColor,
-            railThickness: style.blockquoteRailWidth,
-            capLength: style.blockquoteCapLength,
-            railInset: style.blockquoteRailInset,
+            railThickness: _style.blockquoteRailWidth,
+            capLength: _style.blockquoteCapLength,
+            railInset: _style.blockquoteRailInset,
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 0, 0, 4),
             child: _buildRenderedMarkupDocument(
               context,
-              ChatMarkupDocument(block.blocks),
+              MarkupDocument(block.blocks),
               quoteTheme,
               listDepth: listDepth,
               inListItem: inListItem,
@@ -215,9 +194,9 @@ class ChatMarkupView extends StatelessWidget {
       );
     }
 
-    if (block is ChatMarkupListBlock) {
+    if (block is MarkupListBlock) {
       final List<Widget> children = <Widget>[];
-      for (final (int itemIndex, ChatMarkupListItem item)
+      for (final (int itemIndex, MarkupListItem item)
           in block.items.indexed) {
         if (itemIndex > 0) {
           children.add(
@@ -231,15 +210,13 @@ class ChatMarkupView extends StatelessWidget {
             ? '${block.startingIndex + itemIndex}. '
             : '• ';
         final bool useAssetMarker =
-          !block.ordered &&
-          chromeVisible &&
-          style.unorderedListMarkerAssetPath != null;
-        final List<ChatMarkupBlock> itemBlocks = item.blocks;
+          !block.ordered && chromeVisible;
+        final List<MarkupBlock> itemBlocks = item.blocks;
         final bool canUseBaseline =
           !useAssetMarker &&
             itemBlocks.length == 1 &&
-            (itemBlocks.first is ChatMarkupParagraphBlock ||
-                itemBlocks.first is ChatMarkupHeadingBlock);
+            (itemBlocks.first is MarkupParagraphBlock ||
+              itemBlocks.first is MarkupHeadingBlock);
 
         children.add(
           Padding(
@@ -280,7 +257,7 @@ class ChatMarkupView extends StatelessWidget {
                         )
                       : _buildRenderedMarkupDocument(
                           context,
-                          ChatMarkupDocument(itemBlocks),
+                          MarkupDocument(itemBlocks),
                           theme,
                           listDepth: listDepth + 1,
                           inListItem: true,
@@ -332,24 +309,24 @@ class ChatMarkupView extends StatelessWidget {
   }
 
   double _blockSpacing(
-    ChatMarkupTheme theme, {
-    required ChatMarkupBlock previousBlock,
-    required ChatMarkupBlock nextBlock,
+    MarkupTheme theme, {
+    required MarkupBlock previousBlock,
+    required MarkupBlock nextBlock,
     required bool inListItem,
   }) {
     final double fontSize = theme.baseStyle.fontSize ?? 12.0;
 
-    double spacing = fontSize * style.blockBaseSpacingFactor;
-    if (inListItem && nextBlock is ChatMarkupListBlock) {
-      spacing += fontSize * style.nestedListTopSpacingAdjustment;
-    } else if (inListItem && previousBlock is ChatMarkupListBlock) {
-      spacing += fontSize * style.nestedListBottomSpacingAdjustment;
-    } else if (nextBlock is ChatMarkupBlockQuoteBlock) {
-      spacing += fontSize * style.blockQuoteTopSpacingAdjustment;
+    double spacing = fontSize * _style.blockBaseSpacingFactor;
+    if (inListItem && nextBlock is MarkupListBlock) {
+      spacing += fontSize * _style.nestedListTopSpacingAdjustment;
+    } else if (inListItem && previousBlock is MarkupListBlock) {
+      spacing += fontSize * _style.nestedListBottomSpacingAdjustment;
+    } else if (nextBlock is MarkupBlockQuoteBlock) {
+      spacing += fontSize * _style.blockQuoteTopSpacingAdjustment;
     }
 
-    if (previousBlock is ChatMarkupHeadingBlock) {
-      final double headingBottomSpacingFactor = style
+    if (previousBlock is MarkupHeadingBlock) {
+      final double headingBottomSpacingFactor = _style
           .headingBottomSpacingFactorForLevel(previousBlock.level);
       final double headingFontSize = _resolveHeadingFontSize(
         theme: theme,
@@ -358,8 +335,8 @@ class ChatMarkupView extends StatelessWidget {
       );
       spacing += headingFontSize * headingBottomSpacingFactor;
     }
-    if (nextBlock is ChatMarkupHeadingBlock) {
-      final double headingTopSpacingFactor = style
+    if (nextBlock is MarkupHeadingBlock) {
+      final double headingTopSpacingFactor = _style
           .headingTopSpacingFactorForLevel(nextBlock.level);
       final double headingFontSize = _resolveHeadingFontSize(
         theme: theme,
@@ -369,20 +346,20 @@ class ChatMarkupView extends StatelessWidget {
       spacing += headingFontSize * headingTopSpacingFactor;
     }
 
-    if (previousBlock is ChatMarkupBlockQuoteBlock) {
-      spacing += fontSize * style.blockQuoteExtraSpacing;
+    if (previousBlock is MarkupBlockQuoteBlock) {
+      spacing += fontSize * _style.blockQuoteExtraSpacing;
     }
-    if (nextBlock is ChatMarkupBlockQuoteBlock) {
-      spacing += fontSize * style.blockQuoteExtraSpacing;
+    if (nextBlock is MarkupBlockQuoteBlock) {
+      spacing += fontSize * _style.blockQuoteExtraSpacing;
     }
     if (!inListItem &&
-        nextBlock is ChatMarkupListBlock &&
-        previousBlock is! ChatMarkupHeadingBlock &&
-        previousBlock is! ChatMarkupListBlock) {
-      spacing += fontSize * style.listTopSpacingAdjustment;
+        nextBlock is MarkupListBlock &&
+        previousBlock is! MarkupHeadingBlock &&
+        previousBlock is! MarkupListBlock) {
+      spacing += fontSize * _style.listTopSpacingAdjustment;
     }
-    if (!inListItem && previousBlock is ChatMarkupListBlock) {
-      spacing += fontSize * style.listBottomSpacingAdjustment;
+    if (!inListItem && previousBlock is MarkupListBlock) {
+      spacing += fontSize * _style.listBottomSpacingAdjustment;
     }
     return spacing < 0 ? 0 : spacing;
   }
@@ -390,9 +367,9 @@ class ChatMarkupView extends StatelessWidget {
   double _listItemSpacing(TextStyle baseStyle, {required int listDepth}) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
 
-    double spacing = fontSize * style.listItemBaseSpacingFactor;
+    double spacing = fontSize * _style.listItemBaseSpacingFactor;
     if (listDepth <= 0) {
-      spacing += fontSize * style.topLevelListItemSpacingAdjustment;
+      spacing += fontSize * _style.topLevelListItemSpacingAdjustment;
     }
 
     return spacing < 0 ? 0 : spacing;
@@ -404,19 +381,19 @@ class ChatMarkupView extends StatelessWidget {
 
   double _listMarkerGap(TextStyle baseStyle) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
-    return fontSize * style.listMarkerGapFactor;
+    return fontSize * _style.listMarkerGapFactor;
   }
 
   double _listMarkerSlotWidth(TextStyle baseStyle, int depth) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
     final double factor = depth <= 0
-        ? style.topLevelListMarkerSlotFactor
-        : style.nestedListMarkerSlotFactor;
+      ? _style.topLevelListMarkerSlotFactor
+      : _style.nestedListMarkerSlotFactor;
     return fontSize * factor;
   }
 
   double _resolveHeadingFontSize({
-    required ChatMarkupTheme theme,
+    required MarkupTheme theme,
     required double fallbackFontSize,
     required int level,
   }) {
@@ -426,12 +403,12 @@ class ChatMarkupView extends StatelessWidget {
 
   Widget _buildUnorderedListAssetMarker(TextStyle baseStyle) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
-    final double markerSize = fontSize * style.unorderedListMarkerSizeFactor;
+    final double markerSize = fontSize * _unorderedListMarkerSizeFactor;
     final Color? markerColor = baseStyle.color;
 
     return SvgPicture.asset(
-      style.unorderedListMarkerAssetPath!,
-      package: style.unorderedListMarkerAssetPackage,
+      _unorderedListMarkerAssetPath,
+      package: _unorderedListMarkerAssetPackage,
       width: markerSize,
       height: markerSize,
       fit: BoxFit.contain,

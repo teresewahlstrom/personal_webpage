@@ -62,11 +62,11 @@ class _SelectionCopyProjection {
     // length exactly. Transcript-only affordances such as list markers, quote
     // prefixes, separators, and link URLs are carried in leading/trailing copy
     // fields so they appear in copied output without shifting visible offsets.
-    final document = ChatMessageMarkup.parse(raw);
+    final document = MessageMarkup.parse(raw);
     return _SelectionCopyProjection(
       _buildJoinedBlockSegments(
         document.blocks,
-        separator: ChatMarkupDocument.blockSeparator,
+        separator: MarkupDocument.blockSeparator,
       ),
     );
   }
@@ -159,7 +159,7 @@ class _LinePrefixState {
 }
 
 List<_SelectionCopySegment> _buildJoinedBlockSegments(
-  List<ChatMarkupBlock> blocks, {
+  List<MarkupBlock> blocks, {
   required String separator,
 }) {
   final segments = <_SelectionCopySegment>[];
@@ -178,14 +178,14 @@ List<_SelectionCopySegment> _buildJoinedBlockSegments(
   return segments;
 }
 
-List<_SelectionCopySegment> _buildBlockSegments(ChatMarkupBlock block) {
+List<_SelectionCopySegment> _buildBlockSegments(MarkupBlock block) {
   // Visible text maps 1:1 to selection offsets. Structural transcript chrome is
   // injected only through copy prefixes/suffixes so selection math stays tied
   // to what the user actually highlighted on screen.
-  if (block is ChatMarkupParagraphBlock) {
+  if (block is MarkupParagraphBlock) {
     return _buildInlineSegments(block.inlines);
   }
-  if (block is ChatMarkupHeadingBlock) {
+  if (block is MarkupHeadingBlock) {
     final segments = _buildInlineSegments(block.inlines);
     final prefix = _markdownHeadingPrefix(block.level);
     if (prefix.isEmpty || segments.isEmpty) {
@@ -194,24 +194,24 @@ List<_SelectionCopySegment> _buildBlockSegments(ChatMarkupBlock block) {
     segments[0] = segments[0].prependLeadingCopy(prefix);
     return segments;
   }
-  if (block is ChatMarkupBlockQuoteBlock) {
+  if (block is MarkupBlockQuoteBlock) {
     return _prefixCopyLines(
       _buildJoinedBlockSegments(
         block.blocks,
-        separator: ChatMarkupDocument.blockSeparator,
+        separator: MarkupDocument.blockSeparator,
       ),
       firstLinePrefix: '> ',
       continuationPrefix: '> ',
     );
   }
-  if (block is ChatMarkupListBlock) {
+  if (block is MarkupListBlock) {
     return _buildListSegments(block);
   }
 
   return _splitVisibleText(block.toPlainText());
 }
 
-List<_SelectionCopySegment> _buildListSegments(ChatMarkupListBlock block) {
+List<_SelectionCopySegment> _buildListSegments(MarkupListBlock block) {
   final segments = <_SelectionCopySegment>[];
 
   for (final entry in block.items.indexed) {
@@ -236,7 +236,7 @@ List<_SelectionCopySegment> _buildListSegments(ChatMarkupListBlock block) {
 }
 
 List<_SelectionCopySegment> _buildInlineSegments(
-  List<ChatMarkupInline> inlines,
+  List<MarkupInline> inlines,
 ) {
   final segments = <_SelectionCopySegment>[];
 
@@ -261,7 +261,7 @@ String _markdownHeadingPrefix(int level) {
   };
 }
 
-String _inlineLeadingMarkdown(ChatMarkupInline inline) {
+String _inlineLeadingMarkdown(MarkupInline inline) {
   final buffer = StringBuffer();
   if (inline.isStrong) {
     buffer.write('**');
@@ -281,7 +281,7 @@ String _inlineLeadingMarkdown(ChatMarkupInline inline) {
   return buffer.toString();
 }
 
-String _inlineTrailingMarkdown(ChatMarkupInline inline) {
+String _inlineTrailingMarkdown(MarkupInline inline) {
   final buffer = StringBuffer();
   if (_shouldWriteMarkdownLink(inline)) {
     buffer.write('](${inline.href})');
@@ -301,7 +301,7 @@ String _inlineTrailingMarkdown(ChatMarkupInline inline) {
   return buffer.toString();
 }
 
-bool _shouldWriteMarkdownLink(ChatMarkupInline inline) {
+bool _shouldWriteMarkdownLink(MarkupInline inline) {
   final href = inline.href;
   return href != null && href.isNotEmpty && href != inline.text;
 }

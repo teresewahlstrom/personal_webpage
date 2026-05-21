@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 
-import 'message_markup_model.dart';
+import 'markup_model.dart';
 
-class TwinMarkdownThemeConfig {
-  const TwinMarkdownThemeConfig({
-    required this.baseStyle,
-    required this.baseTextColorFallback,
+class MarkdownThemeConfig {
+  const MarkdownThemeConfig({
+    required this.baseTextColor,
     required this.linkColor,
-    required this.linkDecorationColor,
-    required this.decorationThickness,
-    required this.strikethroughLightThicknessBias,
-    required this.strikethroughDarkThicknessBias,
     required this.isDark,
   });
 
-  final TextStyle baseStyle;
-  final Color baseTextColorFallback;
+  final Color baseTextColor;
   final Color linkColor;
-  final Color linkDecorationColor;
-  final double decorationThickness;
-  final double strikethroughLightThicknessBias;
-  final double strikethroughDarkThicknessBias;
   final bool isDark;
 }
 
-ChatMarkupTheme buildTwinMarkdownTheme(TwinMarkdownThemeConfig config) {
-  final baseStyle = config.baseStyle;
-  final baseColor = baseStyle.color ?? config.baseTextColorFallback;
+const double _underlineThickness = 1.9;
+const double _strikethroughLightThickness = 2.8;
+const double _strikethroughDarkThickness = 5.9;
+
+const TextStyle _baseTextStyle = TextStyle(
+  fontFamily: 'Nunito',
+  fontSize: 14.0,
+  fontWeight: FontWeight.w500,
+  height: 1.38,
+  letterSpacing: 0.0,
+);
+
+MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
+  final baseStyle = _baseTextStyle.copyWith(
+    color: config.baseTextColor,
+  );
+  final baseColor = baseStyle.color ?? config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
   final baseLetterSpacing = baseStyle.letterSpacing ?? 0.0;
@@ -45,29 +49,29 @@ ChatMarkupTheme buildTwinMarkdownTheme(TwinMarkdownThemeConfig config) {
     letterSpacing: baseLetterSpacing + 0.45,
   );
 
-  final double strikeThicknessBias = config.isDark
-      ? config.strikethroughDarkThicknessBias
-      : config.strikethroughLightThicknessBias;
+  final double strikeThickness = config.isDark
+      ? _strikethroughDarkThickness
+      : _strikethroughLightThickness;
   final strikethroughStyle = baseStyle.copyWith(
     decoration: TextDecoration.lineThrough,
     decorationColor: baseStyle.color,
-    decorationThickness: config.decorationThickness + strikeThicknessBias,
+    decorationThickness: strikeThickness,
   );
 
   final underlineStyle = baseStyle.copyWith(
     decoration: TextDecoration.underline,
     decorationColor: baseStyle.color,
-    decorationThickness: config.decorationThickness,
+    decorationThickness: _underlineThickness,
   );
 
   final linkStyle = baseStyle.copyWith(
     color: config.linkColor,
     decoration: TextDecoration.underline,
-    decorationColor: config.linkDecorationColor,
-    decorationThickness: config.decorationThickness,
+    decorationColor: config.linkColor,
+    decorationThickness: _underlineThickness,
   );
 
-  return ChatMarkupTheme(
+  return MarkupTheme(
     baseStyle: baseStyle,
     strongStyle: strongStyle,
     emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),

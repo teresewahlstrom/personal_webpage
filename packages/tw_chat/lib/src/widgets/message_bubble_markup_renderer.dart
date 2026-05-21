@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide GestureRecognizerFactory;
+import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 
 import '../config/config.dart';
@@ -15,28 +15,26 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     required this.gestureRecognizerFactory,
   });
 
-  final ChatMarkupDocument document;
+  final MarkupDocument document;
   final TextStyle style;
   final Color bubbleColor;
   final bool isUserBubble;
   final double truncatedContentHeight;
   final bool isTruncated;
-  final GestureRecognizerFactory gestureRecognizerFactory;
+  final LinkGestureRecognizerFactory gestureRecognizerFactory;
 
   @override
   Widget build(BuildContext context) {
     final ChatSkinData skin = ChatSkin.dataOf(context);
     final ChatSkinColors colors = skin.colors;
     final ChatSkinTokens tokens = skin.tokens;
-    final ChatMarkupTheme markupTheme = _buildMarkupTheme(context, style);
-    const ChatMarkupViewStyle markupViewStyle = ChatMarkupViewStyle();
+    final MarkupTheme markupTheme = _buildMarkupTheme(context);
 
     if (!isTruncated) {
       final Widget visibleMarkupLayer = _buildRenderedMarkupDocument(
         context,
         document,
         markupTheme,
-        markupViewStyle,
         selectable: false,
         chromeVisible: true,
       );
@@ -45,7 +43,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           context,
           document,
           _transparentMarkupTheme(markupTheme),
-          markupViewStyle,
           selectable: true,
           chromeVisible: false,
         ),
@@ -63,7 +60,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           context,
           document: document,
           theme: _transparentMarkupTheme(markupTheme),
-          viewStyle: markupViewStyle,
           maxWidth: constraints.maxWidth,
           selectable: true,
           chromeVisible: false,
@@ -72,7 +68,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
           context,
           document: document,
           theme: markupTheme,
-          viewStyle: markupViewStyle,
           maxWidth: constraints.maxWidth,
           selectable: false,
           chromeVisible: true,
@@ -176,23 +171,13 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
+  MarkupTheme _buildMarkupTheme(BuildContext context) {
     final ChatSkinData skin = ChatSkin.dataOf(context);
     final ChatSkinColors colors = skin.colors;
-    final ChatSkinTokens tokens = skin.tokens;
-    return buildTwinMarkdownTheme(
-      TwinMarkdownThemeConfig(
-        baseStyle: baseStyle,
-        baseTextColorFallback: colors.bubbleText,
+    return buildMarkdownTheme(
+      MarkdownThemeConfig(
+        baseTextColor: colors.bubbleText,
         linkColor: colors.markupLink,
-        linkDecorationColor: colors.markupLinkDecoration,
-        decorationThickness:
-            tokens.markupUnderlineThickness +
-            tokens.markupDecorationThicknessBias,
-        strikethroughLightThicknessBias:
-            tokens.markupStrikethroughLightThicknessBias,
-        strikethroughDarkThicknessBias:
-            tokens.markupStrikethroughDarkThicknessBias,
         isDark: ChatSkin.isDarkOf(context),
       ),
     );
@@ -200,9 +185,8 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
 
   Widget _buildTruncatedMarkupLayer(
     BuildContext context, {
-    required ChatMarkupDocument document,
-    required ChatMarkupTheme theme,
-    required ChatMarkupViewStyle viewStyle,
+    required MarkupDocument document,
+    required MarkupTheme theme,
     required double maxWidth,
     required bool selectable,
     required bool chromeVisible,
@@ -221,7 +205,6 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
               context,
               document,
               theme,
-              viewStyle,
               selectable: selectable,
               chromeVisible: chromeVisible,
             ),
@@ -233,16 +216,14 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
 
   Widget _buildRenderedMarkupDocument(
     BuildContext context,
-    ChatMarkupDocument document,
-    ChatMarkupTheme theme,
-    ChatMarkupViewStyle viewStyle, {
+    MarkupDocument document,
+    MarkupTheme theme, {
     required bool selectable,
     required bool chromeVisible,
   }) {
-    return ChatMarkupView(
+    return MarkupView(
       document: document,
       theme: theme,
-      style: viewStyle,
       selectable: selectable,
       chromeVisible: chromeVisible,
       blockquoteRailColor: chromeVisible
@@ -252,12 +233,12 @@ class MessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  ChatMarkupTheme _transparentMarkupTheme(ChatMarkupTheme theme) {
+  MarkupTheme _transparentMarkupTheme(MarkupTheme theme) {
     TextStyle transparent(TextStyle style) {
       return _transparentTextStyle(style);
     }
 
-    return ChatMarkupTheme(
+    return MarkupTheme(
       baseStyle: transparent(theme.baseStyle),
       strongStyle: transparent(theme.strongStyle),
       emphasisStyle: transparent(theme.emphasisStyle),

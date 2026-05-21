@@ -47,7 +47,7 @@ Line eight carries enough words to wrap through the bubble width for truncation.
 
     final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
 
-    expect(clipboardData?.text, ChatMessageMarkup.toPlainText(rawText).trim());
+    expect(clipboardData?.text, MessageMarkup.toPlainText(rawText).trim());
   });
 
   testWidgets(

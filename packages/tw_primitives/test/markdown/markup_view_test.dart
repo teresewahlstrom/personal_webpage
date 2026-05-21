@@ -8,7 +8,7 @@ void main() {
 
     await tester.pumpWidget(
       _MarkupTestApp(
-        document: ChatMessageMarkup.parse('Before\n\n1. One'),
+        document: MessageMarkup.parse('Before\n\n1. One'),
         baseStyle: baseStyle,
       ),
     );
@@ -24,7 +24,7 @@ void main() {
 
     await tester.pumpWidget(
       _MarkupTestApp(
-        document: ChatMessageMarkup.parse('# Heading\n\nAfter'),
+        document: MessageMarkup.parse('# Heading\n\nAfter'),
         baseStyle: baseStyle,
       ),
     );
@@ -36,7 +36,7 @@ void main() {
   });
 
   test('strikethrough thickness is scaled down to half the source stroke', () {
-    const theme = ChatMarkupTheme(
+    const theme = MarkupTheme(
       baseStyle: TextStyle(fontSize: 14),
       strongStyle: TextStyle(fontWeight: FontWeight.bold),
       emphasisStyle: TextStyle(fontStyle: FontStyle.italic),
@@ -50,7 +50,7 @@ void main() {
       headingStyleResolver: _headingStyle,
     );
 
-    final span = const ChatMarkupInline(
+    final span = const MarkupInline(
       text: 'gone',
       isStrikethrough: true,
     ).toTextSpan(theme: theme, gestureRecognizerFactory: (_) => null);
@@ -62,7 +62,7 @@ void main() {
 class _MarkupTestApp extends StatelessWidget {
   const _MarkupTestApp({required this.document, required this.baseStyle});
 
-  final ChatMarkupDocument document;
+  final MarkupDocument document;
   final TextStyle baseStyle;
 
   @override
@@ -73,7 +73,7 @@ class _MarkupTestApp extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: SizedBox(
             width: 300,
-            child: ChatMarkupView(
+            child: MarkupView(
               document: document,
               theme: _theme(baseStyle),
               gestureRecognizerFactory: (_) => null,
@@ -85,8 +85,8 @@ class _MarkupTestApp extends StatelessWidget {
   }
 }
 
-ChatMarkupTheme _theme(TextStyle baseStyle) {
-  return ChatMarkupTheme(
+MarkupTheme _theme(TextStyle baseStyle) {
+  return MarkupTheme(
     baseStyle: baseStyle,
     strongStyle: const TextStyle(fontWeight: FontWeight.bold),
     emphasisStyle: const TextStyle(fontStyle: FontStyle.italic),

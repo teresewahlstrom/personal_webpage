@@ -1,16 +1,16 @@
-import 'message_markup_model.dart';
+import 'markup_model.dart';
 
-class ChatMarkupInlineTokenizer {
-  ChatMarkupInlineTokenizer(this._raw);
+class MarkupInlineTokenizer {
+  MarkupInlineTokenizer(this._raw);
 
   static const String _escapableCharacters = r'\\`*_{}[]()#+-.!~<>';
 
   final String _raw;
-  final List<ChatMarkupInline> _tokens = <ChatMarkupInline>[];
+  final List<MarkupInline> _tokens = <MarkupInline>[];
   final StringBuffer _buffer = StringBuffer();
   int _offset = 0;
 
-  List<ChatMarkupInline> tokenize() {
+  List<MarkupInline> tokenize() {
     while (_offset < _raw.length) {
       if (_consumeEscape()) {
         continue;
@@ -33,21 +33,21 @@ class ChatMarkupInlineTokenizer {
       final strongAsterisks = _consumeDelimited('**');
       if (strongAsterisks != null) {
         _flushBuffer();
-        _tokens.add(ChatMarkupInline(text: strongAsterisks, isStrong: true));
+        _tokens.add(MarkupInline(text: strongAsterisks, isStrong: true));
         continue;
       }
 
       final strongUnderscores = _consumeDelimited('__');
       if (strongUnderscores != null) {
         _flushBuffer();
-        _tokens.add(ChatMarkupInline(text: strongUnderscores, isStrong: true));
+        _tokens.add(MarkupInline(text: strongUnderscores, isStrong: true));
         continue;
       }
 
       final strike = _consumeDelimited('~~');
       if (strike != null) {
         _flushBuffer();
-        _tokens.add(ChatMarkupInline(text: strike, isStrikethrough: true));
+        _tokens.add(MarkupInline(text: strike, isStrikethrough: true));
         continue;
       }
 
@@ -61,7 +61,7 @@ class ChatMarkupInlineTokenizer {
       final emphasisAsterisk = _consumeDelimited('*');
       if (emphasisAsterisk != null) {
         _flushBuffer();
-        _tokens.add(ChatMarkupInline(text: emphasisAsterisk, isEmphasis: true));
+        _tokens.add(MarkupInline(text: emphasisAsterisk, isEmphasis: true));
         continue;
       }
 
@@ -69,7 +69,7 @@ class ChatMarkupInlineTokenizer {
       if (emphasisUnderscore != null) {
         _flushBuffer();
         _tokens.add(
-          ChatMarkupInline(text: emphasisUnderscore, isEmphasis: true),
+          MarkupInline(text: emphasisUnderscore, isEmphasis: true),
         );
         continue;
       }
@@ -79,7 +79,7 @@ class ChatMarkupInlineTokenizer {
     }
 
     _flushBuffer();
-    return List<ChatMarkupInline>.unmodifiable(_tokens);
+    return List<MarkupInline>.unmodifiable(_tokens);
   }
 
   bool _consumeEscape() {
@@ -97,7 +97,7 @@ class ChatMarkupInlineTokenizer {
     return true;
   }
 
-  ChatMarkupInline? _consumeMarkdownLink() {
+  MarkupInline? _consumeMarkdownLink() {
     if (_raw[_offset] != '[') {
       return null;
     }
@@ -109,7 +109,7 @@ class ChatMarkupInlineTokenizer {
       return null;
     }
 
-    final hrefEnd = _findUnescapedCharacter(')', labelEnd + 2);
+    final hrefEnd = _findMarkdownLinkDestinationEnd(labelEnd + 2);
     if (hrefEnd == -1) {
       return null;
     }
@@ -121,10 +121,42 @@ class ChatMarkupInlineTokenizer {
     }
 
     _offset = hrefEnd + 1;
-    return ChatMarkupInline(text: label, href: href);
+    return MarkupInline(text: label, href: href);
   }
 
-  ChatMarkupInline? _consumeUnderlineTag() {
+  int _findMarkdownLinkDestinationEnd(int start) {
+    var index = start;
+    var nestedParentheses = 0;
+
+    while (index < _raw.length) {
+      if (_raw[index] == r'\') {
+        index += 2;
+        continue;
+      }
+
+      final character = _raw[index];
+      if (character == '(') {
+        nestedParentheses += 1;
+        index += 1;
+        continue;
+      }
+
+      if (character == ')') {
+        if (nestedParentheses == 0) {
+          return index;
+        }
+        nestedParentheses -= 1;
+        index += 1;
+        continue;
+      }
+
+      index += 1;
+    }
+
+    return -1;
+  }
+
+  MarkupInline? _consumeUnderlineTag() {
     const opener = '<u>';
     const closer = '</u>';
     if (!_raw.startsWith(opener, _offset)) {
@@ -142,7 +174,7 @@ class ChatMarkupInlineTokenizer {
     }
 
     _offset = closingIndex + closer.length;
-    return ChatMarkupInline(text: content, isUnderline: true);
+    return MarkupInline(text: content, isUnderline: true);
   }
 
   String? _consumeDelimited(String delimiter) {
@@ -165,7 +197,7 @@ class ChatMarkupInlineTokenizer {
     return content;
   }
 
-  ChatMarkupInline? _consumeAutolink() {
+  MarkupInline? _consumeAutolink() {
     final remainder = _raw.substring(_offset);
     final match = RegExp(r'^(https?:\/\/|www\.)[^\s<]+').firstMatch(remainder);
     if (match == null) {
@@ -179,7 +211,7 @@ class ChatMarkupInlineTokenizer {
     }
 
     _offset += trimmedUrl.length;
-    return ChatMarkupInline(text: trimmedUrl, href: trimmedUrl);
+    return MarkupInline(text: trimmedUrl, href: trimmedUrl);
   }
 
   int _findClosingDelimiter(String delimiter, int start) {
@@ -241,7 +273,7 @@ class ChatMarkupInlineTokenizer {
     if (_buffer.isEmpty) {
       return;
     }
-    _tokens.add(ChatMarkupInline(text: _buffer.toString()));
+    _tokens.add(MarkupInline(text: _buffer.toString()));
     _buffer.clear();
   }
 }

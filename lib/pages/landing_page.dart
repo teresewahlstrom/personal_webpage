@@ -382,7 +382,7 @@ class _ExpandableProjectCard extends StatefulWidget {
   });
 
   final String title;
-  final ChatMarkupDocument contentDocument;
+  final MarkupDocument contentDocument;
   final bool isExpanded;
   final VoidCallback onTap;
   final AppLineStyle gridLineStyle;
@@ -560,13 +560,13 @@ class _ProjectCardData {
   const _ProjectCardData({required this.title, required this.contentDocument});
 
   final String title;
-  final ChatMarkupDocument contentDocument;
+  final MarkupDocument contentDocument;
 }
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
   const _ProjectCardMarkdownBody({required this.document});
 
-  final ChatMarkupDocument document;
+  final MarkupDocument document;
 
   @override
   State<_ProjectCardMarkdownBody> createState() =>
@@ -618,27 +618,13 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
     });
   }
 
-  ChatMarkupTheme _buildTheme(BuildContext context) {
+  MarkupTheme _buildTheme(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final chatSkin = ChatSkin.dataForBrightness(brightness);
-    final double textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final TextStyle baseStyle = chatSkin.textStyles.bubbleTextStyle(
-      textScale,
-      chatSkin.colors,
-    );
-    return buildTwinMarkdownTheme(
-      TwinMarkdownThemeConfig(
-        baseStyle: baseStyle,
-        baseTextColorFallback: chatSkin.colors.bubbleText,
+    return buildMarkdownTheme(
+      MarkdownThemeConfig(
+        baseTextColor: chatSkin.colors.bubbleText,
         linkColor: chatSkin.colors.markupLink,
-        linkDecorationColor: chatSkin.colors.markupLinkDecoration,
-        decorationThickness:
-            chatSkin.tokens.markupUnderlineThickness +
-            chatSkin.tokens.markupDecorationThicknessBias,
-        strikethroughLightThicknessBias:
-            chatSkin.tokens.markupStrikethroughLightThicknessBias,
-        strikethroughDarkThicknessBias:
-            chatSkin.tokens.markupStrikethroughDarkThicknessBias,
         isDark: brightness == Brightness.dark,
       ),
     );
@@ -646,7 +632,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
 
   @override
   Widget build(BuildContext context) {
-    return ChatMarkupView(
+    return MarkupView(
       document: widget.document,
       theme: _buildTheme(context),
       gestureRecognizerFactory: _recognizerForHref,
@@ -711,7 +697,7 @@ class _ProjectCardsMarkdownLoader {
 
     return _ProjectCardData(
       title: title,
-      contentDocument: ChatMessageMarkup.parse(contentMarkdown),
+      contentDocument: MessageMarkup.parse(contentMarkdown),
     );
   }
 }

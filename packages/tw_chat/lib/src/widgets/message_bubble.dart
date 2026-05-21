@@ -1,5 +1,5 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
-import 'package:flutter/material.dart' hide GestureRecognizerFactory;
+import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,7 +47,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required TextStyle style,
     required TextScaler textScaler,
     required double maxTextWidth,
-    required ChatMarkupTheme markupTheme,
+    required MarkupTheme markupTheme,
   }) {
     final key = _MeasurementKey(
       text: rawText,
@@ -89,7 +89,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 
   String _sanitizeTextForMeasurement(String raw) {
-    return ChatMessageMarkup.toPlainText(raw).trim();
+    return MessageMarkup.toPlainText(raw).trim();
   }
 
   _ParsedMarkupPayload _getParsedMarkup(String raw) {
@@ -97,7 +97,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
       return _cachedParsedMarkup!;
     }
 
-    final document = ChatMessageMarkup.parse(raw);
+    final document = MessageMarkup.parse(raw);
     final parsedMarkup = _ParsedMarkupPayload(
       document: document,
       plainText: document.toPlainText().trim(),
@@ -135,7 +135,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final parsedMarkup = widget.isTypingIndicator
         ? null
         : _getParsedMarkup(widget.text);
-    final markupTheme = _buildMarkupTheme(context, bubbleTextStyle);
+    final markupTheme = _buildMarkupTheme(context);
     final measuredLayout = _getMeasuredLayout(
       rawText: widget.text,
       parsedMarkup: parsedMarkup,
@@ -374,8 +374,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     );
   }
 
-  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
-    return _buildSharedMarkdownThemeForChat(context, baseStyle);
+  MarkupTheme _buildMarkupTheme(BuildContext context) {
+    return _buildSharedMarkdownThemeForChat(context);
   }
 
   Future<void> _launchMarkdownLink(String href) async {
@@ -433,25 +433,15 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 }
 
-ChatMarkupTheme _buildSharedMarkdownThemeForChat(
+MarkupTheme _buildSharedMarkdownThemeForChat(
   BuildContext context,
-  TextStyle baseStyle,
 ) {
   final skin = ChatSkin.dataOf(context);
   final colors = skin.colors;
-  final tokens = skin.tokens;
-  return buildTwinMarkdownTheme(
-    TwinMarkdownThemeConfig(
-      baseStyle: baseStyle,
-      baseTextColorFallback: colors.bubbleText,
+  return buildMarkdownTheme(
+    MarkdownThemeConfig(
+      baseTextColor: colors.bubbleText,
       linkColor: colors.markupLink,
-      linkDecorationColor: colors.markupLinkDecoration,
-      decorationThickness:
-          tokens.markupUnderlineThickness + tokens.markupDecorationThicknessBias,
-      strikethroughLightThicknessBias:
-          tokens.markupStrikethroughLightThicknessBias,
-      strikethroughDarkThicknessBias:
-          tokens.markupStrikethroughDarkThicknessBias,
       isDark: ChatSkin.isDarkOf(context),
     ),
   );
@@ -508,7 +498,7 @@ class _MeasurementKey {
 class _ParsedMarkupPayload {
   const _ParsedMarkupPayload({required this.document, required this.plainText});
 
-  final ChatMarkupDocument document;
+  final MarkupDocument document;
   final String plainText;
 }
 
@@ -523,38 +513,35 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     required this.gestureRecognizerFactory,
   });
 
-  final ChatMarkupDocument document;
+  final MarkupDocument document;
   final TextStyle style;
   final Color bubbleColor;
   final bool isUserBubble;
   final double truncatedContentHeight;
   final bool isTruncated;
-  final GestureRecognizerFactory gestureRecognizerFactory;
+  final LinkGestureRecognizerFactory gestureRecognizerFactory;
 
   @override
   Widget build(BuildContext context) {
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
-    final markupTheme = _buildMarkupTheme(context, style);
-    const viewStyle = ChatMarkupViewStyle();
+    final markupTheme = _buildMarkupTheme(context);
 
     if (!isTruncated) {
-      final Widget visibleMarkupLayer = ChatMarkupView(
+      final Widget visibleMarkupLayer = MarkupView(
         document: document,
         theme: markupTheme,
         gestureRecognizerFactory: gestureRecognizerFactory,
-        style: viewStyle,
         selectable: false,
         chromeVisible: true,
         blockquoteRailColor: colors.bubbleText,
       );
       final Widget hiddenSelectionLayer = Positioned.fill(
-        child: ChatMarkupView(
+        child: MarkupView(
           document: document,
           theme: _transparentMarkupTheme(markupTheme),
           gestureRecognizerFactory: gestureRecognizerFactory,
-          style: viewStyle,
           selectable: true,
           chromeVisible: false,
           blockquoteRailColor: colors.transparent,
@@ -575,7 +562,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
           maxWidth: constraints.maxWidth,
           selectable: true,
           chromeVisible: false,
-          viewStyle: viewStyle,
           blockquoteRailColor: colors.transparent,
         );
         final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
@@ -584,7 +570,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
           maxWidth: constraints.maxWidth,
           selectable: false,
           chromeVisible: true,
-          viewStyle: viewStyle,
           blockquoteRailColor: colors.bubbleText,
         );
         final double fadeHeight =
@@ -686,17 +671,16 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  ChatMarkupTheme _buildMarkupTheme(BuildContext context, TextStyle baseStyle) {
-    return _buildSharedMarkdownThemeForChat(context, baseStyle);
+  MarkupTheme _buildMarkupTheme(BuildContext context) {
+    return _buildSharedMarkdownThemeForChat(context);
   }
 
   Widget _buildTruncatedMarkupLayer({
-    required ChatMarkupDocument document,
-    required ChatMarkupTheme theme,
+    required MarkupDocument document,
+    required MarkupTheme theme,
     required double maxWidth,
     required bool selectable,
     required bool chromeVisible,
-    required ChatMarkupViewStyle viewStyle,
     required Color blockquoteRailColor,
   }) {
     return PrimaryScrollController.none(
@@ -709,11 +693,10 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
           widthFactor: 1.0,
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxWidth),
-            child: ChatMarkupView(
+            child: MarkupView(
               document: document,
               theme: theme,
               gestureRecognizerFactory: gestureRecognizerFactory,
-              style: viewStyle,
               selectable: selectable,
               chromeVisible: chromeVisible,
               blockquoteRailColor: blockquoteRailColor,
@@ -724,12 +707,12 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  ChatMarkupTheme _transparentMarkupTheme(ChatMarkupTheme theme) {
+  MarkupTheme _transparentMarkupTheme(MarkupTheme theme) {
     TextStyle transparent(TextStyle style) {
       return _transparentTextStyle(style);
     }
 
-    return ChatMarkupTheme(
+    return MarkupTheme(
       baseStyle: transparent(theme.baseStyle),
       strongStyle: transparent(theme.strongStyle),
       emphasisStyle: transparent(theme.emphasisStyle),

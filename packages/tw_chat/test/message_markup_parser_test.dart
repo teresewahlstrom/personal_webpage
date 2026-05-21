@@ -7,16 +7,15 @@ void main() {
   // Helpers
   // ---------------------------------------------------------------------------
 
-  String plainText(String raw) => ChatMessageMarkup.toPlainText(raw);
+  String plainText(String raw) => MessageMarkup.toPlainText(raw);
 
-  List<ChatMarkupBlock> blocks(String raw) =>
-      ChatMessageMarkup.parse(raw).blocks;
+  List<MarkupBlock> blocks(String raw) => MessageMarkup.parse(raw).blocks;
 
-  ChatMarkupParagraphBlock paragraph(String raw) {
+  MarkupParagraphBlock paragraph(String raw) {
     final result = blocks(raw);
     expect(result, hasLength(1));
-    expect(result.first, isA<ChatMarkupParagraphBlock>());
-    return result.first as ChatMarkupParagraphBlock;
+    expect(result.first, isA<MarkupParagraphBlock>());
+    return result.first as MarkupParagraphBlock;
   }
 
   // ---------------------------------------------------------------------------
@@ -105,9 +104,12 @@ void main() {
       expect(inlines.every((i) => !i.isStrong), isTrue);
     });
 
-    test('empty markdown link is not parsed as link', () {
+    test('empty markdown link label falls back to autolink parsing', () {
       final inlines = paragraph('[](https://example.com)').inlines;
-      expect(inlines.every((i) => i.href == null), isTrue);
+
+      expect(inlines.any((i) => i.href == 'https://example.com'), isTrue);
+      expect(inlines.first.text, '[](');
+      expect(inlines.last.text, ')');
     });
 
     test('link with empty href is not parsed as link', () {
@@ -151,13 +153,13 @@ void main() {
   group('block parser — paragraphs', () {
     test('single line produces one paragraph', () {
       expect(blocks('Hello'), hasLength(1));
-      expect(blocks('Hello').first, isA<ChatMarkupParagraphBlock>());
+      expect(blocks('Hello').first, isA<MarkupParagraphBlock>());
     });
 
     test('blank line separates two paragraphs', () {
       final result = blocks('First\n\nSecond');
       expect(result, hasLength(2));
-      expect(result.every((b) => b is ChatMarkupParagraphBlock), isTrue);
+      expect(result.every((b) => b is MarkupParagraphBlock), isTrue);
     });
 
     test('consecutive non-blank lines collapse into one paragraph', () {
@@ -171,20 +173,20 @@ void main() {
     test('# H1 produces heading level 1', () {
       final result = blocks('# Heading');
       expect(result, hasLength(1));
-      final heading = result.first as ChatMarkupHeadingBlock;
+      final heading = result.first as MarkupHeadingBlock;
       expect(heading.level, 1);
       expect(heading.inlines.first.text, 'Heading');
     });
 
     test('## H2 produces heading level 2', () {
-      final heading = blocks('## Sub').first as ChatMarkupHeadingBlock;
+      final heading = blocks('## Sub').first as MarkupHeadingBlock;
       expect(heading.level, 2);
     });
 
     test('### beyond max level is treated as paragraph', () {
       // _maxHeadingLevel is 2; ### should not produce a heading
       final result = blocks('### Too deep');
-      expect(result.first, isA<ChatMarkupParagraphBlock>());
+      expect(result.first, isA<MarkupParagraphBlock>());
     });
 
     test('heading is stripped to plain text in toPlainText', () {
@@ -196,7 +198,7 @@ void main() {
     test('--- is treated as literal paragraph text', () {
       final result = blocks('---');
       expect(result, hasLength(1));
-      expect(result.first, isA<ChatMarkupParagraphBlock>());
+      expect(result.first, isA<MarkupParagraphBlock>());
     });
 
     test('horizontal rule plain text keeps the marker', () {
@@ -208,27 +210,27 @@ void main() {
     test('- items produce a list block', () {
       final result = blocks('- Alpha\n- Beta\n- Gamma');
       expect(result, hasLength(1));
-      final list = result.first as ChatMarkupListBlock;
+      final list = result.first as MarkupListBlock;
       expect(list.ordered, isFalse);
       expect(list.items, hasLength(3));
     });
 
     test('list item text is correct', () {
-      final list = blocks('- Foo\n- Bar').first as ChatMarkupListBlock;
-      final item0Para = list.items[0].blocks.first as ChatMarkupParagraphBlock;
-      final item1Para = list.items[1].blocks.first as ChatMarkupParagraphBlock;
+      final list = blocks('- Foo\n- Bar').first as MarkupListBlock;
+      final item0Para = list.items[0].blocks.first as MarkupParagraphBlock;
+      final item1Para = list.items[1].blocks.first as MarkupParagraphBlock;
       expect(item0Para.inlines.first.text, 'Foo');
       expect(item1Para.inlines.first.text, 'Bar');
     });
 
     test('nested list is parsed inside parent item', () {
       const raw = '- Parent\n    - Child';
-      final list = blocks(raw).first as ChatMarkupListBlock;
+        final list = blocks(raw).first as MarkupListBlock;
       final nestedList = list.items.first.blocks
-          .whereType<ChatMarkupListBlock>()
+          .whereType<MarkupListBlock>()
           .first;
       final childPara =
-          nestedList.items.first.blocks.first as ChatMarkupParagraphBlock;
+          nestedList.items.first.blocks.first as MarkupParagraphBlock;
       expect(childPara.inlines.first.text, 'Child');
     });
 
@@ -241,13 +243,13 @@ void main() {
 
   group('block parser — ordered lists', () {
     test('1. items produce an ordered list block', () {
-      final list = blocks('1. One\n2. Two').first as ChatMarkupListBlock;
+      final list = blocks('1. One\n2. Two').first as MarkupListBlock;
       expect(list.ordered, isTrue);
       expect(list.items, hasLength(2));
     });
 
     test('ordered list startingIndex is preserved', () {
-      final list = blocks('3. Three\n4. Four').first as ChatMarkupListBlock;
+      final list = blocks('3. Three\n4. Four').first as MarkupListBlock;
       expect(list.startingIndex, 3);
     });
   });
@@ -256,12 +258,12 @@ void main() {
     test('> prefix produces a blockquote block', () {
       final result = blocks('> A quote');
       expect(result, hasLength(1));
-      expect(result.first, isA<ChatMarkupBlockQuoteBlock>());
+      expect(result.first, isA<MarkupBlockQuoteBlock>());
     });
 
     test('blockquote content is parsed as nested blocks', () {
-      final bq = blocks('> **Bold** quote').first as ChatMarkupBlockQuoteBlock;
-      final para = bq.blocks.first as ChatMarkupParagraphBlock;
+      final bq = blocks('> **Bold** quote').first as MarkupBlockQuoteBlock;
+      final para = bq.blocks.first as MarkupParagraphBlock;
       expect(para.inlines.first.isStrong, isTrue);
     });
 
@@ -269,7 +271,7 @@ void main() {
       // Two consecutive > lines with blank > line between
       final result = blocks('> First\n>\n> Second');
       expect(result, hasLength(1));
-      expect(result.first, isA<ChatMarkupBlockQuoteBlock>());
+      expect(result.first, isA<MarkupBlockQuoteBlock>());
     });
 
     test('blockquote toPlainText contains quoted text', () {
@@ -280,14 +282,14 @@ void main() {
   group('block parser — mixed content', () {
     test('paragraph followed by list', () {
       final result = blocks('Intro\n\n- Item');
-      expect(result[0], isA<ChatMarkupParagraphBlock>());
-      expect(result[1], isA<ChatMarkupListBlock>());
+      expect(result[0], isA<MarkupParagraphBlock>());
+      expect(result[1], isA<MarkupListBlock>());
     });
 
     test('heading followed by paragraph', () {
       final result = blocks('# Title\n\nBody text');
-      expect(result[0], isA<ChatMarkupHeadingBlock>());
-      expect(result[1], isA<ChatMarkupParagraphBlock>());
+      expect(result[0], isA<MarkupHeadingBlock>());
+      expect(result[1], isA<MarkupParagraphBlock>());
     });
 
     test('toPlainText joins blocks with double newlines', () {
