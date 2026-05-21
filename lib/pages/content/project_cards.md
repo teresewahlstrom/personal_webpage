@@ -1,9 +1,7 @@
+## Knowledge Management
+One recurring theme across Terese's work has been identifying where operational knowledge is fragile: where teams depend on expert memory, informal workarounds, or workflows that fail when a key person is absent. The structural problem is rarely a lack of technical capability. It is that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
 
-## Knowledge Managementsss
-A recurring pattern across Terese's work is identifying where operational knowledge is fragile: where teams depend on expert memory, informal workarounds, or workflows that fail when a key person is absent. The structural problem is rarely a lack of technical capability. It is that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
-
-She has experienced sharply different knowledge environments:
-
+She has experienced vastly different knowledge environments:
 * Mature vs non-existent
 * Democratized vs weaponized
 * Distilled vs fragmented
@@ -11,7 +9,7 @@ She has experienced sharply different knowledge environments:
 
 When she had the opportunity to redesign the knowledge experience for metal binder jetting at Markforged, she took it seriously because she had seen how much knowledge infrastructure changes the operating reality.
 
-* Instead of discarding defective manufactured parts, she collected them, classified them by failure mechanism, and paired them with engineering logs and educational material. The resulting defect table became a practical meeting point across departments at Markforged, reducing misunderstandings and deepening technical discussions.
+* Instead of discarding defective manufactured parts, she collected them, classified them by failure mechanism, and paired them with engineering logs and educational material. This started a movement were people begun to add more parts and their stories to the collection and it triggered deeper discussions. The resulting defect table became a meeting point across departments at Markforged, reducing misunderstandings and deepening technical discussions.
 
 * Instead of letting recurring service questions keep escalating to scarce experts, she acted as the bridge until the most common issues could be answered without her or them. This gave senior engineers more time for higher-value research, made operator knowledge more visible, and helped align teams around root causes and best practices.
 
@@ -26,12 +24,12 @@ That same operational instinct now drives her self-directed studies in AI-assist
 ---
 
 ## Coaching Leadership
-soon comming
+comming soon
 
 ---
 
 ## Product & Service Development 
-soon comming
+comming soon
 
 ---
 
@@ -63,4 +61,19 @@ Terese applies the same operating model through AI and structured professional t
 ---
 
 ## Metal Additive Manufacturing
-soon comming
+comming soon
+
+---
+
+## Mechanical & Data
+comming soon
+
+---
+
+## Early history
+* Math and arts.
+* Created websites
+
+* 4th generation engineer
+* Occupational Health. Mechanical engineering. Electrical engineering. Boats.
+* Descendant of a famous female privateer (Ingela Gathenhielm).
