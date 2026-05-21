@@ -1,5 +1,5 @@
 
-## Knowledge Management
+## Knowledge Managementsss
 A recurring pattern across Terese's work is identifying where operational knowledge is fragile: where teams depend on expert memory, informal workarounds, or workflows that fail when a key person is absent. The structural problem is rarely a lack of technical capability. It is that critical knowledge exists in forms that are difficult to transfer, retrieve, or scale.
 
 She has experienced sharply different knowledge environments:
