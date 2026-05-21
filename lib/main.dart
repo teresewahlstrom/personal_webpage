@@ -3,7 +3,6 @@ import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
-import 'services/keyboard_height.dart';
 import 'widgets/shell/header_logo_asset.dart';
 import 'widgets/shell/page_scaffold.dart';
 
@@ -52,46 +51,44 @@ class _T1GridAppState extends State<T1GridApp> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyboardHeightObserver(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "T1 grid — Terese Wahlström personal website",
-        themeAnimationDuration: Duration.zero,
-        theme: ThemeData(
-          useMaterial3: false,
-          scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
-            Brightness.light,
-          ),
-          colorScheme: ColorScheme.fromSeed(
-            brightness: Brightness.light,
-            seedColor: AppColorTheme.seedColorFor(Brightness.light),
-          ),
-          fontFamily: 'Nunito',
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "T1 grid — Terese Wahlström personal website",
+      themeAnimationDuration: Duration.zero,
+      theme: ThemeData(
+        useMaterial3: false,
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+          Brightness.light,
         ),
-        darkTheme: ThemeData(
-          useMaterial3: false,
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.light,
+          seedColor: AppColorTheme.seedColorFor(Brightness.light),
+        ),
+        fontFamily: 'Nunito',
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: false,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
+          Brightness.dark,
+        ),
+        colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          scaffoldBackgroundColor: ShellUiConfig.pageBackgroundFor(
-            Brightness.dark,
-          ),
-          colorScheme: ColorScheme.fromSeed(
-            brightness: Brightness.dark,
-            seedColor: AppColorTheme.seedColorFor(Brightness.dark),
-          ),
-          fontFamily: 'Nunito',
+          seedColor: AppColorTheme.seedColorFor(Brightness.dark),
         ),
-        themeMode: _themeMode,
-        home: PageScaffold(
-          showThemeToggle: true,
-          isDarkMode: _isDarkMode,
-          onToggleTheme: _toggleThemeMode,
-          isPageLoading: !_isPageContentReady,
-          showFooter: true,
-          initialChatSkinMode: _isDarkMode
-              ? ChatSkinMode.dark
-              : ChatSkinMode.light,
-          child: LandingPage(onContentReadyChanged: _setPageContentReady),
-        ),
+        fontFamily: 'Nunito',
+      ),
+      themeMode: _themeMode,
+      home: PageScaffold(
+        showThemeToggle: true,
+        isDarkMode: _isDarkMode,
+        onToggleTheme: _toggleThemeMode,
+        isPageLoading: !_isPageContentReady,
+        showFooter: true,
+        initialChatSkinMode: _isDarkMode
+            ? ChatSkinMode.dark
+            : ChatSkinMode.light,
+        child: LandingPage(onContentReadyChanged: _setPageContentReady),
       ),
     );
   }
