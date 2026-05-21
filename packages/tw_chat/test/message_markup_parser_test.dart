@@ -162,10 +162,13 @@ void main() {
       expect(result.every((b) => b is MarkupParagraphBlock), isTrue);
     });
 
-    test('consecutive non-blank lines collapse into one paragraph', () {
-      // Default parser does NOT preserve soft line breaks
+    test('consecutive non-blank lines preserve soft line breaks', () {
       final result = blocks('Line one\nLine two');
       expect(result, hasLength(1));
+      expect(
+        (result.single as MarkupParagraphBlock).toPlainText(),
+        'Line one\nLine two',
+      );
     });
   });
 
@@ -223,9 +226,16 @@ void main() {
       expect(item1Para.inlines.first.text, 'Bar');
     });
 
+    test('single line after unordered item continues that item paragraph', () {
+      final list = blocks('- Foo\nmore Foo').first as MarkupListBlock;
+      final itemPara = list.items.single.blocks.first as MarkupParagraphBlock;
+
+      expect(itemPara.toPlainText(), 'Foo\nmore Foo');
+    });
+
     test('nested list is parsed inside parent item', () {
       const raw = '- Parent\n    - Child';
-        final list = blocks(raw).first as MarkupListBlock;
+      final list = blocks(raw).first as MarkupListBlock;
       final nestedList = list.items.first.blocks
           .whereType<MarkupListBlock>()
           .first;
@@ -251,6 +261,13 @@ void main() {
     test('ordered list startingIndex is preserved', () {
       final list = blocks('3. Three\n4. Four').first as MarkupListBlock;
       expect(list.startingIndex, 3);
+    });
+
+    test('single line after ordered item continues that item paragraph', () {
+      final list = blocks('1. Foo\nmore Foo').first as MarkupListBlock;
+      final itemPara = list.items.single.blocks.first as MarkupParagraphBlock;
+
+      expect(itemPara.toPlainText(), 'Foo\nmore Foo');
     });
   });
 

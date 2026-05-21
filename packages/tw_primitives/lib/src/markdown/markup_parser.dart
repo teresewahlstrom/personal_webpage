@@ -4,13 +4,14 @@ import 'markup_tokenizer.dart';
 class MarkupParser {
   static const int _maxHeadingLevel = 2;
 
-  MarkupParser(String raw)
-    : _lines = raw.replaceAll('\r\n', '\n').split('\n'),
-      preserveSoftLineBreaks = false;
+  MarkupParser(
+    String raw, {
+    this.preserveSoftLineBreaks = true,
+  }) : _lines = raw.replaceAll('\r\n', '\n').split('\n');
 
   MarkupParser.fromLines(
     this._lines, {
-    this.preserveSoftLineBreaks = false,
+    this.preserveSoftLineBreaks = true,
   });
 
   final List<String> _lines;
@@ -202,7 +203,8 @@ class MarkupParser {
       if (nextMarker != null && nextMarker.indent == marker.indent) {
         break;
       }
-      if (lineIndent <= marker.indent) {
+      if (lineIndent <= marker.indent &&
+          _startsNewBlock(line, baseIndent: marker.indent)) {
         break;
       }
 

@@ -3,12 +3,12 @@ import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/src/markdown/markup_parser.dart';
 
 void main() {
-  test('single newline stays in one paragraph by default', () {
+  test('single newline stays in one paragraph and preserves line break', () {
     final document = MessageMarkup.parse('Alpha\nBeta');
 
     expect(document.blocks, hasLength(1));
     expect(document.blocks.single, isA<MarkupParagraphBlock>());
-    expect(document.toPlainText(), 'Alpha Beta');
+    expect(document.toPlainText(), 'Alpha\nBeta');
   });
 
   test('blank lines still split paragraphs', () {
@@ -20,14 +20,14 @@ void main() {
     expect(document.toPlainText(), 'Alpha\n\nBeta');
   });
 
-  test('preserveSoftLineBreaks keeps newline within the same paragraph', () {
+  test('preserveSoftLineBreaks can fold newline within the same paragraph', () {
     final document = MarkupParser.fromLines(
       const <String>['Alpha', 'Beta'],
-      preserveSoftLineBreaks: true,
+      preserveSoftLineBreaks: false,
     ).parse();
 
     expect(document.blocks, hasLength(1));
     expect(document.blocks.single, isA<MarkupParagraphBlock>());
-    expect(document.toPlainText(), 'Alpha\nBeta');
+    expect(document.toPlainText(), 'Alpha Beta');
   });
 }

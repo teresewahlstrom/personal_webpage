@@ -136,15 +136,14 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         ? null
         : _getParsedMarkup(widget.text);
     final markupTheme = _buildMarkupTheme(context);
+    final textContentMaxWidth = (contentMaxWidth - textMeasureHorizontalInset)
+        .clamp(0.0, double.infinity);
     final measuredLayout = _getMeasuredLayout(
       rawText: widget.text,
       parsedMarkup: parsedMarkup,
       style: bubbleTextStyle,
       textScaler: textScaler,
-      maxTextWidth: (contentMaxWidth - textMeasureHorizontalInset).clamp(
-        0.0,
-        double.infinity,
-      ),
+      maxTextWidth: textContentMaxWidth,
       markupTheme: markupTheme,
     );
     final isTruncatable =
@@ -177,8 +176,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             width: 0.5,
           );
     final align = widget.isUserBubble
-      ? Alignment.centerRight
-      : Alignment.centerLeft;
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
     final bubbleColor = widget.isUserBubble
         ? ChatBubbleRules.userFill(context)
         : ChatBubbleRules.botFill(context);
@@ -268,6 +267,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                         truncatedContentHeight:
                                             truncatedContentHeight,
                                         isTruncated: isCollapsed,
+                                        maxTextWidth: textContentMaxWidth,
                                       ),
                                     ),
                                     if (showFooter) buildFooter(),
@@ -298,6 +298,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
                                       truncatedContentHeight:
                                           truncatedContentHeight,
                                       isTruncated: isCollapsed,
+                                      maxTextWidth: textContentMaxWidth,
                                     ),
                                   ),
                                   if (showFooter)
@@ -332,6 +333,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     required bool isUserBubble,
     required double truncatedContentHeight,
     required bool isTruncated,
+    required double maxTextWidth,
   }) {
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
@@ -367,6 +369,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
             isUserBubble: isUserBubble,
             truncatedContentHeight: truncatedContentHeight,
             isTruncated: isTruncated,
+            maxTextWidth: maxTextWidth,
             gestureRecognizerFactory: _createLinkRecognizer,
           ),
         ],
@@ -510,6 +513,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     required this.isUserBubble,
     required this.truncatedContentHeight,
     required this.isTruncated,
+    required this.maxTextWidth,
     required this.gestureRecognizerFactory,
   });
 
@@ -519,6 +523,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
   final bool isUserBubble;
   final double truncatedContentHeight;
   final bool isTruncated;
+  final double maxTextWidth;
   final LinkGestureRecognizerFactory gestureRecognizerFactory;
 
   @override
@@ -554,120 +559,116 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       );
     }
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final Widget hiddenSelectionLayer = _buildTruncatedMarkupLayer(
-          document: document,
-          theme: _transparentMarkupTheme(markupTheme),
-          maxWidth: constraints.maxWidth,
-          selectable: true,
-          chromeVisible: false,
-          blockquoteRailColor: colors.transparent,
-        );
-        final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
-          document: document,
-          theme: markupTheme,
-          maxWidth: constraints.maxWidth,
-          selectable: false,
-          chromeVisible: true,
-          blockquoteRailColor: colors.bubbleText,
-        );
-        final double fadeHeight =
-            truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
-            ? truncatedContentHeight
-            : tokens.bubbleTruncationMaxFadeHeight;
-        final double overlayMidAlpha = isUserBubble
-            ? tokens.bubbleTruncationOverlayMidAlphaUser
-            : tokens.bubbleTruncationOverlayMidAlphaBot;
-        final double overlayLateAlpha = isUserBubble
-            ? tokens.bubbleTruncationOverlayLateAlphaUser
-            : tokens.bubbleTruncationOverlayLateAlphaBot;
-        final double midFadeFactor = isUserBubble
-            ? tokens.bubbleFadeMaskMidFactorUser
-            : tokens.bubbleFadeMaskMidFactorBot;
-        final double lateFadeFactor = isUserBubble
-            ? tokens.bubbleFadeMaskLateFactorUser
-            : tokens.bubbleFadeMaskLateFactorBot;
-        final List<double> overlayStops = isUserBubble
-            ? tokens.bubbleTruncationOverlayStopsUser
-            : tokens.bubbleTruncationOverlayStopsBot;
+    final Widget hiddenSelectionLayer = _buildTruncatedMarkupLayer(
+      document: document,
+      theme: _transparentMarkupTheme(markupTheme),
+      maxWidth: maxTextWidth,
+      selectable: true,
+      chromeVisible: false,
+      blockquoteRailColor: colors.transparent,
+    );
+    final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
+      document: document,
+      theme: markupTheme,
+      maxWidth: maxTextWidth,
+      selectable: false,
+      chromeVisible: true,
+      blockquoteRailColor: colors.bubbleText,
+    );
+    final double fadeHeight =
+        truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
+        ? truncatedContentHeight
+        : tokens.bubbleTruncationMaxFadeHeight;
+    final double overlayMidAlpha = isUserBubble
+        ? tokens.bubbleTruncationOverlayMidAlphaUser
+        : tokens.bubbleTruncationOverlayMidAlphaBot;
+    final double overlayLateAlpha = isUserBubble
+        ? tokens.bubbleTruncationOverlayLateAlphaUser
+        : tokens.bubbleTruncationOverlayLateAlphaBot;
+    final double midFadeFactor = isUserBubble
+        ? tokens.bubbleFadeMaskMidFactorUser
+        : tokens.bubbleFadeMaskMidFactorBot;
+    final double lateFadeFactor = isUserBubble
+        ? tokens.bubbleFadeMaskLateFactorUser
+        : tokens.bubbleFadeMaskLateFactorBot;
+    final List<double> overlayStops = isUserBubble
+        ? tokens.bubbleTruncationOverlayStopsUser
+        : tokens.bubbleTruncationOverlayStopsBot;
 
-        return SizedBox(
-          height: truncatedContentHeight,
-          child: ClipRect(
-            child: Stack(
-              children: <Widget>[
-                hiddenSelectionLayer,
-                ShaderMask(
-                  blendMode: BlendMode.dstIn,
-                  shaderCallback: (Rect bounds) {
-                    final double normalizedFadeStart = bounds.height <= 0
-                        ? 0.0
-                        : ((bounds.height - fadeHeight) / bounds.height).clamp(
-                            0.0,
-                            1.0,
-                          );
-                    final double midFadeStart =
-                        (normalizedFadeStart +
-                                (1.0 - normalizedFadeStart) * midFadeFactor)
-                            .clamp(0.0, 1.0);
-                    final double lateFadeStart =
-                        (normalizedFadeStart +
-                                (1.0 - normalizedFadeStart) * lateFadeFactor)
-                            .clamp(0.0, 1.0);
-
-                    return LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        colors.bubbleFadeMaskOpaque,
-                        colors.bubbleFadeMaskOpaque,
-                        colors.bubbleFadeMaskOpaque,
-                        colors.bubbleFadeMaskSoft,
-                        colors.transparent,
-                      ],
-                      stops: <double>[
+    return SizedBox(
+      height: truncatedContentHeight,
+      child: ClipRect(
+        child: Stack(
+          children: <Widget>[
+            hiddenSelectionLayer,
+            ShaderMask(
+              blendMode: BlendMode.dstIn,
+              shaderCallback: (Rect bounds) {
+                final double normalizedFadeStart = bounds.height <= 0
+                    ? 0.0
+                    : ((bounds.height - fadeHeight) / bounds.height).clamp(
                         0.0,
-                        normalizedFadeStart,
-                        midFadeStart,
-                        lateFadeStart,
                         1.0,
-                      ],
-                    ).createShader(bounds);
-                  },
-                  child: visibleMarkupLayer,
-                ),
-                if (isUserBubble)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    height: fadeHeight,
-                    child: IgnorePointer(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: <Color>[
-                              bubbleColor.withValues(
-                                alpha: tokens.alphaTransparent,
-                              ),
-                              bubbleColor.withValues(alpha: overlayMidAlpha),
-                              bubbleColor.withValues(alpha: overlayLateAlpha),
-                              bubbleColor,
-                            ],
-                            stops: overlayStops,
+                      );
+                final double midFadeStart =
+                    (normalizedFadeStart +
+                            (1.0 - normalizedFadeStart) * midFadeFactor)
+                        .clamp(0.0, 1.0);
+                final double lateFadeStart =
+                    (normalizedFadeStart +
+                            (1.0 - normalizedFadeStart) * lateFadeFactor)
+                        .clamp(0.0, 1.0);
+
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    colors.bubbleFadeMaskOpaque,
+                    colors.bubbleFadeMaskOpaque,
+                    colors.bubbleFadeMaskOpaque,
+                    colors.bubbleFadeMaskSoft,
+                    colors.transparent,
+                  ],
+                  stops: <double>[
+                    0.0,
+                    normalizedFadeStart,
+                    midFadeStart,
+                    lateFadeStart,
+                    1.0,
+                  ],
+                ).createShader(bounds);
+              },
+              child: visibleMarkupLayer,
+            ),
+            if (isUserBubble)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: fadeHeight,
+                child: IgnorePointer(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          bubbleColor.withValues(
+                            alpha: tokens.alphaTransparent,
                           ),
-                        ),
+                          bubbleColor.withValues(alpha: overlayMidAlpha),
+                          bubbleColor.withValues(alpha: overlayLateAlpha),
+                          bubbleColor,
+                        ],
+                        stops: overlayStops,
                       ),
                     ),
                   ),
-              ],
-            ),
-          ),
-        );
-      },
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 
