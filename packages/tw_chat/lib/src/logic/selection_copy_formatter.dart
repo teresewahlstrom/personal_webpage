@@ -194,7 +194,7 @@ List<_SelectionCopySegment> _buildBlockSegments(MarkupBlock block) {
     segments[0] = segments[0].prependLeadingCopy(prefix);
     return segments;
   }
-  if (block is MarkupBlockQuoteBlock) {
+  if (block is MarkupBlockquoteBlock) {
     return _prefixCopyLines(
       _buildJoinedBlockSegments(
         block.blocks,

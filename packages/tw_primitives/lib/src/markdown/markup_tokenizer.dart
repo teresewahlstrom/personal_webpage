@@ -1,4 +1,4 @@
-import 'markup_model.dart';
+import 'markup_ast.dart';
 
 class MarkupInlineTokenizer {
   MarkupInlineTokenizer(this._raw);

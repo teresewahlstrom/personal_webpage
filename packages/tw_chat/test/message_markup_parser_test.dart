@@ -258,11 +258,11 @@ void main() {
     test('> prefix produces a blockquote block', () {
       final result = blocks('> A quote');
       expect(result, hasLength(1));
-      expect(result.first, isA<MarkupBlockQuoteBlock>());
+      expect(result.first, isA<MarkupBlockquoteBlock>());
     });
 
     test('blockquote content is parsed as nested blocks', () {
-      final bq = blocks('> **Bold** quote').first as MarkupBlockQuoteBlock;
+      final bq = blocks('> **Bold** quote').first as MarkupBlockquoteBlock;
       final para = bq.blocks.first as MarkupParagraphBlock;
       expect(para.inlines.first.isStrong, isTrue);
     });
@@ -271,7 +271,7 @@ void main() {
       // Two consecutive > lines with blank > line between
       final result = blocks('> First\n>\n> Second');
       expect(result, hasLength(1));
-      expect(result.first, isA<MarkupBlockQuoteBlock>());
+      expect(result.first, isA<MarkupBlockquoteBlock>());
     });
 
     test('blockquote toPlainText contains quoted text', () {

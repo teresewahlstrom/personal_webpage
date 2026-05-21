@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'markup_ast.dart';
+
 typedef LinkGestureRecognizerFactory = GestureRecognizer? Function(String href);
 typedef MarkupHeadingStyleResolver = TextStyle Function(int level);
 
@@ -26,54 +28,21 @@ class MarkupTheme {
   final MarkupHeadingStyleResolver headingStyleResolver;
 }
 
-class MarkupDocument {
-  const MarkupDocument(this.blocks);
-
-  static const String blockSeparator = '\n\n';
-
-  final List<MarkupBlock> blocks;
-
-  String toPlainText() {
-    return _joinBlockPlainText(blocks, separator: blockSeparator).trimRight();
-  }
-
+extension MarkupDocumentRendering on MarkupDocument {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
     return _joinBlockTextSpan(
       blocks,
-      separator: blockSeparator,
+      separator: MarkupDocument.blockSeparator,
       theme: theme,
       gestureRecognizerFactory: gestureRecognizerFactory,
     );
   }
 }
 
-class MarkupInline {
-  const MarkupInline({
-    required this.text,
-    this.isStrong = false,
-    this.isEmphasis = false,
-    this.isStrikethrough = false,
-    this.isUnderline = false,
-    this.href,
-  });
-
-  final String text;
-  final bool isStrong;
-  final bool isEmphasis;
-  final bool isStrikethrough;
-  final bool isUnderline;
-  final String? href;
-
-  String toPlainText() {
-    if (href == null || href!.isEmpty || href == text) {
-      return text;
-    }
-    return '$text ($href)';
-  }
-
+extension MarkupInlineRendering on MarkupInline {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
@@ -109,195 +78,92 @@ class MarkupInline {
       recognizer: isLink ? gestureRecognizerFactory(href!) : null,
     );
   }
-
-  double _scaledStrikethroughThickness(TextStyle style) {
-    final double fallbackThickness = (style.fontSize ?? 14.0) / 14.0;
-    final double baseThickness = style.decorationThickness ?? fallbackThickness;
-    return (baseThickness * 0.5).clamp(0.5, double.infinity);
-  }
 }
 
-abstract class MarkupBlock {
-  const MarkupBlock();
-
-  String toPlainText();
-
-  TextSpan toTextSpan({
-    required MarkupTheme theme,
-    required LinkGestureRecognizerFactory gestureRecognizerFactory,
-  });
-}
-
-class MarkupParagraphBlock extends MarkupBlock {
-  const MarkupParagraphBlock(this.inlines);
-
-  final List<MarkupInline> inlines;
-
-  @override
-  String toPlainText() {
-    return inlines.map((inline) => inline.toPlainText()).join();
-  }
-
-  @override
+extension MarkupBlockRendering on MarkupBlock {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
   }) {
-    return TextSpan(
-      style: theme.baseStyle,
-      children: inlines
-          .map(
-            (inline) => inline.toTextSpan(
-              theme: theme,
-              gestureRecognizerFactory: gestureRecognizerFactory,
+    switch (this) {
+      case final MarkupParagraphBlock paragraph:
+        return TextSpan(
+          style: theme.baseStyle,
+          children: paragraph.inlines
+              .map(
+                (inline) => inline.toTextSpan(
+                  theme: theme,
+                  gestureRecognizerFactory: gestureRecognizerFactory,
+                ),
+              )
+              .toList(growable: false),
+        );
+      case final MarkupHeadingBlock heading:
+        final headingStyle = theme.headingStyleResolver(heading.level);
+        final headingTheme = MarkupTheme(
+          baseStyle: headingStyle,
+          strongStyle: headingStyle.merge(theme.strongStyle),
+          emphasisStyle: headingStyle.merge(theme.emphasisStyle),
+          strikethroughStyle: headingStyle.merge(theme.strikethroughStyle),
+          underlineStyle: headingStyle.merge(theme.underlineStyle),
+          linkStyle: headingStyle.merge(theme.linkStyle),
+          blockquoteStyle: theme.blockquoteStyle,
+          headingStyleResolver: theme.headingStyleResolver,
+        );
+
+        return TextSpan(
+          style: headingStyle,
+          children: heading.inlines
+              .map(
+                (inline) => inline.toTextSpan(
+                  theme: headingTheme,
+                  gestureRecognizerFactory: gestureRecognizerFactory,
+                ),
+              )
+              .toList(growable: false),
+        );
+      case final MarkupBlockquoteBlock quote:
+        final contentSpan = _joinBlockTextSpan(
+          quote.blocks,
+          separator: MarkupDocument.blockSeparator,
+          theme: theme,
+          gestureRecognizerFactory: gestureRecognizerFactory,
+        );
+
+        return _prefixMultilineSpan(
+          contentSpan,
+          firstLinePrefix: '> ',
+          continuationPrefix: '> ',
+          prefixStyle: theme.blockquoteStyle,
+          mergedStyle: theme.blockquoteStyle,
+        );
+      case final MarkupListBlock list:
+        final itemChildren = <InlineSpan>[];
+
+        for (final entry in list.items.indexed) {
+          if (entry.$1 > 0) {
+            itemChildren.add(const TextSpan(text: '\n'));
+          }
+          final marker = list.ordered ? '${list.startingIndex + entry.$1}. ' : '• ';
+          itemChildren.add(
+            _prefixMultilineSpan(
+              entry.$2.toTextSpan(
+                theme: theme,
+                gestureRecognizerFactory: gestureRecognizerFactory,
+              ),
+              firstLinePrefix: marker,
+              continuationPrefix: ' ' * marker.length,
+              prefixStyle: theme.baseStyle,
             ),
-          )
-          .toList(growable: false),
-    );
-  }
-}
-
-class MarkupHeadingBlock extends MarkupBlock {
-  const MarkupHeadingBlock({required this.level, required this.inlines});
-
-  final int level;
-  final List<MarkupInline> inlines;
-
-  @override
-  String toPlainText() {
-    return inlines.map((inline) => inline.toPlainText()).join();
-  }
-
-  @override
-  TextSpan toTextSpan({
-    required MarkupTheme theme,
-    required LinkGestureRecognizerFactory gestureRecognizerFactory,
-  }) {
-    final headingStyle = theme.headingStyleResolver(level);
-    final headingTheme = MarkupTheme(
-      baseStyle: headingStyle,
-      strongStyle: headingStyle.merge(theme.strongStyle),
-      emphasisStyle: headingStyle.merge(theme.emphasisStyle),
-      strikethroughStyle: headingStyle.merge(theme.strikethroughStyle),
-      underlineStyle: headingStyle.merge(theme.underlineStyle),
-      linkStyle: headingStyle.merge(theme.linkStyle),
-      blockquoteStyle: theme.blockquoteStyle,
-      headingStyleResolver: theme.headingStyleResolver,
-    );
-
-    return TextSpan(
-      style: headingStyle,
-      children: inlines
-          .map(
-            (inline) => inline.toTextSpan(
-              theme: headingTheme,
-              gestureRecognizerFactory: gestureRecognizerFactory,
-            ),
-          )
-          .toList(growable: false),
-    );
-  }
-}
-
-class MarkupBlockQuoteBlock extends MarkupBlock {
-  const MarkupBlockQuoteBlock(this.blocks);
-
-  final List<MarkupBlock> blocks;
-
-  @override
-  String toPlainText() {
-    return _prefixMultilinePlainText(
-      _joinBlockPlainText(blocks, separator: MarkupDocument.blockSeparator),
-      firstLinePrefix: '> ',
-      continuationPrefix: '> ',
-    );
-  }
-
-  @override
-  TextSpan toTextSpan({
-    required MarkupTheme theme,
-    required LinkGestureRecognizerFactory gestureRecognizerFactory,
-  }) {
-    final contentSpan = _joinBlockTextSpan(
-      blocks,
-      separator: MarkupDocument.blockSeparator,
-      theme: theme,
-      gestureRecognizerFactory: gestureRecognizerFactory,
-    );
-
-    return _prefixMultilineSpan(
-      contentSpan,
-      firstLinePrefix: '> ',
-      continuationPrefix: '> ',
-      prefixStyle: theme.blockquoteStyle,
-      mergedStyle: theme.blockquoteStyle,
-    );
-  }
-}
-
-class MarkupListBlock extends MarkupBlock {
-  const MarkupListBlock({
-    required this.ordered,
-    required this.startingIndex,
-    required this.items,
-  });
-
-  final bool ordered;
-  final int startingIndex;
-  final List<MarkupListItem> items;
-
-  @override
-  String toPlainText() {
-    return items.indexed
-        .map((entry) {
-          final marker = ordered ? '${startingIndex + entry.$1}. ' : '• ';
-          return _prefixMultilinePlainText(
-            entry.$2.toPlainText(),
-            firstLinePrefix: marker,
-            continuationPrefix: ' ' * marker.length,
           );
-        })
-        .join('\n');
-  }
+        }
 
-  @override
-  TextSpan toTextSpan({
-    required MarkupTheme theme,
-    required LinkGestureRecognizerFactory gestureRecognizerFactory,
-  }) {
-    final itemChildren = <InlineSpan>[];
-
-    for (final entry in items.indexed) {
-      if (entry.$1 > 0) {
-        itemChildren.add(const TextSpan(text: '\n'));
-      }
-      final marker = ordered ? '${startingIndex + entry.$1}. ' : '• ';
-      itemChildren.add(
-        _prefixMultilineSpan(
-          entry.$2.toTextSpan(
-            theme: theme,
-            gestureRecognizerFactory: gestureRecognizerFactory,
-          ),
-          firstLinePrefix: marker,
-          continuationPrefix: ' ' * marker.length,
-          prefixStyle: theme.baseStyle,
-        ),
-      );
+        return TextSpan(style: theme.baseStyle, children: itemChildren);
     }
-
-    return TextSpan(style: theme.baseStyle, children: itemChildren);
   }
 }
 
-class MarkupListItem {
-  const MarkupListItem(this.blocks);
-
-  final List<MarkupBlock> blocks;
-
-  String toPlainText() {
-    return _joinBlockPlainText(blocks, separator: '\n');
-  }
-
+extension MarkupListItemRendering on MarkupListItem {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
@@ -311,14 +177,10 @@ class MarkupListItem {
   }
 }
 
-String _joinBlockPlainText(
-  List<MarkupBlock> blocks, {
-  required String separator,
-}) {
-  return blocks
-      .map((block) => block.toPlainText())
-      .where((blockText) => blockText.isNotEmpty)
-      .join(separator);
+double _scaledStrikethroughThickness(TextStyle style) {
+  final double fallbackThickness = (style.fontSize ?? 14.0) / 14.0;
+  final double baseThickness = style.decorationThickness ?? fallbackThickness;
+  return (baseThickness * 0.5).clamp(0.5, double.infinity);
 }
 
 TextSpan _joinBlockTextSpan(
@@ -348,24 +210,6 @@ TextSpan _joinBlockTextSpan(
   }
 
   return TextSpan(style: theme.baseStyle, children: children);
-}
-
-String _prefixMultilinePlainText(
-  String text, {
-  required String firstLinePrefix,
-  required String continuationPrefix,
-}) {
-  if (text.isEmpty) {
-    return '';
-  }
-
-  final lines = text.split('\n');
-  return lines.indexed
-      .map((entry) {
-        final prefix = entry.$1 == 0 ? firstLinePrefix : continuationPrefix;
-        return '$prefix${entry.$2}';
-      })
-      .join('\n');
 }
 
 TextSpan _prefixMultilineSpan(

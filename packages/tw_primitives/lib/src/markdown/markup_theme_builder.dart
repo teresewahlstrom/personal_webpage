@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'markup_model.dart';
+import 'markup_rendering.dart';
 
 class MarkdownThemeConfig {
   const MarkdownThemeConfig({
@@ -20,9 +20,9 @@ const double _strikethroughDarkThickness = 5.9;
 
 const TextStyle _baseTextStyle = TextStyle(
   fontFamily: 'Nunito',
-  fontSize: 14.0,
-  fontWeight: FontWeight.w500,
-  height: 1.38,
+  fontSize: 15.0,
+  fontWeight: FontWeight.w300,
+  height: 1.3,
   letterSpacing: 0.0,
 );
 
@@ -30,20 +30,11 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
   final baseStyle = _baseTextStyle.copyWith(
     color: config.baseTextColor,
   );
-  final baseColor = baseStyle.color ?? config.baseTextColor;
+  final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-  final baseLetterSpacing = baseStyle.letterSpacing ?? 0.0;
-  final strongBase = _isNunitoFamily(baseStyle.fontFamily)
-      ? baseStyle.copyWith(
-          fontSize: baseStyle.fontSize,
-          height: baseStyle.height,
-          color: baseColor,
-          fontWeight: FontWeight.w700,
-        )
-      : baseStyle;
-
-  final strongStyle = strongBase.copyWith(
+  final baseLetterSpacing = baseStyle.letterSpacing!;
+  final strongStyle = baseStyle.copyWith(
     fontWeight: FontWeight.w900,
     color: lifted.toColor(),
     letterSpacing: baseLetterSpacing + 0.45,
@@ -85,10 +76,8 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
       final clampedLevel = level.clamp(1, 2);
       final index = clampedLevel - 1;
 
-      double? fontSize = baseStyle.fontSize == null
-          ? null
-          : baseStyle.fontSize! * scales[index];
-      if (clampedLevel == 1 && fontSize != null) {
+      double fontSize = baseStyle.fontSize! * scales[index];
+      if (clampedLevel == 1) {
         fontSize += 2.0;
       }
 
@@ -99,11 +88,4 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
       );
     },
   );
-}
-
-bool _isNunitoFamily(String? family) {
-  if (family == null || family.isEmpty) {
-    return false;
-  }
-  return family.trim().toLowerCase() == 'nunito';
 }

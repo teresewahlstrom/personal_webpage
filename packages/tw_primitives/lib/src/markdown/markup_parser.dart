@@ -1,4 +1,4 @@
-import 'markup_model.dart';
+import 'markup_ast.dart';
 import 'markup_tokenizer.dart';
 
 class MarkupParser {
@@ -39,12 +39,12 @@ class MarkupParser {
         break;
       }
 
-      final blockQuoteContent = _stripBlockQuotePrefix(
+      final blockquoteContent = _stripBlockquotePrefix(
         line,
         baseIndent: baseIndent,
       );
-      if (blockQuoteContent != null) {
-        final result = _parseBlockQuote(start: index, baseIndent: baseIndent);
+      if (blockquoteContent != null) {
+        final result = _parseBlockquote(start: index, baseIndent: baseIndent);
         blocks.add(result.block);
         index = result.nextIndex;
         continue;
@@ -221,7 +221,7 @@ class MarkupParser {
     );
   }
 
-  _BlockQuoteParseResult _parseBlockQuote({
+  _BlockquoteParseResult _parseBlockquote({
     required int start,
     required int baseIndent,
   }) {
@@ -230,7 +230,7 @@ class MarkupParser {
 
     while (index < _lines.length) {
       final line = _trimTrailingWhitespace(_lines[index]);
-      final stripped = _stripBlockQuotePrefix(line, baseIndent: baseIndent);
+      final stripped = _stripBlockquotePrefix(line, baseIndent: baseIndent);
       if (stripped == null) {
         break;
       }
@@ -242,14 +242,14 @@ class MarkupParser {
       quoteLines,
     )._parseBlocks(start: 0, baseIndent: 0).blocks;
 
-    return _BlockQuoteParseResult(
-      block: MarkupBlockQuoteBlock(List<MarkupBlock>.unmodifiable(blocks)),
+    return _BlockquoteParseResult(
+      block: MarkupBlockquoteBlock(List<MarkupBlock>.unmodifiable(blocks)),
       nextIndex: index,
     );
   }
 
   bool _startsNewBlock(String line, {required int baseIndent}) {
-    return _stripBlockQuotePrefix(line, baseIndent: baseIndent) != null ||
+    return _stripBlockquotePrefix(line, baseIndent: baseIndent) != null ||
         _matchHeading(line, baseIndent: baseIndent) != null ||
         _matchListMarker(line, minimumIndent: baseIndent) != null;
   }
@@ -297,7 +297,7 @@ class MarkupParser {
     );
   }
 
-  String? _stripBlockQuotePrefix(String line, {required int baseIndent}) {
+  String? _stripBlockquotePrefix(String line, {required int baseIndent}) {
     if (_leadingSpaces(line) < baseIndent) {
       return null;
     }
@@ -370,10 +370,10 @@ class _ListItemParseResult {
   final int nextIndex;
 }
 
-class _BlockQuoteParseResult {
-  const _BlockQuoteParseResult({required this.block, required this.nextIndex});
+class _BlockquoteParseResult {
+  const _BlockquoteParseResult({required this.block, required this.nextIndex});
 
-  final MarkupBlockQuoteBlock block;
+  final MarkupBlockquoteBlock block;
   final int nextIndex;
 }
 

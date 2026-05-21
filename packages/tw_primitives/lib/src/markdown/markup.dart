@@ -1,9 +1,8 @@
-import 'markup_model.dart';
+import 'markup_ast.dart';
 import 'markup_parser.dart' as markup_parser;
 
-export 'markup_model.dart';
-export 'markup_parser.dart';
-export 'markup_tokenizer.dart';
+export 'markup_ast.dart';
+export 'markup_rendering.dart';
 
 class MessageMarkup {
   const MessageMarkup._();
