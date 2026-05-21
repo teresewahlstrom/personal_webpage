@@ -5,6 +5,7 @@ import 'package:tw_primitives/src/scrollbar/scroll_area.dart';
 import 'package:tw_primitives/src/scrollbar/tw_scrollbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart' show AttributionStyleBuilder;
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
+import 'package:tw_primitives/text_field.dart' show TextInputSource;
 
 /// Beginner-friendly controller for [TwReadyTextField].
 ///
@@ -80,6 +81,7 @@ class TwReadyTextField extends StatefulWidget {
     this.minLines = 1,
     this.maxLines,
     this.lineHeight,
+    this.inputSource,
     this.padding,
     this.showScrollbar = true,
     this.hideSystemScrollbars = true,
@@ -119,6 +121,7 @@ class TwReadyTextField extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final double? lineHeight;
+  final TextInputSource? inputSource;
   final EdgeInsets? padding;
 
   final bool showScrollbar;
@@ -218,6 +221,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
       minLines: widget.minLines,
       maxLines: widget.maxLines,
       lineHeight: widget.lineHeight,
+      inputSource: widget.inputSource,
       padding: widget.padding,
     );
 

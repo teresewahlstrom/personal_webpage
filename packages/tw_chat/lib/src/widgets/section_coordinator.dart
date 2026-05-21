@@ -37,6 +37,7 @@ class SectionCoordinator extends ChangeNotifier {
   bool _showChatScrollbarTrack = false;
   bool _isChatPointerInteractionActive = false;
   bool _isNearBottomCache = true;
+  bool _isNearBottomRefreshQueued = false;
   String? _latestCompletedBotMessageId;
   String? _unseenLatestBotMessageId;
 
@@ -169,6 +170,7 @@ class SectionCoordinator extends ChangeNotifier {
     _messageTruncationOverrides[messageId] = !isMessageTruncated(messageId);
     _notifyChatView();
     _scheduleChatScrollbarVisibilitySync();
+    _scheduleNearBottomRefresh();
   }
 
   void handleChatPointerInteractionStart() {
@@ -190,7 +192,10 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   String resolveSelectionCopyText(List<ChatMessage> messages) {
-    return _selectionCopy.resolveSelectionCopyText(messages);
+    return _selectionCopy.resolveSelectionCopyText(
+      messages,
+      fullCopyMessageIds: _truncatedSelectedMessageIds(messages),
+    );
   }
 
   void jumpToLatest() {
@@ -254,6 +259,10 @@ class SectionCoordinator extends ChangeNotifier {
     controller.selection = TextSelection.collapsed(offset: caretOffset);
   }
 
+  void claimChatInteraction() {
+    _onSetChatKeyboardScrollTarget();
+  }
+
   bool animateChatScrollBy(double delta, {required bool animate}) {
     final tokens = ChatSkin.tokens;
     return _scrollHelper.animateBy(
@@ -291,7 +300,7 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void _handleChatScroll() {
-    _refreshNearBottomCache();
+    _scheduleNearBottomRefresh();
   }
 
   void _runDeferredVisibilityActionIfNeeded({required bool isVisible}) {
@@ -347,6 +356,20 @@ class SectionCoordinator extends ChangeNotifier {
       updateVisibility: (value) => _showChatScrollbarTrack = value,
       onTrackVisibilityChanged: _notifyChatView,
     );
+  }
+
+  void _scheduleNearBottomRefresh() {
+    if (_isNearBottomRefreshQueued) {
+      return;
+    }
+    _isNearBottomRefreshQueued = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _isNearBottomRefreshQueued = false;
+      if (!_isMounted()) {
+        return;
+      }
+      _refreshNearBottomCache();
+    });
   }
 
   void _scheduleScrollbarVisibilitySync({
@@ -481,6 +504,20 @@ class SectionCoordinator extends ChangeNotifier {
 
   bool _defaultMessageTruncation(ChatMessage message) {
     return message.role == ChatRole.user;
+  }
+
+  Set<String> _truncatedSelectedMessageIds(List<ChatMessage> messages) {
+    final selectedIds = <String>{};
+    for (final message in messages) {
+      if (!isMessageTruncated(message.id)) {
+        continue;
+      }
+      if (!_selectionCopy.hasSelectionForMessage(message.id)) {
+        continue;
+      }
+      selectedIds.add(message.id);
+    }
+    return selectedIds;
   }
 
   void _notifyChatView() {

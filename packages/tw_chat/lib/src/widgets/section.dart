@@ -20,6 +20,8 @@ class ChatSection extends StatefulWidget {
     required this.isChatKeyboardScrollTarget,
     required this.onSetChatKeyboardScrollTarget,
     required this.isVisible,
+    required this.panelWidth,
+    required this.panelHeight,
   });
   final List<ChatMessage> messages;
   final void Function(String text) onSend;
@@ -27,6 +29,8 @@ class ChatSection extends StatefulWidget {
   final ValueListenable<bool> isChatKeyboardScrollTarget;
   final VoidCallback onSetChatKeyboardScrollTarget;
   final bool isVisible;
+  final double panelWidth;
+  final double panelHeight;
 
   @override
   State<ChatSection> createState() => _ChatSectionState();
@@ -68,6 +72,10 @@ class _ChatSectionState extends State<ChatSection> {
     _coordinator.initialize(messages: widget.messages);
     _webCopyInterceptor = ChatWebCopyInterceptor(
       () => _coordinator.resolveSelectionCopyText(widget.messages),
+      shouldInterceptCopy: () =>
+          widget.isVisible &&
+          widget.isChatKeyboardScrollTarget.value &&
+          _coordinator.isChatSelectionActive,
     )..attach();
     HardwareKeyboard.instance.addHandler(_handleChatKeyEvent);
   }
@@ -134,37 +142,35 @@ class _ChatSectionState extends State<ChatSection> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final skin = ChatSkin.dataOf(context);
-        final colors = skin.colors;
-        final tokens = skin.tokens;
-        final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-        final composerMetrics = ChatComposerLayout.resolveMetrics(
-          context: context,
-          panelHeight: constraints.maxHeight,
-          textScale: textScale,
-        );
-        final composerHeight =
-            (_composerMeasuredHeight > 0
-                    ? _composerMeasuredHeight
-                    : composerMetrics.minInputHeight)
-                .clamp(
-                  composerMetrics.minInputHeight,
-                  composerMetrics.maxInputHeight,
-                );
-        final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
-        final chatContentBottomInset =
-            tokens.shellContentPadding.bottom +
-            composerHeight +
-            tokens.composerGap +
-            tokens.composerRowTopSpacing;
-        final chatScrollbarBottomInset = tokens.shellBottomShadowHeight(
-          composerHeight,
-        );
+    final skin = ChatSkin.dataOf(context);
+    final colors = skin.colors;
+    final tokens = skin.tokens;
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final composerMetrics = ChatComposerLayout.resolveMetrics(
+      context: context,
+      panelHeight: widget.panelHeight,
+      textScale: textScale,
+    );
+    final composerHeight =
+        (_composerMeasuredHeight > 0
+                ? _composerMeasuredHeight
+                : composerMetrics.minInputHeight)
+            .clamp(
+              composerMetrics.minInputHeight,
+              composerMetrics.maxInputHeight,
+            );
+    final chatScrollbarTopInset = tokens.chatListTopShadowHeight;
+    final chatContentBottomInset =
+        tokens.shellContentPadding.bottom +
+        composerHeight +
+        tokens.composerGap +
+        tokens.composerRowTopSpacing;
+    final chatScrollbarBottomInset = tokens.shellBottomShadowHeight(
+      composerHeight,
+    );
 
-        return Stack(
-          children: [
+    return Stack(
+      children: [
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(
@@ -177,7 +183,7 @@ class _ChatSectionState extends State<ChatSection> {
                     return ChatMessageListArea(
                       messages: widget.messages,
                       availableWidth:
-                          constraints.maxWidth -
+                          widget.panelWidth -
                           tokens.shellContentPadding.left -
                           tokens.shellContentPadding.right -
                           tokens.bubbleViewportPadding.left -
@@ -197,11 +203,13 @@ class _ChatSectionState extends State<ChatSection> {
                       onCopySelectionRequested: () => _coordinator
                           .resolveSelectionCopyText(widget.messages),
                       onRequestChatKeyboardTarget:
-                          widget.onSetChatKeyboardScrollTarget,
+                          _coordinator.claimChatInteraction,
                       onChatPointerInteractionStart:
                           _coordinator.handleChatPointerInteractionStart,
                       onChatPointerInteractionEnd:
                           _coordinator.handleChatPointerInteractionEnd,
+                      shouldPreserveSelectionOnSecondaryClick: () =>
+                          _coordinator.isChatSelectionActive,
                       scrollbarTopInset: chatScrollbarTopInset,
                       scrollbarBottomInset: chatScrollbarBottomInset,
                       contentBottomInset: chatContentBottomInset,
@@ -314,9 +322,7 @@ class _ChatSectionState extends State<ChatSection> {
                 ),
               ),
             ),
-          ],
-        );
-      },
+      ],
     );
   }
 }

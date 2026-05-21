@@ -4,11 +4,16 @@ import 'dart:js_interop';
 import 'package:web/web.dart' as web;
 
 typedef ChatCopyTextResolver = String Function();
+typedef ChatCopyGuard = bool Function();
 
 class ChatWebCopyInterceptor {
-  ChatWebCopyInterceptor(this._resolveCopyText);
+  ChatWebCopyInterceptor(
+    this._resolveCopyText, {
+    required ChatCopyGuard shouldInterceptCopy,
+  }) : _shouldInterceptCopy = shouldInterceptCopy;
 
   final ChatCopyTextResolver _resolveCopyText;
+  final ChatCopyGuard _shouldInterceptCopy;
   JSFunction? _copyListener;
 
   void attach() {
@@ -28,6 +33,10 @@ class ChatWebCopyInterceptor {
   }
 
   void _handleCopy(web.Event event) {
+    if (!_shouldInterceptCopy()) {
+      return;
+    }
+
     final copyText = _resolveCopyText();
     if (copyText.trim().isEmpty) {
       return;

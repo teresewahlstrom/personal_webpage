@@ -34,7 +34,10 @@ class SelectionCopyHelper {
     return true;
   }
 
-  String buildFormattedSelectionCopy(List<ChatMessage> messages) {
+  String buildFormattedSelectionCopy(
+    List<ChatMessage> messages, {
+    Set<String> fullCopyMessageIds = const <String>{},
+  }) {
     final selectedRanges = <String, SelectedContentRange>{};
 
     for (final message in messages) {
@@ -55,15 +58,30 @@ class SelectionCopyHelper {
     return formatChatSelectionCopy(
       messages: messages,
       selectedRanges: selectedRanges,
+      fullCopyMessageIds: fullCopyMessageIds,
     );
   }
 
-  String resolveSelectionCopyText(List<ChatMessage> messages) {
-    final formatted = buildFormattedSelectionCopy(messages);
+  String resolveSelectionCopyText(
+    List<ChatMessage> messages, {
+    Set<String> fullCopyMessageIds = const <String>{},
+  }) {
+    final formatted = buildFormattedSelectionCopy(
+      messages,
+      fullCopyMessageIds: fullCopyMessageIds,
+    );
     if (formatted.trim().isNotEmpty) {
       return formatted;
     }
     return _currentSelectedPlainText;
+  }
+
+  bool hasSelectionForMessage(String messageId) {
+    final notifier = _messageSelectionNotifiers[messageId];
+    final selection = notifier?.selection;
+    return selection != null &&
+        selection.status != SelectionStatus.none &&
+        selection.range != null;
   }
 
   void clearSelection() {

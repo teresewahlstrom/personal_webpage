@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:tw_chat/composer.dart'
   show ChatComposer, ChatComposerSkin;
 import 'package:tw_primitives/text_field.dart'
-    show TwReadyTextController, TwReadyTextField;
+    show TextInputSource, TwReadyTextController, TwReadyTextField;
 
 import '../config/config.dart';
 
@@ -139,6 +140,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
           Text('Ask me anything...', style: composerHintStyle),
       minLines: 1,
       maxLines: null,
+      inputSource: kIsWeb ? TextInputSource.ime : null,
       padding: EdgeInsets.fromLTRB(
         tokens.composerTextInsetLeft + 2.0,
         tokens.composerInputTextInsetTop,

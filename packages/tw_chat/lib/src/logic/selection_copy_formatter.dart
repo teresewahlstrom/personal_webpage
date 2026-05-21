@@ -8,6 +8,7 @@ import '../models/message.dart';
 String formatChatSelectionCopy({
   required List<ChatMessage> messages,
   required Map<String, SelectedContentRange> selectedRanges,
+  Set<String> fullCopyMessageIds = const <String>{},
 }) {
   final buffer = StringBuffer();
   var wroteAny = false;
@@ -24,12 +25,19 @@ String formatChatSelectionCopy({
       continue;
     }
 
-    final start = math
-        .min(range.startOffset, range.endOffset)
-        .clamp(0, projection.visibleLength);
-    final end = math
-        .max(range.startOffset, range.endOffset)
-        .clamp(0, projection.visibleLength);
+    final bool copyWholeMessage = fullCopyMessageIds.contains(message.id);
+    final int start = copyWholeMessage
+        ? 0
+        : math
+              .min(range.startOffset, range.endOffset)
+              .clamp(0, projection.visibleLength)
+              .toInt();
+    final int end = copyWholeMessage
+        ? projection.visibleLength
+        : math
+              .max(range.startOffset, range.endOffset)
+              .clamp(0, projection.visibleLength)
+              .toInt();
     if (end <= start) {
       continue;
     }

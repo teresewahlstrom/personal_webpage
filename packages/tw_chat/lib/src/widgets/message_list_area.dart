@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +5,11 @@ import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import '../models/message.dart';
 import '../config/config.dart';
+import '../logic/web_secondary_click_selection_guard.dart';
 import 'section_coordinator.dart';
 import 'message_bubble.dart';
 
-class ChatMessageListArea extends StatelessWidget {
+class ChatMessageListArea extends StatefulWidget {
   const ChatMessageListArea({
     super.key,
     required this.messages,
@@ -27,6 +27,7 @@ class ChatMessageListArea extends StatelessWidget {
     required this.onRequestChatKeyboardTarget,
     required this.onChatPointerInteractionStart,
     required this.onChatPointerInteractionEnd,
+    this.shouldPreserveSelectionOnSecondaryClick,
     required this.scrollbarTopInset,
     required this.scrollbarBottomInset,
     required this.contentBottomInset,
@@ -50,6 +51,7 @@ class ChatMessageListArea extends StatelessWidget {
   final VoidCallback onRequestChatKeyboardTarget;
   final VoidCallback onChatPointerInteractionStart;
   final VoidCallback onChatPointerInteractionEnd;
+  final bool Function()? shouldPreserveSelectionOnSecondaryClick;
   final double scrollbarTopInset;
   final double scrollbarBottomInset;
   final double contentBottomInset;
@@ -62,35 +64,55 @@ class ChatMessageListArea extends StatelessWidget {
   })
   buildScrollbarTrack;
 
-  bool _isPrimaryActivationPointer(PointerDownEvent event) {
-    final kind = event.kind;
-    if (kind == PointerDeviceKind.touch ||
-        kind == PointerDeviceKind.stylus ||
-        kind == PointerDeviceKind.invertedStylus) {
-      return true;
+  @override
+  State<ChatMessageListArea> createState() => _ChatMessageListAreaState();
+}
+
+class _ChatMessageListAreaState extends State<ChatMessageListArea> {
+  late final ChatWebSecondaryClickSelectionGuard
+  _secondaryClickSelectionGuard;
+
+  @override
+  void initState() {
+    super.initState();
+    _secondaryClickSelectionGuard = ChatWebSecondaryClickSelectionGuard(
+      shouldGuard: () =>
+          widget.shouldPreserveSelectionOnSecondaryClick?.call() ?? false,
+      boundsResolver: _resolveGlobalBounds,
+    )..attach();
+  }
+
+  @override
+  void dispose() {
+    _secondaryClickSelectionGuard.detach();
+    super.dispose();
+  }
+
+  Rect? _resolveGlobalBounds() {
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) {
+      return null;
     }
-    return event.buttons == kPrimaryButton;
+    final topLeft = renderObject.localToGlobal(Offset.zero);
+    return topLeft & renderObject.size;
   }
 
   @override
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     return Focus(
-      focusNode: chatFocusNode,
+      focusNode: widget.chatFocusNode,
       canRequestFocus: true,
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (event) {
-          if (!_isPrimaryActivationPointer(event)) {
-            return;
-          }
-          onChatPointerInteractionStart();
-          onRequestChatKeyboardTarget();
+          widget.onChatPointerInteractionStart();
+          widget.onRequestChatKeyboardTarget();
         },
-        onPointerUp: (_) => onChatPointerInteractionEnd(),
-        onPointerCancel: (_) => onChatPointerInteractionEnd(),
+        onPointerUp: (_) => widget.onChatPointerInteractionEnd(),
+        onPointerCancel: (_) => widget.onChatPointerInteractionEnd(),
         child: TwScrollArea.scrollView(
-          controller: chatScroll,
+          controller: widget.chatScroll,
           thumbColor: ChatScrollbar.thumbColor(context),
           thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
           trackColor: ChatScrollbar.trackColor(context),
@@ -99,34 +121,34 @@ class ChatMessageListArea extends StatelessWidget {
           crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
           mainAxisMargin: 0,
           padding: EdgeInsets.only(
-            top: scrollbarTopInset,
-            bottom: scrollbarBottomInset,
+            top: widget.scrollbarTopInset,
+            bottom: widget.scrollbarBottomInset,
           ),
           radius: tokens.scrollbarRadius,
           thumbVisibility: true,
           interactive: true,
           trackVisibility: false,
-          track: showChatScrollbarTrack
-              ? buildScrollbarTrack(
+          track: widget.showChatScrollbarTrack
+              ? widget.buildScrollbarTrack(
                   thickness: tokens.scrollbarThickness,
                   crossAxisInset: tokens.scrollbarThumbCrossAxisMargin,
-                  topInset: scrollbarTopInset,
-                  bottomInset: scrollbarBottomInset,
+                  topInset: widget.scrollbarTopInset,
+                  bottomInset: widget.scrollbarBottomInset,
                 )
               : null,
           overlayChildren: [
-            if (jumpToLatestButton != null)
+            if (widget.jumpToLatestButton != null)
               Positioned(
                 right: tokens.jumpToLatestButtonRightInset,
                 bottom: tokens.jumpToLatestButtonBottomInset,
-                child: jumpToLatestButton!,
+                child: widget.jumpToLatestButton!,
               ),
           ],
           child: Actions(
             actions: <Type, Action<Intent>>{
               CopySelectionTextIntent: CallbackAction<CopySelectionTextIntent>(
                 onInvoke: (_) {
-                  final copyText = onCopySelectionRequested();
+                  final copyText = widget.onCopySelectionRequested();
                   if (copyText.trim().isEmpty) {
                     return null;
                   }
@@ -136,31 +158,34 @@ class ChatMessageListArea extends StatelessWidget {
               ),
             },
             child: SelectionArea(
-              key: chatSelectionAreaKey,
-              onSelectionChanged: onChatSelectionChanged,
+              key: widget.chatSelectionAreaKey,
+              onSelectionChanged: widget.onChatSelectionChanged,
               magnifierConfiguration: TextMagnifierConfiguration.disabled,
               child: Padding(
                 padding: tokens.bubbleViewportPadding.copyWith(top: 0, bottom: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    for (final entry in messages.indexed)
+                    for (final entry in widget.messages.indexed)
                       ChatMessageBubble(
-                        key: messageBubbleKeys[entry.$2.id],
-                        availableWidth: availableWidth,
+                        key: widget.messageBubbleKeys[entry.$2.id],
+                        availableWidth: widget.availableWidth,
                         text: entry.$2.text,
                         selectionListenerNotifier:
-                            selectionNotifierForMessage(entry.$2.id),
+                            widget.selectionNotifierForMessage(entry.$2.id),
                         isUserBubble: entry.$2.role == ChatRole.user,
                         isTypingIndicator:
                             entry.$2.role == ChatRole.bot && entry.$2.isPending,
-                        isTruncated: isMessageTruncated(entry.$2.id),
+                        isTruncated: widget.isMessageTruncated(entry.$2.id),
                         isFirstMessage: entry.$1 == 0,
-                        isLastMessage: entry.$1 == messages.length - 1,
-                        onToggleTruncation: () => onToggleTruncation(entry.$2.id),
+                        isLastMessage: entry.$1 == widget.messages.length - 1,
+                        onToggleTruncation: () =>
+                            widget.onToggleTruncation(entry.$2.id),
                       ),
                     SizedBox(
-                      height: contentBottomInset + tokens.chatListTrailingGap,
+                      height:
+                          widget.contentBottomInset +
+                          tokens.chatListTrailingGap,
                     ),
                   ],
                 ),

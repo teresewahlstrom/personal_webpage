@@ -559,14 +559,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       );
     }
 
-    final Widget hiddenSelectionLayer = _buildTruncatedMarkupLayer(
-      document: document,
-      theme: _transparentMarkupTheme(markupTheme),
-      maxWidth: maxTextWidth,
-      selectable: true,
-      chromeVisible: false,
-      blockquoteRailColor: colors.transparent,
-    );
     final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
       document: document,
       theme: markupTheme,
@@ -574,6 +566,19 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       selectable: false,
       chromeVisible: true,
       blockquoteRailColor: colors.bubbleText,
+    );
+    final Widget selectionLayer = _buildTruncatedMarkupLayer(
+      document: _visibleSelectionDocument(
+        document: document,
+        theme: markupTheme,
+        maxWidth: maxTextWidth,
+        textScaler: MediaQuery.textScalerOf(context),
+      ),
+      theme: _transparentMarkupTheme(markupTheme),
+      maxWidth: maxTextWidth,
+      selectable: true,
+      chromeVisible: false,
+      blockquoteRailColor: colors.transparent,
     );
     final double fadeHeight =
         truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
@@ -600,7 +605,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       child: ClipRect(
         child: Stack(
           children: <Widget>[
-            hiddenSelectionLayer,
+            selectionLayer,
             ShaderMask(
               blendMode: BlendMode.dstIn,
               shaderCallback: (Rect bounds) {
@@ -684,28 +689,206 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     required bool chromeVisible,
     required Color blockquoteRailColor,
   }) {
-    return PrimaryScrollController.none(
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        primary: false,
-        clipBehavior: Clip.hardEdge,
-        child: Align(
-          alignment: Alignment.topLeft,
-          widthFactor: 1.0,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
-            child: MarkupView(
-              document: document,
-              theme: theme,
-              gestureRecognizerFactory: gestureRecognizerFactory,
-              selectable: selectable,
-              chromeVisible: chromeVisible,
-              blockquoteRailColor: blockquoteRailColor,
-            ),
+    return ClipRect(
+      child: OverflowBox(
+        alignment: Alignment.topLeft,
+        minWidth: 0,
+        maxWidth: maxWidth,
+        minHeight: 0,
+        maxHeight: double.infinity,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: MarkupView(
+            document: document,
+            theme: theme,
+            gestureRecognizerFactory: gestureRecognizerFactory,
+            selectable: selectable,
+            chromeVisible: chromeVisible,
+            blockquoteRailColor: blockquoteRailColor,
           ),
         ),
       ),
     );
+  }
+
+  MarkupDocument _visibleSelectionDocument({
+    required MarkupDocument document,
+    required MarkupTheme theme,
+    required double maxWidth,
+    required TextScaler textScaler,
+  }) {
+    var remainingLines = ChatBubbleRules.collapsedVisibleLines;
+    final visibleBlocks = <MarkupBlock>[];
+
+    for (final block in document.blocks) {
+      if (remainingLines <= 0) {
+        break;
+      }
+
+      final visibleBlock = _visibleSelectionBlock(
+        block: block,
+        theme: theme,
+        maxWidth: maxWidth,
+        textScaler: textScaler,
+        maxLines: remainingLines,
+      );
+      if (visibleBlock == null) {
+        break;
+      }
+      visibleBlocks.add(visibleBlock.block);
+      remainingLines -= visibleBlock.lineCount;
+    }
+
+    if (visibleBlocks.isEmpty && document.blocks.isNotEmpty) {
+      final fallbackText = document.blocks.first.toPlainText();
+      if (fallbackText.isNotEmpty) {
+        visibleBlocks.add(
+          MarkupParagraphBlock(
+            <MarkupInline>[
+              MarkupInline(
+                text: fallbackText.length > 160
+                    ? fallbackText.substring(0, 160)
+                    : fallbackText,
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    return MarkupDocument(List<MarkupBlock>.unmodifiable(visibleBlocks));
+  }
+
+  ({MarkupBlock block, int lineCount})? _visibleSelectionBlock({
+    required MarkupBlock block,
+    required MarkupTheme theme,
+    required double maxWidth,
+    required TextScaler textScaler,
+    required int maxLines,
+  }) {
+    if (block is MarkupParagraphBlock) {
+      return _visibleTextBlock(
+        block: block,
+        inlines: block.inlines,
+        theme: theme,
+        maxWidth: maxWidth,
+        textScaler: textScaler,
+        maxLines: maxLines,
+        buildBlock: MarkupParagraphBlock.new,
+      );
+    }
+
+    if (block is MarkupHeadingBlock) {
+      return _visibleTextBlock(
+        block: block,
+        inlines: block.inlines,
+        theme: theme,
+        maxWidth: maxWidth,
+        textScaler: textScaler,
+        maxLines: maxLines,
+        buildBlock: (inlines) =>
+            MarkupHeadingBlock(level: block.level, inlines: inlines),
+      );
+    }
+
+    final lineCount = _measurePlainLineCount(
+      text: block.toPlainText(),
+      style: theme.baseStyle,
+      maxWidth: maxWidth,
+      textScaler: textScaler,
+    );
+    if (lineCount > maxLines) {
+      return null;
+    }
+    return (block: block, lineCount: lineCount);
+  }
+
+  ({MarkupBlock block, int lineCount})? _visibleTextBlock({
+    required MarkupBlock block,
+    required List<MarkupInline> inlines,
+    required MarkupTheme theme,
+    required double maxWidth,
+    required TextScaler textScaler,
+    required int maxLines,
+    required MarkupBlock Function(List<MarkupInline> inlines) buildBlock,
+  }) {
+    final textSpan = block.toTextSpan(
+      theme: theme,
+      gestureRecognizerFactory: (_) => null,
+    );
+    final painter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+      textScaler: textScaler,
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
+    final lines = painter.computeLineMetrics();
+    if (lines.isEmpty) {
+      painter.dispose();
+      return null;
+    }
+
+    final lineCount = lines.length.clamp(1, maxLines).toInt();
+    if (!painter.didExceedMaxLines) {
+      painter.dispose();
+      return (block: block, lineCount: lineCount);
+    }
+
+    final lastLine = lines[lineCount - 1];
+    final visibleOffset = painter
+        .getPositionForOffset(Offset(maxWidth, lastLine.baseline))
+        .offset
+        .clamp(1, block.toPlainText().length)
+        .toInt();
+    painter.dispose();
+
+    return (
+      block: buildBlock(_sliceInlines(inlines, visibleOffset)),
+      lineCount: lineCount,
+    );
+  }
+
+  int _measurePlainLineCount({
+    required String text,
+    required TextStyle style,
+    required double maxWidth,
+    required TextScaler textScaler,
+  }) {
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+      textScaler: textScaler,
+    )..layout(maxWidth: maxWidth);
+    final lineCount = painter.computeLineMetrics().length;
+    painter.dispose();
+    return lineCount;
+  }
+
+  List<MarkupInline> _sliceInlines(List<MarkupInline> inlines, int maxLength) {
+    final sliced = <MarkupInline>[];
+    var remaining = maxLength;
+    for (final inline in inlines) {
+      if (remaining <= 0) {
+        break;
+      }
+      if (inline.text.length <= remaining) {
+        sliced.add(inline);
+        remaining -= inline.text.length;
+        continue;
+      }
+      sliced.add(
+        MarkupInline(
+          text: inline.text.substring(0, remaining),
+          isStrong: inline.isStrong,
+          isEmphasis: inline.isEmphasis,
+          isStrikethrough: inline.isStrikethrough,
+          isUnderline: inline.isUnderline,
+          href: inline.href,
+        ),
+      );
+      break;
+    }
+    return List<MarkupInline>.unmodifiable(sliced);
   }
 
   MarkupTheme _transparentMarkupTheme(MarkupTheme theme) {

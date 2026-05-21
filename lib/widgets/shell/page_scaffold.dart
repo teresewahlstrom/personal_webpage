@@ -204,6 +204,7 @@ class _PageScaffoldState extends State<PageScaffold> {
               ChatOverlay(
                 twinBackendUrl: AppRuntimeConfig.twinBackendUrl,
                 chatSkinMode: widget.initialChatSkinMode,
+                onChatInteractionClaimed: _clearPageSelection,
               ),
           ],
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 import '../config/config.dart';
 import '../models/message.dart';
@@ -132,6 +132,7 @@ class _ChatDockState extends State<ChatDock> {
                           widget.isChatKeyboardScrollTarget,
                       onSetChatKeyboardScrollTarget:
                           widget.onSetChatKeyboardScrollTarget,
+                      width: layoutMetrics.expandedDockWidth,
                       maxHeight: layoutMetrics.maxDockHeight,
                       isVisible: _isExpanded,
                       onMinimize: _minimizeChat,
@@ -222,32 +223,25 @@ class ChatAppBar extends StatelessWidget {
       right: 0,
       bottom: 0,
       width: tokens.appBarActionWidth,
-      child: LayoutBuilder(
-        key: const ValueKey('chat-app-bar-action-bounds'),
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final double actionHeight =
-              constraints.maxHeight * tokens.appBarActionHeightFactor;
-          return Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              key: const ValueKey('chat-app-bar-action-container'),
-              width: tokens.appBarActionWidth,
-              height: actionHeight,
-              child: Material(
-                color: colors.transparent,
-                child: Tooltip(
-                  message: displayStateToggleTooltip,
-                  child: InkWell(
-                    onTap: onDisplayStateToggle,
-                    child: Center(
-                      child: Icon(displayStateToggleIcon, color: iconColor),
-                    ),
-                  ),
+      child: FractionallySizedBox(
+        alignment: Alignment.topCenter,
+        heightFactor: tokens.appBarActionHeightFactor,
+        child: SizedBox(
+          key: const ValueKey('chat-app-bar-action-container'),
+          width: tokens.appBarActionWidth,
+          child: Material(
+            color: colors.transparent,
+            child: Tooltip(
+              message: displayStateToggleTooltip,
+              child: InkWell(
+                onTap: onDisplayStateToggle,
+                child: Center(
+                  child: Icon(displayStateToggleIcon, color: iconColor),
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
 
@@ -368,6 +362,7 @@ class FloatingChatWindow extends StatelessWidget {
     required this.onSetChatKeyboardScrollTarget,
     required this.isVisible,
     required this.onMinimize,
+    required this.width,
     required this.maxHeight,
     required this.tokens,
   });
@@ -379,6 +374,7 @@ class FloatingChatWindow extends StatelessWidget {
   final VoidCallback onSetChatKeyboardScrollTarget;
   final bool isVisible;
   final VoidCallback onMinimize;
+  final double width;
   final double maxHeight;
   final ChatSkinTokens tokens;
 
@@ -417,6 +413,8 @@ class FloatingChatWindow extends StatelessWidget {
                     onSetChatKeyboardScrollTarget:
                         onSetChatKeyboardScrollTarget,
                     isVisible: isVisible,
+                    panelWidth: width,
+                    panelHeight: maxHeight,
                   ),
                 ),
                 Positioned(

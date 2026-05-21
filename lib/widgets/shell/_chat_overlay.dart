@@ -12,10 +12,12 @@ class ChatOverlay extends StatefulWidget {
     super.key,
     required this.twinBackendUrl,
     this.chatSkinMode = ChatSkinMode.light,
+    this.onChatInteractionClaimed,
   });
 
   final String twinBackendUrl;
   final ChatSkinMode chatSkinMode;
+  final VoidCallback? onChatInteractionClaimed;
 
   @override
   State<ChatOverlay> createState() => _ChatOverlayState();
@@ -44,6 +46,11 @@ class _ChatOverlayState extends State<ChatOverlay> {
     super.dispose();
   }
 
+  void _claimChatInteraction() {
+    widget.onChatInteractionClaimed?.call();
+    ChatKeyboardScrollTarget.setChatTarget(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
@@ -60,8 +67,7 @@ class _ChatOverlayState extends State<ChatOverlay> {
           onSend: _conversationController.sendMessage,
           onStop: _conversationController.stopPendingReply,
           isChatKeyboardScrollTarget: ChatKeyboardScrollTarget.isChatTarget,
-          onSetChatKeyboardScrollTarget: () =>
-              ChatKeyboardScrollTarget.setChatTarget(true),
+          onSetChatKeyboardScrollTarget: _claimChatInteraction,
           onSetPageKeyboardScrollTarget: () =>
               ChatKeyboardScrollTarget.setChatTarget(false),
           keyboardHeight: keyboardHeight,
