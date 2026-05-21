@@ -35,7 +35,7 @@ soon comming
 
 ---
 
-## Production Cost Modelling & Decision Support
+## Cost Modelling & Decision Support
 
 Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
 
