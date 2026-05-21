@@ -1669,12 +1669,14 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
     final attributions = text.getAllAttributionsAt(selection.extentOffset);
     textStyle = widget.textStyleBuilder(attributions);
 
-    _textController.inputConnectionNotifier.value!.setStyle(
-      fontFamily: textStyle.fontFamily,
-      fontSize: textStyle.fontSize,
-      fontWeight: textStyle.fontWeight,
-      textDirection: widget.textDirection ?? TextDirection.ltr,
-      textAlign: widget.textAlign ?? TextAlign.left,
+    _textController.inputConnectionNotifier.value!.updateStyle(
+      TextInputStyle(
+        fontFamily: textStyle.fontFamily,
+        fontSize: textStyle.fontSize,
+        fontWeight: textStyle.fontWeight,
+        textDirection: widget.textDirection ?? TextDirection.ltr,
+        textAlign: widget.textAlign ?? TextAlign.left,
+      ),
     );
   }
 

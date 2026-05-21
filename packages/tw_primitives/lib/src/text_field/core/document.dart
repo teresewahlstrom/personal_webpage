@@ -311,8 +311,7 @@ abstract class DocumentNode {
     // We construct a new map here, instead of directly assigning from the
     // constructor, because we need to make sure that `_metadata` is mutable.
     _metadata = {
-      if (metadata != null) //
-        ...metadata,
+      ...?metadata,
     };
   }
 
