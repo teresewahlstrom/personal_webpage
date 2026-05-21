@@ -15,6 +15,7 @@ class ChatMessageListArea extends StatefulWidget {
     super.key,
     required this.messages,
     required this.availableWidth,
+    required this.botBubbleWidth,
     required this.chatScroll,
     required this.chatFocusNode,
     required this.chatSelectionAreaKey,
@@ -39,6 +40,7 @@ class ChatMessageListArea extends StatefulWidget {
 
   final List<ChatMessage> messages;
   final double availableWidth;
+  final double botBubbleWidth;
   final ScrollController chatScroll;
   final FocusNode chatFocusNode;
   final GlobalKey<SelectionAreaState> chatSelectionAreaKey;
@@ -243,6 +245,7 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
                             isFirstMessage: entry.$1 == 0,
                             isLastMessage:
                                 entry.$1 == widget.messages.length - 1,
+                            botBubbleWidth: widget.botBubbleWidth,
                             onToggleTruncation: () =>
                                 widget.onToggleTruncation(entry.$2.id),
                           ),

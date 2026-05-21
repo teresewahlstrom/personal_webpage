@@ -17,6 +17,7 @@ class ChatMessageBubble extends StatefulWidget {
     required this.isLastMessage,
     required this.availableWidth,
     required this.onToggleTruncation,
+    this.botBubbleWidth,
   });
 
   final String text;
@@ -28,6 +29,7 @@ class ChatMessageBubble extends StatefulWidget {
   final bool isLastMessage;
   final double availableWidth;
   final VoidCallback onToggleTruncation;
+  final double? botBubbleWidth;
 
   @override
   State<ChatMessageBubble> createState() => _ChatMessageBubbleState();
@@ -125,9 +127,14 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
           0.0,
           bubbleMaxWidth,
         );
+    final resolvedBotBubbleWidth =
+        (widget.botBubbleWidth ?? widget.availableWidth).clamp(
+          0.0,
+          widget.availableWidth,
+        ).toDouble();
     final contentMaxWidth = widget.isUserBubble
         ? bubbleMaxWidth
-        : widget.availableWidth;
+        : resolvedBotBubbleWidth;
     final textMeasureHorizontalInset = widget.isUserBubble
         ? horizontalInset * 2
         : tokens.composerTextInsetLeft + horizontalInset;
