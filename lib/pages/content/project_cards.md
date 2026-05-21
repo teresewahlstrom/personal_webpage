@@ -8,7 +8,7 @@ She has experienced vastly different knowledge environments:
 * Global enterprises vs small teams
 
 Those experiences shaped a core belief:
-> Poor knowledge management is not just a source of confusion. It taxes the business through slower decisions, repeated work, missed opportunities, and avoidable dependence on key people.
+> Poor knowledge management and workflows are not just a source of confusion. It taxes the business through slower decisions, repeated work, missed opportunities, and avoidable dependence on key people.
 
 
 So when she had the opportunity to reshape the knowledge experience for metal binder jetting technology at Markforged, she jumped at the opportunity.
