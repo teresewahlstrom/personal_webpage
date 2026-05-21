@@ -168,6 +168,20 @@ class _ChatSectionState extends State<ChatSection> {
     final chatScrollbarBottomInset = tokens.shellBottomShadowHeight(
       composerHeight,
     );
+    final transcriptAvailableWidth =
+        widget.panelWidth -
+        tokens.shellContentPadding.left -
+        tokens.shellContentPadding.right -
+        tokens.bubbleViewportPadding.left -
+        tokens.bubbleViewportPadding.right;
+    final botBubbleWidth =
+        (widget.panelWidth -
+                tokens.shellContentPadding.left -
+                tokens.shellContentPadding.right -
+                tokens.bubbleViewportPadding.left -
+                composerMetrics.sendButtonMinWidth)
+            .clamp(0.0, transcriptAvailableWidth)
+            .toDouble();
 
     return Stack(
       children: [
@@ -182,12 +196,8 @@ class _ChatSectionState extends State<ChatSection> {
               builder: (_, _, _) {
                 return ChatMessageListArea(
                   messages: widget.messages,
-                  availableWidth:
-                      widget.panelWidth -
-                      tokens.shellContentPadding.left -
-                      tokens.shellContentPadding.right -
-                      tokens.bubbleViewportPadding.left -
-                      tokens.bubbleViewportPadding.right,
+                  availableWidth: transcriptAvailableWidth,
+                  botBubbleWidth: botBubbleWidth,
                   chatScroll: _coordinator.chatScroll,
                   chatFocusNode: _coordinator.chatFocusNode,
                   chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
