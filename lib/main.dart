@@ -55,7 +55,7 @@ class _T1GridAppState extends State<T1GridApp> {
     return KeyboardHeightObserver(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "T1 grid",
+        title: "T1 grid — Terese Wahlström personal website",
         themeAnimationDuration: Duration.zero,
         theme: ThemeData(
           useMaterial3: false,
