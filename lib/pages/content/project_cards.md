@@ -25,7 +25,12 @@ That same operational instinct now drives her self-directed studies in AI-assist
 
 ---
 
-## Commercial & Leadership
+## Coaching Leadership
+soon comming
+
+---
+
+## Product & Service Development 
 soon comming
 
 ---
@@ -45,7 +50,7 @@ In short, her strength in production cost modelling has been more than calculati
 
 ---
 
-## Operations / Production and Process Reliability
+## Analysis & Optimizations 
 
 Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.
 
