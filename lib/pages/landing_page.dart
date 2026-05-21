@@ -269,8 +269,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "Terese Wahlström";
   static const String _content =
-      "Mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling.";
-
+            "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
   @override
   Widget build(BuildContext context) {
     return Column(
