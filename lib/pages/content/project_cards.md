@@ -7,7 +7,11 @@ She has experienced vastly different knowledge environments:
 * Distilled vs fragmented
 * Global enterprises vs small teams
 
-When she had the opportunity to redesign the knowledge experience for metal binder jetting at Markforged, she took it seriously because she had seen how much knowledge infrastructure changes the operating reality.
+Those experiences shaped a core belief:
+> Poor knowledge management is not just a source of confusion. It taxes the business through slower decisions, repeated work, missed opportunities, and avoidable dependence on key people.
+
+
+So when she had the opportunity to reshape the knowledge experience for metal binder jetting technology at Markforged, she jumped at the opportunity.
 
 * Instead of discarding defective manufactured parts, she collected them, classified them by failure mechanism, and paired them with engineering logs and educational material. This started a movement were people begun to add more parts and their stories to the collection and it triggered deeper discussions. The resulting defect table became a meeting point across departments at Markforged, reducing misunderstandings and deepening technical discussions.
 
@@ -15,11 +19,7 @@ When she had the opportunity to redesign the knowledge experience for metal bind
 
 * Instead of treating poor workflows as inevitable, she added structure, automation through Excel and CAD scripts, and clearer templates that made work easier and less error-prone. The improvements touched sales, marketing, operations, service, and customer onboarding.
 
-Those experiences shaped a core belief:
-
-> Poor knowledge management is not just a source of confusion. It taxes the business through slower decisions, repeated work, missed opportunities, and avoidable dependence on key people.
-
-That same operational instinct now drives her self-directed studies in AI-assisted workflow intelligence, data management, and structured information systems.
+That same drive now drives her self-directed studies in AI-assisted workflow intelligence, data management, and structured information systems. Preparing for the future way of work. AI enabled and automation.
 
 ---
 
