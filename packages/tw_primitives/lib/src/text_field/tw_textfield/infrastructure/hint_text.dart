@@ -42,6 +42,7 @@ class StyledHintBuilder {
 /// Creates default [TextStyles] for hint text in a super text field.
 TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
   TextStyle newStyle = const TextStyle(
+    fontFamily: 'Nunito',
     color: Colors.grey,
     fontSize: 16,
     height: 1.4,

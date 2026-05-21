@@ -43,7 +43,6 @@ class PageFooter extends StatelessWidget {
             Text(
               '\u00A9$year $brandName. All rights reserved.',
               style: TextStyle(
-                fontFamily: 'Inter18pt',
                 fontWeight: FontWeight.w300,
                 fontSize: 16,
                 color: ShellUiConfig.footerTextFor(brightness),
@@ -133,7 +132,6 @@ class _LinkTextButton extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontFamily: 'Inter18pt',
           fontWeight: FontWeight.w300,
           fontSize: 16,
           decoration: TextDecoration.underline,

@@ -205,7 +205,7 @@ final class PageTextStyles {
     final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
     final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
     return TextStyle(
-      fontFamily: 'Inter18pt',
+      fontFamily: 'Nunito',
       fontWeight: FontWeight.w300,
       fontSize: scaledFontSize,
       height: 1.4,
@@ -230,7 +230,7 @@ final class PageTextStyles {
     final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
     final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
     return TextStyle(
-      fontFamily: 'Inter18pt',
+      fontFamily: 'Nunito',
       fontWeight: FontWeight.w300,
       fontSize: scaledFontSize,
       height: 1.2,
@@ -253,7 +253,7 @@ final class ModalTextStyles {
   static TextStyle h3(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
-      fontFamily: "Inter18pt",
+      fontFamily: 'Nunito',
       fontWeight: FontWeight.w500,
       fontSize: 22,
       color: AppColorTheme.modalContentTextFor(brightness),
@@ -264,7 +264,7 @@ final class ModalTextStyles {
   static TextStyle body(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
-      fontFamily: "Inter18pt",
+      fontFamily: 'Nunito',
       fontWeight: FontWeight.w300,
       fontSize: 16,
       height: 1.6,
@@ -275,7 +275,7 @@ final class ModalTextStyles {
   static TextStyle link(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     return TextStyle(
-      fontFamily: "Inter18pt",
+      fontFamily: 'Nunito',
       fontWeight: FontWeight.w300,
       fontSize: 16,
       height: 1.6,

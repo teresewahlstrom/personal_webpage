@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/math.dart';
 
@@ -331,13 +330,14 @@ class ChatSkinTextStyles {
       textScale,
       maxTextScale: defaultMaxTextScale,
     );
-    final base = GoogleFonts.nunito(
+    const base = TextStyle(
+      fontFamily: 'Nunito',
       fontSize: 15,
       height: 1.3,
-      color: colors.bubbleText,
       fontWeight: FontWeight.w300,
     );
     return base.copyWith(
+      color: colors.bubbleText,
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
       height: _scaledLineHeight(base.height!, scale, 0.5),
     );
@@ -348,13 +348,14 @@ class ChatSkinTextStyles {
       textScale,
       maxTextScale: composerMaxTextScale,
     );
-    final base = GoogleFonts.nunito(
+    const base = TextStyle(
+      fontFamily: 'Nunito',
       fontSize: 14,
       height: 1.5,
-      color: colors.composerHint,
       fontWeight: FontWeight.w300,
     );
     return base.copyWith(
+      color: colors.composerHint,
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
       height: _scaledLineHeight(base.height!, scale, 0.5),
     );

@@ -1,5 +1,12 @@
 # Third-Party Notices
 
+Bundled font notices used by tw_primitives:
+
+Nunito
+Copyright 2014 The Nunito Project Authors
+Licensed under the SIL Open Font License 1.1.
+License file: assets/fonts/nunito/OFL.txt
+
 Portions of the TwTextField subtree in tw_primitives are derived from super_editor.
 
 super_editor

@@ -18,18 +18,14 @@ const double _underlineThickness = 1.9;
 const double _strikethroughLightThickness = 2.8;
 const double _strikethroughDarkThickness = 5.9;
 
-const TextStyle _baseTextStyle = TextStyle(
-  fontFamily: 'Nunito',
-  fontSize: 15.0,
-  fontWeight: FontWeight.w300,
-  height: 1.3,
-  letterSpacing: 0.0,
-);
-
 MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
-  final baseStyle = _baseTextStyle.copyWith(
-    color: config.baseTextColor,
-  );
+  final baseStyle = const TextStyle(
+    fontFamily: 'Nunito',
+    fontSize: 15.0,
+    fontWeight: FontWeight.w300,
+    height: 1.3,
+    letterSpacing: 0.0,
+  ).copyWith(color: config.baseTextColor);
   final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));

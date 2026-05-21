@@ -119,7 +119,7 @@ class _AppModalFrameState extends State<_AppModalFrame> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'ComingSoon',
+                              fontFamily: 'Nunito',
                               fontWeight: FontWeight.w700,
                               fontSize: 24,
                               color: widget.closeIconColor,

@@ -37,22 +37,15 @@ flutter:
     - lib/pages/content/project_cards.md
 
   fonts:
-    - family: Inter18pt
+    - family: Nunito
       fonts:
-        - asset: assets/fonts/inter/Inter_18pt-Light.ttf
-          weight: 300
-        - asset: assets/fonts/inter/Inter_18pt-Medium.ttf
-          weight: 400
-        - asset: assets/fonts/inter/Inter_18pt-SemiBold.ttf
-          weight: 500
-        - asset: assets/fonts/inter/Inter_18pt-Bold.ttf
-          weight: 700
+        - asset: assets/fonts/nunito/Nunito[wght].ttf
     - family: ComingSoon
       fonts:
         - asset: assets/fonts/comingsoon/ComingSoon-Regular.ttf
           weight: 400
     - family: BebasNeue
       fonts:
-        - asset: assets/fonts/BebasNeue-Regular.ttf
+        - asset: assets/fonts/bebasneue/BebasNeue-Regular.ttf
           weight: 400
 

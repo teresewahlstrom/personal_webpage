@@ -1,0 +1,8 @@
+Update pubspec.yaml to use variable fonts:
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/nunito/Nunito[wght].ttf
+        - asset: assets/fonts/nunito/Nunito-Italic[wght].ttf
+          style: italic

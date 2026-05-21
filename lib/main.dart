@@ -66,7 +66,7 @@ class _T1GridAppState extends State<T1GridApp> {
             brightness: Brightness.light,
             seedColor: AppColorTheme.seedColorFor(Brightness.light),
           ),
-          fontFamily: "Inter18pt",
+          fontFamily: 'Nunito',
         ),
         darkTheme: ThemeData(
           useMaterial3: false,
@@ -78,7 +78,7 @@ class _T1GridAppState extends State<T1GridApp> {
             brightness: Brightness.dark,
             seedColor: AppColorTheme.seedColorFor(Brightness.dark),
           ),
-          fontFamily: "Inter18pt",
+          fontFamily: 'Nunito',
         ),
         themeMode: _themeMode,
         home: PageScaffold(
