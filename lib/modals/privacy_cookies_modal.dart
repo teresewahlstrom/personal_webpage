@@ -1,168 +1,124 @@
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import '../config/app_ui_config.dart';
 
-class PrivacyCookiesContent extends StatelessWidget {
+class PrivacyCookiesContent extends StatefulWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
 
   final Future<void> Function(String url) onLaunchUrl;
 
   @override
-  Widget build(BuildContext context) {
-    final TextStyle h3Style = ModalTextStyles.h3(context);
+  State<PrivacyCookiesContent> createState() => _PrivacyCookiesContentState();
+}
+
+class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
+  static final MarkupDocument _contentDocument = MessageMarkup.parse(
+    _contentMarkdown,
+  );
+  final Map<String, TapGestureRecognizer> _linkRecognizersByHref =
+      <String, TapGestureRecognizer>{};
+
+  @override
+  void dispose() {
+    for (final TapGestureRecognizer recognizer
+        in _linkRecognizersByHref.values) {
+      recognizer.dispose();
+    }
+    _linkRecognizersByHref.clear();
+    super.dispose();
+  }
+
+  TapGestureRecognizer _recognizerForHref(String href) {
+    return _linkRecognizersByHref.putIfAbsent(href, () {
+      final TapGestureRecognizer recognizer = TapGestureRecognizer();
+      recognizer.onTap = () {
+        widget.onLaunchUrl(href);
+      };
+      return recognizer;
+    });
+  }
+
+  MarkupTheme _buildTheme(BuildContext context) {
+    final TextStyle bodyStyle = ModalTextStyles.body(context);
+    final TextStyle headingStyle = ModalTextStyles.h3(context);
     final TextStyle linkStyle = ModalTextStyles.link(context);
+    final TextStyle strikethroughStyle = bodyStyle.copyWith(
+      decoration: TextDecoration.lineThrough,
+      decorationColor: bodyStyle.color,
+      decorationThickness: 2.0,
+    );
+    return MarkupTheme(
+      baseStyle: bodyStyle,
+      strongStyle: bodyStyle.copyWith(fontWeight: FontWeight.w700),
+      emphasisStyle: bodyStyle.copyWith(fontStyle: FontStyle.italic),
+      strikethroughStyle: strikethroughStyle,
+      underlineStyle: bodyStyle.copyWith(
+        decoration: TextDecoration.underline,
+        decorationColor: bodyStyle.color,
+        decorationThickness: 1.4,
+      ),
+      linkStyle: linkStyle,
+      blockquoteStyle: bodyStyle.copyWith(fontStyle: FontStyle.italic),
+      headingStyleResolver: (int level) {
+        if (level <= 1) {
+          return headingStyle.copyWith(fontSize: headingStyle.fontSize! + 2);
+        }
+        return headingStyle;
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       bottom: false,
       child: TwScrollArea.scrollView(
         thumbVisibility: false,
         primary: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text("Controller: Terese Wahlstrom (EU resident)"),
-            const SizedBox(height: 16),
-            Text("Cookies", style: h3Style),
-            const SizedBox(height: 8),
-            const Text("We only set essential cookies via:"),
-            const SizedBox(height: 4),
-            _PrivacyModalLink(
-              label: "Brevo",
-              url: "https://www.brevo.com/legal/privacypolicy/",
-              onLaunchUrl: onLaunchUrl,
-            ),
-            _PrivacyModalLink(
-              label: "Cal.com",
-              url: "https://cal.com/privacy",
-              onLaunchUrl: onLaunchUrl,
-            ),
-            _PrivacyModalLink(
-              label: "Stripe",
-              url: "https://stripe.com/privacy",
-              onLaunchUrl: onLaunchUrl,
-            ),
-            _PrivacyModalLink(
-              label: "Cloudflare",
-              url: "https://www.cloudflare.com/privacypolicy/",
-              onLaunchUrl: onLaunchUrl,
-            ),
-            _PrivacyModalLink(
-              label: "GitHub",
-              url:
-                  "https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement",
-              onLaunchUrl: onLaunchUrl,
-            ),
-            const SizedBox(height: 16),
-            Text("What We Collect", style: h3Style),
-            const SizedBox(height: 8),
-            const _PrivacyModalBullet(
-              text:
-                  "Newsletter (via Brevo): Your name and email are stored by Brevo when you sign up; they use a double-opt-in to confirm your consent, and Brevo retains your data until you unsubscribe and an additional three years for record-keeping.",
-            ),
-            const _PrivacyModalBullet(
-              text:
-                  "Meetings (via Cal.com): Cal.com collects your name, email and any details you choose to share when you book a call; Cal.com holds this information for up to 12 months.",
-            ),
-            const _PrivacyModalBullet(
-              text:
-                  "Payments (via Stripe): Stripe processes and retains your name, email and billing information for seven years to meet legal and accounting requirements.",
-            ),
-            const SizedBox(height: 16),
-            Text("Transfers & Safeguards", style: h3Style),
-            const SizedBox(height: 8),
-            const Text(
-              "Our embedded services may transfer data outside the EEA under their own GDPR-compliant safeguards (Standard Contractual Clauses or adequacy).",
-            ),
-            const SizedBox(height: 16),
-            Text("Your Rights", style: h3Style),
-            const SizedBox(height: 8),
-            const _PrivacyModalBullet(text: "Access, correct or delete your data"),
-            const _PrivacyModalBullet(text: "Restrict or object to processing"),
-            const _PrivacyModalBullet(text: "Data portability"),
-            const _PrivacyModalBullet(text: "Withdraw consent anytime"),
-            const _PrivacyModalBullet(
-              text: "Lodge a complaint with your Data Protection Authority",
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 4,
-              runSpacing: 2,
-              children: <Widget>[
-                const Text("To exercise any right, email"),
-                GestureDetector(
-                  onTap: () => onLaunchUrl("mailto:terese@t1grid.com"),
-                  child: Text("terese@t1grid.com", style: linkStyle),
-                ),
-                const Text("."),
-              ],
-            ),
-          ],
+        child: MarkupView(
+          document: _contentDocument,
+          theme: _buildTheme(context),
+          gestureRecognizerFactory: _recognizerForHref,
+          textAlign: TextAlign.start,
+          selectable: true,
+          chromeVisible: true,
+          blockquoteRailColor:
+              ModalTextStyles.body(context).color ??
+              Theme.of(context).textTheme.bodyMedium?.color,
         ),
       ),
     );
   }
 }
 
-class _PrivacyModalLink extends StatefulWidget {
-  const _PrivacyModalLink({
-    required this.label,
-    required this.url,
-    required this.onLaunchUrl,
-  });
+const String _contentMarkdown =
+    '''Controller: Terese Wahlstrom (EU resident)
 
-  final String label;
-  final String url;
-  final Future<void> Function(String url) onLaunchUrl;
+## Cookies
+We only set essential cookies via:
+- [Brevo](https://www.brevo.com/legal/privacypolicy/)
+- [Cal.com](https://cal.com/privacy)
+- [Stripe](https://stripe.com/privacy)
+- [Cloudflare](https://www.cloudflare.com/privacypolicy/)
+- [GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement)
 
-  @override
-  State<_PrivacyModalLink> createState() => _PrivacyModalLinkState();
-}
+## What We Collect
+- Newsletter (via Brevo): Your name and email are stored by Brevo when you sign up; they use a double-opt-in to confirm your consent, and Brevo retains your data until you unsubscribe and an additional three years for record-keeping.
+- Meetings (via Cal.com): Cal.com collects your name, email and any details you choose to share when you book a call; Cal.com holds this information for up to 12 months.
+- Payments (via Stripe): Stripe processes and retains your name, email and billing information for seven years to meet legal and accounting requirements.
 
-class _PrivacyModalLinkState extends State<_PrivacyModalLink> {
-  bool _isHovered = false;
+## Transfers & Safeguards
+Our embedded services may transfer data outside the EEA under their own GDPR-compliant safeguards (Standard Contractual Clauses or adequacy).
 
-  @override
-  Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color baseLinkColor = AppColorTheme.linkTextFor(brightness);
-    final Color hoverLinkColor = AppColorTheme.linkTextHoverFor(brightness);
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: () => widget.onLaunchUrl(widget.url),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: Text(
-            widget.label,
-            style: ModalTextStyles.link(
-              context,
-            ).copyWith(color: _isHovered ? hoverLinkColor : baseLinkColor),
-          ),
-        ),
-      ),
-    );
-  }
-}
+## Your Rights
+- Access, correct or delete your data
+- Restrict or object to processing
+- Data portability
+- Withdraw consent anytime
+- Lodge a complaint with your Data Protection Authority
 
-class _PrivacyModalBullet extends StatelessWidget {
-  const _PrivacyModalBullet({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("\u2022 "),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-}
+To exercise any right, email [terese@t1grid.com](mailto:terese@t1grid.com).''';
