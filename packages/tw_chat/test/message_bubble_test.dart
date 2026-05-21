@@ -148,6 +148,36 @@ Line four carries enough words to wrap through the bubble width for truncation.'
   });
 
   testWidgets(
+    'expanded bubble constrains markdown width like collapsed bubbles',
+    (tester) async {
+      const rawText =
+          '''Line one carries enough words to wrap through the bubble width for truncation.
+
+Line two carries enough words to wrap through the bubble width for truncation.
+
+Line three carries enough words to wrap through the bubble width for truncation.
+
+Line four carries enough words to wrap through the bubble width for truncation.
+
+Line five carries enough words to wrap through the bubble width for truncation.''';
+
+      await _pumpExpandedBubble(tester, text: rawText);
+
+      final constrainedMarkup = find.descendant(
+        of: find.byWidgetPredicate((widget) {
+          if (widget is! ConstrainedBox) {
+            return false;
+          }
+          return (widget.constraints.maxWidth - 180.0).abs() <= 0.001;
+        }),
+        matching: find.byType(MarkupView),
+      );
+
+      expect(constrainedMarkup, findsWidgets);
+    },
+  );
+
+  testWidgets(
     'chat transcript copy stays ordered when the first message is truncated',
     (tester) async {
       final selectionAreaKey = GlobalKey<SelectionAreaState>();
@@ -513,6 +543,38 @@ Future<void> _pumpTruncatedBubble(
                 isUserBubble: false,
                 isTypingIndicator: false,
                 isTruncated: true,
+                isFirstMessage: true,
+                isLastMessage: true,
+                availableWidth: 180,
+                onToggleTruncation: _noop,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> _pumpExpandedBubble(
+  WidgetTester tester, {
+  required String text,
+  Key? selectionAreaKey,
+}) {
+  return tester.pumpWidget(
+    MaterialApp(
+      home: Material(
+        child: Center(
+          child: SizedBox(
+            width: 180,
+            child: SelectionArea(
+              key: selectionAreaKey,
+              child: ChatMessageBubble(
+                text: text,
+                selectionListenerNotifier: SelectionListenerNotifier(),
+                isUserBubble: false,
+                isTypingIndicator: false,
+                isTruncated: false,
                 isFirstMessage: true,
                 isLastMessage: true,
                 availableWidth: 180,

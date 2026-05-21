@@ -529,34 +529,38 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     final markupTheme = _buildMarkupTheme(context);
 
     if (!isTruncated) {
-      final Widget visibleMarkupLayer = MarkupView(
-        document: document,
-        theme: markupTheme,
-        gestureRecognizerFactory: gestureRecognizerFactory,
-        selectable: false,
-        chromeVisible: true,
-        blockquoteRailColor: colors.bubbleText,
-      );
-      final Widget hiddenSelectionLayer = Positioned.fill(
-        child: MarkupView(
-          document: document,
-          theme: _transparentMarkupTheme(markupTheme),
-          gestureRecognizerFactory: gestureRecognizerFactory,
-          selectable: true,
-          chromeVisible: false,
-          blockquoteRailColor: colors.transparent,
-        ),
-      );
+      return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final Widget visibleMarkupLayer = _buildConstrainedMarkupLayer(
+            document: document,
+            theme: markupTheme,
+            maxWidth: constraints.maxWidth,
+            selectable: false,
+            chromeVisible: true,
+            blockquoteRailColor: colors.bubbleText,
+          );
+          final Widget hiddenSelectionLayer = Positioned.fill(
+            child: _buildConstrainedMarkupLayer(
+              document: document,
+              theme: _transparentMarkupTheme(markupTheme),
+              maxWidth: constraints.maxWidth,
+              selectable: true,
+              chromeVisible: false,
+              blockquoteRailColor: colors.transparent,
+            ),
+          );
 
-      return Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[hiddenSelectionLayer, visibleMarkupLayer],
+          return Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[hiddenSelectionLayer, visibleMarkupLayer],
+          );
+        },
       );
     }
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final Widget hiddenSelectionLayer = _buildTruncatedMarkupLayer(
+        final Widget hiddenSelectionLayer = _buildConstrainedMarkupLayer(
           document: document,
           theme: _transparentMarkupTheme(markupTheme),
           maxWidth: constraints.maxWidth,
@@ -564,7 +568,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
           chromeVisible: false,
           blockquoteRailColor: colors.transparent,
         );
-        final Widget visibleMarkupLayer = _buildTruncatedMarkupLayer(
+        final Widget visibleMarkupLayer = _buildConstrainedMarkupLayer(
           document: document,
           theme: markupTheme,
           maxWidth: constraints.maxWidth,
@@ -675,7 +679,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     return _buildSharedMarkdownThemeForChat(context);
   }
 
-  Widget _buildTruncatedMarkupLayer({
+  Widget _buildConstrainedMarkupLayer({
     required MarkupDocument document,
     required MarkupTheme theme,
     required double maxWidth,
