@@ -22,6 +22,14 @@ void main() {
     expect(indexHtml, contains('property="og:title"'));
     expect(indexHtml, contains('application/ld+json'));
     expect(indexHtml, contains('"@type": "Person"'));
+    expect(
+      indexHtml,
+      contains(
+        'name="viewport"\n      content="width=device-width, initial-scale=1.0, viewport-fit=cover"',
+      ),
+    );
+    expect(indexHtml, isNot(contains('overflow: hidden;')));
+    expect(indexHtml, isNot(contains('position: fixed;')));
   });
 
   testWidgets('landing page hero emphasizes broader engineering identity', (
