@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
-import '../config/app_ui_config.dart';
+import '../config/app_color_theme.dart';
 
 class PrivacyCookiesContent extends StatefulWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
@@ -42,32 +42,13 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
   }
 
   MarkupTheme _buildTheme(BuildContext context) {
-    final TextStyle bodyStyle = ModalTextStyles.body(context);
-    final TextStyle headingStyle = ModalTextStyles.h3(context);
-    final TextStyle linkStyle = ModalTextStyles.link(context);
-    final TextStyle strikethroughStyle = bodyStyle.copyWith(
-      decoration: TextDecoration.lineThrough,
-      decorationColor: bodyStyle.color,
-      decorationThickness: 2.0,
-    );
-    return MarkupTheme(
-      baseStyle: bodyStyle,
-      strongStyle: bodyStyle.copyWith(fontWeight: FontWeight.w700),
-      emphasisStyle: bodyStyle.copyWith(fontStyle: FontStyle.italic),
-      strikethroughStyle: strikethroughStyle,
-      underlineStyle: bodyStyle.copyWith(
-        decoration: TextDecoration.underline,
-        decorationColor: bodyStyle.color,
-        decorationThickness: 1.4,
+    final Brightness brightness = Theme.of(context).brightness;
+    return buildMarkdownTheme(
+      MarkdownThemeConfig(
+        baseTextColor: AppColorTheme.modalContentTextFor(brightness),
+        linkColor: AppColorTheme.linkTextFor(brightness),
+        isDark: brightness == Brightness.dark,
       ),
-      linkStyle: linkStyle,
-      blockquoteStyle: bodyStyle.copyWith(fontStyle: FontStyle.italic),
-      headingStyleResolver: (int level) {
-        if (level <= 1) {
-          return headingStyle.copyWith(fontSize: headingStyle.fontSize! + 2);
-        }
-        return headingStyle;
-      },
     );
   }
 
@@ -86,9 +67,9 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
           textAlign: TextAlign.start,
           selectable: true,
           chromeVisible: true,
-          blockquoteRailColor:
-              ModalTextStyles.body(context).color ??
-              Theme.of(context).textTheme.bodyMedium?.color,
+          blockquoteRailColor: AppColorTheme.modalContentTextFor(
+            Theme.of(context).brightness,
+          ),
         ),
       ),
     );
