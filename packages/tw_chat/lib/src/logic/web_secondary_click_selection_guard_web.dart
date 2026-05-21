@@ -16,14 +16,14 @@ class ChatWebSecondaryClickSelectionGuard {
   final ChatSelectionGuardPredicate _shouldGuard;
   final ChatSelectionGuardBoundsResolver _boundsResolver;
   JSFunction? _pointerDownListener;
-  JSBoolean? _captureOptions;
+  JSAny? _captureOptions;
 
   void attach() {
     if (_pointerDownListener != null) {
       return;
     }
     _pointerDownListener = _handlePointerDown.toJS;
-    final captureOptions = true.toJS;
+    final captureOptions = true.toJS as JSAny;
     _captureOptions = captureOptions;
     web.document.addEventListener(
       'pointerdown',
@@ -38,11 +38,7 @@ class ChatWebSecondaryClickSelectionGuard {
     if (listener == null || captureOptions == null) {
       return;
     }
-    web.document.removeEventListener(
-      'pointerdown',
-      listener,
-      captureOptions,
-    );
+    web.document.removeEventListener('pointerdown', listener, captureOptions);
     _pointerDownListener = null;
     _captureOptions = null;
   }

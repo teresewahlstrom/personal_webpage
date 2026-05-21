@@ -64,6 +64,8 @@ void main() {
                       onRequestChatKeyboardTarget: () {},
                       onChatPointerInteractionStart: () {},
                       onChatPointerInteractionEnd: () {},
+                      hasActiveChatSelection: () => false,
+                      onClearChatSelection: () {},
                       jumpToLatestButton: null,
                       scrollbarTopInset: 0,
                       scrollbarBottomInset: 0,
@@ -101,7 +103,9 @@ void main() {
       await tester.pumpAndSettle();
 
       final viewportRect = tester.getRect(find.byType(SingleChildScrollView));
-      final lastBubbleRect = tester.getRect(find.byType(ChatMessageBubble).last);
+      final lastBubbleRect = tester.getRect(
+        find.byType(ChatMessageBubble).last,
+      );
 
       expect(
         viewportRect.bottom - lastBubbleRect.bottom,

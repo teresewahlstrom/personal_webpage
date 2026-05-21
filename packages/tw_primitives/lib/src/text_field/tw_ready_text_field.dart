@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:super_text_layout/super_text_layout.dart' show CaretStyle;
 import 'package:tw_primitives/src/scrollbar/scroll_area.dart';
 import 'package:tw_primitives/src/scrollbar/tw_scrollbar.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart' show AttributionStyleBuilder;
+import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart'
+    show AttributionStyleBuilder;
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:tw_primitives/text_field.dart' show TextInputSource;
 
@@ -14,6 +15,7 @@ import 'package:tw_primitives/text_field.dart' show TextInputSource;
 class TwReadyTextController extends ChangeNotifier {
   TwReadyTextController({String text = ''})
     : _raw = AttributedTextEditingController(text: AttributedText(text)) {
+    _raw.selection = TextSelection.collapsed(offset: text.length);
     _raw.addListener(_handleRawChange);
   }
 
@@ -302,7 +304,9 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
       _lastMaxScrollExtent = 0.0;
       return;
     }
-    final nextMaxScrollExtent = _effectiveScrollController.position.maxScrollExtent
+    final nextMaxScrollExtent = _effectiveScrollController
+        .position
+        .maxScrollExtent
         .clamp(0.0, double.infinity)
         .toDouble();
     final grew = nextMaxScrollExtent > _lastMaxScrollExtent + 0.5;

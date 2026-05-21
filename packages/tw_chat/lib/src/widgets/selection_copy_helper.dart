@@ -84,9 +84,13 @@ class SelectionCopyHelper {
         selection.range != null;
   }
 
-  void clearSelection() {
+  bool clearSelection() {
+    final hadSelection =
+        _isChatSelectionActive || _currentSelectedPlainText.isNotEmpty;
+    chatSelectionAreaKey.currentState?.selectableRegion.clearSelection();
     _currentSelectedPlainText = '';
     _isChatSelectionActive = false;
+    return hadSelection;
   }
 
   void syncActiveMessageIds(Set<String> activeMessageIds) {

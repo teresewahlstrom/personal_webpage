@@ -171,157 +171,156 @@ class _ChatSectionState extends State<ChatSection> {
 
     return Stack(
       children: [
-            Positioned.fill(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: tokens.shellContentPadding.left,
-                  right: tokens.shellContentPadding.right,
-                ),
-                child: ValueListenableBuilder<int>(
-                  valueListenable: _coordinator.chatViewListenable,
-                  builder: (_, _, _) {
-                    return ChatMessageListArea(
-                      messages: widget.messages,
-                      availableWidth:
-                          widget.panelWidth -
-                          tokens.shellContentPadding.left -
-                          tokens.shellContentPadding.right -
-                          tokens.bubbleViewportPadding.left -
-                          tokens.bubbleViewportPadding.right,
-                      chatScroll: _coordinator.chatScroll,
-                      chatFocusNode: _coordinator.chatFocusNode,
-                      chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
-                      messageBubbleKeys: _coordinator.messageBubbleKeys,
-                      showChatScrollbarTrack:
-                          _coordinator.showChatScrollbarTrack,
-                      isMessageTruncated: _coordinator.isMessageTruncated,
-                      onToggleTruncation: _coordinator.toggleMessageTruncation,
-                      onChatSelectionChanged:
-                          _coordinator.handleChatSelectionChanged,
-                      selectionNotifierForMessage:
-                          _coordinator.selectionNotifierForMessage,
-                      onCopySelectionRequested: () => _coordinator
-                          .resolveSelectionCopyText(widget.messages),
-                      onRequestChatKeyboardTarget:
-                          _coordinator.claimChatInteraction,
-                      onChatPointerInteractionStart:
-                          _coordinator.handleChatPointerInteractionStart,
-                      onChatPointerInteractionEnd:
-                          _coordinator.handleChatPointerInteractionEnd,
-                      shouldPreserveSelectionOnSecondaryClick: () =>
-                          _coordinator.isChatSelectionActive,
-                      scrollbarTopInset: chatScrollbarTopInset,
-                      scrollbarBottomInset: chatScrollbarBottomInset,
-                      contentBottomInset: chatContentBottomInset,
-                      jumpToLatestButton: null,
-                      buildScrollbarTrack:
-                          ({
-                            required double thickness,
-                            required double crossAxisInset,
-                            required double topInset,
-                            required double bottomInset,
-                          }) => ChatScrollbar.buildTrack(
-                            context: context,
-                            thickness: thickness,
-                            crossAxisInset: crossAxisInset,
-                            topInset: topInset,
-                            bottomInset: bottomInset,
-                          ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            // Absorb any pointer event that lands in the composer zone but
-            // misses the Composer's exact Positioned bounds (e.g. the extended
-            // touch-target of the caret handle sitting just above the text
-            // field's top edge).  The Composer is the *last* Stack child so it
-            // is always hit-tested first and wins for precise hits.  This
-            // shield is the fallback: it ensures ChatMessageListArea's
-            // SelectionArea never participates in gesture-arena resolution for
-            // any pointer originating within the composer zone.
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: chatScrollbarBottomInset,
-              child: AbsorbPointer(child: const SizedBox.expand()),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom:
-                  tokens.shellContentPadding.bottom +
-                  composerHeight +
-                  tokens.composerGap +
-                  tokens.composerRowTopSpacing +
-                  tokens.jumpToLatestButtonBottomInset,
-              child: Center(
-                child: ValueListenableBuilder<int>(
-                  valueListenable: _coordinator.chatViewListenable,
-                  builder: (_, _, _) {
-                    final bool showJumpButton =
-                        !_coordinator.isNearChatBottom;
-                    if (!showJumpButton) {
-                      return const SizedBox.shrink();
-                    }
-                    return ChatJumpButton(
-                      showNewMessage: _coordinator.hasUnseenLatestBotMessage,
-                      onJumpToLatest: _coordinator.jumpToLatest,
-                      onJumpToBottom: _coordinator.jumpToBottom,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: tokens.chatListTopShadowHeight,
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: tokens.shellTopShadowDecoration(colors),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: tokens.shellBottomShadowHeight(composerHeight),
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: tokens.shellBottomShadowGradient(colors),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
+        Positioned.fill(
+          child: Padding(
+            padding: EdgeInsets.only(
               left: tokens.shellContentPadding.left,
               right: tokens.shellContentPadding.right,
-              bottom: tokens.shellContentPadding.bottom,
-              child: ValueListenableBuilder<int>(
-                valueListenable: _coordinator.composerViewListenable,
-                builder: (_, _, _) => Padding(
-                  padding: EdgeInsets.only(top: tokens.composerRowTopSpacing),
-                  child: ChatComposerRow(
-                    controller: _coordinator.controller,
-                    inputFocusNode: _coordinator.inputFocusNode,
-                    minInputHeight: composerMetrics.minInputHeight,
-                    maxInputHeight: composerMetrics.maxInputHeight,
-                    sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
-                    isAwaitingResponse: widget.messages.any(
-                      (message) => message.isPending,
-                    ),
-                    onSubmit: _submitMessage,
-                    onStop: _stopPendingReply,
-                    onMeasuredHeight: _handleComposerHeightChanged,
-                  ),
-                ),
+            ),
+            child: ValueListenableBuilder<int>(
+              valueListenable: _coordinator.chatViewListenable,
+              builder: (_, _, _) {
+                return ChatMessageListArea(
+                  messages: widget.messages,
+                  availableWidth:
+                      widget.panelWidth -
+                      tokens.shellContentPadding.left -
+                      tokens.shellContentPadding.right -
+                      tokens.bubbleViewportPadding.left -
+                      tokens.bubbleViewportPadding.right,
+                  chatScroll: _coordinator.chatScroll,
+                  chatFocusNode: _coordinator.chatFocusNode,
+                  chatSelectionAreaKey: _coordinator.chatSelectionAreaKey,
+                  messageBubbleKeys: _coordinator.messageBubbleKeys,
+                  showChatScrollbarTrack: _coordinator.showChatScrollbarTrack,
+                  isMessageTruncated: _coordinator.isMessageTruncated,
+                  onToggleTruncation: _coordinator.toggleMessageTruncation,
+                  onChatSelectionChanged:
+                      _coordinator.handleChatSelectionChanged,
+                  selectionNotifierForMessage:
+                      _coordinator.selectionNotifierForMessage,
+                  onCopySelectionRequested: () =>
+                      _coordinator.resolveSelectionCopyText(widget.messages),
+                  onRequestChatKeyboardTarget:
+                      _coordinator.claimChatInteraction,
+                  onChatPointerInteractionStart:
+                      _coordinator.handleChatPointerInteractionStart,
+                  onChatPointerInteractionEnd:
+                      _coordinator.handleChatPointerInteractionEnd,
+                  hasActiveChatSelection: () =>
+                      _coordinator.isChatSelectionActive,
+                  onClearChatSelection: _coordinator.clearChatSelection,
+                  scrollbarTopInset: chatScrollbarTopInset,
+                  scrollbarBottomInset: chatScrollbarBottomInset,
+                  contentBottomInset: chatContentBottomInset,
+                  jumpToLatestButton: null,
+                  buildScrollbarTrack:
+                      ({
+                        required double thickness,
+                        required double crossAxisInset,
+                        required double topInset,
+                        required double bottomInset,
+                      }) => ChatScrollbar.buildTrack(
+                        context: context,
+                        thickness: thickness,
+                        crossAxisInset: crossAxisInset,
+                        topInset: topInset,
+                        bottomInset: bottomInset,
+                      ),
+                );
+              },
+            ),
+          ),
+        ),
+        // Absorb any pointer event that lands in the composer zone but
+        // misses the Composer's exact Positioned bounds (e.g. the extended
+        // touch-target of the caret handle sitting just above the text
+        // field's top edge).  The Composer is the *last* Stack child so it
+        // is always hit-tested first and wins for precise hits.  This
+        // shield is the fallback: it ensures ChatMessageListArea's
+        // SelectionArea never participates in gesture-arena resolution for
+        // any pointer originating within the composer zone.
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: chatScrollbarBottomInset,
+          child: AbsorbPointer(child: const SizedBox.expand()),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom:
+              tokens.shellContentPadding.bottom +
+              composerHeight +
+              tokens.composerGap +
+              tokens.composerRowTopSpacing +
+              tokens.jumpToLatestButtonBottomInset,
+          child: Center(
+            child: ValueListenableBuilder<int>(
+              valueListenable: _coordinator.chatViewListenable,
+              builder: (_, _, _) {
+                final bool showJumpButton = !_coordinator.isNearChatBottom;
+                if (!showJumpButton) {
+                  return const SizedBox.shrink();
+                }
+                return ChatJumpButton(
+                  showNewMessage: _coordinator.hasUnseenLatestBotMessage,
+                  onJumpToLatest: _coordinator.jumpToLatest,
+                  onJumpToBottom: _coordinator.jumpToBottom,
+                );
+              },
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: tokens.chatListTopShadowHeight,
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: tokens.shellTopShadowDecoration(colors),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: tokens.shellBottomShadowHeight(composerHeight),
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: tokens.shellBottomShadowGradient(colors),
               ),
             ),
+          ),
+        ),
+        Positioned(
+          left: tokens.shellContentPadding.left,
+          right: tokens.shellContentPadding.right,
+          bottom: tokens.shellContentPadding.bottom,
+          child: ValueListenableBuilder<int>(
+            valueListenable: _coordinator.composerViewListenable,
+            builder: (_, _, _) => Padding(
+              padding: EdgeInsets.only(top: tokens.composerRowTopSpacing),
+              child: ChatComposerRow(
+                controller: _coordinator.controller,
+                inputFocusNode: _coordinator.inputFocusNode,
+                minInputHeight: composerMetrics.minInputHeight,
+                maxInputHeight: composerMetrics.maxInputHeight,
+                sendButtonMinWidth: composerMetrics.sendButtonMinWidth,
+                isAwaitingResponse: widget.messages.any(
+                  (message) => message.isPending,
+                ),
+                onSubmit: _submitMessage,
+                onStop: _stopPendingReply,
+                onMeasuredHeight: _handleComposerHeightChanged,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:tw_chat/composer.dart'
-  show ChatComposer, ChatComposerSkin;
+import 'package:tw_chat/composer.dart' show ChatComposer, ChatComposerSkin;
 import 'package:tw_primitives/text_field.dart'
     show TextInputSource, TwReadyTextController, TwReadyTextField;
 
@@ -143,7 +142,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       inputSource: kIsWeb ? TextInputSource.ime : null,
       padding: EdgeInsets.fromLTRB(
         tokens.composerTextInsetLeft + 2.0,
-        tokens.composerInputTextInsetTop,
+        tokens.composerInputTextInsetTop + 3.0,
         tokens.composerTextInsetRight + 2.0,
         tokens.composerInputTextInsetTopBottom,
       ),
@@ -170,8 +169,9 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       sendButtonHeight: actionHeight,
       sendButtonIcon: composerButtonIcon,
       sendButtonTooltip: composerButtonTooltip,
-      onSendPressed:
-          widget.isAwaitingResponse ? widget.onStop : widget.onSubmit,
+      onSendPressed: widget.isAwaitingResponse
+          ? widget.onStop
+          : widget.onSubmit,
       shellRadius: tokens.composerRadius,
       cornerRadius: tokens.composerCornerAccentRadius,
       cornerSegmentLength: tokens.composerCornerAccentSegment,

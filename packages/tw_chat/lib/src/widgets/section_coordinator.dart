@@ -188,7 +188,15 @@ class SectionCoordinator extends ChangeNotifier {
   }
 
   void handleChatSelectionChanged(SelectedContent? selectedContent) {
-    _selectionCopy.handleChatSelectionChanged(selectedContent);
+    if (_selectionCopy.handleChatSelectionChanged(selectedContent)) {
+      _notifyChatView();
+    }
+  }
+
+  void clearChatSelection() {
+    if (_selectionCopy.clearSelection()) {
+      _notifyChatView();
+    }
   }
 
   String resolveSelectionCopyText(List<ChatMessage> messages) {

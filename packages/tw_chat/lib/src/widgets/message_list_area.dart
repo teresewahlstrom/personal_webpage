@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,8 @@ class ChatMessageListArea extends StatefulWidget {
     required this.onRequestChatKeyboardTarget,
     required this.onChatPointerInteractionStart,
     required this.onChatPointerInteractionEnd,
-    this.shouldPreserveSelectionOnSecondaryClick,
+    required this.hasActiveChatSelection,
+    required this.onClearChatSelection,
     required this.scrollbarTopInset,
     required this.scrollbarBottomInset,
     required this.contentBottomInset,
@@ -51,7 +53,8 @@ class ChatMessageListArea extends StatefulWidget {
   final VoidCallback onRequestChatKeyboardTarget;
   final VoidCallback onChatPointerInteractionStart;
   final VoidCallback onChatPointerInteractionEnd;
-  final bool Function()? shouldPreserveSelectionOnSecondaryClick;
+  final bool Function() hasActiveChatSelection;
+  final VoidCallback onClearChatSelection;
   final double scrollbarTopInset;
   final double scrollbarBottomInset;
   final double contentBottomInset;
@@ -69,17 +72,71 @@ class ChatMessageListArea extends StatefulWidget {
 }
 
 class _ChatMessageListAreaState extends State<ChatMessageListArea> {
-  late final ChatWebSecondaryClickSelectionGuard
-  _secondaryClickSelectionGuard;
+  late final ChatWebSecondaryClickSelectionGuard _secondaryClickSelectionGuard;
+  int? _selectionShieldPointer;
+  Offset? _selectionShieldPointerDownPosition;
+  bool _selectionShieldPointerMoved = false;
 
   @override
   void initState() {
     super.initState();
     _secondaryClickSelectionGuard = ChatWebSecondaryClickSelectionGuard(
-      shouldGuard: () =>
-          widget.shouldPreserveSelectionOnSecondaryClick?.call() ?? false,
+      shouldGuard: widget.hasActiveChatSelection,
       boundsResolver: _resolveGlobalBounds,
     )..attach();
+  }
+
+  bool _isPrimaryPointer(PointerDownEvent event) {
+    return event.buttons == kPrimaryButton || event.buttons == 0;
+  }
+
+  void _handleSelectionShieldPointerDown(PointerDownEvent event) {
+    widget.onChatPointerInteractionStart();
+    widget.onRequestChatKeyboardTarget();
+
+    if (!_isPrimaryPointer(event)) {
+      return;
+    }
+
+    _selectionShieldPointer = event.pointer;
+    _selectionShieldPointerDownPosition = event.position;
+    _selectionShieldPointerMoved = false;
+  }
+
+  void _handleSelectionShieldPointerMove(PointerMoveEvent event) {
+    if (event.pointer != _selectionShieldPointer) {
+      return;
+    }
+    final pointerDownPosition = _selectionShieldPointerDownPosition;
+    if (pointerDownPosition == null) {
+      return;
+    }
+    if ((event.position - pointerDownPosition).distance > kTouchSlop) {
+      _selectionShieldPointerMoved = true;
+    }
+  }
+
+  void _handleSelectionShieldPointerUp(PointerUpEvent event) {
+    final shouldClearSelection =
+        event.pointer == _selectionShieldPointer &&
+        !_selectionShieldPointerMoved;
+    _resetSelectionShieldPointer();
+    widget.onChatPointerInteractionEnd();
+
+    if (shouldClearSelection) {
+      widget.onClearChatSelection();
+    }
+  }
+
+  void _handleSelectionShieldPointerCancel(PointerCancelEvent event) {
+    _resetSelectionShieldPointer();
+    widget.onChatPointerInteractionEnd();
+  }
+
+  void _resetSelectionShieldPointer() {
+    _selectionShieldPointer = null;
+    _selectionShieldPointerDownPosition = null;
+    _selectionShieldPointerMoved = false;
   }
 
   @override
@@ -157,39 +214,59 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
                 },
               ),
             },
-            child: SelectionArea(
-              key: widget.chatSelectionAreaKey,
-              onSelectionChanged: widget.onChatSelectionChanged,
-              magnifierConfiguration: TextMagnifierConfiguration.disabled,
-              child: Padding(
-                padding: tokens.bubbleViewportPadding.copyWith(top: 0, bottom: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    for (final entry in widget.messages.indexed)
-                      ChatMessageBubble(
-                        key: widget.messageBubbleKeys[entry.$2.id],
-                        availableWidth: widget.availableWidth,
-                        text: entry.$2.text,
-                        selectionListenerNotifier:
-                            widget.selectionNotifierForMessage(entry.$2.id),
-                        isUserBubble: entry.$2.role == ChatRole.user,
-                        isTypingIndicator:
-                            entry.$2.role == ChatRole.bot && entry.$2.isPending,
-                        isTruncated: widget.isMessageTruncated(entry.$2.id),
-                        isFirstMessage: entry.$1 == 0,
-                        isLastMessage: entry.$1 == widget.messages.length - 1,
-                        onToggleTruncation: () =>
-                            widget.onToggleTruncation(entry.$2.id),
-                      ),
-                    SizedBox(
-                      height:
-                          widget.contentBottomInset +
-                          tokens.chatListTrailingGap,
+            child: Stack(
+              children: [
+                SelectionArea(
+                  key: widget.chatSelectionAreaKey,
+                  onSelectionChanged: widget.onChatSelectionChanged,
+                  magnifierConfiguration: TextMagnifierConfiguration.disabled,
+                  child: Padding(
+                    padding: tokens.bubbleViewportPadding.copyWith(
+                      top: 0,
+                      bottom: 0,
                     ),
-                  ],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (final entry in widget.messages.indexed)
+                          ChatMessageBubble(
+                            key: widget.messageBubbleKeys[entry.$2.id],
+                            availableWidth: widget.availableWidth,
+                            text: entry.$2.text,
+                            selectionListenerNotifier: widget
+                                .selectionNotifierForMessage(entry.$2.id),
+                            isUserBubble: entry.$2.role == ChatRole.user,
+                            isTypingIndicator:
+                                entry.$2.role == ChatRole.bot &&
+                                entry.$2.isPending,
+                            isTruncated: widget.isMessageTruncated(entry.$2.id),
+                            isFirstMessage: entry.$1 == 0,
+                            isLastMessage:
+                                entry.$1 == widget.messages.length - 1,
+                            onToggleTruncation: () =>
+                                widget.onToggleTruncation(entry.$2.id),
+                          ),
+                        SizedBox(
+                          height:
+                              widget.contentBottomInset +
+                              tokens.chatListTrailingGap,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                if (widget.hasActiveChatSelection())
+                  Positioned.fill(
+                    child: Listener(
+                      behavior: HitTestBehavior.translucent,
+                      onPointerDown: _handleSelectionShieldPointerDown,
+                      onPointerMove: _handleSelectionShieldPointerMove,
+                      onPointerUp: _handleSelectionShieldPointerUp,
+                      onPointerCancel: _handleSelectionShieldPointerCancel,
+                      child: const SizedBox.expand(),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),

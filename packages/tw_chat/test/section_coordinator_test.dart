@@ -13,12 +13,7 @@ void main() {
     required String text,
     required DateTime createdAt,
   }) {
-    return ChatMessage(
-      id: id,
-      role: role,
-      text: text,
-      createdAt: createdAt,
-    );
+    return ChatMessage(id: id, role: role, text: text, createdAt: createdAt);
   }
 
   String longText(String label, int paragraphs) {
@@ -122,6 +117,9 @@ void main() {
                         coordinator.handleChatPointerInteractionStart,
                     onChatPointerInteractionEnd:
                         coordinator.handleChatPointerInteractionEnd,
+                    hasActiveChatSelection: () =>
+                        coordinator.isChatSelectionActive,
+                    onClearChatSelection: coordinator.clearChatSelection,
                     jumpToLatestButton: null,
                     scrollbarTopInset: 0,
                     scrollbarBottomInset: 0,
@@ -173,51 +171,52 @@ void main() {
     expect(lastBubbleRect.bottom, greaterThan(viewportRect.bottom));
   });
 
-  testWidgets('new bot messages away from bottom mark unread and jump to latest', (
-    tester,
-  ) async {
-    final initialMessages = buildMessages();
-    var mounted = true;
-    final coordinator = SectionCoordinator(
-      isMounted: () => mounted,
-      onSetChatKeyboardScrollTarget: () {},
-    );
+  testWidgets(
+    'new bot messages away from bottom mark unread and jump to latest',
+    (tester) async {
+      final initialMessages = buildMessages();
+      var mounted = true;
+      final coordinator = SectionCoordinator(
+        isMounted: () => mounted,
+        onSetChatKeyboardScrollTarget: () {},
+      );
 
-    addTearDown(() {
-      mounted = false;
-      coordinator.dispose();
-    });
+      addTearDown(() {
+        mounted = false;
+        coordinator.dispose();
+      });
 
-    coordinator.initialize(messages: initialMessages);
-    await pumpTranscript(
-      tester,
-      coordinator: coordinator,
-      messages: initialMessages,
-    );
+      coordinator.initialize(messages: initialMessages);
+      await pumpTranscript(
+        tester,
+        coordinator: coordinator,
+        messages: initialMessages,
+      );
 
-    final updatedMessages = buildMessages(withNewBot: true);
-    coordinator.handleWidgetUpdate(
-      messages: updatedMessages,
-      becameVisible: false,
-      isVisible: true,
-    );
-    await pumpTranscript(
-      tester,
-      coordinator: coordinator,
-      messages: updatedMessages,
-    );
+      final updatedMessages = buildMessages(withNewBot: true);
+      coordinator.handleWidgetUpdate(
+        messages: updatedMessages,
+        becameVisible: false,
+        isVisible: true,
+      );
+      await pumpTranscript(
+        tester,
+        coordinator: coordinator,
+        messages: updatedMessages,
+      );
 
-    expect(coordinator.hasUnseenLatestBotMessage, isTrue);
+      expect(coordinator.hasUnseenLatestBotMessage, isTrue);
 
-    coordinator.jumpToLatest();
-    await tester.pump();
-    await tester.pumpAndSettle();
+      coordinator.jumpToLatest();
+      await tester.pump();
+      await tester.pumpAndSettle();
 
-    final viewportRect = tester.getRect(find.byType(SingleChildScrollView));
-    final newestBotRect = tester.getRect(find.byType(ChatMessageBubble).last);
+      final viewportRect = tester.getRect(find.byType(SingleChildScrollView));
+      final newestBotRect = tester.getRect(find.byType(ChatMessageBubble).last);
 
-    expect(coordinator.hasUnseenLatestBotMessage, isFalse);
-    expect(newestBotRect.top, lessThanOrEqualTo(viewportRect.top + 16));
-    expect(newestBotRect.bottom, greaterThan(viewportRect.bottom));
-  });
+      expect(coordinator.hasUnseenLatestBotMessage, isFalse);
+      expect(newestBotRect.top, lessThanOrEqualTo(viewportRect.top + 16));
+      expect(newestBotRect.bottom, greaterThan(viewportRect.bottom));
+    },
+  );
 }
