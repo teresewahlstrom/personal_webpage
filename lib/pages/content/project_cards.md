@@ -4,8 +4,9 @@ In her work, Terese repeatedly encountered environments where organizational cap
 Across these environments, she has experienced vastly different approaches to organizational learning and capability-building firsthand:
 
 * Mature vs non-existent
-* Democratized vs weaponized
 * Distilled vs fragmented
+* Democratized vs weaponized
+* R&D vs Operation vs Commercial
 * Global enterprises vs small teams
 
 Those contrasts became a major driver behind her recurring focus on capability architecture: designing systems that make complex technical capability easier to transfer, align around, operate, and scale.
