@@ -760,10 +760,17 @@ class _SocialRowState extends State<_SocialRow> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // Use IconTheme so both Material Icon and FaIcon inherit size/color.
-              IconTheme(
-                data: IconThemeData(size: 27, color: color),
-                child: widget.entry.icon,
+              // Reserve a fixed icon slot so all labels start at the same x-position.
+              SizedBox(
+                width: 27,
+                height: 27,
+                child: Center(
+                  // Use IconTheme so both Material Icon and FaIcon inherit size/color.
+                  child: IconTheme(
+                    data: IconThemeData(size: 27, color: color),
+                    child: widget.entry.icon,
+                  ),
+                ),
               ),
               const SizedBox(width: 14),
               Text(
