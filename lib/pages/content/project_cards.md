@@ -23,8 +23,27 @@ That same drive now drives her self-directed studies in AI-assisted workflow int
 
 ---
 
-## Coaching Leadership
-comming soon
+## Leadership
+If someone assumes Terese can just step into *any* traditional leadership role—like managing a standard, steady-state hierarchical team or playing a purely political corporate executive game—they are misreading her core mechanism.
+
+She isn't a generic "people manager" who motivates through charismatic authority, nor is she a bureaucratic "status manager." Dropping her into a role that relies on org-chart power or slow, steady-state maintenance would completely waste her actual strengths.
+Here is the raw distillation of what her leadership style actually is, stripped of the corporate buzzwords, to show exactly where she thrives and where she doesn't.
+
+1. Influence Over Orgs, Not Org Charts
+Terese doesn't need direct reports to get things done, and she doesn't use formal hierarchy as a crutch. Instead, she exercises **systems leadership**. She leads by building the structures, data tools, and clear workflows that other people *want* to use because they make sense.
+ * **The Reality:** If you give her a rigid team where authority is purely derived from titles rather than expertise and logical systems, her primary leverage points are neutralized. She moves organizations by untangling operational messes, not by playing corporate politics.
+2. Architect of Autonomy, Not a Hand-Holder
+Her approach to building team capability isn't about constant micromanagement; it’s about **designed autonomy transfer**. She extracts messy, fragmented knowledge from experts, turns it into highly reliable documentation and training infrastructure, and hands it off.
+ * **The Reality:** She builds systems so teams can run independently without being fragilely dependent on a single person (including herself). Her style is "leader as capability builder," which looks very different from traditional top-down supervision.
+3. Socio-Technical Knot Untangling
+She doesn't treat organizational problems as purely "people problems" or purely "technical bugs." She operates at the intersection of both. When a cross-functional team is stuck because they all have partial truths and no shared view, she builds the technical data references or financial cost-modeling tools that force everyone onto the same page.
+ * **The Reality:** Her leadership is anchored in technical and financial reality. She manages alignment through objective truth and concrete frameworks, rather than trying to engineer consensus through purely social persuasion.
+4. High-Stakes Rescue Execution
+Terese's leadership profile acts as an operational anchor under severe constraints. When customer deadlines are crashing, technical systems are breaking down, and suppliers are failing simultaneously, she handles the chaos by mapping out end-to-end dependencies and driving the rescue execution.
+ * **The Reality:** She is built for high-ambiguity, high-stakes environments where decisions carry immediate commercial weight. Putting her in a highly bureaucratic role where the main task is moving papers or maintaining a static process would stifle her capacity for high-impact problem solving.
+
+> **The Bottom Line:** Terese shouldn't be deployed as a generalist manager to oversee a steady-state department. Her true leadership archetype is a **Socio-Technical Systems Architect**—someone you send in to untangle highly complex, ambiguous operational chaos, translate it into repeatable logic, build team capability, and establish high-trust execution under pressure.
+
 
 ---
 
