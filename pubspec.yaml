@@ -32,9 +32,9 @@ flutter:
 
   assets:
     - assets/images/logo.png
-    - assets/data/subjects/index.json
-    - assets/data/subjects/terese.md
-    - lib/pages/content/project_cards.md
+    - lib/subjects/index.json
+    - lib/subjects/Terese/keywords.md
+    - lib/subjects/Terese/project_cards.md
 
   fonts:
     - family: Nunito

@@ -3,7 +3,7 @@
   "subjects": [
     {
       "id": "terese",
-      "file": "assets/data/subjects/terese.md"
+      "file": "lib/subjects/Terese/keywords.md"
     }
   ]
 }

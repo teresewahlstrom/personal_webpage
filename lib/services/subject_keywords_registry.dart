@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:tw_keywords/tw_keywords.dart';
 
 final class SubjectRegistry {
-  static const String _indexAssetPath = 'assets/data/subjects/index.json';
+  static const String _indexAssetPath = 'lib/subjects/index.json';
 
   static Map<String, SubjectKeywordData>? _cache;
   static final Map<String, SubjectKeywordData> _subjectCache =
@@ -63,7 +63,7 @@ final class SubjectRegistry {
     final _SubjectIndex index = await _loadIndex();
     if (index.subjectRefs.isEmpty) {
       throw StateError(
-        'No subjects available in assets/data/subjects/index.json',
+        'No subjects available in lib/subjects/index.json',
       );
     }
 

@@ -293,7 +293,7 @@ class _ProjectsSection extends StatefulWidget {
 class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _title = "Professional Story";
   static const String _projectCardsAssetPath =
-      'lib/pages/content/project_cards.md';
+      'lib/subjects/Terese/project_cards.md';
 
   late Future<List<_ProjectCardData>> _projectCardsFuture;
   List<bool> _expandedStates = <bool>[];
