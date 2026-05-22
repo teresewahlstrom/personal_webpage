@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tw_primitives/markdown.dart';
 
 void main() {
@@ -33,6 +34,54 @@ void main() {
     final afterRect = tester.getRect(_richTextWithPlainText('After').first);
 
     expect(afterRect.top - headingRect.bottom, closeTo(11.4, 0.5));
+  });
+
+  testWidgets('blockquotes keep tighter spacing above', (tester) async {
+    const baseStyle = TextStyle(fontSize: 20, height: 1);
+
+    await tester.pumpWidget(
+      _MarkupTestApp(
+        document: MessageMarkup.parse('Before\n\n> Quote'),
+        baseStyle: baseStyle,
+      ),
+    );
+
+    final beforeRect = tester.getRect(_richTextWithPlainText('Before').first);
+    final quoteRect = tester.getRect(_richTextWithPlainText('Quote').first);
+
+    expect(quoteRect.top - beforeRect.bottom, closeTo(27.0, 0.5));
+  });
+
+  testWidgets('paragraphs keep less space after a top-level list', (tester) async {
+    const baseStyle = TextStyle(fontSize: 20, height: 1);
+
+    await tester.pumpWidget(
+      _MarkupTestApp(
+        document: MessageMarkup.parse('1. One\n\nAfter'),
+        baseStyle: baseStyle,
+      ),
+    );
+
+    final itemRect = tester.getRect(_richTextWithPlainText('One').first);
+    final afterRect = tester.getRect(_richTextWithPlainText('After').first);
+
+    expect(afterRect.top - itemRect.bottom, closeTo(24.0, 0.5));
+  });
+
+  testWidgets('unordered list marker uses the reduced SVG size', (tester) async {
+    const baseStyle = TextStyle(fontSize: 20, height: 1);
+
+    await tester.pumpWidget(
+      _MarkupTestApp(
+        document: MessageMarkup.parse('* One'),
+        baseStyle: baseStyle,
+      ),
+    );
+
+    final SvgPicture marker = tester.widget<SvgPicture>(find.byType(SvgPicture));
+
+    expect(marker.width, 14.0);
+    expect(marker.height, 14.0);
   });
 
   test('strikethrough thickness is scaled down to half the source stroke', () {

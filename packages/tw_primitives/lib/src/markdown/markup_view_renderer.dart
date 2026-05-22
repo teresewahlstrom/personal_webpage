@@ -31,7 +31,7 @@ class MarkupViewRenderer {
   static const String _unorderedListMarkerAssetPath =
       'assets/images/arrow2.svg';
   static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
-  static const double _unorderedListMarkerSizeFactor = 1.05;
+  static const double _unorderedListMarkerSizeFactor = 0.7;
 
   Widget build() {
     return Column(

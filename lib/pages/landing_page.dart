@@ -500,33 +500,35 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Listener(
-                  behavior: HitTestBehavior.opaque,
-                  onPointerDown: _handleHeaderPointerDown,
-                  onPointerMove: _handleHeaderPointerMove,
-                  onPointerUp: _handleHeaderPointerUp,
-                  onPointerCancel: (_) => _clearHeaderPointerTracking(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          widget.title,
-                          style: PageTextStyles.body(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w700),
+              SelectionContainer.disabled(
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Listener(
+                    behavior: HitTestBehavior.opaque,
+                    onPointerDown: _handleHeaderPointerDown,
+                    onPointerMove: _handleHeaderPointerMove,
+                    onPointerUp: _handleHeaderPointerUp,
+                    onPointerCancel: (_) => _clearHeaderPointerTracking(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            widget.title,
+                            style: PageTextStyles.body(
+                              context,
+                            ).copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                      RotationTransition(
-                        turns: Tween<double>(
-                          begin: 0,
-                          end: 0.5,
-                        ).animate(_heightAnimation),
-                        child: Icon(Icons.expand_more, color: iconColor),
-                      ),
-                    ],
+                        RotationTransition(
+                          turns: Tween<double>(
+                            begin: 0,
+                            end: 0.5,
+                          ).animate(_heightAnimation),
+                          child: Icon(Icons.expand_more, color: iconColor),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -541,7 +543,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return child!;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(top: 12, bottom: 4),
                     child: _ProjectCardMarkdownBody(
                       document: widget.contentDocument,
                     ),

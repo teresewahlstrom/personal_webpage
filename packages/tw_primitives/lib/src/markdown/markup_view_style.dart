@@ -7,8 +7,8 @@ class MarkupViewStyle {
   final double listTopSpacingAdjustment = -0.12;
   final double nestedListTopSpacingAdjustment = -0.59;
   final double nestedListBottomSpacingAdjustment = -0.55;
-  final double blockquoteTopSpacingAdjustment = 0.0;
-  final double listBottomSpacingAdjustment = 1.05;
+  final double blockquoteTopSpacingAdjustment = -0.6;
+  final double listBottomSpacingAdjustment = 0.45;
   final List<double> headingBottomSpacingFactors = const <double>[-0.12, -0.14];
   final List<double> headingTopSpacingFactors = const <double>[1.0, 1.0];
   final double listItemBaseSpacingFactor = 0.26;
