@@ -23,7 +23,7 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
     fontFamily: 'Nunito',
     fontSize: 15.0,
     fontWeight: FontWeight.w300,
-    height: 1.3,
+    height: 1.4,
     letterSpacing: 0.0,
   ).copyWith(color: config.baseTextColor);
   final baseColor = config.baseTextColor;
