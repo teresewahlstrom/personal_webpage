@@ -14,7 +14,7 @@ Those contrasts became a major driver behind her recurring focus on capability a
 
 At Markforged, these problems had direct operational consequences: failed builds, unstable processes, recurring support escalations, difficult root-cause analysis, production drift, qualification uncertainty, and expensive equipment standing idle while teams searched for answers. Small misunderstandings could propagate into wasted material, delayed deliveries, repeated troubleshooting, or incorrect operational decisions across departments.
 
-> Instead of discarding failed binder-jetted parts at Markforged, Terese took the initiative to collect them, organize by likely root-cause, and pair them with engineering logs, observations, and troubleshooting notes. Over time, operators and engineers started bringing their own failed parts to the collection. The table evolved into a natural gathering point for discussion: people compared defects, shared process observations, debated root causes, and connected fragmented experiences into a more shared understanding of the process.
+> Instead of discarding failed binder-jetted parts at Markforged, Terese took the initiative to collect them, organize them by likely root cause, and pair them with engineering logs, observations, and troubleshooting notes. Over time, operators and engineers started bringing their own failed parts to the collection. The table evolved into a natural gathering point for discussion: people compared defects, shared process observations, debated root causes, and connected fragmented experiences into a more shared understanding of the process.
 
 The same pattern appeared repeatedly in her work: transforming tacit operational experience into structures that other people could use. Depending on the context, that meant diagnostic references, process maps, training systems, cost models, workflow templates, structured logging, CAD and Excel automation, troubleshooting frameworks, or decision-support tooling.
 
@@ -46,6 +46,37 @@ Under pressure, her leadership becomes practical orchestration. At GE Additive, 
 
 ---
 
+## Industrial Metal AM
+**Metal additive manufacturing is frontier manufacturing systems engineering under incomplete rules and real production pressure.** It is far from click-and-play. The people who work successfully in this field operate in a newer, less fully codified manufacturing environment where the rulebook is still being written. Terese has been at the source of it, working for two OEM's, as well as been experiencing it from the outside.
+
+Terese's additive-manufacturing experience spans the path from technology evaluation to live industrial production. Across automotive, aerospace, medical, and industrial applications, she has worked with AM in comparison with traditional manufacturing: where it creates real value, where conventional methods remain better, and what technical, economic, and organizational conditions must exist for adoption to succeed.
+
+The work has not been about a printer in isolation. It has involved materials, process stability, powder handling, downstream processing, qualification pressure, production economics, operator workflows, customer readiness, and support burden. Metal additive manufacturing is highly process-sensitive: differences in equipment configuration, material, build preparation, process parameters, printer operation, or downstream workflows can significantly affect reliability, repeatability, and final part quality. Working in metal AM often means inventing the wheel again and again, but in a structured engineering way: testing, observing, documenting, comparing, and turning uncertain process behavior into repeatable knowledge.
+
+The pressure is real. A failed build can mean expensive material loss, downstream scrap, lost machine time, delayed customer milestones, or a support escalation that pulls scarce experts away from development work. Missed technical or logistics deadlines can damage customer confidence and purchase momentum. Qualification pressure limits how casually a process can be changed. When production is live, unclear instructions or misunderstood failure modes are not just learning moments; they can become operational consequences.
+
+Her additive-manufacturing experience follows an unusually coherent progression through the industrialization arc of a newer manufacturing technology: evaluation, adoption, execution, stabilization, scaling, and enablement.
+
+* **Volvo Cars:** evaluating where additive manufacturing actually fits, and where conventional manufacturing remains better.
+
+* **GE Additive:** supporting adoption decisions by helping customers reason through high-investment industrial metal AM, benchmark design, feasibility, logistics, milestone credibility, and ROI-backed decision-making. She translated technically complex customer requirements into benchmark workflows, feasibility framing, and ROI-backed adoption decisions for industrial EBM systems. The work involved materials such as Ti-6Al-4V, cobalt-chromium, Inconel 718, titanium aluminides, copper, and other alloys, often tied to aerospace and medical applications with demanding technical constraints.
+
+* **Markforged:** working in execution, stabilization, troubleshooting, scaling, and enablement of live binder-jetting production systems across customer onboarding, training, support, and ISO 9001 in-house production. She worked extensively with troubleshooting systems, process monitoring, defect diagnostics, support enablement, customer onboarding, and customer training architecture as head of training for binder jetting. Her root-cause analysis work covered both ISO 9001 in-house production issues and customer issues, combining part inspection, defect morphology, process-stage reasoning, logs, operator input, and engineering support.
+
+A defining aspect of this experience is not only technical depth, but systems integration: connecting materials, manufacturing, economics, workflows, operators, training, and organizational adoption into production systems that are easier to understand, operate, troubleshoot, and scale.
+
+---
+
+## Physical & Digital Product Development
+Terese's product-development foundation is mechanically grounded and customer-facing. Her M.Sc. in Mechanical Engineering with Industrial Design combined engineering depth with industrial design, human factors, production methods, CAD/digital prototyping, and product-development processes: the layers needed to turn technical ideas into products people can understand, use, manufacture, and buy.
+
+Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
+
+Across roles, this followed a practical product arc: assessing technical fit, building proof through prototypes or benchmarks, translating results into usable customer-facing offers, and supporting adoption through clear guidance, training, troubleshooting, and economic reasoning.
+
+
+---
+
 ## Cost Modelling & Decision Support
 
 Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
@@ -64,36 +95,7 @@ In short, her strength in production cost modelling has been more than calculati
 
 ---
 
-## Industrial Metal AM (and some polymers)
-**Metal additive manufacturing is frontier manufacturing systems engineering under incomplete rules and real production pressure.** It is far from click-and-play. The people who work successfully in this field operate in a newer, less fully codified manufacturing environment where the rulebook is still being written.
-
-Terese's metal AM experience spans the path from technology evaluation to live industrial production. Across automotive, aerospace, medical, and industrial applications, she has worked with additive manufacturing in comparison with traditional manufacturing: where it creates real value, where conventional methods remain better, and what technical, economic, and organizational conditions must exist for adoption to succeed.
-
-The work has not been about a printer in isolation. It has involved materials, process stability, powder handling, downstream processing, qualification pressure, production economics, operator workflows, customer readiness, and support burden. Metal additive manufacturing is highly process-sensitive: differences in equipment configuration, material, build preparation, process parameters, printer operation, or downstream workflows can significantly affect reliability, repeatability, and final part quality. Working in metal AM often means inventing the wheel again and again, but in a structured engineering way: testing, observing, documenting, comparing, and turning uncertain process behavior into repeatable knowledge.
-
-The work has not been about a printer in isolation. It has involved materials, process stability, powder handling, downstream processing, qualification pressure, production economics, operator workflows, customer readiness, and support burden. Additive Manufacturing is process intensive, the choises of equipment, material, process paramters and operation thereof all affects outcome. Working in metal AM often means inventing the wheel again and again, but in a structured engineering way: testing, observing, documenting, comparing, and turning uncertain process behavior into repeatable knowledge.
-
-The pressure is real. A failed build can mean expensive material loss, downstream scrap, lost machine time, delayed customer milestones, or a support escalation that pulls scarce experts away from development work. Missed technical or logistics deadlines can damage customer confidence and purchase momentum. Qualification pressure limits how casually a process can be changed. When production is live, unclear instructions or misunderstood failure modes are not just learning moments; they can become operational consequences.
-
-Her additive-manufacturing experience follows an unusually coherent progression through the industrialization arc of a newer manufacturing technology: evaluation, adoption, execution, stabilization, scaling, and enablement.
-
-* **Volvo Cars:** evaluating where additive manufacturing actually fits, and where conventional manufacturing remains better.
-
-* **GE Additive:** supporting adoption decisions by helping customers reason through high-investment industrial metal AM, benchmark design, feasibility, logistics, milestone credibility, and ROI-backed decision-making. She translated technically complex customer requirements into benchmark workflows, feasibility framing, and ROI-backed adoption decisions for industrial EBM systems. The work involved materials such as Ti-6Al-4V, cobalt-chromium, Inconel 718, titanium aluminides, copper, and other alloys, often tied to aerospace and medical applications with demanding technical constraints.
-
-* **Markforged:** working in execution, stabilization, troubleshooting, scaling, and enablement of live binder-jetting production systems across customer onboarding, training, support, and ISO 9001 in-house production. She worked extensively with troubleshooting systems, process monitoring, defect diagnostics, support enablement, customer onboarding, and customer training architecture as head of training for binder jetting. Her root-cause analysis work covered both ISO 9001 in-house production issues and customer issues, combining part inspection, defect morphology, process-stage reasoning, logs, operator input, and engineering support.
-
-A defining aspect of this experience is not only technical depth, but systems integration: connecting materials, manufacturing, economics, workflows, operators, training, and organizational adoption into production systems that are easier to understand, operate, troubleshoot, and scale.
-
----
-
-
-## Product Development 
-comming soon
-
----
-
-## Analysis & Optimizations 
+## Analysis & Optimizations
 
 Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.
 
@@ -102,24 +104,3 @@ Her systems perspective is grounded in production environments where errors have
 ## AI-Assisted Workflows
 
 Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
-
----
-
-
-## Mechanical & Data
-comming soon
-
----
-
-## Creative
-comming soon
-
----
-
-## Early history
-* Math and arts.
-* Created websites
-
-* 4th generation engineer
-* Occupational Health. Mechanical engineering. Electrical engineering. Boats.
-* Descendant of a famous female privateer (Ingela Gathenhielm).
