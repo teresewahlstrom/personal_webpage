@@ -1,4 +1,9 @@
-## Capability Enabler
+## Deep into AI & Workflows
+Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
+
+---
+
+## Capability Architect
 In her work, Terese repeatedly encountered environments where organizational capability was structurally hindered: departments operated in silos, critical reasoning stayed trapped within individuals, discussions became fragmented across functions, workflows broke down under real operational conditions, and people who wanted to contribute lacked the visibility, structure, or support needed to grow into the role.
 
 Across these environments, she has experienced vastly different approaches to organizational learning and capability-building firsthand:
@@ -47,7 +52,7 @@ Under pressure, her leadership becomes practical orchestration. At GE Additive, 
 
 ---
 
-## Modelling Cost & Decision framework
+## Modelling Cost & Decision Frameworks
 
 Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
 
@@ -93,7 +98,3 @@ Her product-development pattern connects physical engineering reality with the d
 
 Across roles, this followed a practical product arc: assessing technical fit, building proof through prototypes or benchmarks, translating results into usable customer-facing offers, and supporting adoption through clear guidance, training, troubleshooting, and economic reasoning.
 
----
-
-## Augmenting workflows with AI
-Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
