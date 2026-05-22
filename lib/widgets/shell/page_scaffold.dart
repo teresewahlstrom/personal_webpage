@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tw_chat/chat.dart' show ChatSkin, ChatSkinMode;
+import 'package:tw_chat/chat.dart'
+  show
+    ChatKeyboardScrollTargetController,
+    ChatOverlay,
+    ChatSkin,
+    ChatSkinMode;
 import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
 
 import '../../config/app_ui_config.dart';
 import '../arrow_key_scroll_wrapper.dart';
-import '_chat_overlay.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
 import '_page_header.dart';
@@ -61,6 +65,7 @@ class PageScaffold extends StatefulWidget {
 
 class _PageScaffoldState extends State<PageScaffold> {
   final ScrollController _pageScrollController = ScrollController();
+  late final ChatKeyboardScrollTargetController _chatKeyboardScrollTargetController;
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
   final FocusNode _pageSelectionFocusNode = FocusNode(
@@ -70,6 +75,7 @@ class _PageScaffoldState extends State<PageScaffold> {
   @override
   void initState() {
     super.initState();
+    _chatKeyboardScrollTargetController = ChatKeyboardScrollTargetController();
   }
 
   void _clearPageSelection() {
@@ -79,6 +85,7 @@ class _PageScaffoldState extends State<PageScaffold> {
   @override
   void dispose() {
     _pageScrollController.dispose();
+    _chatKeyboardScrollTargetController.dispose();
     _pageSelectionFocusNode.dispose();
     super.dispose();
   }
@@ -98,6 +105,9 @@ class _PageScaffoldState extends State<PageScaffold> {
           )
         : null;
     final double floatingTopInset = mediaQuery.viewPadding.top + 10.0;
+    final double floatingInset = FloatingControlInset.forViewportWidth(
+      mediaQuery.size.width,
+    );
     return GridBackground(
       backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
       gridLineStyle: ShellUiConfig.gridLineFor(brightness),
@@ -153,6 +163,13 @@ class _PageScaffoldState extends State<PageScaffold> {
                                       ),
                                       child: ArrowKeyScrollWrapper(
                                         controller: _pageScrollController,
+                                        isKeyboardScrollBlocked:
+                                            _chatKeyboardScrollTargetController
+                                                .isChatTargetListenable,
+                                        onPointerDown: () {
+                                          _chatKeyboardScrollTargetController
+                                              .setChatTarget(false);
+                                        },
                                         onTap: () {
                                           _clearPageSelection();
                                         },
@@ -202,9 +219,16 @@ class _PageScaffoldState extends State<PageScaffold> {
               ),
             if (AppRuntimeConfig.showChatInUi)
               ChatOverlay(
-                twinBackendUrl: AppRuntimeConfig.twinBackendUrl,
+                backendUrl: AppRuntimeConfig.twinBackendUrl,
+                useBackend: AppRuntimeConfig.useChatBackend,
+                backendDisabledReply: AppRuntimeConfig.backendDisabledReply,
+                keyboardScrollTargetController:
+                    _chatKeyboardScrollTargetController,
                 chatSkinMode: widget.initialChatSkinMode,
                 onChatInteractionClaimed: _clearPageSelection,
+                minimizedBottomOffset: floatingInset,
+                minimizedRightInset: floatingInset,
+                launcherStyle: buildChatLauncherStyle(brightness),
               ),
           ],
         ),

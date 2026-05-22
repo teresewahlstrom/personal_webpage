@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:tw_chat/chat.dart';
+
+import 'reply_client.dart';
 
 class HttpReplyClient extends ReplyClient {
   HttpReplyClient({
@@ -48,16 +49,12 @@ class HttpReplyClient extends ReplyClient {
       }
 
       if (decodedBody is! Map<String, dynamic>) {
-        throw const ReplyException(
-          'The chat service returned invalid JSON.',
-        );
+        throw const ReplyException('The chat service returned invalid JSON.');
       }
 
       final reply = decodedBody['reply'];
       if (reply is! String || reply.trim().isEmpty) {
-        throw const ReplyException(
-          'The chat service returned an empty reply.',
-        );
+        throw const ReplyException('The chat service returned an empty reply.');
       }
 
       return reply.trim();
@@ -66,9 +63,7 @@ class HttpReplyClient extends ReplyClient {
     } on FormatException {
       throw const ReplyException('The chat service returned invalid JSON.');
     } on http.ClientException catch (error) {
-      throw ReplyException(
-        'The chat service is unavailable: ${error.message}',
-      );
+      throw ReplyException('The chat service is unavailable: ${error.message}');
     }
   }
 

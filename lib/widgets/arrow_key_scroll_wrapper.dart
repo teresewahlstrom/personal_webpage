@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'shell/_chat_keyboard_scroll_target.dart';
 
 class ArrowKeyScrollWrapper extends StatefulWidget {
   const ArrowKeyScrollWrapper({
@@ -13,12 +12,16 @@ class ArrowKeyScrollWrapper extends StatefulWidget {
     required this.child,
     this.lineStep = 120,
     this.onTap,
+    this.isKeyboardScrollBlocked,
+    this.onPointerDown,
   });
 
   final ScrollController controller;
   final Widget child;
   final double lineStep;
   final VoidCallback? onTap;
+  final ValueListenable<bool>? isKeyboardScrollBlocked;
+  final VoidCallback? onPointerDown;
 
   @override
   State<ArrowKeyScrollWrapper> createState() => _ArrowKeyScrollWrapperState();
@@ -56,7 +59,7 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
   }
 
   void _handleScroll() {
-    if (ChatKeyboardScrollTarget.isChatTarget.value) {
+    if (widget.isKeyboardScrollBlocked?.value ?? false) {
       return;
     }
 
@@ -143,7 +146,7 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
         child: Listener(
           behavior: HitTestBehavior.translucent,
           onPointerDown: (_) {
-            ChatKeyboardScrollTarget.setChatTarget(false);
+            widget.onPointerDown?.call();
           },
           child: widget.child,
         ),

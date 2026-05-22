@@ -25,7 +25,7 @@ That progression eventually led Terese toward AI-assisted workflows, retrieval s
 
 ---
 
-## Cross-Functional Leadership
+## Cross-Functional Leader
 Terese’s work has consistently operated between functions rather than inside a single silo. Across automotive departments, industrial metal additive manufacturing, production, customer enablement, and workflow systems, she repeatedly worked in the gaps between engineering, operations, support, sales, product management, suppliers, and customers: environments where no single group fully owned the whole problem and where alignment itself became part of execution.
 
 Her leadership style centers on finding the real constraint, building shared understanding across functions, translating ambiguity into operating logic, and helping teams execute with greater autonomy and confidence. It operates through systems influence rather than org-chart authority: **creating the structures, conversations, tools, and decision logic that allow people with different responsibilities to move around the same reality**.
@@ -47,7 +47,7 @@ Under pressure, her leadership becomes practical orchestration. At GE Additive, 
 
 ---
 
-## Cost Modelling & Decision Support
+## Modelling Cost & Decision framework
 
 Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
 
@@ -65,7 +65,7 @@ In short, her strength in production cost modelling has been more than calculati
 
 ---
 
-## Industrial Metal AM
+## Deep into Industrial Metal AM
 **Metal additive manufacturing is frontier manufacturing systems engineering under incomplete rules and real production pressure.** It is far from click-and-play. The people who work successfully in this field operate in a newer, less fully codified manufacturing environment where the rulebook is still being written. Terese has been at the source of it, working for two OEM's, as well as been experiencing it from the outside.
 
 Terese's additive-manufacturing experience spans the path from technology evaluation to live industrial production. Across automotive, aerospace, medical, and industrial applications, she has worked with AM in comparison with traditional manufacturing: where it creates real value, where conventional methods remain better, and what technical, economic, and organizational conditions must exist for adoption to succeed.
@@ -86,7 +86,7 @@ A defining aspect of this experience is not only technical depth, but systems in
 
 ---
 
-## Physical & Digital Product R&D
+## Developing Physical & Digital Products
 Terese's product-development foundation is mechanically grounded and customer-facing. Her M.Sc. in Mechanical Engineering with Industrial Design combined engineering depth with industrial design, human factors, production methods, CAD/digital prototyping, and product-development processes: the layers needed to turn technical ideas into products people can understand, use, manufacture, and buy.
 
 Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
@@ -95,6 +95,5 @@ Across roles, this followed a practical product arc: assessing technical fit, bu
 
 ---
 
-## AI-Assisted Workflows
-
+## Augmenting workflows with AI
 Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
