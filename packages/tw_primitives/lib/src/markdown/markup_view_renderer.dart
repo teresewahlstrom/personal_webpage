@@ -31,7 +31,10 @@ class MarkupViewRenderer {
   static const String _unorderedListMarkerAssetPath =
       'assets/images/arrow2.svg';
   static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
-  static const double _unorderedListMarkerSizeFactor = 1.05;
+  static const double _unorderedListMarkerSizeFactor = 0.50;
+  static const double _unorderedListMarkerVerticalOffsetFactor = 0.27;
+  static const double _blockquoteRailVerticalOverhang = 3.0;
+  static const double _blockquoteInnerVerticalPadding = 2.0;
 
   Widget build() {
     return Column(
@@ -141,7 +144,12 @@ class MarkupViewRenderer {
             railInset: _style.blockquoteRailInset,
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 0, 4),
+            padding: const EdgeInsets.fromLTRB(
+              12,
+              _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+              0,
+              _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+            ),
             child: _buildRenderedMarkupDocument(
               MarkupDocument(block.blocks),
               quoteTheme,
@@ -357,18 +365,36 @@ class MarkupViewRenderer {
 
   Widget _buildUnorderedListAssetMarker(TextStyle baseStyle) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
-    final double markerSize = fontSize * _unorderedListMarkerSizeFactor;
+    final double markerSize = _snapToDevicePixels(
+      fontSize * _unorderedListMarkerSizeFactor,
+    );
+    final double verticalOffset = _snapToDevicePixels(
+      fontSize * _unorderedListMarkerVerticalOffsetFactor,
+    );
     final Color? markerColor = baseStyle.color;
 
-    return SvgPicture.asset(
-      _unorderedListMarkerAssetPath,
-      package: _unorderedListMarkerAssetPackage,
-      width: markerSize,
-      height: markerSize,
-      fit: BoxFit.contain,
-      colorFilter: markerColor == null
-          ? null
-          : ColorFilter.mode(markerColor, BlendMode.srcIn),
+    return Transform.translate(
+      offset: Offset(0, verticalOffset),
+      child: SvgPicture.asset(
+        _unorderedListMarkerAssetPath,
+        package: _unorderedListMarkerAssetPackage,
+        width: markerSize,
+        height: markerSize,
+        fit: BoxFit.contain,
+        colorFilter: markerColor == null
+            ? null
+            : ColorFilter.mode(markerColor, BlendMode.srcIn),
+      ),
     );
+  }
+
+  double _snapToDevicePixels(double logicalSize) {
+    final double dpr = MediaQuery.devicePixelRatioOf(context);
+    if (dpr <= 0) {
+      return logicalSize;
+    }
+
+    final double snapped = (logicalSize * dpr).roundToDouble() / dpr;
+    return snapped.clamp(1.0, double.infinity);
   }
 }

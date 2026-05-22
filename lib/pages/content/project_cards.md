@@ -1,4 +1,4 @@
-## Capability Architecture
+## Capability Enabler
 In her work, Terese repeatedly encountered environments where organizational capability was structurally hindered: departments operated in silos, critical reasoning stayed trapped within individuals, discussions became fragmented across functions, workflows broke down under real operational conditions, and people who wanted to contribute lacked the visibility, structure, or support needed to grow into the role.
 
 Across these environments, she has experienced vastly different approaches to organizational learning and capability-building firsthand:

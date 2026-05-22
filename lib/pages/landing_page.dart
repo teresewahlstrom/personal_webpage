@@ -544,6 +544,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     padding: const EdgeInsets.only(top: 12),
                     child: _ProjectCardMarkdownBody(
                       document: widget.contentDocument,
+                      selectable: _heightAnimation.value >= 1.0,
                     ),
                   ),
                 ),
@@ -564,9 +565,13 @@ class _ProjectCardData {
 }
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
-  const _ProjectCardMarkdownBody({required this.document});
+  const _ProjectCardMarkdownBody({
+    required this.document,
+    required this.selectable,
+  });
 
   final MarkupDocument document;
+  final bool selectable;
 
   @override
   State<_ProjectCardMarkdownBody> createState() =>
@@ -637,7 +642,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       theme: _buildTheme(context),
       gestureRecognizerFactory: _recognizerForHref,
       textAlign: TextAlign.start,
-      selectable: true,
+      selectable: widget.selectable,
       chromeVisible: true,
       blockquoteRailColor:
           PageTextStyles.body(context).color ??
