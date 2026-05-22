@@ -86,7 +86,7 @@ A defining aspect of this experience is not only technical depth, but systems in
 
 ---
 
-## Physical & Digital Product Development
+## Physical & Digital Product R&D
 Terese's product-development foundation is mechanically grounded and customer-facing. Her M.Sc. in Mechanical Engineering with Industrial Design combined engineering depth with industrial design, human factors, production methods, CAD/digital prototyping, and product-development processes: the layers needed to turn technical ideas into products people can understand, use, manufacture, and buy.
 
 Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
