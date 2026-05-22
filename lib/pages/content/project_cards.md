@@ -46,6 +46,24 @@ Under pressure, her leadership becomes practical orchestration. At GE Additive, 
 
 ---
 
+## Cost Modelling & Decision Support
+
+Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
+
+**Core impact areas:**
+
+* **Translating uncertainty into economics:** Converted technical process variables into decision-ready cost estimations, making it easier to evaluate whether a manufacturing setup was commercially viable for a specific use case.
+
+* **Making engineering trade-offs commercially legible:** Connected configuration, material, process, and workflow choices to cost, capacity, risk, and adoption consequences, allowing different stakeholders to compare options on a shared basis.
+
+* **De-risking high-stakes decisions:** Provided pre-sales and adoption tools that reduced ambiguity around qualification, setup choices, and expected production economics under real-world constraints.
+
+* **Embedding economic logic into execution:** Designed models to sit inside broader operational workflows, such as benchmarking, cross-functional coordination, and execution planning, so outputs became active decision support rather than theoretical finance artifacts.
+
+In short, her strength in production cost modelling has been more than calculating cost. **It has been building the shared economic logic that helps people make better adoption, investment, and execution decisions.**
+
+---
+
 ## Industrial Metal AM
 **Metal additive manufacturing is frontier manufacturing systems engineering under incomplete rules and real production pressure.** It is far from click-and-play. The people who work successfully in this field operate in a newer, less fully codified manufacturing environment where the rulebook is still being written. Terese has been at the source of it, working for two OEM's, as well as been experiencing it from the outside.
 
@@ -73,31 +91,6 @@ Terese's product-development foundation is mechanically grounded and customer-fa
 Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
 
 Across roles, this followed a practical product arc: assessing technical fit, building proof through prototypes or benchmarks, translating results into usable customer-facing offers, and supporting adoption through clear guidance, training, troubleshooting, and economic reasoning.
-
-
----
-
-## Cost Modelling & Decision Support
-
-Terese has repeatedly built practical cost-modelling tools that translate complex engineering and process realities into shared economic logic. Rather than using the tools herself, her strongest work has been **creating dynamic models that help prospects, customers, sales teams, and internal stakeholders evaluate the financial consequences of technical decisions on their own**.
-
-**Core impact areas:**
-
-* **Translating uncertainty into economics:** Converted technical process variables into decision-ready cost estimations, making it easier to evaluate whether a manufacturing setup was commercially viable for a specific use case.
-
-* **Making engineering trade-offs commercially legible:** Connected configuration, material, process, and workflow choices to cost, capacity, risk, and adoption consequences, allowing different stakeholders to compare options on a shared basis.
-
-* **De-risking high-stakes decisions:** Provided pre-sales and adoption tools that reduced ambiguity around qualification, setup choices, and expected production economics under real-world constraints.
-
-* **Embedding economic logic into execution:** Designed models to sit inside broader operational workflows, such as benchmarking, cross-functional coordination, and execution planning, so outputs became active decision support rather than theoretical finance artifacts.
-
-In short, her strength in production cost modelling has been more than calculating cost. **It has been building the shared economic logic that helps people make better adoption, investment, and execution decisions.**
-
----
-
-## Analysis & Optimizations
-
-Her systems perspective is grounded in production environments where errors have consequences. Work with ISO-governed production, process monitoring, control-chart drift visibility, and defect analysis shaped a reliability-first approach focused on execution quality in practice, not theory.
 
 ---
 
