@@ -62,3 +62,20 @@ Quick verification after deploy:
 
 - `https://www.t1grid.com/version.json` should return `{"build_sha":"...","build_time_utc":"...","build_id":"..."}` from this script.
 - If you instead see Flutter default metadata (`app_name/version/build_number/package_name`), the Pages project is not using this build script/output and is deploying from a different config path.
+
+## GitHub Cloudflare Preview Check
+
+Pull requests now have a `Cloudflare Preview` GitHub Actions check that:
+
+- installs `ripgrep` for the existing color-centralization precheck
+- builds the site with the same `npm run build` / `cloudflare-pages-build.sh` path used for Pages artifacts
+- deploys the built `build/web` output to a Cloudflare Pages preview deployment for same-repository pull requests
+
+Repository configuration required for the preview deploy step:
+
+- repository secret: `CLOUDFLARE_API_TOKEN`
+- repository secret: `CLOUDFLARE_ACCOUNT_ID`
+- repository variable: `CLOUDFLARE_PAGES_PROJECT_NAME`
+
+The API token should have at least Cloudflare Pages edit access for the target account/project.
+Fork pull requests still run the build, but skip the direct preview deployment because GitHub does not expose repository secrets to forked PR workflows.

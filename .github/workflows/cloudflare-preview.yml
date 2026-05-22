@@ -1,0 +1,99 @@
+name: Cloudflare Preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Cloudflare Preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install ripgrep for color audit
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Build Cloudflare Pages artifact
+        run: npm run build
+
+      - name: Skip direct preview deploy for fork pull requests
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          {
+            echo "## Cloudflare Preview"
+            echo
+            echo "Preview deployment skipped for fork pull requests because repository secrets are not exposed to them."
+            echo "The site artifact was still built successfully."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate Cloudflare preview configuration
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT_NAME: ${{ vars.CLOUDFLARE_PAGES_PROJECT_NAME }}
+        run: |
+          missing=()
+          [[ -n "${CLOUDFLARE_API_TOKEN}" ]] || missing+=("secret:CLOUDFLARE_API_TOKEN")
+          [[ -n "${CLOUDFLARE_ACCOUNT_ID}" ]] || missing+=("secret:CLOUDFLARE_ACCOUNT_ID")
+          [[ -n "${CLOUDFLARE_PAGES_PROJECT_NAME}" ]] || missing+=("variable:CLOUDFLARE_PAGES_PROJECT_NAME")
+
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            {
+              echo "## Cloudflare Preview"
+              echo
+              echo "Missing required Cloudflare preview configuration:"
+              for item in "${missing[@]}"; do
+                echo "- ${item}"
+              done
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Deploy preview to Cloudflare Pages
+        id: deploy
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: >-
+            pages deploy build/web
+            --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT_NAME }}
+            --branch=${{ github.head_ref || github.ref_name }}
+
+      - name: Publish preview summary
+        if: ${{ steps.deploy.outputs.deployment-url != '' }}
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+          ALIAS_URL: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+        run: |
+          PREVIEW_URL="${ALIAS_URL:-$DEPLOYMENT_URL}"
+          {
+            echo "## Cloudflare Preview"
+            echo
+            echo "- Preview URL: ${PREVIEW_URL}"
+            if [[ -n "${ALIAS_URL}" ]]; then
+              echo "- Deployment URL: ${DEPLOYMENT_URL}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

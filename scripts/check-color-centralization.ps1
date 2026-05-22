@@ -27,7 +27,8 @@ $rgArgs = @(
   '--glob', '!packages/tw_primitives/**',
   '--glob', '!packages/tw_super_editor/**',
   '--glob', '!packages/tw_keywords/lib/src/config/keyword_color_theme.dart',
-  $pattern,
+  '-e', $pattern,
+  '--',
   $repoRoot
 )
 
