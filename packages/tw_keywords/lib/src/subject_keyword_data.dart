@@ -40,7 +40,8 @@ final class SubjectKeywordData {
   });
 
   factory SubjectKeywordData.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> rawKeywords = (json['keywords'] as List<dynamic>? ?? <dynamic>[]);
+    final List<dynamic> rawKeywords =
+        (json['keywords'] as List<dynamic>? ?? <dynamic>[]);
     return SubjectKeywordData(
       id: _readRequiredString(json, 'id'),
       name: _readRequiredString(json, 'name'),
@@ -48,20 +49,19 @@ final class SubjectKeywordData {
       theme: _readOptionalString(json, 'theme'),
       bio: _readOptionalString(json, 'bio'),
       keywords: rawKeywords
-          .map((dynamic item) => _keywordNodeFromJson(item as Map<String, dynamic>))
+          .map((dynamic item) =>
+              _keywordNodeFromJson(item as Map<String, dynamic>))
           .toList(growable: false),
     );
   }
 
   static KeywordNode _keywordNodeFromJson(Map<String, dynamic> json) {
-    final KeywordTextColorToken colorToken =
-        _parseKeywordTextColorToken(json);
+    final KeywordTextColorToken colorToken = _parseKeywordTextColorToken(json);
     return KeywordNode(
       _readRequiredString(json, 'text'),
       colorToken,
       _parseFontWeight((json['weight'] as num).toInt()),
       (json['em'] as num).toDouble(),
-      tier: _readRequiredString(json, 'tier'),
       group: _readOptionalString(json, 'group'),
       alignmentBias: _readOptionalString(json, 'alignmentBias'),
       lockGroup: _readOptionalString(json, 'lockGroup'),
@@ -74,9 +74,8 @@ final class SubjectKeywordData {
 
   static KeywordTextColorToken _parseKeywordTextColorToken(
       Map<String, dynamic> json) {
-    final String? token = _readOptionalString(json, 'colorToken')
-        ?.trim()
-        .toLowerCase();
+    final String? token =
+        _readOptionalString(json, 'colorToken')?.trim().toLowerCase();
     if (token != null && token.isNotEmpty) {
       return _tokenFromString(token);
     }

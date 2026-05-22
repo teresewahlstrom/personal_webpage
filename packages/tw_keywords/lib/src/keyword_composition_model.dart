@@ -15,9 +15,6 @@ final class KeywordNode {
   final FontWeight weight;
   final double em;
 
-  /// Semantic tier: `hero` (leading), `core` (primary), `support` (secondary).
-  final String tier;
-
   /// Optional semantic group: `engineering`, `business`, `human`, `future`.
   final String? group;
 
@@ -48,7 +45,6 @@ final class KeywordNode {
     this.colorToken,
     this.weight,
     this.em, {
-    required this.tier,
     this.group,
     this.alignmentBias,
     this.lockGroup,

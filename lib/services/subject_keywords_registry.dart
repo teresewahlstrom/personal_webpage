@@ -21,13 +21,13 @@ final class SubjectRegistry {
     final _SubjectIndex index = await _loadIndex();
     final List<MapEntry<String, SubjectKeywordData>> loadedEntries =
         await Future.wait(
-      index.subjectRefs.values.map(( _SubjectRef ref) async {
-        final SubjectKeywordData subject =
-            _subjectCache[ref.id] ?? await _loadSubject(ref.file);
-        _subjectCache[ref.id] = subject;
-        return MapEntry<String, SubjectKeywordData>(ref.id, subject);
-      }),
-    );
+          index.subjectRefs.values.map((_SubjectRef ref) async {
+            final SubjectKeywordData subject =
+                _subjectCache[ref.id] ?? await _loadSubject(ref.file);
+            _subjectCache[ref.id] = subject;
+            return MapEntry<String, SubjectKeywordData>(ref.id, subject);
+          }),
+        );
 
     final Map<String, SubjectKeywordData> loaded =
         Map<String, SubjectKeywordData>.fromEntries(loadedEntries);
@@ -172,11 +172,7 @@ final class SubjectRegistry {
   static Future<SubjectKeywordData> _loadSubject(String file) async {
     try {
       final String content = await rootBundle.loadString(file);
-      final dynamic decoded = jsonDecode(content);
-      if (decoded is! Map<String, dynamic>) {
-        throw FormatException('Expected $file to contain a JSON object.');
-      }
-
+      final Map<String, dynamic> decoded = _decodeSubjectContent(file, content);
       return SubjectKeywordData.fromJson(decoded);
     } catch (error, stackTrace) {
       final FormatException wrappedError = FormatException(
@@ -192,6 +188,131 @@ final class SubjectRegistry {
       );
       Error.throwWithStackTrace(wrappedError, stackTrace);
     }
+  }
+
+  static Map<String, dynamic> _decodeSubjectContent(
+    String file,
+    String content,
+  ) {
+    if (file.toLowerCase().endsWith('.md')) {
+      return _subjectJsonFromMarkdown(file, content);
+    }
+
+    final dynamic decoded = jsonDecode(content);
+    if (decoded is! Map<String, dynamic>) {
+      throw FormatException('Expected $file to contain a JSON object.');
+    }
+
+    return decoded;
+  }
+
+  static Map<String, dynamic> _subjectJsonFromMarkdown(
+    String file,
+    String content,
+  ) {
+    final List<String> lines = content.replaceAll('\r\n', '\n').split('\n');
+    if (lines.isEmpty || lines.first.trim() != '---') {
+      throw FormatException(
+        'Expected $file to start with YAML-style front matter.',
+      );
+    }
+
+    final int frontMatterEnd = lines.indexWhere(
+      (String line) => line.trim() == '---',
+      1,
+    );
+    if (frontMatterEnd == -1) {
+      throw FormatException('Expected $file front matter to end with "---".');
+    }
+
+    final Map<String, dynamic> subject = <String, dynamic>{};
+    for (final String line in lines.sublist(1, frontMatterEnd)) {
+      final String trimmed = line.trim();
+      if (trimmed.isEmpty) {
+        continue;
+      }
+
+      final int separator = trimmed.indexOf(':');
+      if (separator <= 0) {
+        throw FormatException('Expected front matter line "$line" in $file.');
+      }
+
+      final String key = trimmed.substring(0, separator).trim();
+      final String value = trimmed.substring(separator + 1).trim();
+      subject[key] = value;
+    }
+
+    final List<String> tableLines = lines
+        .skip(frontMatterEnd + 1)
+        .where((String line) => line.trim().startsWith('|'))
+        .toList(growable: false);
+    if (tableLines.length < 2) {
+      throw FormatException('Expected $file to contain a keyword table.');
+    }
+
+    final List<String> headers = _splitMarkdownTableRow(tableLines.first);
+    final List<Map<String, dynamic>> keywords = <Map<String, dynamic>>[];
+    for (final String tableLine in tableLines.skip(1)) {
+      final List<String> cells = _splitMarkdownTableRow(tableLine);
+      if (_isMarkdownSeparatorRow(cells)) {
+        continue;
+      }
+      if (cells.length != headers.length) {
+        throw FormatException(
+          'Expected keyword row in $file to have ${headers.length} cells.',
+        );
+      }
+
+      final Map<String, dynamic> keyword = <String, dynamic>{};
+      for (int index = 0; index < headers.length; index++) {
+        final String key = headers[index];
+        final String value = cells[index];
+        if (value.isEmpty) {
+          continue;
+        }
+
+        keyword[key] = switch (key) {
+          'weight' || 'lockOrder' => int.parse(value),
+          'em' || 'lockGapEm' => double.parse(value),
+          _ => value,
+        };
+      }
+      keywords.add(keyword);
+    }
+
+    subject['keywords'] = keywords;
+    return subject;
+  }
+
+  static bool _isMarkdownSeparatorRow(List<String> cells) {
+    return cells.every((String cell) => RegExp(r'^:?-{3,}:?$').hasMatch(cell));
+  }
+
+  static List<String> _splitMarkdownTableRow(String line) {
+    final String trimmed = line.trim();
+    final String row = trimmed
+        .replaceFirst(RegExp(r'^\|'), '')
+        .replaceFirst(RegExp(r'\|$'), '');
+    final List<String> cells = <String>[];
+    final StringBuffer cell = StringBuffer();
+
+    for (int index = 0; index < row.length; index++) {
+      final String character = row[index];
+      if (character == '\\' &&
+          index + 1 < row.length &&
+          row[index + 1] == '|') {
+        cell.write('|');
+        index++;
+      } else if (character == '|') {
+        cells.add(cell.toString().trim());
+        cell.clear();
+      } else {
+        cell.write(character);
+      }
+    }
+
+    cells.add(cell.toString().trim());
+    return cells;
   }
 
   static List<dynamic> _readRequiredList(

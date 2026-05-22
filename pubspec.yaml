@@ -33,7 +33,7 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/data/subjects/index.json
-    - assets/data/subjects/terese.json
+    - assets/data/subjects/terese.md
     - lib/pages/content/project_cards.md
 
   fonts:
