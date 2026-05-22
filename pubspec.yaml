@@ -34,7 +34,7 @@ flutter:
     - assets/images/logo.png
     - assets/data/subjects/index.json
     - assets/data/subjects/terese.json
-    - lib/pages/content/project_cards.md
+    - assets/content/project_cards.md
 
   fonts:
     - family: Nunito
@@ -48,4 +48,3 @@ flutter:
       fonts:
         - asset: assets/fonts/bebasneue/BebasNeue-Regular.ttf
           weight: 400
-
