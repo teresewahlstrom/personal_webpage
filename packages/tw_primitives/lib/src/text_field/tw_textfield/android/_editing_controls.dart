@@ -451,8 +451,6 @@ class _AndroidEditingOverlayControlsState
       _updateSelectionForDragHandleAfterScrollChange,
     );
 
-    // TODO: ensure that extent is visible
-
     setState(() {
       _isDraggingCollapsed = false;
       _isDraggingBase = false;
@@ -748,8 +746,6 @@ class _AndroidEditingOverlayControlsState
 
   List<Widget> _buildExpandedHandles() {
     // The selection is expanded. Draw 2 drag handles.
-    // TODO: handle the case with no text affinity and then query widget.selection!.affinity
-    // TODO: handle RTL text orientation
     final selectionDirection =
         widget.editingController.textController.selection.extentOffset >=
             widget.editingController.textController.selection.baseOffset

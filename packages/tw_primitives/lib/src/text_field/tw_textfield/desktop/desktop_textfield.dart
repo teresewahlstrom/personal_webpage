@@ -2369,7 +2369,6 @@ class DefaultTwTextFieldKeyboardHandlers {
       // like an emoji picker or a character selection panel.
       // We need to let the OS handle the key so the user can navigate
       // on the list of possible characters.
-      // TODO: update this after https://github.com/flutter/flutter/issues/134268 is resolved.
       return TextFieldKeyboardHandlerResult.blocked;
     }
 

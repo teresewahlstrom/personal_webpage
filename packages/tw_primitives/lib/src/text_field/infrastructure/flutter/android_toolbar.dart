@@ -86,7 +86,7 @@ class _AndroidPopoverToolbarState extends State<AndroidPopoverToolbar> with Tick
             overflowOpen: _overflowOpen,
             textDirection: textDirection,
             children: <Widget>[
-              // TODO(justinmc): This overflow button should have its own slot in
+              // This overflow button should have its own slot in
               // _TextSelectionToolbarItemsLayout separate from children, similar
               // to how it's done in Cupertino's text selection menu.
               // https://github.com/flutter/flutter/issues/69908
@@ -692,7 +692,7 @@ class _TextSelectionToolbarOverflowButton extends StatelessWidget {
       type: MaterialType.card,
       color: const Color(0x00000000),
       child: IconButton(
-        // TODO(justinmc): This should be an AnimatedIcon, but
+        // This should be an AnimatedIcon, but
         // AnimatedIcons doesn't yet support arrow_back to more_vert.
         // https://github.com/flutter/flutter/issues/51209
         icon: icon,

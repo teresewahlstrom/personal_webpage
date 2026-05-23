@@ -310,8 +310,6 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
       _updateSelectionForNewDragHandleLocation,
     );
 
-    // TODO: ensure that extent is visible
-
     setState(() {
       _isDraggingBase = false;
       _isDraggingExtent = false;
@@ -514,8 +512,6 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     }
 
     // The selection is expanded. Draw 2 drag handles.
-    // TODO: handle the case with no text affinity and then query widget.selection!.affinity
-    // TODO: handle RTL text orientation
     final selectionDirection =
         widget.editingController.textController.selection.extentOffset >=
             widget.editingController.textController.selection.baseOffset
