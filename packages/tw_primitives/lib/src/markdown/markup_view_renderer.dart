@@ -64,7 +64,7 @@ class MarkupViewRenderer {
     for (final (int index, MarkupBlock block) in document.blocks.indexed) {
       if (index > 0) {
         children.add(
-          SizedBox(
+          _buildSelectableCopyBreak(
             height: _blockSpacing(
               theme,
               previousBlock: document.blocks[index - 1],
@@ -168,8 +168,9 @@ class MarkupViewRenderer {
       for (final (int itemIndex, MarkupListItem item) in block.items.indexed) {
         if (itemIndex > 0) {
           children.add(
-            SizedBox(
+            _buildSelectableCopyBreak(
               height: _listItemSpacing(theme.baseStyle, listDepth: listDepth),
+              lineBreaks: 1,
             ),
           );
         }
@@ -267,6 +268,36 @@ class MarkupViewRenderer {
           ? (DefaultSelectionStyle.of(context).selectionColor ??
                 DefaultSelectionStyle.defaultColor)
           : null,
+    );
+  }
+
+  Widget _buildSelectableCopyBreak({
+    required double height,
+    int lineBreaks = 2,
+  }) {
+    if (!selectable) {
+      return SizedBox(height: height);
+    }
+
+    return SizedBox(
+      height: height,
+      child: IgnorePointer(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: RichText(
+            text: TextSpan(
+              text: '\n' * lineBreaks,
+              style: const TextStyle(
+                color: Colors.transparent,
+                fontSize: 0.01,
+                height: 1.0,
+              ),
+            ),
+            selectionRegistrar: SelectionContainer.maybeOf(context),
+            selectionColor: Colors.transparent,
+          ),
+        ),
+      ),
     );
   }
 

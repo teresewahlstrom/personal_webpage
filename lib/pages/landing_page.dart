@@ -276,7 +276,7 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(_title, style: PageTextStyles.h2(context)),
-        const SizedBox(height: 10),
+        const _SelectableCopyBreak(height: 10),
         Text(_content, style: PageTextStyles.body(context)),
       ],
     );
@@ -322,7 +322,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(_title, style: PageTextStyles.h2(context)),
-        const SizedBox(height: 10),
+        const _SelectableCopyBreak(height: 10),
         FutureBuilder<List<_ProjectCardData>>(
           future: _projectCardsFuture,
           builder:
@@ -341,29 +341,35 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 }
 
                 final List<_ProjectCardData> projectCards = snapshot.data!;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    for (
-                      int index = 0;
-                      index < projectCards.length;
-                      index++
-                    ) ...<Widget>[
-                      _ExpandableProjectCard(
-                        title: projectCards[index].title,
-                        contentDocument: projectCards[index].contentDocument,
-                        isExpanded: _expandedStates[index],
-                        onTap: () {
-                          setState(() {
-                            _expandedStates[index] = !_expandedStates[index];
-                          });
-                        },
-                        gridLineStyle: gridLineStyle,
-                      ),
-                      if (index < projectCards.length - 1)
-                        const SizedBox(height: 12),
+                final String selectionOrderKey = _expandedStates
+                    .map((bool isExpanded) => isExpanded ? '1' : '0')
+                    .join();
+                return KeyedSubtree(
+                  key: ValueKey<String>('project-cards-$selectionOrderKey'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      for (
+                        int index = 0;
+                        index < projectCards.length;
+                        index++
+                      ) ...<Widget>[
+                        _ExpandableProjectCard(
+                          title: projectCards[index].title,
+                          contentDocument: projectCards[index].contentDocument,
+                          isExpanded: _expandedStates[index],
+                          onTap: () {
+                            setState(() {
+                              _expandedStates[index] = !_expandedStates[index];
+                            });
+                          },
+                          gridLineStyle: gridLineStyle,
+                        ),
+                        if (index < projectCards.length - 1)
+                          const _SelectableCopyBreak(height: 12),
+                      ],
                     ],
-                  ],
+                  ),
                 );
               },
         ),
@@ -538,12 +544,15 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     if (_heightAnimation.status == AnimationStatus.dismissed) {
                       return SelectionContainer.disabled(child: child!);
                     }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: _ProjectCardMarkdownBody(
-                        document: widget.contentDocument,
-                        selectable: _heightAnimation.value >= 1.0,
-                      ),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const _SelectableCopyBreak(height: 12),
+                        _ProjectCardMarkdownBody(
+                          document: widget.contentDocument,
+                          selectable: _heightAnimation.value >= 1.0,
+                        ),
+                      ],
                     );
                   },
                   child: const SizedBox.shrink(),
@@ -719,15 +728,53 @@ class _SocialSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(title, style: PageTextStyles.h2(context).copyWith(fontSize: 34)),
-        const SizedBox(height: 10),
+        const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: _SocialRow(entry: entry),
           ),
-          const SizedBox(height: 6),
+          const _SelectableCopyBreak(height: 6),
         ],
       ],
+    );
+  }
+}
+
+class _SelectableCopyBreak extends StatelessWidget {
+  const _SelectableCopyBreak({required this.height, this.lineBreaks = 1});
+
+  final double height;
+  final int lineBreaks;
+
+  @override
+  Widget build(BuildContext context) {
+    final SelectionRegistrar? selectionRegistrar = SelectionContainer.maybeOf(
+      context,
+    );
+    if (selectionRegistrar == null) {
+      return SizedBox(height: height);
+    }
+
+    return SizedBox(
+      height: height,
+      child: IgnorePointer(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: RichText(
+            text: TextSpan(
+              text: '\n' * lineBreaks,
+              style: const TextStyle(
+                color: Colors.transparent,
+                fontSize: 0.01,
+                height: 1.0,
+              ),
+            ),
+            selectionRegistrar: selectionRegistrar,
+            selectionColor: Colors.transparent,
+          ),
+        ),
+      ),
     );
   }
 }
