@@ -4,6 +4,46 @@ Terese applies the same operating model through AI and structured professional t
 ---
 
 ## Capability Architect
+Every complex organization develops invisible gaps.
+
+Engineering speaks one language. Operations another. Leadership sees metrics. Operators see reality. Valuable knowledge becomes fragmented across departments, tools, and individuals until critical decisions depend on interpretation rather than shared understanding.
+
+A Capability Architect builds the translation layer.
+
+Terese developed this capability in industrial environments where ambiguity was unavoidable and process behavior could not simply be looked up in a manual. She learned to systematically observe chaotic systems, isolate meaningful signals from noise, and construct frameworks that allowed people with entirely different responsibilities to operate around the same technical reality.
+Cost models. Diagnostic systems. Training architectures. Operational feedback loops. Decision-support structures.
+
+The objective is always the same: transform fragile expertise into scalable organizational capability.
+
+
+
+
+---
+
+Where the Narrative Flows Next
+With this paragraph as your anchor, the subsequent sections you wrote fit perfectly. It builds a natural, descending hierarchy of scale:
+
+                  [ 1. The Philosophy ]
+             Capability is Infrastructure
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+    [ 2. The Physical Domain ]   [ 3. The Digital Domain ]
+      Industrial Metal AM          AI & Workflow Intelligence
+    (Volvo / GE / Markforged)     (Structured Context / Twins)
+
+The Physical Proving Ground: You immediately follow this intro with her work at GE and Markforged—showing how she took this "hidden architecture" concept and applied it to physical, messy things like binder-jetting failure taxonomies and cross-functional engineering loops.
+
+The Economic Layer: Then, you introduce her cost and decision frameworks—proving that this "infrastructure" also dictates the economic viability of a technical choice.
+
+The Digital Proving Ground: Finally, you close with AI and structured professional twins—framing local retrieval systems and LLM-driven context layers not as a pivot to a new field, but as the ultimate digital scaling mechanism for that very same infrastructure.
+
+
+
+
+
+
+
 In her work, Terese repeatedly encountered environments where organizational capability was structurally hindered: departments operated in silos, critical reasoning stayed trapped within individuals, discussions became fragmented across functions, workflows broke down under real operational conditions, and people who wanted to contribute lacked the visibility, structure, or support needed to grow into the role.
 
 Across these environments, she has experienced vastly different approaches to organizational learning and capability-building firsthand:
