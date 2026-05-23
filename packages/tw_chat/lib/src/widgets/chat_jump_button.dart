@@ -46,7 +46,10 @@ class ChatJumpButton extends StatelessWidget {
         message: showNewMessage ? 'Jump to latest message' : 'Jump to bottom',
         child: showNewMessage
             ? FilledButton.icon(
-                onPressed: onJumpToLatest,
+                onPressed: () {
+                  Tooltip.dismissAllToolTips();
+                  onJumpToLatest();
+                },
                 icon: arrowIcon,
                 label: const Text('new message'),
                 style: FilledButton.styleFrom(
@@ -64,7 +67,10 @@ class ChatJumpButton extends StatelessWidget {
             : SizedBox.square(
                 dimension: buttonSize,
                 child: FilledButton(
-                  onPressed: onJumpToBottom,
+                  onPressed: () {
+                    Tooltip.dismissAllToolTips();
+                    onJumpToBottom();
+                  },
                   style: FilledButton.styleFrom(
                     backgroundColor: ChatComposerLayout.fillColor(context),
                     foregroundColor: colors.bubbleText,

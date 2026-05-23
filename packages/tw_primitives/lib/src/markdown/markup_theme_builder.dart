@@ -30,8 +30,11 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
   final baseLetterSpacing = baseStyle.letterSpacing!;
+  final FontWeight strongFontWeight = config.isDark
+      ? FontWeight.w800
+      : FontWeight.w700;
   final strongStyle = baseStyle.copyWith(
-    fontWeight: FontWeight.w900,
+    fontWeight: strongFontWeight,
     color: lifted.toColor(),
     letterSpacing: baseLetterSpacing + 0.45,
   );

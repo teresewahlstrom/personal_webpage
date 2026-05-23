@@ -32,7 +32,7 @@ class MarkupViewRenderer {
       'assets/images/arrow2.svg';
   static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
   static const double _unorderedListMarkerSizeFactor = 0.50;
-  static const double _unorderedListMarkerVerticalOffsetFactor = 0.27;
+  static const double _unorderedListMarkerVerticalOffsetFactor = 0.4;
   static const double _blockquoteRailVerticalOverhang = 3.0;
   static const double _blockquoteInnerVerticalPadding = 2.0;
 

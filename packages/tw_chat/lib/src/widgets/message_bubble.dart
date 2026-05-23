@@ -1023,7 +1023,10 @@ class _BubbleTruncationToggleButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(tokens.collapseButtonRadius),
               side: toggleButtonBorderSide,
             ),
-            onTap: onToggleTruncation,
+            onTap: () {
+              Tooltip.dismissAllToolTips();
+              onToggleTruncation();
+            },
             child: Center(
               child: SizedBox(
                 width: tokens.collapseButtonIconSize,

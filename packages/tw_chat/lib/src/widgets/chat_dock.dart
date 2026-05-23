@@ -83,11 +83,13 @@ class _ChatDockState extends State<ChatDock> {
   bool get _isExpanded => _displayState == ChatDockDisplayState.expanded;
 
   void _expandChat() {
+    Tooltip.dismissAllToolTips();
     widget.onSetChatKeyboardScrollTarget();
     setState(() => _displayState = ChatDockDisplayState.expanded);
   }
 
   void _minimizeChat() {
+    Tooltip.dismissAllToolTips();
     widget.onSetPageKeyboardScrollTarget();
     setState(() => _displayState = ChatDockDisplayState.minimized);
   }
