@@ -275,10 +275,11 @@ class _HeroStatement extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 0),
+        const _SelectableCopyBreak(height: 20),
         Text(_title, style: PageTextStyles.h2(context)),
         const _SelectableCopyBreak(height: 10),
         Text(_content, style: PageTextStyles.body(context)),
+        const _SelectableCopyBreak(height: 0),
       ],
     );
   }
@@ -322,7 +323,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 0),
+        const _SelectableCopyBreak(height: 20),
         Text(_title, style: PageTextStyles.h2(context)),
         const _SelectableCopyBreak(height: 10),
         FutureBuilder<List<_ProjectCardData>>(
@@ -730,7 +731,7 @@ class _SocialSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 0),
+        const _SelectableCopyBreak(height: 20),
         Text(title, style: PageTextStyles.h2(context).copyWith(fontSize: 34)),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
