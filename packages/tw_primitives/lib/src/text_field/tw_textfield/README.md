@@ -25,4 +25,4 @@ Keep this responsibility here. App-level services may measure keyboard height fo
 ## Related Docs
 
 - `packages/tw_primitives/THIRD_PARTY_NOTICES.md`
-- `docs/KEYBOARD_FIX_RESEARCH.md`
+- `packages/tw_primitives/lib/src/text_field/README.md`

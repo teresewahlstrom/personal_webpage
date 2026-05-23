@@ -12,28 +12,29 @@ The local backend has two services under one parent directory:
 - exposes the stable Flutter-facing `/api/chat` endpoint
 - validates and proxies chat requests to the Python twin service
 - keeps the frontend contract narrow: `sessionId` and `reply`
+- exposes health at `/api/health`
 - listens on `http://localhost:8787` by default
 
 ### Twin
 
 - uses the workspace `.env` OpenAI key
-- loads runtime package directly from `backend/twin/repo/src/twin`
-- loads subject policies + retrieval artifacts directly from `backend/twin/repo/01_define_subject`
+- serves health at `/health`
+- imports runtime package from `TWIN_REPO_ROOT/src/twin`
+- loads subject policies + retrieval artifacts from the same runtime root
 - keeps in-memory session history keyed by `sessionId` while the service is running
 - returns only the final answer text for each turn
 
 ## Twin Layout
 
 - `backend/twin/app.py`: FastAPI entrypoint and adapter for `/twin/chat`
-- `backend/twin/repo/src/twin`: bridged runtime package source
-- `backend/twin/repo/01_define_subject`: bridged subject data, contracts, and built retrieval artifacts
+- `backend/twin/repo` (optional local default): runtime bridge root used when `TWIN_REPO_ROOT` is not set
 
 Bridge behavior:
 
 - no local sync step is required
-- backend imports from `backend/twin/repo/src` at runtime
-- runtime artifact paths resolve under `backend/twin/repo/01_define_subject`
+- backend imports from `TWIN_REPO_ROOT/src` at runtime
 - optional override: set `TWIN_REPO_ROOT` to point at a different twin repo root
+- if neither `TWIN_REPO_ROOT` nor `backend/twin/repo` is available, the twin service will fail fast at startup
 
 ## Run
 
@@ -52,6 +53,11 @@ Stop the local stack:
 ```
 
 Omit `-WithFlutter` in either command if you only want the backends.
+
+Useful launcher flags:
+
+- `-InstallGateway`: runs `npm install` for `backend/gateway` before starting the gateway
+- `-FlutterPubGet`: runs `flutter pub get` before launching Flutter
 
 The Python twin keeps in-memory session history while it is running, so memory resets when the twin process restarts.
 

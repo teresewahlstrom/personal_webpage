@@ -3,7 +3,7 @@
 Flutter web personal site with a local chat prototype split into three layers:
 
 - Flutter UI
-- TypeScript gateway service
+- Node.js gateway service
 - Python twin service
 
 Backend setup and run details are documented in [backend/README.md](backend/README.md).
@@ -11,7 +11,12 @@ RagGraph orchestration is backend-owned (gateway/twin), not frontend-owned.
 
 ## Local Development
 
-Keep the OpenAI API key in the workspace root `.env` file.
+Prerequisites:
+
+- Flutter SDK on PATH
+- Node.js and npm
+- A Python virtual environment at `.venv` in the workspace root (used by `scripts/run-twin.ps1`)
+- `.env` in the workspace root with your OpenAI API key
 
 Run the shortcut scripts from the workspace root.
 
@@ -27,8 +32,10 @@ Stop the local stack:
 .\scripts\stop-local.ps1 -WithFlutter
 ```
 
-That opens and stops tracked PowerShell windows for the Python twin, the TypeScript gateway, and Flutter Web.
+That opens and stops tracked PowerShell windows for the Python twin, the Node.js gateway, and Flutter Web.
 Omit `-WithFlutter` in either command if you only want the backends.
+
+If `backend/twin/repo` is not present locally, set `TWIN_REPO_ROOT` in `.env` to a twin runtime checkout before starting the backend.
 
 The Python twin keeps in-memory session history while it is running, so that memory resets when the twin process restarts.
 
@@ -39,8 +46,6 @@ If you see repeated errors like `LateInitializationError: Field '_handledContext
 ```powershell
 flutter run -d chrome --web-renderer html
 ```
-
-In VS Code, use the `Flutter Web (Chrome, HTML renderer)` launch profile in `.vscode/launch.json`.
 
 ## Deploy Cache Behavior
 
