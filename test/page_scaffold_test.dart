@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_webpage/widgets/shell/_page_footer.dart';
 import 'package:personal_webpage/widgets/shell/page_scaffold.dart';
-import 'package:tw_chat/chat.dart';
+import 'package:tw_chat/chat.dart' show ChatSkinMode;
 
 void main() {
   testWidgets('page scaffold keeps the footer at the viewport bottom', (

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_chat/chat.dart';
+import 'package:tw_chat/chat.dart' show ChatLauncherStyle, ChatSkin, ChatSkinMode;
 
 import '../../config/app_ui_config.dart';
 

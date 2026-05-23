@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:tw_chat/composer.dart' show ChatComposer, ChatComposerSkin;
 import 'package:tw_primitives/text_field.dart'
     show TextInputSource, TwReadyTextController, TwReadyTextField;
 
 import '../config/config.dart';
+import '../composer/chat_composer.dart';
 
 class ChatComposerRow extends StatefulWidget {
   const ChatComposerRow({

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_webpage/pages/landing_page.dart';
 import 'package:personal_webpage/widgets/shell/page_scaffold.dart';
-import 'package:tw_chat/chat.dart';
+import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import 'package:tw_keywords/tw_keywords.dart';
 
 void main() {

@@ -9,17 +9,10 @@ It does not own retrieval orchestration, LLM behavior, backend policy, HTTP tran
 ## Public Entry Points
 
 - `chat.dart`
-  - `ChatDock`
   - `ChatLauncherStyle`
-  - `ChatMessage`
-  - `ConversationController`
-  - `ReplyClient`
-  - `ChatRuntimeConfig`
+  - `ChatOverlay`
+  - `ChatKeyboardScrollTargetController`
   - `ChatSkin` / `ChatSkinMode`
-- `composer.dart`
-  - lower-level composer UI pieces
-- `content.dart`
-  - prototype intro/content used by the app
 
 ## Main Responsibilities
 

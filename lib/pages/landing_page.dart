@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tw_chat/chat.dart';
+import 'package:tw_chat/chat.dart' show ChatSkin;
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
