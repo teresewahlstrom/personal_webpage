@@ -10,7 +10,6 @@ Provides styled text input components with platform-specific support (Android, i
 
 **Public API:**
 - `TwReadyTextField` — ready-to-use input that includes scrolling + scrollbar
-- `text_field_advanced.dart` — low-level and infrastructure APIs for advanced use
 
 ## Usage
 
@@ -22,12 +21,6 @@ import 'package:tw_primitives/text_field.dart';
 
 For most screens, start with `TwReadyTextField` so you do not need to manually
 compose `TwTextField` with a scrollbar.
-
-Import advanced APIs only when needed:
-
-```dart
-import 'package:tw_primitives/text_field_advanced.dart';
-```
 
 This provides a stable API boundary and makes the dependency relationship clearer: `tw_chat` depends on `tw_primitives`, which now owns the extracted text-field code.
 

@@ -5,8 +5,9 @@ import 'package:tw_primitives/src/scrollbar/scroll_area.dart';
 import 'package:tw_primitives/src/scrollbar/tw_scrollbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart'
     show AttributionStyleBuilder;
+import 'package:tw_primitives/src/text_field/infrastructure/text_input.dart'
+    show TextInputSource;
 import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
-import 'package:tw_primitives/text_field.dart' show TextInputSource;
 
 /// Beginner-friendly controller for [TwReadyTextField].
 ///
@@ -160,9 +161,6 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
 
   bool get _ownsTextController => widget.controller == null;
 
-  ScrollController get _scrollController =>
-      widget.scrollController ?? _ownedScrollController;
-
   bool get _ownsScrollController => widget.scrollController == null;
 
   ScrollController get _effectiveScrollController =>
@@ -208,7 +206,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
         : HintBehavior.displayHintUntilFocus;
     final resolvedCaretStyle = _resolveCaretStyle();
     final textField = TwTextField(
-      scrollController: _scrollController,
+      scrollController: _effectiveScrollController,
       focusNode: widget.focusNode,
       textController: _textController.raw,
       textAlign: widget.textAlign,
@@ -238,7 +236,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
     }
 
     return TwScrollArea(
-      controller: _scrollController,
+      controller: _effectiveScrollController,
       activationPulse: _scrollbarActivationPulse,
       hideSystemScrollbars: widget.hideSystemScrollbars,
       thumbColor: widget.thumbColor,
