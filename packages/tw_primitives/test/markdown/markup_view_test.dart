@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_primitives/markdown.dart';
+import 'package:tw_primitives/src/markdown/markup_rendering.dart'
+    show MarkupInlineRendering;
 
 void main() {
   testWidgets('top-level ordered lists have extra space above', (tester) async {

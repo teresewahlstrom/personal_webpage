@@ -4,15 +4,10 @@ import 'markup_tokenizer.dart';
 class MarkupParser {
   static const int _maxHeadingLevel = 2;
 
-  MarkupParser(
-    String raw, {
-    this.preserveSoftLineBreaks = true,
-  }) : _lines = raw.replaceAll('\r\n', '\n').split('\n');
+  MarkupParser(String raw, {this.preserveSoftLineBreaks = true})
+    : _lines = raw.replaceAll('\r\n', '\n').split('\n');
 
-  MarkupParser.fromLines(
-    this._lines, {
-    this.preserveSoftLineBreaks = true,
-  });
+  MarkupParser.fromLines(this._lines, {this.preserveSoftLineBreaks = true});
 
   final List<String> _lines;
   final bool preserveSoftLineBreaks;
@@ -40,11 +35,7 @@ class MarkupParser {
         break;
       }
 
-      final blockquoteContent = _stripBlockquotePrefix(
-        line,
-        baseIndent: baseIndent,
-      );
-      if (blockquoteContent != null) {
+      if (_stripBlockquotePrefix(line, baseIndent: baseIndent) != null) {
         final result = _parseBlockquote(start: index, baseIndent: baseIndent);
         blocks.add(result.block);
         index = result.nextIndex;
@@ -114,7 +105,9 @@ class MarkupParser {
         : paragraphLines.join(' ');
 
     return _ParagraphParseResult(
-      block: MarkupParagraphBlock(MarkupInlineTokenizer(paragraphText).tokenize()),
+      block: MarkupParagraphBlock(
+        MarkupInlineTokenizer(paragraphText).tokenize(),
+      ),
       nextIndex: index,
     );
   }

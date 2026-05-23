@@ -1,8 +1,22 @@
 import 'markup_ast.dart';
 import 'markup_parser.dart' as markup_parser;
 
-export 'markup_ast.dart';
-export 'markup_rendering.dart';
+export 'markup_ast.dart'
+    show
+        MarkupDocument,
+        MarkupInline,
+        MarkupBlock,
+        MarkupParagraphBlock,
+        MarkupHeadingBlock,
+        MarkupBlockquoteBlock,
+        MarkupListBlock,
+        MarkupListItem;
+export 'markup_rendering.dart'
+    show
+        LinkGestureRecognizerFactory,
+        MarkupTheme,
+        MarkupDocumentRendering,
+        MarkupBlockRendering;
 
 class MessageMarkup {
   const MessageMarkup._();

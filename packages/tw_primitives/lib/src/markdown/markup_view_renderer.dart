@@ -101,155 +101,146 @@ class MarkupViewRenderer {
     required bool selectable,
     required bool chromeVisible,
   }) {
-    if (block is MarkupParagraphBlock || block is MarkupHeadingBlock) {
-      return _buildSelectableRichText(
-        block.toTextSpan(
-          theme: theme,
-          gestureRecognizerFactory: gestureRecognizerFactory,
-        ),
-        selectable: selectable,
-      );
-    }
-
-    if (block is MarkupBlockquoteBlock) {
-      final MarkupTheme quoteTheme = MarkupTheme(
-        baseStyle: theme.blockquoteStyle,
-        strongStyle: theme.blockquoteStyle.merge(theme.strongStyle),
-        emphasisStyle: theme.blockquoteStyle.merge(theme.emphasisStyle),
-        strikethroughStyle: theme.blockquoteStyle.merge(
-          theme.strikethroughStyle,
-        ),
-        underlineStyle: theme.blockquoteStyle.merge(theme.underlineStyle),
-        linkStyle: theme.blockquoteStyle.merge(theme.linkStyle),
-        blockquoteStyle: theme.blockquoteStyle,
-        headingStyleResolver: (int level) =>
-            theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
-      );
-      final Color railColor = chromeVisible
-          ? (blockquoteRailColor ??
-                theme.baseStyle.color ??
-                DefaultTextStyle.of(context).style.color ??
-                Colors.transparent)
-          : Colors.transparent;
-      final double fontSize = theme.baseStyle.fontSize ?? 12.0;
-      return Padding(
-        padding: EdgeInsets.only(
-          left: fontSize * _style.blockquoteIndentFactor * 3.0,
-        ),
-        child: CustomPaint(
-          foregroundPainter: BlockQuoteRailPainter(
-            color: railColor,
-            railThickness: _style.blockquoteRailWidth,
-            capLength: _style.blockquoteCapLength,
-            railInset: _style.blockquoteRailInset,
+    switch (block) {
+      case MarkupParagraphBlock() || MarkupHeadingBlock():
+        return _buildSelectableRichText(
+          block.toTextSpan(
+            theme: theme,
+            gestureRecognizerFactory: gestureRecognizerFactory,
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              12,
-              _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
-              0,
-              _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+          selectable: selectable,
+        );
+      case final MarkupBlockquoteBlock quote:
+        final MarkupTheme quoteTheme = MarkupTheme(
+          baseStyle: theme.blockquoteStyle,
+          strongStyle: theme.blockquoteStyle.merge(theme.strongStyle),
+          emphasisStyle: theme.blockquoteStyle.merge(theme.emphasisStyle),
+          strikethroughStyle: theme.blockquoteStyle.merge(
+            theme.strikethroughStyle,
+          ),
+          underlineStyle: theme.blockquoteStyle.merge(theme.underlineStyle),
+          linkStyle: theme.blockquoteStyle.merge(theme.linkStyle),
+          blockquoteStyle: theme.blockquoteStyle,
+          headingStyleResolver: (int level) =>
+              theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
+        );
+        final Color railColor = chromeVisible
+            ? (blockquoteRailColor ??
+                  theme.baseStyle.color ??
+                  DefaultTextStyle.of(context).style.color ??
+                  Colors.transparent)
+            : Colors.transparent;
+        final double fontSize = theme.baseStyle.fontSize ?? 12.0;
+        return Padding(
+          padding: EdgeInsets.only(
+            left: fontSize * _style.blockquoteIndentFactor * 3.0,
+          ),
+          child: CustomPaint(
+            foregroundPainter: BlockQuoteRailPainter(
+              color: railColor,
+              railThickness: _style.blockquoteRailWidth,
+              capLength: _style.blockquoteCapLength,
+              railInset: _style.blockquoteRailInset,
             ),
-            child: _buildRenderedMarkupDocument(
-              MarkupDocument(block.blocks),
-              quoteTheme,
-              listDepth: listDepth,
-              inListItem: inListItem,
-              selectable: selectable,
-              chromeVisible: chromeVisible,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                12,
+                _blockquoteRailVerticalOverhang +
+                    _blockquoteInnerVerticalPadding,
+                0,
+                _blockquoteRailVerticalOverhang +
+                    _blockquoteInnerVerticalPadding,
+              ),
+              child: _buildRenderedMarkupDocument(
+                MarkupDocument(quote.blocks),
+                quoteTheme,
+                listDepth: listDepth,
+                inListItem: inListItem,
+                selectable: selectable,
+                chromeVisible: chromeVisible,
+              ),
             ),
           ),
-        ),
-      );
-    }
+        );
+      case final MarkupListBlock list:
+        final List<Widget> children = <Widget>[];
+        for (final (int itemIndex, MarkupListItem item) in list.items.indexed) {
+          if (itemIndex > 0) {
+            children.add(
+              _buildSelectableCopyBreak(
+                height: _listItemSpacing(theme.baseStyle, listDepth: listDepth),
+                lineBreaks: 1,
+              ),
+            );
+          }
 
-    if (block is MarkupListBlock) {
-      final List<Widget> children = <Widget>[];
-      for (final (int itemIndex, MarkupListItem item) in block.items.indexed) {
-        if (itemIndex > 0) {
+          final String marker = list.ordered
+              ? '${list.startingIndex + itemIndex}. '
+              : '• ';
+          final bool useAssetMarker = !list.ordered && chromeVisible;
+          final List<MarkupBlock> itemBlocks = item.blocks;
+          final bool canUseBaseline =
+              !useAssetMarker &&
+              itemBlocks.length == 1 &&
+              (itemBlocks.first is MarkupParagraphBlock ||
+                  itemBlocks.first is MarkupHeadingBlock);
+
           children.add(
-            _buildSelectableCopyBreak(
-              height: _listItemSpacing(theme.baseStyle, listDepth: listDepth),
-              lineBreaks: 1,
+            Padding(
+              padding: EdgeInsets.only(left: _listIndent()),
+              child: Row(
+                crossAxisAlignment: canUseBaseline
+                    ? CrossAxisAlignment.baseline
+                    : CrossAxisAlignment.start,
+                textBaseline: canUseBaseline ? TextBaseline.alphabetic : null,
+                children: <Widget>[
+                  SizedBox(
+                    width: _listMarkerSlotWidth(theme.baseStyle, listDepth),
+                    child: Align(
+                      alignment: list.ordered
+                          ? const Alignment(0.78, 0.0)
+                          : const Alignment(0.45, 0.0),
+                      child: useAssetMarker
+                          ? _buildUnorderedListAssetMarker(theme.baseStyle)
+                          : _buildSelectableRichText(
+                              TextSpan(text: marker, style: theme.baseStyle),
+                              softWrap: false,
+                              selectable: selectable,
+                            ),
+                    ),
+                  ),
+                  SizedBox(width: _listMarkerGap(theme.baseStyle)),
+                  Expanded(
+                    child: canUseBaseline
+                        ? _buildRenderedMarkupBlock(
+                            itemBlocks.first,
+                            theme: theme,
+                            listDepth: listDepth + 1,
+                            inListItem: true,
+                            selectable: selectable,
+                            chromeVisible: chromeVisible,
+                          )
+                        : _buildRenderedMarkupDocument(
+                            MarkupDocument(itemBlocks),
+                            theme,
+                            listDepth: listDepth + 1,
+                            inListItem: true,
+                            selectable: selectable,
+                            chromeVisible: chromeVisible,
+                          ),
+                  ),
+                ],
+              ),
             ),
           );
         }
 
-        final String marker = block.ordered
-            ? '${block.startingIndex + itemIndex}. '
-            : '• ';
-        final bool useAssetMarker = !block.ordered && chromeVisible;
-        final List<MarkupBlock> itemBlocks = item.blocks;
-        final bool canUseBaseline =
-            !useAssetMarker &&
-            itemBlocks.length == 1 &&
-            (itemBlocks.first is MarkupParagraphBlock ||
-                itemBlocks.first is MarkupHeadingBlock);
-
-        children.add(
-          Padding(
-            padding: EdgeInsets.only(left: _listIndent()),
-            child: Row(
-              crossAxisAlignment: canUseBaseline
-                  ? CrossAxisAlignment.baseline
-                  : CrossAxisAlignment.start,
-              textBaseline: canUseBaseline ? TextBaseline.alphabetic : null,
-              children: <Widget>[
-                SizedBox(
-                  width: _listMarkerSlotWidth(theme.baseStyle, listDepth),
-                  child: Align(
-                    alignment: block.ordered
-                        ? const Alignment(0.78, 0.0)
-                        : const Alignment(0.45, 0.0),
-                    child: useAssetMarker
-                        ? _buildUnorderedListAssetMarker(theme.baseStyle)
-                        : _buildSelectableRichText(
-                            TextSpan(text: marker, style: theme.baseStyle),
-                            softWrap: false,
-                            selectable: selectable,
-                          ),
-                  ),
-                ),
-                SizedBox(width: _listMarkerGap(theme.baseStyle)),
-                Expanded(
-                  child: canUseBaseline
-                      ? _buildRenderedMarkupBlock(
-                          itemBlocks.first,
-                          theme: theme,
-                          listDepth: listDepth + 1,
-                          inListItem: true,
-                          selectable: selectable,
-                          chromeVisible: chromeVisible,
-                        )
-                      : _buildRenderedMarkupDocument(
-                          MarkupDocument(itemBlocks),
-                          theme,
-                          listDepth: listDepth + 1,
-                          inListItem: true,
-                          selectable: selectable,
-                          chromeVisible: chromeVisible,
-                        ),
-                ),
-              ],
-            ),
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: children,
         );
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      );
     }
-
-    return _buildSelectableRichText(
-      block.toTextSpan(
-        theme: theme,
-        gestureRecognizerFactory: gestureRecognizerFactory,
-      ),
-      selectable: selectable,
-    );
   }
 
   Widget _buildSelectableRichText(
