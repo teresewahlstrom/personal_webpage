@@ -170,7 +170,7 @@ class _LandingPageState extends State<LandingPage> {
                       children: <Widget>[
                         SizedBox(height: 22),
                         _HeroStatement(),
-                        SizedBox(height: 14),
+                        _SelectableCopyBreak(height: 28, lineBreaks: 2),
                       ],
                     ),
                   ),
@@ -356,6 +356,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                         index < projectCards.length;
                         index++
                       ) ...<Widget>[
+                        if (index > 0)
+                          const _SelectableCopyBreak(height: 12),
                         _ExpandableProjectCard(
                           title: projectCards[index].title,
                           contentDocument: projectCards[index].contentDocument,
@@ -367,8 +369,6 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                           },
                           gridLineStyle: gridLineStyle,
                         ),
-                        if (index < projectCards.length - 1)
-                          const _SelectableCopyBreak(height: 12),
                       ],
                     ],
                   ),
@@ -550,7 +550,6 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const _SelectableCopyBreak(height: 12),
                         _ProjectCardMarkdownBody(
                           document: widget.contentDocument,
                           selectable: _heightAnimation.value >= 1.0,

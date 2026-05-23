@@ -273,7 +273,7 @@ class MarkupViewRenderer {
 
   Widget _buildSelectableCopyBreak({
     required double height,
-    int lineBreaks = 2,
+    int lineBreaks = 1,
   }) {
     if (!selectable) {
       return SizedBox(height: height);

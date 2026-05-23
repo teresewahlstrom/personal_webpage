@@ -420,23 +420,41 @@ class WordCloud extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: <Widget>[
-              for (final _PlacedWord pw in placed)
+              for (final (int index, _PlacedWord pw) in placed.indexed)
                 Positioned(
                   left: pw.left,
                   top: pw.top - contentTop + contentVerticalInset,
-                  child: Text(
-                    '${pw.node.text} ',
-                    style: TextStyle(
-                      fontFamily: fontFamily,
-                      fontSize: pw.fontSize,
-                      fontWeight: pw.node.weight,
-                      color: KeywordSkin.textColorForToken(
-                        pw.node.colorToken,
-                        brightness,
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: pw.fontSize,
+                        fontWeight: pw.node.weight,
+                        color: KeywordSkin.textColorForToken(
+                          pw.node.colorToken,
+                          brightness,
+                        ),
+                        height: 1.0,
+                        letterSpacing: letterSpacing,
                       ),
-                      height: 1.0,
-                      letterSpacing: letterSpacing,
+                      children: <InlineSpan>[
+                        TextSpan(text: pw.node.text),
+                        if (index < placed.length - 1)
+                          const TextSpan(
+                            text: '\n',
+                            style: TextStyle(
+                              color: Colors.transparent,
+                              fontSize: 0.01,
+                              height: 1.0,
+                              letterSpacing: 0,
+                            ),
+                          ),
+                      ],
                     ),
+                    selectionRegistrar: SelectionContainer.maybeOf(context),
+                    selectionColor:
+                        DefaultSelectionStyle.of(context).selectionColor ??
+                        DefaultSelectionStyle.defaultColor,
                   ),
                 ),
             ],
