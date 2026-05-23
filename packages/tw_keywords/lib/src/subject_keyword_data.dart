@@ -18,25 +18,13 @@ final class SubjectKeywordData {
   /// Human-readable name
   final String name;
 
-  /// Role or professional title (optional context)
-  final String? role;
-
   /// All keywords for this subject
   final List<KeywordNode> keywords;
-
-  /// Optional semantic theme/tag
-  final String? theme;
-
-  /// Optional narrative/bio (for future use)
-  final String? bio;
 
   const SubjectKeywordData({
     required this.id,
     required this.name,
     required this.keywords,
-    this.role,
-    this.theme,
-    this.bio,
   });
 
   factory SubjectKeywordData.fromJson(Map<String, dynamic> json) {
@@ -45,9 +33,6 @@ final class SubjectKeywordData {
     return SubjectKeywordData(
       id: _readRequiredString(json, 'id'),
       name: _readRequiredString(json, 'name'),
-      role: _readOptionalString(json, 'role'),
-      theme: _readOptionalString(json, 'theme'),
-      bio: _readOptionalString(json, 'bio'),
       keywords: rawKeywords
           .map((dynamic item) =>
               _keywordNodeFromJson(item as Map<String, dynamic>))
@@ -62,8 +47,6 @@ final class SubjectKeywordData {
       colorToken,
       _parseFontWeight((json['weight'] as num).toInt()),
       (json['em'] as num).toDouble(),
-      group: _readOptionalString(json, 'group'),
-      alignmentBias: _readOptionalString(json, 'alignmentBias'),
       lockGroup: _readOptionalString(json, 'lockGroup'),
       lockOrder: (json['lockOrder'] as num?)?.toInt(),
       lockAxis: _readOptionalString(json, 'lockAxis'),

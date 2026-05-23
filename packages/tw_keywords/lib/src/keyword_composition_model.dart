@@ -15,13 +15,6 @@ final class KeywordNode {
   final FontWeight weight;
   final double em;
 
-  /// Optional semantic group: `engineering`, `business`, `human`, `future`.
-  final String? group;
-
-  /// Optional alignment bias for future advanced layouts.
-  /// `left`, `center`, `right`, or null for default.
-  final String? alignmentBias;
-
   /// Optional lock group id.
   ///
   /// Keywords with the same `lockGroup` are placed together as one unit in
@@ -45,8 +38,6 @@ final class KeywordNode {
     this.colorToken,
     this.weight,
     this.em, {
-    this.group,
-    this.alignmentBias,
     this.lockGroup,
     this.lockOrder,
     this.lockAxis,

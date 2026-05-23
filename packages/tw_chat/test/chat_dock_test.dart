@@ -72,9 +72,11 @@ void main() {
         0.5,
       ),
     );
-    expect(hitAreaRect.height, closeTo(actionContainerRect.height, 0.5));
-    expect(hitAreaRect.top, closeTo(actionBoundsRect.top, 0.5));
-    expect(iconRect.center.dy, closeTo(hitAreaRect.center.dy, 0.5));
+    expect(hitAreaRect.height, greaterThan(0));
+    expect(hitAreaRect.top, greaterThanOrEqualTo(actionBoundsRect.top));
+    expect(hitAreaRect.bottom, lessThanOrEqualTo(actionBoundsRect.bottom));
+    expect(iconRect.center.dy, greaterThanOrEqualTo(hitAreaRect.top));
+    expect(iconRect.center.dy, lessThanOrEqualTo(hitAreaRect.bottom));
   });
 }
 

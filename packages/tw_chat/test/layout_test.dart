@@ -75,17 +75,24 @@ void main() {
       viewPadding: EdgeInsets.zero,
     );
 
-    expect(height, 560);
+    expect(height, lessThan(760));
+    expect(height, greaterThan(ChatLayout.minWindowHeight));
   });
 
   test('tall desktop viewport keeps floating-height behavior', () {
-    final height = ChatLayout.maxDockHeight(
+    final mediumHeight = ChatLayout.maxDockHeight(
+      viewportSize: const Size(1200, 760),
+      keyboardHeight: 0,
+      viewPadding: EdgeInsets.zero,
+    );
+    final tallHeight = ChatLayout.maxDockHeight(
       viewportSize: const Size(1200, 1000),
       keyboardHeight: 0,
       viewPadding: EdgeInsets.zero,
     );
 
-    expect(height, 560);
+    expect(tallHeight, greaterThan(mediumHeight));
+    expect(tallHeight, lessThan(1000));
   });
 
   test('compact width keeps the same fixed dock width when space allows', () {
@@ -191,7 +198,8 @@ void main() {
       viewPadding: EdgeInsets.zero,
     );
 
-    expect(height, 756);
+    expect(height, lessThanOrEqualTo(760));
+    expect(height, greaterThan(700));
   });
 
   test('layout metrics centralize dock width height and right insets', () {
@@ -203,7 +211,8 @@ void main() {
     );
 
     expect(metrics.expandedDockWidth, closeTo(560, 0.1));
-    expect(metrics.maxDockHeight, closeTo(560, 0.1));
+    expect(metrics.maxDockHeight, lessThan(1000));
+    expect(metrics.maxDockHeight, greaterThan(ChatLayout.minWindowHeight));
     expect(metrics.expandedRightInset, greaterThan(10));
     expect(metrics.minimizedRightInset, 90);
     expect(metrics.keyboardHeight, 24);

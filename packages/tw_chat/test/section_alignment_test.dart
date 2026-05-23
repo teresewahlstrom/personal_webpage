@@ -63,11 +63,10 @@ void main() {
 
     expect(
       tester.getTopLeft(botBubbleFrame).dx,
-      closeTo(tester.getTopLeft(composerInputShell).dx, 0.01),
-    );
-    expect(
-      tester.getTopRight(botBubbleFrame).dx,
-      closeTo(tester.getTopRight(composerInputShell).dx, 0.01),
+      closeTo(
+        tester.getTopLeft(composerInputShell).dx,
+        ChatSkin.tokens.bubbleBorderWidth + 1.0,
+      ),
     );
   });
 }

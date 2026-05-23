@@ -11,7 +11,6 @@ final class _PlacedWord {
   final KeywordNode node;
   final double left;
   final double top;
-  final double width;
   final double height;
   final double fontSize;
 
@@ -19,7 +18,6 @@ final class _PlacedWord {
     required this.node,
     required this.left,
     required this.top,
-    required this.width,
     required this.height,
     required this.fontSize,
   });
@@ -360,7 +358,6 @@ class WordCloud extends StatelessWidget {
               node: word.node,
               left: x + word.left,
               top: y + word.top,
-              width: word.width,
               height: word.height,
               fontSize: word.fontSize,
             ));

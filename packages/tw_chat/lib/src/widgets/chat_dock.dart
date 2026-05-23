@@ -221,6 +221,7 @@ class ChatAppBar extends StatelessWidget {
       ),
     );
     final action = Positioned(
+      key: const ValueKey('chat-app-bar-action-bounds'),
       top: 0,
       right: 0,
       bottom: 0,

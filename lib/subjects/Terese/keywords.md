@@ -1,9 +1,6 @@
 ---
 id: terese
 name: Terese Wahlström
-role: Product Engineer & Leader
-theme: product-engineer-leader
-bio: Building systems, leading teams, driving strategy across mechanical, product, and AI domains.
 ---
 
 ## Keywords
