@@ -749,9 +749,7 @@ class _SelectableCopyBreak extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SelectionRegistrar? selectionRegistrar = SelectionContainer.maybeOf(
-      context,
-    );
+    final selectionRegistrar = SelectionContainer.maybeOf(context);
     if (selectionRegistrar == null) {
       return SizedBox(height: height);
     }
