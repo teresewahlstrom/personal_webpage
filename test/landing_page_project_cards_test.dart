@@ -108,13 +108,17 @@ void main() {
 
       expect(
         copiedText,
-        contains('Terese Wahlström\nTurns complexity into clarity.'),
+        startsWith('\nTerese Wahlström\nTurns complexity into clarity.'),
       );
       expect(
         copiedText,
         contains(
-          'Deep into AI & Workflows\nTerese applies the same operating model through AI',
+          '\nProfessional Story\n\nDeep into AI & Workflows\nTerese applies the same operating model through AI',
         ),
+      );
+      expect(
+        copiedText,
+        contains('\nContact, Connect, Follow\nterese@t1grid.com'),
       );
 
       final int firstCardBodyIndex = copiedText.indexOf(
@@ -128,6 +132,10 @@ void main() {
       expect(firstCardBodyIndex, greaterThanOrEqualTo(0));
       expect(secondCardTitleIndex, greaterThan(firstCardBodyIndex));
       expect(secondCardBodyIndex, greaterThan(secondCardTitleIndex));
+      expect(
+        copiedText.substring(secondCardTitleIndex - 2, secondCardTitleIndex),
+        '\n\n',
+      );
     },
   );
 }
