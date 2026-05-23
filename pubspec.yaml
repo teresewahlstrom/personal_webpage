@@ -19,6 +19,7 @@ dependencies:
   tw_keywords:
     path: packages/tw_keywords
   flutter_svg: ^2.3.0
+  web: ^1.1.1
 
 
 dev_dependencies:
