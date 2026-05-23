@@ -538,15 +538,15 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     if (_heightAnimation.status == AnimationStatus.dismissed) {
                       return SelectionContainer.disabled(child: child!);
                     }
-                    return child!;
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: _ProjectCardMarkdownBody(
+                        document: widget.contentDocument,
+                        selectable: _heightAnimation.value >= 1.0,
+                      ),
+                    );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: _ProjectCardMarkdownBody(
-                      document: widget.contentDocument,
-                      selectable: _heightAnimation.value >= 1.0,
-                    ),
-                  ),
+                  child: const SizedBox.shrink(),
                 ),
               ),
             ],
