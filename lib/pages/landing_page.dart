@@ -343,35 +343,29 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 }
 
                 final List<_ProjectCardData> projectCards = snapshot.data!;
-                final String selectionOrderKey = _expandedStates
-                    .map((bool isExpanded) => isExpanded ? '1' : '0')
-                    .join();
-                return KeyedSubtree(
-                  key: ValueKey<String>('project-cards-$selectionOrderKey'),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      for (
-                        int index = 0;
-                        index < projectCards.length;
-                        index++
-                      ) ...<Widget>[
-                        if (index > 0)
-                          const _SelectableCopyBreak(height: 12),
-                        _ExpandableProjectCard(
-                          title: projectCards[index].title,
-                          contentDocument: projectCards[index].contentDocument,
-                          isExpanded: _expandedStates[index],
-                          onTap: () {
-                            setState(() {
-                              _expandedStates[index] = !_expandedStates[index];
-                            });
-                          },
-                          gridLineStyle: gridLineStyle,
-                        ),
-                      ],
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    for (
+                      int index = 0;
+                      index < projectCards.length;
+                      index++
+                    ) ...<Widget>[
+                      if (index > 0)
+                        const _SelectableCopyBreak(height: 12),
+                      _ExpandableProjectCard(
+                        title: projectCards[index].title,
+                        contentDocument: projectCards[index].contentDocument,
+                        isExpanded: _expandedStates[index],
+                        onTap: () {
+                          setState(() {
+                            _expandedStates[index] = !_expandedStates[index];
+                          });
+                        },
+                        gridLineStyle: gridLineStyle,
+                      ),
                     ],
-                  ),
+                  ],
                 );
               },
         ),
@@ -550,6 +544,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        const _SelectableCopyBreak(height: 12),
                         _ProjectCardMarkdownBody(
                           document: widget.contentDocument,
                           selectable: _heightAnimation.value >= 1.0,
