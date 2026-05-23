@@ -227,7 +227,7 @@ class _LandingPageState extends State<LandingPage> {
                               icon: const Icon(Icons.calendar_month_outlined),
                               label: "Video meeting",
                               onTap: () =>
-                                  _launchUrl("https://cal.com/teresew/intro"),
+                                  _launchUrl("https://cal.com/teresew/discuss"),
                             ),
                             _SocialItem(
                               icon: const Icon(
