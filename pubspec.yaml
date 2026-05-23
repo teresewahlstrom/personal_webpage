@@ -31,7 +31,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/logo.png
+    - assets/t1_logo/t1_logo_3.svg
     - lib/subjects/index.json
     - lib/subjects/Terese/keywords.md
     - lib/subjects/Terese/project_cards.md

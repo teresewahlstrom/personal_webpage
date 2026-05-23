@@ -1,28 +1,22 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 
-const String kHeaderLogoAssetPath = 'assets/images/logo.png';
-const AssetImage kHeaderLogoImage = AssetImage(kHeaderLogoAssetPath);
+const String kHeaderLogoAssetPath = 'assets/t1_logo/t1_logo_3.svg';
 const Duration _headerLogoPrecacheTimeout = Duration(seconds: 3);
 
 Future<void> precacheHeaderLogoAsset() {
   final Completer<void> completer = Completer<void>();
-  final ImageStream stream = kHeaderLogoImage.resolve(ImageConfiguration.empty);
-  late final ImageStreamListener listener;
-
-  void complete() {
-    stream.removeListener(listener);
+  Future<void> complete() async {
     if (!completer.isCompleted) {
       completer.complete();
     }
   }
 
-  listener = ImageStreamListener(
-    (ImageInfo image, bool synchronousCall) {
-      complete();
-    },
-    onError: (Object error, StackTrace? stackTrace) {
+  rootBundle.loadString(kHeaderLogoAssetPath).then((_) {
+    complete();
+  }).catchError((Object error, StackTrace stackTrace) {
       FlutterError.reportError(
         FlutterErrorDetails(
           exception: error,
@@ -32,14 +26,10 @@ Future<void> precacheHeaderLogoAsset() {
         ),
       );
       complete();
-    },
-  );
+    });
 
-  stream.addListener(listener);
   return completer.future.timeout(
     _headerLogoPrecacheTimeout,
-    onTimeout: () {
-      stream.removeListener(listener);
-    },
+    onTimeout: () {},
   );
 }

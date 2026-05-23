@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../config/app_ui_config.dart';
 import 'header_logo_asset.dart';
@@ -13,25 +14,22 @@ class PageHeader extends StatefulWidget {
 }
 
 class _PageHeaderState extends State<PageHeader> {
-  late final AssetImage _logoImage;
-
-  @override
-  void initState() {
-    super.initState();
-    _logoImage = widget.logoAssetPath == kHeaderLogoAssetPath
-        ? kHeaderLogoImage
-        : AssetImage(widget.logoAssetPath);
-  }
+  bool get _isSvgLogo => widget.logoAssetPath.toLowerCase().endsWith('.svg');
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(_logoImage, context);
+    if (!_isSvgLogo) {
+      precacheImage(AssetImage(widget.logoAssetPath), context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
+    final Color logoColor = PagePalette.headingFor(
+      brightness,
+    ).withValues(alpha: 0.5);
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
     final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
     final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
@@ -60,10 +58,16 @@ class _PageHeaderState extends State<PageHeader> {
                   SizedBox(
                     width: ShellUiConfig.headerLogoWidth,
                     height: ShellUiConfig.headerLogoHeight,
-                    child: Image(
-                      image: _logoImage,
-                      fit: BoxFit.contain,
-                    ),
+                    child: _isSvgLogo
+                        ? SvgPicture.asset(
+                            widget.logoAssetPath,
+                            fit: BoxFit.contain,
+                            colorFilter: ColorFilter.mode(
+                              logoColor,
+                              BlendMode.srcIn,
+                            ),
+                          )
+                        : Image.asset(widget.logoAssetPath, fit: BoxFit.contain),
                   ),
                   const Spacer(),
                 ],
