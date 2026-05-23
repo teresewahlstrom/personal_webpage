@@ -275,6 +275,7 @@ class _HeroStatement extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(_title, style: PageTextStyles.h2(context)),
         const _SelectableCopyBreak(height: 10),
         Text(_content, style: PageTextStyles.body(context)),
