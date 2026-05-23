@@ -18,8 +18,6 @@ The objective is always the same: transform fragile expertise into scalable orga
 
 
 
----
-
 Where the Narrative Flows Next
 With this paragraph as your anchor, the subsequent sections you wrote fit perfectly. It builds a natural, descending hierarchy of scale:
 
