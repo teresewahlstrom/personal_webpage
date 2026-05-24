@@ -1,4 +1,4 @@
-# Capability Architect
+## Capability Architect
 Terese’s approach to capability architecture was forged in high-consequence environments where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments cascaded into costly failures.
 
 Working across radically different frontiers—from mature industrial systems to barely codified workflows—revealed a recurring pattern: when organizational infrastructure fails to keep pace with technical complexity, execution becomes fragile. Context fragments, hidden variables accumulate, and critical knowledge is either trapped within isolated human expertise or buried deep within the complex systems themselves, requiring deliberate investigation to surface.
@@ -98,4 +98,3 @@ Terese applies the same operating model through AI and structured professional t
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
-
