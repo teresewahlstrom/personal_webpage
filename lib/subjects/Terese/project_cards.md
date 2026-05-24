@@ -82,7 +82,7 @@ In short, her strength in cost modelling has been more than calculating numbers.
 
 ---
 
-## Industrial Metal AM ("3D-printing")
+## Industrial Metal AM, "3D-printing"
 **Metal additive manufacturing is frontier systems engineering under incomplete rules and high technical coupling.** It is far from click-and-play. People who succeed in this field operate in a newer, less codified environment where the rulebook is still being written. Terese has worked at the source of that reality across two OEMs, and from the outside looking in.
 
 Terese's additive-manufacturing experience spans the path from technology evaluation to live industrial execution. Across automotive, aerospace, medical, and industrial applications, she has worked with AM in comparison with traditional manufacturing: where it creates real value, where conventional methods remain better, and which technical, economic, and organizational conditions are required for adoption to hold.
