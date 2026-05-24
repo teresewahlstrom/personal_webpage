@@ -43,6 +43,25 @@ Across all of these environments, the pattern remained the same: fragmented unde
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. These are not peripheral values; they are the exact conditions that make durable execution possible in complex systems. Terese does not lead by occupying the center of every decision. She leads by creating the clarity, trust, and architecture that allow complex groups to reason, align, and execute effectively together.
 
 ---
+## Modelling Cost & Decision Frameworks v5
+Terese builds cost and decision frameworks that translate complex engineering realities into shared business logic. Rather than producing static financial spreadsheets, she **architects decision infrastructure—predictive models that allow customers, sales teams, and engineering stakeholders to clearly see the financial impact of their technical choices.**
+
+Her models treat financial performance as a direct output of physical system behavior, focusing on four areas:
+ * **System Translation:** Converting complex technical variables—like material consumption, machine cycles, and software steps—into clear, predictable cost structures.
+ * **Trade-Off Legibility:** Showing exactly how an upstream technical choice affects downstream capacity, operational risk, and long-term costs.
+ * **Risk Mitigation:** Building upfront evaluation tools that remove financial ambiguity around early-stage testing and hardware configuration.
+ * **Operational Integration:** Embedding economic models directly into active engineering and sales workflows so they serve as live decision support.
+
+**Application: Material Lifecycle Economics**
+A primary example of this is her work modeling the hidden costs of specialized engineering materials across different regulatory environments.
+
+In high-consequence industries, strict regulations often dictate that raw materials can only be used or recycled a set number of times before they must be scrapped. In unregulated sectors, that same material might be endlessly recycled or sold to secondary markets. Furthermore, how tightly an operator packs a system volume directly changes how much raw material is left over, degraded, or put at risk.
+
+Working alongside frontline operators, Terese mapped these volatile physical realities—including safety margins, hardware capabilities, and consumable lifecycles—into a transparent economic model.
+
+**The Outcome:** By making these invisible technical dependencies visible *before* a purchase or deployment, she reset the commercial narrative. Instead of hiding the complexity to close a deal, she gave clients a realistic framework for decision-making. This fundamentally de-risked the sales pipeline and turned anxious prospects into successful, long-term customers.
+
+---
 
 ## Modelling Cost & Decision Frameworks
 
