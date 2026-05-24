@@ -43,7 +43,8 @@ Across all of these environments, the pattern remained the same: fragmented unde
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. These are not peripheral values; they are the exact conditions that make durable execution possible in complex systems. Terese does not lead by occupying the center of every decision. She leads by creating the clarity, trust, and architecture that allow complex groups to reason, align, and execute effectively together.
 
 ---
-## Modelling Cost & Decision Frameworks v5
+
+## Cost & Decision Modelling v5
 Terese builds cost and decision frameworks that translate complex engineering realities into shared business logic. Rather than producing static financial spreadsheets, she **architects decision infrastructure—predictive models that allow customers, sales teams, and engineering stakeholders to clearly see the financial impact of their technical choices.**
 
 Her models treat financial performance as a direct output of physical system behavior, focusing on four areas:
@@ -63,7 +64,7 @@ Working alongside frontline operators, Terese mapped these volatile physical rea
 
 ---
 
-## Modelling Cost & Decision Frameworks
+## Cost & Decision Modelling
 
 Terese has repeatedly built cost and decision frameworks that translate complex engineering realities into shared economic logic. Rather than producing one-off calculations, her strongest work has been **creating decision infrastructure that helps prospects, customers, sales teams, and internal stakeholders reason through the financial consequences of technical choices themselves**.
 
@@ -102,7 +103,7 @@ A defining aspect of this experience is not only technical depth, but systems in
 
 ---
 
-## Developing Physical & Digital Products
+## Physical & Digital Products R&D
 Terese's product-development foundation is mechanically grounded and customer-facing. Her M.Sc. in Mechanical Engineering with Industrial Design combined engineering depth with industrial design, human factors, production methods, CAD/digital prototyping, and product-development processes: the layers needed to turn technical ideas into products people can understand, use, manufacture, and buy.
 
 Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
