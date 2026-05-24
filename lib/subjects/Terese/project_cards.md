@@ -82,7 +82,7 @@ In short, her strength in cost modelling has been more than calculating numbers.
 
 ---
 
-## Deep into Industrial Metal AM
+## Industrial Metal AM ("3D-printing")
 **Metal additive manufacturing is frontier systems engineering under incomplete rules and high technical coupling.** It is far from click-and-play. People who succeed in this field operate in a newer, less codified environment where the rulebook is still being written. Terese has worked at the source of that reality across two OEMs, and from the outside looking in.
 
 Terese's additive-manufacturing experience spans the path from technology evaluation to live industrial execution. Across automotive, aerospace, medical, and industrial applications, she has worked with AM in comparison with traditional manufacturing: where it creates real value, where conventional methods remain better, and which technical, economic, and organizational conditions are required for adoption to hold.
@@ -112,7 +112,7 @@ Across roles, this followed a practical product arc: assessing technical fit, bu
 
 ---
 
-## Deep into AI & Workflows
+## AI enthusiast
 Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
 
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
