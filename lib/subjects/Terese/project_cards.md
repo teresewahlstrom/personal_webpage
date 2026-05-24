@@ -5,10 +5,53 @@ Over time, this gradually expanded beyond manufacturing workflows themselves int
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
 
+---
+
+## Capability Architect v2
+Terese’s approach to capability architecture was forged in high-consequence environments where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments cascaded into costly failures.
+
+Working across radically different frontiers—from mature industrial systems to barely codified workflows—revealed a recurring pattern: when organizational infrastructure fails to keep pace with technical complexity, execution becomes fragile, trapped within isolated human expertise rather than reproducible capability.
+
+This is the engineering problem Terese repeatedly solves: designing and embedding structural capability into complex technical environments so that knowledge becomes transferable, stable, and aligned.
+
+Her work follows a consistent, diagnostic pattern:
+ * **Diagnostic:** Locating the precise points where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
+ * **Abstraction:** Isolating the deeper structural weakness, systemic friction, or hidden-variable interactions driving localized failure.
+ * **Architecture:** Translating that insight into durable infrastructure—whether through cost and configuration logic, diagnostic frameworks, training systems, operational feedback structures, or knowledge architectures.
+
+Across advanced manufacturing, technical enablement, and systems design, the objective remains the same: converting fragmented operational reality into capability that is stable, intelligible, and transferable.
+One expression of this was her initiative to build a curated defect-reference system at Markforged, transforming scattered failure signals into shared diagnostic infrastructure that operators and engineers could reason around collectively. Over time, contributors naturally began anchoring their own data points to this framework, turning a localized observation tool into a decentralized engine for continuous learning.
+
+Another was her work defining configuration and decision logic at GE Additive, making complex technical dependencies visible across engineering, supply chain, commercial, and customer stakeholders to enable clearer system planning, more accurate cost modeling, and predictable adoption decisions.
+Whether shaping industrial workflows or designing local-first knowledge architectures, the core conviction remains the same: capability must be designed into the underlying architecture if it is to scale beyond the individuals who first uncover it.
+Terese does not merely improve execution. She architects the logic that makes reliable execution possible.
 
 ---
 
-## Capability Architect
+## Cross-Functional Leader v2
+The most difficult problems rarely sit neatly inside a single function. They emerge in the gaps: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where critical decisions must be made from incomplete and unevenly distributed understanding.
+
+This is where Terese’s leadership becomes most visible.
+
+True cross-functional alignment cannot be forced through hierarchy, nor achieved through coordination alone. It depends on trust strong enough to bridge functions that often operate with different incentives, assumptions, and languages.
+
+Terese builds that trust through a consistent combination of technical credibility, investigative depth, translation precision, fair representation, and calm under ambiguity.
+Operators trust that operational reality will be surfaced and respected. Engineers trust that complexity will not be flattened into oversimplified conclusions. Commercial stakeholders and customers trust that uncertainty will be translated into clear, usable decision logic without distortion.
+That trust changes the dynamics of fragmented systems.
+
+Rather than managing relationships at the surface, Terese works to reconstruct the deeper system logic beneath fragmented perspectives. She surfaces hidden constraints, clarifies competing assumptions, and creates enough shared context for different functions to move coherently around the same reality.
+
+This has taken different forms across her work. At Markforged, it meant aligning operators, material R&D, machine R&D, and build preparation into coherent customer-facing execution while helping technical contributors translate their expertise across boundaries. At GE Additive, it meant coordinating operators, suppliers, logistics partners, external finishing providers, and customer commitments under milestone-critical pressure. At Volvo Cars and GE Additive, it meant translating technical uncertainty into structured reasoning that enabled clearer adoption and investment decisions.
+
+Across all of these environments, the pattern remained the same: fragmented understanding became coordinated action because the underlying system had first been made intelligible.
+
+Her leadership is grounded in truthful representation, fair attribution, and principled challenge. These are not peripheral values. They are the conditions that make durable alignment possible in complex systems.
+
+Terese does not lead by occupying the center of every decision. She leads by creating the clarity, trust, and shared logic that allow complex groups to reason, align, and execute more effectively together.
+
+---
+
+## Capability Architect v1
 
 Terese’s belief in capability architecture was forged in environments where clarity had to be designed into the system for capability to scale. These were settings where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments could cascade into costly consequences.
 
@@ -30,7 +73,7 @@ Another expression of this was Terese’s work defining configuration logic that
 
 ---
 
-## Cross-Functional Leader
+## Cross-Functional Leader v1
 Terese’s work has consistently operated between functions rather than inside a single silo. Across automotive departments, industrial metal additive manufacturing, customer enablement, and software-supported workflow systems, she repeatedly worked in the gaps between engineering, operations, support, sales, product management, suppliers, and customers: environments where no single group fully owned the whole problem and where alignment itself became part of execution.
 
 Her leadership style centers on finding the real constraint, building shared understanding across functions, translating ambiguity into operating logic, and helping teams execute with greater autonomy and confidence. It operates through systems influence rather than org-chart authority: **creating the structures, conversations, tools, and decision logic that allow people with different responsibilities to move around the same technical reality**. She creates translation layers between complex technical systems (materials, machine, software pipelines, and data) and real-world organizational execution.
@@ -48,7 +91,6 @@ She does not treat organizational problems as purely "people problems" or purely
 Under pressure, her leadership becomes practical orchestration. At GE Additive, that meant coordinating operators, material R&D, suppliers, logistics, external finishing partners, and customer commitments under deadline pressure, including milestone-critical benchmark and launch-demo situations. At Markforged, it meant coordinating operators, material R&D, machine R&D, build preparation, support, and customer-facing training around live binder-jetting production.
 
 > **The Bottom Line:** Terese builds execution capacity where technical complexity, product strategy, and distributed knowledge intersect. Her work focuses on turning cross-domain ambiguity into coherent logic, scalable organizational infrastructure, and more reliable cross-team decision-making.
-
 
 ---
 
