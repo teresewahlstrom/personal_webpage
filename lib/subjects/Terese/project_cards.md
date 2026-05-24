@@ -1,31 +1,58 @@
-## Deep into AI & Workflows
-Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
-
-Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
-
-That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
-
----
-
 ## Capability Architect v2
 Terese’s approach to capability architecture was forged in high-consequence environments where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments cascaded into costly failures.
 
 Working across radically different frontiers—from mature industrial systems to barely codified workflows—revealed a recurring pattern: when organizational infrastructure fails to keep pace with technical complexity, execution becomes fragile, trapped within isolated human expertise rather than reproducible capability.
 
-This is the engineering problem Terese repeatedly solves: designing and embedding structural capability into complex technical environments so that knowledge becomes transferable, stable, and aligned.
+This is the engineering problem Terese repeatedly has been solving: designing and embedding structural capability into complex technical environments so that knowledge becomes transferable, stable, and aligned.
 
 Her work follows a consistent, diagnostic pattern:
  * **Diagnostic:** Locating the precise points where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
  * **Abstraction:** Isolating the deeper structural weakness, systemic friction, or hidden-variable interactions driving localized failure.
- * **Architecture:** Translating that insight into durable infrastructure—whether through cost and configuration logic, diagnostic frameworks, training systems, operational feedback structures, or knowledge architectures.
+ * **Architecture:** Translating that insight into durable infrastructure—whether through cost and configuration logic, diagnostic frameworks, training programs, operational feedback structures, or knowledge systems.
 
 Across advanced manufacturing, technical enablement, and systems design, the objective remains the same: converting fragmented operational reality into capability that is stable, intelligible, and transferable.
-One expression of this was her initiative to build a curated defect-reference system at Markforged, transforming scattered failure signals into shared diagnostic infrastructure that operators and engineers could reason around collectively. Over time, contributors naturally began anchoring their own data points to this framework, turning a localized observation tool into a decentralized engine for continuous learning.
 
-Another was her work defining configuration and decision logic at GE Additive, making complex technical dependencies visible across engineering, supply chain, commercial, and customer stakeholders to enable clearer system planning, more accurate cost modeling, and predictable adoption decisions.
+* One concrete example of this was Terese’s initiative to create a curated defect table, organized by failure mechanism and connected to engineering observations and troubleshooting context. It gave operators and engineers a shared physical reference for collective reasoning, transforming scattered operational observations into distributed diagnostic capability. Over time, others began contributing their own failed parts to the collection, turning it into a shared focal point for diagnosis and continuous learning.
+
+* Another example was her work defining configuration and decision logic at GE Additive, making complex technical dependencies visible across engineering, supply chain, commercial, and customer stakeholders to enable clearer system planning, more accurate cost modeling, and predictable adoption decisions.
+
 Whether shaping industrial workflows or designing local-first knowledge architectures, the core conviction remains the same: capability must be designed into the underlying architecture if it is to scale beyond the individuals who first uncover it.
+
 Terese does not merely improve execution. She architects the logic that makes reliable execution possible.
 
+---
+
+## Capability Architect v1
+
+Terese’s belief in capability architecture was forged in environments where clarity had to be designed into the system for capability to scale. These were settings where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments could cascade into costly consequences.
+
+Working at that frontier revealed a recurring pattern: when an organization lacks a structured framework for navigating complexity, execution becomes fragile. Critical knowledge is often either trapped in individual expertise or hidden within complex systems themselves, requiring deliberate investigation to surface. Without those structures, context fragments, hidden variables accumulate, and learning becomes difficult to retain, synthesize, and scale.
+
+Those patterns became clearer through exposure to radically different capability environments: from mature systems to barely codified ones, from democratized knowledge cultures to fragmented or tightly guarded expertise, and across settings spanning R&D, operations, commercial teams, global enterprises, and smaller organizations. Across those contrasts, the same principle emerged: capability scales only when critical knowledge becomes transferable, aligned, and structurally accessible.
+
+From that reality emerged a defining conviction: capability must be architected. Complex organizations inevitably develop invisible fractures between functions, perspectives, and sources of truth. Engineering speaks one language. Operations another. Leadership sees metrics while execution reveals what the numbers cannot. Valuable knowledge becomes fragmented across teams, tools, and individuals.
+
+For Terese, capability architecture is the translation of fragile, experience-driven insight into the structures that make complex technical reality usable beyond the individuals who first uncovered it.
+
+The objective is always the same: to make complex technical reality stable enough to scale, clear enough to align around, and structured enough to execute.
+
+Through this work, Terese learned to surface hidden signals within complex systems and translate them into frameworks that allowed people with entirely different responsibilities to operate around the same technical reality: cost models, configuration models, diagnostic systems, training architectures, operational feedback loops, and decision-support structures.
+
+One concrete expression of this was Terese’s initiative to create a curated defect table, organized by failure mechanism and connected to engineering observations and troubleshooting context. It gave operators and engineers a shared physical reference for collective reasoning, transforming scattered operational observations into distributed diagnostic capability. Over time, others began contributing their own failed parts to the collection, turning it into a shared focal point for diagnosis and continuous learning.
+
+Another expression of this was Terese’s work defining configuration logic that translated complex technical dependencies into shared decision infrastructure. By making equipment, process, and workflow consequences visible across sales, prospects, customers, engineering, and supply-chain stakeholders, she created a common reasoning framework that reduced ambiguity and enabled more reliable cost modelling, system planning, and adoption decisions.  
+
+
+
+
+
+
+
+
+
+
+
+copy from here
 ---
 
 ## Cross-Functional Leader v2
@@ -48,28 +75,6 @@ Across all of these environments, the pattern remained the same: fragmented unde
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. These are not peripheral values. They are the conditions that make durable alignment possible in complex systems.
 
 Terese does not lead by occupying the center of every decision. She leads by creating the clarity, trust, and shared logic that allow complex groups to reason, align, and execute more effectively together.
-
----
-
-## Capability Architect v1
-
-Terese’s belief in capability architecture was forged in environments where clarity had to be designed into the system for capability to scale. These were settings where technical dependencies ran deep, operational conditions evolved quickly, and small misalignments could cascade into costly consequences.
-
-Working at that frontier revealed a recurring pattern: when an organization lacks a structured framework for navigating complexity, execution becomes fragile. Critical knowledge is often either trapped in individual expertise or hidden within complex systems themselves, requiring deliberate investigation to surface. Without those structures, context fragments, hidden variables accumulate, and learning becomes difficult to retain, synthesize, and scale.
-
-Those patterns became clearer through exposure to radically different capability environments: from mature systems to barely codified ones, from democratized knowledge cultures to fragmented or tightly guarded expertise, and across settings spanning R&D, operations, commercial teams, global enterprises, and smaller organizations. Across those contrasts, the same principle emerged: capability scales only when critical knowledge becomes transferable, aligned, and structurally accessible.
-
-From that reality emerged a defining conviction: capability must be architected. Complex organizations inevitably develop invisible fractures between functions, perspectives, and sources of truth. Engineering speaks one language. Operations another. Leadership sees metrics while execution reveals what the numbers cannot. Valuable knowledge becomes fragmented across teams, tools, and individuals.
-
-For Terese, capability architecture is the translation of fragile, experience-driven insight into the structures that make complex technical reality usable beyond the individuals who first uncovered it.
-
-The objective is always the same: to make complex technical reality stable enough to scale, clear enough to align around, and structured enough to execute.
-
-Through this work, Terese learned to surface hidden signals within complex systems and translate them into frameworks that allowed people with entirely different responsibilities to operate around the same technical reality: cost models, configuration models, diagnostic systems, training architectures, operational feedback loops, and decision-support structures.
-
-One concrete expression of this was Terese’s initiative to create a curated defect table, organized by failure mechanism and connected to engineering observations and troubleshooting context. It gave operators and engineers a shared physical reference for collective reasoning, transforming scattered operational observations into distributed diagnostic capability. Over time, others began contributing their own failed parts to the collection, turning it into a shared focal point for diagnosis and continuous learning.
-
-Another expression of this was Terese’s work defining configuration logic that translated complex technical dependencies into shared decision infrastructure. By making equipment, process, and workflow consequences visible across sales, prospects, customers, engineering, and supply-chain stakeholders, she created a common reasoning framework that reduced ambiguity and enabled more reliable cost modelling, system planning, and adoption decisions.
 
 ---
 
@@ -139,4 +144,13 @@ Terese's product-development foundation is mechanically grounded and customer-fa
 Her product-development pattern connects physical engineering reality with the digital and informational layers that support real customer adoption: requirements, usability, manufacturing constraints, technical communication, serviceability, training, and decision support. The product is not only the physical object or machine; it is the full customer-facing system around it.
 
 Across roles, this followed a practical product arc: assessing technical fit, building proof through prototypes or benchmarks, translating results into usable customer-facing offers, and supporting adoption through clear guidance, training, troubleshooting, and economic reasoning.
+
+---
+
+## Deep into AI & Workflows
+Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
+
+Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
+
+That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
 
