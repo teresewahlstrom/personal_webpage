@@ -20,13 +20,13 @@ From that reality emerged a defining conviction: capability must be architected.
 
 For Terese, capability architecture is the translation of fragile, experience-driven insight into the structures that make complex technical reality usable beyond the individuals who first uncovered it.
 
-The objective is always the same: to make complex technical reality stable enough to scale, clear enough to trust, and structured enough to execute.
+The objective is always the same: to make complex technical reality stable enough to scale, clear enough to align around, and structured enough to execute.
 
 Through this work, Terese learned to surface hidden signals within complex systems and translate them into frameworks that allowed people with entirely different responsibilities to operate around the same technical reality: cost models, configuration models, diagnostic systems, training architectures, operational feedback loops, and decision-support structures.
 
 One concrete expression of this was Terese’s initiative to create a curated defect table, organized by failure mechanism and connected to engineering observations and troubleshooting context. It gave operators and engineers a shared physical reference for collective reasoning, transforming scattered operational observations into distributed diagnostic capability. Over time, others began contributing their own failed parts to the collection, turning it into a shared focal point for diagnosis and continuous learning.
 
-Another expression of this was Terese’s work defining configuration logic that translated complex technical dependencies into shared decision infrastructure. By making equipment, process, and workflow consequences visible across sales, prospects, customers, engineering, and supply-chain stakeholders, she created a common reasoning framework that reduced ambiguity and made cost modelling, system planning, and adoption decisions more coherent.
+Another expression of this was Terese’s work defining configuration logic that translated complex technical dependencies into shared decision infrastructure. By making equipment, process, and workflow consequences visible across sales, prospects, customers, engineering, and supply-chain stakeholders, she created a common reasoning framework that reduced ambiguity and enabled more reliable cost modelling, system planning, and adoption decisions.
 
 ---
 
