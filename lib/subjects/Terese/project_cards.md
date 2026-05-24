@@ -1,85 +1,21 @@
 ## Deep into AI & Workflows
 Terese applies the same operating model through AI and structured professional twins. The goal is not generic automation, but workflow decision support: represent context, retrieve relevant knowledge, and surface it when decisions are made. This improves execution while keeping human judgment central.
 
----
-
-## Capability Architect
-Terese’s belief in capability architecture was forged in environments where complexity leaves little room for ambiguity.
-
-These were systems defined by tight technical interdependence, evolving operational logic, and high consequences for small misunderstandings. In such settings, gaps in shared understanding could ripple outward into operational instability, wasted resources, costly delays, and avoidable execution risk.
-
-Working at that frontier revealed a recurring pattern: when organizational capability depends too heavily on individual expertise, complexity becomes fragile. Process knowledge fragments. Variability compounds. Learning becomes difficult to retain and harder to scale.
-
-That experience shaped a lasting conviction: capability must be architected.
-For Terese, capability architecture is the deliberate act of translating fragile, experience-driven insight into the systems, feedback structures, and decision frameworks that allow complex technical reality to become operationally stable, transferable, and repeatable.
-
-
-
-
-
-
-
-Every complex organization develops invisible gaps.
-
-Engineering speaks one language. Operations another. Leadership sees metrics. Operators see reality. Valuable knowledge becomes fragmented across departments, tools, and individuals until critical decisions depend on interpretation rather than shared understanding.
-
-A Capability Architect builds the translation layer.
-
-Terese developed this capability in industrial environments where ambiguity was unavoidable and process behavior could not simply be looked up in a manual. She learned to systematically observe chaotic systems, isolate meaningful signals from noise, and construct frameworks that allowed people with entirely different responsibilities to operate around the same technical reality.
-Cost models. Diagnostic systems. Training architectures. Operational feedback loops. Decision-support structures.
-
-The objective is always the same: transform fragile expertise into scalable organizational capability.
-
-
-
-
-Where the Narrative Flows Next
-With this paragraph as your anchor, the subsequent sections you wrote fit perfectly. It builds a natural, descending hierarchy of scale:
-
-                  [ 1. The Philosophy ]
-             Capability is Infrastructure
-                           │
-             ┌─────────────┴─────────────┐
-             ▼                           ▼
-    [ 2. The Physical Domain ]   [ 3. The Digital Domain ]
-      Industrial Metal AM          AI & Workflow Intelligence
-    (Volvo / GE / Markforged)     (Structured Context / Twins)
-
-The Physical Proving Ground: You immediately follow this intro with her work at GE and Markforged—showing how she took this "hidden architecture" concept and applied it to physical, messy things like binder-jetting failure taxonomies and cross-functional engineering loops.
-
-The Economic Layer: Then, you introduce her cost and decision frameworks—proving that this "infrastructure" also dictates the economic viability of a technical choice.
-
-The Digital Proving Ground: Finally, you close with AI and structured professional twins—framing local retrieval systems and LLM-driven context layers not as a pivot to a new field, but as the ultimate digital scaling mechanism for that very same infrastructure.
-
-
-
-
-
-
-
-In her work, Terese repeatedly encountered environments where organizational capability was structurally hindered: departments operated in silos, critical reasoning stayed trapped within individuals, discussions became fragmented across functions, workflows broke down under real operational conditions, and people who wanted to contribute lacked the visibility, structure, or support needed to grow into the role.
-
-Across these environments, she has experienced vastly different approaches to organizational learning and capability-building firsthand:
-
-* Mature vs non-existent
-* Distilled vs fragmented
-* Democratized vs weaponized
-* R&D vs Operation vs Commercial
-* Global enterprises vs small teams
-
-Those contrasts became a major driver behind her recurring focus on capability architecture: designing systems that make complex technical capability easier to transfer, align around, operate, and scale.
-
-**Much of this work happened in environments where no single person fully understood the system end-to-end.** Operators, engineers, support teams, sales teams, and customers each held different but valid pieces of the truth. Failures rarely belonged cleanly to one department, and the most difficult problems often emerged in the gaps between process stages, teams, or assumptions. Terese repeatedly worked by moving across those boundaries: tracing weak signals back through technical and organizational layers, connecting fragmented context, and turning recurring patterns into reusable system logic.
-
-At Markforged, these problems had direct operational consequences: failed builds, unstable processes, recurring support escalations, difficult root-cause analysis, production drift, qualification uncertainty, and expensive equipment standing idle while teams searched for answers. Small misunderstandings could propagate into wasted material, delayed deliveries, repeated troubleshooting, or incorrect operational decisions across departments.
-
-> Instead of discarding failed binder-jetted parts at Markforged, Terese took the initiative to collect them, organize them by likely root cause, and pair them with engineering logs, observations, and troubleshooting notes. Over time, operators and engineers started bringing their own failed parts to the collection. The table evolved into a natural gathering point for discussion: people compared defects, shared process observations, debated root causes, and connected fragmented experiences into a more shared understanding of the process.
-
-The same pattern appeared repeatedly in her work: transforming tacit operational experience into structures that other people could use. Depending on the context, that meant diagnostic references, process maps, training systems, cost models, workflow templates, structured logging, CAD and Excel automation, troubleshooting frameworks, or decision-support tooling.
-
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
+
+
+---
+
+## Capability Architect
+
+**Much of this work happened in environments where no single person fully understood the system end-to-end.** Operators, engineers, support teams, sales teams, and customers each held different but valid pieces of the truth. Failures rarely belonged cleanly to one department, and the most difficult problems often emerged in the gaps between process stages, teams, or assumptions. Terese repeatedly worked by moving across those boundaries: tracing weak signals back through technical and organizational layers, connecting fragmented context, and turning recurring patterns into reusable system logic.
+
+
+The same pattern appeared repeatedly in her work: transforming tacit operational experience into structures that other people could use. Depending on the context, that meant diagnostic references, process maps, training systems, cost models, workflow templates, structured logging, CAD and Excel automation, troubleshooting frameworks, or decision-support tooling.
+
+
 
 ---
 
