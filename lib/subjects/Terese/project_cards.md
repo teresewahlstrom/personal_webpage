@@ -1,25 +1,40 @@
+
 ## Capability Architect
+
 Terese’s approach to capability architecture was shaped by working inside very different technical and organizational environments. Across these settings, she experienced firsthand how differently knowledge can be structured, transferred, and operationalized—and how strongly those differences shape an organization’s ability to execute under complexity.
 
 These experiences reinforced a recurring lesson: when organizational infrastructure does not adequately support technical complexity, execution becomes fragile. Critical knowledge fragments across people, tools, and functions, leaving capability dependent on isolated expertise rather than durable systems.
 
-Her work focuses on translating this operational reality into structures that make complex technical truth stable, intelligible, and transferable.
+Terese consistently identifies operational friction as an indicator that system design can be improved.
+
+She quickly recognizes moments where people expend unnecessary effort navigating avoidable complexity—whether through repetitive manual steps, unclear handoffs, hidden dependencies, duplicated reasoning, or workflows that quietly force people to compensate for structural inefficiencies.
+
+Where others may accept these patterns as normal operational overhead, she treats them as signals that the underlying system can be redesigned.
+
+Her work focuses on translating these constraints into structures that make complex technical truth stable, intelligible, and transferable.
 
 Her methodology follows a consistent pattern:
-* Diagnostic: Locating where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
-* Abstraction: Isolating the deeper structural weakness, systemic friction, or hidden-variable interactions driving localized failure.
-* Architecture: Translating that insight into practical decision infrastructure—whether through cost and configuration logic, diagnostic frameworks, training systems, operational feedback structures, or knowledge systems.
+
+Observation: Identifying where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
+
+Structuring: Isolating the deeper structural weakness, hidden-variable interaction, or systemic friction driving localized failure.
+
+Encoding: Translating that insight into practical decision infrastructure—whether through automation scripts, cost and configuration logic, CAD tooling, templates, diagnostic frameworks, training systems, operational feedback structures, or knowledge systems.
 
 The objective is always the same: converting fragmented operational reality into capability that can scale beyond the individuals who currently carry it.
 
-Examples:
-* Distributed Diagnostics: Terese initiated a curated physical defect-reference system that transformed scattered production observations into shared diagnostic capability, giving operators and engineers a common framework for collective reasoning and continuous learning.
+This architectural pattern has repeatedly taken the form of workflow and decision-support systems: building scripts, templates, configuration logic, and structured evaluation frameworks that reduced friction, increased quality, accelerated execution, and decreased dependence on repeated manual interpretation.
 
-* Shared Decision Infrastructure: She developed configuration and decision-support logic that made complex technical dependencies visible across engineering, commercial, supply-chain, and customer stakeholders, enabling clearer planning, more predictable cost modelling, and stronger technical decision-making.
+At times, capability architecture begins with recognizing the value of what is already present and preserving it.
+
+In manufacturing environments, defect components, process data, and in-situ documentation captured when problems arise often contain the evidence needed to reconstruct the underlying failure mechanism. Recognizing this, Terese took the initiative to gather these artifacts and organize them into a shared physical diagnostic reference that teams could gather around and reason through together.
+
+What might otherwise have been discarded became a practical reasoning tool that gave operators and engineers a common basis for troubleshooting, faster learning, and deeper technical discussion. As its value became clear, others began contributing additional parts and observations, allowing it to evolve organically into a living shared diagnostic resource.
 
 The underlying principle remains constant: capability must be designed into the system if it is to scale.
 
-Terese does not merely improve execution. She architects the logic that makes reliable execution possible.
+Terese does not merely improve execution. She designs the underlying logic that makes reliable, low-friction execution repeatable.
+
 
 ---
 
