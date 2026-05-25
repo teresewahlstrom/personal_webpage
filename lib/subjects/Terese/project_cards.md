@@ -1,19 +1,22 @@
 
 ## Capability Architect
+Terese strengthens organizational capability by designing practical structures that make complex work easier to understand, coordinate, and execute reliably at scale.
 
-Terese’s approach to capability architecture was shaped inside very different technical and organizational environments where execution depended on how well knowledge moved through the system. Across these settings, she saw the same failure mode repeatedly: when complex technical knowledge stays fragmented across people, teams, and tools, execution becomes fragile and expensive.
+She identifies where system understanding fragments, reconstructs the underlying logic, and translates that insight into reusable frameworks, workflows, and decision structures that reduce expert dependency and improve execution reliability.
 
-She treats operational friction as a design signal. Repeated manual workarounds, unclear handoffs, duplicated reasoning, and hidden dependencies are not normal overhead; they are indicators that system structure can be improved.
+Terese’s approach to capability architecture was shaped inside very different technical and organizational environments where execution depended on how effectively critical context, decisions, and technical reasoning moved through the system. Across these settings, she repeatedly saw the same failure mode: when the structures supporting complex work become fragmented across people, teams, and tools, execution becomes fragile and expensive.
+
+She treats friction as a design signal. Repeated manual workarounds, unclear handoffs, duplicated reasoning, and hidden dependencies are not normal overhead; they are indicators that system structure can be improved.
 
 Her methodology follows a consistent pattern:
 
 * **Observation:** Identifying where technical intent degrades across engineering, operations, and real-world delivery.
 
-* **Structuring:** Isolating the deeper structural weakness, variable interaction, or recurring constraint behind localized failure.
+* **Reconstruction:** Isolating the deeper structural weakness, variable interaction, or recurring constraint behind localized failure.
 
 * **Encoding:** Translating that insight into practical infrastructure—such as scripts, templates, configuration logic, diagnostic frameworks, training systems, and decision-support structures.
 
-This pattern repeatedly produces durable capability: less expert bottleneck risk, clearer troubleshooting, stronger transferability, and faster execution under pressure.
+This pattern repeatedly produces durable capability: reduced expert bottleneck risk, clearer troubleshooting, faster knowledge transfer, and more reliable execution under pressure.
 
 In manufacturing environments, this has taken multiple forms.
 
