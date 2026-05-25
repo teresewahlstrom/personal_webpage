@@ -45,7 +45,7 @@ Her leadership is grounded in truthful representation, fair attribution, and pri
 
 ---
 
-## Industrial Metal AM, “3D-printing”
+## Industrial Metal “3D-printing”
 Industrial metal additive manufacturing has been the technical proving ground through which Terese developed much of her systems approach. More than a decade working across the field has exposed her to the engineering realities that determine whether additive manufacturing becomes reliable production capability or remains technically promising but operationally fragile.
 
 Her work has spanned technology assessment, design for additive manufacturing, manufacturable build strategies, process constraints, failure analysis, and the tradeoffs between technical performance and production economics.
