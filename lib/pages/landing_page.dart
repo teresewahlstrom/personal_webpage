@@ -517,9 +517,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                       Expanded(
                         child: Text(
                           widget.title,
-                          style: PageTextStyles.body(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w700),
+                          style: PageTextStyles.h2(context),
                         ),
                       ),
                       RotationTransition(
