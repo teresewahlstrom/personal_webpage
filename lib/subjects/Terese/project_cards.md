@@ -15,7 +15,7 @@ Examples:
 The underlying principle remains constant: capability must be designed into the system if it is to scale.
 Terese does not merely improve execution. She architects the logic that makes reliable execution possible.
 
-—
+---
 
 ## Cross-Functional Leader
 The most difficult problems rarely sit neatly inside a single function. They emerge in the gaps: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where critical decisions must be made from incomplete and unevenly distributed understanding.
@@ -30,7 +30,7 @@ This has been proven under milestone-critical pressure. At Markforged, it meant 
 Across these environments, the pattern remained consistent: fragmented understanding became coordinated action because the underlying system had first been made intelligible.
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. Terese does not lead by always occupying the center of every decision. She leads by creating the clarity and shared logic that allow complex groups to reason, align, and execute effectively together.
 
-—
+---
 
 ## Industrial Metal AM, “3d-printing”
 Industrial metal additive manufacturing has been the technical proving ground through which Terese developed much of her systems approach. More than a decade working across the field has exposed her to the engineering realities that determine whether additive manufacturing becomes reliable production capability or remains technically promising but operationally fragile.
