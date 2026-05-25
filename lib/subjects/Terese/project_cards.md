@@ -28,11 +28,13 @@ The principle remains consistent: capability must be designed into the system if
 
 ---
 
+
 ## Cross-Functional Leader
+Terese creates alignment across technical, operational, and commercial functions by surfacing hidden system logic and translating fragmented perspectives into shared decision structures. Her leadership enables coordinated execution in environments where complexity, uncertainty, and competing constraints would otherwise create friction and misalignment.
 
 The most difficult problems rarely sit inside a single function. They emerge at the seams: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where decisions must be made with incomplete, unevenly distributed understanding.
 
-Terese’s leadership operates through structured investigation, evidence, and systems rather than hierarchy alone. She builds cross-functional alignment by making underlying system logic explicit, translating assumptions across groups, and creating shared decision structures that increase team autonomy. This approach builds deep trust across different layers of the organization:
+Terese’s leadership operates through structured investigation, evidence, and systems rather than hierarchy alone. She builds alignment by surfacing hidden constraints, clarifying competing assumptions, and creating shared reasoning structures that allow different functions to coordinate around the same underlying reality. This approach builds deep trust across different layers of the organization:
 
 * **Operators and technical contributors** trust that operational reality will be surfaced, respected, and fairly attributed.
 
@@ -40,7 +42,7 @@ Terese’s leadership operates through structured investigation, evidence, and s
 
 * **Commercial stakeholders and customers** trust that technical uncertainty will be translated into clear decision logic without distortion.
 
-Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal—evidence that a constraint, assumption gap, or hidden dependency has not yet been surfaced. Across milestone-critical contexts—including production execution, technical qualification, supplier coordination, and investment-facing decisions—she repeatedly translates fragmented perspectives into coordinated action. She has repeatedly driven this alignment in project-scoped environments where influence depended on technical credibility, clarity of reasoning, and system design rather than formal authority.
+Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal—evidence that a constraint, assumption gap, or hidden dependency has not yet been surfaced. She has repeatedly driven alignment in project-scoped environments where influence depended on technical credibility, clarity of reasoning, and system design rather than formal authority.
 
 ---
 
