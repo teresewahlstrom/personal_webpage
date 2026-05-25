@@ -1,38 +1,51 @@
 ## Capability Architect
 Terese’s approach to capability architecture was shaped by working inside very different technical and organizational environments. Across these settings, she experienced firsthand how differently knowledge can be structured, transferred, and operationalized—and how strongly those differences shape an organization’s ability to execute under complexity.
+
 These experiences reinforced a recurring lesson: when organizational infrastructure does not adequately support technical complexity, execution becomes fragile. Critical knowledge fragments across people, tools, and functions, leaving capability dependent on isolated expertise rather than durable systems.
+
 Her work focuses on translating this operational reality into structures that make complex technical truth stable, intelligible, and transferable.
+
 Her methodology follows a consistent pattern:
 * Diagnostic: Locating where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
 * Abstraction: Isolating the deeper structural weakness, systemic friction, or hidden-variable interactions driving localized failure.
 * Architecture: Translating that insight into practical decision infrastructure—whether through cost and configuration logic, diagnostic frameworks, training systems, operational feedback structures, or knowledge systems.
+
 The objective is always the same: converting fragmented operational reality into capability that can scale beyond the individuals who currently carry it.
+
 Examples:
 * Distributed Diagnostics: Terese initiated a curated physical defect-reference system that transformed scattered production observations into shared diagnostic capability, giving operators and engineers a common framework for collective reasoning and continuous learning.
 
 * Shared Decision Infrastructure: She developed configuration and decision-support logic that made complex technical dependencies visible across engineering, commercial, supply-chain, and customer stakeholders, enabling clearer planning, more predictable cost modelling, and stronger technical decision-making.
 
 The underlying principle remains constant: capability must be designed into the system if it is to scale.
+
 Terese does not merely improve execution. She architects the logic that makes reliable execution possible.
 
 ---
 
 ## Cross-Functional Leader
 The most difficult problems rarely sit neatly inside a single function. They emerge in the gaps: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where critical decisions must be made from incomplete and unevenly distributed understanding.
+
 Terese’s leadership operates through systems rather than hierarchy, creating the structures, translation layers, and shared logic that allow teams to execute with greater autonomy and confidence.
+
 Cross-functional alignment depends on trust strong enough to bridge functions that operate with different incentives, assumptions, and technical languages.
+
 Terese builds that trust through technical credibility, investigative depth, translation precision, fair representation, and calm under ambiguity.
 * Operators and Technical Contributors trust that operational reality will be surfaced, respected, and fairly attributed.
- Engineers and R&D Specialists trust that complexity will not be flattened into oversimplified conclusions.
+* Engineers and R&D Specialists trust that complexity will not be flattened into oversimplified conclusions.
 *  Commercial Stakeholders and Customers trust that technical uncertainty will be translated into clear decision logic without distortion.
+
 Rather than managing relationships at the surface, Terese works to reconstruct the system logic beneath fragmented perspectives. She surfaces hidden constraints, clarifies competing assumptions, and creates enough shared understanding for different functions to move coherently around the same technical reality.
+
 This has been proven under milestone-critical pressure. At Markforged, it meant aligning operators, material R&D, machine R&D, and build preparation around customer-facing execution. At GE Additive, it meant coordinating operators, suppliers, logistics partners, and external finishing providers under demanding benchmark and launch deadlines. Across Volvo Cars and GE Additive, it meant translating technical uncertainty into structured reasoning that supported high-consequence investment decisions.
+
 Across these environments, the pattern remained consistent: fragmented understanding became coordinated action because the underlying system had first been made intelligible.
+
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. Terese does not lead by always occupying the center of every decision. She leads by creating the clarity and shared logic that allow complex groups to reason, align, and execute effectively together.
 
 ---
 
-## Industrial Metal AM, “3d-printing”
+## Industrial Metal AM, “3D-printing”
 Industrial metal additive manufacturing has been the technical proving ground through which Terese developed much of her systems approach. More than a decade working across the field has exposed her to the engineering realities that determine whether additive manufacturing becomes reliable production capability or remains technically promising but operationally fragile.
 
 Her work has spanned technology assessment, design for additive manufacturing, manufacturable build strategies, process constraints, failure analysis, and the tradeoffs between technical performance and production economics.
@@ -68,11 +81,9 @@ Working alongside frontline operators, Terese mapped these volatile physical rea
 ---
 
 ## Cost & Decision Modelling
-
 Terese has repeatedly built cost and decision frameworks that translate complex engineering realities into shared economic logic. Rather than producing one-off calculations, her strongest work has been **creating decision infrastructure that helps prospects, customers, sales teams, and internal stakeholders reason through the financial consequences of technical choices themselves**.
 
 **Core impact areas:**
-
 * **Translating system uncertainty into economic logic:** Converted technical variables into decision-ready cost structures, making it easier to evaluate whether a configuration was viable under real constraints.
 
 * **Making engineering trade-offs legible across functions:** Connected configuration, material, process, and software-enabled workflow choices to cost, capacity, risk, and adoption consequences so stakeholders could compare options on a shared basis.
