@@ -24,6 +24,7 @@ Terese does not merely improve execution. She architects the logic that makes re
 ---
 
 ## Cross-Functional Leader
+
 The most difficult problems rarely sit neatly inside a single function. They emerge in the gaps: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where critical decisions must be made from incomplete and unevenly distributed understanding.
 
 Terese’s leadership operates through systems rather than hierarchy, creating the structures, translation layers, and shared logic that allow teams to execute with greater autonomy and confidence.
@@ -31,15 +32,19 @@ Terese’s leadership operates through systems rather than hierarchy, creating t
 Cross-functional alignment depends on trust strong enough to bridge functions that operate with different incentives, assumptions, and technical languages.
 
 Terese builds that trust through technical credibility, investigative depth, translation precision, fair representation, and calm under ambiguity.
-* Operators and Technical Contributors trust that operational reality will be surfaced, respected, and fairly attributed.
-* Engineers and R&D Specialists trust that complexity will not be flattened into oversimplified conclusions.
-*  Commercial Stakeholders and Customers trust that technical uncertainty will be translated into clear decision logic without distortion.
 
-Rather than managing relationships at the surface, Terese works to reconstruct the system logic beneath fragmented perspectives. She surfaces hidden constraints, clarifies competing assumptions, and creates enough shared understanding for different functions to move coherently around the same technical reality.
+Operators and technical contributors trust that operational reality will be surfaced, respected, and fairly attributed.
 
-This has been proven under milestone-critical pressure. At Markforged, it meant aligning operators, material R&D, machine R&D, and build preparation around customer-facing execution. At GE Additive, it meant coordinating operators, suppliers, logistics partners, and external finishing providers under demanding benchmark and launch deadlines. Across Volvo Cars and GE Additive, it meant translating technical uncertainty into structured reasoning that supported high-consequence investment decisions.
+Engineers and R&D specialists trust that complexity will not be flattened into oversimplified conclusions.
 
-Across these environments, the pattern remained consistent: fragmented understanding became coordinated action because the underlying system had first been made intelligible.
+Commercial stakeholders and customers trust that technical uncertainty will be translated into clear decision logic without distortion.
+
+
+Rather than treating disagreement as a relationship problem to manage, Terese treats it as a signal that part of the system’s underlying reality has not yet been fully surfaced.
+
+Her work focuses on reconstructing the system logic beneath fragmented perspectives: surfacing hidden constraints, clarifying competing assumptions, and creating enough shared understanding for different functions to move coherently around the same technical reality.
+
+Across milestone-critical environments involving production execution, technical qualification, customer-facing delivery, supplier coordination, and high-consequence investment decisions, Terese repeatedly helped transform fragmented understanding into coordinated action by making the underlying system intelligible.
 
 Her leadership is grounded in truthful representation, fair attribution, and principled challenge. Terese does not lead by always occupying the center of every decision. She leads by creating the clarity and shared logic that allow complex groups to reason, align, and execute effectively together.
 
