@@ -37,15 +37,13 @@ Industrial metal additive manufacturing has been the technical proving ground th
 
 Her work has spanned technology assessment, design for additive manufacturing, manufacturable build strategies, process constraints, failure analysis, and the tradeoffs between technical performance and production economics.
 
-She has worked across multiple industrial contexts. At Volvo Cars, she evaluated where additive technologies created real manufacturing value through technology scouting and manufacturing-fit assessment. At GE Additive, she translated customer applications into feasibility assessments, benchmark programs, and investment decision support for industrial electron beam melting. At Markforged, she helped make live binder-jetting systems easier to understand, teach, and operationalize across customers and internal teams.
+She has worked across multiple industrial contexts. At Volvo Cars, she evaluated where additive technologies could create real manufacturing value through technology scouting, proof-of-concept validation, and business-case assessment. At GE Additive, she translated customer applications into feasibility analysis, benchmark execution, ROI modelling, and adoption decision support for industrial electron beam melting. At Markforged, she owned and rebuilt global technical training while driving data-informed process optimization that improved production reliability, customer adoption, and operational transfer across live binder-jetting production.
 
-A defining pattern throughout this work was rapidly developing sufficient technical depth across new process domains to convert expert-dependent knowledge into transferable operational capability. Working alongside operators and specialists, Terese distilled critical process logic into practical guidance while simultaneously teaching customers, developing the operators who would later carry it forward, and embedding that knowledge into reusable structures before handing mature capability back into the organization.
+A defining pattern throughout this work was rapidly developing sufficient technical depth across new process domains to convert expert-dependent knowledge into transferable operational capability. This included personally teaching advanced technical content globally across customers, sales, product teams, and operators while simultaneously structuring the knowledge and developing the internal capability needed for others to carry it forward.
 
-The scope ranged from design for additive manufacturing through build preparation, powder handling, printing, curing, depowdering, debinding, sintering, and troubleshooting.
+The scope ranged from design for additive manufacturing through build preparation, machine configuration, powder handling, printing, curing, depowdering, debinding, sintering, post-treatment, and troubleshooting.
 
 The result is a deep practical understanding of what separates technically impressive additive manufacturing from additive manufacturing that can actually be operated reliably, taught effectively, and trusted in industrial settings.
-
-
 
 ---
 
