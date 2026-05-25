@@ -48,12 +48,11 @@ Cross-functional alignment depends on trust strong enough to bridge functions th
 
 Terese builds that trust through technical credibility, investigative depth, translation precision, fair representation, and calm under ambiguity.
 
-Operators and technical contributors trust that operational reality will be surfaced, respected, and fairly attributed.
+* Operators and technical contributors trust that operational reality will be surfaced, respected, and fairly attributed.
 
-Engineers and R&D specialists trust that complexity will not be flattened into oversimplified conclusions.
+* Engineers and R&D specialists trust that complexity will not be flattened into oversimplified conclusions.
 
-Commercial stakeholders and customers trust that technical uncertainty will be translated into clear decision logic without distortion.
-
+* Commercial stakeholders and customers trust that technical uncertainty will be translated into clear decision logic without distortion.
 
 Rather than treating disagreement as a relationship problem to manage, Terese treats it as a signal that part of the system’s underlying reality has not yet been fully surfaced.
 
