@@ -15,11 +15,11 @@ Her work focuses on translating these constraints into structures that make comp
 
 Her methodology follows a consistent pattern:
 
-Observation: Identifying where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
+* Observation: Identifying where technical intent degrades as it moves across engineering systems, operational workflows, and real-world execution.
 
-Structuring: Isolating the deeper structural weakness, hidden-variable interaction, or systemic friction driving localized failure.
+* Structuring: Isolating the deeper structural weakness, hidden-variable interaction, or systemic friction driving localized failure.
 
-Encoding: Translating that insight into practical decision infrastructure—whether through automation scripts, cost and configuration logic, CAD tooling, templates, diagnostic frameworks, training systems, operational feedback structures, or knowledge systems.
+* Encoding: Translating that insight into practical decision infrastructure—whether through automation scripts, cost and configuration logic, CAD tooling, templates, diagnostic frameworks, training systems, operational feedback structures, or knowledge systems.
 
 The objective is always the same: converting fragmented operational reality into capability that can scale beyond the individuals who currently carry it.
 
