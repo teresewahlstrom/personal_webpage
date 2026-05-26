@@ -28,7 +28,6 @@ The principle remains consistent: capability must be designed into the system if
 
 ---
 
-
 ## Cross-Functional Leader
 Terese creates alignment across technical, operational, and commercial functions by surfacing hidden system logic and translating fragmented perspectives into shared decision structures. Her leadership enables coordinated execution in environments where complexity, uncertainty, and competing constraints would otherwise create friction and misalignment.
 
@@ -46,7 +45,7 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 
 ---
 
-## Industrial Metal “3D-printing”
+## Metal “3D-printing”
 Industrial metal additive manufacturing has been the technical proving ground for much of Terese’s systems approach. Across nearly a decade in the field, she has worked directly with the conditions that decide whether additive manufacturing becomes reliable production capability or remains technically promising but operationally fragile.
 
 Her scope has included technology assessment, design for additive manufacturing, manufacturable build strategies, process constraints, failure analysis, and trade-offs between technical performance and production economics - from build preparation and machine configuration through powder handling, printing, debinding, sintering, post-treatment, and troubleshooting.
@@ -60,13 +59,15 @@ A defining pattern has been building sufficient depth across new process domains
 ---
 
 ## Cost & Decision Modelling
-Terese designs decision infrastructure that turns engineering complexity into commercial clarity. Her value is not one-off spreadsheet analysis; it is repeatable models that improve decisions under real constraints.
+Terese translates engineering complexity into decision-ready economic logic. She builds practical modelling frameworks that make technical trade-offs legible across engineering, operations, and commercial stakeholders.
 
 At GE Additive, she co-developed reusable Excel templates with embedded configuration and estimation logic, plus scenario-based cost and production-economics evaluation. She paired this with benchmark and ROI workflows linking technical feasibility to purchase readiness, compared build-stack options across time, productivity, and scheduling, and reframed powder handling from single-use assumptions to validated multi-cycle reuse based on material, safety-margin, and process constraints. To rationalise, her colleague added a linear regression model of the productivity with some base assumption bounding volume and volume of material - and matched to real build with continiuously added data from those to choose to contribute. data per machine type + process parameters. Terese build scripts for auto-nesting-and-stacking some often occuring shapes - circles
 
+This included reframing powder-handling assumptions through structured reuse modelling grounded in material behavior, safety margins, and process constraints.
+
 At Volvo Cars, she built business-case, ROI, and make-versus-buy framing for internal adoption decisions, connecting technical fit to cost, sourcing, and operational readiness.
 
-At Markforged, she built configuration templates and process models translating customer choices into required equipment, consumables, workflow paths, and support implications, reducing setup ambiguity across technical and non-technical teams.
+At Markforged, she built configuration templates and process models translating customer choices into required equipment, consumables, workflow paths, and support implications, reducing configuration ambiguity and improving implementation consistency across technical and non-technical stakeholders.
 
 Across all three contexts, the pattern is consistent: translate uncertainty into decision-ready cost structures, make trade-offs legible across functions, de-risk high-stakes setup and qualification choices, and embed economic logic into live execution workflows rather than downstream reporting. Her approach treats cost, value, and KPI structures as upstream design constraints. The objective is practical: reduce friction and uncertainty in operations while improving adoption quality, supportability, and execution reliability; the outcome is more coherent, lower-risk investment and implementation decisions.
 
