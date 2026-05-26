@@ -34,7 +34,7 @@ flutter:
     - assets/t1_logo/t1_logo_3.svg
     - lib/subjects/index.json
     - lib/subjects/Terese/keywords.md
-    - lib/subjects/Terese/project_cards.md
+    - lib/subjects/Terese/professional_story.md
 
   fonts:
     - family: Nunito
