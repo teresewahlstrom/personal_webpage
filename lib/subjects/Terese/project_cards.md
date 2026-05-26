@@ -46,15 +46,20 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 ---
 
 ## Metal “3D-printing”
-Industrial metal additive manufacturing has been the technical proving ground for much of Terese’s systems approach. Across nearly a decade in the field, she has worked directly with the conditions that decide whether additive manufacturing becomes reliable production capability or remains technically promising but operationally fragile.
+Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into practical guidance for technology selection, manufacturability assessment, build strategy, troubleshooting, production analysis, technical education, and strategic decision-making—helping teams understand what is technically possible, where additive manufacturing creates meaningful industrial value, and what is required to make it reliable in practice.
 
-Her scope has included technology assessment, design for additive manufacturing, manufacturable build strategies, process constraints, failure analysis, and trade-offs between technical performance and production economics - from build preparation and machine configuration through powder handling, printing, debinding, sintering, post-treatment, and troubleshooting.
+She brings broad cross-technology understanding across the additive-manufacturing landscape, with particular operational depth in metal Binder Jetting and Electron Beam Melting.
 
-She has contributed across distinct industrial contexts with different decision pressures. At Volvo Cars, she evaluated fit versus traditional manufacturing through technology scouting, proof-of-concept validation, and business-case and make-versus-buy framing. At GE Additive (industrial EBM), she translated customer applications into feasibility, benchmark evidence, ROI logic, and adoption decision support under real purchase pressure. At Markforged (live ISO:9001 binder-jetting production), she owned and rebuilt global technical training while driving process optimization, troubleshooting structure, and customer-enablement improvements tied to production reliability.
+Her perspective was shaped through nearly a decade across distinct industrial environments where technical capability depended on successfully translating process complexity into dependable execution.
+At Volvo Cars, she evaluated additive manufacturing through technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real production value.
 
-Across roles, she has also used CAD-to-print demonstration work to make additive-manufacturing boundaries and possibilities tangible: designing and printing geometries that intentionally fail to reveal process limits, geometries that show achievable complexity, and consolidated designs that reduce part count by merging multiple components into one printable unit. At Volvo Cars, this was used in education, internal meetings, and internal technology fairs. At Markforged and Digital Metal contexts, the same approach was used for education, marketing, and prospect-facing technical discussions when needed.
+At GE Additive, she translated customer applications into feasibility analysis, benchmark logic, configuration support, and ROI-based decision frameworks under real commercial purchase pressure.
 
-A defining pattern has been building sufficient depth across new process domains to convert expert-dependent knowledge into transferable capability that others can use. The result is deep practical understanding of what separates technically impressive additive manufacturing from additive manufacturing that can be operated reliably, taught effectively, supported at scale, and trusted in industrial settings.
+At Markforged for the Binder Jetting modality, she owned and rebuilt global technical training structures while strengthening troubleshooting logic, process visibility, and customer-enablement systems directly tied to production reliability within live ISO:9001 binder-jetting manufacturing.
+
+Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into transferable operational capability—through decision-support models, educational systems, diagnostic structures, and process frameworks others could reliably use.
+
+The result is deep practical understanding of what separates technically impressive additive manufacturing from manufacturing capability that can be operated, taught, supported, scaled, and trusted in industrial practice.
 
 ---
 
