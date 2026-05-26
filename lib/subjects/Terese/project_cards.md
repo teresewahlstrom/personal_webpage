@@ -48,18 +48,19 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 ## Metal “3D-printing”
 Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into practical guidance for technology selection, manufacturability assessment, build strategy, troubleshooting, production analysis, technical education, and strategic decision-making—helping teams understand what is technically possible, where additive manufacturing creates meaningful industrial value, and what is required to make it reliable in practice.
 
-She brings broad cross-technology understanding across the additive-manufacturing landscape, with particular operational depth in metal Binder Jetting and Electron Beam Melting.
+She brings broad cross-technology understanding across the additive-manufacturing landscape, with particular depth in metal binder jetting and Electron Beam Melting.
 
-Her perspective was shaped through nearly a decade across distinct industrial environments where technical capability depended on successfully translating process complexity into dependable execution.
+Her perspective was shaped through nearly a decade across distinct industrial environments where reliable outcomes depended on translating process complexity into structured execution.
+
 At Volvo Cars, she evaluated additive manufacturing through technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real production value.
 
-At GE Additive, she translated customer applications into feasibility analysis, benchmark logic, configuration support, and ROI-based decision frameworks under real commercial purchase pressure.
+At GE Additive, she translated customer applications into feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real commercial purchase pressure.
 
-At Markforged for the Binder Jetting modality, she owned and rebuilt global technical training structures while strengthening troubleshooting logic, process visibility, and customer-enablement systems directly tied to production reliability within live ISO:9001 binder-jetting manufacturing.
+At Markforged, she owned and rebuilt global technical training structures while strengthening troubleshooting logic, process visibility, and customer-enablement systems directly tied to production reliability within live ISO:9001 binder-jetting manufacturing.
 
 Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into transferable operational capability—through decision-support models, educational systems, diagnostic structures, and process frameworks others could reliably use.
 
-The result is deep practical understanding of what separates technically impressive additive manufacturing from manufacturing capability that can be operated, taught, supported, scaled, and trusted in industrial practice.
+The result is a practical ability to distinguish between additive manufacturing that is technically impressive and additive manufacturing that can be operated, taught, supported, scaled, and trusted as real industrial capability.
 
 ---
 
@@ -78,7 +79,7 @@ Across all three contexts, the pattern is consistent: translate uncertainty into
 
 ---
 
-## Physical & Digital Product Development
+## Physical & Digital Product R&D
 Terese's product-development foundation combines mechanical-engineering rigor with industrial-design integration. Her M.Sc. in Mechanical Engineering with Industrial Design from Lund University trained her to work across the full product-development spectrum: translating functional requirements into physical geometry, evaluating manufacturability and material behavior, and shaping products through iterative CAD/CAE-driven development with equal attention to technical performance and real-world usability.
 
 This dual foundation matters because strong product development rarely happens inside isolated disciplines. The hardest challenges emerge where mechanical performance, manufacturability, user interaction, and implementation constraints intersect.
