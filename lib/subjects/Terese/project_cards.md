@@ -45,17 +45,29 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 
 In complex commercial-technical delivery environments, this has meant aligning applications engineering, operators, suppliers, and commercial stakeholders around technically credible execution paths—creating shared decision structures that balanced feasibility, delivery constraints, customer expectations, and operational responsibility.
 
-In customer enablement settings, it has meant rebuilding training and support structures so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways under real delivery pressure.
+In customer enablement settings, it has meant rebuilding training and support structures so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways during live technical delivery.
 
 Across these environments, alignment was achieved through evidence quality and system clarity rather than formal authority.
 
 ---
 
+## Decisions Under Technical Complexity
+Terese translates engineering complexity into decision-ready technical, operational, and economic logic. She builds practical modelling frameworks that make trade-offs legible across engineering, operations, and commercial stakeholders.
+
+At GE Additive, she co-developed reusable Excel-based ROI and cost architecture with embedded configuration and estimation logic, supported by benchmark economics workflows that linked technical feasibility to purchase readiness. She helped compare build-stack scenarios across cycle time, productivity, and scheduling constraints; reframed powder handling from single-use assumptions to validated multi-cycle reuse grounded in material behavior, safety margins, and process constraints; and contributed to linear-regression-assisted productivity reasoning by helping connect model assumptions to continuously updated real-build data across machine types and process parameters.
+
+Alongside this modelling work, she built scripting support for recurring geometry workflows, including auto-nesting and stacking logic for common circular part families, reducing manual setup effort and improving consistency in early-stage planning.
+
+At Volvo Cars, she built business-case, ROI, and make-versus-buy framing for internal adoption decisions, connecting technical fit to cost, sourcing, and operational readiness.
+
+At Markforged, she built configuration templates and process models translating customer choices into required equipment, consumables, workflow paths, and support implications, reducing configuration ambiguity and improving implementation consistency across technical and non-technical stakeholders.
+
+Across all three contexts, the pattern is consistent: translate uncertainty into decision-ready structures, make trade-offs legible across functions, de-risk high-stakes setup and qualification choices, and embed economic logic into live execution workflows rather than downstream reporting. Her approach treats cost, value, and KPI structures as upstream design constraints. The objective is practical: reduce uncertainty, improve adoption quality and operational reliability, and enable lower-risk implementation decisions grounded in explicit technical trade-offs.
+
+---
+
 ## Metal “3D-printing”
-
-Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
-
-Her perspective was shaped through nearly a decade across distinct industrial environments spanning **strategic AM evaluation, commercial-technical solution development, and live industrial capability-building.**
+Terese brings more than a decade of industrial experience in metal Additive Manufacturing ("3D-printing"). She helps organizations evaluate, operationalize, and communicate advanced additive-manufacturing capability. She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
 * **In strategic AM evaluation,** earlier work at Volvo Cars focused on technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real production value.
 
@@ -73,20 +85,6 @@ Across these settings, her contribution consistently centered on converting expe
 
 The result is a practical ability to distinguish between additive manufacturing that is merely technically impressive and additive manufacturing that can be operated, taught, supported, scaled, and trusted as real industrial capability.
 
----
-
-## Cost & Decision Modelling
-Terese translates engineering complexity into decision-ready economic logic. She builds practical modelling frameworks that make technical trade-offs legible across engineering, operations, and commercial stakeholders.
-
-At GE Additive, she co-developed reusable Excel templates with embedded configuration and estimation logic, plus scenario-based cost and production-economics evaluation. She paired this with benchmark and ROI workflows linking technical feasibility to purchase readiness, compared build-stack options across time, productivity, and scheduling, and reframed powder handling from single-use assumptions to validated multi-cycle reuse based on material, safety-margin, and process constraints. To rationalise, her colleague added a linear regression model of the productivity with some base assumption bounding volume and volume of material - and matched to real build with continiuously added data from those to choose to contribute. data per machine type + process parameters. Terese build scripts for auto-nesting-and-stacking some often occuring shapes - circles
-
-This included reframing powder-handling assumptions through structured reuse modelling grounded in material behavior, safety margins, and process constraints.
-
-At Volvo Cars, she built business-case, ROI, and make-versus-buy framing for internal adoption decisions, connecting technical fit to cost, sourcing, and operational readiness.
-
-At Markforged, she built configuration templates and process models translating customer choices into required equipment, consumables, workflow paths, and support implications, reducing configuration ambiguity and improving implementation consistency across technical and non-technical stakeholders.
-
-Across all three contexts, the pattern is consistent: translate uncertainty into decision-ready cost structures, make trade-offs legible across functions, de-risk high-stakes setup and qualification choices, and embed economic logic into live execution workflows rather than downstream reporting. Her approach treats cost, value, and KPI structures as upstream design constraints. The objective is practical: reduce friction and uncertainty in operations while improving adoption quality, supportability, and execution reliability; the outcome is more coherent, lower-risk investment and implementation decisions.
 
 ---
 
@@ -111,3 +109,4 @@ Terese applies the same operating model through AI and structured professional t
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
+
