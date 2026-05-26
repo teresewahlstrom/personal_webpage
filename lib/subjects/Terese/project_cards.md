@@ -48,15 +48,17 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 ## Metal “3D-printing”
 Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into practical guidance for technology selection, manufacturability assessment, build strategy, troubleshooting, production analysis, technical education, and strategic decision-making—helping teams understand what is technically possible, where additive manufacturing creates meaningful industrial value, and what is required to make it reliable in practice.
 
-She brings broad cross-technology understanding across the additive-manufacturing landscape, with particular depth in metal binder jetting and Electron Beam Melting.
+Her perspective was shaped through nearly a decade across distinct industrial environments spanning **strategic AM evaluation, commercial-technical solution development, and live industrial capability-building.**
 
-Her perspective was shaped through nearly a decade across distinct industrial environments where reliable outcomes depended on translating process complexity into structured execution.
+* **In strategic AM evaluation,** earlier work at Volvo Cars focused on technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real production value.
 
-At Volvo Cars, she evaluated additive manufacturing through technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real production value.
+* **In internal commercial enablement settings,** she translated additive-manufacturing complexity into practical decision logic for teams supporting both service-bureau delivery and industrial-system sales. At GE Additive, this included customer application feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real commercial purchase pressure. At Markforged, it included enabling commercial teams to communicate technical capability accurately, navigate customer application discussions, articulate the broader manufacturing vision, and distinguish realistic industrial fit from superficial technical possibility.
 
-At GE Additive, she translated customer applications into feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real commercial purchase pressure.
+* **In production environments,** particularly within live ISO:9001 binder-jetting manufacturing at Markforged, she worked across order intake, new-part CAD design, CAD redesign for manufacturability, build preparation, production planning, quality logic, and process coordination—while handing repetitive machine operation and physical process execution to operators.
 
-At Markforged, she owned and rebuilt global technical training structures while strengthening troubleshooting logic, process visibility, and customer-enablement systems directly tied to production reliability within live ISO:9001 binder-jetting manufacturing.
+* **In customer training environments,** she led technical education across the metal additive workflow, rebuilding global training structures at Markforged and teaching process principles, design constraints, manufacturability reasoning, build preparation, failure mechanisms, and troubleshooting frameworks—while delegating repetitive machine operation and physical execution to operators and bridging to material specialists when deeper metallurgical expertise was required.
+
+* **Across internal production and external machine-customer support,** she operated as a technical integration point between manufacturing, customer application and process support, and specialist engineering expertise—resolving process-related questions, strengthening troubleshooting pathways, escalating deeper material issues to domain experts, and continuously converting operational learning into stronger training and support systems.
 
 Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into transferable operational capability—through decision-support models, educational systems, diagnostic structures, and process frameworks others could reliably use.
 
@@ -100,6 +102,5 @@ Terese applies the same operating model through AI and structured professional t
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
-
 
 ---
