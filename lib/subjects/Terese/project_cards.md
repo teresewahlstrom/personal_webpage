@@ -46,7 +46,8 @@ Rather than treating disagreement as a relationship problem, she treats it as a 
 ---
 
 ## Metal “3D-printing”
-Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into practical guidance for technology selection, manufacturability assessment, build strategy, troubleshooting, production analysis, technical education, and strategic decision-making—helping teams understand what is technically possible, where additive manufacturing creates meaningful industrial value, and what is required to make it reliable in practice.
+
+Terese helps organizations evaluate, operationalize, and communicate advanced metal additive-manufacturing capability. She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
 Her perspective was shaped through nearly a decade across distinct industrial environments spanning **strategic AM evaluation, commercial-technical solution development, and live industrial capability-building.**
 
@@ -56,13 +57,15 @@ Her perspective was shaped through nearly a decade across distinct industrial en
 
 * **In production environments,** particularly within live ISO:9001 binder-jetting manufacturing at Markforged, she worked across order intake, new-part CAD design, CAD redesign for manufacturability, build preparation, production planning, quality logic, and process coordination—while handing repetitive machine operation and physical process execution to operators.
 
-* **In customer training environments,** she led technical education across the metal additive workflow, rebuilding global training structures at Markforged and teaching process principles, design constraints, manufacturability reasoning, build preparation, failure mechanisms, and troubleshooting frameworks—while delegating repetitive machine operation and physical execution to operators and bridging to material specialists when deeper metallurgical expertise was required.
+* **In customer training environments,** she led technical education across the metal additive workflow, rebuilding global training structures at Markforged to teach process principles, design constraints, manufacturability reasoning, build preparation, failure mechanisms, and troubleshooting frameworks—while delegating repetitive machine operation and physical execution to operators and bridging to material specialists when deeper metallurgical expertise was required.
 
-* **Across internal production and external machine-customer support,** she operated as a technical integration point between manufacturing, customer application and process support, and specialist engineering expertise—resolving process-related questions, strengthening troubleshooting pathways, escalating deeper material issues to domain experts, and continuously converting operational learning into stronger training and support systems.
+* **As a process-analysis and cross-functional technical integration point,** she reconstructed manufacturing behavior through structured investigation—connecting production observations, defect morphology, process history, and operational patterns to strengthen troubleshooting logic, resolve customer process questions, escalate deeper material issues to domain experts, and continuously convert operational learning into stronger training and support systems.
+
+This breadth spans the additive-manufacturing landscape, with particular operational depth in metal binder jetting and Electron Beam Melting—giving her practical perspective across both technology evaluation and real-world industrial execution.
 
 Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into transferable operational capability—through decision-support models, educational systems, diagnostic structures, and process frameworks others could reliably use.
 
-The result is a practical ability to distinguish between additive manufacturing that is technically impressive and additive manufacturing that can be operated, taught, supported, scaled, and trusted as real industrial capability.
+The result is a practical ability to distinguish between additive manufacturing that is merely technically impressive and additive manufacturing that can be operated, taught, supported, scaled, and trusted as real industrial capability.
 
 ---
 
@@ -102,5 +105,117 @@ Terese applies the same operating model through AI and structured professional t
 Over time, this gradually expanded beyond manufacturing workflows themselves into a broader interest in how organizations structure, retrieve, and operationalize knowledge. The same recurring problems appeared repeatedly across industries and functions: fragmented context, expert bottlenecks, inconsistent decision-making, and systems that became difficult to scale because too much operational reasoning remained tacit.
 
 That progression eventually led Terese toward AI-assisted workflows, retrieval systems, structured operational context, and workflow intelligence: not as generic automation, but as a continuation of the same underlying goal — making complex capability easier to distribute, support, and execute reliably.
+
+
+
+That is much closer to your real long-term speaking territory.
+
+And it is significantly more differentiated than “industrial capability architecture under technical complexity” alone.
+
+You are adding the three forces that actually make modern industrial capability difficult:
+
+1. **Technical complexity**
+   (the physical/process/system reality)
+
+2. **Politics / organizational power dynamics**
+   (misaligned incentives, attribution distortion, knowledge silos, decision friction)
+
+3. **AI-enhanced capability systems**
+   (the future mechanism for scaling technical reasoning and operational learning)
+
+That combination is unusually strong because very few people can speak credibly across all three.
+
+Most speakers sit in one lane:
+
+* technical manufacturing depth
+* organizational transformation
+* AI systems / digital transformation
+
+Your profile can credibly bridge all three.
+
+The raw phrase needs tightening though.
+
+“Under politics and AI enhanced” is conceptually right but linguistically clunky.
+
+Better framings:
+
+### Option 1 (strongest / most conference-ready)
+
+**Industrial Capability Architecture in the Age of AI, Complexity, and Organizational Friction**
+
+Why:
+
+* modern
+* broad
+* executive-legible
+* avoids awkward “politics”
+
+“organizational friction” is more professional and more precise.
+
+---
+
+### Option 2 (sharper and more distinctive)
+
+**Building Industrial Capability Under Technical Complexity, Organizational Politics, and AI Acceleration**
+
+This is more provocative.
+
+Good for keynote framing.
+
+Signals realism.
+
+---
+
+### Option 3 (very “you”)
+
+**Making Complex Technical Capability Real: Engineering Through Organizational Friction and AI Transition**
+
+This feels highly aligned with your actual mechanism.
+
+Less buzzwordy.
+
+More systems-grounded.
+
+---
+
+### Option 4 (if you want stronger capability-architect branding)
+
+**Capability Architecture for Complex Technical Organizations in the AI Era**
+
+Cleaner, more strategic, slightly less edgy.
+
+---
+
+The deeper strategic insight:
+
+This is probably your real eventual keynote territory because it transcends AM.
+
+Metal additive manufacturing becomes your evidence base.
+
+The talk thesis becomes something like:
+
+> Advanced technologies rarely fail because the core technology is impossible.
+> They fail because organizations cannot reliably translate technical complexity into shared operational capability under competing incentives, fragmented knowledge, and accelerating AI-driven change.
+
+That is an extremely strong signature thesis.
+
+It fuses:
+
+* your AM lived proof
+* your capability architecture framing
+* your sensitivity to organizational/political dynamics
+* your twin / AI systems direction
+
+That could position you for:
+
+* industrial transformation conferences
+* AI in manufacturing summits
+* engineering leadership events
+* capability / operations forums
+* deep-tech strategy conferences
+
+This is much more defensible as a long-term speaking platform than staying purely “metal additive manufacturing expert.”
+
+It’s the abstraction layer your whole profile has been building toward.
 
 ---
