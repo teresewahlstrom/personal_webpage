@@ -16,13 +16,13 @@ Her methodology follows a consistent pattern:
 
 * **Encoding:** Translating that insight into practical infrastructure—such as scripts, templates, configuration logic, diagnostic frameworks, training systems, and decision-support structures.
 
-This pattern repeatedly produces durable capability: reduced expert bottleneck risk, clearer troubleshooting, faster knowledge transfer, and more reliable execution under pressure.
+This pattern repeatedly reduces operational fragility by lowering expert bottleneck risk, accelerating knowledge transfer, strengthening troubleshooting consistency, and making execution more structurally reliable.
 
 In manufacturing environments, this has taken multiple forms.
 
 In one case, she recognized the diagnostic value of floor-level evidence and took the initiative to preserve and structure defect parts, process data, and in-situ documentation into a shared reasoning tool. By creating an accessible diagnostic reference, she established a common reasoning surface between operators and engineers. As its value became clear in day-to-day troubleshooting, additional parts, observations, and failure examples were added over time, allowing it to evolve into a shared diagnostic reference.
 
-In another case, she translated complex machine and process dependencies into structured configuration and decision-support logic, enabling teams to make technically sound choices with greater speed, consistency, and confidence while reducing repeated expert intervention.
+In another case, she translated complex machine and process dependencies into structured configuration and decision-support logic, enabling teams to make technical sound choices with greater speed, consistency, and confidence while reducing repeated expert intervention.
 
 The principle remains consistent: capability must be designed into the system if it is to scale.
 
@@ -49,7 +49,7 @@ In complex commercial-technical delivery environments, this has meant aligning a
 
 In customer enablement settings, it has meant rebuilding training and support structures so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways during live technical delivery.
 
-Across these environments, alignment was achieved through evidence quality and system clarity rather than formal authority.
+Across these environments, alignment emerged through shared reasoning structures grounded in evidence rather than through formal authority alone.
 
 ---
 
@@ -69,7 +69,7 @@ Across all three contexts, the pattern is consistent: translate uncertainty into
 ---
 
 ## Metal “3D-printing”
-Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments. She helps organizations evaluate, operationalize, and communicate advanced additive-manufacturing capability. She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
+Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments. She helps organizations evaluate, structure, and operationalize advanced additive-manufacturing capability. She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
 * **In strategic AM evaluation,** earlier work at Volvo Cars focused on production-suitability assessment, technology scouting, proof-of-concept validation, and make-versus-buy decision support that clarified where additive manufacturing created real industrial value.
 
@@ -108,7 +108,7 @@ This integrated product perspective was visible early in Formula Student, where 
 
 Across academic, automotive, and industrial contexts, a recurring part of Terese’s work has involved iterative geometry refinement: identifying manufacturability risks, material limitations, and implementation complexity, then refining designs directly in CAD.
 
-At Volvo Cars, this included rapidly translating interior-pattern concepts across complex double-curved surfaces under tight design timelines, converting design intent into manufacturable geometric alternatives that accelerated concept evaluation. Some of this work ultimately carried through into the end product in the Polestar 2.
+At Volvo Cars, this included rapidly translating interior-pattern concepts across complex double-curved surfaces under tight design timelines, converting design intent into manufacturable geometric alternatives that accelerated concept evaluation. Some of this work ultimately carried through into the end-product in the Polestar 2.
 
 Her work has also extended into digital end-products. Working closely with mechanical, electrical, and software R&D teams, she contributed interface improvements across embedded machine software, cloud interfaces, and build-preparation products—improving clarity, interaction flow, and usability through operationally grounded feedback.
 
@@ -122,6 +122,6 @@ Terese applies the same capability-architecture principles to AI-enabled knowled
 
 This work emerged as a natural extension of patterns first observed in complex manufacturing environments. Across technical organizations, the same systemic constraints repeatedly appeared: fragmented context, tacit expert reasoning, inconsistent decision pathways, and operational capability that remained difficult to scale because too much critical logic lived inside individuals rather than accessible systems.
 
-To address this, Terese has designed retrieval-backed context and decision-support systems that structure expertise into queryable decision infrastructure. This has included building context-aware retrieval logic, designing evidence-routing structures, shaping decision-support context assembly, and translating tacit professional reasoning into explicit operational representations that can be surfaced dynamically when needed.
+To address this, Terese has designed retrieval-backed context and decision-support systems that structure expertise into quarriable  decision infrastructure. This has included building context-aware retrieval logic, designing evidence-routing structures, shaping decision-support context assembly, and translating tacit professional reasoning into explicit operational representations that can be surfaced dynamically when needed.
 
 The underlying objective remains consistent: convert expert-dependent reasoning into distributed capability. In AI contexts, this means treating intelligence not as standalone automation, but as capability architecture—using structured retrieval, context design, and workflow intelligence to make organizational knowledge more accessible, actionable, and operationally reliable.
