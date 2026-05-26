@@ -90,7 +90,7 @@ The result is a practical ability to distinguish between additive manufacturing 
 
 ---
 
-## Physical & Digital Product R&D
+## Product R&D — Physical & Digital 
 
 Terese’s product-development foundation spans three complementary engineering layers:
 
