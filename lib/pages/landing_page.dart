@@ -334,7 +334,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               ) {
                 if (snapshot.hasError) {
                   return Text(
-                    'Could not load project cards.',
+                    'Could not load professional stories.',
                     style: PageTextStyles.body(context),
                   );
                 }
@@ -506,7 +506,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Listener(
-                  behavior: HitTestBehavior.opaque,
+                  behavior: HitTestBehavior.translucent,
                   onPointerDown: _handleHeaderPointerDown,
                   onPointerMove: _handleHeaderPointerMove,
                   onPointerUp: _handleHeaderPointerUp,
@@ -680,7 +680,7 @@ class _ProjectCardsMarkdownLoader {
 
     if (cards.isEmpty) {
       throw FormatException(
-        'Project card markdown did not contain any card sections in $sourceAssetPath.',
+        'Professional story markdown did not contain any sections in $sourceAssetPath.',
       );
     }
 
@@ -694,7 +694,7 @@ class _ProjectCardsMarkdownLoader {
     final List<String> lines = section.split('\n');
     if (lines.isEmpty || !lines.first.startsWith('## ')) {
       throw FormatException(
-        'Project card section missing level-2 heading in $sourceAssetPath.',
+        'Professional story section missing level-2 heading in $sourceAssetPath.',
       );
     }
 
@@ -702,7 +702,7 @@ class _ProjectCardsMarkdownLoader {
     final String contentMarkdown = lines.skip(1).join('\n').trim();
     if (title.isEmpty || contentMarkdown.isEmpty) {
       throw FormatException(
-        'Project card section missing title or body in $sourceAssetPath.',
+        'Professional story section missing title or body in $sourceAssetPath.',
       );
     }
 

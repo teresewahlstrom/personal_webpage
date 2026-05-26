@@ -154,9 +154,9 @@ class _PageScaffoldState extends State<PageScaffold> {
                                     thumbVisibility: true,
                                     interactive: true,
                                     trackVisibility: false,
-                                    physics: ScrollConfiguration.of(
-                                      context,
-                                    ).getScrollPhysics(context),
+                                      physics: const ClampingScrollPhysics(
+                                      parent: AlwaysScrollableScrollPhysics(),
+                                    ),
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
                                         minHeight: constraints.maxHeight,

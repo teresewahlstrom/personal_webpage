@@ -23,12 +23,12 @@ void main() {
     );
   });
 
-  test('project card fill alphas stay aligned with the tinted panel theme', () {
+  test('professional story card fill alphas stay aligned with the tinted panel theme', () {
     expect(AppColorTheme.projectCardFillAlphaFor(Brightness.light), 0.70);
     expect(AppColorTheme.projectCardFillAlphaFor(Brightness.dark), 0.65);
   });
 
-  test('floating controls reuse project card colors and chat glow', () {
+  test('floating controls reuse professional story card colors and chat glow', () {
     final darkStyle = floatingControlVisualStyleFor(Brightness.dark);
     final darkBorder = ShellUiConfig.gridLineFor(Brightness.dark);
     final darkSkin = ChatSkin.dataForMode(ChatSkinMode.dark);

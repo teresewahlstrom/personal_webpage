@@ -1,4 +1,3 @@
-
 ## Capability Architect
 Terese strengthens organizational capability by designing practical structures that make complex work easier to understand, coordinate, and execute reliably at scale.
 
@@ -87,7 +86,6 @@ Across these settings, her contribution consistently centered on converting expe
 
 The result is a practical ability to distinguish between additive manufacturing that is merely technically impressive and additive manufacturing that can be operated, taught, supported, scaled, and trusted as real industrial capability.
 
-
 ---
 
 ## Product R&D — Physical & Digital 
@@ -113,7 +111,6 @@ At Volvo Cars, this included rapidly translating interior-pattern concepts acros
 Her work has also extended into digital end-products. Working closely with mechanical, electrical, and software R&D teams, she contributed interface improvements across embedded machine software, cloud interfaces, and build-preparation products—improving clarity, interaction flow, and usability through operationally grounded feedback.
 
 Across these contexts, her contribution has centered on practical iteration: using CAD, CAE, ergonomics, usability reasoning, computational tooling, and interaction-design logic to move ideas from ambiguous requirements toward validated physical and digital products.
-
 
 ---
 

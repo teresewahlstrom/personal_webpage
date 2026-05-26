@@ -49,7 +49,7 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
   void _onFocusChange() {
     if (_focusNode.hasFocus && _scrollTimer == null) {
       _scrollTimer = Timer.periodic(
-        const Duration(milliseconds: 250),
+        const Duration(milliseconds: 33),
         (_) => _handleScroll(),
       );
     } else if (!_focusNode.hasFocus) {
@@ -107,7 +107,11 @@ class _ArrowKeyScrollWrapperState extends State<ArrowKeyScrollWrapper> {
       position.maxScrollExtent,
     );
 
-    widget.controller.jumpTo(clamped);
+    widget.controller.animateTo(
+      clamped,
+      duration: const Duration(milliseconds: 50),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
