@@ -37,6 +37,54 @@ void main() {
     expect(afterRect.top - headingRect.bottom, closeTo(11.4, 0.5));
   });
 
+  testWidgets(
+    'chrome-free selectable path does not inject copy-break RichText between paragraphs',
+    (tester) async {
+      await tester.pumpWidget(
+        _MarkupTestApp(
+          document: MessageMarkup.parse('Before\n\nAfter'),
+          baseStyle: const TextStyle(fontSize: 20, height: 1),
+          chromeVisible: false,
+        ),
+      );
+
+      expect(_newlineRichText(), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'chrome-free selectable path does not inject copy-break RichText between list items',
+    (tester) async {
+      await tester.pumpWidget(
+        _MarkupTestApp(
+          document: MessageMarkup.parse('1. One\n2. Two'),
+          baseStyle: const TextStyle(fontSize: 20, height: 1),
+          chromeVisible: false,
+        ),
+      );
+
+      expect(_newlineRichText(), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'chrome-free selectable nested lists use fewer RichText leaves',
+    (tester) async {
+      await tester.pumpWidget(
+        _MarkupTestApp(
+          document: MessageMarkup.parse(
+            '1. Parent\n    - Child one\n    - Child two\n2. Next',
+          ),
+          baseStyle: const TextStyle(fontSize: 20, height: 1),
+          chromeVisible: false,
+        ),
+      );
+
+      final richTextCount = find.byType(RichText).evaluate().length;
+      expect(richTextCount, lessThanOrEqualTo(4));
+    },
+  );
+
   test('strikethrough thickness is scaled down to half the source stroke', () {
     const theme = MarkupTheme(
       baseStyle: TextStyle(fontSize: 14),
@@ -62,10 +110,15 @@ void main() {
 }
 
 class _MarkupTestApp extends StatelessWidget {
-  const _MarkupTestApp({required this.document, required this.baseStyle});
+  const _MarkupTestApp({
+    required this.document,
+    required this.baseStyle,
+    this.chromeVisible = true,
+  });
 
   final MarkupDocument document;
   final TextStyle baseStyle;
+  final bool chromeVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +132,7 @@ class _MarkupTestApp extends StatelessWidget {
               document: document,
               theme: _theme(baseStyle),
               gestureRecognizerFactory: (_) => null,
+              chromeVisible: chromeVisible,
             ),
           ),
         ),
@@ -111,5 +165,11 @@ TextStyle _headingStyle(int level) {
 Finder _richTextWithPlainText(String text) {
   return find.byWidgetPredicate(
     (Widget widget) => widget is RichText && widget.text.toPlainText() == text,
+  );
+}
+
+Finder _newlineRichText() {
+  return find.byWidgetPredicate(
+    (Widget widget) => widget is RichText && widget.text.toPlainText() == '\n',
   );
 }

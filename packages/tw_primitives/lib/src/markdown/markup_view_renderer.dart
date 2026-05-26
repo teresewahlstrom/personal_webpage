@@ -37,21 +37,17 @@ class MarkupViewRenderer {
   static const double _blockquoteInnerVerticalPadding = 2.0;
 
   Widget build() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        _buildRenderedMarkupDocument(
-          document,
-          theme,
-          selectable: selectable,
-          chromeVisible: chromeVisible,
-        ),
-      ],
+    return _renderLayoutNode(
+      _buildLayoutDocument(
+        document,
+        theme,
+        selectable: selectable,
+        chromeVisible: chromeVisible,
+      ),
     );
   }
 
-  Widget _buildRenderedMarkupDocument(
+  _MarkupLayoutNode _buildLayoutDocument(
     MarkupDocument document,
     MarkupTheme theme, {
     int listDepth = 0,
@@ -59,23 +55,25 @@ class MarkupViewRenderer {
     bool selectable = true,
     bool chromeVisible = true,
   }) {
-    final List<Widget> children = <Widget>[];
+    final List<_MarkupLayoutNode> children = <_MarkupLayoutNode>[];
 
     for (final (int index, MarkupBlock block) in document.blocks.indexed) {
       if (index > 0) {
         children.add(
-          _buildSelectableCopyBreak(
+          _MarkupLayoutGapNode(
             height: _blockSpacing(
               theme,
               previousBlock: document.blocks[index - 1],
               nextBlock: block,
               inListItem: inListItem,
             ),
+            selectionLineBreaks: 1,
+            includeSelectableCopyBreak: chromeVisible,
           ),
         );
       }
       children.add(
-        _buildRenderedMarkupBlock(
+        _buildLayoutBlock(
           block,
           theme: theme,
           listDepth: listDepth,
@@ -86,14 +84,10 @@ class MarkupViewRenderer {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: children,
-    );
+    return _MarkupLayoutColumnNode(children);
   }
 
-  Widget _buildRenderedMarkupBlock(
+  _MarkupLayoutNode _buildLayoutBlock(
     MarkupBlock block, {
     required MarkupTheme theme,
     required int listDepth,
@@ -103,8 +97,8 @@ class MarkupViewRenderer {
   }) {
     switch (block) {
       case MarkupParagraphBlock() || MarkupHeadingBlock():
-        return _buildSelectableRichText(
-          block.toTextSpan(
+        return _MarkupLayoutTextNode(
+          text: block.toTextSpan(
             theme: theme,
             gestureRecognizerFactory: gestureRecognizerFactory,
           ),
@@ -131,49 +125,30 @@ class MarkupViewRenderer {
                   Colors.transparent)
             : Colors.transparent;
         final double fontSize = theme.baseStyle.fontSize ?? 12.0;
-        return Padding(
-          padding: EdgeInsets.only(
-            left: fontSize * _style.blockquoteIndentFactor * 3.0,
+        return _MarkupLayoutBlockquoteNode(
+          indent: fontSize * _style.blockquoteIndentFactor * 3.0,
+          railColor: railColor,
+          contentPadding: const EdgeInsets.fromLTRB(
+            12,
+            _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+            0,
+            _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
           ),
-          child: CustomPaint(
-            foregroundPainter: BlockQuoteRailPainter(
-              color: railColor,
-              railThickness: _style.blockquoteRailWidth,
-              capLength: _style.blockquoteCapLength,
-              railInset: _style.blockquoteRailInset,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                12,
-                _blockquoteRailVerticalOverhang +
-                    _blockquoteInnerVerticalPadding,
-                0,
-                _blockquoteRailVerticalOverhang +
-                    _blockquoteInnerVerticalPadding,
-              ),
-              child: _buildRenderedMarkupDocument(
-                MarkupDocument(quote.blocks),
-                quoteTheme,
-                listDepth: listDepth,
-                inListItem: inListItem,
-                selectable: selectable,
-                chromeVisible: chromeVisible,
-              ),
-            ),
+          child: _buildLayoutDocument(
+            MarkupDocument(quote.blocks),
+            quoteTheme,
+            listDepth: listDepth,
+            inListItem: inListItem,
+            selectable: selectable,
+            chromeVisible: chromeVisible,
           ),
         );
       case final MarkupListBlock list:
-        final List<Widget> children = <Widget>[];
+        final List<_MarkupLayoutListItemNode> items =
+            <_MarkupLayoutListItemNode>[];
+        final bool flattenListItemContentForSelection =
+            selectable && !chromeVisible;
         for (final (int itemIndex, MarkupListItem item) in list.items.indexed) {
-          if (itemIndex > 0) {
-            children.add(
-              _buildSelectableCopyBreak(
-                height: _listItemSpacing(theme.baseStyle, listDepth: listDepth),
-                lineBreaks: 1,
-              ),
-            );
-          }
-
           final String marker = list.ordered
               ? '${list.startingIndex + itemIndex}. '
               : '• ';
@@ -185,62 +160,163 @@ class MarkupViewRenderer {
               (itemBlocks.first is MarkupParagraphBlock ||
                   itemBlocks.first is MarkupHeadingBlock);
 
-          children.add(
-            Padding(
-              padding: EdgeInsets.only(left: _listIndent()),
-              child: Row(
-                crossAxisAlignment: canUseBaseline
-                    ? CrossAxisAlignment.baseline
-                    : CrossAxisAlignment.start,
-                textBaseline: canUseBaseline ? TextBaseline.alphabetic : null,
-                children: <Widget>[
-                  SizedBox(
-                    width: _listMarkerSlotWidth(theme.baseStyle, listDepth),
-                    child: Align(
-                      alignment: list.ordered
-                          ? const Alignment(0.78, 0.0)
-                          : const Alignment(0.45, 0.0),
-                      child: useAssetMarker
-                          ? _buildUnorderedListAssetMarker(theme.baseStyle)
-                          : _buildSelectableRichText(
-                              TextSpan(text: marker, style: theme.baseStyle),
-                              softWrap: false,
-                              selectable: selectable,
-                            ),
+          items.add(
+            _MarkupLayoutListItemNode(
+              topSpacing: itemIndex == 0
+                  ? 0.0
+                  : _listItemSpacing(theme.baseStyle, listDepth: listDepth),
+              leftPadding: _listIndent(),
+              crossAxisAlignment: canUseBaseline
+                  ? CrossAxisAlignment.baseline
+                  : CrossAxisAlignment.start,
+              textBaseline: canUseBaseline ? TextBaseline.alphabetic : null,
+              markerSlotWidth: _listMarkerSlotWidth(theme.baseStyle, listDepth),
+              markerAlignment: list.ordered
+                  ? const Alignment(0.78, 0.0)
+                  : const Alignment(0.45, 0.0),
+              marker: useAssetMarker
+                  ? _MarkupLayoutAssetMarkerNode(theme.baseStyle)
+                  : _MarkupLayoutTextNode(
+                      text: TextSpan(text: marker, style: theme.baseStyle),
+                      softWrap: false,
+                      selectable: selectable,
                     ),
-                  ),
-                  SizedBox(width: _listMarkerGap(theme.baseStyle)),
-                  Expanded(
-                    child: canUseBaseline
-                        ? _buildRenderedMarkupBlock(
-                            itemBlocks.first,
-                            theme: theme,
-                            listDepth: listDepth + 1,
-                            inListItem: true,
-                            selectable: selectable,
-                            chromeVisible: chromeVisible,
-                          )
-                        : _buildRenderedMarkupDocument(
-                            MarkupDocument(itemBlocks),
-                            theme,
-                            listDepth: listDepth + 1,
-                            inListItem: true,
-                            selectable: selectable,
-                            chromeVisible: chromeVisible,
-                          ),
-                  ),
-                ],
-              ),
+              markerGap: _listMarkerGap(theme.baseStyle),
+              content: flattenListItemContentForSelection
+                  ? _MarkupLayoutTextNode(
+                      text: item.toTextSpan(
+                        theme: theme,
+                        gestureRecognizerFactory: gestureRecognizerFactory,
+                      ),
+                      selectable: selectable,
+                    )
+                  : canUseBaseline
+                  ? _buildLayoutBlock(
+                      itemBlocks.first,
+                      theme: theme,
+                      listDepth: listDepth + 1,
+                      inListItem: true,
+                      selectable: selectable,
+                      chromeVisible: chromeVisible,
+                    )
+                  : _buildLayoutDocument(
+                      MarkupDocument(itemBlocks),
+                      theme,
+                      listDepth: listDepth + 1,
+                      inListItem: true,
+                      selectable: selectable,
+                      chromeVisible: chromeVisible,
+                    ),
             ),
           );
         }
 
+        return _MarkupLayoutListNode(items);
+    }
+  }
+
+  Widget _renderLayoutNode(_MarkupLayoutNode node) {
+    switch (node) {
+      case final _MarkupLayoutColumnNode column:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: children,
+          children: column.children
+              .map(_renderLayoutNode)
+              .toList(growable: false),
+        );
+      case final _MarkupLayoutGapNode gap:
+        return _buildSelectableCopyBreak(
+          height: gap.height,
+          lineBreaks: gap.selectionLineBreaks,
+          includeSelectableCopyBreak: gap.includeSelectableCopyBreak,
+        );
+      case final _MarkupLayoutTextNode text:
+        return _buildSelectableRichText(
+          text.text,
+          softWrap: text.softWrap,
+          selectable: text.selectable,
+        );
+      case final _MarkupLayoutBlockquoteNode blockquote:
+        return Padding(
+          padding: EdgeInsets.only(left: blockquote.indent),
+          child: CustomPaint(
+            foregroundPainter: BlockQuoteRailPainter(
+              color: blockquote.railColor,
+              railThickness: _style.blockquoteRailWidth,
+              capLength: _style.blockquoteCapLength,
+              railInset: _style.blockquoteRailInset,
+            ),
+            child: Padding(
+              padding: blockquote.contentPadding,
+              child: _renderLayoutNode(blockquote.child),
+            ),
+          ),
+        );
+      case final _MarkupLayoutListNode list:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: list.items.map(_renderListItem).toList(growable: false),
         );
     }
+  }
+
+  Widget _renderListItem(_MarkupLayoutListItemNode item) {
+    final children = <Widget>[];
+
+    if (item.topSpacing > 0) {
+      children.add(
+        _buildSelectableCopyBreak(
+          height: item.topSpacing,
+          lineBreaks: 1,
+          includeSelectableCopyBreak: chromeVisible,
+        ),
+      );
+    }
+
+    children.add(
+      Padding(
+        padding: EdgeInsets.only(left: item.leftPadding),
+        child: Row(
+          crossAxisAlignment: item.crossAxisAlignment,
+          textBaseline: item.textBaseline,
+          children: <Widget>[
+            SizedBox(
+              width: item.markerSlotWidth,
+              child: Align(
+                alignment: item.markerAlignment,
+                child: _renderMarkerNode(item.marker),
+              ),
+            ),
+            SizedBox(width: item.markerGap),
+            Expanded(child: _renderLayoutNode(item.content)),
+          ],
+        ),
+      ),
+    );
+
+    if (children.length == 1) {
+      return children.first;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: children,
+    );
+  }
+
+  Widget _renderMarkerNode(_MarkupLayoutMarkerNode marker) {
+    return switch (marker) {
+      _MarkupLayoutAssetMarkerNode(:final baseStyle) =>
+        _buildUnorderedListAssetMarker(baseStyle),
+      _MarkupLayoutTextNode() => _buildSelectableRichText(
+        marker.text,
+        softWrap: marker.softWrap,
+        selectable: marker.selectable,
+      ),
+    };
   }
 
   Widget _buildSelectableRichText(
@@ -265,8 +341,9 @@ class MarkupViewRenderer {
   Widget _buildSelectableCopyBreak({
     required double height,
     int lineBreaks = 1,
+    bool includeSelectableCopyBreak = true,
   }) {
-    if (!selectable) {
+    if (!selectable || !includeSelectableCopyBreak) {
       return SizedBox(height: height);
     }
 
@@ -419,4 +496,93 @@ class MarkupViewRenderer {
     final double snapped = (logicalSize * dpr).roundToDouble() / dpr;
     return snapped.clamp(1.0, double.infinity);
   }
+}
+
+sealed class _MarkupLayoutNode {
+  const _MarkupLayoutNode();
+}
+
+class _MarkupLayoutColumnNode extends _MarkupLayoutNode {
+  const _MarkupLayoutColumnNode(this.children);
+
+  final List<_MarkupLayoutNode> children;
+}
+
+class _MarkupLayoutGapNode extends _MarkupLayoutNode {
+  const _MarkupLayoutGapNode({
+    required this.height,
+    required this.selectionLineBreaks,
+    required this.includeSelectableCopyBreak,
+  });
+
+  final double height;
+  final int selectionLineBreaks;
+  final bool includeSelectableCopyBreak;
+}
+
+sealed class _MarkupLayoutMarkerNode {
+  const _MarkupLayoutMarkerNode();
+}
+
+class _MarkupLayoutTextNode extends _MarkupLayoutNode
+    implements _MarkupLayoutMarkerNode {
+  const _MarkupLayoutTextNode({
+    required this.text,
+    this.softWrap = true,
+    this.selectable = true,
+  });
+
+  final TextSpan text;
+  final bool softWrap;
+  final bool selectable;
+}
+
+class _MarkupLayoutAssetMarkerNode extends _MarkupLayoutMarkerNode {
+  const _MarkupLayoutAssetMarkerNode(this.baseStyle);
+
+  final TextStyle baseStyle;
+}
+
+class _MarkupLayoutBlockquoteNode extends _MarkupLayoutNode {
+  const _MarkupLayoutBlockquoteNode({
+    required this.indent,
+    required this.railColor,
+    required this.contentPadding,
+    required this.child,
+  });
+
+  final double indent;
+  final Color railColor;
+  final EdgeInsets contentPadding;
+  final _MarkupLayoutNode child;
+}
+
+class _MarkupLayoutListNode extends _MarkupLayoutNode {
+  const _MarkupLayoutListNode(this.items);
+
+  final List<_MarkupLayoutListItemNode> items;
+}
+
+class _MarkupLayoutListItemNode {
+  const _MarkupLayoutListItemNode({
+    required this.topSpacing,
+    required this.leftPadding,
+    required this.crossAxisAlignment,
+    required this.textBaseline,
+    required this.markerSlotWidth,
+    required this.markerAlignment,
+    required this.marker,
+    required this.markerGap,
+    required this.content,
+  });
+
+  final double topSpacing;
+  final double leftPadding;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextBaseline? textBaseline;
+  final double markerSlotWidth;
+  final Alignment markerAlignment;
+  final _MarkupLayoutMarkerNode marker;
+  final double markerGap;
+  final _MarkupLayoutNode content;
 }
