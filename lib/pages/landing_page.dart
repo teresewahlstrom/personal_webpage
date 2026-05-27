@@ -825,7 +825,6 @@ class _SocialRowState extends State<_SocialRow> {
                 widget.entry.label,
                 style: PageTextStyles.socialLink(context).copyWith(
                   color: color,
-                  fontSize: 17,
                   letterSpacing: 0.35,
                   decoration: _isHovered
                       ? TextDecoration.underline
