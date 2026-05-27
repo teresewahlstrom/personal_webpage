@@ -21,7 +21,7 @@ In manufacturing environments, this has taken multiple forms.
 
 In one case, she recognized the diagnostic value of floor-level evidence and took the initiative to preserve and structure defect parts, process data, and in-situ documentation into a shared reasoning tool. By creating an accessible diagnostic reference, she established a common reasoning surface between operators and engineers. As its practical value became visible, others began contributing additional parts, observations, and failure stories, allowing it to evolve into a living team asset.
 
-In another case, she translated complex machine and process dependencies into structured configuration and decision-support logic, enabling teams to make technical sound choices with greater speed, consistency, and confidence while reducing repeated expert intervention.
+In another case, she translated complex machine and process dependencies into structured configuration and decision-support logic, enabling teams to make technically sound choices with greater speed, consistency, and confidence while reducing repeated expert intervention.
 
 The principle remains consistent: capability must be designed into the system if it is to scale.
 
@@ -48,7 +48,7 @@ In pre-sales, this has meant aligning applications engineering, operators, suppl
 
 In equipment-customer enablement settings, it has meant rebuilding training and support systems so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways during live technical delivery.
 
-Across these environments, alignment emerged through evidence and structured reasoning rather than formal authority alone.
+Across these environments, alignment did not come from authority — it came from making the underlying system logic visible enough that different functions could reason from the same ground.
 
 ---
 
@@ -78,7 +78,7 @@ She translates complex process realities into structured decision logic, operati
 
 * **In internal commercial enablement settings,** she translated additive-manufacturing complexity into practical decision logic for teams supporting both service-bureau delivery and industrial-system sales. At GE Additive, this included customer application feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real commercial purchase pressure. At Markforged, it included enabling commercial teams to communicate technical capability accurately, navigate customer application discussions, articulate the broader manufacturing vision, and distinguish realistic industrial fit from superficial technical possibility.
 
-* **In production environments,** particularly within live ISO:9001 binder-jetting manufacturing at Markforged and benchmark production at GE additive, she worked across order intake, new-part CAD design, CAD redesign for manufacturability, build preparation, production planning, quality logic, and process coordination, focusing on the technical and systems-level structures that enabled reliable execution.
+* **In production environments,** particularly within live ISO 9001 binder-jetting manufacturing at Markforged and benchmark production at GE Additive, she worked across order intake, new-part CAD design, CAD redesign for manufacturability, build preparation, production planning, quality logic, and process coordination, focusing on the technical and systems-level structures that enabled reliable execution.
 
 * **In customer training environments,** she led technical education across the metal additive workflow, rebuilding global technical training programmes at Markforged to teach process principles, design constraints, manufacturability reasoning, build preparation, failure mechanisms, and troubleshooting frameworks—while structuring delivery so hands-on execution remained embedded within specialist operator workflows and moderating technical interface with material specialists when deeper metallurgical depth was required.
 
@@ -92,7 +92,7 @@ She knows the difference between good-on-paper additive manufacturing and capabi
 
 ## Product R&D – Physical & Digital 
 
-Her product-development capability spans four complementary engineering layers—grounded in an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, and extended through professional practice and self-directed technical work:
+Terese's product-development capability spans four complementary engineering layers—grounded in an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, and extended through professional practice and self-directed technical work:
 
 * **Mechanical engineering depth** — product realization, material behavior, CAD/CAE-driven development, and design-for-manufacture across complex physical products.
 
@@ -112,6 +112,7 @@ Working closely with mechanical, electrical, and software R&D teams, she has con
 
 More recently, she has independently taken on full end-to-end ownership of modern software-system development: designing, building, and deploying production Flutter web applications backed by Python AI services and Node.js API gateways as complete integrated systems.
 
+The through-line is consistent: a rigorous approach to translating requirements into something that actually works — whether the output is a carbon-fibre steering wheel, a manufacturable surface geometry, or a deployed software system.
 
 ---
 
