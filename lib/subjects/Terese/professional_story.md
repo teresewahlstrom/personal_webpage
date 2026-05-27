@@ -74,7 +74,7 @@ Her deepest expertise lies in metal binder jetting and Electron Beam Melting, su
 
 She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
-* **In strategic AM evaluation,** earlier work at Volvo Cars focused on technology scouting, proof-of-concept validation, production-suitability assessment, and make-versus-buy decision support that clarified where additive manufacturing was sustainably, technically and economically justified.
+* **In strategic AM evaluation,** earlier work at Volvo Cars focused on technology scouting, proof-of-concept validation, production-suitability assessment, and make-versus-buy decision support that clarified where additive manufacturing met application-specific technical requirements, justified implementation costs over the product lifecycle, and held up against environmental and safety constraints.
 
 * **In internal commercial enablement settings,** she translated additive-manufacturing complexity into practical decision logic for teams supporting both service-bureau delivery and industrial-system sales. At GE Additive, this included customer application feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real commercial purchase pressure. At Markforged, it included enabling commercial teams to communicate technical capability accurately, navigate customer application discussions, articulate the broader manufacturing vision, and distinguish realistic industrial fit from superficial technical possibility.
 
