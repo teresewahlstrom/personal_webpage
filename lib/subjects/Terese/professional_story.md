@@ -32,9 +32,9 @@ Terese creates alignment across technical, operational, and commercial functions
 
 The most difficult problems rarely sit inside a single function. They emerge at the seams: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where decisions must be made with incomplete, unevenly distributed understanding.
 
-Her leadership operates through structured investigation, technical curiosity, and evidence rather than hierarchy alone. Her breadth across engineering, operations, product, and commercial contexts allows her to engage credibly across disciplines, while her non-defensive, evidence-first approach creates the trust needed for people to surface operational truth openly.
+Her leadership operates through structured investigation, technical curiosity, and evidence rather than hierarchy alone. Her breadth across engineering, operations, product, and commercial contexts allows her to engage credibly across disciplines, while her evidence-first approach creates the trust needed to surface operational truth openly.
 
-Having worked directly across manufacturing, customer-facing technical delivery, commercial enablement, and multidisciplinary engineering collaboration, she understands enough of each domain to ask the right questions without flattening domain-specific complexity. This approach builds deep trust across different layers of the organization:
+Having worked directly across manufacturing, customer-facing technical delivery, commercial enablement, and multidisciplinary engineering collaboration, she understands enough of each domain to ask the right questions without flattening domain-specific complexity. This creates trust across each layer:
 
 * **Operators and technical contributors** trust that operational reality will be surfaced, respected, and fairly attributed.
 
@@ -44,11 +44,11 @@ Having worked directly across manufacturing, customer-facing technical delivery,
 
 Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal: evidence that a constraint, assumption gap, or hidden dependency has not yet been surfaced.
 
-In pre-sales, this has meant aligning applications engineering, operators, suppliers, and commercial stakeholders around the right configuration and offer scope given the customer's application and constraints.
+In pre-sales settings, this has meant aligning applications engineering, operators, suppliers, and commercial stakeholders around the right configuration and offer scope for the customer's application.
 
 In equipment-customer enablement settings, it has meant rebuilding training and support systems so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways during live technical delivery.
 
-Across these environments, alignment did not come from authority — it came from making the underlying system logic visible enough that different functions could reason from the same ground.
+Across these environments, alignment did not come from authority; it came from making underlying system logic visible enough for different functions to reason from the same ground.
 
 ---
 
@@ -70,7 +70,7 @@ Across all three contexts, the pattern is consistent: translate uncertainty into
 ## Metal “3D-printing”
 Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments—across automotive, aerospace, medical, jewellery, and general industrial manufacturing, and organizations ranging from early-stage ventures to global enterprises.
 
-Her deepest expertise lies in metal binder jetting and Electron Beam Melting, supported by working knowledge across the wider additive-manufacturing landscape. This broader perspective was shaped through extensive comparative proof-of-concept evaluations at Volvo Cars across diverse printers, materials, and AM processes, alongside technology analysis grounded in both literature and structured case studies, beginning with her [master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) and sustained throughout her career.
+Her deepest expertise lies in metal binder jetting and Electron Beam Melting, supported by working knowledge across the wider additive-manufacturing landscape. This broader perspective was shaped through extensive comparative proof-of-concept evaluations at Volvo Cars across diverse printers, materials, and AM processes, alongside technology analysis grounded in both literature and structured case studies, beginning with her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) and sustained throughout her career.
 
 She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
@@ -90,31 +90,28 @@ She knows the difference between good-on-paper additive manufacturing and capabi
 
 ---
 
-## Product R&D – Physical & Digital 
+## Product R&D – Physical & Digital
+Terese is driven by the challenge of making things real — taking ambiguous requirements, fragmented constraints, and incomplete ideas and shaping them into systems that work. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical products, manufacturing systems, decision-support tools, and software-enabled solutions.
 
-Terese's product-development capability spans four complementary engineering layers—grounded in an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, and extended through professional practice and self-directed technical work:
+What distinguishes this capability is the ability to reason coherently across product layers without flattening their complexity — holding geometry, manufacturability, operational behaviour, user interaction, and system logic in view simultaneously, then synthesising toward decisions that strengthen the whole system.
 
-* **Mechanical engineering depth** — product realization, material behavior, CAD/CAE-driven development, and design-for-manufacture across complex physical products.
+Her foundation was formally shaped through an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, with rigorous training in product realization, material behaviour, manufacturing methods, structural analysis, thermodynamics, CAD/CAE-driven development, computational modelling and algorithmic reasoning, combined with human-centered product reasoning in ergonomics, interaction design, and usability.
 
-* **Human-centered product reasoning** — usability, interaction design, ergonomics, behavioral understanding, and translating user needs into structured behavior across physical products, digital products, and service interactions.
+* At Formula Student, she owned driver ergonomics and steering-wheel development as a complete product challenge — translating driver feedback into validated physical geometry through iterative clay-based prototyping of grip and button placement, 3D scanning, CAD integration, structural optimization in Altair OptiStruct, and final manufacturing through carbon-fiber vacuum infusion and polyurethane grip molding. The resulting vehicle placed 4th out of 113 combustion-class cars at Silverstone.
 
-* **Computational engineering capability** — data modelling, scripting, and software-driven technical logic supporting structured iteration, analysis, and system-level reasoning.
+* At Volvo Cars, she collaborated with industrial designers on interior-pattern concepts across complex double-curved surfaces, work that carried through into production implementation within the Polestar 2.
 
-* **Full-stack digital product engineering** — end-to-end ownership of production web applications and AI-integrated backend systems, from front-end architecture to deployed services.
+* Across her additive-manufacturing roles at Volvo Cars, GE Additive, and Markforged, she worked continuously across additive manufacturing (particularly metal) and traditional manufacturing alternatives, developing grounded comparative judgment across DfAM, laser cutting, hot vacuum forming, welding, polymer molding, milling, and manufacturing-strategy evaluation.
 
-Together, these layers enable work across the full product-development spectrum: translating requirements into physical geometry, shaping digital interaction behavior, and iterating toward validated physical and digital products.
+* At additive-manufacturing OEMs (Markforged and GE Additive), Terese contributed across hardware and software product layers through grounded analysis of process output, workflow behaviour, and operator interaction. This included working alongside engineers developing printer hardware, build-processing software, and machine-interface applications, providing technically and operationally grounded inputs that informed technical decisions across both physical and digital system layers.
 
-This integrated perspective was visible early in Formula Student, where she owned driver ergonomics and steering-wheel development as a full physical product challenge. This included iterative clay-based grip development through live driver testing, digitizing validated forms through 3D scanning and additive prototyping, engineering low-cost composite tooling under severe resource constraints, and manufacturing the final carbon-fiber and polyurethane assembly through vacuum infusion and waterjet-based precision finishing.
+* Through commercially deployed Excel-based decision products built across three organizations, she translated technical complexity into structured decision logic used to support customer evaluation, configuration, and purchasing decisions.
 
-A recurring part of her work across academic, automotive, and industrial contexts has involved iterative geometry refinement—identifying manufacturability risks, material limitations, and implementation complexity, then refining designs directly in CAD. At Volvo Cars, this included rapidly translating interior-pattern concepts across complex double-curved surfaces under tight design timelines, converting design intent into manufacturable geometric alternatives that accelerated concept evaluation. Elements of this geometry-development work ultimately carried through into production implementation within the Polestar 2.
+* Through hands-on digital product development, she has designed and built software-enabled solutions to reduce organizational friction and streamline communication in process-intensive engineering environments. This capability is reflected in a production Flutter web application backed by Python-based services and a Node.js API layer — demonstrating the implementation depth required to validate architectural direction, build working prototypes, and collaborate effectively with specialist software engineers.
 
-Working closely with mechanical, electrical, and software R&D teams, she has contributed interface improvements across embedded machine software, cloud interfaces, and build-preparation products—improving clarity, interaction flow, and usability through operationally grounded feedback.
+The through-line is consistent: translating ambiguous requirements into working systems — whether the output is a carbon-fibre steering wheel, manufacturable surface geometry, commercially deployed Excel-based decision tools, or production software systems.
 
-More recently, she has independently taken on full end-to-end ownership of modern software-system development: designing, building, and deploying production Flutter web applications backed by Python AI services and Node.js API gateways as complete integrated systems.
-
-The through-line is consistent: a rigorous approach to translating requirements into something that actually works — whether the output is a carbon-fibre steering wheel, a manufacturable surface geometry, or a deployed software system.
-
----
+--- 
 
 ## AI Engineer & Strategist
 Terese applies the same capability-architecture principles to AI-enabled knowledge and decision systems. Her focus is not generic automation, but designing structured context systems that represent operational knowledge, retrieve relevant evidence, and surface decision-critical information at the point of use—improving execution while keeping human judgment central.

@@ -1,224 +1,40 @@
-Yes — looking at the full set, your prioritization is right.
+**Strong missing signals**
 
-The first four are now largely structurally solved. The real remaining work is concentrated exactly where you identified. 
+1. **Structural analysis / FEA as a named capability** — the vault lists `simulation_and_structural_analysis` as *advanced*, with specific academic evidence: Finite Element Method, Solid Mechanics, Strength of Materials, and actual use of **Altair OptiStruct** at Formula Student. The section says "CAD/CAE-driven development" which buries this completely. OptiStruct is a structural/topology-optimization solver — she ran lightweight structural optimization, not just modeled geometry.
 
-If I assess chapter maturity:
+2. **Formula Student competition result** — 4th out of 113 combustion cars at Silverstone. This is the strongest concrete outcome from that role and is entirely absent from the section.
 
-### Essentially resolved
+3. **CATIA in an OEM context** — at Volvo Cars she used CATIA (the automotive OEM's primary CAD tool), which is a distinct signal from "advanced CAD." It implies full PLM workflow (Teamcenter was also used at both Volvo and Formula Student).
 
-**Capability Architect** — 95%
-(only micro-language cleanup: “under pressure” → “under complexity”)
+5. **Thermodynamics and fluid systems** — coursework domain listed in Education, not mentioned anywhere in the Product R&D section.
 
-**Cross-Functional Leader** — 94%
-(structurally strong)
-
-**Metal “3D-printing”** — 96%
-(probably your strongest proof chapter)
+TERESE SAYS SKIP: 
+    * 4. **Vehicle systems** — both a dedicated academic domain and reinforced by the full Volvo role, which was inside an automotive OEM. Not mentioned in the Product R&D section.
 
 ---
 
-### Needs meaningful refinement
+**Medium missing signals**
 
-**Decisions Under Technical Complexity** — 88–90%
-Strong evidence, but still slightly denser and less elegant than the first three.
+6. **Broader manufacturing methods exposure beyond composites** — Volvo vault lists hands-on comparative exposure to laser cutting, hot vacuum forming, welding, molding polymers, and milling. The section currently reads as if composites are the only manufacturing method she's touched.
 
-**Physical & Digital Product R&D** — 78–82%
-This is clearly lagging.
+7. **Design for additive manufacturing (DfAM)** as a specific mechanical engineering discipline — explicitly named in the Volvo vault as an operating context. Not mentioned in the section.
 
-**AI enthusiast** — 55–65%
-This is not yet operating at the same level as the rest.
+TERESE SAYS SKIP: 
+    * 8. **Master's thesis** — "Additive Manufacturing in Production – for the Automotive Industry" at Lund University — a significant primary research evidence item linking mechanical engineering depth to manufacturing systems analysis. Not referenced in the section.
 
----
-
-## 1. Decisions Under Technical Complexity
-
-This chapter is close.
-
-Its issue is not evidence.
-
-It is **narrative compression and elegance.**
-
-Compared to your first three chapters, it still reads slightly like:
-
-“strong technical examples assembled into a chapter”
-
-rather than
-
-“a cleanly distilled operating pattern.”
-
-What needs tightening:
-
-### The GE paragraph is overloaded
-
-This sentence carries too much:
-
-> She helped compare build-stack scenarios...
-
-It’s accurate, but cognitively dense.
-
-The examples are strong, but need cleaner hierarchy.
-
-Right now the reader has to unpack too many technical sub-threads simultaneously.
-
-The chapter needs stronger abstraction control.
-
-The pattern should surface more clearly than the examples.
+    * 9. **Autodesk Simufact** — in the Markforged tool list. This is a manufacturing process simulation tool (specifically used for sintering/metal AM simulation), a distinct signal from general CAD.
 
 ---
 
-## 2. Physical & Digital Product R&D
+**Low signals (still real)**
+11. **3D scan processing and digitization pipeline** — MeshLab is in both Formula Student and Volvo tools; she used it to process scans from 3D scanning into usable geometry. The section mentions 3D scanning but the digitization-to-CAD pipeline step is implied rather than stated.
 
-This is the weakest substantive chapter.
-
-Not because it is bad.
-
-Because it is still reading like **background evidence**, not like a mature capability chapter.
-
-The others answer:
-
-**what systemic capability does this prove?**
-
-This one currently answers more:
-
-**what product-development things has she done?**
-
-That is a major distinction.
-
-The chapter needs a stronger identity.
-
-Right now it feels like:
-
-“foundational engineering credentials + examples”
-
-It needs to become something more like:
-
-**Physical-Digital Translation Across Product Constraints**
-
-or
-
-**Integrated Product Realization**
-
-The real capability underneath is:
-
-translating design intent into manufacturable, physically-realizable solutions across technical constraints.
-
-That is much sharper than “product R&D.”
+TERESE SAYS SKIP: 
+    * 10. **Automatic control / control systems foundations** — the vault lists this as a foundational (not advanced) capability with coursework: Measurement and Instrumentation, Basic Automatic Control, Electronics. Signals awareness of feedback systems and instrumentation within mechanical product development — absent from the section.
+    * 12. **SPC / statistical process control** as a mechanical/production engineering tool — in the `production_and_quality_engineering` capability evidence list, not referenced in the Product R&D section.
 
 ---
 
-## 3. AI enthusiast
+**Summary of the core gap**
 
-This is by far the biggest mismatch.
-
-Everything before it is:
-
-* evidence-grounded
-* operationally specific
-* earned through industrial proof
-
-Then:
-
-**AI enthusiast**
-
-lands like an abrupt downgrade.
-
-It sounds hobbyist.
-
-Almost junior.
-
-That title is actively undermining the sophistication of the preceding chapters.
-
-This is the clearest immediate fix.
-
-Do not use “enthusiast.”
-
-It collapses your credibility gradient.
-
-You are not presenting:
-
-“person interested in AI.”
-
-You are presenting:
-
-someone extending a long-standing capability-architecture pattern into knowledge systems and retrieval-backed decision infrastructure.
-
-That is fundamentally different.
-
-Better titles:
-
-### Strongest
-
-**AI-Enabled Knowledge Systems**
-
-Very aligned with your actual work.
-
----
-
-### More architectural
-
-**Structured Intelligence & Knowledge Infrastructure**
-
----
-
-### Most aligned with prior chapters
-
-**Capability Architecture for AI-Assisted Work**
-
----
-
-### If you want future-facing without hype
-
-**AI-Assisted Decision Systems**
-
----
-
-The content also needs more evidence.
-
-Right now it is still too abstract relative to the rest.
-
-This chapter needs concrete grounding through your twin architecture:
-
-* retrieval design
-* query planning
-* contract-aware retrieval
-* evidence structuring
-* decision-support context assembly
-* knowledge operationalization
-
-That is your proof.
-
-Not “interest in AI.”
-
----
-
-## My recommendation order
-
-Work in this sequence:
-
-### First: rename + rebuild AI chapter
-
-This is the largest credibility gap.
-
----
-
-### Second: strengthen Physical & Digital Product R&D
-
-This is your second biggest structural weakness.
-
----
-
-### Third: polish Decisions Under Technical Complexity
-
-This is already strong enough to leave for final refinement.
-
----
-
-Critical read:
-
-You are no longer solving foundational profile architecture.
-
-You are solving **consistency of chapter maturity.**
-
-The first three chapters established a very high bar.
-
-The remaining three need to rise to that same level.
+The vault shows the mechanical engineering foundation is *significantly deeper* than what the section conveys. Specifically: she ran structural optimization tools (not just CAD), she worked at OEM CAD maturity level (CATIA/Teamcenter/PLM), she has formal FEA coursework, vehicle systems grounding, and a placed competition result as proof. The section currently positions her as someone who does product development with CAD — the vault supports a much stronger reading: structural analysis, lightweight engineering, OEM-workflow fluency, and multi-process manufacturing literacy.
