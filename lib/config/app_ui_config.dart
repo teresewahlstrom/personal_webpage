@@ -227,8 +227,8 @@ final class PageTextStyles {
   }
 
   static TextStyle socialLink(BuildContext context) {
-    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
-    final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
+    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(17.0) / 17.0);
+    final scaledFontSize = _scaledFontSize(17.0, textScale, _bodyScaleIntensity);
     return TextStyle(
       fontFamily: 'Nunito',
       fontWeight: FontWeight.w300,
