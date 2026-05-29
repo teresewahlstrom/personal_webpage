@@ -12,7 +12,7 @@ import '../../config/app_ui_config.dart';
 import '../arrow_key_scroll_wrapper.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
-import '_page_header.dart';
+import 'page_header.dart';
 import '_floating_controls.dart';
 
 /// A reusable widget that combines a grid background with content.

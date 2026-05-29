@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://www.t1grid.com/" />
     <meta
       property="og:title"
-      content="T1 grid — Terese Wahlström personal website"
+      content="Terese Wahlström personal website"
     />
     <meta
       property="og:description"
@@ -23,15 +23,16 @@
     <meta name="twitter:card" content="summary" />
     <meta
       name="twitter:title"
-      content="T1 grid — Terese Wahlström personal website"
+      content="Terese Wahlström personal website"
     />
     <meta
       name="twitter:description"
       content="Personal website of Terese Wahlström — mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling."
     />
-    <meta name="theme-color" content="#F8F9F7" />
-    <title>T1 grid — Terese Wahlström personal website</title>
-    <link rel="preload" href="assets/assets/images/logo.png" as="image" type="image/png" fetchpriority="high" />
+    <meta id="theme-color" name="theme-color" content="#F8F9F7" />
+    <title>Terese Wahlström personal website</title>
+    <link id="app-icon" rel="icon" href="assets/t1_logo/t1_logo_favicon_dark.svg" type="image/svg+xml" />
+    <link id="app-shortcut-icon" rel="shortcut icon" href="assets/t1_logo/t1_logo_favicon_dark.svg" type="image/svg+xml" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -46,6 +47,28 @@
         },
         "sameAs": ["https://www.linkedin.com/in/teresewahlstrom"]
       }
+    </script>
+    <script>
+      (function () {
+        var darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        var themeColor = document.getElementById('theme-color');
+        var iconLink = document.getElementById('app-icon');
+        var shortcutIconLink = document.getElementById('app-shortcut-icon');
+        var lightIcon = 'assets/t1_logo/t1_logo_favicon_dark.svg';
+        var darkIcon = 'assets/t1_logo/t1_logo_favicon_light.svg';
+
+        function applyBrowserTheme(event) {
+          var prefersDark = event.matches;
+          var iconHref = prefersDark ? darkIcon : lightIcon;
+
+          themeColor.setAttribute('content', prefersDark ? '#212835' : '#F8F9F7');
+          iconLink.setAttribute('href', iconHref);
+          shortcutIconLink.setAttribute('href', iconHref);
+        }
+
+        applyBrowserTheme(darkModeQuery);
+        darkModeQuery.addEventListener('change', applyBrowserTheme);
+      })();
     </script>
     <style>
       html, body {
@@ -65,7 +88,6 @@
       }
       img {
         -webkit-user-drag: none;
-        user-drag: none;
       }
     </style>
   </head>

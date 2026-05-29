@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../text_styles/utility_text_styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../svg/tw_svg_asset.dart';
 
 import 'markup_ast.dart';
 import 'markup_blockquote_rail_painter.dart';
@@ -472,15 +471,13 @@ class MarkupViewRenderer {
 
     return Transform.translate(
       offset: Offset(0, verticalOffset),
-      child: SvgPicture.asset(
+      child: TwSvgAsset(
         _unorderedListMarkerAssetPath,
         package: _unorderedListMarkerAssetPackage,
         width: markerSize,
         height: markerSize,
         fit: BoxFit.contain,
-        colorFilter: markerColor == null
-            ? null
-            : ColorFilter.mode(markerColor, BlendMode.srcIn),
+        color: markerColor,
       ),
     );
   }

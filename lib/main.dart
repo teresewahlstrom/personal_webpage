@@ -4,7 +4,7 @@ import 'package:tw_primitives/text_styles.dart';
 
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
-import 'widgets/shell/header_logo_asset.dart';
+import 'widgets/shell/page_header.dart';
 import 'widgets/shell/page_scaffold.dart';
 
 Future<void> main() async {
@@ -54,7 +54,7 @@ class _T1GridAppState extends State<T1GridApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "T1 grid — Terese Wahlström personal website",
+      title: "Terese Wahlström personal website",
       themeAnimationDuration: Duration.zero,
       theme: ThemeData(
         useMaterial3: false,

@@ -1,8 +1,42 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:tw_primitives/svg.dart';
 
 import '../../config/app_ui_config.dart';
-import 'header_logo_asset.dart';
+
+const String kHeaderLogoAssetPath = 'assets/t1_logo/t1_logo.svg';
+const Duration _headerLogoPrecacheTimeout = Duration(seconds: 3);
+
+Future<void> precacheHeaderLogoAsset() {
+  final Completer<void> completer = Completer<void>();
+
+  void complete() {
+    if (!completer.isCompleted) {
+      completer.complete();
+    }
+  }
+
+  rootBundle.loadString(kHeaderLogoAssetPath).then((_) {
+    complete();
+  }).catchError((Object error, StackTrace stackTrace) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace,
+        library: 'personal_webpage',
+        context: ErrorDescription('while precaching the header logo'),
+      ),
+    );
+    complete();
+  });
+
+  return completer.future.timeout(
+    _headerLogoPrecacheTimeout,
+    onTimeout: () {},
+  );
+}
 
 class PageHeader extends StatefulWidget {
   const PageHeader({super.key, this.logoAssetPath = kHeaderLogoAssetPath});
@@ -16,7 +50,7 @@ class PageHeader extends StatefulWidget {
 class _PageHeaderState extends State<PageHeader> {
   bool get _isSvgLogo => widget.logoAssetPath.toLowerCase().endsWith('.svg');
   bool get _usesTextColorTint =>
-      widget.logoAssetPath.toLowerCase().endsWith('assets/t1_logo/t1_logo.svg');
+      widget.logoAssetPath.toLowerCase().startsWith('assets/t1_logo/');
 
   @override
   void didChangeDependencies() {
@@ -61,12 +95,10 @@ class _PageHeaderState extends State<PageHeader> {
                     width: ShellUiConfig.headerLogoWidth,
                     height: ShellUiConfig.headerLogoHeight,
                     child: _isSvgLogo
-                        ? SvgPicture.asset(
+                        ? TwSvgAsset(
                             widget.logoAssetPath,
                             fit: BoxFit.contain,
-                            colorFilter: logoColor == null
-                                ? null
-                                : ColorFilter.mode(logoColor, BlendMode.srcIn),
+                            color: logoColor,
                           )
                         : Image.asset(widget.logoAssetPath, fit: BoxFit.contain),
                   ),

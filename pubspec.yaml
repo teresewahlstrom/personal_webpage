@@ -18,7 +18,6 @@ dependencies:
     path: packages/tw_primitives
   tw_keywords:
     path: packages/tw_keywords
-  flutter_svg: ^2.3.0
   web: ^1.1.1
 
 
@@ -32,6 +31,8 @@ flutter:
 
   assets:
     - assets/t1_logo/t1_logo.svg
+    - assets/t1_logo/t1_logo_favicon_dark.svg
+    - assets/t1_logo/t1_logo_favicon_light.svg
     - lib/subjects/index.json
     - lib/subjects/Terese/keywords.md
     - lib/subjects/Terese/professional_story.md

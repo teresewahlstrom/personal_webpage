@@ -70,7 +70,7 @@ Sustainable alignment does not come from authority. It emerges when system reali
 
 ---
 
-## Product R&D – Physical & Digital
+## Product R&D - Physical & Digital
 The hardest product decisions are rarely isolated technical choices. They emerge where multiple system layers must resolve into one working whole.
 
 Terese works across precisely these intersections. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical components, manufacturing systems, decision-support tools, and software-enabled solutions. She helps shape what should be built, how it should work, and what it will take for teams to deliver it reliably. What distinguishes this capability is the ability to reason coherently across product layers without losing sight of where they intersect: physical geometry, manufacturability, operational behavior, human interaction, and the underlying system architecture that makes the whole product coherent.
