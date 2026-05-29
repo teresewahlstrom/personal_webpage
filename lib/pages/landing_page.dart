@@ -213,9 +213,9 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 48),
                         const _ProjectsSection(),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 48),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
                           entries: <_SocialItem>[
@@ -391,7 +391,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                       index++
                     ) ...<Widget>[
                       if (index > 0)
-                        const _SelectableCopyBreak(height: 12),
+                        const _SelectableCopyBreak(height: 14),
                       _ExpandableProjectCard(
                         title: projectCards[index].title,
                         contentDocument: projectCards[index].contentDocument,
@@ -537,8 +537,9 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
         _buildProjectCardMarkdownSurface(
       context,
     );
-    final TextStyle cardTitleStyle = markdownSurface.theme.headingStyleResolver(
-      2,
+    final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
+    final TextStyle cardTitleStyle = h2.copyWith(
+      fontSize: (h2.fontSize ?? 18) - 0.5,
     );
     final Color baseIconColor =
       TwBodyTextStyle.bodyForContext(

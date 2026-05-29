@@ -24,7 +24,7 @@ Capability must be designed into the system if it is to scale.
 
 ---
 
-## Engineering Logic & Automation
+## Logic & Automation Engineer
 Complex engineering environments depend on hidden rules: process dependencies, material constraints, workflow sequences, configuration logic, and operational trade-offs that determine whether technical work executes reliably or breaks down under real-world conditions. These rules are often understood tacitly by experts but remain difficult for others to see, apply, or scale consistently.
 
 Terese captures this hidden logic and translates it into executable models, automation, and formal systems others can reliably use. She treats modeling and automation as active engineering design rather than passive documentation. By connecting physical system constraints directly to execution logic and business decisions, she reduces ambiguity, removes repetitive expert-dependent work, and creates more reliable pathways for technical and commercial execution.
@@ -70,7 +70,7 @@ Sustainable alignment does not come from authority. It emerges when system reali
 
 ---
 
-## Product R&D - Physical & Digital
+## Product R&D Engineer - Physical & Digital
 The hardest product decisions are rarely isolated technical choices. They emerge where multiple system layers must resolve into one working whole.
 
 Terese works across precisely these intersections. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical components, manufacturing systems, decision-support tools, and software-enabled solutions. She helps shape what should be built, how it should work, and what it will take for teams to deliver it reliably. What distinguishes this capability is the ability to reason coherently across product layers without losing sight of where they intersect: physical geometry, manufacturability, operational behavior, human interaction, and the underlying system architecture that makes the whole product coherent.
@@ -91,7 +91,7 @@ The through-line is consistent: translating ambiguous requirements into working 
 
 ---
 
-## Metal “3D Printing”
+## Metal “3D Printing” Specialist
 Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments across automotive, aerospace, medical, jewellery, and general industrial manufacturing, and organizations ranging from early-stage ventures to global enterprises.
 
 Within additive manufacturing, she has developed substantial depth in **Metal Binder Jetting** and **Electron Beam Melting**, while maintaining a broad comparative perspective across the wider process landscape. That perspective was shaped through comparative proof-of-concept evaluation work at Volvo Cars across diverse printers, materials, and AM processes, and grounded in long-running technology analysis spanning literature, case studies, and applied industrial work since her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478).
