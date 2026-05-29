@@ -4,7 +4,7 @@ final class TwBodyTextStyle {
   static const String fontFamily = 'Nunito';
   static const double baseFontSize = 18.0;
   static const FontWeight fontWeight = FontWeight.w300;
-  static const double lineHeight = 1.4;
+  static const double lineHeight = 1.42;
   static const double minTextScale = 1.0;
   static const double defaultMaxTextScale = 1.6;
   static const double scaleIntensity = 0.7;
