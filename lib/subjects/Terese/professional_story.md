@@ -1,6 +1,6 @@
 A creative systems engineer and cross-domain integrator, Terese builds technical systems, decision tools, and workflow infrastructure that help complex engineering organizations and teams execute reliably.
 
-Her strongest fit is in industrial or deep-tech roles with ownership of technical product logic, digital workflow systems, technical product direction, and the cross-functional team capability required to deliver them.
+Her strongest fit is in industrial or deep-tech roles with ownership of technical products, digital workflow systems, and the cross-functional capability required to translate complex user and engineering needs into reliable implementation.
 
 ---
 
