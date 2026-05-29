@@ -5,6 +5,26 @@ import 'package:tw_primitives/src/markdown/markup_rendering.dart'
     show MarkupInlineRendering;
 
 void main() {
+  test('buildMarkdownTheme: H1 heading style uses configured scale', () {
+    const baseColor = Colors.black;
+    const linkColor = Colors.blue;
+
+    final theme = buildMarkdownTheme(
+      const MarkdownThemeConfig(
+        baseTextColor: baseColor,
+        linkColor: linkColor,
+        isDark: false,
+      ),
+    );
+
+    final headingStyle = theme.headingStyleResolver(1);
+
+    expect(
+      headingStyle.fontSize,
+      closeTo((theme.baseStyle.fontSize ?? 14.0) * 1.6833333333, 0.001),
+    );
+  });
+
   test('buildMarkdownTheme: H2 heading style uses configured scale', () {
     const baseColor = Colors.black;
     const linkColor = Colors.blue;

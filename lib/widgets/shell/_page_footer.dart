@@ -42,12 +42,7 @@ class PageFooter extends StatelessWidget {
           children: <Widget>[
             Text(
               '\u00A9$year $brandName. All rights reserved.',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 16,
-                color: ShellUiConfig.footerTextFor(brightness),
-                decoration: TextDecoration.none,
-              ),
+              style: PageTextStyles.bodyText(context).copyWith(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             _LinkTextButton(
@@ -131,14 +126,7 @@ class _LinkTextButton extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 16,
-          decoration: TextDecoration.underline,
-          decorationStyle: TextDecorationStyle.solid,
-          decorationColor: ShellUiConfig.linkTextFor(brightness),
-          decorationThickness: 1.0,
-        ),
+        style: PageTextStyles.bodyText(context).copyWith(fontSize: 16),
       ),
     );
   }

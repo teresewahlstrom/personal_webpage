@@ -123,13 +123,13 @@ class _LandingPageState extends State<LandingPage> {
                   Text(
                     'Failed to load subject data.',
                     textAlign: TextAlign.center,
-                    style: PageTextStyles.h2(context),
+                    style: PageTextStyles.sectionTitle(context),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     snapshot.error.toString(),
                     textAlign: TextAlign.center,
-                    style: PageTextStyles.body(context),
+                    style: PageTextStyles.bodyText(context),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
@@ -256,7 +256,7 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-          style: PageTextStyles.body(context),
+          style: PageTextStyles.bodyText(context),
           child: content,
         );
       },
@@ -276,9 +276,9 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(_title, style: PageTextStyles.h2(context)),
+        Text(_title, style: PageTextStyles.sectionTitle(context)),
         const _SelectableCopyBreak(height: 10),
-        Text(_content, style: PageTextStyles.body(context)),
+        Text(_content, style: PageTextStyles.bodyText(context)),
       ],
     );
   }
@@ -323,7 +323,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(_title, style: PageTextStyles.h2(context)),
+        Text(_title, style: PageTextStyles.sectionTitle(context)),
         const _SelectableCopyBreak(height: 10),
         FutureBuilder<_ProjectCardsContent>(
           future: _projectCardsFuture,
@@ -335,7 +335,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 if (snapshot.hasError) {
                   return Text(
                     'Could not load professional stories.',
-                    style: PageTextStyles.body(context),
+                    style: PageTextStyles.bodyText(context),
                   );
                 }
                 if (!snapshot.hasData) {
@@ -399,6 +399,18 @@ class _ExpandableProjectCard extends StatefulWidget {
 
   @override
   State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
+}
+
+MarkupTheme _buildProjectCardMarkupTheme(BuildContext context) {
+  final Brightness brightness = Theme.of(context).brightness;
+  final chatSkin = ChatSkin.dataForBrightness(brightness);
+  return buildMarkdownTheme(
+    MarkdownThemeConfig(
+      baseTextColor: chatSkin.colors.bubbleText,
+      linkColor: chatSkin.colors.markupLink,
+      isDark: brightness == Brightness.dark,
+    ),
+  );
 }
 
 class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
@@ -489,8 +501,11 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color cardFill = ShellUiConfig.projectCardFillFor(brightness);
+    final TextStyle cardTitleStyle = _buildProjectCardMarkupTheme(
+      context,
+    ).headingStyleResolver(2);
     final Color baseIconColor =
-        PageTextStyles.body(context).color ??
+      PageTextStyles.bodyText(context).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         PagePalette.bodyFor(brightness);
     final Color iconColor = _isHovered
@@ -525,9 +540,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                       Expanded(
                         child: Text(
                           widget.title,
-                          style: PageTextStyles.body(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w700),
+                          style: cardTitleStyle,
                         ),
                       ),
                       RotationTransition(
@@ -645,15 +658,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
   }
 
   MarkupTheme _buildTheme(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final chatSkin = ChatSkin.dataForBrightness(brightness);
-    return buildMarkdownTheme(
-      MarkdownThemeConfig(
-        baseTextColor: chatSkin.colors.bubbleText,
-        linkColor: chatSkin.colors.markupLink,
-        isDark: brightness == Brightness.dark,
-      ),
-    );
+    return _buildProjectCardMarkupTheme(context);
   }
 
   @override
@@ -666,7 +671,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       selectable: widget.selectable,
       chromeVisible: true,
       blockquoteRailColor:
-          PageTextStyles.body(context).color ??
+          PageTextStyles.bodyText(context).color ??
           Theme.of(context).textTheme.bodyMedium?.color,
     );
   }
@@ -746,7 +751,10 @@ class _SocialSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(title, style: PageTextStyles.h2(context).copyWith(fontSize: 34)),
+        Text(
+          title,
+          style: PageTextStyles.sectionTitle(context).copyWith(fontSize: 34),
+        ),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
           Padding(
@@ -812,8 +820,8 @@ class _SocialRowState extends State<_SocialRow> {
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color headingColor =
-        PageTextStyles.h2(context).color ??
-        PageTextStyles.body(context).color ??
+      PageTextStyles.sectionTitle(context).color ??
+      PageTextStyles.bodyText(context).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         PagePalette.bodyFor(brightness);
     final Color color = _isHovered
@@ -844,13 +852,7 @@ class _SocialRowState extends State<_SocialRow> {
               const SizedBox(width: 14),
               Text(
                 widget.entry.label,
-                style: PageTextStyles.socialLink(context).copyWith(
-                  color: color,
-                  letterSpacing: 0.35,
-                  decoration: _isHovered
-                      ? TextDecoration.underline
-                      : TextDecoration.none,
-                ),
+                style: PageTextStyles.bodyText(context),
               ),
             ],
           ),

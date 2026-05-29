@@ -200,7 +200,7 @@ final class PageTextStyles {
   static const double _bodyScaleIntensity = 0.7;
   static const double _headingScaleIntensity = 0.5;
 
-  static TextStyle body(BuildContext context) {
+  static TextStyle bodyText(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
     final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
@@ -209,11 +209,12 @@ final class PageTextStyles {
       fontWeight: FontWeight.w300,
       fontSize: scaledFontSize,
       height: 1.4,
+      decoration: TextDecoration.none,
       color: PagePalette.bodyFor(brightness),
     );
   }
 
-  static TextStyle h2(BuildContext context) {
+  static TextStyle sectionTitle(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(35.0) / 35.0);
     final scaledFontSize = _scaledFontSize(35.0, textScale, _headingScaleIntensity);
@@ -226,7 +227,7 @@ final class PageTextStyles {
     );
   }
 
-  static TextStyle socialLink(BuildContext context) {
+  static TextStyle socialLinkText(BuildContext context) {
     final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(17.0) / 17.0);
     final scaledFontSize = _scaledFontSize(17.0, textScale, _bodyScaleIntensity);
     return TextStyle(

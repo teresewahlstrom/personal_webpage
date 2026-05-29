@@ -15,4 +15,4 @@ License file: assets/fonts/comingsoon/LICENSE.txt
 Bebas Neue
 Copyright 2010 Dharma Type
 Licensed under the SIL Open Font License 1.1.
-License file: assets/fonts/BebasNeue-LICENSE.txt
+License file: assets/fonts/bebasneue/OFL.txt

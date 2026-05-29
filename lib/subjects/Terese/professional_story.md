@@ -91,7 +91,7 @@ The through-line is consistent: translating ambiguous requirements into working 
 
 ---
 
-## Metal Additive Manufacturing (“3D Printing”)
+## Metal “3D Printing”
 Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments across automotive, aerospace, medical, jewellery, and general industrial manufacturing, and organizations ranging from early-stage ventures to global enterprises.
 
 Within additive manufacturing, she has developed substantial depth in **Metal Binder Jetting** and **Electron Beam Melting**, while maintaining a broad comparative perspective across the wider process landscape. That perspective was shaped through comparative proof-of-concept evaluation work at Volvo Cars across diverse printers, materials, and AM processes, and grounded in long-running technology analysis spanning literature, case studies, and applied industrial work since her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478).

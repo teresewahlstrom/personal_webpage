@@ -70,18 +70,13 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
     linkStyle: linkStyle,
     blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
     headingStyleResolver: (int level) {
-      const scales = <double>[1.55, 1.36];
+      const scales = <double>[1.6833333333, 1.36];
       const weights = <FontWeight>[FontWeight.w600, FontWeight.w700];
       final clampedLevel = level.clamp(1, 2);
       final index = clampedLevel - 1;
 
-      double fontSize = baseStyle.fontSize! * scales[index];
-      if (clampedLevel == 1) {
-        fontSize += 2.0;
-      }
-
       return strongStyle.copyWith(
-        fontSize: fontSize,
+        fontSize: baseStyle.fontSize! * scales[index],
         fontWeight: weights[index],
         height: 1.2,
       );
