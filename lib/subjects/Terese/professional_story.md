@@ -1,93 +1,97 @@
-## Capability Architect
-Terese strengthens organizational capability by designing practical structures that make complex work easier to understand, coordinate, and execute reliably at scale.
+# Capability Architect
+Most technical organizations accumulate knowledge that works—until the person carrying it is unavailable. At that point, what looked like a reliable process reveals itself as individual expertise that was never made transferable.
 
-She identifies where system understanding fragments, reconstructs the underlying logic, and translates that insight into reusable frameworks, workflows, and decision structures that reduce expert dependency and improve execution reliability.
+Terese identifies and closes the structural gaps that make complex execution fragile, designing practical infrastructure—diagnostic structures, decision frameworks, training systems, workflow architecture, and knowledge infrastructure—that makes technical work easier to understand, coordinate, and execute reliably at scale.
 
-Terese’s approach to capability architecture was shaped across very different technical and organizational environments where execution depended on how effectively critical context, decisions, and technical reasoning moved through the system. Across these settings, she repeatedly saw the same failure mode: when the structures supporting complex work become fragmented across people, teams, and tools, execution becomes fragile and expensive.
+She treats friction as a design signal. Repeated manual workarounds, unclear handoffs, duplicated reasoning, and hidden dependencies are not normal overhead; they are indicators that system structure can be improved. Her approach follows a consistent pattern:
 
-She treats friction as a design signal. Repeated manual workarounds, unclear handoffs, duplicated reasoning, and hidden dependencies are not normal overhead; they are indicators that system structure can be improved.
+* **Observe:** Identifying where technical intent and execution degrade across engineering, operations, and real-world delivery.
 
-Her methodology follows a consistent pattern:
+* **Reconstruct:** Isolating the deeper structural weaknesses, variable interactions, or recurring constraints behind localized failure.
 
-* **Observation:** Identifying where technical intent degrades across engineering, operations, and real-world delivery.
+* **Encode:** Translating those insights into usable infrastructure built to outlast any individual and improve execution reliability over time.
 
-* **Reconstruction:** Isolating the deeper structural weakness, variable interaction, or recurring constraint behind localized failure.
+This pattern was shaped across manufacturing environments where the cost of fragmented knowledge was concrete and visible. In one case, she recognized that floor-level evidence and process data were being discarded rather than used to build shared understanding. She took the initiative to preserve and structure defect parts, process history, and in-situ documentation into a physical and digital diagnostic reference. This created a practical shared reference that both operators and engineers could use to evaluate production failures together. As its value became visible, others began contributing their own cases and observations, and it evolved into a shared team reference.
 
-* **Encoding:** Translating that insight into practical infrastructure—such as scripts, templates, configuration logic, diagnostic frameworks, training systems, and decision-support structures.
+In another case, she translated the configuration dependencies of a complex production system—equipment parameters, material constraints, and workflow sequences—into structured decision logic that supported technical evaluation, configuration selection, and purchasing decisions. Teams that previously needed to pull in an expert to make correct choices could make them reliably, with greater speed and consistency, without that dependency.
 
-This pattern repeatedly reduces operational fragility by lowering expert bottleneck risk, accelerating knowledge transfer, increasing troubleshooting consistency, and making execution more structurally reliable.
-
-In manufacturing environments, this has taken multiple forms.
-
-In one case, she recognized the diagnostic value of floor-level evidence and took the initiative to preserve and structure defect parts, process data, and in-situ documentation into a shared reasoning tool. By creating an accessible diagnostic reference, she established a common reasoning surface between operators and engineers. As its practical value became visible, others began contributing additional parts, observations, and failure stories, allowing it to evolve into a living team asset.
-
-In another case, she translated complex machine and process dependencies into structured configuration and decision-support logic, enabling teams to make technically sound choices with greater speed, consistency, and confidence while reducing repeated expert intervention.
-
-The principle remains consistent: capability must be designed into the system if it is to scale.
+Capability must be designed into the system if it is to scale.
 
 ---
 
-## Cross-Functional Leader
-Terese creates alignment across technical, operational, and commercial functions by surfacing hidden system logic and translating fragmented perspectives into shared decision structures.
+# Cross-Functional Leader
+The hardest problems in technical organizations don’t sit inside a single function. They emerge at the seams: where engineering specifications meet operational constraints, where technical feasibility and commercial commitment are operating on different assumptions, and where a process that works in the lab fails in the field for reasons no single team can fully see.
 
-The most difficult problems rarely sit inside a single function. They emerge at the seams: where technical complexity meets operational constraint, where engineering intent collides with executional reality, and where decisions must be made with incomplete, unevenly distributed understanding.
+Through structured investigation, technical curiosity, and evidence-driven analysis, Terese makes the underlying system logic visible enough that people in different roles can reason from the same ground—and then reach decisions that hold up across all of them. Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal: evidence that a hidden constraint, assumption gap, or system dependency has not yet been surfaced.
 
-Her leadership operates through structured investigation, technical curiosity, and evidence rather than hierarchy alone. Her breadth across engineering, operations, product, and commercial contexts allows her to engage credibly across disciplines, while her evidence-first approach creates the trust needed to surface operational truth openly.
+Her experience spans factory-floor operations, engineering development, customer-facing technical delivery, and live ISO-certified production environments. This breadth allows her to engage deeply with engineering complexity without asking for oversimplification, while translating what matters clearly for commercial and operational stakeholders without distortion—creating the trust required for operational reality to surface openly and commercial decisions to remain grounded in technical truth.
 
-Having worked directly across manufacturing, customer-facing technical delivery, commercial enablement, and multidisciplinary engineering collaboration, she understands enough of each domain to ask the right questions without flattening domain-specific complexity. This creates trust across each layer:
+In practice, this has taken concrete forms:
 
-* **Operators and technical contributors** trust that operational reality will be surfaced, respected, and fairly attributed.
+* **In pre-sales settings at GE Additive,** she worked across applications engineering, operators, suppliers, and sales teams to determine whether a customer application was genuinely a fit for the technology—and if so, what configuration, implementation scope, and support structure the commitment required. The objective was not to close the deal, but to ensure the promise being made was one the company could honor without the customer absorbing hidden implementation risk.
 
-* **Engineers and R&D specialists** trust that complexity will not be flattened into oversimplified conclusions.
+* **In technical enablement at Markforged,** she rebuilt training and support systems so product and process engineering teams, operators, field engineers, and customer-facing teams shared the same understanding of process behavior, failure mechanisms, and escalation logic. When a customer’s system underperformed, the response was coordinated rather than conflicted, because everyone operated from the same technical ground.
 
-* **Commercial stakeholders and customers** trust that technical uncertainty will be translated into clear decision logic without distortion.
-
-Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal: evidence that a constraint, assumption gap, or hidden dependency has not yet been surfaced.
-
-In pre-sales settings, this has meant aligning applications engineering, operators, suppliers, and commercial stakeholders around the right configuration and offer scope for the customer's application.
-
-In equipment-customer enablement settings, it has meant rebuilding training and support systems so operators, engineers, and customer-facing teams could operate from the same process language, failure logic, and escalation pathways during live technical delivery.
-
-Across these environments, alignment did not come from authority; it came from making underlying system logic visible enough for different functions to reason from the same ground.
+Alignment in these environments does not come from authority; it comes from making hidden system logic legible enough that different functions can reach the same conclusions independently.
 
 ---
 
-## Cost & Decision Modelling
-Terese translates engineering complexity into decision-ready technical, operational, and economic logic. She builds practical modelling frameworks that make trade-offs legible across engineering, operations, and commercial stakeholders.
+## Engineering Logic & Automation
+Complex engineering environments depend on hidden rules: process dependencies, material constraints, workflow sequences, configuration logic, and operational trade-offs that determine whether technical work executes reliably or breaks down under real-world conditions. These rules are often understood tacitly by experts but remain difficult for others to see, apply, or scale consistently.
 
-At GE Additive, she co-developed and customer-adapted a commercially deployed Excel-based decision platform. It linked technical feasibility, benchmark economics, and consumables needs (based on system configuration logic) directly to industrial purchase readiness. She helped compare build-stack scenarios across cycle time, productivity, and scheduling constraints; reframed powder handling from single-use assumptions to validated multi-cycle reuse grounded in material behavior, safety margins, and process constraints; and contributed to linear-regression-assisted productivity reasoning by helping connect model assumptions to continuously updated real-build data across machine types and process parameters.
+Terese captures this hidden logic and translates it into executable models, automation, and formal systems others can reliably use.
 
-Alongside this modelling work, she built scripting support for recurring geometry workflows, including auto-nesting and stacking logic for common circular part families, reducing manual setup effort and improving consistency in early-stage planning.
+Her work centers on identifying where hidden engineering dependencies create meaningful execution friction, then encoding that logic into models, semi-automated workflows, configuration tools, and structured frameworks that make technical reasoning explicit, repeatable, and easier to execute. By converting tacit system behavior into operational tools that connect physical system constraints directly to execution and business logic, she reduces ambiguity, removes repetitive expert-dependent work, and creates more reliable pathways for technical and commercial execution.
 
-At Volvo Cars, she built business-case, ROI, and make-versus-buy framing for internal adoption decisions, connecting technical feasibility to industrial decision criteria including cost, sourcing strategy, and production readiness.
+She treats modeling and automation as active engineering design rather than passive documentation. Her approach follows a consistent pattern:
 
-At Markforged, she built configuration templates and process models translating customer choices into required equipment, consumables, workflow paths, and support implications, reducing configuration ambiguity and improving implementation consistency across technical and non-technical stakeholders.
+* **Map:** Identify the variables, constraints, and dependency structures governing system behavior.
+* **Formalize:** Reconstruct their logical, mathematical, or procedural relationships.
+* **Automate:** Encode that logic into practical systems—templates, scripts, models, workflows, and decision-support tools that others can execute consistently.
 
-Across all three contexts, the pattern is consistent: translate uncertainty into decision-ready structures, make trade-offs legible across functions, de-risk high-stakes setup and qualification choices, and embed economic logic into live execution workflows rather than downstream reporting. Her approach treats cost, value, and KPI structures as upstream design constraints. The objective is practical: reduce uncertainty, improve adoption quality and operational reliability, and enable lower-risk implementation decisions grounded in explicit technical trade-offs.
+This capability has taken multiple forms across industrial environments.
+
+* **At GE Additive,** she co-developed and adapted commercially deployed Excel-based logic systems that translated process dependencies, equipment constraints, consumable dynamics, and production-cycle behavior into predictive configuration and evaluation tools. These systems supported customer feasibility assessment, system configuration, and purchasing decisions under real commercial pressure, while continuously anchoring model assumptions against live production behavior across machine configurations and process conditions.
+
+* **At Markforged,** she encoded multi-stage manufacturing dependencies into structured configuration tools and operational logic frameworks that reduced ambiguity across deployment planning, consumable management, workflow coordination, and technical support. This created shared execution logic commercial and technical teams could operate from consistently.
+
+* **At Volvo Cars,** she built multi-variable evaluation frameworks that mapped technical feasibility, manufacturing suitability, and implementation constraints directly to make-versus-buy and business-case logic for advanced manufacturing adoption.
+
+* **Exploring on her spare-time,** she builds automated trading systems in Python—turning patterns in market behavior into explicit trading rules, testing them systematically, and building the automation needed to execute and evaluate those strategies reliably.
+
+Alongside these larger systems, she selectively builds targeted automation where formalized logic can eliminate repetitive technical work or meaningfully reduce execution ambiguity. This has included scripting geometry-driven preparation workflows, automating repetitive CAD logic such as nesting and stacking initialization, and designing semi-automated internal tooling that converts manual expert reasoning into reliable execution flows.
+
+Across these environments, the underlying methodology remains consistent: capture hidden engineering logic, formalize its governing relationships, and encode that structure into tools and automation that make complex systems easier to reason about, execute, and scale.
+
+The result is not better documentation. It is engineering logic made operational.
 
 ---
 
-## Engineering Logic Modelling
-it was **translating complex, interconnected physical and operational constraints into deterministic logic**.
+## Product R&D – Physical & Digital
+Terese is driven by the challenge of making things real — taking ambiguous requirements, fragmented constraints, and incomplete ideas and shaping them into systems that work. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical products, manufacturing systems, decision-support tools, and software-enabled solutions.
 
-Terese translates complex engineering dependencies, process physics, and operational constraints into deterministic logical frameworks. She builds the practical modeling infrastructure that makes multi-variable trade-offs legible, converting tacit engineering reality into decision-ready tools for technical, operational, and commercial stakeholders.
+What distinguishes this capability is the ability to move across product layers without losing track of any of them — physical geometry, how something can be manufactured, how it will behave in operation, how someone interacts with it, and what the underlying system logic requires. The highest-leverage product decisions usually emerge where several of these layers intersect.
 
-She treats modeling not as passive documentation, but as executable system architecture. Her approach links physical variables (such as material behavior, machine parameters, and cycle times) directly to business logic, allowing organizations to run predictive scenarios, de-risk high-stakes qualification choices, and embed expert-level technical reasoning into everyday workflows.
+Her foundation was formally shaped through an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, with rigorous training in product realization, material behaviour, manufacturing methods, structural analysis, thermodynamics, CAD/CAE-driven development, computational modelling and algorithmic reasoning, combined with human-centered product reasoning in ergonomics, interaction design, and usability.
 
-* **At GE Additive,** she co-developed and customer-adapted a commercially deployed logic engine. This platform synthesized technical process dependencies, system configuration rules, and consumable dynamics into a live predictive model. She mapped complex build-stack scenarios against thermal scheduling constraints and cycle times, and reframed powder lifecycle management from arbitrary single-use assumptions into a validated, multi-cycle reuse model grounded in empirical material behavior, degradation limits, and safety margins. To ensure the model remained accurate under real-world conditions, she integrated linear-regression analysis to continuously anchor theoretical process assumptions against live build data across diverse machine types.
-* **At Markforged,** she translated multi-stage manufacturing and metallurgical dependencies into structural configuration templates and process models. By encoding equipment constraints, volatile consumable consumption rates, and post-processing workflow paths into explicit logic, she systematically stripped ambiguity out of the deployment process, allowing non-technical commercial teams and technical operators to execute from a single source of truth.
-* **At Volvo Cars,** she built multi-variable business-case frameworks and ROI/make-versus-buy decision infrastructure for advanced manufacturing adoption. These models did not just aggregate costs; they mapped technical feasibility, industrial scalability, and cross-technology sourcing constraints directly to corporate decision criteria, making the operational risks and trade-offs of emerging technologies fully legible to executive stakeholders.
+* **At Formula Student,** she owned driver ergonomics and steering-wheel development as a complete product challenge — translating driver feedback into validated physical geometry through iterative clay-based prototyping of grip and button placement, 3D scanning, CAD integration, structural optimization in Altair OptiStruct, and final manufacturing through carbon-fiber vacuum infusion and polyurethane grip molding. The resulting vehicle placed 4th out of 113 combustion-class cars at Silverstone.
 
-Alongside these macroscopic frameworks, she has consistently built the microscopic automation required to make them viable. This includes developing custom scripting support for geometric workflows—such as algorithmic auto-nesting and stacking logic for complex, circular part families—which converted hours of highly repetitive, expert-dependent CAD preparation into a reliable, single-click initialization step.
+* **At Volvo Cars,** she collaborated with industrial designers on interior-pattern concepts across complex double-curved surfaces, work that carried through into production implementation within the Polestar 2.
 
-Across all three environments, the methodology remains identical: capture the hidden rules of a physical system, reconstruct their mathematical and logical relationships, and package that insight into reliable software and modeling infrastructure. By treating operational and economic constraints as upfront design inputs, she ensures that high-stakes technical decisions are grounded in explicit, verifiable system logic.
+* **Across her additive-manufacturing roles** at Volvo Cars, GE Additive, and Markforged, she worked continuously across additive manufacturing (particularly metal) and traditional manufacturing alternatives, developing grounded comparative judgment across DfAM, laser cutting, hot vacuum forming, welding, polymer molding, milling, and manufacturing-strategy evaluation.
+
+* **At Markforged and GE Additive,** she contributed across hardware and software product layers — working alongside engineers developing printer hardware, build-processing software, and machine-interface applications, with input grounded in direct production and operator experience. She also built commercially deployed Excel-based decision tools used across three organizations: structured platforms that translated technical process complexity into evaluation and configuration logic customers could use to make purchasing and implementation decisions.
+
+* **Exploring on her spare-time,** she has built production software systems to explore and validate technical approaches firsthand. The most developed of these is a Flutter web application backed by Python services and a Node.js API layer — a working system built to the implementation depth required to assess architectural direction from the inside, produce credible prototypes, and engage productively with specialist software engineers around implementation trade-offs, architectural constraints, and system design decisions.
+
+The through-line is consistent: translating ambiguous requirements into working systems — whether the output is a carbon-fibre steering wheel, manufacturable surface geometry, commercially deployed Excel-based decision tools, or production software systems.
 
 ---
 
 ## Metal “3D-printing”
 Terese brings over a decade of additive-manufacturing experience spanning product development, industrial evaluation, commercial systems, and live production environments—across automotive, aerospace, medical, jewellery, and general industrial manufacturing, and organizations ranging from early-stage ventures to global enterprises.
 
-Her deepest expertise lies in metal binder jetting and Electron Beam Melting, supported by working knowledge across the wider additive-manufacturing landscape. This broader perspective was shaped through extensive comparative proof-of-concept evaluations at Volvo Cars across diverse printers, materials, and AM processes, alongside technology analysis grounded in both literature and structured case studies, beginning with her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) and sustained throughout her career.
+Within additive manufacturing, she has developed substantial depth in metal binder jetting and Electron Beam Melting, while maintaining broad comparative perspective across the wider process landscape. That broader perspective was shaped through comparative proof-of-concept evaluation work at Volvo Cars across diverse printers, materials, and AM processes, and grounded in long-running technology analysis spanning literature, case studies, and applied industrial work since her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478).
 
 She translates complex process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates real industrial value—and what is required to make that value reliable, scalable, and operationally trustworthy.
 
@@ -101,40 +105,35 @@ She translates complex process realities into structured decision logic, operati
 
 * **As a process-analysis and cross-functional technical integration point,** she reconstructed manufacturing behavior through structured investigation—connecting production observations, defect morphology, process history, and operational patterns to strengthen troubleshooting logic, resolve customer process questions, escalate deeper material issues to domain experts, and continuously convert operational learning into stronger training and support systems.
 
-Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into transferable capability—through decision-support models, technical training programmes, diagnostic structures, and process frameworks others could reliably use.
+Across these settings, her contribution consistently centered on converting expert-dependent technical understanding into decision structures, training systems, and process frameworks others could reliably use.
 
 She knows the difference between good-on-paper additive manufacturing and capability that can actually be operated, taught, supported, scaled, and trusted in production.
 
 ---
 
-## Product R&D – Physical & Digital
-Terese is driven by the challenge of making things real — taking ambiguous requirements, fragmented constraints, and incomplete ideas and shaping them into systems that work. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical products, manufacturing systems, decision-support tools, and software-enabled solutions.
+## AI Systems for Technical Work
 
-What distinguishes this capability is the ability to reason coherently across product layers without flattening their complexity — holding geometry, manufacturability, operational behaviour, user interaction, and system logic in view simultaneously, then synthesising toward decisions that strengthen the whole system.
+Terese designs evidence-grounded AI systems for complex technical environments—systems that combine structured operational knowledge, retrieval, deterministic tools, workflow logic, and human escalation to help teams reason more reliably from fragmented technical reality.
 
-Her foundation was formally shaped through an M.Sc. in Mechanical Engineering with Industrial Design from Lund University, with rigorous training in product realization, material behaviour, manufacturing methods, structural analysis, thermodynamics, CAD/CAE-driven development, computational modelling and algorithmic reasoning, combined with human-centered product reasoning in ergonomics, interaction design, and usability.
+Her work focuses on a specific class of AI problem: situations where critical decisions depend on incomplete context, tacit expert reasoning, and interacting technical constraints that cannot be reduced to static rules alone. In these environments, the challenge is not simply generating answers, but designing systems that surface the right evidence, preserve uncertainty where it exists, and support human judgment without distorting underlying technical truth.
 
-* **At Formula Student,** she owned driver ergonomics and steering-wheel development as a complete product challenge — translating driver feedback into validated physical geometry through iterative clay-based prototyping of grip and button placement, 3D scanning, CAD integration, structural optimization in Altair OptiStruct, and final manufacturing through carbon-fiber vacuum infusion and polyurethane grip molding. The resulting vehicle placed 4th out of 113 combustion-class cars at Silverstone.
+This work emerged as a natural extension of patterns first observed across advanced manufacturing environments, where operational reliability often depended on whether expert-dependent reasoning could be made accessible beyond the individuals carrying it. The same structural challenge appears in AI-enabled systems: how to convert fragmented expertise into distributed capability while preserving fidelity to real-world constraints.
 
-* **At Volvo Cars,** she collaborated with industrial designers on interior-pattern concepts across complex double-curved surfaces, work that carried through into production implementation within the Polestar 2.
+Terese addresses this by treating AI as capability architecture rather than generic automation. Her systems combine structured knowledge representation, retrieval-backed evidence selection, deterministic validation layers, and bounded reasoning workflows that make decision-critical context available at the point of use.
 
-* **Across her additive-manufacturing roles** at Volvo Cars, GE Additive, and Markforged, she worked continuously across additive manufacturing (particularly metal) and traditional manufacturing alternatives, developing grounded comparative judgment across DfAM, laser cutting, hot vacuum forming, welding, polymer molding, milling, and manufacturing-strategy evaluation.
+Her approach follows a consistent pattern:
 
-* **At her additive-manufacturing OEMs** (Markforged and GE Additive), Terese contributed across hardware and software product layers through grounded analysis of process output, workflow behaviour, and operator interaction. This included working alongside engineers developing printer hardware, build-processing software, and machine-interface applications, providing technically and operationally grounded inputs that informed technical decisions across both physical and digital system layers. [weave it in:] Through commercially deployed Excel-based decision products built across three organizations, she translated technical complexity into structured decision logic used to support customer evaluation, configuration, and purchasing decisions.
+* **Represent:** Structure operational knowledge into explicit, queryable system representations.
+* **Retrieve:** Surface relevant evidence dynamically based on contextual need.
+* **Validate:** Anchor probabilistic reasoning against deterministic tools, explicit constraints, and source-grounded evidence.
+* **Escalate:** Preserve clear boundaries between supported inference, unresolved uncertainty, and required human expertise.
 
-* [weave it in and make it more real:] **Exploring on her own,** Through hands-on digital product development, she has designed and built software-enabled solutions to reduce organizational friction and streamline communication in process-intensive engineering environments. This capability is reflected in a production Flutter web application backed by Python-based services and a Node.js API layer — demonstrating the implementation depth required to validate architectural direction, build working prototypes, and collaborate effectively with specialist software engineers.
+This capability has been developed through hands-on design and evaluation of retrieval-backed technical reasoning systems, including context-aware retrieval architectures, evidence-routing logic, structured context assembly pipelines, deterministic tool integration, and formal evaluation frameworks for retrieval quality, grounding reliability, abstention behavior, and workflow usefulness.
 
-The through-line is consistent: translating ambiguous requirements into working systems — whether the output is a carbon-fibre steering wheel, manufacturable surface geometry, commercially deployed Excel-based decision tools, or production software systems.
+In parallel, she has built domain-specific AI reasoning systems that reconstruct technical meaning from incomplete operational evidence—translating fragmented observations into structured next-step reasoning while preserving uncertainty boundaries and explicit escalation pathways.
 
---- 
+Formal applied AI engineering study has complemented this implementation-driven work, but the central focus has remained practical system design: building AI systems that make complex technical reasoning more accessible, traceable, and operationally reliable.
 
-## AI Engineer & Strategist
-Terese applies the same capability-architecture principles to AI-enabled knowledge and decision systems. Her focus is not generic automation, but designing structured context systems that represent operational knowledge, retrieve relevant evidence, and surface decision-critical information at the point of use—improving execution while keeping human judgment central.
+The objective remains consistent with her broader engineering work: converting expert-dependent judgment into distributed capability.
 
-This work emerged as a natural extension of patterns first observed in complex manufacturing environments. Across technical organizations, the same systemic constraints repeatedly appeared: fragmented context, tacit expert reasoning, inconsistent decision pathways, and operational capability that remained difficult to scale because too much critical logic lived inside individuals rather than accessible systems.
-
-To address this, Terese has designed retrieval-backed context and decision-support systems that structure expertise into queryable decision infrastructure. This has included building context-aware retrieval logic, designing evidence-routing logic, context-assembly pipelines, and retrieval-aware decision-support workflows, and translating tacit professional reasoning into explicit operational representations that can be surfaced dynamically when needed.
-
-This work has involved hands-on development across modern AI engineering workflows, including LLM application development, retrieval-augmented generation architectures, embedding and retrieval pipelines, context orchestration logic, backend service integration, and iterative evaluation of retrieval quality, evidence selection, and response reliability. Formal structured study—including completion of advanced applied AI engineering coursework—has complemented this implementation-driven work.
-
-The underlying objective remains consistent: convert expert-dependent reasoning into distributed capability. In AI contexts, this means treating intelligence not as standalone automation, but as capability architecture—using structured retrieval, context design, and workflow intelligence to make organizational knowledge more accessible, actionable, and operationally reliable.
+In AI contexts, this means building systems that do not replace technical reasoning, but make it more visible, more transferable, and more dependable under real-world complexity.
