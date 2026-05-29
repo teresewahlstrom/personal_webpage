@@ -35,7 +35,6 @@ class ChatSkinColors {
     required this.bubbleFadeMaskOpaque,
     required this.bubbleFadeMaskSoft,
     required this.markupLink,
-    required this.markupLinkDecoration,
     required this.scrollbarThumb,
     required this.scrollbarThumbInactive,
     required this.scrollbarTrack,
@@ -60,7 +59,6 @@ class ChatSkinColors {
   final Color bubbleFadeMaskOpaque;
   final Color bubbleFadeMaskSoft;
   final Color markupLink;
-  final Color markupLinkDecoration;
   final Color scrollbarThumb;
   final Color scrollbarThumbInactive;
   final Color scrollbarTrack;

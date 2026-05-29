@@ -72,7 +72,6 @@ void main() {
     expect(colors.composerCursor, sendButtonCyan);
     expect(colors.composerCornerAccent, sendButtonCyan);
     expect(colors.markupLink, sendButtonCyan);
-    expect(colors.markupLinkDecoration, sendButtonCyan);
     expect(colors.bubbleCollapseButton, sendButtonCyan);
   });
 
