@@ -67,23 +67,27 @@ void main() {
     },
   );
 
-  testWidgets(
-    'chrome-free selectable nested lists use fewer RichText leaves',
-    (tester) async {
-      await tester.pumpWidget(
-        _MarkupTestApp(
-          document: MessageMarkup.parse(
-            '1. Parent\n    - Child one\n    - Child two\n2. Next',
-          ),
-          baseStyle: const TextStyle(fontSize: 20, height: 1),
-          chromeVisible: false,
+  testWidgets('chrome-free selectable nested lists preserve nested alignment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _MarkupTestApp(
+        document: MessageMarkup.parse(
+          '1. Parent\n    - Child one\n    - Child two\n2. Next',
         ),
-      );
+        baseStyle: const TextStyle(fontSize: 20, height: 1),
+        chromeVisible: false,
+      ),
+    );
 
-      final richTextCount = find.byType(RichText).evaluate().length;
-      expect(richTextCount, lessThanOrEqualTo(4));
-    },
-  );
+    final parentRect = tester.getRect(_richTextWithPlainText('Parent').first);
+    final childRect = tester.getRect(_richTextWithPlainText('Child one').first);
+    final nextRect = tester.getRect(_richTextWithPlainText('Next').first);
+
+    expect(childRect.left, greaterThan(parentRect.left));
+    expect(nextRect.left, closeTo(parentRect.left, 0.5));
+    expect(nextRect.top, greaterThan(childRect.bottom));
+  });
 
   test('strikethrough thickness is scaled down to half the source stroke', () {
     const theme = MarkupTheme(

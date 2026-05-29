@@ -147,8 +147,6 @@ class MarkupViewRenderer {
       case final MarkupListBlock list:
         final List<_MarkupLayoutListItemNode> items =
             <_MarkupLayoutListItemNode>[];
-        final bool flattenListItemContentForSelection =
-            selectable && !chromeVisible;
         for (final (int itemIndex, MarkupListItem item) in list.items.indexed) {
           final String marker = list.ordered
               ? '${list.startingIndex + itemIndex}. '
@@ -183,15 +181,7 @@ class MarkupViewRenderer {
                       selectable: selectable,
                     ),
               markerGap: _listMarkerGap(theme.baseStyle),
-              content: flattenListItemContentForSelection
-                  ? _MarkupLayoutTextNode(
-                      text: item.toTextSpan(
-                        theme: theme,
-                        gestureRecognizerFactory: gestureRecognizerFactory,
-                      ),
-                      selectable: selectable,
-                    )
-                  : canUseBaseline
+              content: canUseBaseline
                   ? _buildLayoutBlock(
                       itemBlocks.first,
                       theme: theme,
