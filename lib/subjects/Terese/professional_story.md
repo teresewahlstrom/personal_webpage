@@ -60,7 +60,7 @@ Her method is consistent:
 
 * **At Volvo Cars:** She built multi-variable evaluation frameworks that mapped technical feasibility, manufacturing suitability, and implementation constraints directly to make-versus-buy and business-case logic for advanced manufacturing adoption, reducing uncertainty in adoption and sourcing decisions.
 
-* **Exploring on her spare-time, Algo Trading:** She builds automated trading systems in Python, turning patterns in market behavior into explicit trading rules, testing them systematically, and building the automation needed to execute and evaluate those strategies reliably.
+* **Independant exploration: Algo Trading:** She builds automated trading systems in Python, turning patterns in market behavior into explicit trading rules, testing them systematically, and building the automation needed to execute and evaluate those strategies reliably.
 
 Alongside these larger systems, she selectively builds targeted automation where formalized logic eliminates repetitive technical friction. This includes scripting geometry-driven preparation workflows, automating CAD logic such as nesting and stacking initialization, and designing internal tooling that converts manual expert reasoning into predictable execution flows.
 
@@ -85,7 +85,7 @@ Her foundation was formally shaped through an **M.Sc. in Mechanical Engineering 
 
 * **Hardware and software product layers:** At Markforged and GE Additive, she worked alongside engineers developing printer hardware, build-processing software, and machine-interface applications, with input grounded in direct production and operator experience. She also built commercially deployed Excel-based decision tools used across three organizations to translate technical process complexity into evaluation, configuration, and implementation logic, helping teams move from expert interpretation to repeatable operational decisions.
 
-* **Exploring on her spare-time, full-stack prototyping:** On her own initiative, she has built working full-stack software systems to explore and validate technical approaches firsthand, including a Flutter web application backed by Python services and a Node.js API layer. The system is built deeply enough to assess architectural direction from the inside, produce credible prototypes, and engage productively with specialist software engineers around trade-offs, constraints, and system design decisions.
+* **Independant exploration: full-stack prototyping:** On her own initiative, she has built working full-stack software systems to explore and validate technical approaches firsthand, including a Flutter web application backed by Python services and a Node.js API layer. The system is built deeply enough to assess architectural direction from the inside, produce credible prototypes, and engage productively with specialist software engineers around trade-offs, constraints, and system design decisions.
 
 The through-line is consistent: translating ambiguous requirements into working systems—whether the output is a carbon-fibre steering wheel, manufacturable surface geometry, commercially deployed Excel-based decision tools, or production software systems.
 
