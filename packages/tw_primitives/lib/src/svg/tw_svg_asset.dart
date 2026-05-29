@@ -1,7 +1,23 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 
 import 'tw_svg_asset_stub.dart'
     if (dart.library.html) 'tw_svg_asset_web.dart' as impl;
+
+const Duration kTwSvgAssetPrecacheTimeout = Duration(seconds: 3);
+
+Future<void> precacheTwSvgAsset(
+  String assetName, {
+  String? package,
+  Duration timeout = kTwSvgAssetPrecacheTimeout,
+}) {
+  return rootBundle
+      .loadString(_bundleAssetKey(assetName, package))
+      .then((_) {})
+      .timeout(timeout, onTimeout: () {});
+}
 
 class TwSvgAsset extends StatelessWidget {
   const TwSvgAsset(
@@ -32,4 +48,8 @@ class TwSvgAsset extends StatelessWidget {
       color: color,
     );
   }
+}
+
+String _bundleAssetKey(String assetName, String? package) {
+  return package == null ? assetName : 'packages/$package/$assetName';
 }

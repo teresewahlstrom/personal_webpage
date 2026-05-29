@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart' show ChatSkinMode;
+import 'package:tw_primitives/svg.dart';
 import 'package:tw_primitives/text_styles.dart';
 
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
-import 'widgets/shell/page_header.dart';
+import 'widgets/shell/page_header.dart' show kHeaderLogoAssetPath;
 import 'widgets/shell/page_scaffold.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await precacheHeaderLogoAsset();
+  await precacheTwSvgAsset(kHeaderLogoAssetPath).catchError((
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace,
+        library: 'personal_webpage',
+        context: ErrorDescription('while precaching the header logo'),
+      ),
+    );
+  });
   runApp(const T1GridApp());
 }
 
