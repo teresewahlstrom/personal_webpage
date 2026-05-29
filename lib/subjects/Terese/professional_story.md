@@ -1,11 +1,28 @@
-A creative systems engineer and cross-domain integrator, Terese builds technical systems, decision tools, and workflow infrastructure that help complex engineering organizations and teams execute reliably.
+A cross-functional leader, systems engineer, and cross-domain integrator, Terese builds technical systems, decision tools, and workflow infrastructure that help complex engineering organizations and teams execute reliably.
 
 Her strongest fit is in industrial or deep-tech roles with ownership of technical products, digital workflow systems, and the cross-functional capability required to translate complex user and engineering needs into reliable implementation.
 
 ---
 
+## Cross-Functional Leader
+The hardest problems in technical organizations do not sit inside a single function. They emerge at the seams: where engineering specifications meet operational constraints, where technical feasibility and commercial commitment operate on mismatched assumptions, and where a process that works in the lab fails in the field for reasons no single team can fully see.
+
+Through structured investigation, technical curiosity, and evidence-driven analysis, Terese makes the underlying system logic visible so that different roles can reason from the same ground and reach decisions that hold up under pressure. Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal: evidence that a hidden constraint, assumption gap, or system dependency has not yet been surfaced.
+
+Her experience spans factory-floor operations, engineering development, customer-facing technical delivery, and live ISO-certified production environments. This breadth allows her to engage deeply with engineering complexity without demanding oversimplification, while translating critical variables for commercial and operational stakeholders without distortion. She creates the structural trust teams need for operational reality to surface openly, for decisions to stay grounded in technical truth, and for coordinated execution to hold under pressure.
+
+**Cross-functional alignment in practice**
+
+* **Commercial Guardrails at GE Additive:** Working across applications engineering, operators, suppliers, and sales teams, she evaluated whether customer applications genuinely fit the technology and, if so, what configuration, implementation scope, and support structure the commitment required. The objective was not simply to close a deal, but to ensure the commercial promise matched technical capability before hidden implementation risk reached the customer.
+
+* **Technical Delivery Alignment at Markforged:** She rebuilt training and support systems so product engineering, operators, field engineers, and customer-facing teams shared the same mental model of process behavior, failure mechanisms, and escalation logic. When a customer's system underperformed, the organizational response was coordinated rather than conflicted because everyone operated from the same technical ground.
+
+Sustainable alignment does not come from authority. It emerges when system reality becomes visible enough for different functions to reason from the same ground.
+
+---
+
 ## Capability Architect
-Most technical organizations accumulate knowledge that works until the person carrying it is unavailable. At that point, what looked like a reliable process reveals itself as individual expertise that was never made transferable.
+To sustain cross-functional alignment, organizations cannot rely on meetings alone; they require infrastructure. Yet, most technical organizations accumulate knowledge that works until the person carrying it is unavailable. At that point, what looked like a reliable process reveals itself as individual expertise that was never made transferable.
 
 Terese identifies and closes the structural gaps that make complex execution fragile. She designs practical infrastructure such as diagnostic structures, decision frameworks, technical enablement systems, workflow architecture, and knowledge infrastructure that makes complex work easier for teams to understand, coordinate, and execute reliably at scale.
 
@@ -53,24 +70,7 @@ Engineering logic creates value only when it is built into execution.
 
 ---
 
-## Cross-Functional Leader
-The hardest problems in technical organizations do not sit inside a single function. They emerge at the seams: where engineering specifications meet operational constraints, where technical feasibility and commercial commitment operate on mismatched assumptions, and where a process that works in the lab fails in the field for reasons no single team can fully see.
-
-Through structured investigation, technical curiosity, and evidence-driven analysis, Terese makes the underlying system logic visible so that different roles can reason from the same ground and reach decisions that hold up under pressure. Rather than treating disagreement as a relationship problem, she treats it as a diagnostic signal: evidence that a hidden constraint, assumption gap, or system dependency has not yet been surfaced.
-
-Her experience spans factory-floor operations, engineering development, customer-facing technical delivery, and live ISO-certified production environments. This breadth allows her to engage deeply with engineering complexity without demanding oversimplification, while translating critical variables for commercial and operational stakeholders without distortion. She creates the structural trust teams need for operational reality to surface openly, for decisions to stay grounded in technical truth, and for coordinated execution to hold under pressure.
-
-**Cross-functional alignment in practice**
-
-* **Commercial Guardrails at GE Additive:** Working across applications engineering, operators, suppliers, and sales teams, she evaluated whether customer applications genuinely fit the technology and, if so, what configuration, implementation scope, and support structure the commitment required. The objective was not simply to close a deal, but to ensure the commercial promise matched technical capability before hidden implementation risk reached the customer.
-
-* **Technical Delivery Alignment at Markforged:** She rebuilt training and support systems so product engineering, operators, field engineers, and customer-facing teams shared the same mental model of process behavior, failure mechanisms, and escalation logic. When a customer's system underperformed, the organizational response was coordinated rather than conflicted because everyone operated from the same technical ground.
-
-Sustainable alignment does not come from authority. It emerges when system reality becomes visible enough for different functions to reason from the same ground.
-
----
-
-## Product R&D Engineer - Physical & Digital
+## Product R&D Engineer
 The hardest product decisions are rarely isolated technical choices. They emerge where multiple system layers must resolve into one working whole.
 
 Terese works across precisely these intersections. Across physical and digital contexts, this has repeatedly taken form through product-development work spanning physical components, manufacturing systems, decision-support tools, and software-enabled solutions. She helps shape what should be built, how it should work, and what it will take for teams to deliver it reliably. What distinguishes this capability is the ability to reason coherently across product layers without losing sight of where they intersect: physical geometry, manufacturability, operational behavior, human interaction, and the underlying system architecture that makes the whole product coherent.
