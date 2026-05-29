@@ -1,10 +1,10 @@
-Here is the clean B-style rewrite under **Logic & Automation Engineer**.
+Here is the clean B-style rewrite under **Computational Engineer**.
 
 It follows the same structure as your finalized other chapters: concrete problem → mechanism → examples → principle.
 
 ---
 
-## Logic & Automation Engineer
+## Computational Engineer
 
 Complex engineering environments depend on hidden rules: process dependencies, material constraints, workflow sequences, configuration logic, and operational trade-offs that determine whether technical work executes reliably or breaks down under real-world conditions. These rules are often understood tacitly by experts but remain difficult for others to see, apply, or scale consistently.
 

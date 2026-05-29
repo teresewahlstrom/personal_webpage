@@ -24,7 +24,7 @@ Capability must be designed into the system if it is to scale.
 
 ---
 
-## Logic & Automation Engineer
+## Computational Engineer
 Complex engineering environments depend on hidden rules: process dependencies, material constraints, workflow sequences, configuration logic, and operational trade-offs that determine whether technical work executes reliably or breaks down under real-world conditions. These rules are often understood tacitly by experts but remain difficult for others to see, apply, or scale consistently.
 
 Terese captures this hidden logic and translates it into executable models, automation, and formal systems others can reliably use. She treats modeling and automation as active engineering design rather than passive documentation. By connecting physical system constraints directly to execution logic and business decisions, she reduces ambiguity, removes repetitive expert-dependent work, and creates more reliable pathways for technical and commercial execution.
