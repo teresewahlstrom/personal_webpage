@@ -296,7 +296,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   static const String _projectCardsAssetPath =
       'lib/subjects/Terese/professional_story.md';
 
-  late Future<List<_ProjectCardData>> _projectCardsFuture;
+  late Future<_ProjectCardsContent> _projectCardsFuture;
   List<bool> _expandedStates = <bool>[];
 
   @override
@@ -305,14 +305,14 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
     _projectCardsFuture = _loadProjectCards();
   }
 
-  Future<List<_ProjectCardData>> _loadProjectCards() async {
+  Future<_ProjectCardsContent> _loadProjectCards() async {
     final String markdown = await rootBundle.loadString(_projectCardsAssetPath);
-    final List<_ProjectCardData> cards = _ProjectCardsMarkdownLoader.parse(
+    final _ProjectCardsContent content = _ProjectCardsMarkdownLoader.parse(
       markdown,
       sourceAssetPath: _projectCardsAssetPath,
     );
-    _expandedStates = List<bool>.filled(cards.length, false);
-    return cards;
+    _expandedStates = List<bool>.filled(content.cards.length, false);
+    return content;
   }
 
   @override
@@ -325,12 +325,12 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(_title, style: PageTextStyles.h2(context)),
         const _SelectableCopyBreak(height: 10),
-        FutureBuilder<List<_ProjectCardData>>(
+        FutureBuilder<_ProjectCardsContent>(
           future: _projectCardsFuture,
           builder:
               (
                 BuildContext context,
-                AsyncSnapshot<List<_ProjectCardData>> snapshot,
+                AsyncSnapshot<_ProjectCardsContent> snapshot,
               ) {
                 if (snapshot.hasError) {
                   return Text(
@@ -342,10 +342,18 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                   return const SizedBox(height: 48);
                 }
 
-                final List<_ProjectCardData> projectCards = snapshot.data!;
+                final _ProjectCardsContent content = snapshot.data!;
+                final List<_ProjectCardData> projectCards = content.cards;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    if (content.introDocument != null) ...<Widget>[
+                      _ProjectCardMarkdownBody(
+                        document: content.introDocument!,
+                        selectable: true,
+                      ),
+                      const _SelectableCopyBreak(height: 16, lineBreaks: 2),
+                    ],
                     for (
                       int index = 0;
                       index < projectCards.length;
@@ -563,6 +571,13 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   }
 }
 
+class _ProjectCardsContent {
+  const _ProjectCardsContent({required this.cards, this.introDocument});
+
+  final List<_ProjectCardData> cards;
+  final MarkupDocument? introDocument;
+}
+
 class _ProjectCardData {
   const _ProjectCardData({required this.title, required this.contentDocument});
 
@@ -660,7 +675,7 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
 class _ProjectCardsMarkdownLoader {
   const _ProjectCardsMarkdownLoader._();
 
-  static List<_ProjectCardData> parse(
+  static _ProjectCardsContent parse(
     String markdown, {
     required String sourceAssetPath,
   }) {
@@ -671,7 +686,13 @@ class _ProjectCardsMarkdownLoader {
         .where((String section) => section.isNotEmpty)
         .toList(growable: false);
 
-    final List<_ProjectCardData> cards = normalizedSections
+    MarkupDocument? introDocument;
+    final List<String> cardSections = <String>[...normalizedSections];
+    if (cardSections.isNotEmpty && !cardSections.first.startsWith('## ')) {
+      introDocument = MessageMarkup.parse(cardSections.removeAt(0));
+    }
+
+    final List<_ProjectCardData> cards = cardSections
         .map(
           (String section) =>
               _parseCardSection(section, sourceAssetPath: sourceAssetPath),
@@ -684,7 +705,7 @@ class _ProjectCardsMarkdownLoader {
       );
     }
 
-    return cards;
+    return _ProjectCardsContent(cards: cards, introDocument: introDocument);
   }
 
   static _ProjectCardData _parseCardSection(
