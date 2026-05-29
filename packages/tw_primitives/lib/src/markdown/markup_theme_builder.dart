@@ -25,7 +25,19 @@ const double _underlineThickness = 1.9;
 const double _strikethroughLightThickness = 2.8;
 const double _strikethroughDarkThickness = 5.9;
 
-MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
+class MarkdownSurfaceStyle {
+  const MarkdownSurfaceStyle({
+    required this.bodyTextStyle,
+    required this.theme,
+    required this.blockquoteRailColor,
+  });
+
+  final TextStyle bodyTextStyle;
+  final MarkupTheme theme;
+  final Color blockquoteRailColor;
+}
+
+MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   final baseStyle = TwBodyTextStyle.body(
     color: config.baseTextColor,
     textScale: config.textScale,
@@ -63,25 +75,30 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
     decorationThickness: _underlineThickness,
   );
 
-  return MarkupTheme(
-    baseStyle: baseStyle,
-    strongStyle: strongStyle,
-    emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
-    strikethroughStyle: strikethroughStyle,
-    underlineStyle: underlineStyle,
-    linkStyle: linkStyle,
-    blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
-    headingStyleResolver: (int level) {
-      const scales = <double>[1.6, 1.2];
-      const weights = <FontWeight>[FontWeight.w600, FontWeight.w600];
-      final clampedLevel = level.clamp(1, 2);
-      final index = clampedLevel - 1;
+  return MarkdownSurfaceStyle(
+    bodyTextStyle: baseStyle,
+    blockquoteRailColor: baseColor,
+    theme: MarkupTheme(
+      baseStyle: baseStyle,
+      strongStyle: strongStyle,
+      emphasisStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
+      strikethroughStyle: strikethroughStyle,
+      underlineStyle: underlineStyle,
+      linkStyle: linkStyle,
+      blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
+      headingStyleResolver: (int level) {
+        const scales = <double>[1.6, 1.2];
+        const weights = <FontWeight>[FontWeight.w600, FontWeight.w600];
+        final clampedLevel = level.clamp(1, 2);
+        final index = clampedLevel - 1;
 
-      return strongStyle.copyWith(
-        fontSize: baseStyle.fontSize! * scales[index],
-        fontWeight: weights[index],
-        height: 1.2,
-      );
-    },
+        return strongStyle.copyWith(
+          fontSize: baseStyle.fontSize! * scales[index],
+          fontWeight: weights[index],
+          height: 1.2,
+        );
+      },
+    ),
   );
 }
+

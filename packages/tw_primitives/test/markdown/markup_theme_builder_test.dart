@@ -5,24 +5,27 @@ import 'package:tw_primitives/src/markdown/markup_rendering.dart'
     show MarkupInlineRendering;
 
 void main() {
-  test('buildMarkdownTheme: strikethrough thickness is applied by mode', () {
+  test('buildMarkdownSurfaceStyle: strikethrough thickness is applied by mode', () {
     const baseColor = Colors.black;
     const linkColor = Colors.blue;
 
-    final lightTheme = buildMarkdownTheme(
+    final lightSurface = buildMarkdownSurfaceStyle(
       const MarkdownThemeConfig(
         baseTextColor: baseColor,
         linkColor: linkColor,
         isDark: false,
       ),
     );
-    final darkTheme = buildMarkdownTheme(
+    final darkSurface = buildMarkdownSurfaceStyle(
       const MarkdownThemeConfig(
         baseTextColor: baseColor,
         linkColor: linkColor,
         isDark: true,
       ),
     );
+
+    final lightTheme = lightSurface.theme;
+    final darkTheme = darkSurface.theme;
 
     const expectedLightThickness = 2.8;
     const expectedDarkThickness = 5.9;

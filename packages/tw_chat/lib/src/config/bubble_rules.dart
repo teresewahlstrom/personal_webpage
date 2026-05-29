@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/markdown.dart';
 
 import '../utils/math.dart';
 import 'composer_layout.dart';
@@ -46,7 +47,14 @@ class ChatBubbleRules {
 
   static TextStyle textStyle(BuildContext context, double textScale) {
     final skin = ChatSkin.dataOf(context);
-    return ChatSkin.textStyles.bubbleTextStyle(textScale, skin.colors);
+    return buildMarkdownSurfaceStyle(
+      MarkdownThemeConfig(
+        baseTextColor: skin.colors.bubbleText,
+        linkColor: skin.colors.markupLink,
+        isDark: ChatSkin.isDarkOf(context),
+        textScale: textScale,
+      ),
+    ).bodyTextStyle;
   }
 
   static double horizontalTextInset(double textScale) {

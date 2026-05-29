@@ -432,10 +432,10 @@ class _ExpandableProjectCard extends StatefulWidget {
   State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
 }
 
-MarkupTheme _buildProjectCardMarkupTheme(BuildContext context) {
+MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
   final Brightness brightness = Theme.of(context).brightness;
   final chatSkin = ChatSkin.dataForBrightness(brightness);
-  return buildMarkdownTheme(
+  return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
       baseTextColor: chatSkin.colors.bubbleText,
       linkColor: chatSkin.colors.markupLink,
@@ -533,9 +533,13 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Color cardFill = ShellUiConfig.projectCardFillFor(brightness);
-    final TextStyle cardTitleStyle = _buildProjectCardMarkupTheme(
+    final MarkdownSurfaceStyle markdownSurface =
+        _buildProjectCardMarkdownSurface(
       context,
-    ).headingStyleResolver(2);
+    );
+    final TextStyle cardTitleStyle = markdownSurface.theme.headingStyleResolver(
+      2,
+    );
     final Color baseIconColor =
       TwBodyTextStyle.bodyForContext(
         context: context,
@@ -692,25 +696,18 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
     });
   }
 
-  MarkupTheme _buildTheme(BuildContext context) {
-    return _buildProjectCardMarkupTheme(context);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final MarkdownSurfaceStyle markdownSurface =
+        _buildProjectCardMarkdownSurface(context);
     return MarkupView(
       document: widget.document,
-      theme: _buildTheme(context),
+      theme: markdownSurface.theme,
       gestureRecognizerFactory: _recognizerForHref,
       textAlign: TextAlign.start,
       selectable: widget.selectable,
       chromeVisible: true,
-      blockquoteRailColor:
-          TwBodyTextStyle.bodyForContext(
-            context: context,
-            color: PagePalette.bodyFor(Theme.of(context).brightness),
-          ).color ??
-          Theme.of(context).textTheme.bodyMedium?.color,
+      blockquoteRailColor: markdownSurface.blockquoteRailColor,
     );
   }
 }

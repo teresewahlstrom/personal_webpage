@@ -19,12 +19,12 @@ class ChatJumpButton extends StatelessWidget {
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
-    final textStyles = ChatSkin.textStyles;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final double buttonSize = tokens.jumpToLatestButtonFixedSize;
-    final TextStyle buttonTextStyle = textStyles
-      .bubbleTextStyle(textScale, colors)
-        .copyWith(color: colors.bubbleText, fontWeight: FontWeight.w700);
+    final TextStyle buttonTextStyle = ChatBubbleRules.textStyle(
+      context,
+      textScale,
+    ).copyWith(color: colors.bubbleText, fontWeight: FontWeight.w700);
     final BorderSide buttonBorder = BorderSide(
       color: ChatComposerLayout.borderColor(context),
       width: 1.0,

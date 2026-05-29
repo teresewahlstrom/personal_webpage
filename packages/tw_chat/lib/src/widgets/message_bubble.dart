@@ -142,7 +142,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final parsedMarkup = widget.isTypingIndicator
         ? null
         : _getParsedMarkup(widget.text);
-    final markupTheme = _buildMarkupTheme(context);
+    final markupTheme = _buildSharedMarkdownSurfaceForChat(context).theme;
     final textContentMaxWidth = (contentMaxWidth - textMeasureHorizontalInset)
         .clamp(0.0, double.infinity);
     final measuredLayout = _getMeasuredLayout(
@@ -384,10 +384,6 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     );
   }
 
-  MarkupTheme _buildMarkupTheme(BuildContext context) {
-    return _buildSharedMarkdownThemeForChat(context);
-  }
-
   Future<void> _launchMarkdownLink(String href) async {
     final uri = _normalizeLink(href);
     if (uri == null) {
@@ -443,12 +439,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 }
 
-MarkupTheme _buildSharedMarkdownThemeForChat(
+MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(
   BuildContext context,
 ) {
   final skin = ChatSkin.dataOf(context);
   final colors = skin.colors;
-  return buildMarkdownTheme(
+  return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
       baseTextColor: colors.bubbleText,
       linkColor: colors.markupLink,
@@ -539,7 +535,8 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     final skin = ChatSkin.dataOf(context);
     final colors = skin.colors;
     final tokens = skin.tokens;
-    final markupTheme = _buildMarkupTheme(context);
+    final markdownSurface = _buildMarkupSurface(context);
+    final markupTheme = markdownSurface.theme;
 
     if (!isTruncated) {
       final Widget visibleMarkupLayer = MarkupView(
@@ -548,7 +545,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
         gestureRecognizerFactory: gestureRecognizerFactory,
         selectable: false,
         chromeVisible: true,
-        blockquoteRailColor: colors.bubbleText,
+        blockquoteRailColor: markdownSurface.blockquoteRailColor,
       );
       final Widget hiddenSelectionLayer = Positioned.fill(
         child: MarkupView(
@@ -573,7 +570,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       maxWidth: maxTextWidth,
       selectable: false,
       chromeVisible: true,
-      blockquoteRailColor: colors.bubbleText,
+      blockquoteRailColor: markdownSurface.blockquoteRailColor,
     );
     final Widget selectionLayer = _buildTruncatedMarkupLayer(
       document: _visibleSelectionDocument(
@@ -685,8 +682,8 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  MarkupTheme _buildMarkupTheme(BuildContext context) {
-    return _buildSharedMarkdownThemeForChat(context);
+  MarkdownSurfaceStyle _buildMarkupSurface(BuildContext context) {
+    return _buildSharedMarkdownSurfaceForChat(context);
   }
 
   Widget _buildTruncatedMarkupLayer({
@@ -926,6 +923,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       shadows: const <Shadow>[],
     );
   }
+
 }
 
 class _BubbleFooter extends StatelessWidget {

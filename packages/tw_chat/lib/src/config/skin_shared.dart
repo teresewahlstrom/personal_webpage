@@ -321,24 +321,6 @@ class ChatSkinTextStyles {
     );
   }
 
-  TextStyle bubbleTextStyle(double textScale, ChatSkinColors colors) {
-    final scale = _resolvedTextScale(
-      textScale,
-      maxTextScale: defaultMaxTextScale,
-    );
-    const base = TextStyle(
-      fontFamily: 'Nunito',
-      fontSize: 15,
-      height: 1.3,
-      fontWeight: FontWeight.w300,
-    );
-    return base.copyWith(
-      color: colors.bubbleText,
-      fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
-      height: _scaledLineHeight(base.height!, scale, 0.5),
-    );
-  }
-
   double _scaledFontSize(double base, double scale, double intensity) {
     return ChatMath.scaleFromOne(base, scale, intensity);
   }

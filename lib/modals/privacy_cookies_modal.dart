@@ -41,9 +41,9 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
     });
   }
 
-  MarkupTheme _buildTheme(BuildContext context) {
+  MarkdownSurfaceStyle _buildSurface(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    return buildMarkdownTheme(
+    return buildMarkdownSurfaceStyle(
       MarkdownThemeConfig(
         baseTextColor: AppColorTheme.pageBodyTextFor(brightness),
         linkColor: AppColorTheme.linkTextFor(brightness),
@@ -55,6 +55,7 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
 
   @override
   Widget build(BuildContext context) {
+    final MarkdownSurfaceStyle markdownSurface = _buildSurface(context);
     return SafeArea(
       top: false,
       bottom: false,
@@ -63,14 +64,12 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
         primary: true,
         child: MarkupView(
           document: _contentDocument,
-          theme: _buildTheme(context),
+          theme: markdownSurface.theme,
           gestureRecognizerFactory: _recognizerForHref,
           textAlign: TextAlign.start,
           selectable: true,
           chromeVisible: true,
-          blockquoteRailColor: AppColorTheme.pageBodyTextFor(
-            Theme.of(context).brightness,
-          ),
+          blockquoteRailColor: markdownSurface.blockquoteRailColor,
         ),
       ),
     );
