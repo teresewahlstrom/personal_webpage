@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_ui_config.dart';
@@ -42,7 +43,10 @@ class PageFooter extends StatelessWidget {
           children: <Widget>[
             Text(
               '\u00A9$year $brandName. All rights reserved.',
-              style: PageTextStyles.bodyText(context).copyWith(fontSize: 16),
+              style: TwFooterTextStyles.bodyForContext(
+                context: context,
+                color: PagePalette.bodyFor(brightness),
+              ),
               textAlign: TextAlign.center,
             ),
             _LinkTextButton(
@@ -126,7 +130,10 @@ class _LinkTextButton extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: PageTextStyles.bodyText(context).copyWith(fontSize: 16),
+        style: TwFooterTextStyles.linkForContext(
+          context: context,
+          color: ShellUiConfig.linkTextFor(brightness),
+        ),
       ),
     );
   }

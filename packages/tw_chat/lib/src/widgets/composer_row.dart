@@ -106,7 +106,6 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final composerTextStyle = ChatBubbleRules.textStyle(context, textScale);
-    final composerHintStyle = ChatComposerLayout.hintStyle(context, textScale);
     final composerButtonTooltip = widget.isAwaitingResponse
         ? 'Stop response'
         : 'Send message';
@@ -136,7 +135,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       textStyleBuilder: (_) => composerTextStyle,
       displayHintUntilTextEntered: true,
       hintBuilder: (context) =>
-          Text('Ask me anything...', style: composerHintStyle),
+          Text('Ask me anything...', style: composerTextStyle),
       minLines: 1,
       maxLines: null,
       inputSource: kIsWeb ? TextInputSource.ime : null,

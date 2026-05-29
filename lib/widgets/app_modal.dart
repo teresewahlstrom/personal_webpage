@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/text_styles.dart';
 
 import '../config/app_ui_config.dart';
 import '../services/keyboard_height.dart';
@@ -83,6 +84,7 @@ class _AppModalFrameState extends State<_AppModalFrame> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     final Size viewportSize = MediaQuery.of(context).size;
     final double keyboardHeight = KeyboardHeight.of(context);
     final double availableHeight = viewportSize.height - keyboardHeight;
@@ -118,12 +120,8 @@ class _AppModalFrameState extends State<_AppModalFrame> {
                             widget.headerTitle!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24,
-                              color: widget.closeIconColor,
-                              height: 1,
+                            style: TwModalTextStyles.headerTitle(
+                              color: AppColorTheme.pageBodyTextFor(brightness),
                             ),
                           ),
                   ),
@@ -141,7 +139,10 @@ class _AppModalFrameState extends State<_AppModalFrame> {
                 child: PrimaryScrollController(
                   controller: _modalScrollController,
                   child: DefaultTextStyle(
-                    style: ModalTextStyles.body(context),
+                    style: TwBodyTextStyle.bodyForContext(
+                      context: context,
+                      color: AppColorTheme.pageBodyTextFor(brightness),
+                    ),
                     child: Padding(
                       padding: widget.contentPadding,
                       child: widget.builder(context, widget.close),
@@ -186,10 +187,8 @@ class _ModalCloseButtonState extends State<_ModalCloseButton> {
           padding: const EdgeInsets.all(8),
           child: Text(
             "×",
-            style: TextStyle(
+            style: TwModalTextStyles.closeGlyph(
               color: _isHovered ? widget.hoverColor : widget.color,
-              fontSize: 28,
-              height: 1,
             ),
           ),
         ),

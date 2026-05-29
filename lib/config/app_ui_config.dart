@@ -41,8 +41,8 @@ final class ShellUiConfig {
 
   static const double headerMinHeight = 56;
   static const double headerMaxWidth = 700;
-  static const double headerLogoWidth = 44;
-  static const double headerLogoHeight = 36;
+  static const double headerLogoWidth = 56;
+  static const double headerLogoHeight = 40;
   static const double headerToggleSize = 42;
   static const EdgeInsets headerPadding = EdgeInsets.symmetric(horizontal: 11);
 
@@ -105,10 +105,6 @@ final class ShellUiConfig {
 
   static AppLineStyle footerBorderFor(Brightness brightness) {
     return AppLineTheme.subtleSecondaryFor(brightness);
-  }
-
-  static Color footerTextFor(Brightness brightness) {
-    return AppColorTheme.footerTextFor(brightness);
   }
 
   static Color linkTextFor(Brightness brightness) {
@@ -185,103 +181,7 @@ final class PagePalette {
     return AppColorTheme.pageLoaderFor(brightness);
   }
 
-  static Color headingFor(Brightness brightness) {
-    return AppColorTheme.pageHeadingTextFor(brightness);
-  }
-
   static Color bodyFor(Brightness brightness) {
     return AppColorTheme.pageBodyTextFor(brightness);
-  }
-}
-
-final class PageTextStyles {
-  static const double minTextScale = 1.0;
-  static const double maxTextScale = 1.6;
-  static const double _bodyScaleIntensity = 0.7;
-  static const double _headingScaleIntensity = 0.5;
-
-  static TextStyle bodyText(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(18.0) / 18.0);
-    final scaledFontSize = _scaledFontSize(18.0, textScale, _bodyScaleIntensity);
-    return TextStyle(
-      fontFamily: 'Nunito',
-      fontWeight: FontWeight.w300,
-      fontSize: scaledFontSize,
-      height: 1.4,
-      decoration: TextDecoration.none,
-      color: PagePalette.bodyFor(brightness),
-    );
-  }
-
-  static TextStyle sectionTitle(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(35.0) / 35.0);
-    final scaledFontSize = _scaledFontSize(35.0, textScale, _headingScaleIntensity);
-    return TextStyle(
-      fontFamily: 'ComingSoon',
-      fontWeight: FontWeight.w700,
-      fontSize: scaledFontSize,
-      height: 1,
-      color: PagePalette.headingFor(brightness),
-    );
-  }
-
-  static TextStyle socialLinkText(BuildContext context) {
-    final textScale = _resolvedTextScale(MediaQuery.textScalerOf(context).scale(17.0) / 17.0);
-    final scaledFontSize = _scaledFontSize(17.0, textScale, _bodyScaleIntensity);
-    return TextStyle(
-      fontFamily: 'Nunito',
-      fontWeight: FontWeight.w300,
-      fontSize: scaledFontSize,
-      height: 1.2,
-    );
-  }
-
-  static double _scaledFontSize(double base, double scale, double intensity) {
-    return base * (1 + (scale - 1) * intensity);
-  }
-
-  static double _resolvedTextScale(double textScale) {
-    if (!textScale.isFinite || textScale <= 0) {
-      return minTextScale;
-    }
-    return textScale.clamp(minTextScale, maxTextScale).toDouble();
-  }
-}
-
-final class ModalTextStyles {
-  static TextStyle h3(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: 'Nunito',
-      fontWeight: FontWeight.w500,
-      fontSize: 22,
-      color: AppColorTheme.modalContentTextFor(brightness),
-      height: 1.2,
-    );
-  }
-
-  static TextStyle body(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: 'Nunito',
-      fontWeight: FontWeight.w300,
-      fontSize: 16,
-      height: 1.6,
-      color: AppColorTheme.modalContentTextFor(brightness),
-    );
-  }
-
-  static TextStyle link(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    return TextStyle(
-      fontFamily: 'Nunito',
-      fontWeight: FontWeight.w300,
-      fontSize: 16,
-      height: 1.6,
-      color: AppColorTheme.linkTextFor(brightness),
-      decoration: TextDecoration.underline,
-    );
   }
 }

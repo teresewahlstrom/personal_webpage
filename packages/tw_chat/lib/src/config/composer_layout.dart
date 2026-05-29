@@ -46,11 +46,6 @@ class ChatComposerLayout {
   static Color sendIconColor(BuildContext context) =>
       ChatSkin.dataOf(context).colors.composerSendIcon;
 
-  static TextStyle hintStyle(BuildContext context, double textScale) {
-    final skin = ChatSkin.dataOf(context);
-    return ChatSkin.textStyles.composerHintStyle(textScale, skin.colors);
-  }
-
   static ChatComposerMetrics resolveMetrics({
     required BuildContext context,
     required double panelHeight,

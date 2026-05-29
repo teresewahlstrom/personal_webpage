@@ -5,7 +5,6 @@ import 'skin_shared.dart';
 const ChatSkinData chatLightSkin = ChatSkinData(
   colors: ChatSkinColors(
     transparent: Color(0x00000000),
-    appBarTitle: Color(0xFF161C45),
     bubbleText: Color(0xFF000000),
     shellBackground: Color.fromARGB(255, 238, 238, 238),
     shellOuterShadow: Color(0x14000000),
@@ -16,7 +15,6 @@ const ChatSkinData chatLightSkin = ChatSkinData(
     bubbleShadow: Color(0x10000000),
     bubbleCollapseButton: Color(0xFF843F02),
     bubbleCollapseButtonIcon: Color(0xFFFFFFFF),
-    composerHint: Color(0xFF555764),
     composerFill: Color(0xFFF8F9F7),
     composerBorder: Color(0xFFFFFFFF),
     composerCursor: Color(0xFF394183),

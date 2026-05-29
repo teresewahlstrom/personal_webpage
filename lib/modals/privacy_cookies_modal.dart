@@ -45,9 +45,10 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
     final Brightness brightness = Theme.of(context).brightness;
     return buildMarkdownTheme(
       MarkdownThemeConfig(
-        baseTextColor: AppColorTheme.modalContentTextFor(brightness),
+        baseTextColor: AppColorTheme.pageBodyTextFor(brightness),
         linkColor: AppColorTheme.linkTextFor(brightness),
         isDark: brightness == Brightness.dark,
+        textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       ),
     );
   }
@@ -67,7 +68,7 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
           textAlign: TextAlign.start,
           selectable: true,
           chromeVisible: true,
-          blockquoteRailColor: AppColorTheme.modalContentTextFor(
+          blockquoteRailColor: AppColorTheme.pageBodyTextFor(
             Theme.of(context).brightness,
           ),
         ),

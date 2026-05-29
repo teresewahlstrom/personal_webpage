@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 
-const String kHeaderLogoAssetPath = 'assets/t1_logo/t1_logo_3.svg';
+const String kHeaderLogoAssetPath = 'assets/t1_logo/t1_logo.svg';
 const Duration _headerLogoPrecacheTimeout = Duration(seconds: 3);
 
 Future<void> precacheHeaderLogoAsset() {

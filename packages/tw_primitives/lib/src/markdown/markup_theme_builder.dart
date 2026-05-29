@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../text_styles/body_text_style.dart';
 import 'markup_rendering.dart';
 
 class MarkdownThemeConfig {
@@ -7,11 +8,17 @@ class MarkdownThemeConfig {
     required this.baseTextColor,
     required this.linkColor,
     required this.isDark,
+    this.textScale = TwBodyTextStyle.minTextScale,
   });
+
+  static double bodyTextScaleOf(BuildContext context) {
+    return TwBodyTextStyle.contextTextScale(context);
+  }
 
   final Color baseTextColor;
   final Color linkColor;
   final bool isDark;
+  final double textScale;
 }
 
 const double _underlineThickness = 1.9;
@@ -19,24 +26,19 @@ const double _strikethroughLightThickness = 2.8;
 const double _strikethroughDarkThickness = 5.9;
 
 MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
-  final baseStyle = const TextStyle(
-    fontFamily: 'Nunito',
-    fontSize: 15.0,
-    fontWeight: FontWeight.w300,
-    height: 1.4,
-    letterSpacing: 0.0,
-  ).copyWith(color: config.baseTextColor);
+  final baseStyle = TwBodyTextStyle.body(
+    color: config.baseTextColor,
+    textScale: config.textScale,
+  );
   final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-  final baseLetterSpacing = baseStyle.letterSpacing!;
   final FontWeight strongFontWeight = config.isDark
-      ? FontWeight.w800
-      : FontWeight.w700;
+      ? FontWeight.w700
+      : FontWeight.w600;
   final strongStyle = baseStyle.copyWith(
     fontWeight: strongFontWeight,
     color: lifted.toColor(),
-    letterSpacing: baseLetterSpacing + 0.45,
   );
 
   final double strikeThickness = config.isDark
@@ -70,8 +72,8 @@ MarkupTheme buildMarkdownTheme(MarkdownThemeConfig config) {
     linkStyle: linkStyle,
     blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
     headingStyleResolver: (int level) {
-      const scales = <double>[1.6833333333, 1.36];
-      const weights = <FontWeight>[FontWeight.w600, FontWeight.w700];
+      const scales = <double>[1.6, 1.2];
+      const weights = <FontWeight>[FontWeight.w600, FontWeight.w600];
       final clampedLevel = level.clamp(1, 2);
       final index = clampedLevel - 1;
 

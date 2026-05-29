@@ -15,6 +15,8 @@ class PageHeader extends StatefulWidget {
 
 class _PageHeaderState extends State<PageHeader> {
   bool get _isSvgLogo => widget.logoAssetPath.toLowerCase().endsWith('.svg');
+  bool get _usesTextColorTint =>
+      widget.logoAssetPath.toLowerCase().endsWith('assets/t1_logo/t1_logo.svg');
 
   @override
   void didChangeDependencies() {
@@ -27,9 +29,9 @@ class _PageHeaderState extends State<PageHeader> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color logoColor = PagePalette.headingFor(
-      brightness,
-    ).withValues(alpha: 0.5);
+    final Color? logoColor = _usesTextColorTint
+        ? PagePalette.bodyFor(brightness)
+        : null;
     final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
     final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
     final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
@@ -62,10 +64,9 @@ class _PageHeaderState extends State<PageHeader> {
                         ? SvgPicture.asset(
                             widget.logoAssetPath,
                             fit: BoxFit.contain,
-                            colorFilter: ColorFilter.mode(
-                              logoColor,
-                              BlendMode.srcIn,
-                            ),
+                            colorFilter: logoColor == null
+                                ? null
+                                : ColorFilter.mode(logoColor, BlendMode.srcIn),
                           )
                         : Image.asset(widget.logoAssetPath, fit: BoxFit.contain),
                   ),

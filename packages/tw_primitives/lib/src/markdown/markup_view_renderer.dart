@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../text_styles/utility_text_styles.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'markup_ast.dart';
@@ -355,11 +357,7 @@ class MarkupViewRenderer {
           child: RichText(
             text: TextSpan(
               text: '\n' * lineBreaks,
-              style: const TextStyle(
-                color: Colors.transparent,
-                fontSize: 0.01,
-                height: 1.0,
-              ),
+              style: TwUtilityTextStyles.transparentSelectionSpacer,
             ),
             selectionRegistrar: SelectionContainer.maybeOf(context),
             selectionColor: Colors.transparent,

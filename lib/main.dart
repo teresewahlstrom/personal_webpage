@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart' show ChatSkinMode;
+import 'package:tw_primitives/text_styles.dart';
 
 import 'config/app_ui_config.dart';
 import 'pages/landing_page.dart';
@@ -64,7 +65,7 @@ class _T1GridAppState extends State<T1GridApp> {
           brightness: Brightness.light,
           seedColor: AppColorTheme.seedColorFor(Brightness.light),
         ),
-        fontFamily: 'Nunito',
+        fontFamily: TwBodyTextStyle.fontFamily,
       ),
       darkTheme: ThemeData(
         useMaterial3: false,
@@ -76,7 +77,7 @@ class _T1GridAppState extends State<T1GridApp> {
           brightness: Brightness.dark,
           seedColor: AppColorTheme.seedColorFor(Brightness.dark),
         ),
-        fontFamily: 'Nunito',
+        fontFamily: TwBodyTextStyle.fontFamily,
       ),
       themeMode: _themeMode,
       home: PageScaffold(

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_chat/chat.dart' show ChatSkin;
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:tw_primitives/markdown.dart';
+import 'package:tw_primitives/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/app_ui_config.dart';
@@ -123,13 +124,19 @@ class _LandingPageState extends State<LandingPage> {
                   Text(
                     'Failed to load subject data.',
                     textAlign: TextAlign.center,
-                    style: PageTextStyles.sectionTitle(context),
+                    style: TwSectionTitleTextStyle.forContext(
+                      context: context,
+                      color: PagePalette.bodyFor(Theme.of(context).brightness),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     snapshot.error.toString(),
                     textAlign: TextAlign.center,
-                    style: PageTextStyles.bodyText(context),
+                    style: TwBodyTextStyle.bodyForContext(
+                      context: context,
+                      color: PagePalette.bodyFor(Theme.of(context).brightness),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
@@ -256,7 +263,10 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-          style: PageTextStyles.bodyText(context),
+          style: TwBodyTextStyle.bodyForContext(
+            context: context,
+            color: PagePalette.bodyFor(Theme.of(context).brightness),
+          ),
           child: content,
         );
       },
@@ -276,9 +286,21 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(_title, style: PageTextStyles.sectionTitle(context)),
+        Text(
+          _title,
+          style: TwSectionTitleTextStyle.forContext(
+            context: context,
+            color: PagePalette.bodyFor(Theme.of(context).brightness),
+          ),
+        ),
         const _SelectableCopyBreak(height: 10),
-        Text(_content, style: PageTextStyles.bodyText(context)),
+        Text(
+          _content,
+          style: TwBodyTextStyle.bodyForContext(
+            context: context,
+            color: PagePalette.bodyFor(Theme.of(context).brightness),
+          ),
+        ),
       ],
     );
   }
@@ -323,7 +345,13 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(_title, style: PageTextStyles.sectionTitle(context)),
+        Text(
+          _title,
+          style: TwSectionTitleTextStyle.forContext(
+            context: context,
+            color: PagePalette.bodyFor(brightness),
+          ),
+        ),
         const _SelectableCopyBreak(height: 10),
         FutureBuilder<_ProjectCardsContent>(
           future: _projectCardsFuture,
@@ -335,7 +363,10 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 if (snapshot.hasError) {
                   return Text(
                     'Could not load professional stories.',
-                    style: PageTextStyles.bodyText(context),
+                    style: TwBodyTextStyle.bodyForContext(
+                      context: context,
+                      color: PagePalette.bodyFor(brightness),
+                    ),
                   );
                 }
                 if (!snapshot.hasData) {
@@ -409,6 +440,7 @@ MarkupTheme _buildProjectCardMarkupTheme(BuildContext context) {
       baseTextColor: chatSkin.colors.bubbleText,
       linkColor: chatSkin.colors.markupLink,
       isDark: brightness == Brightness.dark,
+      textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
     ),
   );
 }
@@ -505,7 +537,10 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
       context,
     ).headingStyleResolver(2);
     final Color baseIconColor =
-      PageTextStyles.bodyText(context).color ??
+      TwBodyTextStyle.bodyForContext(
+        context: context,
+        color: PagePalette.bodyFor(brightness),
+      ).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         PagePalette.bodyFor(brightness);
     final Color iconColor = _isHovered
@@ -671,7 +706,10 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       selectable: widget.selectable,
       chromeVisible: true,
       blockquoteRailColor:
-          PageTextStyles.bodyText(context).color ??
+          TwBodyTextStyle.bodyForContext(
+            context: context,
+            color: PagePalette.bodyFor(Theme.of(context).brightness),
+          ).color ??
           Theme.of(context).textTheme.bodyMedium?.color,
     );
   }
@@ -753,7 +791,11 @@ class _SocialSection extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           title,
-          style: PageTextStyles.sectionTitle(context).copyWith(fontSize: 34),
+          style: TwSectionTitleTextStyle.forContext(
+            context: context,
+            color: PagePalette.bodyFor(Theme.of(context).brightness),
+            baseSize: 34,
+          ),
         ),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[
@@ -789,11 +831,7 @@ class _SelectableCopyBreak extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               text: '\n' * lineBreaks,
-              style: const TextStyle(
-                color: Colors.transparent,
-                fontSize: 0.01,
-                height: 1.0,
-              ),
+              style: TwUtilityTextStyles.transparentSelectionSpacer,
             ),
             selectionRegistrar: selectionRegistrar,
             selectionColor: Colors.transparent,
@@ -819,14 +857,20 @@ class _SocialRowState extends State<_SocialRow> {
   @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
-    final Color headingColor =
-      PageTextStyles.sectionTitle(context).color ??
-      PageTextStyles.bodyText(context).color ??
+    final Color textColor =
+      TwSectionTitleTextStyle.forContext(
+        context: context,
+        color: PagePalette.bodyFor(brightness),
+      ).color ??
+      TwBodyTextStyle.bodyForContext(
+        context: context,
+        color: PagePalette.bodyFor(brightness),
+      ).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         PagePalette.bodyFor(brightness);
     final Color color = _isHovered
-        ? headingColor.withValues(alpha: 0.82)
-        : headingColor;
+        ? textColor.withValues(alpha: 0.82)
+        : textColor;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -852,7 +896,10 @@ class _SocialRowState extends State<_SocialRow> {
               const SizedBox(width: 14),
               Text(
                 widget.entry.label,
-                style: PageTextStyles.bodyText(context),
+                style: TwBodyTextStyle.bodyForContext(
+                  context: context,
+                  color: PagePalette.bodyFor(brightness),
+                ),
               ),
             ],
           ),

@@ -30,9 +30,6 @@ final class _AppLightColors {
   static const Color modalHeaderBorder = Color(0xFFFFFFFF);
 
   // text colors
-  static const Color pageHeadingText = Color(0xFF161C45);
-  static const Color footerText = Color(0xFF555764);
-  static const Color modalContentText = Color(0xFF252525);
   static const Color pageBodyText = Color(0xFF252525);
   static const Color pageScrollbarThumb = Color(0xFFFFFFFF);
   static const Color pageScrollbarThumbInactive = Color(0xFFFFFFFF);
@@ -69,9 +66,6 @@ final class _AppDarkColors {
   static const Color modalHeaderBorder = Color(0x3390E8F8);
 
   // text colors
-  static const Color pageHeadingText = Color(0xEBDCF6F8);
-  static const Color footerText = Color(0xD6DCF6F8);
-  static const Color modalContentText = Color(0xFFEAF7FF);
   static const Color pageBodyText = Color(0xD6DCF6F8);
   static const Color pageScrollbarThumb = Color(0x397199FF);
   static const Color pageScrollbarThumbInactive = Color(0xFF283143);
@@ -114,10 +108,6 @@ final class AppColorTheme {
     _AppLightColors.footerBackground,
     _AppDarkColors.footerBackground,
   );
-  static const _ThemeColor _footerText = _ThemeColor(
-    _AppLightColors.footerText,
-    _AppDarkColors.footerText,
-  );
   static const _ThemeColor _linkText = _ThemeColor(
     _AppLightColors.linkText,
     _AppDarkColors.linkText,
@@ -145,19 +135,11 @@ final class AppColorTheme {
     _AppLightColors.modalCloseIconHover,
     _AppDarkColors.modalCloseIconHover,
   );
-  static const _ThemeColor _modalContentText = _ThemeColor(
-    _AppLightColors.modalContentText,
-    _AppDarkColors.modalContentText,
-  );
 
   // Page text/link palette
   static const _ThemeColor _pageLoader = _ThemeColor(
     _AppLightColors.pageLoader,
     _AppDarkColors.pageLoader,
-  );
-  static const _ThemeColor _pageHeadingText = _ThemeColor(
-    _AppLightColors.pageHeadingText,
-    _AppDarkColors.pageHeadingText,
   );
   static const _ThemeColor _pageBodyText = _ThemeColor(
     _AppLightColors.pageBodyText,
@@ -218,9 +200,6 @@ final class AppColorTheme {
   static Color footerBackgroundFor(Brightness brightness) =>
       _footerBackground.resolve(brightness);
 
-  static Color footerTextFor(Brightness brightness) =>
-      _footerText.resolve(brightness);
-
   static Color linkTextFor(Brightness brightness) =>
       _linkText.resolve(brightness);
 
@@ -239,14 +218,8 @@ final class AppColorTheme {
   static Color modalCloseIconHoverFor(Brightness brightness) =>
       _modalCloseIconHover.resolve(brightness);
 
-    static Color modalContentTextFor(Brightness brightness) =>
-      _modalContentText.resolve(brightness);
-
   static Color pageLoaderFor(Brightness brightness) =>
       _pageLoader.resolve(brightness);
-
-  static Color pageHeadingTextFor(Brightness brightness) =>
-      _pageHeadingText.resolve(brightness);
 
   static Color pageBodyTextFor(Brightness brightness) =>
       _pageBodyText.resolve(brightness);

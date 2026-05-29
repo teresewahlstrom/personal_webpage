@@ -453,6 +453,7 @@ MarkupTheme _buildSharedMarkdownThemeForChat(
       baseTextColor: colors.bubbleText,
       linkColor: colors.markupLink,
       isDark: ChatSkin.isDarkOf(context),
+      textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
     ),
   );
 }

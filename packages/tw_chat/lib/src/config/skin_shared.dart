@@ -17,7 +17,6 @@ class ChatSkinData {
 class ChatSkinColors {
   const ChatSkinColors({
     required this.transparent,
-    required this.appBarTitle,
     required this.bubbleText,
     required this.shellBackground,
     required this.shellOuterShadow,
@@ -28,7 +27,6 @@ class ChatSkinColors {
     required this.bubbleShadow,
     required this.bubbleCollapseButton,
     required this.bubbleCollapseButtonIcon,
-    required this.composerHint,
     required this.composerFill,
     required this.composerBorder,
     required this.composerCursor,
@@ -44,7 +42,6 @@ class ChatSkinColors {
   });
 
   final Color transparent;
-  final Color appBarTitle;
   final Color bubbleText;
   final Color shellBackground;
   final Color shellOuterShadow;
@@ -55,7 +52,6 @@ class ChatSkinColors {
   final Color bubbleShadow;
   final Color bubbleCollapseButton;
   final Color bubbleCollapseButtonIcon;
-  final Color composerHint;
   final Color composerFill;
   final Color composerBorder;
   final Color composerCursor;
@@ -319,7 +315,7 @@ class ChatSkinTextStyles {
       maxTextScale: defaultMaxTextScale,
     );
     return base.copyWith(
-      color: colors.appBarTitle,
+      color: colors.bubbleText,
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.7),
       height: _scaledLineHeight(base.height!, scale, 0.18),
     );
@@ -338,24 +334,6 @@ class ChatSkinTextStyles {
     );
     return base.copyWith(
       color: colors.bubbleText,
-      fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
-      height: _scaledLineHeight(base.height!, scale, 0.5),
-    );
-  }
-
-  TextStyle composerHintStyle(double textScale, ChatSkinColors colors) {
-    final scale = _resolvedTextScale(
-      textScale,
-      maxTextScale: composerMaxTextScale,
-    );
-    const base = TextStyle(
-      fontFamily: 'Nunito',
-      fontSize: 14,
-      height: 1.5,
-      fontWeight: FontWeight.w300,
-    );
-    return base.copyWith(
-      color: colors.composerHint,
       fontSize: _scaledFontSize(base.fontSize!, scale, 0.8),
       height: _scaledLineHeight(base.height!, scale, 0.5),
     );
