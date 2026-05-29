@@ -1612,6 +1612,10 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
     _reportCaretRectToIme();
     _reportTextStyleToIme();
 
+    if (CurrentPlatform.isWeb) {
+      return;
+    }
+
     // Without showing the keyboard, the panel is always positioned at the screen center after the first time.
     // I'm not sure why this is needed in TwTextField, but not in the original implementation.
     _textController.showKeyboard();

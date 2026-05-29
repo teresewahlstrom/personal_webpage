@@ -39,8 +39,7 @@ class TwReadyTextController extends ChangeNotifier {
   bool get isBlank => text.trim().isEmpty;
 
   void clear() {
-    text = '';
-    selection = const TextSelection.collapsed(offset: 0);
+    _raw.clearText();
   }
 
   AttributedTextEditingController get raw => _raw;
