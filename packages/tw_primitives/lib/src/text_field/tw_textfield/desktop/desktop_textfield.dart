@@ -1906,6 +1906,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     }
 
     final extentOffset = _textLayout.getOffsetAtPosition(selection.extent);
+    final extentLineHeight = _textLayout.getLineHeightAtPosition(selection.extent);
 
     const gutterExtent = 0; // _dragGutterExtent
     final extentLineIndex = (extentOffset.dy / widget.estimatedLineHeight).round();
@@ -1918,20 +1919,16 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
             extentOffset.dy - //
                 widget.scrollController.offset -
                 gutterExtent -
-                (isAtFirstLine ? _textLayout.getLineHeightAtPosition(selection.extent) / 2 : 0),
+              (isAtFirstLine ? extentLineHeight / 2 : 0),
             0)
         .abs();
 
-    final lastCharY =
-        _textLayout.getCharacterBox(TextPosition(offset: widget.textController.text.length - 1))?.top ?? 0.0;
-    final isAtLastLine = extentOffset.dy == lastCharY;
-
     final beyondBottomExtent = max<double>(
-        ((extentLineIndex + 1) * widget.estimatedLineHeight) -
+          ((extentLineIndex + 1) * widget.estimatedLineHeight) -
             myBox.size.height -
             widget.scrollController.offset +
             gutterExtent +
-            (isAtLastLine ? _textLayout.getLineHeightAtPosition(selection.extent) / 2 : 0) +
+            (extentLineHeight / 2) +
             (widget.estimatedLineHeight / 2), // manual adjustment to avoid line getting half cut off
         0);
 
