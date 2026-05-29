@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: 100%; margin: 0; background: #F8F9F7;">
+<html style="height: 100%; margin: 0; background: #EEEEEE;">
   <head>
     <base href="$FLUTTER_BASE_HREF" />
     <meta charset="UTF-8" />
@@ -56,17 +56,35 @@
         var shortcutIconLink = document.getElementById('app-shortcut-icon');
         var lightIcon = 'assets/t1_logo/t1_logo_favicon_dark.svg';
         var darkIcon = 'assets/t1_logo/t1_logo_favicon_light.svg';
+        var lightBackground = '#EEEEEE';
+        var darkBackground = '#212835';
+
+        function setHostBackground(color) {
+          document.documentElement.style.background = color;
+          if (document.body) {
+            document.body.style.background = color;
+          }
+          var appRoot = document.getElementById('app');
+          if (appRoot) {
+            appRoot.style.background = color;
+          }
+        }
 
         function applyBrowserTheme(event) {
           var prefersDark = event.matches;
           var iconHref = prefersDark ? darkIcon : lightIcon;
+          var background = prefersDark ? darkBackground : lightBackground;
 
-          themeColor.setAttribute('content', prefersDark ? '#212835' : '#F8F9F7');
+          themeColor.setAttribute('content', background);
           iconLink.setAttribute('href', iconHref);
           shortcutIconLink.setAttribute('href', iconHref);
+          setHostBackground(background);
         }
 
         applyBrowserTheme(darkModeQuery);
+        document.addEventListener('DOMContentLoaded', function () {
+          applyBrowserTheme(darkModeQuery);
+        });
         darkModeQuery.addEventListener('change', applyBrowserTheme);
       })();
     </script>
@@ -76,7 +94,7 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background: #F8F9F7;
+        background: #EEEEEE;
       }
       #app {
         height: 100%;
@@ -84,7 +102,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        background: #F8F9F7;
+        background: #EEEEEE;
       }
       img {
         -webkit-user-drag: none;
