@@ -148,7 +148,7 @@ const double _kSelectableVerticalComparingThreshold = 3.0;
 /// [SelectableRegion].
 ///
 /// To make a custom selectable widget, its render object needs to mix in
-/// [Selectable] and implement the required APIs to handle [SelectionEvent]s
+/// [Selectable] and implement the required APIs to handle [SelectionEys vent]s
 /// as well as paint appropriate selection highlights.
 ///
 /// The render object also needs to register itself to a [SelectionRegistrar].
@@ -595,6 +595,8 @@ class SelectableRegionState extends State<SelectableRegion>
   // The device kind for the pointer of the most recent tap down event on this
   // SelectableRegion.
   PointerDeviceKind? _lastPointerDeviceKind;
+  Timer? _viewportScrollSettleTimer;
+  bool _isViewportScrollInProgress = false;
 
   static bool _isPrecisePointerDevice(PointerDeviceKind pointerDeviceKind) {
     switch (pointerDeviceKind) {
@@ -626,6 +628,30 @@ class SelectableRegionState extends State<SelectableRegion>
   }
 
   bool get _hasActiveSelection => _selectionDelegate.value.hasSelection;
+
+  bool _shouldPreserveSelectionForViewportScroll(
+    PointerDeviceKind? pointerDeviceKind,
+  ) {
+    return _hasActiveSelection &&
+        _isViewportScrollInProgress &&
+        _isNonPrecisePointerDevice(pointerDeviceKind);
+  }
+
+  void markViewportScrollInProgress() {
+    if (!_hasActiveSelection) {
+      return;
+    }
+    _viewportScrollSettleTimer?.cancel();
+    _viewportScrollSettleTimer = null;
+    _isViewportScrollInProgress = true;
+  }
+
+  void markViewportScrollSettled() {
+    _viewportScrollSettleTimer?.cancel();
+    _viewportScrollSettleTimer = Timer(const Duration(milliseconds: 120), () {
+      _isViewportScrollInProgress = false;
+    });
+  }
 
   /// Refreshes selection geometry after the viewport containing this region moves.
   void refreshSelectionForViewportChange() {
@@ -1039,6 +1065,10 @@ class SelectableRegionState extends State<SelectableRegion>
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
           case TargetPlatform.iOS:
+            if (_shouldPreserveSelectionForViewportScroll(details.kind)) {
+              _showHandles();
+              break;
+            }
             hideToolbar();
             _collapseSelectionAt(offset: details.globalPosition);
             _selectionStatusNotifier.value =
@@ -1048,6 +1078,10 @@ class SelectableRegionState extends State<SelectableRegion>
           case TargetPlatform.windows:
             if (_isNonPrecisePointerDevice(details.kind)) {
               if (_hasActiveSelection) {
+                if (_shouldPreserveSelectionForViewportScroll(details.kind)) {
+                  _showHandles();
+                  break;
+                }
                 hideToolbar();
                 clearSelection();
                 _selectionStatusNotifier.value =
@@ -2139,6 +2173,8 @@ class SelectableRegionState extends State<SelectableRegion>
     _selectionOverlay?.hideMagnifier();
     _selectionOverlay?.dispose();
     _selectionOverlay = null;
+    _viewportScrollSettleTimer?.cancel();
+    _viewportScrollSettleTimer = null;
     widget.focusNode?.removeListener(_handleFocusChanged);
     _localFocusNode?.removeListener(_handleFocusChanged);
     _localFocusNode?.dispose();

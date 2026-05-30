@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart' show cupertinoTextSelectionControls;
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show RenderBox, SelectedContent;
+import 'package:flutter/rendering.dart'
+    show RenderBox, ScrollDirection, SelectedContent;
 
 import '../selection/tw_selectable_region.dart';
 import 'selectable_secondary_click_guard.dart';
@@ -242,10 +243,25 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification ||
-        notification is OverscrollNotification ||
-        notification is UserScrollNotification) {
-      _effectiveSelectionKey.currentState?.refreshSelectionForViewportChange();
+    final selectionState = _effectiveSelectionKey.currentState;
+    if (selectionState == null) {
+      return false;
+    }
+
+    if (notification is ScrollStartNotification ||
+        notification is ScrollUpdateNotification ||
+        notification is OverscrollNotification) {
+      selectionState.markViewportScrollInProgress();
+      selectionState.refreshSelectionForViewportChange();
+    } else if (notification is UserScrollNotification) {
+      if (notification.direction == ScrollDirection.idle) {
+        selectionState.markViewportScrollSettled();
+      } else {
+        selectionState.markViewportScrollInProgress();
+        selectionState.refreshSelectionForViewportChange();
+      }
+    } else if (notification is ScrollEndNotification) {
+      selectionState.markViewportScrollSettled();
     }
     return false;
   }
