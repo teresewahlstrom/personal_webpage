@@ -156,9 +156,11 @@ class _SelectionCopyProjection {
     int? bestStart;
     int? bestEnd;
 
-    for (var candidateStart = 0;
-        candidateStart < visibleText.length;
-        candidateStart += 1) {
+    for (
+      var candidateStart = 0;
+      candidateStart < visibleText.length;
+      candidateStart += 1
+    ) {
       var visibleIndex = candidateStart;
       var selectedIndex = 0;
 

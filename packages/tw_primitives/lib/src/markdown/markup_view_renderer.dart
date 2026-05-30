@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../text_styles/utility_text_styles.dart';
 import '../svg/tw_svg_asset.dart';
 
 import 'markup_ast.dart';
@@ -314,40 +313,6 @@ class MarkupViewRenderer {
           ? (DefaultSelectionStyle.of(context).selectionColor ??
                 DefaultSelectionStyle.defaultColor)
           : null,
-    );
-  }
-
-  Widget _buildSelectableCopyBreak({
-    required double height,
-    int lineBreaks = 1,
-    bool includeSelectableCopyBreak = true,
-  }) {
-    final TargetPlatform platform = Theme.of(context).platform;
-    final bool allowSelectableCopyBreak =
-        selectable &&
-        includeSelectableCopyBreak &&
-        platform != TargetPlatform.android &&
-        platform != TargetPlatform.iOS;
-
-    if (!allowSelectableCopyBreak) {
-      return SizedBox(height: height);
-    }
-
-    return SizedBox(
-      height: height,
-      child: IgnorePointer(
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: RichText(
-            text: TextSpan(
-              text: '\n' * lineBreaks,
-              style: TwUtilityTextStyles.transparentSelectionSpacer,
-            ),
-            selectionRegistrar: SelectionContainer.maybeOf(context),
-            selectionColor: Colors.transparent,
-          ),
-        ),
-      ),
     );
   }
 
