@@ -241,6 +241,15 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
     widget.onDesktopTap?.call();
   }
 
+  bool _handleScrollNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification ||
+        notification is OverscrollNotification ||
+        notification is UserScrollNotification) {
+      _effectiveSelectionKey.currentState?.refreshSelectionForViewportChange();
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final TargetPlatform platform = Theme.of(context).platform;
@@ -267,7 +276,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
       mainAxisMargin: widget.mainAxisMargin,
       radius: widget.radius,
       padding: widget.padding,
-          physics: widget.physics,
+      physics: widget.physics,
       excludeScrollViewFromSelection: true,
       enableDesktopKeyboardScroll: widget.enableDesktopKeyboardScroll,
       keyboardScrollLineStep: widget.keyboardScrollLineStep,
@@ -281,11 +290,17 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
       child: TwSelectableRegion(
         key: _effectiveSelectionKey,
         contextMenuBuilder: widget.contextMenuBuilder,
+        focusNode: widget.interactionFocusNode,
         magnifierConfiguration: widget.magnifierConfiguration,
         onSelectionChanged: _handleSelectionChanged,
         selectionControls: resolvedSelectionControls,
         child: widget.child,
       ),
+    );
+
+    result = NotificationListener<ScrollNotification>(
+      onNotification: _handleScrollNotification,
+      child: result,
     );
 
     if (widget.actions != null && widget.actions!.isNotEmpty) {
@@ -300,19 +315,12 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
         onPointerDown: widget.onPointerDown == null
             ? null
             : (_) => widget.onPointerDown!(),
-        onPointerUp:
-            widget.onPointerUp == null ? null : (_) => widget.onPointerUp!(),
+        onPointerUp: widget.onPointerUp == null
+            ? null
+            : (_) => widget.onPointerUp!(),
         onPointerCancel: widget.onPointerCancel == null
             ? null
             : (_) => widget.onPointerCancel!(),
-        child: result,
-      );
-    }
-
-    if (widget.interactionFocusNode != null) {
-      result = Focus(
-        focusNode: widget.interactionFocusNode,
-        canRequestFocus: widget.canRequestFocus,
         child: result,
       );
     }

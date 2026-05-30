@@ -539,28 +539,13 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     final markupTheme = markdownSurface.theme;
 
     if (!isTruncated) {
-      final Widget visibleMarkupLayer = MarkupView(
+      return MarkupView(
         document: document,
         theme: markupTheme,
         gestureRecognizerFactory: gestureRecognizerFactory,
-        selectable: false,
+        selectable: true,
         chromeVisible: true,
         blockquoteRailColor: markdownSurface.blockquoteRailColor,
-      );
-      final Widget hiddenSelectionLayer = Positioned.fill(
-        child: MarkupView(
-          document: document,
-          theme: _transparentMarkupTheme(markupTheme),
-          gestureRecognizerFactory: gestureRecognizerFactory,
-          selectable: true,
-          chromeVisible: false,
-          blockquoteRailColor: colors.transparent,
-        ),
-      );
-
-      return Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[hiddenSelectionLayer, visibleMarkupLayer],
       );
     }
 
