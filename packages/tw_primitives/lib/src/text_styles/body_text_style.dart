@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 final class TwBodyTextStyle {
-  static const String fontFamily = 'Nunito';
-  static const double baseFontSize = 18.0;
-  static const FontWeight fontWeight = FontWeight.w300;
+  static const String fontFamily = 'Rubik';
+  static const double baseFontSize = 17.0;
+  static const FontWeight fontWeight = FontWeight.w100;
   static const double lineHeight = 1.42;
   static const double minTextScale = 1.0;
   static const double defaultMaxTextScale = 1.6;

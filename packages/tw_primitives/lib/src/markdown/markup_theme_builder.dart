@@ -45,9 +45,9 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-  final FontWeight strongFontWeight = config.isDark
-      ? FontWeight.w700
-      : FontWeight.w600;
+    final FontWeight strongFontWeight = config.isDark
+      ? FontWeight.w600
+      : FontWeight.w500;
   final strongStyle = baseStyle.copyWith(
     fontWeight: strongFontWeight,
     color: lifted.toColor(),
@@ -87,15 +87,18 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       linkStyle: linkStyle,
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
-        const scales = <double>[1.6, 1.2];
-        const weights = <FontWeight>[FontWeight.w600, FontWeight.w600];
+        const scales = <double>[2.1, 1.5];
+        const weights = <FontWeight>[FontWeight.w300, FontWeight.w400];
         final clampedLevel = level.clamp(1, 2);
         final index = clampedLevel - 1;
 
+        // Apply letterSpacing/wordSpacing for H1 and H2
         return strongStyle.copyWith(
           fontSize: baseStyle.fontSize! * scales[index],
           fontWeight: weights[index],
           height: 1.2,
+          letterSpacing: level == 1 ? 0.2 : (level == 2 ? 1.15 : null),
+          wordSpacing: level == 1 ? 2.2 : (level == 2 ? 2.2 : null),
         );
       },
     ),

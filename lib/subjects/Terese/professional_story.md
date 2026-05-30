@@ -1,9 +1,3 @@
-A cross-functional leader, systems engineer, and cross-domain integrator, Terese builds technical systems, decision tools, and workflow infrastructure that help complex engineering organizations and teams execute reliably.
-
-Her strongest fit is in industrial or deep-tech roles with ownership of technical products, digital workflow systems, and the cross-functional capability required to translate complex user and engineering needs into reliable implementation.
-
----
-
 ## Cross-Functional Leader
 The hardest problems in technical organizations do not sit inside a single function. They emerge at the seams: where engineering specifications meet operational constraints, where technical feasibility and commercial commitment operate on mismatched assumptions, and where a process that works in the lab fails in the field for reasons no single team can fully see.
 

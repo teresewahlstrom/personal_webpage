@@ -38,15 +38,12 @@ flutter:
     - lib/subjects/Terese/professional_story.md
 
   fonts:
-    - family: Nunito
+    - family: Rubik
       fonts:
-        - asset: assets/fonts/nunito/Nunito[wght].ttf
-        - asset: assets/fonts/nunito/Nunito-Italic[wght].ttf
+        - asset: assets/fonts/Rubik/Rubik-VariableFont_wght.ttf
+        - asset: assets/fonts/Rubik/Rubik-Italic-VariableFont_wght.ttf
           style: italic
-    - family: ComingSoon
-      fonts:
-        - asset: assets/fonts/comingsoon/ComingSoon-Regular.ttf
-          weight: 400
+    # ComingSoon replaced by Rubik for section titles
     - family: BebasNeue
       fonts:
         - asset: assets/fonts/bebasneue/BebasNeue-Regular.ttf

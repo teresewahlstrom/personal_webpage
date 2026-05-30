@@ -27,7 +27,12 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  static const bool _showKeywordGraph = false;
+  static const String _projectCardsAssetPath =
+      'lib/subjects/Terese/professional_story.md';
+
   late Future<SubjectKeywordData> _subjectFuture;
+  late Future<_ProjectCardsContent> _projectCardsFuture;
   bool? _lastReportedContentReady;
   double _cachedCloudHeightRatio = 0.80;
   double _lastCloudHeightRatioWidth = double.infinity;
@@ -39,6 +44,15 @@ class _LandingPageState extends State<LandingPage> {
     _subjectFuture = widget.subject != null
         ? Future<SubjectKeywordData>.value(widget.subject)
         : SubjectRegistry.defaultSubject();
+    _projectCardsFuture = _loadProjectCards();
+  }
+
+  Future<_ProjectCardsContent> _loadProjectCards() async {
+    final String markdown = await rootBundle.loadString(_projectCardsAssetPath);
+    return _ProjectCardsMarkdownLoader.parse(
+      markdown,
+      sourceAssetPath: _projectCardsAssetPath,
+    );
   }
 
   Future<void> _launchUrl(String rawUrl) async {
@@ -172,33 +186,63 @@ class _LandingPageState extends State<LandingPage> {
                   constraints: const BoxConstraints(maxWidth: 700),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 11),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 22),
-                        _HeroStatement(),
-                        _SelectableCopyBreak(height: 28, lineBreaks: 2),
+                        const SizedBox(height: 7),
+                        const _HeroStatement(),
+                        FutureBuilder<_ProjectCardsContent>(
+                          future: _projectCardsFuture,
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<_ProjectCardsContent> snapshot,
+                          ) {
+                            if (!snapshot.hasData ||
+                                snapshot.data!.introDocument == null) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                const _SelectableCopyBreak(
+                                  height: 10,
+                                  lineBreaks: 1,
+                                ),
+                                _ProjectCardMarkdownBody(
+                                  document: snapshot.data!.introDocument!,
+                                  selectable: true,
+                                ),
+                                const _SelectableCopyBreak(
+                                  height: 28,
+                                  lineBreaks: 2,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 700),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 11),
-                    child: WordCloud(
-                      keywords: subject.keywords,
-                      heightRatio: cloudHeightRatio,
-                      maxContentWidth: 700,
-                      frameStyle: WordCloudFrameStyle(
-                        backgroundColor: keywordGraphicFill,
-                        borderSide: keywordGraphicLine.borderSide,
-                        borderRadius: BorderRadius.zero,
-                        padding: const EdgeInsets.all(5),
-                      ),
+              if (_showKeywordGraph)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 700),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 11),
+                      child: WordCloud(
+                        keywords: subject.keywords,
+                        heightRatio: cloudHeightRatio,
+                        maxContentWidth: 700,
+                        frameStyle: WordCloudFrameStyle(
+                          backgroundColor: keywordGraphicFill,
+                          borderSide: keywordGraphicLine.borderSide,
+                          borderRadius: BorderRadius.zero,
+                          padding: const EdgeInsets.all(5),
+                        ),
                     ),
                   ),
                 ),
@@ -213,8 +257,31 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 48),
-                        const _ProjectsSection(),
+                        const SizedBox(height: 25),
+                        FutureBuilder<_ProjectCardsContent>(
+                          future: _projectCardsFuture,
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<_ProjectCardsContent> snapshot,
+                          ) {
+                            if (snapshot.hasError) {
+                              return Text(
+                                'Could not load professional stories.',
+                                style: TwBodyTextStyle.bodyForContext(
+                                  context: context,
+                                  color: PagePalette.bodyFor(brightness),
+                                ),
+                              );
+                            }
+                            if (!snapshot.hasData) {
+                              return const SizedBox(height: 48);
+                            }
+
+                            return _ProjectsSection(
+                              cards: snapshot.data!.cards,
+                            );
+                          },
+                        ),
                         const SizedBox(height: 48),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
@@ -277,9 +344,9 @@ class _LandingPageState extends State<LandingPage> {
 class _HeroStatement extends StatelessWidget {
   const _HeroStatement();
 
-  static const String _title = "Terese Wahlström";
+  static const String _title = "About Me";
   static const String _content =
-            "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
+      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -288,8 +355,10 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           _title,
-          style: TwSectionTitleTextStyle.forContext(
-            context: context,
+          style: _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).copyWith(
+            fontSize: _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).fontSize != null
+                ? _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).fontSize! * (2.5 / 2.1)
+                : null,
             color: PagePalette.bodyFor(Theme.of(context).brightness),
           ),
         ),
@@ -307,34 +376,29 @@ class _HeroStatement extends StatelessWidget {
 }
 
 class _ProjectsSection extends StatefulWidget {
-  const _ProjectsSection();
+  const _ProjectsSection({required this.cards});
+
+  final List<_ProjectCardData> cards;
 
   @override
   State<_ProjectsSection> createState() => _ProjectsSectionState();
 }
 
 class _ProjectsSectionState extends State<_ProjectsSection> {
-  static const String _title = "Professional Story";
-  static const String _projectCardsAssetPath =
-      'lib/subjects/Terese/professional_story.md';
-
-  late Future<_ProjectCardsContent> _projectCardsFuture;
   List<bool> _expandedStates = <bool>[];
 
   @override
   void initState() {
     super.initState();
-    _projectCardsFuture = _loadProjectCards();
+    _expandedStates = List<bool>.filled(widget.cards.length, false);
   }
 
-  Future<_ProjectCardsContent> _loadProjectCards() async {
-    final String markdown = await rootBundle.loadString(_projectCardsAssetPath);
-    final _ProjectCardsContent content = _ProjectCardsMarkdownLoader.parse(
-      markdown,
-      sourceAssetPath: _projectCardsAssetPath,
-    );
-    _expandedStates = List<bool>.filled(content.cards.length, false);
-    return content;
+  @override
+  void didUpdateWidget(covariant _ProjectsSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.cards.length != oldWidget.cards.length) {
+      _expandedStates = List<bool>.filled(widget.cards.length, false);
+    }
   }
 
   @override
@@ -344,70 +408,21 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(
-          _title,
-          style: TwSectionTitleTextStyle.forContext(
-            context: context,
-            color: PagePalette.bodyFor(brightness),
+        for (int index = 0; index < widget.cards.length; index++) ...<Widget>[
+          if (index > 0)
+            const _SelectableCopyBreak(height: 14),
+          _ExpandableProjectCard(
+            title: widget.cards[index].title,
+            contentDocument: widget.cards[index].contentDocument,
+            isExpanded: _expandedStates[index],
+            onTap: () {
+              setState(() {
+                _expandedStates[index] = !_expandedStates[index];
+              });
+            },
+            gridLineStyle: gridLineStyle,
           ),
-        ),
-        const _SelectableCopyBreak(height: 10),
-        FutureBuilder<_ProjectCardsContent>(
-          future: _projectCardsFuture,
-          builder:
-              (
-                BuildContext context,
-                AsyncSnapshot<_ProjectCardsContent> snapshot,
-              ) {
-                if (snapshot.hasError) {
-                  return Text(
-                    'Could not load professional stories.',
-                    style: TwBodyTextStyle.bodyForContext(
-                      context: context,
-                      color: PagePalette.bodyFor(brightness),
-                    ),
-                  );
-                }
-                if (!snapshot.hasData) {
-                  return const SizedBox(height: 48);
-                }
-
-                final _ProjectCardsContent content = snapshot.data!;
-                final List<_ProjectCardData> projectCards = content.cards;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (content.introDocument != null) ...<Widget>[
-                      _ProjectCardMarkdownBody(
-                        document: content.introDocument!,
-                        selectable: true,
-                      ),
-                      const _SelectableCopyBreak(height: 16, lineBreaks: 2),
-                    ],
-                    for (
-                      int index = 0;
-                      index < projectCards.length;
-                      index++
-                    ) ...<Widget>[
-                      if (index > 0)
-                        const _SelectableCopyBreak(height: 14),
-                      _ExpandableProjectCard(
-                        title: projectCards[index].title,
-                        contentDocument: projectCards[index].contentDocument,
-                        isExpanded: _expandedStates[index],
-                        onTap: () {
-                          setState(() {
-                            _expandedStates[index] = !_expandedStates[index];
-                          });
-                        },
-                        gridLineStyle: gridLineStyle,
-                      ),
-                    ],
-                  ],
-                );
-              },
-        ),
+        ],
       ],
     );
   }
@@ -539,7 +554,9 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     );
     final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
     final TextStyle cardTitleStyle = h2.copyWith(
-      fontSize: (h2.fontSize ?? 18) - 0.5,
+        fontSize: (h2.fontSize ?? 18) - 5.0,
+      letterSpacing: 1.15,
+      wordSpacing: 2.2,
     );
     final Color baseIconColor =
       TwBodyTextStyle.bodyForContext(
@@ -727,12 +744,7 @@ class _ProjectCardsMarkdownLoader {
         .where((String section) => section.isNotEmpty)
         .toList(growable: false);
 
-    MarkupDocument? introDocument;
     final List<String> cardSections = <String>[...normalizedSections];
-    if (cardSections.isNotEmpty && !cardSections.first.startsWith('## ')) {
-      introDocument = MessageMarkup.parse(cardSections.removeAt(0));
-    }
-
     final List<_ProjectCardData> cards = cardSections
         .map(
           (String section) =>
@@ -746,7 +758,7 @@ class _ProjectCardsMarkdownLoader {
       );
     }
 
-    return _ProjectCardsContent(cards: cards, introDocument: introDocument);
+    return _ProjectCardsContent(cards: cards, introDocument: null);
   }
 
   static _ProjectCardData _parseCardSection(
@@ -789,10 +801,11 @@ class _SocialSection extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           title,
-          style: TwSectionTitleTextStyle.forContext(
-            context: context,
+          style: _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).copyWith(
+            fontSize: _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).fontSize != null
+                ? _buildProjectCardMarkdownSurface(context).theme.headingStyleResolver(1).fontSize! * (2.5 / 2.1)
+                : null,
             color: PagePalette.bodyFor(Theme.of(context).brightness),
-            baseSize: 34,
           ),
         ),
         const _SelectableCopyBreak(height: 10),

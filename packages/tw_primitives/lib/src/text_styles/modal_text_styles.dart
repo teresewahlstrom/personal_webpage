@@ -8,8 +8,8 @@ final class TwModalTextStyles {
   static TextStyle headerTitle({required Color color}) {
     return const TextStyle(
       fontFamily: TwBodyTextStyle.fontFamily,
-      fontWeight: FontWeight.w700,
-      fontSize: 24,
+      fontWeight: FontWeight.w300,
+      fontSize: 28,
       height: _headerTitleLineHeight,
     ).copyWith(color: color);
   }

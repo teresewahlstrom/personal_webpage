@@ -306,7 +306,7 @@ class ChatSkinTextStyles {
     const base = TextStyle(
       fontSize: 14,
       height: 1.12,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w400,
     );
     final scale = _resolvedTextScale(
       textScale,
