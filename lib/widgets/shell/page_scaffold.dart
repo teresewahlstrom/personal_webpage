@@ -5,6 +5,7 @@ import 'package:tw_chat/chat.dart'
     ChatOverlay,
     ChatSkin,
     ChatSkinMode;
+import 'package:tw_primitives/colors.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/scrollbar.dart'
   show TwSelectableScrollArea, TwSelectableRegionState;
 
@@ -91,8 +92,6 @@ class _PageScaffoldState extends State<PageScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final Brightness brightness = theme.brightness;
     final chatSkin = ChatSkin.dataForMode(widget.initialChatSkinMode);
     final chatTokens = chatSkin.tokens;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -107,8 +106,11 @@ class _PageScaffoldState extends State<PageScaffold> {
       mediaQuery.size.width,
     );
     return GridBackground(
-      backgroundColor: ShellUiConfig.pageBackgroundFor(brightness),
-      gridLineStyle: ShellUiConfig.gridLineFor(brightness),
+      backgroundColor: context.twColors.pageBackground,
+      gridLineStyle: AppLineStyle(
+        color: context.twColors.lineSubtle,
+        width: AppLineTheme.subtleWidth,
+      ),
       child: Stack(
           children: <Widget>[
             SafeArea(
@@ -137,12 +139,9 @@ class _PageScaffoldState extends State<PageScaffold> {
                                           _chatKeyboardScrollTargetController
                                               .setChatTarget(false);
                                         },
-                                        thumbColor:
-                                          ShellUiConfig.pageScrollbarThumbFor(brightness),
-                                        thumbInactiveColor:
-                                          ShellUiConfig.pageScrollbarThumbInactiveFor(brightness),
-                                        trackColor:
-                                          ShellUiConfig.pageScrollbarTrackFor(brightness),
+                                        thumbColor: context.twColors.pageScrollbarThumb,
+                                        thumbInactiveColor: context.twColors.pageScrollbarThumbInactive,
+                                        trackColor: context.twColors.pageScrollbarTrack,
                                         thickness:
                                           ShellUiConfig.pageScrollbarThickness,
                                         minThumbLength:
@@ -212,7 +211,7 @@ class _PageScaffoldState extends State<PageScaffold> {
                 onChatInteractionClaimed: _clearPageSelection,
                 minimizedBottomOffset: floatingInset,
                 minimizedRightInset: floatingInset,
-                launcherStyle: buildChatLauncherStyle(brightness),
+                launcherStyle: buildChatLauncherStyle(context),
               ),
           ],
         ),
@@ -225,8 +224,7 @@ class _PageLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color accent = PagePalette.accentFor(brightness);
+    final Color accent = context.twColors.pageLoader;
     return SizedBox(
       width: 34,
       height: 34,

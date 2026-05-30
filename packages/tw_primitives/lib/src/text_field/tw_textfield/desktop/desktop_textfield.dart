@@ -28,6 +28,7 @@ import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../infrastructure/fill_width_if_constrained.dart';
+import 'package:tw_primitives/colors.dart';
 
 final _log = textFieldLog;
 
@@ -560,8 +561,7 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
-                    color: widget.textStyleBuilder({}).color ?? //
-                        (Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white),
+                    color: widget.textStyleBuilder({}).color ?? context.twColors.pageBodyText,
                   ),
                   underlines: [
                     TextLayoutUnderline(

@@ -22,11 +22,8 @@ $rgArgs = @(
   '--with-filename',
   '--glob', 'lib/**/*.dart',
   '--glob', 'packages/**/*.dart',
-  '--glob', '!lib/config/app_color_theme.dart',
-  '--glob', '!packages/tw_chat/**',
-  '--glob', '!packages/tw_primitives/**',
-  '--glob', '!packages/tw_super_editor/**',
-  '--glob', '!packages/tw_keywords/lib/src/config/keyword_color_theme.dart',
+  # Only allow color definitions inside packages/tw_primitives/lib/src/colors by excluding that path from the search.
+  '--glob', '!packages/tw_primitives/lib/src/colors/**',
   $pattern,
   $repoRoot
 )
@@ -36,11 +33,11 @@ $rgMatches = & $rg.Source @rgArgs
 if ($LASTEXITCODE -eq 0 -and $rgMatches) {
   Write-Host ''
   Write-Host 'Color centralization check failed.' -ForegroundColor Red
-  Write-Host 'Found hardcoded color usage outside approved theme sources (lib/config/app_color_theme.dart, packages/tw_chat/, packages/tw_primitives/, packages/tw_keywords/lib/src/config/keyword_color_theme.dart):' -ForegroundColor Yellow
+  Write-Host 'Found hardcoded color usage outside the approved theme source (packages/tw_primitives/lib/src/colors):' -ForegroundColor Yellow
   Write-Host ''
   $rgMatches | ForEach-Object { Write-Host $_ }
   Write-Host ''
-  Write-Host 'Move these colors into AppColorTheme (or package-owned theme files) and reference semantic tokens.' -ForegroundColor Yellow
+  Write-Host 'Move these colors into packages/tw_primitives/lib/src/colors and reference semantic tokens from `tw_primitives`.' -ForegroundColor Yellow
   exit 1
 }
 

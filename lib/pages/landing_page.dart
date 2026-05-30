@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_chat/chat.dart' show ChatComposerLayout, ChatSkin;
 import 'package:tw_keywords/tw_keywords.dart';
+import 'package:tw_primitives/colors.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -140,7 +141,7 @@ class _LandingPageState extends State<LandingPage> {
                     textAlign: TextAlign.center,
                     style: TwSectionTitleTextStyle.forContext(
                       context: context,
-                      color: PagePalette.bodyFor(Theme.of(context).brightness),
+                      color: context.twColors.pageBodyText,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -149,7 +150,7 @@ class _LandingPageState extends State<LandingPage> {
                     textAlign: TextAlign.center,
                     style: TwBodyTextStyle.bodyForContext(
                       context: context,
-                      color: PagePalette.bodyFor(Theme.of(context).brightness),
+                      color: context.twColors.pageBodyText,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -167,12 +168,10 @@ class _LandingPageState extends State<LandingPage> {
           content = const SizedBox(height: 400.0);
         } else {
           final SubjectKeywordData subject = snapshot.data!;
-          final Brightness brightness = Theme.of(context).brightness;
-          final Color keywordGraphicFill = ShellUiConfig.pageBackgroundFor(
-            brightness,
-          );
-          final AppLineStyle keywordGraphicLine = ShellUiConfig.gridLineFor(
-            brightness,
+          final Color keywordGraphicFill = context.twColors.pageBackground;
+          final AppLineStyle keywordGraphicLine = AppLineStyle(
+            color: context.twColors.lineSubtle,
+            width: AppLineTheme.subtleWidth,
           );
           // heightRatio: taller on mobile (portrait), shallower on wide desktop.
           final double cloudHeightRatio = _getCloudHeightRatio(viewport.width);
@@ -270,9 +269,9 @@ class _LandingPageState extends State<LandingPage> {
                                   return Text(
                                     'Could not load professional stories.',
                                     style: TwBodyTextStyle.bodyForContext(
-                                      context: context,
-                                      color: PagePalette.bodyFor(brightness),
-                                    ),
+                                          context: context,
+                                          color: context.twColors.pageBodyText,
+                                        ),
                                   );
                                 }
                                 if (!snapshot.hasData) {
@@ -334,7 +333,7 @@ class _LandingPageState extends State<LandingPage> {
         return DefaultTextStyle(
           style: TwBodyTextStyle.bodyForContext(
             context: context,
-            color: PagePalette.bodyFor(Theme.of(context).brightness),
+            color: context.twColors.pageBodyText,
           ),
           child: content,
         );
@@ -370,7 +369,7 @@ class _HeroStatement extends StatelessWidget {
                           ).theme.headingStyleResolver(1).fontSize! *
                           (2.5 / 2.1)
                     : null,
-                color: PagePalette.bodyFor(Theme.of(context).brightness),
+                color: context.twColors.pageBodyText,
               ),
         ),
         const _SelectableCopyBreak(height: 10),
@@ -378,7 +377,7 @@ class _HeroStatement extends StatelessWidget {
           _content,
           style: TwBodyTextStyle.bodyForContext(
             context: context,
-            color: PagePalette.bodyFor(Theme.of(context).brightness),
+            color: context.twColors.pageBodyText,
           ),
         ),
       ],
@@ -414,8 +413,10 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final AppLineStyle gridLineStyle = ShellUiConfig.gridLineFor(brightness);
+    final AppLineStyle gridLineStyle = AppLineStyle(
+      color: context.twColors.lineSubtle,
+      width: AppLineTheme.subtleWidth,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -458,14 +459,13 @@ class _ExpandableProjectCard extends StatefulWidget {
 }
 
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
-  final Brightness brightness = Theme.of(context).brightness;
-  final chatSkin = ChatSkin.dataForBrightness(brightness);
+  final chatSkin = ChatSkin.dataOf(context);
   final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
       baseTextColor: chatSkin.colors.bubbleText,
       linkColor: chatSkin.colors.markupLink,
-      isDark: brightness == Brightness.dark,
+      isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       linkPillStyle: MarkupLinkPillStyle(
         fillColor: ChatComposerLayout.fillColor(context),
@@ -568,8 +568,11 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color cardFill = ShellUiConfig.projectCardFillFor(brightness);
+    final Color cardFill = Color.lerp(
+      context.twColors.pageBackground,
+      context.twColors.lineSubtle,
+      context.twColors.projectCardFillAlpha,
+    )!;
     final MarkdownSurfaceStyle markdownSurface =
         _buildProjectCardMarkdownSurface(context);
     final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
@@ -581,13 +584,11 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     final Color baseIconColor =
         TwBodyTextStyle.bodyForContext(
           context: context,
-          color: PagePalette.bodyFor(brightness),
+          color: context.twColors.pageBodyText,
         ).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
-        PagePalette.bodyFor(brightness);
-    final Color iconColor = _isHovered
-        ? ShellUiConfig.linkTextHoverFor(brightness)
-        : baseIconColor;
+        context.twColors.pageBodyText;
+    final Color iconColor = _isHovered ? context.twColors.linkTextHover : baseIconColor;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -831,7 +832,7 @@ class _SocialSection extends StatelessWidget {
                           ).theme.headingStyleResolver(1).fontSize! *
                           (2.5 / 2.1)
                     : null,
-                color: PagePalette.bodyFor(Theme.of(context).brightness),
+                color: context.twColors.pageBodyText,
               ),
         ),
         const _SelectableCopyBreak(height: 10),
@@ -893,18 +894,17 @@ class _SocialRowState extends State<_SocialRow> {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
     final Color textColor =
         TwSectionTitleTextStyle.forContext(
           context: context,
-          color: PagePalette.bodyFor(brightness),
+          color: context.twColors.pageBodyText,
         ).color ??
         TwBodyTextStyle.bodyForContext(
           context: context,
-          color: PagePalette.bodyFor(brightness),
+          color: context.twColors.pageBodyText,
         ).color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
-        PagePalette.bodyFor(brightness);
+        context.twColors.pageBodyText;
     final Color color = _isHovered
         ? textColor.withValues(alpha: 0.82)
         : textColor;
@@ -935,7 +935,7 @@ class _SocialRowState extends State<_SocialRow> {
                 widget.entry.label,
                 style: TwBodyTextStyle.bodyForContext(
                   context: context,
-                  color: PagePalette.bodyFor(brightness),
+                  color: context.twColors.pageBodyText,
                 ),
               ),
             ],

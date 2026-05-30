@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 import 'package:tw_primitives/text_styles.dart';
 
 import '../config/app_ui_config.dart';
@@ -12,7 +13,6 @@ Future<void> showAppModal({
   required AppModalChildBuilder builder,
   String? headerTitle,
 }) {
-  final Brightness brightness = Theme.of(context).brightness;
   final Size viewportSize = MediaQuery.of(context).size;
   return showDialog<void>(
     context: context,
@@ -20,13 +20,15 @@ Future<void> showAppModal({
     useSafeArea: true,
     builder: (BuildContext dialogContext) {
       void close() => Navigator.of(dialogContext).pop();
-
       return _AppModalFrame(
-        backgroundColor: ModalUiConfig.frameFillFor(brightness),
-        frameBorder: ModalUiConfig.frameBorderFor(brightness),
-        headerBorderColor: ModalUiConfig.headerBorderFor(brightness),
-        closeIconColor: ModalUiConfig.closeIconFor(brightness),
-        closeIconHoverColor: ModalUiConfig.closeIconHoverFor(brightness),
+        backgroundColor: context.twColors.modalBackground,
+        frameBorder: AppLineStyle(
+          color: context.twColors.lineSubtle,
+          width: AppLineTheme.subtleWidth,
+        ),
+        headerBorderColor: context.twColors.modalHeaderBorder,
+        closeIconColor: context.twColors.modalCloseIcon,
+        closeIconHoverColor: context.twColors.modalCloseIconHover,
         insetPadding: ModalUiConfig.insetPaddingFor(viewportSize),
         contentPadding: ModalUiConfig.contentPaddingFor(viewportSize),
         maxWidth: ModalUiConfig.maxWidth,
@@ -70,7 +72,6 @@ class _AppModalFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
     final Size viewportSize = MediaQuery.of(context).size;
     final double keyboardHeight = KeyboardHeight.of(context);
     final double availableHeight = viewportSize.height - keyboardHeight;
@@ -107,7 +108,7 @@ class _AppModalFrame extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TwModalTextStyles.headerTitle(
-                              color: AppColorTheme.pageBodyTextFor(brightness),
+                              color: context.twColors.pageBodyText,
                             ),
                           ),
                   ),
@@ -123,7 +124,7 @@ class _AppModalFrame extends StatelessWidget {
               child: DefaultTextStyle(
                 style: TwBodyTextStyle.bodyForContext(
                   context: context,
-                  color: AppColorTheme.pageBodyTextFor(brightness),
+                  color: context.twColors.pageBodyText,
                 ),
                 child: Padding(
                   padding: contentPadding,

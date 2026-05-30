@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_webpage/config/app_ui_config.dart';
 import 'package:personal_webpage/widgets/app_modal.dart';
+import 'package:tw_primitives/colors.dart';
 
 void main() {
   testWidgets('showAppModal uses the shared square themed frame', (
@@ -34,14 +35,13 @@ void main() {
     final Dialog dialog = tester.widget<Dialog>(find.byType(Dialog));
     final RoundedRectangleBorder shape =
         dialog.shape! as RoundedRectangleBorder;
-    final AppLineStyle frameBorder = ModalUiConfig.frameBorderFor(
-      Brightness.light,
+    final TwColors tw = TwColors.forBrightness(Brightness.light);
+    final AppLineStyle frameBorder = AppLineStyle(
+      color: tw.lineSubtle,
+      width: AppLineTheme.subtleWidth,
     );
 
-    expect(
-      dialog.backgroundColor,
-      ModalUiConfig.frameFillFor(Brightness.light),
-    );
+    expect(dialog.backgroundColor, tw.modalBackground);
     expect(shape.borderRadius, BorderRadius.zero);
     expect(shape.side.color, frameBorder.color);
     expect(shape.side.width, frameBorder.width);

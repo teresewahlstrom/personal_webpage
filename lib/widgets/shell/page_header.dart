@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 import 'package:tw_primitives/svg.dart';
 
 import '../../config/app_ui_config.dart';
@@ -29,11 +30,11 @@ class _PageHeaderState extends State<PageHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
-    final Color? logoColor = _usesTextColorTint
-        ? PagePalette.bodyFor(brightness)
-        : null;
-    final AppLineStyle headerLine = ShellUiConfig.headerBorderFor(brightness);
+    final Color? logoColor = _usesTextColorTint ? context.twColors.pageBodyText : null;
+    final AppLineStyle headerLine = AppLineStyle(
+      color: context.twColors.lineSubtleSecondary,
+      width: AppLineTheme.subtleSecondaryWidth,
+    );
     final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
     final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
       ShellUiConfig.headerPadding.left + safeInsets.left,
@@ -44,9 +45,9 @@ class _PageHeaderState extends State<PageHeader> {
     return SizedBox(
       width: double.infinity,
       height: ShellUiConfig.headerMinHeight + safeInsets.top,
-      child: DecoratedBox(
+        child: DecoratedBox(
         decoration: BoxDecoration(
-          color: ShellUiConfig.headerBackgroundFor(brightness),
+          color: context.twColors.headerBackground,
           border: Border(bottom: headerLine.borderSide),
         ),
         child: Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
+import 'package:tw_primitives/colors.dart';
 
 import 'android_popover_toolbar.dart';
 
@@ -80,7 +81,8 @@ class _TwSelectionFloatingToolbarState
 
   @override
   Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
+    // Use semantic color token for selection toolbar primary color.
+    final Color primaryText = context.twColors.pageBodyText;
     final buttons = <_ButtonViewModel>[
       if (widget.onCutPressed != null)
         _ButtonViewModel(onPressed: widget.onCutPressed!, title: 'Cut'),
@@ -97,9 +99,10 @@ class _TwSelectionFloatingToolbarState
 
     return Theme(
       data: ThemeData(
-        colorScheme: brightness == Brightness.light
-            ? const ColorScheme.light(primary: Colors.black)
-            : const ColorScheme.dark(primary: Colors.white),
+        colorScheme: ColorScheme.fromSeed(
+          brightness: context.twBrightness,
+          seedColor: primaryText,
+        ),
       ),
       child: KeyedSubtree(
         key: widget.floatingToolbarKey,

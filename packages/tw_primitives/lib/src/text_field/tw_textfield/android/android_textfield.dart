@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
 import 'package:super_text_layout/super_text_layout.dart';
@@ -734,11 +735,7 @@ class TwAndroidTextFieldState extends State<TwAndroidTextField>
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
-                    color:
-                        widget.textStyleBuilder({}).color ?? //
-                        (Theme.of(context).brightness == Brightness.light
-                            ? Colors.black
-                            : Colors.white),
+                  color: widget.textStyleBuilder({}).color ?? context.twColors.pageBodyText,
                   ),
                   underlines: [
                     TextLayoutUnderline(

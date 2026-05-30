@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 import 'package:tw_primitives/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,8 +20,10 @@ class PageFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int year = DateTime.now().year;
-    final Brightness brightness = Theme.of(context).brightness;
-    final AppLineStyle footerLine = ShellUiConfig.footerBorderFor(brightness);
+    final AppLineStyle footerLine = AppLineStyle(
+      color: context.twColors.lineSubtleSecondary,
+      width: AppLineTheme.subtleSecondaryWidth,
+    );
 
     return Container(
       width: double.infinity,
@@ -29,7 +32,7 @@ class PageFooter extends StatelessWidget {
       ),
       padding: ShellUiConfig.footerPadding,
       decoration: BoxDecoration(
-        color: ShellUiConfig.footerBackgroundFor(brightness),
+        color: context.twColors.footerBackground,
         border: Border(
           top: footerLine.borderSide,
         ),
@@ -45,7 +48,7 @@ class PageFooter extends StatelessWidget {
               '\u00A9$year $brandName. All rights reserved.',
               style: TwFooterTextStyles.bodyForContext(
                 context: context,
-                color: PagePalette.bodyFor(brightness),
+                color: context.twColors.pageBodyText,
               ),
               textAlign: TextAlign.center,
             ),
@@ -102,7 +105,7 @@ class _LinkTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
+    
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
@@ -114,25 +117,25 @@ class _LinkTextButton extends StatelessWidget {
           (Set<WidgetState> states) {
             if (states.contains(WidgetState.hovered) ||
                 states.contains(WidgetState.focused)) {
-              return AppColorTheme.transparent;
+              return context.twColors.transparent;
             }
             return null;
           },
         ),
         foregroundColor: WidgetStateProperty.resolveWith<Color>(
           (Set<WidgetState> states) {
-            if (states.contains(WidgetState.hovered)) {
-              return ShellUiConfig.linkTextHoverFor(brightness);
-            }
-            return ShellUiConfig.linkTextFor(brightness);
+                if (states.contains(WidgetState.hovered)) {
+                  return context.twColors.linkTextHover;
+                }
+                return context.twColors.linkText;
           },
         ),
       ),
       child: Text(
         label,
         style: TwFooterTextStyles.linkForContext(
-          context: context,
-          color: ShellUiConfig.linkTextFor(brightness),
+              context: context,
+              color: context.twColors.linkText,
         ),
       ),
     );

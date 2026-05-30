@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/text_tools.dart';
@@ -751,11 +752,7 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
-                    color:
-                        widget.textStyleBuilder({}).color ?? //
-                        (Theme.of(context).brightness == Brightness.light
-                            ? Colors.black
-                            : Colors.white),
+                  color: widget.textStyleBuilder({}).color ?? context.twColors.pageBodyText,
                   ),
                   underlines: [
                     TextLayoutUnderline(

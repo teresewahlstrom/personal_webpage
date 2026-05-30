@@ -4,6 +4,7 @@ import 'package:tw_primitives/svg.dart';
 import 'package:tw_primitives/text_styles.dart';
 
 import 'config/app_ui_config.dart';
+import 'package:tw_primitives/colors.dart';
 import 'pages/landing_page.dart';
 import 'widgets/shell/page_header.dart' show kHeaderLogoAssetPath;
 import 'widgets/shell/page_scaffold.dart';
@@ -76,7 +77,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
-          seedColor: AppColorTheme.seedColorFor(Brightness.light),
+          seedColor: TwColors.forBrightness(Brightness.light).seedColor,
         ),
         fontFamily: TwBodyTextStyle.fontFamily,
       ),
@@ -88,7 +89,7 @@ class _T1GridAppState extends State<T1GridApp> {
         ),
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          seedColor: AppColorTheme.seedColorFor(Brightness.dark),
+          seedColor: TwColors.forBrightness(Brightness.dark).seedColor,
         ),
         fontFamily: TwBodyTextStyle.fontFamily,
       ),

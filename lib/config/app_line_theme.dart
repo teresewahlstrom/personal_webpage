@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_theme.dart';
+import 'package:tw_primitives/colors.dart';
 
 final class AppLineStyle {
   const AppLineStyle({required this.color, required this.width});
@@ -25,21 +25,21 @@ final class AppLineTheme {
 
   static AppLineStyle subtleFor(Brightness brightness) {
     return AppLineStyle(
-      color: AppColorTheme.lineSubtleFor(brightness),
+      color: TwColors.forBrightness(brightness).lineSubtle,
       width: subtleWidth,
     );
   }
 
   static AppLineStyle subtleSecondaryFor(Brightness brightness) {
     return AppLineStyle(
-      color: AppColorTheme.lineSubtleSecondaryFor(brightness),
+      color: TwColors.forBrightness(brightness).lineSubtleSecondary,
       width: subtleSecondaryWidth,
     );
   }
 
   static AppLineStyle subtleTertiaryFor(Brightness brightness) {
     return AppLineStyle(
-      color: AppColorTheme.lineSubtleTertiaryFor(brightness),
+      color: TwColors.forBrightness(brightness).lineSubtleTertiary,
       width: subtleTertiaryWidth,
     );
   }
@@ -47,8 +47,8 @@ final class AppLineTheme {
   static AppLineStyle interactiveFor(Brightness brightness, {bool hovered = false}) {
     return AppLineStyle(
       color: hovered
-          ? AppColorTheme.lineInteractiveHoverFor(brightness)
-          : AppColorTheme.lineInteractiveFor(brightness),
+          ? TwColors.forBrightness(brightness).lineInteractiveHover
+          : TwColors.forBrightness(brightness).lineInteractive,
       width: interactiveWidth,
     );
   }

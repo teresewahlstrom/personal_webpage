@@ -1,7 +1,6 @@
-import 'skin_dark.dart' as dark;
-import 'skin_light.dart' as light;
 import 'skin_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/colors.dart';
 export 'skin_shared.dart'
     show ChatSkinColors, ChatSkinData, ChatSkinTextStyles, ChatSkinTokens;
 
@@ -14,11 +13,17 @@ class ChatSkin {
   static const ChatSkinTextStyles textStyles = ChatSkinTextStyles();
 
   static ChatSkinData dataForMode(ChatSkinMode mode) {
-    return mode == ChatSkinMode.dark ? dark.chatDarkSkin : light.chatLightSkin;
+    final tw = mode == ChatSkinMode.dark
+        ? TwColors.forTheme('dark')
+        : TwColors.forTheme('light');
+    return ChatSkinData(colors: _fromTw(tw));
   }
 
   static ChatSkinData dataForBrightness(Brightness brightness) {
-    return brightness == Brightness.dark ? dark.chatDarkSkin : light.chatLightSkin;
+    final tw = brightness == Brightness.dark
+        ? TwColors.forBrightness(Brightness.dark)
+        : TwColors.forBrightness(Brightness.light);
+    return ChatSkinData(colors: _fromTw(tw));
   }
 
   static ChatSkinMode modeForBrightness(Brightness brightness) {
@@ -30,7 +35,7 @@ class ChatSkin {
     if (scoped != null) {
       return scoped;
     }
-    return modeForBrightness(Theme.of(context).brightness);
+    return modeForBrightness(context.twIsDark ? Brightness.dark : Brightness.light);
   }
 
   static ChatSkinData dataOf(BuildContext context) {
@@ -40,6 +45,37 @@ class ChatSkin {
   static bool isDarkOf(BuildContext context) {
     return modeOf(context) == ChatSkinMode.dark;
   }
+}
+
+ChatSkinColors _fromTw(TwColors tw) {
+  return ChatSkinColors(
+    transparent: tw.transparent,
+    bubbleText: tw.bubbleText,
+    shellBackground: tw.shellBackground,
+    shellOuterShadow: tw.shellOuterShadow,
+    shellOuterBorder: tw.shellOuterBorder,
+    shellDivider: tw.shellDivider,
+    botBubbleFill: tw.botBubbleFill,
+    botBubbleBorder: tw.botBubbleBorder,
+    bubbleShadow: tw.bubbleShadow,
+    bubbleCollapseButton: tw.bubbleCollapseButton,
+    bubbleCollapseButtonIcon: tw.bubbleCollapseButtonIcon,
+    composerFill: tw.composerFill,
+    composerBorder: tw.composerBorder,
+    composerCursor: tw.composerCursor,
+    composerCornerAccent: tw.composerCornerAccent,
+    composerSendIcon: tw.composerSendIcon,
+    textFieldSelection: tw.textFieldSelection,
+    textFieldCaret: tw.textFieldCaret,
+    textFieldHint: tw.textFieldHint,
+    toolbarColor: tw.toolbarColor,
+    bubbleFadeMaskOpaque: tw.bubbleFadeMaskOpaque,
+    bubbleFadeMaskSoft: tw.bubbleFadeMaskSoft,
+    markupLink: tw.markupLink,
+    scrollbarThumb: tw.scrollbarThumb,
+    scrollbarThumbInactive: tw.scrollbarThumbInactive,
+    scrollbarTrack: tw.scrollbarTrack,
+  );
 }
 
 class ChatSkinScope extends InheritedWidget {

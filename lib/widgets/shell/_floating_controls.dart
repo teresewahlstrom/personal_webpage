@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tw_chat/chat.dart' show ChatLauncherStyle, ChatSkin, ChatSkinMode;
+import 'package:tw_chat/chat.dart' show ChatLauncherStyle, ChatSkin;
+import 'package:tw_primitives/colors.dart';
 
 import '../../config/app_ui_config.dart';
 
@@ -44,17 +45,17 @@ final class FloatingControlVisualStyle {
   final BoxShadow glow;
 }
 
-FloatingControlVisualStyle floatingControlVisualStyleFor(
-  Brightness brightness,
-) {
-  final ChatSkinMode skinMode = brightness == Brightness.dark
-      ? ChatSkinMode.dark
-      : ChatSkinMode.light;
-  final skin = ChatSkin.dataForMode(skinMode);
+FloatingControlVisualStyle floatingControlVisualStyleFor(BuildContext context) {
+  final skin = ChatSkin.dataOf(context);
+  final tw = context.twColors;
   return FloatingControlVisualStyle(
-    fillColor: ShellUiConfig.projectCardFillFor(brightness),
-    outlineStyle: ShellUiConfig.gridLineFor(brightness),
-    iconColor: PagePalette.bodyFor(brightness),
+    fillColor: Color.lerp(
+      tw.pageBackground,
+      tw.lineSubtle,
+      tw.projectCardFillAlpha,
+    )!,
+    outlineStyle: AppLineStyle(color: tw.lineSubtle, width: AppLineTheme.subtleWidth),
+    iconColor: tw.pageBodyText,
     glow: skin.tokens.shellShadow(skin.colors),
   );
 }
@@ -75,9 +76,8 @@ class ThemeToggleControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
     final FloatingControlVisualStyle visualStyle =
-        floatingControlVisualStyleFor(brightness);
+      floatingControlVisualStyleFor(context);
     final IconData icon = isDarkMode
         ? Icons.light_mode
         : Icons.dark_mode;
@@ -114,9 +114,9 @@ class ThemeToggleControlButton extends StatelessWidget {
   }
 }
 
-ChatLauncherStyle buildChatLauncherStyle(Brightness brightness) {
+ChatLauncherStyle buildChatLauncherStyle(BuildContext context) {
   final FloatingControlVisualStyle visualStyle =
-      floatingControlVisualStyleFor(brightness);
+      floatingControlVisualStyleFor(context);
   return ChatLauncherStyle(
     size: ShellUiConfig.headerToggleSize * 1.5,
     iconSize: 30,

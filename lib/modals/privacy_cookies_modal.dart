@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
 
-import '../config/app_color_theme.dart';
+import 'package:tw_primitives/colors.dart';
 
 class PrivacyCookiesContent extends StatefulWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
@@ -42,12 +42,11 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
   }
 
   MarkdownSurfaceStyle _buildSurface(BuildContext context) {
-    final Brightness brightness = Theme.of(context).brightness;
     return buildMarkdownSurfaceStyle(
       MarkdownThemeConfig(
-        baseTextColor: AppColorTheme.pageBodyTextFor(brightness),
-        linkColor: AppColorTheme.linkTextFor(brightness),
-        isDark: brightness == Brightness.dark,
+        baseTextColor: context.twColors.pageBodyText,
+        linkColor: context.twColors.linkText,
+        isDark: context.twIsDark,
         textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       ),
     );

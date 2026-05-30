@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_theme.dart';
+import 'package:tw_primitives/colors.dart';
 import 'app_line_theme.dart';
-
-export 'app_color_theme.dart';
 export 'app_line_theme.dart';
 
 final class AppRuntimeConfig {
@@ -52,7 +50,7 @@ final class ShellUiConfig {
     vertical: 10,
   );
   static Color pageBackgroundFor(Brightness brightness) {
-    return AppColorTheme.pageBackgroundFor(brightness);
+    return TwColors.forBrightness(brightness).pageBackground;
   }
 
   static AppLineStyle gridLineFor(Brightness brightness) {
@@ -63,12 +61,12 @@ final class ShellUiConfig {
     return Color.lerp(
       pageBackgroundFor(brightness),
       gridLineFor(brightness).color,
-      AppColorTheme.projectCardFillAlphaFor(brightness),
+      TwColors.forBrightness(brightness).projectCardFillAlpha,
     )!;
   }
 
   static Color headerBackgroundFor(Brightness brightness) {
-    return AppColorTheme.headerBackgroundFor(brightness);
+    return TwColors.forBrightness(brightness).headerBackground;
   }
 
   static AppLineStyle headerBorderFor(Brightness brightness) {
@@ -84,23 +82,23 @@ final class ShellUiConfig {
   }
 
   static Color buttonBackgroundFor(Brightness brightness) {
-    return AppColorTheme.buttonBackgroundFor(brightness);
+    return TwColors.forBrightness(brightness).buttonBackground;
   }
 
   static Color pageScrollbarThumbFor(Brightness brightness) {
-    return AppColorTheme.pageScrollbarThumbFor(brightness);
+    return TwColors.forBrightness(brightness).pageScrollbarThumb;
   }
 
   static Color pageScrollbarThumbInactiveFor(Brightness brightness) {
-    return AppColorTheme.pageScrollbarThumbInactiveFor(brightness);
+    return TwColors.forBrightness(brightness).pageScrollbarThumbInactive;
   }
 
   static Color pageScrollbarTrackFor(Brightness brightness) {
-    return AppColorTheme.pageScrollbarTrackFor(brightness);
+    return TwColors.forBrightness(brightness).pageScrollbarTrack;
   }
 
   static Color footerBackgroundFor(Brightness brightness) {
-    return AppColorTheme.footerBackgroundFor(brightness);
+    return TwColors.forBrightness(brightness).footerBackground;
   }
 
   static AppLineStyle footerBorderFor(Brightness brightness) {
@@ -108,16 +106,16 @@ final class ShellUiConfig {
   }
 
   static Color linkTextFor(Brightness brightness) {
-    return AppColorTheme.linkTextFor(brightness);
+    return TwColors.forBrightness(brightness).linkText;
   }
 
   static Color linkTextHoverFor(Brightness brightness) {
-    return AppColorTheme.linkTextHoverFor(brightness);
+    return TwColors.forBrightness(brightness).linkTextHover;
   }
 }
 
 final class ModalUiConfig {
-  static const Color barrierColor = AppColorTheme.modalBarrier;
+  static final Color barrierColor = TwColors.forBrightness(Brightness.light).modalBarrier;
   static const EdgeInsets insetPadding = EdgeInsets.all(14);
   static const EdgeInsets contentPadding = EdgeInsets.fromLTRB(24, 20, 24, 20);
   static const EdgeInsets contentPaddingCompact = EdgeInsets.fromLTRB(
@@ -132,7 +130,7 @@ final class ModalUiConfig {
   static const double headerHeight = 52;
 
   static Color backgroundFor(Brightness brightness) {
-    return AppColorTheme.modalBackgroundFor(brightness);
+    return TwColors.forBrightness(brightness).modalBackground;
   }
 
   static AppLineStyle frameBorderFor(Brightness brightness) {
@@ -143,20 +141,20 @@ final class ModalUiConfig {
     return Color.lerp(
       backgroundFor(brightness),
       frameBorderFor(brightness).color,
-      AppColorTheme.projectCardFillAlphaFor(brightness),
+      TwColors.forBrightness(brightness).projectCardFillAlpha,
     )!;
   }
 
   static Color headerBorderFor(Brightness brightness) {
-    return AppColorTheme.modalHeaderBorderFor(brightness);
+    return TwColors.forBrightness(brightness).modalHeaderBorder;
   }
 
   static Color closeIconFor(Brightness brightness) {
-    return AppColorTheme.modalCloseIconFor(brightness);
+    return TwColors.forBrightness(brightness).modalCloseIcon;
   }
 
   static Color closeIconHoverFor(Brightness brightness) {
-    return AppColorTheme.modalCloseIconHoverFor(brightness);
+    return TwColors.forBrightness(brightness).modalCloseIconHover;
   }
 
   static bool isCompact(Size viewportSize) {
@@ -178,10 +176,10 @@ final class ModalUiConfig {
 
 final class PagePalette {
   static Color accentFor(Brightness brightness) {
-    return AppColorTheme.pageLoaderFor(brightness);
+    return TwColors.forBrightness(brightness).pageLoader;
   }
 
   static Color bodyFor(Brightness brightness) {
-    return AppColorTheme.pageBodyTextFor(brightness);
+    return TwColors.forBrightness(brightness).pageBodyText;
   }
 }
