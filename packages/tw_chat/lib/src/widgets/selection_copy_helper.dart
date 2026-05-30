@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tw_primitives/scrollbar.dart' show TwSelectableRegionState;
 
 import '../logic/selection_copy_formatter.dart';
 import '../models/message.dart';
 
 class SelectionCopyHelper {
-  final GlobalKey<SelectableRegionState> chatSelectionAreaKey =
-      GlobalKey<SelectableRegionState>();
+  final GlobalKey<TwSelectableRegionState> chatSelectionAreaKey =
+      GlobalKey<TwSelectableRegionState>();
 
   final Map<String, SelectionListenerNotifier> _messageSelectionNotifiers =
       <String, SelectionListenerNotifier>{};

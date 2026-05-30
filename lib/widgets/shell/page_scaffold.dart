@@ -5,7 +5,8 @@ import 'package:tw_chat/chat.dart'
     ChatOverlay,
     ChatSkin,
     ChatSkinMode;
-import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
+import 'package:tw_primitives/scrollbar.dart'
+  show TwSelectableScrollArea, TwSelectableRegionState;
 
 import '../../config/app_ui_config.dart';
 import '_grid_background.dart';
@@ -64,8 +65,8 @@ class PageScaffold extends StatefulWidget {
 class _PageScaffoldState extends State<PageScaffold> {
   final ScrollController _pageScrollController = ScrollController();
   late final ChatKeyboardScrollTargetController _chatKeyboardScrollTargetController;
-  final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
-      GlobalKey<SelectableRegionState>();
+    final GlobalKey<TwSelectableRegionState> _pageSelectionAreaKey =
+      GlobalKey<TwSelectableRegionState>();
   final FocusNode _pageInteractionFocusNode = FocusNode(
     debugLabel: 'page-scroll-interaction',
   );

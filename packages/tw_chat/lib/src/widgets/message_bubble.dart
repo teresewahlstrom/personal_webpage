@@ -722,7 +722,10 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     required double maxWidth,
     required TextScaler textScaler,
   }) {
-    var remainingLines = ChatBubbleRules.collapsedVisibleLines;
+    // Keep collapsed bubble selection slightly more permissive than the visible
+    // fade boundary so transcript-level select-all still captures the intended
+    // leading message content without changing the rendered bubble preview.
+    var remainingLines = ChatBubbleRules.collapsedVisibleLines + 1;
     final visibleBlocks = <MarkupBlock>[];
 
     for (final block in document.blocks) {

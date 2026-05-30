@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderBox, SelectedContent;
 
+import '../selection/tw_selectable_region.dart';
 import 'selectable_secondary_click_guard.dart';
 import 'scroll_area.dart';
 import 'tw_scrollbar.dart';
@@ -61,10 +62,10 @@ class TwSelectableScrollArea extends StatefulWidget {
     ScrollController? controller,
     required Widget child,
     TextSelectionControls? selectionControls,
-    GlobalKey<SelectableRegionState>? selectionKey,
+    GlobalKey<TwSelectableRegionState>? selectionKey,
     FocusNode? interactionFocusNode,
     bool canRequestFocus = true,
-    SelectableRegionContextMenuBuilder? contextMenuBuilder,
+    TwSelectableRegionContextMenuBuilder? contextMenuBuilder,
     TextMagnifierConfiguration magnifierConfiguration =
         TextMagnifierConfiguration.disabled,
     ValueChanged<SelectedContent?>? onSelectionChanged,
@@ -148,10 +149,10 @@ class TwSelectableScrollArea extends StatefulWidget {
   final ScrollController? controller;
   final Widget child;
   final TextSelectionControls? selectionControls;
-  final GlobalKey<SelectableRegionState>? selectionKey;
+  final GlobalKey<TwSelectableRegionState>? selectionKey;
   final FocusNode? interactionFocusNode;
   final bool canRequestFocus;
-  final SelectableRegionContextMenuBuilder? contextMenuBuilder;
+  final TwSelectableRegionContextMenuBuilder? contextMenuBuilder;
   final TextMagnifierConfiguration magnifierConfiguration;
   final ValueChanged<SelectedContent?>? onSelectionChanged;
   final Map<Type, Action<Intent>>? actions;
@@ -192,11 +193,11 @@ class TwSelectableScrollArea extends StatefulWidget {
 
 class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
   late final TwSelectableSecondaryClickGuard _secondaryClickGuard;
-  final GlobalKey<SelectableRegionState> _internalSelectionKey =
-      GlobalKey<SelectableRegionState>();
+  final GlobalKey<TwSelectableRegionState> _internalSelectionKey =
+      GlobalKey<TwSelectableRegionState>();
   bool _hasSelection = false;
 
-  GlobalKey<SelectableRegionState> get _effectiveSelectionKey =>
+  GlobalKey<TwSelectableRegionState> get _effectiveSelectionKey =>
       widget.selectionKey ?? _internalSelectionKey;
 
   @override
@@ -266,7 +267,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
       mainAxisMargin: widget.mainAxisMargin,
       radius: widget.radius,
       padding: widget.padding,
-      physics: widget.physics,
+          physics: widget.physics,
       excludeScrollViewFromSelection: true,
       enableDesktopKeyboardScroll: widget.enableDesktopKeyboardScroll,
       keyboardScrollLineStep: widget.keyboardScrollLineStep,
@@ -277,7 +278,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
       trackVisibility: widget.trackVisibility,
       fadeDuration: widget.fadeDuration,
       timeToFade: widget.timeToFade,
-      child: SelectableRegion(
+      child: TwSelectableRegion(
         key: _effectiveSelectionKey,
         contextMenuBuilder: widget.contextMenuBuilder,
         magnifierConfiguration: widget.magnifierConfiguration,

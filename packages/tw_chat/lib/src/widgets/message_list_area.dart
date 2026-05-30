@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
+import 'package:tw_primitives/scrollbar.dart'
+  show TwSelectableScrollArea, TwSelectableRegionState;
 
 import '../config/config.dart';
 import '../models/message.dart';
@@ -40,7 +41,7 @@ class ChatMessageListArea extends StatefulWidget {
   final double botBubbleWidth;
   final ScrollController chatScroll;
   final FocusNode chatFocusNode;
-  final GlobalKey<SelectableRegionState> chatSelectionAreaKey;
+  final GlobalKey<TwSelectableRegionState> chatSelectionAreaKey;
   final ChatMessageBubbleKeyMap messageBubbleKeys;
   final bool showChatScrollbarTrack;
   final bool Function(String messageId) isMessageTruncated;
