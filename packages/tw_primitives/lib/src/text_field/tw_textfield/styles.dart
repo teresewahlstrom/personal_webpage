@@ -2,13 +2,6 @@ import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/src/text_field/core/attributions.dart';
 
-const defaultSelectionColor = Color(0xFFACCEF7);
-const defaultDesktopCaretColor = Color(0xFF000000);
-
-const defaultAndroidControlsColor = Color(0xFFA4C639);
-
-const defaultIOSControlsColor = Color(0xFF2196F3);
-
 /// Default [TextStyles] for [TwTextField].
 TextStyle defaultTextFieldStyleBuilder(Set<Attribution> attributions) {
   TextStyle newStyle = const TextStyle(

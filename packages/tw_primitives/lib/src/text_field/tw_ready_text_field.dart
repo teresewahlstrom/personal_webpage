@@ -74,12 +74,12 @@ class TwReadyTextField extends StatefulWidget {
     this.hintBuilder,
     this.hintText,
     this.hintTextStyle,
-    this.controlsColor,
+    required this.controlsColor,
     this.handleOutlineColor,
-    this.caretColor,
+    required this.caretColor,
     this.caretWidth,
     this.handlesRadius,
-    this.selectionColor,
+    required this.selectionColor,
     this.minLines = 1,
     this.maxLines,
     this.lineHeight,
@@ -114,12 +114,12 @@ class TwReadyTextField extends StatefulWidget {
   final WidgetBuilder? hintBuilder;
   final String? hintText;
   final TextStyle? hintTextStyle;
-  final Color? controlsColor;
+  final Color controlsColor;
   final Color? handleOutlineColor;
-  final Color? caretColor;
+  final Color caretColor;
   final double? caretWidth;
   final double? handlesRadius;
-  final Color? selectionColor;
+  final Color selectionColor;
   final int? minLines;
   final int? maxLines;
   final double? lineHeight;
@@ -273,11 +273,8 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
   }
 
   CaretStyle? _resolveCaretStyle() {
-    if (widget.caretColor == null && widget.caretWidth == null) {
-      return null;
-    }
     return CaretStyle(
-      color: widget.caretColor ?? widget.controlsColor ?? Colors.black,
+      color: widget.caretColor,
       width: widget.caretWidth ?? 1,
     );
   }

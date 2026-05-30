@@ -32,6 +32,10 @@ class ChatSkinColors {
     required this.composerCursor,
     required this.composerCornerAccent,
     required this.composerSendIcon,
+    required this.textFieldSelection,
+    required this.textFieldCaret,
+    required this.textFieldHint,
+    required this.toolbarColor,
     required this.bubbleFadeMaskOpaque,
     required this.bubbleFadeMaskSoft,
     required this.markupLink,
@@ -56,6 +60,10 @@ class ChatSkinColors {
   final Color composerCursor;
   final Color composerCornerAccent;
   final Color composerSendIcon;
+  final Color textFieldSelection;
+  final Color textFieldCaret;
+  final Color textFieldHint;
+  final Color toolbarColor;
   final Color bubbleFadeMaskOpaque;
   final Color bubbleFadeMaskSoft;
   final Color markupLink;

@@ -31,6 +31,10 @@ final class _AppLightColors {
 
   // text colors
   static const Color pageBodyText = Color(0xFF252525);
+  // text-field specific tokens
+  static const Color textFieldSelection = Color(0xFFACCEF7);
+  static const Color textFieldCaret = Color(0xFF000000);
+  static const Color textFieldHint = Color(0xFF777777);
   static const Color pageScrollbarThumb = Color(0xFFFFFFFF);
   static const Color pageScrollbarThumbInactive = Color(0xFFFFFFFF);
   static const Color pageScrollbarTrack = Color(0x00F8F9F7);
@@ -67,6 +71,10 @@ final class _AppDarkColors {
 
   // text colors
   static const Color pageBodyText = Color(0xD6DCF6F8);
+  // text-field specific tokens
+  static const Color textFieldSelection = Color(0xFF90E8F8);
+  static const Color textFieldCaret = Color(0xD6DCF6F8);
+  static const Color textFieldHint = Color(0xFF9AA6B2);
   static const Color pageScrollbarThumb = Color(0x397199FF);
   static const Color pageScrollbarThumbInactive = Color(0xFF283143);
   static const Color pageScrollbarTrack = Color(0x004EF0FF);
@@ -140,6 +148,18 @@ final class AppColorTheme {
   static const _ThemeColor _pageLoader = _ThemeColor(
     _AppLightColors.pageLoader,
     _AppDarkColors.pageLoader,
+  );
+  static const _ThemeColor _textFieldSelection = _ThemeColor(
+    _AppLightColors.textFieldSelection,
+    _AppDarkColors.textFieldSelection,
+  );
+  static const _ThemeColor _textFieldCaret = _ThemeColor(
+    _AppLightColors.textFieldCaret,
+    _AppDarkColors.textFieldCaret,
+  );
+  static const _ThemeColor _textFieldHint = _ThemeColor(
+    _AppLightColors.textFieldHint,
+    _AppDarkColors.textFieldHint,
   );
   static const _ThemeColor _pageBodyText = _ThemeColor(
     _AppLightColors.pageBodyText,
@@ -220,6 +240,15 @@ final class AppColorTheme {
 
   static Color pageLoaderFor(Brightness brightness) =>
       _pageLoader.resolve(brightness);
+
+    static Color textFieldSelectionFor(Brightness brightness) =>
+      _textFieldSelection.resolve(brightness);
+
+    static Color textFieldCaretFor(Brightness brightness) =>
+      _textFieldCaret.resolve(brightness);
+
+    static Color textFieldHintFor(Brightness brightness) =>
+      _textFieldHint.resolve(brightness);
 
   static Color pageBodyTextFor(Brightness brightness) =>
       _pageBodyText.resolve(brightness);

@@ -71,12 +71,12 @@ class TwTextField extends StatefulWidget {
     this.inlineWidgetBuilders = const [],
     this.hintBehavior = HintBehavior.displayHintUntilFocus,
     this.hintBuilder,
-    this.controlsColor,
+    required this.controlsColor,
     this.handleOutlineColor,
     this.caretStyle,
     this.handlesRadius,
     this.blinkTimingMode = BlinkTimingMode.ticker,
-    this.selectionColor,
+    required this.selectionColor,
     this.minLines,
     this.maxLines = 1,
     this.lineHeight,
@@ -135,7 +135,7 @@ class TwTextField extends StatefulWidget {
   /// The color of the caret, drag handles, and other controls.
   ///
   /// The color in [caretStyle] overrides the [controlsColor].
-  final Color? controlsColor;
+  final Color controlsColor;
 
   /// The color of the outline around mobile drag handles.
   final Color? handleOutlineColor;
@@ -158,7 +158,7 @@ class TwTextField extends StatefulWidget {
   final BlinkTimingMode blinkTimingMode;
 
   /// The color of selection rectangles that appear around selected text.
-  final Color? selectionColor;
+  final Color selectionColor;
 
   /// The minimum height of this text field, represented as a
   /// line count.
@@ -400,15 +400,13 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
           hintBehavior: widget.hintBehavior,
           hintBuilder: widget.hintBuilder,
           selectionHighlightStyle: SelectionHighlightStyle(
-            color: widget.selectionColor ?? defaultSelectionColor,
+            color: widget.selectionColor,
           ),
-          caretStyle:
-              widget.caretStyle ??
-              CaretStyle(
-                color: widget.controlsColor ?? defaultDesktopCaretColor,
-                width: 1,
-                borderRadius: BorderRadius.zero,
-              ),
+          caretStyle: widget.caretStyle ?? CaretStyle(
+            color: widget.controlsColor,
+            width: 1,
+            borderRadius: BorderRadius.zero,
+          ),
           minLines: widget.minLines,
           maxLines: widget.maxLines,
           keyboardHandlers: widget.keyboardHandlers,
@@ -437,13 +435,11 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             inlineWidgetBuilders: widget.inlineWidgetBuilders,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle:
-                widget.caretStyle ??
-                CaretStyle(
-                  color: widget.controlsColor ?? defaultAndroidControlsColor,
-                ),
-            selectionColor: widget.selectionColor ?? defaultSelectionColor,
-            handlesColor: widget.controlsColor ?? defaultAndroidControlsColor,
+            caretStyle: widget.caretStyle ?? CaretStyle(
+              color: widget.controlsColor,
+            ),
+            selectionColor: widget.selectionColor,
+            handlesColor: widget.controlsColor,
             handleOutlineColor: widget.handleOutlineColor,
             handlesRadius:
                 widget.handlesRadius ?? AndroidSelectionHandle.defaultRadius,
@@ -472,13 +468,11 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
             padding: widget.padding,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle:
-                widget.caretStyle ??
-                CaretStyle(
-                  color: widget.controlsColor ?? defaultIOSControlsColor,
-                ),
-            selectionColor: widget.selectionColor ?? defaultSelectionColor,
-            handlesColor: widget.controlsColor ?? defaultIOSControlsColor,
+            caretStyle: widget.caretStyle ?? CaretStyle(
+              color: widget.controlsColor,
+            ),
+            selectionColor: widget.selectionColor,
+            handlesColor: widget.controlsColor,
             handleOutlineColor: widget.handleOutlineColor,
             handlesRadius: widget.handlesRadius,
             minLines: widget.minLines,

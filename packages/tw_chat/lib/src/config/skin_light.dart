@@ -1,34 +1,37 @@
-import 'package:flutter/material.dart';
 
 import 'skin_shared.dart';
+import 'package:tw_primitives/colors.dart' show TwColors;
 
-const Color _chatMainAccent = Color(0xFF843F02);
-const Color _chatSoftAccent = Color.fromARGB(255, 214, 214, 214);
-const Color _chatComposerFill = Color(0xFFF8F9F7);
+final _light = TwColors.forTheme('light');
 
-const ChatSkinData chatLightSkin = ChatSkinData(
+final ChatSkinData chatLightSkin = ChatSkinData(
   colors: ChatSkinColors(
-    transparent: Color(0x00000000),
-    bubbleText: Color(0xFF000000),
-    shellBackground: Color.fromARGB(255, 238, 238, 238),
-    shellOuterShadow: Color(0x14000000),
-    shellOuterBorder: _chatSoftAccent,
-    shellDivider: Color(0xFFFFFFFF),
-    botBubbleFill: _chatComposerFill,
-    botBubbleBorder: _chatSoftAccent,
-    bubbleShadow: Color(0x10000000),
-    bubbleCollapseButton: _chatMainAccent,
-    bubbleCollapseButtonIcon: _chatComposerFill,
-    composerFill: _chatComposerFill,
-    composerBorder: _chatSoftAccent,
-    composerCursor: _chatMainAccent,
-    composerCornerAccent: _chatMainAccent,
-    composerSendIcon: _chatMainAccent,
-    bubbleFadeMaskOpaque: Color(0xFFFFFFFF),
-    bubbleFadeMaskSoft: Color(0x00000000),
-    markupLink: _chatMainAccent,
-    scrollbarThumb: _chatSoftAccent,
-    scrollbarThumbInactive: Color(0xFFFFFFFF),
-    scrollbarTrack: Color(0x00F8F9F7),
+    transparent: _light.transparent,
+    bubbleText: _light.bubbleText,
+    shellBackground: _light.shellBackground,
+    shellOuterShadow: _light.shellOuterShadow,
+    shellOuterBorder: _light.shellOuterBorder,
+    shellDivider: _light.shellDivider,
+    botBubbleFill: _light.botBubbleFill,
+    botBubbleBorder: _light.botBubbleBorder,
+    bubbleShadow: _light.bubbleShadow,
+    bubbleCollapseButton: _light.bubbleCollapseButton,
+    bubbleCollapseButtonIcon: _light.bubbleCollapseButtonIcon,
+    composerFill: _light.composerFill,
+    composerBorder: _light.composerBorder,
+    composerCursor: _light.composerCursor,
+    composerCornerAccent: _light.composerCornerAccent,
+    composerSendIcon: _light.composerSendIcon,
+    // text-field tokens
+    textFieldSelection: _light.textFieldSelection,
+    textFieldCaret: _light.textFieldCaret,
+    textFieldHint: _light.textFieldHint,
+    toolbarColor: _light.toolbarColor,
+    bubbleFadeMaskOpaque: _light.bubbleFadeMaskOpaque,
+    bubbleFadeMaskSoft: _light.bubbleFadeMaskSoft,
+    markupLink: _light.markupLink,
+    scrollbarThumb: _light.scrollbarThumb,
+    scrollbarThumbInactive: _light.scrollbarThumbInactive,
+    scrollbarTrack: _light.scrollbarTrack,
   ),
 );

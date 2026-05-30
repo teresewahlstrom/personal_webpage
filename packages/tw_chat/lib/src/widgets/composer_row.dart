@@ -145,9 +145,11 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
         tokens.composerTextInsetRight + 2.0,
         tokens.composerInputTextInsetTopBottom,
       ),
-      controlsColor: ChatComposerLayout.cursorColor(context),
+      // Inject chat-skin text-field tokens explicitly (no fallbacks in primitives)
+      selectionColor: colors.textFieldSelection,
+      controlsColor: colors.textFieldCaret,
       handleOutlineColor: ChatComposerLayout.fillColor(context),
-      caretColor: ChatComposerLayout.cursorColor(context),
+      caretColor: colors.textFieldCaret,
       caretWidth: tokens.composerCaretWidth,
       handlesRadius: tokens.composerHandleRadius,
     );
