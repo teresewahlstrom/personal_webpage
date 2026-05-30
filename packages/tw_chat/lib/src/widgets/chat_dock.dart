@@ -167,6 +167,7 @@ class ChatAppBar extends StatelessWidget {
     required this.displayStateToggleIcon,
     required this.displayStateToggleTooltip,
     required this.tokens,
+    this.isDisplayStateToggleTooltipVisible = true,
     this.shrinkWrap = false,
   });
 
@@ -174,6 +175,7 @@ class ChatAppBar extends StatelessWidget {
   final IconData displayStateToggleIcon;
   final String displayStateToggleTooltip;
   final ChatSkinTokens tokens;
+  final bool isDisplayStateToggleTooltipVisible;
   final bool shrinkWrap;
 
   @override
@@ -234,12 +236,15 @@ class ChatAppBar extends StatelessWidget {
           width: tokens.appBarActionWidth,
           child: Material(
             color: colors.transparent,
-            child: Tooltip(
-              message: displayStateToggleTooltip,
-              child: InkWell(
-                onTap: onDisplayStateToggle,
-                child: Center(
-                  child: Icon(displayStateToggleIcon, color: iconColor),
+            child: TooltipVisibility(
+              visible: isDisplayStateToggleTooltipVisible,
+              child: Tooltip(
+                message: displayStateToggleTooltip,
+                child: InkWell(
+                  onTap: onDisplayStateToggle,
+                  child: Center(
+                    child: Icon(displayStateToggleIcon, color: iconColor),
+                  ),
                 ),
               ),
             ),
@@ -428,6 +433,7 @@ class FloatingChatWindow extends StatelessWidget {
                     onDisplayStateToggle: onMinimize,
                     displayStateToggleIcon: Icons.expand_more_rounded,
                     displayStateToggleTooltip: 'Minimize chat',
+                    isDisplayStateToggleTooltipVisible: isVisible,
                     tokens: tokens,
                   ),
                 ),

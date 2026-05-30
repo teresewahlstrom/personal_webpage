@@ -174,14 +174,7 @@ class _ChatSectionState extends State<ChatSection> {
         tokens.shellContentPadding.right -
         tokens.bubbleViewportPadding.left -
         tokens.bubbleViewportPadding.right;
-    final botBubbleWidth =
-        (widget.panelWidth -
-                tokens.shellContentPadding.left -
-                tokens.shellContentPadding.right -
-                tokens.bubbleViewportPadding.left -
-                composerMetrics.sendButtonMinWidth)
-            .clamp(0.0, transcriptAvailableWidth)
-            .toDouble();
+    final botBubbleWidth = transcriptAvailableWidth;
 
     return Stack(
       children: [
