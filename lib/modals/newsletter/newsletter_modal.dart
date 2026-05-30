@@ -17,8 +17,7 @@ class NewsletterModalContent extends StatelessWidget {
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return TwSelectableScrollArea.scrollView(
-            thumbVisibility: false,
-            primary: true,
+            thumbVisibility: true,
             child: ConstrainedBox(
               constraints: BoxConstraints(minWidth: constraints.maxWidth),
               child: Center(

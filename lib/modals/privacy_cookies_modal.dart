@@ -60,8 +60,7 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
       top: false,
       bottom: false,
       child: TwSelectableScrollArea.scrollView(
-        thumbVisibility: false,
-        primary: true,
+        thumbVisibility: true,
         child: MarkupView(
           document: _contentDocument,
           theme: markdownSurface.theme,

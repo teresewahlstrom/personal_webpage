@@ -126,7 +126,6 @@ class _PageScaffoldState extends State<PageScaffold> {
                             builder: (context, constraints) {
                               return TwSelectableScrollArea.scrollView(
                                         controller: _pageScrollController,
-                                        primary: true,
                                         selectionKey: _pageSelectionAreaKey,
                                     interactionFocusNode:
                                       _pageInteractionFocusNode,
