@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart'
     show RenderBox, ScrollDirection, SelectedContent;
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/toolbar.dart';
 
 import '../selection/tw_selectable_region.dart';
 import 'selectable_secondary_click_guard.dart';
@@ -391,25 +392,33 @@ class _TwSelectionContextMenu extends StatelessWidget {
   final TextSelectionToolbarAnchors anchors;
   final List<ContextMenuButtonItem> buttonItems;
 
-  bool _usesHorizontalDesktopToolbar(TargetPlatform platform) {
-    return switch (platform) {
-      TargetPlatform.linux ||
-      TargetPlatform.macOS ||
-      TargetPlatform.windows => true,
-      TargetPlatform.android ||
-      TargetPlatform.fuchsia ||
-      TargetPlatform.iOS => false,
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     if (buttonItems.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    final platform = Theme.of(context).platform;
-    if (!_usesHorizontalDesktopToolbar(platform)) {
+    VoidCallback? onCopyPressed;
+    VoidCallback? onSelectAllPressed;
+    for (final buttonItem in buttonItems) {
+      switch (buttonItem.type) {
+        case ContextMenuButtonType.copy:
+          onCopyPressed = buttonItem.onPressed;
+        case ContextMenuButtonType.selectAll:
+          onSelectAllPressed = buttonItem.onPressed;
+        case ContextMenuButtonType.cut:
+        case ContextMenuButtonType.paste:
+        case ContextMenuButtonType.delete:
+        case ContextMenuButtonType.lookUp:
+        case ContextMenuButtonType.searchWeb:
+        case ContextMenuButtonType.share:
+        case ContextMenuButtonType.liveTextInput:
+        case ContextMenuButtonType.custom:
+          break;
+      }
+    }
+
+    if (onCopyPressed == null && onSelectAllPressed == null) {
       return AdaptiveTextSelectionToolbar.buttonItems(
         anchors: anchors,
         buttonItems: buttonItems,
@@ -427,69 +436,21 @@ class _TwSelectionContextMenu extends StatelessWidget {
         _screenPadding,
       ),
       child: CustomSingleChildLayout(
-        delegate: _TwHorizontalSelectionToolbarLayoutDelegate(
+        delegate: _TwSelectionToolbarLayoutDelegate(
           anchor: anchors.primaryAnchor - localAdjustment,
           gap: _toolbarGap,
         ),
-        child: Material(
-          borderRadius: const BorderRadius.all(Radius.circular(7)),
-          clipBehavior: Clip.antiAlias,
-          elevation: 1,
-          type: MaterialType.card,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final (index, buttonItem) in buttonItems.indexed) ...[
-                _TwSelectionContextMenuButton(buttonItem: buttonItem),
-                if (index < buttonItems.length - 1)
-                  const SizedBox(
-                    height: 24,
-                    child: VerticalDivider(width: 1, thickness: 1),
-                  ),
-              ],
-            ],
-          ),
+        child: AndroidTextEditingFloatingToolbar(
+          onCopyPressed: onCopyPressed,
+          onSelectAllPressed: onSelectAllPressed,
         ),
       ),
     );
   }
 }
 
-class _TwSelectionContextMenuButton extends StatelessWidget {
-  const _TwSelectionContextMenuButton({required this.buttonItem});
-
-  final ContextMenuButtonItem buttonItem;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final foregroundColor = theme.colorScheme.brightness == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
-    return TextButton(
-      style: TextButton.styleFrom(
-        enabledMouseCursor: SystemMouseCursors.basic,
-        disabledMouseCursor: SystemMouseCursors.basic,
-        foregroundColor: foregroundColor,
-        minimumSize: const Size(kMinInteractiveDimension, 36),
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 1),
-        shape: const RoundedRectangleBorder(),
-        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-      ),
-      onPressed: buttonItem.onPressed,
-      child: Text(
-        AdaptiveTextSelectionToolbar.getButtonLabel(context, buttonItem),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-      ),
-    );
-  }
-}
-
-class _TwHorizontalSelectionToolbarLayoutDelegate
-    extends SingleChildLayoutDelegate {
-  const _TwHorizontalSelectionToolbarLayoutDelegate({
+class _TwSelectionToolbarLayoutDelegate extends SingleChildLayoutDelegate {
+  const _TwSelectionToolbarLayoutDelegate({
     required this.anchor,
     required this.gap,
   });
@@ -514,7 +475,8 @@ class _TwHorizontalSelectionToolbarLayoutDelegate
   }
 
   @override
-  bool shouldRelayout(_TwHorizontalSelectionToolbarLayoutDelegate oldDelegate) {
+  bool shouldRelayout(_TwSelectionToolbarLayoutDelegate oldDelegate) {
     return anchor != oldDelegate.anchor || gap != oldDelegate.gap;
   }
 }
+

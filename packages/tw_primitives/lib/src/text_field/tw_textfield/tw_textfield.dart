@@ -333,6 +333,10 @@ class TwTextFieldState extends State<TwTextField> implements ImeInputOwner {
       return widget.configuration!;
     }
 
+    if (CurrentPlatform.isWeb && browserReportsTouchInput()) {
+      return TwTextFieldPlatformConfiguration.android;
+    }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return TwTextFieldPlatformConfiguration.android;
