@@ -29,7 +29,7 @@ class SelectionCopyHelper {
 
   bool handleChatSelectionChanged(SelectedContent? selectedContent) {
     _currentSelectedPlainText = selectedContent?.plainText ?? '';
-    final hasSelection = (selectedContent?.plainText ?? '').trim().isNotEmpty;
+    final hasSelection = selectedContent?.plainText.isNotEmpty ?? false;
     if (_isChatSelectionActive == hasSelection) {
       return false;
     }

@@ -109,8 +109,10 @@ extension MarkupInlineRendering on MarkupInline {
       effectiveStyle = effectiveStyle.merge(theme.linkStyle);
       final linkPillStyle = theme.linkPillStyle;
       if (linkPillStyle != null) {
+        // Hybrid: WidgetSpan for clickable pill, hidden TextSpan for selection/copy
         return TextSpan(
           children: <InlineSpan>[
+            // Visible clickable pill
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: _MarkupLinkPill(
@@ -123,6 +125,17 @@ extension MarkupInlineRendering on MarkupInline {
                 ),
                 gestureRecognizerFactory: gestureRecognizerFactory,
               ),
+            ),
+            // Hidden span for selection/copy
+            TextSpan(
+              text: text,
+              style: effectiveStyle.copyWith(
+                color: Colors.transparent,
+                height: 0.01,
+                fontSize: 0.01,
+              ),
+              recognizer: gestureRecognizerFactory(href!),
+              semanticsLabel: null,
             ),
           ],
         );
@@ -185,30 +198,36 @@ class _MarkupLinkPillState extends State<_MarkupLinkPill> {
       label: widget.href != widget.label
           ? '${widget.label} (${widget.href})'
           : widget.label,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: SelectionContainer.disabled(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: onTap,
-            child: DecoratedBox(
-              decoration: ShapeDecoration(
-                color: widget.style.fillColor,
-                shape: StadiumBorder(
-                  side: BorderSide(
-                    color: widget.style.borderColor,
-                    width: widget.style.borderWidth,
-                  ),
+      child: Stack(
+        children: [
+          DecoratedBox(
+            decoration: ShapeDecoration(
+              color: widget.style.fillColor,
+              shape: StadiumBorder(
+                side: BorderSide(
+                  color: widget.style.borderColor,
+                  width: widget.style.borderWidth,
                 ),
-                shadows: widget.style.shadows,
               ),
-              child: Padding(
-                padding: widget.style.padding,
-                child: Text(widget.label, style: widget.style.textStyle),
+              shadows: widget.style.shadows,
+            ),
+            child: Padding(
+              padding: widget.style.padding,
+              child: Text(widget.label, style: widget.style.textStyle),
+            ),
+          ),
+          // Transparent overlay for click/tap and pointer cursor
+          Positioned.fill(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: onTap,
+                child: Container(),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

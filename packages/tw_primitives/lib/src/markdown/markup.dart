@@ -11,13 +11,7 @@ export 'markup_ast.dart'
         MarkupBlockquoteBlock,
         MarkupListBlock,
         MarkupListItem;
-export 'markup_rendering.dart'
-    show
-        LinkGestureRecognizerFactory,
-        MarkupLinkPillStyle,
-        MarkupTheme,
-        MarkupDocumentRendering,
-        MarkupBlockRendering;
+export 'markup_rendering.dart';
 
 class MessageMarkup {
   const MessageMarkup._();

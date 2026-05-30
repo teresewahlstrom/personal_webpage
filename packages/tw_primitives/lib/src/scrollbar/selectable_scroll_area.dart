@@ -252,7 +252,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
   }
 
   void _handleSelectionChanged(SelectedContent? selectedContent) {
-    final hasSelection = (selectedContent?.plainText ?? '').trim().isNotEmpty;
+    final hasSelection = selectedContent?.plainText.isNotEmpty ?? false;
     if (_hasSelection != hasSelection) {
       setState(() {
         _hasSelection = hasSelection;
@@ -465,11 +465,18 @@ class _TwSelectionToolbarLayoutDelegate extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
+    final double maxX = (size.width - childSize.width).clamp(0.0, size.width);
+    final double maxY = (size.height - childSize.height).clamp(
+      0.0,
+      size.height,
+    );
     final double x = (anchor.dx - childSize.width / 2)
-        .clamp(0.0, (size.width - childSize.width).clamp(0.0, size.width))
+        .clamp(0.0, maxX)
         .toDouble();
-    final double y = (anchor.dy - childSize.height - gap)
-        .clamp(0.0, (size.height - childSize.height).clamp(0.0, size.height))
+    final double yAbove = anchor.dy - childSize.height - gap;
+    final double yBelow = anchor.dy + gap;
+    final double y = (yAbove >= 0.0 ? yAbove : yBelow)
+        .clamp(0.0, maxY)
         .toDouble();
     return Offset(x, y);
   }
