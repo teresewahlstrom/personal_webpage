@@ -189,7 +189,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 7),
+                        const SizedBox(height: 15),
                         const _HeroStatement(),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
@@ -274,7 +274,7 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             }
                             if (!snapshot.hasData) {
-                              return const SizedBox(height: 48);
+                              return const SizedBox(height: 37);
                             }
 
                             return _ProjectsSection(
@@ -282,7 +282,7 @@ class _LandingPageState extends State<LandingPage> {
                             );
                           },
                         ),
-                        const SizedBox(height: 48),
+                        const SizedBox(height: 37),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
                           entries: <_SocialItem>[

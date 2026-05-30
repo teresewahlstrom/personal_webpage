@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "check:colors": "node ./scripts/check-color-centralization.cjs",
-    "check:primitives": "dart run scripts/check_tw_primitives_usage.dart",
+    "check:primitives": "bash scripts/check-tw-primitives-usage.sh",
     "check:selection": "npm run check:primitives",
     "deploy": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh",
     "build": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh"

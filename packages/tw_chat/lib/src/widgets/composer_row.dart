@@ -141,7 +141,7 @@ class _ChatComposerRowState extends State<ChatComposerRow> {
       inputSource: kIsWeb ? TextInputSource.ime : null,
       padding: EdgeInsets.fromLTRB(
         tokens.composerTextInsetLeft + 2.0,
-        tokens.composerInputTextInsetTop + 3.0,
+        tokens.composerInputTextInsetTop,
         tokens.composerTextInsetRight + 2.0,
         tokens.composerInputTextInsetTopBottom,
       ),

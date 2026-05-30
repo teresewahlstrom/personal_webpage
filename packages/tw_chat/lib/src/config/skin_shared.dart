@@ -304,7 +304,7 @@ class ChatSkinTextStyles {
 
   TextStyle appBarTitleStyle(double textScale, ChatSkinColors colors) {
     const base = TextStyle(
-      fontSize: 14,
+      fontSize: 13,
       height: 1.12,
       fontWeight: FontWeight.w400,
     );

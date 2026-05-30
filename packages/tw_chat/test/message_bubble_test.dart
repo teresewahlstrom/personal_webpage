@@ -173,7 +173,7 @@ Line four carries enough words to wrap through the bubble width for truncation.'
         ChatMessage(
           id: 'bot-1',
           role: ChatRole.bot,
-          text: '''# Prototype Mode
+          text: '''## Prototype Mode
 
 I answer from a fixed Terese context and keep in-session chat memory while the local backend is running.
 

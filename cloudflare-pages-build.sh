@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FLUTTER_DIR="$HOME/flutter"
-
-if [ ! -d "$FLUTTER_DIR" ]; then
-  git clone --depth 1 https://github.com/flutter/flutter.git "$FLUTTER_DIR"
-fi
-
-export PATH="$FLUTTER_DIR/bin:$PATH"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/scripts/ensure-flutter.sh"
 
 flutter --version
 flutter config --enable-web
