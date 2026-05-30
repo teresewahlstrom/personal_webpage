@@ -37,6 +37,38 @@ void main() {
     expect(afterRect.top - headingRect.bottom, closeTo(11.4, 0.5));
   });
 
+  testWidgets('link pill text does not keep underline decoration', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _MarkupTestApp(
+        document: MessageMarkup.parse('[Twin](https://example.com)'),
+        baseStyle: const TextStyle(fontSize: 20, height: 1),
+        linkPillStyle: const MarkupLinkPillStyle(
+          fillColor: Colors.white,
+          borderColor: Colors.black,
+          textStyle: TextStyle(fontSize: 13),
+        ),
+      ),
+    );
+
+    expect(
+      tester.widget<Text>(find.text('Twin')).style?.decoration,
+      TextDecoration.none,
+    );
+    expect(
+      tester
+          .widget<MouseRegion>(
+            find.ancestor(
+              of: find.text('Twin'),
+              matching: find.byType(MouseRegion),
+            ),
+          )
+          .cursor,
+      SystemMouseCursors.click,
+    );
+  });
+
   testWidgets(
     'chrome-free selectable path does not inject copy-break RichText between paragraphs',
     (tester) async {
@@ -118,11 +150,13 @@ class _MarkupTestApp extends StatelessWidget {
     required this.document,
     required this.baseStyle,
     this.chromeVisible = true,
+    this.linkPillStyle,
   });
 
   final MarkupDocument document;
   final TextStyle baseStyle;
   final bool chromeVisible;
+  final MarkupLinkPillStyle? linkPillStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +168,7 @@ class _MarkupTestApp extends StatelessWidget {
             width: 300,
             child: MarkupView(
               document: document,
-              theme: _theme(baseStyle),
+              theme: _theme(baseStyle, linkPillStyle: linkPillStyle),
               gestureRecognizerFactory: (_) => null,
               chromeVisible: chromeVisible,
             ),
@@ -145,14 +179,18 @@ class _MarkupTestApp extends StatelessWidget {
   }
 }
 
-MarkupTheme _theme(TextStyle baseStyle) {
+MarkupTheme _theme(TextStyle baseStyle, {MarkupLinkPillStyle? linkPillStyle}) {
   return MarkupTheme(
     baseStyle: baseStyle,
     strongStyle: const TextStyle(fontWeight: FontWeight.bold),
     emphasisStyle: const TextStyle(fontStyle: FontStyle.italic),
     strikethroughStyle: const TextStyle(decoration: TextDecoration.lineThrough),
     underlineStyle: const TextStyle(decoration: TextDecoration.underline),
-    linkStyle: const TextStyle(color: Colors.blue),
+    linkStyle: const TextStyle(
+      color: Colors.blue,
+      decoration: TextDecoration.underline,
+    ),
+    linkPillStyle: linkPillStyle,
     blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
     headingStyleResolver: (int level) => baseStyle.copyWith(
       fontSize: level == 1 ? 30 : 24,

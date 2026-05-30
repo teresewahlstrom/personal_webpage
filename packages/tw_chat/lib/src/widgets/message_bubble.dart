@@ -122,17 +122,16 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final bubbleMaxWidth =
         (widget.availableWidth * ChatBubbleRules.maxWidthFactor +
                 tokens.bubbleWidthCompensation)
-        .clamp(tokens.bubbleMinWidthClamp, widget.availableWidth);
+            .clamp(tokens.bubbleMinWidthClamp, widget.availableWidth);
     final bubbleMinWidth =
         (widget.availableWidth * ChatBubbleRules.minWidthFactor).clamp(
           0.0,
           bubbleMaxWidth,
         );
     final resolvedBotBubbleWidth =
-        (widget.botBubbleWidth ?? widget.availableWidth).clamp(
-          0.0,
-          widget.availableWidth,
-        ).toDouble();
+        (widget.botBubbleWidth ?? widget.availableWidth)
+            .clamp(0.0, widget.availableWidth)
+            .toDouble();
     final contentMaxWidth = widget.isUserBubble
         ? bubbleMaxWidth
         : resolvedBotBubbleWidth;
@@ -440,17 +439,22 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
   }
 }
 
-MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(
-  BuildContext context,
-) {
+MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(BuildContext context) {
   final skin = ChatSkin.dataOf(context);
   final colors = skin.colors;
+  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
       baseTextColor: colors.bubbleText,
       linkColor: colors.markupLink,
       isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
+      linkPillStyle: MarkupLinkPillStyle(
+        fillColor: ChatComposerLayout.fillColor(context),
+        borderColor: ChatComposerLayout.borderColor(context),
+        textStyle: skin.textStyles.appBarTitleStyle(textScale, colors),
+        shadows: <BoxShadow>[skin.tokens.jumpToLatestButtonShadow(colors)],
+      ),
     ),
   );
 }
@@ -737,15 +741,13 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       final fallbackText = document.blocks.first.toPlainText();
       if (fallbackText.isNotEmpty) {
         visibleBlocks.add(
-          MarkupParagraphBlock(
-            <MarkupInline>[
-              MarkupInline(
-                text: fallbackText.length > 160
-                    ? fallbackText.substring(0, 160)
-                    : fallbackText,
-              ),
-            ],
-          ),
+          MarkupParagraphBlock(<MarkupInline>[
+            MarkupInline(
+              text: fallbackText.length > 160
+                  ? fallbackText.substring(0, 160)
+                  : fallbackText,
+            ),
+          ]),
         );
       }
     }
@@ -890,6 +892,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       return _transparentTextStyle(style);
     }
 
+    final linkPillStyle = theme.linkPillStyle;
     return MarkupTheme(
       baseStyle: transparent(theme.baseStyle),
       strongStyle: transparent(theme.strongStyle),
@@ -897,6 +900,12 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       strikethroughStyle: transparent(theme.strikethroughStyle),
       underlineStyle: transparent(theme.underlineStyle),
       linkStyle: transparent(theme.linkStyle),
+      linkPillStyle: linkPillStyle?.copyWith(
+        fillColor: Colors.transparent,
+        borderColor: Colors.transparent,
+        shadows: const <BoxShadow>[],
+        textStyle: transparent(linkPillStyle.textStyle),
+      ),
       blockquoteStyle: transparent(theme.blockquoteStyle),
       headingStyleResolver: (int level) =>
           transparent(theme.headingStyleResolver(level)),
@@ -912,7 +921,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       shadows: const <Shadow>[],
     );
   }
-
 }
 
 class _BubbleFooter extends StatelessWidget {
@@ -938,7 +946,8 @@ class _BubbleFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
     final double footerLineYOffset = isCollapsed
-        ? tokens.bubbleBorderWidth * 1.1 // Nudge down do that the dashed line does not appear to coincide with bubble shadow when truncated
+        ? tokens.bubbleBorderWidth *
+              1.1 // Nudge down do that the dashed line does not appear to coincide with bubble shadow when truncated
         : -tokens.bubbleBorderWidth;
     return Column(
       mainAxisSize: MainAxisSize.min,

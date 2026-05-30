@@ -103,6 +103,7 @@ class MarkupViewRenderer {
           selectable: selectable,
         );
       case final MarkupBlockquoteBlock quote:
+        final MarkupLinkPillStyle? linkPillStyle = theme.linkPillStyle;
         final MarkupTheme quoteTheme = MarkupTheme(
           baseStyle: theme.blockquoteStyle,
           strongStyle: theme.blockquoteStyle.merge(theme.strongStyle),
@@ -112,6 +113,9 @@ class MarkupViewRenderer {
           ),
           underlineStyle: theme.blockquoteStyle.merge(theme.underlineStyle),
           linkStyle: theme.blockquoteStyle.merge(theme.linkStyle),
+          linkPillStyle: linkPillStyle?.copyWith(
+            textStyle: theme.blockquoteStyle.merge(linkPillStyle.textStyle),
+          ),
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: (int level) =>
               theme.headingStyleResolver(level).merge(theme.blockquoteStyle),

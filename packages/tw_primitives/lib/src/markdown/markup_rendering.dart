@@ -6,6 +6,42 @@ import 'markup_ast.dart';
 typedef LinkGestureRecognizerFactory = GestureRecognizer? Function(String href);
 typedef MarkupHeadingStyleResolver = TextStyle Function(int level);
 
+class MarkupLinkPillStyle {
+  const MarkupLinkPillStyle({
+    required this.fillColor,
+    required this.borderColor,
+    required this.textStyle,
+    this.borderWidth = 1.0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    this.shadows = const <BoxShadow>[],
+  });
+
+  final Color fillColor;
+  final Color borderColor;
+  final double borderWidth;
+  final EdgeInsetsGeometry padding;
+  final List<BoxShadow> shadows;
+  final TextStyle textStyle;
+
+  MarkupLinkPillStyle copyWith({
+    Color? fillColor,
+    Color? borderColor,
+    double? borderWidth,
+    EdgeInsetsGeometry? padding,
+    List<BoxShadow>? shadows,
+    TextStyle? textStyle,
+  }) {
+    return MarkupLinkPillStyle(
+      fillColor: fillColor ?? this.fillColor,
+      borderColor: borderColor ?? this.borderColor,
+      borderWidth: borderWidth ?? this.borderWidth,
+      padding: padding ?? this.padding,
+      shadows: shadows ?? this.shadows,
+      textStyle: textStyle ?? this.textStyle,
+    );
+  }
+}
+
 class MarkupTheme {
   const MarkupTheme({
     required this.baseStyle,
@@ -16,6 +52,7 @@ class MarkupTheme {
     required this.linkStyle,
     required this.blockquoteStyle,
     required this.headingStyleResolver,
+    this.linkPillStyle,
   });
 
   final TextStyle baseStyle;
@@ -24,6 +61,7 @@ class MarkupTheme {
   final TextStyle strikethroughStyle;
   final TextStyle underlineStyle;
   final TextStyle linkStyle;
+  final MarkupLinkPillStyle? linkPillStyle;
   final TextStyle blockquoteStyle;
   final MarkupHeadingStyleResolver headingStyleResolver;
 }
@@ -69,6 +107,26 @@ extension MarkupInlineRendering on MarkupInline {
     }
     if (isLink) {
       effectiveStyle = effectiveStyle.merge(theme.linkStyle);
+      final linkPillStyle = theme.linkPillStyle;
+      if (linkPillStyle != null) {
+        return TextSpan(
+          children: <InlineSpan>[
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: _MarkupLinkPill(
+                href: href!,
+                label: text,
+                style: linkPillStyle.copyWith(
+                  textStyle: effectiveStyle
+                      .merge(linkPillStyle.textStyle)
+                      .copyWith(decoration: TextDecoration.none),
+                ),
+                gestureRecognizerFactory: gestureRecognizerFactory,
+              ),
+            ),
+          ],
+        );
+      }
     }
 
     return TextSpan(
@@ -76,6 +134,82 @@ extension MarkupInlineRendering on MarkupInline {
       style: effectiveStyle,
       semanticsLabel: isLink && href != text ? '$text ($href)' : null,
       recognizer: isLink ? gestureRecognizerFactory(href!) : null,
+    );
+  }
+}
+
+class _MarkupLinkPill extends StatefulWidget {
+  const _MarkupLinkPill({
+    required this.href,
+    required this.label,
+    required this.style,
+    required this.gestureRecognizerFactory,
+  });
+
+  final String href;
+  final String label;
+  final MarkupLinkPillStyle style;
+  final LinkGestureRecognizerFactory gestureRecognizerFactory;
+
+  @override
+  State<_MarkupLinkPill> createState() => _MarkupLinkPillState();
+}
+
+class _MarkupLinkPillState extends State<_MarkupLinkPill> {
+  GestureRecognizer? _recognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _recognizer = widget.gestureRecognizerFactory(widget.href);
+  }
+
+  @override
+  void didUpdateWidget(covariant _MarkupLinkPill oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.href != widget.href ||
+        oldWidget.gestureRecognizerFactory != widget.gestureRecognizerFactory) {
+      _recognizer = widget.gestureRecognizerFactory(widget.href);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final recognizer = _recognizer;
+    final VoidCallback? onTap = recognizer is TapGestureRecognizer
+        ? recognizer.onTap
+        : null;
+
+    return Semantics(
+      link: true,
+      label: widget.href != widget.label
+          ? '${widget.label} (${widget.href})'
+          : widget.label,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: SelectionContainer.disabled(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: DecoratedBox(
+              decoration: ShapeDecoration(
+                color: widget.style.fillColor,
+                shape: StadiumBorder(
+                  side: BorderSide(
+                    color: widget.style.borderColor,
+                    width: widget.style.borderWidth,
+                  ),
+                ),
+                shadows: widget.style.shadows,
+              ),
+              child: Padding(
+                padding: widget.style.padding,
+                child: Text(widget.label, style: widget.style.textStyle),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -100,6 +234,7 @@ extension MarkupBlockRendering on MarkupBlock {
         );
       case final MarkupHeadingBlock heading:
         final headingStyle = theme.headingStyleResolver(heading.level);
+        final linkPillStyle = theme.linkPillStyle;
         final headingTheme = MarkupTheme(
           baseStyle: headingStyle,
           strongStyle: headingStyle.merge(theme.strongStyle),
@@ -107,6 +242,9 @@ extension MarkupBlockRendering on MarkupBlock {
           strikethroughStyle: headingStyle.merge(theme.strikethroughStyle),
           underlineStyle: headingStyle.merge(theme.underlineStyle),
           linkStyle: headingStyle.merge(theme.linkStyle),
+          linkPillStyle: linkPillStyle?.copyWith(
+            textStyle: headingStyle.merge(linkPillStyle.textStyle),
+          ),
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: theme.headingStyleResolver,
         );
@@ -144,7 +282,9 @@ extension MarkupBlockRendering on MarkupBlock {
           if (entry.$1 > 0) {
             itemChildren.add(const TextSpan(text: '\n'));
           }
-          final marker = list.ordered ? '${list.startingIndex + entry.$1}. ' : '• ';
+          final marker = list.ordered
+              ? '${list.startingIndex + entry.$1}. '
+              : '• ';
           itemChildren.add(
             _prefixMultilineSpan(
               entry.$2.toTextSpan(
@@ -323,11 +463,7 @@ List<_MarkupTextFragment> _flattenTextSpan(
 }
 
 class _MarkupTextFragment {
-  const _MarkupTextFragment({
-    required this.text,
-    this.style,
-    this.recognizer,
-  });
+  const _MarkupTextFragment({required this.text, this.style, this.recognizer});
 
   final String text;
   final TextStyle? style;

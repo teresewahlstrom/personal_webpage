@@ -9,6 +9,7 @@ class MarkdownThemeConfig {
     required this.linkColor,
     required this.isDark,
     this.textScale = TwBodyTextStyle.minTextScale,
+    this.linkPillStyle,
   });
 
   static double bodyTextScaleOf(BuildContext context) {
@@ -19,6 +20,7 @@ class MarkdownThemeConfig {
   final Color linkColor;
   final bool isDark;
   final double textScale;
+  final MarkupLinkPillStyle? linkPillStyle;
 }
 
 const double _underlineThickness = 1.9;
@@ -45,7 +47,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-    final FontWeight strongFontWeight = config.isDark
+  final FontWeight strongFontWeight = config.isDark
       ? FontWeight.w600
       : FontWeight.w500;
   final strongStyle = baseStyle.copyWith(
@@ -85,6 +87,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       strikethroughStyle: strikethroughStyle,
       underlineStyle: underlineStyle,
       linkStyle: linkStyle,
+      linkPillStyle: config.linkPillStyle,
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
         const scales = <double>[2.1, 1.5];
@@ -104,4 +107,3 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
     ),
   );
 }
-

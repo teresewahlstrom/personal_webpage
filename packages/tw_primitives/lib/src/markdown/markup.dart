@@ -14,6 +14,7 @@ export 'markup_ast.dart'
 export 'markup_rendering.dart'
     show
         LinkGestureRecognizerFactory,
+        MarkupLinkPillStyle,
         MarkupTheme,
         MarkupDocumentRendering,
         MarkupBlockRendering;
