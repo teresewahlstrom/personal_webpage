@@ -68,8 +68,6 @@ class MarkupViewRenderer {
               nextBlock: block,
               inListItem: inListItem,
             ),
-            selectionLineBreaks: 1,
-            includeSelectableCopyBreak: chromeVisible,
           ),
         );
       }
@@ -217,11 +215,7 @@ class MarkupViewRenderer {
               .toList(growable: false),
         );
       case final _MarkupLayoutGapNode gap:
-        return _buildSelectableCopyBreak(
-          height: gap.height,
-          lineBreaks: gap.selectionLineBreaks,
-          includeSelectableCopyBreak: gap.includeSelectableCopyBreak,
-        );
+        return SizedBox(height: gap.height);
       case final _MarkupLayoutTextNode text:
         return _buildSelectableRichText(
           text.text,
@@ -257,13 +251,7 @@ class MarkupViewRenderer {
     final children = <Widget>[];
 
     if (item.topSpacing > 0) {
-      children.add(
-        _buildSelectableCopyBreak(
-          height: item.topSpacing,
-          lineBreaks: 1,
-          includeSelectableCopyBreak: chromeVisible,
-        ),
-      );
+      children.add(SizedBox(height: item.topSpacing));
     }
 
     children.add(
@@ -501,15 +489,9 @@ class _MarkupLayoutColumnNode extends _MarkupLayoutNode {
 }
 
 class _MarkupLayoutGapNode extends _MarkupLayoutNode {
-  const _MarkupLayoutGapNode({
-    required this.height,
-    required this.selectionLineBreaks,
-    required this.includeSelectableCopyBreak,
-  });
+  const _MarkupLayoutGapNode({required this.height});
 
   final double height;
-  final int selectionLineBreaks;
-  final bool includeSelectableCopyBreak;
 }
 
 sealed class _MarkupLayoutMarkerNode {

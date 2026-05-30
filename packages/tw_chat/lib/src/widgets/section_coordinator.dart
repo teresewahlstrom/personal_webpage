@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwSelectableRegionState;
+import 'package:flutter/rendering.dart' show RenderAbstractViewport, SelectedContent;
+import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
 import 'package:tw_primitives/text_field.dart' show TwReadyTextController;
 
 import '../config/config.dart';
@@ -50,14 +50,16 @@ class SectionCoordinator extends ChangeNotifier {
   String? _deferredRevealMessageId;
   bool _deferredStickToBottom = false;
 
-  GlobalKey<TwSelectableRegionState> get chatSelectionAreaKey =>
+  GlobalKey<tw_scrollbar.TwSelectableRegionState> get chatSelectionAreaKey =>
       _selectionCopy.chatSelectionAreaKey;
   ChatMessageBubbleKeyMap get messageBubbleKeys => _messageBubbleKeys;
   ValueListenable<int> get chatViewListenable => _chatViewTick;
   ValueListenable<int> get composerViewListenable => _composerViewTick;
   bool get isChatSelectionActive => _selectionCopy.isChatSelectionActive;
 
-  SelectionListenerNotifier selectionNotifierForMessage(String messageId) {
+  tw_scrollbar.SelectionListenerNotifier selectionNotifierForMessage(
+    String messageId,
+  ) {
     return _selectionCopy.selectionNotifierForMessage(messageId);
   }
 

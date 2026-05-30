@@ -8,6 +8,7 @@ import '../models/message.dart';
 String formatChatSelectionCopy({
   required List<ChatMessage> messages,
   required Map<String, SelectedContentRange> selectedRanges,
+  Map<String, String> selectedPlainTextByMessage = const <String, String>{},
   Set<String> fullCopyMessageIds = const <String>{},
 }) {
   final buffer = StringBuffer();
@@ -26,18 +27,41 @@ String formatChatSelectionCopy({
     }
 
     final bool copyWholeMessage = fullCopyMessageIds.contains(message.id);
-    final int start = copyWholeMessage
+    final int fallbackStart = copyWholeMessage
         ? 0
         : math
               .min(range.startOffset, range.endOffset)
               .clamp(0, projection.visibleLength)
               .toInt();
-    final int end = copyWholeMessage
+    final int fallbackEnd = copyWholeMessage
         ? projection.visibleLength
         : math
               .max(range.startOffset, range.endOffset)
               .clamp(0, projection.visibleLength)
               .toInt();
+    final selectedPlainText = selectedPlainTextByMessage[message.id] ?? '';
+    final bool rangeCoversWholeMessage =
+        fallbackStart == 0 && fallbackEnd == projection.visibleLength;
+    final bool rangeLengthMatchesSelectedText =
+        selectedPlainText.length == (fallbackEnd - fallbackStart);
+    final bool shouldAnchorToSelectedText =
+        !copyWholeMessage &&
+        selectedPlainText.isNotEmpty &&
+        (!rangeCoversWholeMessage || !rangeLengthMatchesSelectedText);
+    final matchedRange = !shouldAnchorToSelectedText
+        ? null
+        : projection.findVisibleTextRange(
+            selectedPlainText,
+            preferredStart: fallbackStart,
+          );
+    final int start = matchedRange?.$1 ?? fallbackStart;
+    final int end = matchedRange?.$2 ?? fallbackEnd;
+    final bool includeLeadingCopyAtStart = matchedRange != null
+        ? projection.shouldIncludeLeadingCopyAtStart(
+            start: start,
+            selectedText: selectedPlainText,
+          )
+        : false;
     if (end <= start) {
       continue;
     }
@@ -50,7 +74,13 @@ String formatChatSelectionCopy({
         ),
       );
     }
-    buffer.write(projection.copySlice(start: start, end: end));
+    buffer.write(
+      projection.copySlice(
+        start: start,
+        end: end,
+        includeLeadingCopyAtStart: includeLeadingCopyAtStart,
+      ),
+    );
     wroteAny = true;
   }
 
@@ -62,7 +92,8 @@ class _SelectionCopyProjection {
     : visibleLength = _segments.fold<int>(
         0,
         (total, segment) => total + segment.visibleLength,
-      );
+      ),
+      visibleText = _segments.map((segment) => segment.visibleText).join();
 
   factory _SelectionCopyProjection.fromRawMessage(String raw) {
     // Copy selection offsets come from the visible rendered markup tree, so the
@@ -74,17 +105,117 @@ class _SelectionCopyProjection {
     return _SelectionCopyProjection(
       _buildJoinedBlockSegments(
         document.blocks,
-        separator: MarkupDocument.blockSeparator,
+        visibleSeparator: '\n',
+        copySeparator: MarkupDocument.blockSeparator,
       ),
     );
   }
 
   final List<_SelectionCopySegment> _segments;
   final int visibleLength;
+  final String visibleText;
 
   bool get isEmpty => visibleLength == 0;
 
-  String copySlice({required int start, required int end}) {
+  (int, int)? findVisibleTextRange(
+    String selectedText, {
+    required int preferredStart,
+  }) {
+    if (selectedText.isEmpty) {
+      return null;
+    }
+
+    int? bestStart;
+    var searchStart = 0;
+    while (searchStart <= visibleText.length - selectedText.length) {
+      final matchIndex = visibleText.indexOf(selectedText, searchStart);
+      if (matchIndex == -1) {
+        break;
+      }
+      if (bestStart == null ||
+          (matchIndex - preferredStart).abs() <
+              (bestStart - preferredStart).abs()) {
+        bestStart = matchIndex;
+      }
+      searchStart = matchIndex + 1;
+    }
+
+    if (bestStart == null) {
+      return _findVisibleTextRangeSkippingSeparators(
+        selectedText,
+        preferredStart: preferredStart,
+      );
+    }
+    return (bestStart, bestStart + selectedText.length);
+  }
+
+  (int, int)? _findVisibleTextRangeSkippingSeparators(
+    String selectedText, {
+    required int preferredStart,
+  }) {
+    int? bestStart;
+    int? bestEnd;
+
+    for (var candidateStart = 0;
+        candidateStart < visibleText.length;
+        candidateStart += 1) {
+      var visibleIndex = candidateStart;
+      var selectedIndex = 0;
+
+      while (visibleIndex < visibleText.length &&
+          selectedIndex < selectedText.length) {
+        if (visibleText[visibleIndex] == '\n') {
+          visibleIndex += 1;
+          continue;
+        }
+        if (visibleText[visibleIndex] != selectedText[selectedIndex]) {
+          break;
+        }
+        visibleIndex += 1;
+        selectedIndex += 1;
+      }
+
+      if (selectedIndex != selectedText.length) {
+        continue;
+      }
+
+      if (bestStart == null ||
+          (candidateStart - preferredStart).abs() <
+              (bestStart - preferredStart).abs()) {
+        bestStart = candidateStart;
+        bestEnd = visibleIndex;
+      }
+    }
+
+    if (bestStart == null || bestEnd == null) {
+      return null;
+    }
+    return (bestStart, bestEnd);
+  }
+
+  bool shouldIncludeLeadingCopyAtStart({
+    required int start,
+    required String selectedText,
+  }) {
+    if (selectedText.isEmpty || start < 0 || start >= visibleText.length) {
+      return false;
+    }
+
+    if (start > 0 && visibleText[start - 1] != '\n') {
+      return false;
+    }
+
+    final firstSelectedLine = selectedText.split('\n').first;
+    final lineEnd = visibleText.indexOf('\n', start);
+    final visibleLineEnd = lineEnd == -1 ? visibleText.length : lineEnd;
+    return start + firstSelectedLine.length >= visibleLineEnd;
+  }
+
+  String copySlice({
+    required int start,
+    required int end,
+    bool includeLeadingCopyAtStart = false,
+  }) {
     final buffer = StringBuffer();
     var visibleOffset = 0;
 
@@ -106,7 +237,10 @@ class _SelectionCopyProjection {
         continue;
       }
 
-      if (localStart == 0) {
+      if (localStart == 0 &&
+          (segmentStart == 0 ||
+              buffer.isNotEmpty ||
+              (includeLeadingCopyAtStart && segmentStart == start))) {
         buffer.write(segment.leadingCopy);
       }
       buffer.write(segment.visibleText.substring(localStart, localEnd));
@@ -131,17 +265,6 @@ class _SelectionCopySegment {
   final String trailingCopy;
 
   int get visibleLength => visibleText.length;
-
-  _SelectionCopySegment prependLeadingCopy(String prefix) {
-    if (prefix.isEmpty) {
-      return this;
-    }
-    return _SelectionCopySegment(
-      visibleText: visibleText,
-      leadingCopy: '$prefix$leadingCopy',
-      trailingCopy: trailingCopy,
-    );
-  }
 
   _SelectionCopySegment copyWith({
     String? visibleText,
@@ -168,7 +291,8 @@ class _LinePrefixState {
 
 List<_SelectionCopySegment> _buildJoinedBlockSegments(
   List<MarkupBlock> blocks, {
-  required String separator,
+  required String visibleSeparator,
+  required String copySeparator,
 }) {
   final segments = <_SelectionCopySegment>[];
 
@@ -178,7 +302,12 @@ List<_SelectionCopySegment> _buildJoinedBlockSegments(
       continue;
     }
     if (segments.isNotEmpty) {
-      blockSegments[0] = blockSegments[0].prependLeadingCopy(separator);
+      segments.add(
+        _buildVisibleSeparatorSegment(
+          visibleSeparator: visibleSeparator,
+          copySeparator: copySeparator,
+        ),
+      );
     }
     segments.addAll(blockSegments);
   }
@@ -199,14 +328,17 @@ List<_SelectionCopySegment> _buildBlockSegments(MarkupBlock block) {
     if (prefix.isEmpty || segments.isEmpty) {
       return segments;
     }
-    segments[0] = segments[0].prependLeadingCopy(prefix);
+    segments[0] = segments[0].copyWith(
+      leadingCopy: '$prefix${segments[0].leadingCopy}',
+    );
     return segments;
   }
   if (block is MarkupBlockquoteBlock) {
     return _prefixCopyLines(
       _buildJoinedBlockSegments(
         block.blocks,
-        separator: MarkupDocument.blockSeparator,
+        visibleSeparator: '\n',
+        copySeparator: MarkupDocument.blockSeparator,
       ),
       firstLinePrefix: '> ',
       continuationPrefix: '> ',
@@ -224,17 +356,21 @@ List<_SelectionCopySegment> _buildListSegments(MarkupListBlock block) {
 
   for (final entry in block.items.indexed) {
     final marker = block.ordered ? '${block.startingIndex + entry.$1}. ' : '- ';
+    if (entry.$1 > 0) {
+      segments.add(const _SelectionCopySegment(visibleText: '\n'));
+    }
 
-    segments.add(
-      _SelectionCopySegment(
-        visibleText: marker,
-        leadingCopy: entry.$1 > 0 ? '\n' : '',
-      ),
-    );
+    if (block.ordered) {
+      segments.add(_SelectionCopySegment(visibleText: marker));
+    }
 
     final itemSegments = _prefixCopyLines(
-      _buildJoinedBlockSegments(entry.$2.blocks, separator: '\n'),
-      firstLinePrefix: '',
+      _buildJoinedBlockSegments(
+        entry.$2.blocks,
+        visibleSeparator: '\n',
+        copySeparator: '\n',
+      ),
+      firstLinePrefix: block.ordered ? '' : marker,
       continuationPrefix: ' ' * marker.length,
     );
     segments.addAll(itemSegments);
@@ -243,9 +379,18 @@ List<_SelectionCopySegment> _buildListSegments(MarkupListBlock block) {
   return segments;
 }
 
-List<_SelectionCopySegment> _buildInlineSegments(
-  List<MarkupInline> inlines,
-) {
+_SelectionCopySegment _buildVisibleSeparatorSegment({
+  required String visibleSeparator,
+  required String copySeparator,
+}) {
+  assert(copySeparator.startsWith(visibleSeparator));
+  return _SelectionCopySegment(
+    visibleText: visibleSeparator,
+    trailingCopy: copySeparator.substring(visibleSeparator.length),
+  );
+}
+
+List<_SelectionCopySegment> _buildInlineSegments(List<MarkupInline> inlines) {
   final segments = <_SelectionCopySegment>[];
 
   for (final inline in inlines) {

@@ -54,6 +54,8 @@ const Set<PointerDeviceKind> _kLongPressSelectionDevices = <PointerDeviceKind>{
 // the vertical position diff is within the threshold, compare the horizontal
 // position to make the compareScreenOrder function more robust.
 const double _kSelectableVerticalComparingThreshold = 3.0;
+const double _kSelectionToolbarViewportPadding = 8.0;
+const double _kSelectionToolbarEstimatedHeight = 96.0;
 
 /// A widget that introduces an area for user selections.
 ///
@@ -148,7 +150,7 @@ const double _kSelectableVerticalComparingThreshold = 3.0;
 /// [SelectableRegion].
 ///
 /// To make a custom selectable widget, its render object needs to mix in
-/// [Selectable] and implement the required APIs to handle [SelectionEys vent]s
+/// [Selectable] and implement the required APIs to handle [SelectionEys :vent]s
 /// as well as paint appropriate selection highlights.
 ///
 /// The render object also needs to register itself to a [SelectionRegistrar].
@@ -248,6 +250,7 @@ class SelectableRegion extends StatefulWidget {
     this.focusNode,
     this.magnifierConfiguration = TextMagnifierConfiguration.disabled,
     this.onSelectionChanged,
+    this.selectionOverlayBoundsResolver,
     required this.selectionControls,
     required this.child,
   });
@@ -271,6 +274,12 @@ class SelectableRegion extends StatefulWidget {
 
   /// {@macro flutter.widgets.EditableText.contextMenuBuilder}
   final SelectableRegionContextMenuBuilder? contextMenuBuilder;
+
+  /// Resolves the global bounds where selection overlays should be considered
+  /// visible.
+  ///
+  /// When omitted, the selectable region's own global bounds are used.
+  final SelectableRegionBoundsResolver? selectionOverlayBoundsResolver;
 
   /// The delegate to build the selection handles and toolbar for mobile
   /// devices.
@@ -419,6 +428,15 @@ class SelectableRegionState extends State<SelectableRegion>
   final LayerLink _startHandleLayerLink = LayerLink();
   final LayerLink _endHandleLayerLink = LayerLink();
   final LayerLink _toolbarLayerLink = LayerLink();
+  final ValueNotifier<bool> _startHandleVisibleInViewport = ValueNotifier<bool>(
+    true,
+  );
+  final ValueNotifier<bool> _endHandleVisibleInViewport = ValueNotifier<bool>(
+    true,
+  );
+  final ValueNotifier<bool> _toolbarVisibleInViewport = ValueNotifier<bool>(
+    true,
+  );
   final StaticSelectionContainerDelegate _selectionDelegate =
       StaticSelectionContainerDelegate();
   // there should only ever be one selectable, which is the SelectionContainer.
@@ -546,24 +564,16 @@ class SelectableRegionState extends State<SelectableRegion>
       if (_webContextMenuEnabled) {
         PlatformSelectableRegionContextMenu.detach(_selectionDelegate);
       }
-      if (SchedulerBinding.instance.lifecycleState ==
-          AppLifecycleState.resumed) {
-        // We should only clear the selection when this SelectableRegion loses
-        // focus while the application is currently running. It is possible
-        // that the application is not currently running, for example on desktop
-        // platforms, clicking on a different window switches the focus to
-        // the new window causing the Flutter application to go inactive. In this
-        // case we want to retain the selection so it remains when we return to
-        // the Flutter application.
-        clearSelection();
-        _selectionStatusNotifier.value =
-            SelectableRegionSelectionStatus.changing;
-        _finalizeSelectableRegionStatus();
-      }
     }
     if (_webContextMenuEnabled) {
       PlatformSelectableRegionContextMenu.attach(_selectionDelegate);
     }
+  }
+
+  void _clearSelectionFromUserInteraction() {
+    clearSelection();
+    _selectionStatusNotifier.value = SelectableRegionSelectionStatus.changing;
+    _finalizeSelectableRegionStatus();
   }
 
   void _updateSelectionStatus() {
@@ -661,6 +671,7 @@ class SelectableRegionState extends State<SelectableRegion>
     _selectionDelegate._updateLastSelectionEdgeLocationsFromGeometries();
     _selectionDelegate.didChangeSelectables();
     _updateSelectionOverlay();
+    _selectionOverlay?.markNeedsBuild();
     _updateSelectedContentIfNeeded();
   }
 
@@ -1470,19 +1481,23 @@ class SelectableRegionState extends State<SelectableRegion>
     }
     final SelectionPoint? start = _selectionDelegate.value.startSelectionPoint;
     final SelectionPoint? end = _selectionDelegate.value.endSelectionPoint;
+    _updateOverlayVisibilityForViewport();
     _selectionOverlay = SelectionOverlay(
       context: context,
       debugRequiredFor: widget,
       startHandleType: start?.handleType ?? TextSelectionHandleType.collapsed,
       lineHeightAtStart: start?.lineHeight ?? end!.lineHeight,
+      startHandlesVisible: _startHandleVisibleInViewport,
       onStartHandleDragStart: _handleSelectionStartHandleDragStart,
       onStartHandleDragUpdate: _handleSelectionStartHandleDragUpdate,
       onStartHandleDragEnd: _onAnyDragEnd,
       endHandleType: end?.handleType ?? TextSelectionHandleType.collapsed,
       lineHeightAtEnd: end?.lineHeight ?? start!.lineHeight,
+      endHandlesVisible: _endHandleVisibleInViewport,
       onEndHandleDragStart: _handleSelectionEndHandleDragStart,
       onEndHandleDragUpdate: _handleSelectionEndHandleDragUpdate,
       onEndHandleDragEnd: _onAnyDragEnd,
+      toolbarVisible: _toolbarVisibleInViewport,
       selectionEndpoints: selectionEndpoints,
       selectionControls: widget.selectionControls,
       selectionDelegate: this,
@@ -1507,6 +1522,68 @@ class SelectableRegionState extends State<SelectableRegion>
       ..endHandleType = end?.handleType ?? TextSelectionHandleType.right
       ..lineHeightAtEnd = end?.lineHeight ?? start!.lineHeight
       ..selectionEndpoints = selectionEndpoints;
+    _updateOverlayVisibilityForViewport();
+  }
+
+  Rect? _selectionOverlayVisibleGlobalBounds() {
+    Rect? visibleBounds = widget.selectionOverlayBoundsResolver?.call();
+    if (visibleBounds == null || visibleBounds.isEmpty) {
+      final renderObject = context.findRenderObject();
+      if (renderObject is! RenderBox || !renderObject.hasSize) {
+        return null;
+      }
+      visibleBounds =
+          renderObject.localToGlobal(Offset.zero) & renderObject.size;
+    }
+
+    final Size? screenSize = MediaQuery.maybeSizeOf(context);
+    if (screenSize != null) {
+      visibleBounds = visibleBounds.intersect(Offset.zero & screenSize);
+    }
+    return visibleBounds.isEmpty ? null : visibleBounds;
+  }
+
+  Rect? _selectionPointGlobalRect(SelectionPoint? selectionPoint) {
+    final selectable = _selectable;
+    if (selectionPoint == null || selectable == null) {
+      return null;
+    }
+    final Offset globalPosition = MatrixUtils.transformPoint(
+      selectable.getTransformTo(null),
+      selectionPoint.localPosition,
+    );
+    return Rect.fromLTWH(
+      globalPosition.dx,
+      globalPosition.dy - selectionPoint.lineHeight,
+      1,
+      selectionPoint.lineHeight,
+    );
+  }
+
+  bool _isSelectionPointVisibleInViewport(SelectionPoint? selectionPoint) {
+    final Rect? visibleBounds = _selectionOverlayVisibleGlobalBounds();
+    final Rect? pointRect = _selectionPointGlobalRect(selectionPoint);
+    return visibleBounds != null &&
+        pointRect != null &&
+        pointRect.overlaps(visibleBounds);
+  }
+
+  bool _isToolbarVisibleInViewport() {
+    final Rect? visibleBounds = _selectionOverlayVisibleGlobalBounds();
+    final Rect? visibleSelectionRect = _visibleSelectedGlobalRect();
+    return visibleBounds != null &&
+        visibleSelectionRect != null &&
+        visibleBounds.height > _kSelectionToolbarViewportPadding * 2;
+  }
+
+  void _updateOverlayVisibilityForViewport() {
+    _startHandleVisibleInViewport.value = _isSelectionPointVisibleInViewport(
+      _selectionDelegate.value.startSelectionPoint,
+    );
+    _endHandleVisibleInViewport.value = _isSelectionPointVisibleInViewport(
+      _selectionDelegate.value.endSelectionPoint,
+    );
+    _toolbarVisibleInViewport.value = _isToolbarVisibleInViewport();
   }
 
   /// Shows the selection handles.
@@ -1785,6 +1862,53 @@ class SelectableRegionState extends State<SelectableRegion>
     await SystemChannels.platform.invokeMethod('Share.invoke', data.plainText);
   }
 
+  Rect? _visibleSelectedGlobalRect() {
+    final selectable = _selectable;
+    final Rect? visibleBounds = _selectionOverlayVisibleGlobalBounds();
+    if (selectable == null || visibleBounds == null) {
+      return null;
+    }
+
+    final Matrix4 transform = selectable.getTransformTo(null);
+    Rect? visibleSelectionRect;
+    for (final Rect selectionRect in _selectionDelegate.value.selectionRects) {
+      final Rect globalSelectionRect = MatrixUtils.transformRect(
+        transform,
+        selectionRect,
+      );
+      final Rect visibleRect = globalSelectionRect.intersect(visibleBounds);
+      if (visibleRect.isEmpty) {
+        continue;
+      }
+      visibleSelectionRect = visibleSelectionRect == null
+          ? visibleRect
+          : visibleSelectionRect.expandToInclude(visibleRect);
+    }
+    return visibleSelectionRect;
+  }
+
+  Offset _contextMenuAnchorForVisibleSelection(Rect visibleSelectionRect) {
+    final Rect? visibleBounds = _selectionOverlayVisibleGlobalBounds();
+    if (visibleBounds == null) {
+      return visibleSelectionRect.center;
+    }
+
+    final double minX = visibleBounds.left + _kSelectionToolbarViewportPadding;
+    final double maxX = max(
+      minX,
+      visibleBounds.right - _kSelectionToolbarViewportPadding,
+    );
+    final double minY = visibleBounds.top + _kSelectionToolbarViewportPadding;
+    final double maxY = max(
+      minY,
+      visibleBounds.bottom - _kSelectionToolbarEstimatedHeight,
+    );
+    return Offset(
+      visibleSelectionRect.center.dx.clamp(minX, maxX).toDouble(),
+      visibleSelectionRect.center.dy.clamp(minY, maxY).toDouble(),
+    );
+  }
+
   /// {@macro flutter.widgets.EditableText.getAnchors}
   ///
   /// See also:
@@ -1800,6 +1924,15 @@ class SelectableRegionState extends State<SelectableRegion>
       // access contextMenuAnchors and receive invalid anchors for their context menu.
       _lastSecondaryTapDownPosition = null;
       return anchors;
+    }
+    final Rect? visibleSelectionRect = _visibleSelectedGlobalRect();
+    if (visibleSelectionRect != null) {
+      final Offset visibleSelectionAnchor =
+          _contextMenuAnchorForVisibleSelection(visibleSelectionRect);
+      return TextSelectionToolbarAnchors(
+        primaryAnchor: visibleSelectionAnchor,
+        secondaryAnchor: visibleSelectionAnchor,
+      );
     }
     final renderBox = context.findRenderObject()! as RenderBox;
     return TextSelectionToolbarAnchors.fromSelection(
@@ -2175,6 +2308,9 @@ class SelectableRegionState extends State<SelectableRegion>
     _selectionOverlay = null;
     _viewportScrollSettleTimer?.cancel();
     _viewportScrollSettleTimer = null;
+    _startHandleVisibleInViewport.dispose();
+    _endHandleVisibleInViewport.dispose();
+    _toolbarVisibleInViewport.dispose();
     widget.focusNode?.removeListener(_handleFocusChanged);
     _localFocusNode?.removeListener(_handleFocusChanged);
     _localFocusNode?.dispose();
@@ -2206,6 +2342,7 @@ class SelectableRegionState extends State<SelectableRegion>
         // Tapping outside the selectable region does not unfocus
         // the region on non-web platforms.
         if (kIsWeb) {
+          _clearSelectionFromUserInteraction();
           _focusNode.unfocus();
         }
       },
@@ -3792,6 +3929,8 @@ typedef SelectableRegionContextMenuBuilder =
       SelectableRegionState selectableRegionState,
     );
 
+typedef SelectableRegionBoundsResolver = Rect? Function();
+
 /// The status of the selection under a [SelectableRegion].
 ///
 /// This value can be accessed for a [SelectableRegion] by using
@@ -4017,6 +4156,9 @@ final class _SelectionListenerDelegate extends StaticSelectionContainerDelegate
   SelectedContentRange? get range => getSelection();
 
   @override
+  String get plainText => getSelectedContent()?.plainText ?? '';
+
+  @override
   SelectionStatus get status => value.status;
 }
 
@@ -4034,6 +4176,9 @@ abstract final class SelectionDetails {
   ///
   /// Returns `null` if there is nothing selected.
   SelectedContentRange? get range;
+
+  /// The selected plain text under the owning [SelectionListener]s subtree.
+  String get plainText;
 
   /// The status that indicates whether there is a selection and whether the selection is collapsed.
   SelectionStatus get status;

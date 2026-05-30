@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
+import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
@@ -21,7 +22,7 @@ class ChatMessageBubble extends StatefulWidget {
   });
 
   final String text;
-  final SelectionListenerNotifier selectionListenerNotifier;
+  final tw_scrollbar.SelectionListenerNotifier selectionListenerNotifier;
   final bool isUserBubble;
   final bool isTypingIndicator;
   final bool isTruncated;
@@ -346,7 +347,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final colors = skin.colors;
     final tokens = skin.tokens;
     if (widget.isTypingIndicator) {
-      return SelectionListener(
+      return tw_scrollbar.SelectionListener(
         selectionNotifier: widget.selectionListenerNotifier,
         child: Padding(
           padding: tokens.typingIndicatorPadding,
@@ -363,7 +364,7 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
         ),
       );
     }
-    return SelectionListener(
+    return tw_scrollbar.SelectionListener(
       selectionNotifier: widget.selectionListenerNotifier,
       child: Column(
         mainAxisSize: MainAxisSize.min,

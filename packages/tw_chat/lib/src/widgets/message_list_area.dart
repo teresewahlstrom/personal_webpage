@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:tw_primitives/scrollbar.dart'
-  show TwSelectableScrollArea, TwSelectableRegionState;
+import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
 
 import '../config/config.dart';
 import '../models/message.dart';
@@ -41,13 +40,13 @@ class ChatMessageListArea extends StatefulWidget {
   final double botBubbleWidth;
   final ScrollController chatScroll;
   final FocusNode chatFocusNode;
-  final GlobalKey<TwSelectableRegionState> chatSelectionAreaKey;
+  final GlobalKey<tw_scrollbar.TwSelectableRegionState> chatSelectionAreaKey;
   final ChatMessageBubbleKeyMap messageBubbleKeys;
   final bool showChatScrollbarTrack;
   final bool Function(String messageId) isMessageTruncated;
   final ValueChanged<String> onToggleTruncation;
   final ValueChanged<SelectedContent?> onChatSelectionChanged;
-  final SelectionListenerNotifier Function(String messageId)
+  final tw_scrollbar.SelectionListenerNotifier Function(String messageId)
   selectionNotifierForMessage;
   final String Function() onCopySelectionRequested;
   final VoidCallback onRequestChatKeyboardTarget;
@@ -75,7 +74,7 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
 
-    return TwSelectableScrollArea.scrollView(
+    return tw_scrollbar.TwSelectableScrollArea.scrollView(
       controller: widget.chatScroll,
       selectionKey: widget.chatSelectionAreaKey,
       interactionFocusNode: widget.chatFocusNode,

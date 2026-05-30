@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwSelectableRegionState;
+import 'package:flutter/material.dart' show GlobalKey;
+import 'package:flutter/rendering.dart'
+    show SelectedContent, SelectedContentRange, SelectionStatus;
+import 'package:tw_primitives/scrollbar.dart'
+    show TwSelectableRegionState, SelectionListenerNotifier;
 
 import '../logic/selection_copy_formatter.dart';
 import '../models/message.dart';
@@ -40,6 +42,7 @@ class SelectionCopyHelper {
     Set<String> fullCopyMessageIds = const <String>{},
   }) {
     final selectedRanges = <String, SelectedContentRange>{};
+    final selectedPlainTextByMessage = <String, String>{};
 
     for (final message in messages) {
       final notifier = _messageSelectionNotifiers[message.id];
@@ -54,11 +57,15 @@ class SelectionCopyHelper {
       }
 
       selectedRanges[message.id] = range;
+      if (selection.plainText.isNotEmpty) {
+        selectedPlainTextByMessage[message.id] = selection.plainText;
+      }
     }
 
     return formatChatSelectionCopy(
       messages: messages,
       selectedRanges: selectedRanges,
+      selectedPlainTextByMessage: selectedPlainTextByMessage,
       fullCopyMessageIds: fullCopyMessageIds,
     );
   }
