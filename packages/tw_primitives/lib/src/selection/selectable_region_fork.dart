@@ -861,6 +861,11 @@ class SelectableRegionState extends State<SelectableRegion>
                   SelectableRegionSelectionStatus.changing;
               break;
             }
+            if (_hasActiveSelection) {
+              hideToolbar();
+              _clearSelectionFromUserInteraction();
+              break;
+            }
             clearSelection();
             _collapseSelectionAt(offset: details.globalPosition);
             _selectionStatusNotifier.value =

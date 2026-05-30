@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -eu
+
+dart run scripts/check_tw_primitives_usage.dart

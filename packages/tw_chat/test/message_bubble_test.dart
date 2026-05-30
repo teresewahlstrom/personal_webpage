@@ -8,15 +8,14 @@ import 'package:tw_chat/src/config/skin.dart';
 import 'package:tw_chat/src/logic/selection_copy_formatter.dart';
 import 'package:tw_chat/src/models/message.dart';
 import 'package:tw_chat/src/widgets/message_bubble.dart';
+import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
 
 void main() {
   String? clipboardText;
 
   setUp(() {
     clipboardText = null;
-    TestDefaultBinaryMessengerBinding
-        .instance
-        .defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(SystemChannels.platform, (call) async {
           switch (call.method) {
             case 'Clipboard.setData':
@@ -32,16 +31,14 @@ void main() {
   });
 
   tearDown(() {
-    TestDefaultBinaryMessengerBinding
-        .instance
-        .defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(SystemChannels.platform, null);
   });
 
   testWidgets('collapsed bubble copy reflects visible selected text', (
     tester,
   ) async {
-    final selectionAreaKey = GlobalKey<SelectionAreaState>();
+    final selectionAreaKey = GlobalKey<tw_scrollbar.TwSelectableRegionState>();
     const rawText =
         '''Line one carries enough words to wrap through the bubble width for truncation.
 
@@ -64,9 +61,7 @@ Line eight carries enough words to wrap through the bubble width for truncation.
     );
     final selectionActionContext = tester.element(find.byType(RichText).first);
 
-    selectionAreaKey.currentState!.selectableRegion.selectAll(
-      SelectionChangedCause.keyboard,
-    );
+    selectionAreaKey.currentState!.selectAll(SelectionChangedCause.keyboard);
     await tester.pump();
 
     Actions.invoke(selectionActionContext, CopySelectionTextIntent.copy);
@@ -75,7 +70,10 @@ Line eight carries enough words to wrap through the bubble width for truncation.
     final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
 
     expect(clipboardData?.text, isNotNull);
-    expect(clipboardData!.text, startsWith('Line one carries enough words to '));
+    expect(
+      clipboardData!.text,
+      startsWith('Line one carries enough words to '),
+    );
   });
 
   testWidgets(
@@ -115,7 +113,7 @@ Paragraph eight carries enough words to wrap through the bubble width for trunca
   testWidgets('collapsed bubble indents nested list items in copied text', (
     tester,
   ) async {
-    final selectionAreaKey = GlobalKey<SelectionAreaState>();
+    final selectionAreaKey = GlobalKey<tw_scrollbar.TwSelectableRegionState>();
     const rawText = '''1. Parent item
 2. Second parent
     - Child item
@@ -129,9 +127,7 @@ Paragraph eight carries enough words to wrap through the bubble width for trunca
 
     final selectionActionContext = tester.element(find.byType(RichText).first);
 
-    selectionAreaKey.currentState!.selectableRegion.selectAll(
-      SelectionChangedCause.keyboard,
-    );
+    selectionAreaKey.currentState!.selectAll(SelectionChangedCause.keyboard);
     await tester.pump();
 
     Actions.invoke(selectionActionContext, CopySelectionTextIntent.copy);
@@ -171,7 +167,8 @@ Line four carries enough words to wrap through the bubble width for truncation.'
   testWidgets(
     'chat transcript copy stays ordered when the first message is truncated',
     (tester) async {
-      final selectionAreaKey = GlobalKey<SelectionAreaState>();
+      final selectionAreaKey =
+          GlobalKey<tw_scrollbar.TwSelectableRegionState>();
       final messages = <ChatMessage>[
         ChatMessage(
           id: 'bot-1',
@@ -244,9 +241,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
         find.byType(RichText).first,
       );
 
-      selectionAreaKey.currentState!.selectableRegion.selectAll(
-        SelectionChangedCause.keyboard,
-      );
+      selectionAreaKey.currentState!.selectAll(SelectionChangedCause.keyboard);
       await tester.pump();
 
       Actions.invoke(selectionActionContext, CopySelectionTextIntent.copy);
@@ -272,7 +267,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
   testWidgets('chat transcript copy preserves full multiline blockquotes', (
     tester,
   ) async {
-    final selectionAreaKey = GlobalKey<SelectionAreaState>();
+    final selectionAreaKey = GlobalKey<tw_scrollbar.TwSelectableRegionState>();
     final messages = <ChatMessage>[
       ChatMessage(
         id: 'bot-quote',
@@ -331,9 +326,7 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
 
     final selectionActionContext = tester.element(find.byType(RichText).first);
 
-    selectionAreaKey.currentState!.selectableRegion.selectAll(
-      SelectionChangedCause.keyboard,
-    );
+    selectionAreaKey.currentState!.selectAll(SelectionChangedCause.keyboard);
     await tester.pump();
 
     Actions.invoke(selectionActionContext, CopySelectionTextIntent.copy);
@@ -366,7 +359,8 @@ I answer from a fixed Terese context and keep in-session chat memory while the l
                 width: 320,
                 child: ChatMessageBubble(
                   text: 'Short user message',
-                  selectionListenerNotifier: SelectionListenerNotifier(),
+                  selectionListenerNotifier:
+                      tw_scrollbar.SelectionListenerNotifier(),
                   isUserBubble: true,
                   isTypingIndicator: false,
                   isTruncated: false,
@@ -456,7 +450,8 @@ Line five carries enough words to wrap through the bubble width for truncation.'
                 width: availableWidth,
                 child: ChatMessageBubble(
                   text: 'OK',
-                  selectionListenerNotifier: SelectionListenerNotifier(),
+                  selectionListenerNotifier:
+                      tw_scrollbar.SelectionListenerNotifier(),
                   isUserBubble: true,
                   isTypingIndicator: false,
                   isTruncated: false,
@@ -482,7 +477,7 @@ Line five carries enough words to wrap through the bubble width for truncation.'
       final maxWidth =
           (availableWidth * ChatBubbleRules.maxWidthFactor +
                   ChatSkin.tokens.bubbleWidthCompensation)
-            .clamp(ChatSkin.tokens.bubbleMinWidthClamp, availableWidth);
+              .clamp(ChatSkin.tokens.bubbleMinWidthClamp, availableWidth);
       final minWidth = (availableWidth * ChatBubbleRules.minWidthFactor).clamp(
         0.0,
         maxWidth,
@@ -511,7 +506,7 @@ Finder _footerLinePaint({required bool dashed}) {
 Future<void> _pumpTruncatedBubble(
   WidgetTester tester, {
   required String text,
-  Key? selectionAreaKey,
+  GlobalKey<tw_scrollbar.TwSelectableRegionState>? selectionAreaKey,
 }) {
   return tester.pumpWidget(
     MaterialApp(
@@ -519,11 +514,13 @@ Future<void> _pumpTruncatedBubble(
         child: Center(
           child: SizedBox(
             width: 180,
-            child: SelectionArea(
+            child: tw_scrollbar.TwSelectableRegion(
               key: selectionAreaKey,
+              selectionControls: materialTextSelectionControls,
               child: ChatMessageBubble(
                 text: text,
-                selectionListenerNotifier: SelectionListenerNotifier(),
+                selectionListenerNotifier:
+                    tw_scrollbar.SelectionListenerNotifier(),
                 isUserBubble: false,
                 isTypingIndicator: false,
                 isTruncated: true,
@@ -547,15 +544,18 @@ class _TestTranscriptSelectionArea extends StatelessWidget {
     required this.child,
   });
 
-  final GlobalKey<SelectionAreaState> selectionAreaKey;
+  final GlobalKey<tw_scrollbar.TwSelectableRegionState> selectionAreaKey;
   final List<ChatMessage> messages;
   final Widget child;
 
-  static final Map<String, SelectionListenerNotifier> _notifiers =
-      <String, SelectionListenerNotifier>{};
+  static final Map<String, tw_scrollbar.SelectionListenerNotifier> _notifiers =
+      <String, tw_scrollbar.SelectionListenerNotifier>{};
 
-  static SelectionListenerNotifier notifierFor(String messageId) {
-    return _notifiers.putIfAbsent(messageId, SelectionListenerNotifier.new);
+  static tw_scrollbar.SelectionListenerNotifier notifierFor(String messageId) {
+    return _notifiers.putIfAbsent(
+      messageId,
+      tw_scrollbar.SelectionListenerNotifier.new,
+    );
   }
 
   @override
@@ -565,6 +565,7 @@ class _TestTranscriptSelectionArea extends StatelessWidget {
         CopySelectionTextIntent: CallbackAction<CopySelectionTextIntent>(
           onInvoke: (_) {
             final selectedRanges = <String, SelectedContentRange>{};
+            final selectedPlainTextByMessage = <String, String>{};
             for (final message in messages) {
               final notifier = notifierFor(message.id);
               if (!notifier.registered) {
@@ -576,12 +577,16 @@ class _TestTranscriptSelectionArea extends StatelessWidget {
                 continue;
               }
               selectedRanges[message.id] = range;
+              if (selection.plainText.isNotEmpty) {
+                selectedPlainTextByMessage[message.id] = selection.plainText;
+              }
             }
             Clipboard.setData(
               ClipboardData(
                 text: formatChatSelectionCopy(
                   messages: messages,
                   selectedRanges: selectedRanges,
+                  selectedPlainTextByMessage: selectedPlainTextByMessage,
                 ),
               ),
             );
@@ -589,7 +594,11 @@ class _TestTranscriptSelectionArea extends StatelessWidget {
           },
         ),
       },
-      child: SelectionArea(key: selectionAreaKey, child: child),
+      child: tw_scrollbar.TwSelectableRegion(
+        key: selectionAreaKey,
+        selectionControls: materialTextSelectionControls,
+        child: child,
+      ),
     );
   }
 }
