@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
+import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
 
 import 'embed.dart';
 import 'embed_config.dart';
@@ -16,7 +16,7 @@ class NewsletterModalContent extends StatelessWidget {
       bottom: false,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return TwScrollArea.scrollView(
+          return TwSelectableScrollArea.scrollView(
             thumbVisibility: false,
             primary: true,
             child: ConstrainedBox(

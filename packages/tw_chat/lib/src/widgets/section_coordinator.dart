@@ -49,7 +49,7 @@ class SectionCoordinator extends ChangeNotifier {
   String? _deferredRevealMessageId;
   bool _deferredStickToBottom = false;
 
-  GlobalKey<SelectionAreaState> get chatSelectionAreaKey =>
+  GlobalKey<SelectableRegionState> get chatSelectionAreaKey =>
       _selectionCopy.chatSelectionAreaKey;
   ChatMessageBubbleKeyMap get messageBubbleKeys => _messageBubbleKeys;
   ValueListenable<int> get chatViewListenable => _chatViewTick;

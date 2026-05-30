@@ -3,18 +3,18 @@ import 'dart:ui';
 
 import 'package:web/web.dart' as web;
 
-typedef ChatSelectionGuardPredicate = bool Function();
-typedef ChatSelectionGuardBoundsResolver = Rect? Function();
+typedef SelectableSecondaryClickGuardPredicate = bool Function();
+typedef SelectableSecondaryClickGuardBoundsResolver = Rect? Function();
 
-class ChatWebSecondaryClickSelectionGuard {
-  ChatWebSecondaryClickSelectionGuard({
-    required ChatSelectionGuardPredicate shouldGuard,
-    required ChatSelectionGuardBoundsResolver boundsResolver,
+class TwSelectableSecondaryClickGuard {
+  TwSelectableSecondaryClickGuard({
+    required SelectableSecondaryClickGuardPredicate shouldGuard,
+    required SelectableSecondaryClickGuardBoundsResolver boundsResolver,
   }) : _shouldGuard = shouldGuard,
        _boundsResolver = boundsResolver;
 
-  final ChatSelectionGuardPredicate _shouldGuard;
-  final ChatSelectionGuardBoundsResolver _boundsResolver;
+  final SelectableSecondaryClickGuardPredicate _shouldGuard;
+  final SelectableSecondaryClickGuardBoundsResolver _boundsResolver;
   JSFunction? _pointerDownListener;
   JSAny? _captureOptions;
 
@@ -64,8 +64,6 @@ class ChatWebSecondaryClickSelectionGuard {
       return;
     }
 
-    // Let the browser context menu open, but keep Flutter's SelectableRegion
-    // from treating the secondary click as a new selection gesture.
     event.stopImmediatePropagation();
   }
 }

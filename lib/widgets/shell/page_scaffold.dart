@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart'
   show
@@ -6,10 +5,9 @@ import 'package:tw_chat/chat.dart'
     ChatOverlay,
     ChatSkin,
     ChatSkinMode;
-import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
+import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
 
 import '../../config/app_ui_config.dart';
-import '../arrow_key_scroll_wrapper.dart';
 import '_grid_background.dart';
 import '_page_footer.dart';
 import 'page_header.dart';
@@ -68,8 +66,8 @@ class _PageScaffoldState extends State<PageScaffold> {
   late final ChatKeyboardScrollTargetController _chatKeyboardScrollTargetController;
   final GlobalKey<SelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<SelectableRegionState>();
-  final FocusNode _pageSelectionFocusNode = FocusNode(
-    debugLabel: 'page-selectable-region',
+  final FocusNode _pageInteractionFocusNode = FocusNode(
+    debugLabel: 'page-scroll-interaction',
   );
 
   @override
@@ -86,7 +84,7 @@ class _PageScaffoldState extends State<PageScaffold> {
   void dispose() {
     _pageScrollController.dispose();
     _chatKeyboardScrollTargetController.dispose();
-    _pageSelectionFocusNode.dispose();
+    _pageInteractionFocusNode.dispose();
     super.dispose();
   }
 
@@ -94,7 +92,6 @@ class _PageScaffoldState extends State<PageScaffold> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Brightness brightness = theme.brightness;
-    final TargetPlatform platform = theme.platform;
     final chatSkin = ChatSkin.dataForMode(widget.initialChatSkinMode);
     final chatTokens = chatSkin.tokens;
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -125,44 +122,14 @@ class _PageScaffoldState extends State<PageScaffold> {
                       children: <Widget>[
                         AbsorbPointer(
                           absorbing: widget.isPageLoading,
-                          child: PrimaryScrollController(
-                            controller: _pageScrollController,
-                            child: SelectableRegion(
-                              key: _pageSelectionAreaKey,
-                              focusNode: _pageSelectionFocusNode,
-                              selectionControls: platform == TargetPlatform.iOS ||
-                                  platform == TargetPlatform.macOS
-                                  ? cupertinoTextSelectionControls
-                                  : materialTextSelectionControls,
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return TwScrollArea.scrollView(
-                                    controller: _pageScrollController,
-                                    thumbColor:
-                                      ShellUiConfig.pageScrollbarThumbFor(brightness),
-                                    thumbInactiveColor:
-                                      ShellUiConfig.pageScrollbarThumbInactiveFor(brightness),
-                                    trackColor:
-                                      ShellUiConfig.pageScrollbarTrackFor(brightness),
-                                    thickness:
-                                      ShellUiConfig.pageScrollbarThickness,
-                                    minThumbLength:
-                                        chatTokens.scrollbarMinThumbLength,
-                                    crossAxisMargin:
-                                        ShellUiConfig.pageScrollbarCrossAxisMargin,
-                                    radius: chatTokens.scrollbarRadius,
-                                    thumbVisibility: true,
-                                    interactive: true,
-                                    trackVisibility: false,
-                                      physics: const ClampingScrollPhysics(
-                                      parent: AlwaysScrollableScrollPhysics(),
-                                    ),
-                                    child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        minHeight: constraints.maxHeight,
-                                      ),
-                                      child: ArrowKeyScrollWrapper(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return TwSelectableScrollArea.scrollView(
                                         controller: _pageScrollController,
+                                        primary: true,
+                                        selectionKey: _pageSelectionAreaKey,
+                                    interactionFocusNode:
+                                      _pageInteractionFocusNode,
                                         isKeyboardScrollBlocked:
                                             _chatKeyboardScrollTargetController
                                                 .isChatTargetListenable,
@@ -170,9 +137,29 @@ class _PageScaffoldState extends State<PageScaffold> {
                                           _chatKeyboardScrollTargetController
                                               .setChatTarget(false);
                                         },
-                                        onTap: () {
-                                          _clearPageSelection();
-                                        },
+                                        thumbColor:
+                                          ShellUiConfig.pageScrollbarThumbFor(brightness),
+                                        thumbInactiveColor:
+                                          ShellUiConfig.pageScrollbarThumbInactiveFor(brightness),
+                                        trackColor:
+                                          ShellUiConfig.pageScrollbarTrackFor(brightness),
+                                        thickness:
+                                          ShellUiConfig.pageScrollbarThickness,
+                                        minThumbLength:
+                                            chatTokens.scrollbarMinThumbLength,
+                                        crossAxisMargin:
+                                            ShellUiConfig.pageScrollbarCrossAxisMargin,
+                                        radius: chatTokens.scrollbarRadius,
+                                        thumbVisibility: true,
+                                        interactive: true,
+                                        trackVisibility: false,
+                                      physics: const ClampingScrollPhysics(
+                                        parent: AlwaysScrollableScrollPhysics(),
+                                      ),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minHeight: constraints.maxHeight,
+                                        ),
                                         child: Column(
                                           mainAxisAlignment: footer != null
                                               ? MainAxisAlignment.spaceBetween
@@ -193,11 +180,8 @@ class _PageScaffoldState extends State<PageScaffold> {
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ),
                         if (widget.isPageLoading)

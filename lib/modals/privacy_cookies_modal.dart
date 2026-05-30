@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwScrollArea;
+import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
 
 import '../config/app_color_theme.dart';
 
@@ -59,7 +59,7 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: TwScrollArea.scrollView(
+      child: TwSelectableScrollArea.scrollView(
         thumbVisibility: false,
         primary: true,
         child: MarkupView(

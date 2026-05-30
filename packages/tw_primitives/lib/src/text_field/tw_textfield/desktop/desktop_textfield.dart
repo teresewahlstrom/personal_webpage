@@ -719,25 +719,6 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
     _selectionType = _SelectionType.position;
 
-    final tapTextPosition = _getPositionNearestToTextOffset(textOffset);
-    _log.finer("Tap text position: $tapTextPosition");
-
-    final expandSelection = HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftRight) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shift);
-
-    setState(() {
-      widget.textController.selection = expandSelection
-          ? TextSelection(
-              baseOffset: widget.textController.selection.baseOffset,
-              extentOffset: tapTextPosition.offset,
-            )
-          : TextSelection.collapsed(offset: tapTextPosition.offset);
-      widget.textController.composingRegion = TextRange.empty;
-
-      _log.finer("New text field selection: ${widget.textController.selection}");
-    });
-
     widget.focusNode.requestFocus();
   }
 
@@ -758,6 +739,25 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
         return;
       }
     }
+
+    final tapTextPosition = _getPositionNearestToTextOffset(textOffset);
+    _log.finer("Tap text position: $tapTextPosition");
+
+    final expandSelection = HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftLeft) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftRight) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shift);
+
+    setState(() {
+      widget.textController.selection = expandSelection
+          ? TextSelection(
+              baseOffset: widget.textController.selection.baseOffset,
+              extentOffset: tapTextPosition.offset,
+            )
+          : TextSelection.collapsed(offset: tapTextPosition.offset);
+      widget.textController.composingRegion = TextRange.empty;
+
+      _log.finer("New text field selection: ${widget.textController.selection}");
+    });
   }
 
   void _onTapCancel() {

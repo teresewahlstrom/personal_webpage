@@ -5,8 +5,8 @@ import '../logic/selection_copy_formatter.dart';
 import '../models/message.dart';
 
 class SelectionCopyHelper {
-  final GlobalKey<SelectionAreaState> chatSelectionAreaKey =
-      GlobalKey<SelectionAreaState>();
+  final GlobalKey<SelectableRegionState> chatSelectionAreaKey =
+      GlobalKey<SelectableRegionState>();
 
   final Map<String, SelectionListenerNotifier> _messageSelectionNotifiers =
       <String, SelectionListenerNotifier>{};
@@ -87,7 +87,7 @@ class SelectionCopyHelper {
   bool clearSelection() {
     final hadSelection =
         _isChatSelectionActive || _currentSelectedPlainText.isNotEmpty;
-    chatSelectionAreaKey.currentState?.selectableRegion.clearSelection();
+    chatSelectionAreaKey.currentState?.clearSelection();
     _currentSelectedPlainText = '';
     _isChatSelectionActive = false;
     return hadSelection;

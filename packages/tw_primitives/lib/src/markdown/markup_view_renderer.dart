@@ -334,7 +334,14 @@ class MarkupViewRenderer {
     int lineBreaks = 1,
     bool includeSelectableCopyBreak = true,
   }) {
-    if (!selectable || !includeSelectableCopyBreak) {
+    final TargetPlatform platform = Theme.of(context).platform;
+    final bool allowSelectableCopyBreak =
+        selectable &&
+        includeSelectableCopyBreak &&
+        platform != TargetPlatform.android &&
+        platform != TargetPlatform.iOS;
+
+    if (!allowSelectableCopyBreak) {
       return SizedBox(height: height);
     }
 

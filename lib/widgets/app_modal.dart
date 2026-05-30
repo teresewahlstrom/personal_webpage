@@ -3,7 +3,6 @@ import 'package:tw_primitives/text_styles.dart';
 
 import '../config/app_ui_config.dart';
 import '../services/keyboard_height.dart';
-import 'arrow_key_scroll_wrapper.dart';
 
 typedef AppModalChildBuilder =
     Widget Function(BuildContext context, VoidCallback close);
@@ -40,7 +39,7 @@ Future<void> showAppModal({
   );
 }
 
-class _AppModalFrame extends StatefulWidget {
+class _AppModalFrame extends StatelessWidget {
   const _AppModalFrame({
     required this.backgroundColor,
     required this.frameBorder,
@@ -70,36 +69,23 @@ class _AppModalFrame extends StatefulWidget {
   final AppModalChildBuilder builder;
 
   @override
-  State<_AppModalFrame> createState() => _AppModalFrameState();
-}
-
-class _AppModalFrameState extends State<_AppModalFrame> {
-  final ScrollController _modalScrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _modalScrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     final Size viewportSize = MediaQuery.of(context).size;
     final double keyboardHeight = KeyboardHeight.of(context);
     final double availableHeight = viewportSize.height - keyboardHeight;
     return Dialog(
-      backgroundColor: widget.backgroundColor,
-      insetPadding: widget.insetPadding,
+      backgroundColor: backgroundColor,
+      insetPadding: insetPadding,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.zero,
-        side: widget.frameBorder.borderSide,
+        side: frameBorder.borderSide,
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: widget.maxWidth,
-          maxHeight: availableHeight * widget.maxHeightFactor,
+          maxWidth: maxWidth,
+          maxHeight: availableHeight * maxHeightFactor,
         ),
         child: Column(
           children: <Widget>[
@@ -107,17 +93,17 @@ class _AppModalFrameState extends State<_AppModalFrame> {
               height: ModalUiConfig.headerHeight,
               decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: widget.headerBorderColor, width: 1),
+                  bottom: BorderSide(color: headerBorderColor, width: 1),
                 ),
               ),
               padding: const EdgeInsets.only(left: 14, right: 8),
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: widget.headerTitle == null
+                    child: headerTitle == null
                         ? const SizedBox.shrink()
                         : Text(
-                            widget.headerTitle!,
+                            headerTitle!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TwModalTextStyles.headerTitle(
@@ -126,28 +112,22 @@ class _AppModalFrameState extends State<_AppModalFrame> {
                           ),
                   ),
                   _ModalCloseButton(
-                    onTap: widget.close,
-                    color: widget.closeIconColor,
-                    hoverColor: widget.closeIconHoverColor,
+                    onTap: close,
+                    color: closeIconColor,
+                    hoverColor: closeIconHoverColor,
                   ),
                 ],
               ),
             ),
             Expanded(
-              child: ArrowKeyScrollWrapper(
-                controller: _modalScrollController,
-                child: PrimaryScrollController(
-                  controller: _modalScrollController,
-                  child: DefaultTextStyle(
-                    style: TwBodyTextStyle.bodyForContext(
-                      context: context,
-                      color: AppColorTheme.pageBodyTextFor(brightness),
-                    ),
-                    child: Padding(
-                      padding: widget.contentPadding,
-                      child: widget.builder(context, widget.close),
-                    ),
-                  ),
+              child: DefaultTextStyle(
+                style: TwBodyTextStyle.bodyForContext(
+                  context: context,
+                  color: AppColorTheme.pageBodyTextFor(brightness),
+                ),
+                child: Padding(
+                  padding: contentPadding,
+                  child: builder(context, close),
                 ),
               ),
             ),

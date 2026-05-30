@@ -219,7 +219,6 @@ class _ChatSectionState extends State<ChatSection> {
                       _coordinator.handleChatPointerInteractionEnd,
                   hasActiveChatSelection: () =>
                       _coordinator.isChatSelectionActive,
-                  onClearChatSelection: _coordinator.clearChatSelection,
                   scrollbarTopInset: chatScrollbarTopInset,
                   scrollbarBottomInset: chatScrollbarBottomInset,
                   contentBottomInset: chatContentBottomInset,
