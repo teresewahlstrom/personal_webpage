@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/flutter/android_toolbar.dart';
 
-class AndroidTextEditingFloatingToolbar extends StatefulWidget {
-  const AndroidTextEditingFloatingToolbar({
+import 'android_popover_toolbar.dart';
+
+class TwSelectionFloatingToolbar extends StatefulWidget {
+  const TwSelectionFloatingToolbar({
     super.key,
     this.focalPoint,
     this.floatingToolbarKey,
@@ -22,13 +23,16 @@ class AndroidTextEditingFloatingToolbar extends StatefulWidget {
   final VoidCallback? onSelectAllPressed;
 
   @override
-  State<AndroidTextEditingFloatingToolbar> createState() => _AndroidTextEditingFloatingToolbarState();
+  State<TwSelectionFloatingToolbar> createState() =>
+      _TwSelectionFloatingToolbarState();
 }
 
-class _AndroidTextEditingFloatingToolbarState extends State<AndroidTextEditingFloatingToolbar> {
+class _TwSelectionFloatingToolbarState
+    extends State<TwSelectionFloatingToolbar> {
   /// Whether the toolbar is above or below the focal point.
   ///
-  /// This is used to determine the position of the back button in the overflow menu.
+  /// This is used to determine the position of the back button in the overflow
+  /// menu.
   bool _isAbove = true;
 
   @override
@@ -38,7 +42,7 @@ class _AndroidTextEditingFloatingToolbarState extends State<AndroidTextEditingFl
   }
 
   @override
-  void didUpdateWidget(AndroidTextEditingFloatingToolbar oldWidget) {
+  void didUpdateWidget(TwSelectionFloatingToolbar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.focalPoint != widget.focalPoint) {
       oldWidget.focalPoint?.removeListener(_onFocalPointChange);
@@ -79,20 +83,11 @@ class _AndroidTextEditingFloatingToolbarState extends State<AndroidTextEditingFl
     final brightness = Theme.of(context).brightness;
     final buttons = <_ButtonViewModel>[
       if (widget.onCutPressed != null)
-        _ButtonViewModel(
-          onPressed: widget.onCutPressed!,
-          title: 'Cut',
-        ),
+        _ButtonViewModel(onPressed: widget.onCutPressed!, title: 'Cut'),
       if (widget.onCopyPressed != null)
-        _ButtonViewModel(
-          onPressed: widget.onCopyPressed!,
-          title: 'Copy',
-        ),
+        _ButtonViewModel(onPressed: widget.onCopyPressed!, title: 'Copy'),
       if (widget.onPastePressed != null)
-        _ButtonViewModel(
-          onPressed: widget.onPastePressed!,
-          title: 'Paste',
-        ),
+        _ButtonViewModel(onPressed: widget.onPastePressed!, title: 'Paste'),
       if (widget.onSelectAllPressed != null)
         _ButtonViewModel(
           onPressed: widget.onSelectAllPressed!,
@@ -102,7 +97,7 @@ class _AndroidTextEditingFloatingToolbarState extends State<AndroidTextEditingFl
 
     return Theme(
       data: ThemeData(
-        colorScheme: brightness == Brightness.light //
+        colorScheme: brightness == Brightness.light
             ? const ColorScheme.light(primary: Colors.black)
             : const ColorScheme.dark(primary: Colors.white),
       ),
@@ -114,7 +109,10 @@ class _AndroidTextEditingFloatingToolbarState extends State<AndroidTextEditingFl
           children: [
             for (int i = 0; i < buttons.length; i++)
               TextSelectionToolbarTextButton(
-                padding: TextSelectionToolbarTextButton.getPadding(i, buttons.length),
+                padding: TextSelectionToolbarTextButton.getPadding(
+                  i,
+                  buttons.length,
+                ),
                 onPressed: buttons[i].onPressed,
                 alignment: AlignmentDirectional.center,
                 child: Text(buttons[i].title),
@@ -131,12 +129,8 @@ Widget _defaultToolbarBuilder(BuildContext context, Widget child) {
 }
 
 class _ButtonViewModel {
-  _ButtonViewModel({
-    required this.title,
-    required this.onPressed,
-  });
+  _ButtonViewModel({required this.title, required this.onPressed});
 
   final String title;
   final VoidCallback onPressed;
 }
-

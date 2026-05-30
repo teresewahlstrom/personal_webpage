@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
+import 'package:super_text_layout/super_text_layout.dart';
+import 'package:tw_primitives/src/selection/tw_selection_toolbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/text_tools.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/build_context.dart';
@@ -8,7 +10,6 @@ import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_sche
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/text_input_configuration.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/ime_input_owner.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/selection_handles.dart';
-import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/toolbar.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/signal_notifier.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/touch_controls.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/android/_editing_controls.dart';
@@ -19,7 +20,6 @@ import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_in
 import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_field_gestures_interaction_overrides.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/text_scrollview.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
-import 'package:super_text_layout/super_text_layout.dart';
 
 import '../../infrastructure/_logging.dart';
 import '../metrics.dart';
@@ -806,7 +806,7 @@ Widget _defaultAndroidToolbarBuilder(
 ) {
   final isSelectionExpanded = !controller.textController.selection.isCollapsed;
 
-  return AndroidTextEditingFloatingToolbar(
+  return TwSelectionFloatingToolbar(
     onCutPressed:
         isSelectionExpanded //
         ? () => _onToolbarCutPressed(controller)

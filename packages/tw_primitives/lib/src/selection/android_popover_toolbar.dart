@@ -13,7 +13,8 @@ const double _kToolbarHeight = 54.0;
 /// Extracted from Flutter's Material text selection toolbar implementation
 /// from flutter/packages/flutter/lib/src/material/text_selection_toolbar.dart
 class AndroidPopoverToolbar extends StatefulWidget {
-  const AndroidPopoverToolbar({super.key, 
+  const AndroidPopoverToolbar({
+    super.key,
     required this.isAbove,
     required this.toolbarBuilder,
     required this.children,
@@ -32,7 +33,8 @@ class AndroidPopoverToolbar extends StatefulWidget {
   State<AndroidPopoverToolbar> createState() => _AndroidPopoverToolbarState();
 }
 
-class _AndroidPopoverToolbarState extends State<AndroidPopoverToolbar> with TickerProviderStateMixin {
+class _AndroidPopoverToolbarState extends State<AndroidPopoverToolbar>
+    with TickerProviderStateMixin {
   // Whether or not the overflow menu is open. When it is closed, the menu
   // items that don't overflow are shown. When it is open, only the overflowing
   // menu items are shown.
@@ -68,7 +70,8 @@ class _AndroidPopoverToolbarState extends State<AndroidPopoverToolbar> with Tick
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
     final TextDirection textDirection = Directionality.of(context);
 
     return _TextSelectionToolbarTrailingEdgeAlign(

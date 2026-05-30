@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart'
     show RenderBox, ScrollDirection, SelectedContent;
-import 'package:tw_primitives/src/text_field/infrastructure/platforms/android/toolbar.dart';
 
 import '../selection/tw_selectable_region.dart';
+import '../selection/tw_selection_toolbar.dart';
 import 'selectable_secondary_click_guard.dart';
 import 'scroll_area.dart';
 import 'tw_scrollbar.dart';
@@ -440,7 +440,7 @@ class _TwSelectionContextMenu extends StatelessWidget {
           anchor: anchors.primaryAnchor - localAdjustment,
           gap: _toolbarGap,
         ),
-        child: AndroidTextEditingFloatingToolbar(
+        child: TwSelectionFloatingToolbar(
           onCopyPressed: onCopyPressed,
           onSelectAllPressed: onSelectAllPressed,
         ),
