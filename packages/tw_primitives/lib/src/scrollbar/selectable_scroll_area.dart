@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart'
     show RenderBox, ScrollDirection, SelectedContent;
+import 'package:flutter/scheduler.dart' show Ticker;
 
 import '../selection/tw_selectable_region.dart';
 import '../selection/tw_selection_toolbar.dart';
@@ -194,18 +195,30 @@ class TwSelectableScrollArea extends StatefulWidget {
   State<TwSelectableScrollArea> createState() => _TwSelectableScrollAreaState();
 }
 
-class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
+class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
+    with SingleTickerProviderStateMixin {
+  static const double _selectionAutoScrollBoundary = 56;
+  static const double _selectionAutoScrollMaxSpeed = 720;
+
   late final TwSelectableSecondaryClickGuard _secondaryClickGuard;
+  ScrollController? _ownedController;
+  late final Ticker _selectionAutoScrollTicker;
   final GlobalKey<TwSelectableRegionState> _internalSelectionKey =
       GlobalKey<TwSelectableRegionState>();
   bool _hasSelection = false;
+  Offset? _selectionDragGlobalPosition;
+  Duration? _lastSelectionAutoScrollTick;
 
   GlobalKey<TwSelectableRegionState> get _effectiveSelectionKey =>
       widget.selectionKey ?? _internalSelectionKey;
 
+  ScrollController get _effectiveScrollController =>
+      widget.controller ?? (_ownedController ??= ScrollController());
+
   @override
   void initState() {
     super.initState();
+    _selectionAutoScrollTicker = createTicker(_handleSelectionAutoScrollTick);
     _secondaryClickGuard = TwSelectableSecondaryClickGuard(
       shouldGuard: () => widget.enableWebSecondaryClickGuard && _hasSelection,
       boundsResolver: _resolveGlobalBounds,
@@ -213,7 +226,19 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
   }
 
   @override
+  void didUpdateWidget(covariant TwSelectableScrollArea oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller == null && widget.controller != null) {
+      _ownedController?.dispose();
+      _ownedController = null;
+    }
+  }
+
+  @override
   void dispose() {
+    _stopSelectionAutoScroll();
+    _selectionAutoScrollTicker.dispose();
+    _ownedController?.dispose();
     _secondaryClickGuard.detach();
     super.dispose();
   }
@@ -268,6 +293,84 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
     widget.onDesktopTap?.call();
   }
 
+  void _handleSelectionDragUpdate(Offset globalPosition) {
+    _selectionDragGlobalPosition = globalPosition;
+    _handleSelectionAutoScrollTick(Duration.zero);
+    if (!_selectionAutoScrollTicker.isTicking) {
+      _lastSelectionAutoScrollTick = null;
+      _selectionAutoScrollTicker.start();
+    }
+  }
+
+  void _stopSelectionAutoScroll() {
+    _selectionDragGlobalPosition = null;
+    _lastSelectionAutoScrollTick = null;
+    if (_selectionAutoScrollTicker.isTicking) {
+      _selectionAutoScrollTicker.stop();
+    }
+  }
+
+  void _handleSelectionAutoScrollTick(Duration elapsed) {
+    final Offset? dragPosition = _selectionDragGlobalPosition;
+    final Rect? bounds = _resolveSelectionOverlayBounds();
+    final controller = _effectiveScrollController;
+    if (dragPosition == null ||
+        bounds == null ||
+        !controller.hasClients ||
+        widget.scrollDirection != Axis.vertical) {
+      _stopSelectionAutoScroll();
+      return;
+    }
+
+    final position = controller.position;
+    final double distanceAbove =
+        bounds.top + _selectionAutoScrollBoundary - dragPosition.dy;
+    final double distanceBelow =
+        dragPosition.dy - (bounds.bottom - _selectionAutoScrollBoundary);
+    final double direction;
+    final double distance;
+    if (distanceAbove > 0 && position.pixels > position.minScrollExtent) {
+      direction = -1;
+      distance = distanceAbove;
+    } else if (distanceBelow > 0 &&
+        position.pixels < position.maxScrollExtent) {
+      direction = 1;
+      distance = distanceBelow;
+    } else {
+      if (_selectionAutoScrollTicker.isTicking) {
+        _selectionAutoScrollTicker.stop();
+      }
+      _lastSelectionAutoScrollTick = null;
+      return;
+    }
+
+    final Duration? previousTick = _lastSelectionAutoScrollTick;
+    _lastSelectionAutoScrollTick = elapsed;
+    final double seconds = previousTick == null
+        ? 1 / 60
+        : (elapsed - previousTick).inMicroseconds /
+              Duration.microsecondsPerSecond;
+    final double speedPercent = (distance / _selectionAutoScrollBoundary)
+        .clamp(0.0, 1.0)
+        .toDouble();
+    final double delta =
+        direction * _selectionAutoScrollMaxSpeed * speedPercent * seconds;
+    if (delta == 0) {
+      return;
+    }
+
+    final double nextOffset = (position.pixels + delta)
+        .clamp(position.minScrollExtent, position.maxScrollExtent)
+        .toDouble();
+    if (nextOffset == position.pixels) {
+      _stopSelectionAutoScroll();
+      return;
+    }
+    controller.jumpTo(nextOffset);
+    _effectiveSelectionKey.currentState?.markViewportScrollInProgress();
+    _effectiveSelectionKey.currentState?.refreshSelectionForViewportChange();
+  }
+
   bool _handleScrollNotification(ScrollNotification notification) {
     final selectionState = _effectiveSelectionKey.currentState;
     if (selectionState == null) {
@@ -310,7 +413,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
         };
 
     Widget result = TwScrollArea.scrollView(
-      controller: widget.controller,
+      controller: _effectiveScrollController,
       scrollDirection: widget.scrollDirection,
       primary: widget.primary,
       activationPulse: widget.activationPulse,
@@ -343,6 +446,8 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea> {
         focusNode: widget.interactionFocusNode,
         magnifierConfiguration: widget.magnifierConfiguration,
         onSelectionChanged: _handleSelectionChanged,
+        onSelectionDragUpdate: _handleSelectionDragUpdate,
+        onSelectionDragEnd: _stopSelectionAutoScroll,
         selectionOverlayBoundsResolver: _resolveSelectionOverlayBounds,
         selectionControls: resolvedSelectionControls,
         child: widget.child,
@@ -486,4 +591,3 @@ class _TwSelectionToolbarLayoutDelegate extends SingleChildLayoutDelegate {
     return anchor != oldDelegate.anchor || gap != oldDelegate.gap;
   }
 }
-

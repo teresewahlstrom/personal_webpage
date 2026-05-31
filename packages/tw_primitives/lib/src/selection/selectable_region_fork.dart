@@ -250,6 +250,8 @@ class SelectableRegion extends StatefulWidget {
     this.focusNode,
     this.magnifierConfiguration = TextMagnifierConfiguration.disabled,
     this.onSelectionChanged,
+    this.onSelectionDragUpdate,
+    this.onSelectionDragEnd,
     this.selectionOverlayBoundsResolver,
     required this.selectionControls,
     required this.child,
@@ -290,6 +292,12 @@ class SelectableRegion extends StatefulWidget {
 
   /// Called when the selected content changes.
   final ValueChanged<SelectedContent?>? onSelectionChanged;
+
+  /// Called while a user drag is updating selection.
+  final ValueChanged<Offset>? onSelectionDragUpdate;
+
+  /// Called when a user selection drag stops.
+  final VoidCallback? onSelectionDragEnd;
 
   /// Returns the [ContextMenuButtonItem]s representing the buttons in this
   /// platform's default selection menu.
@@ -631,6 +639,7 @@ class SelectableRegionState extends State<SelectableRegion>
   }
 
   void _handleTapOrDragCancel() {
+    widget.onSelectionDragEnd?.call();
     if (_lastPointerWasNonPrecise) {
       return;
     }
@@ -682,6 +691,14 @@ class SelectableRegionState extends State<SelectableRegion>
       return;
     }
     _selectionStatusNotifier.value = SelectableRegionSelectionStatus.finalized;
+  }
+
+  void _notifySelectionDragUpdate(Offset globalPosition) {
+    widget.onSelectionDragUpdate?.call(globalPosition);
+  }
+
+  void _notifySelectionDragEnd() {
+    widget.onSelectionDragEnd?.call();
   }
 
   // Converts the details.consecutiveTapCount from a TapAndDrag*Details object,
@@ -932,6 +949,7 @@ class SelectableRegionState extends State<SelectableRegion>
         _selectionStatusNotifier.value =
             SelectableRegionSelectionStatus.changing;
     }
+    _notifySelectionDragUpdate(details.globalPosition);
     _updateSelectedContentIfNeeded();
   }
 
@@ -1057,6 +1075,7 @@ class SelectableRegionState extends State<SelectableRegion>
         break;
     }
     _finalizeSelection();
+    _notifySelectionDragEnd();
     _updateSelectedContentIfNeeded();
     _finalizeSelectableRegionStatus();
   }
@@ -1099,9 +1118,6 @@ class SelectableRegionState extends State<SelectableRegion>
                   break;
                 }
                 hideToolbar();
-                clearSelection();
-                _selectionStatusNotifier.value =
-                    SelectableRegionSelectionStatus.changing;
                 break;
               }
               hideToolbar(false);
@@ -1181,12 +1197,14 @@ class SelectableRegionState extends State<SelectableRegion>
       offset: details.globalPosition,
       textGranularity: TextGranularity.word,
     );
+    _notifySelectionDragUpdate(details.globalPosition);
     _selectionStatusNotifier.value = SelectableRegionSelectionStatus.changing;
     _updateSelectedContentIfNeeded();
   }
 
   void _handleTouchLongPressEnd(LongPressEndDetails details) {
     _finalizeSelection();
+    _notifySelectionDragEnd();
     _updateSelectedContentIfNeeded();
     _finalizeSelectableRegionStatus();
     _showToolbar();
@@ -1317,6 +1335,7 @@ class SelectableRegionState extends State<SelectableRegion>
       _showToolbar();
     }
     _finalizeSelection();
+    _notifySelectionDragEnd();
     _updateSelectedContentIfNeeded();
     _finalizeSelectableRegionStatus();
   }
@@ -1364,7 +1383,7 @@ class SelectableRegionState extends State<SelectableRegion>
 
   void _stopSelectionStartEdgeUpdate() {
     _scheduledSelectionStartEdgeUpdate = false;
-    _selectionEndPosition = null;
+    _selectionStartPosition = null;
   }
 
   // SelectionOverlay helper methods.
@@ -1401,6 +1420,7 @@ class SelectableRegionState extends State<SelectableRegion>
         _selectionStartHandleDragPosition -
         Offset(0, _selectionDelegate.value.startSelectionPoint!.lineHeight / 2);
     _triggerSelectionStartEdgeUpdate();
+    _notifySelectionDragUpdate(_selectionStartPosition!);
 
     _selectionOverlay!.updateMagnifier(
       _buildInfoForMagnifier(
@@ -1440,6 +1460,7 @@ class SelectableRegionState extends State<SelectableRegion>
         _selectionEndHandleDragPosition -
         Offset(0, _selectionDelegate.value.endSelectionPoint!.lineHeight / 2);
     _triggerSelectionEndEdgeUpdate();
+    _notifySelectionDragUpdate(_selectionEndPosition!);
 
     _selectionOverlay!.updateMagnifier(
       _buildInfoForMagnifier(
@@ -1906,11 +1927,22 @@ class SelectableRegionState extends State<SelectableRegion>
     final double minY = visibleBounds.top + _kSelectionToolbarViewportPadding;
     final double maxY = max(
       minY,
-      visibleBounds.bottom - _kSelectionToolbarEstimatedHeight,
+      visibleBounds.bottom - _kSelectionToolbarViewportPadding,
     );
+    final bool toolbarFitsAbove =
+        visibleSelectionRect.top - visibleBounds.top >=
+        _kSelectionToolbarEstimatedHeight + _kSelectionToolbarViewportPadding;
+    final bool toolbarFitsBelow =
+        visibleBounds.bottom - visibleSelectionRect.bottom >=
+        _kSelectionToolbarEstimatedHeight + _kSelectionToolbarViewportPadding;
+    final double preferredY = toolbarFitsAbove
+        ? visibleSelectionRect.top
+        : toolbarFitsBelow
+        ? visibleSelectionRect.bottom
+        : visibleSelectionRect.center.dy;
     return Offset(
       visibleSelectionRect.center.dx.clamp(minX, maxX).toDouble(),
-      visibleSelectionRect.center.dy.clamp(minY, maxY).toDouble(),
+      preferredY.clamp(minY, maxY).toDouble(),
     );
   }
 

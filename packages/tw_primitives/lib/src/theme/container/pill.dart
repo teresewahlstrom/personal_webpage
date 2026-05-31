@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../../theme/text_styles/router.dart';
 import '../../theme/colors/router.dart';
 
-
 // Local canonical pill tokens (kept here so the pill widget owns its
 // presentation defaults). These mirror the values used by the markdown
 // tokens but live next to the widget for easier discovery.
-const EdgeInsets kTwLinkPillDefaultPadding = EdgeInsets.symmetric(horizontal: 10, vertical: 4);
+const EdgeInsets kTwLinkPillDefaultPadding = EdgeInsets.symmetric(
+  horizontal: 10,
+  vertical: 4,
+);
 const double kTwLinkPillDefaultBorderWidth = 1.0;
 const double kTwLinkPillFillLerpTLight = 0.70;
 const double kTwLinkPillFillLerpTDark = 0.65;
@@ -56,15 +58,23 @@ TwLinkPillStyle computeDefaultTwLinkPillStyle({
   double textScale = 1.0,
 }) {
   final bool isDark = brightness == Brightness.dark;
-  final TwColors colors = TwColors.forBrightness(isDark ? Brightness.dark : Brightness.light);
+  final TwColors colors = TwColors.forBrightness(
+    isDark ? Brightness.dark : Brightness.light,
+  );
 
-  final double lerpT = isDark ? kTwLinkPillFillLerpTDark : kTwLinkPillFillLerpTLight;
-  final Color fill = Color.lerp(colors.shellBackground, colors.shellDivider, lerpT) ?? colors.composerFill;
+  final double lerpT = isDark
+      ? kTwLinkPillFillLerpTDark
+      : kTwLinkPillFillLerpTLight;
+  final Color fill =
+      Color.lerp(colors.shellBackground, colors.shellDivider, lerpT) ??
+      colors.composerFill;
   final Color border = colors.composerBorder;
 
   final List<BoxShadow> shadows = <BoxShadow>[
     BoxShadow(
-      color: colors.bubbleShadow.withValues(alpha: colors.bubbleShadow.a * 0.25),
+      color: colors.bubbleShadow.withValues(
+        alpha: colors.bubbleShadow.a * 0.25,
+      ),
       blurRadius: 8,
       spreadRadius: 2,
       offset: const Offset(0, 1),
@@ -73,13 +83,15 @@ TwLinkPillStyle computeDefaultTwLinkPillStyle({
 
   // Derive pill text style similarly to the markdown builder.
   final Brightness twBrightness = brightness;
-  final TextStyle base = TwTextStyles.forBrightness(twBrightness)
-      .bodyForContextless(color: colors.pageBodyText, textScale: textScale);
-  final TextStyle small = TwTextStyles.forBrightness(twBrightness).smallFrom(base);
-  final TextStyle textStyle = TwTextStyles.forBrightness(twBrightness).adaptBase(
-    small,
-    color: colors.bubbleText,
-  );
+  final TextStyle base = TwTextStyles.forBrightness(
+    twBrightness,
+  ).bodyForContextless(color: colors.pageBodyText, textScale: textScale);
+  final TextStyle small = TwTextStyles.forBrightness(
+    twBrightness,
+  ).smallFrom(base);
+  final TextStyle textStyle = TwTextStyles.forBrightness(
+    twBrightness,
+  ).adaptBase(small, color: colors.bubbleText);
 
   return TwLinkPillStyle(
     fillColor: fill,
@@ -108,8 +120,8 @@ class TwLinkPill extends StatelessWidget {
     this.tooltip,
     this.tooltipVisible = true,
     this.semanticsLabel,
-  })  : _externalKey = key,
-        super(key: null);
+  }) : _externalKey = key,
+       super(key: null);
 
   final Key? _externalKey;
 
@@ -130,9 +142,13 @@ class TwLinkPill extends StatelessWidget {
   final String? semanticsLabel;
 
   TwLinkPillStyle _resolveDefault(BuildContext context) {
-    final Brightness resolvedBrightness = brightness ?? Theme.of(context).brightness;
+    final Brightness resolvedBrightness =
+        brightness ?? Theme.of(context).brightness;
     final double resolvedScale = textScale ?? 1.0;
-    return computeDefaultTwLinkPillStyle(brightness: resolvedBrightness, textScale: resolvedScale);
+    return computeDefaultTwLinkPillStyle(
+      brightness: resolvedBrightness,
+      textScale: resolvedScale,
+    );
   }
 
   @override
@@ -142,17 +158,25 @@ class TwLinkPill extends StatelessWidget {
 
     // Use zero padding for icon-only pills so they can become perfectly
     // circular when wrapped in a fixed-size parent (e.g., SizedBox.square).
-    final EdgeInsetsGeometry effectivePadding = label.isEmpty ? EdgeInsets.zero : resolved.padding;
+    final EdgeInsetsGeometry effectivePadding = label.isEmpty
+        ? EdgeInsets.zero
+        : resolved.padding;
 
     final ShapeDecoration decoration = ShapeDecoration(
       color: resolved.fillColor,
-      shape: StadiumBorder(side: BorderSide(color: resolved.borderColor, width: resolved.borderWidth)),
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: resolved.borderColor,
+          width: resolved.borderWidth,
+        ),
+      ),
     );
 
     Widget content = Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        mouseCursor: SystemMouseCursors.click,
         borderRadius: BorderRadius.circular(9999),
         child: Padding(
           padding: effectivePadding,
@@ -160,15 +184,26 @@ class TwLinkPill extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (leading != null) IconTheme(data: IconThemeData(color: resolved.textStyle.color, size: resolved.textStyle.fontSize), child: leading!),
+              if (leading != null)
+                IconTheme(
+                  data: IconThemeData(
+                    color: resolved.textStyle.color,
+                    size: resolved.textStyle.fontSize,
+                  ),
+                  child: leading!,
+                ),
               if (leading != null && label.isNotEmpty) const SizedBox(width: 8),
               if (label.isNotEmpty)
                 Text(
                   label,
                   style: resolved.textStyle.copyWith(
-                    decoration: resolved.textStyle.decoration ?? TextDecoration.none,
+                    decoration:
+                        resolved.textStyle.decoration ?? TextDecoration.none,
                   ),
-                  strutStyle: const StrutStyle(forceStrutHeight: true, height: 1.0),
+                  strutStyle: const StrutStyle(
+                    forceStrutHeight: true,
+                    height: 1.0,
+                  ),
                 ),
             ],
           ),
@@ -184,15 +219,15 @@ class TwLinkPill extends StatelessWidget {
     if (label.isEmpty) {
       content = Center(child: content);
     }
-    content = DecoratedBox(key: _externalKey, decoration: decoration, child: content);
+    content = DecoratedBox(
+      key: _externalKey,
+      decoration: decoration,
+      child: content,
+    );
 
     // Optionally provide semantics label for accessibility.
     if (semanticsLabel != null && semanticsLabel!.isNotEmpty) {
-      content = Semantics(
-        button: true,
-        label: semanticsLabel,
-        child: content,
-      );
+      content = Semantics(button: true, label: semanticsLabel, child: content);
     }
 
     // Optionally show a tooltip (wrapped outside semantics to avoid

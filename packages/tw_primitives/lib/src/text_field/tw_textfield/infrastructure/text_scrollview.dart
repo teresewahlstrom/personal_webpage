@@ -695,7 +695,6 @@ class _TextScrollViewState extends State<TextScrollView>
 enum TextFieldSizePolicy { singleLine, multiLineBounded, multiLineUnbounded }
 
 class TextScrollController with ChangeNotifier {
-  static const _autoScrollTimePerLine = Duration(milliseconds: 500);
   static const _autoScrollTimePerCharacter = Duration(milliseconds: 50);
   static const _caretVisibilityPadding = 2.0;
 
@@ -913,9 +912,19 @@ class TextScrollController with ChangeNotifier {
 
     if (_delegate!.isMultiline) {
       if (_autoScrollDirection == _AutoScrollDirection.start) {
-        _autoScrollOneLineUp();
+        _autoScrollVertically(
+          dt,
+          -_delegate!.calculateDistanceBeyondStartingAutoScrollBoundary(
+            _userInteractionOffsetInViewport!,
+          ),
+        );
       } else {
-        _autoScrollOneLineDown();
+        _autoScrollVertically(
+          dt,
+          _delegate!.calculateDistanceBeyondEndingAutoScrollBoundary(
+            _userInteractionOffsetInViewport!,
+          ),
+        );
       }
     } else {
       if (_autoScrollDirection == _AutoScrollDirection.start) {
@@ -1038,77 +1047,26 @@ class TextScrollController with ChangeNotifier {
 
   /// Updates the scroll offset so that a new line of text is
   /// visible at the top of the viewport, if a line is available.
-  void _autoScrollOneLineUp() {
+  void _autoScrollVertically(Duration dt, double signedDistanceFromBoundary) {
     if (_delegate == null) {
-      _log.warning("Can't auto-scroll up. The scroll delegate is null.");
-      return;
-    }
-
-    final viewportHeight = _delegate!.viewportHeight;
-    if (viewportHeight == null) {
-      _log.warning("Can't auto-scroll up. The viewport height is null");
-      return;
-    }
-
-    final verticalOffsetForTopOfLineAboveViewport = _delegate!
-        .getVerticalOffsetForTopOfLineAboveViewport();
-    if (verticalOffsetForTopOfLineAboveViewport == null) {
       _log.warning(
-        "Can't auto-scroll up. Couldn't calculate the offset for the line above the viewport",
+        "Can't auto-scroll vertically. The scroll delegate is null.",
       );
       return;
     }
 
-    _log.fine('Auto-scrolling one line up');
-
-    _log.finer('Old offset: $scrollOffset.');
-    _log.finer('Viewport height: $viewportHeight');
-    _log.finer(
-      'Vertical offset for top of line above viewport: $verticalOffsetForTopOfLineAboveViewport',
-    );
-    _timeOfNextAutoScroll += _autoScrollTimePerLine;
-    _setScrollOffset(verticalOffsetForTopOfLineAboveViewport);
-    _log.fine(
-      'New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll',
-    );
-  }
-
-  /// Updates the scroll offset so that a new line of text is
-  /// visible at the bottom of the viewport, if a line is available.
-  void _autoScrollOneLineDown() {
-    if (_delegate == null) {
-      _log.warning("Can't auto-scroll down. The scroll delegate is null.");
+    final double distance = signedDistanceFromBoundary.abs();
+    if (distance == 0) {
       return;
     }
 
-    final viewportHeight = _delegate!.viewportHeight;
-    if (viewportHeight == null) {
-      _log.warning("Can't auto-scroll down. The viewport height is null");
-      return;
-    }
-
-    final verticalOffsetForBottomOfLineBelowViewport = _delegate!
-        .getVerticalOffsetForBottomOfLineBelowViewport();
-    if (verticalOffsetForBottomOfLineBelowViewport == null) {
-      _log.warning(
-        "Can't auto-scroll down. Couldn't calculate the offset for the line below the viewport",
-      );
-      return;
-    }
-
-    _log.fine('Auto-scrolling one line down');
-
-    _log.finer('Old offset: $scrollOffset.');
-    _log.finer('Viewport height: ${_delegate!.viewportHeight}');
-    _log.finer(
-      'Vertical offset for bottom of line below viewport: $verticalOffsetForBottomOfLineBelowViewport',
-    );
-    _timeOfNextAutoScroll += _autoScrollTimePerLine;
+    final double direction = signedDistanceFromBoundary.sign;
+    final double scrollDistance = _calculateAutoScrollDistance(dt, distance);
     _setScrollOffset(
-      verticalOffsetForBottomOfLineBelowViewport - viewportHeight,
-    );
-    _log.fine(
-      'New scroll offset: $scrollOffset, time of next scroll: $_timeOfNextAutoScroll',
+      (scrollOffset + direction * scrollDistance).clamp(
+        startScrollOffset,
+        endScrollOffset,
+      ),
     );
   }
 
