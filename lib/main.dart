@@ -78,7 +78,7 @@ class _T1GridAppState extends State<T1GridApp> {
           brightness: Brightness.light,
           seedColor: TwColors.forBrightness(Brightness.light).seedColor,
         ),
-        fontFamily: TwBodyTextStyle.fontFamily,
+        fontFamily: twFontFamily,
       ),
       darkTheme: ThemeData(
         useMaterial3: false,
@@ -90,7 +90,7 @@ class _T1GridAppState extends State<T1GridApp> {
           brightness: Brightness.dark,
           seedColor: TwColors.forBrightness(Brightness.dark).seedColor,
         ),
-        fontFamily: TwBodyTextStyle.fontFamily,
+        fontFamily: twFontFamily,
       ),
       themeMode: _themeMode,
       home: PageScaffold(

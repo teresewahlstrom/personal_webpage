@@ -2,6 +2,7 @@ import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/src/text_field/core/attributions.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/attributed_text_styles.dart';
+import 'package:tw_primitives/theme.dart';
 
 /// Policy that dictates when to display a hint in a Super Text Field.
 enum HintBehavior {
@@ -41,12 +42,10 @@ class StyledHintBuilder {
 
 /// Creates default [TextStyles] for hint text in a super text field.
 TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
-  TextStyle newStyle = const TextStyle(
-    fontFamily: 'Rubik',
-    color: Colors.grey,
-    fontSize: 16,
-    height: 1.4,
-  );
+  // Use centralized text-style router for hint defaults, then adjust where necessary.
+  TextStyle newStyle = TwTextStyles.forBrightness(Brightness.light)
+      .bodyForContextless(color: Colors.grey, textScale: 1.0)
+      .copyWith(height: 1.4);
 
   for (final attribution in attributions) {
     if (attribution == header1Attribution) {

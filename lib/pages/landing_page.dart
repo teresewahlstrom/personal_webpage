@@ -138,7 +138,7 @@ class _LandingPageState extends State<LandingPage> {
                   Text(
                     'Failed to load subject data.',
                     textAlign: TextAlign.center,
-                    style: TwSectionTitleTextStyle.forContext(
+                    style: TwTextStyles.of(context).sectionTitleForContext(
                       context: context,
                       color: context.twColors.pageBodyText,
                     ),
@@ -147,7 +147,7 @@ class _LandingPageState extends State<LandingPage> {
                   Text(
                     snapshot.error.toString(),
                     textAlign: TextAlign.center,
-                    style: TwBodyTextStyle.bodyForContext(
+                    style: TwTextStyles.of(context).bodyForContext(
                       context: context,
                       color: context.twColors.pageBodyText,
                     ),
@@ -267,7 +267,7 @@ class _LandingPageState extends State<LandingPage> {
                                 if (snapshot.hasError) {
                                   return Text(
                                     'Could not load professional stories.',
-                                    style: TwBodyTextStyle.bodyForContext(
+                                    style: TwTextStyles.of(context).bodyForContext(
                                           context: context,
                                           color: context.twColors.pageBodyText,
                                         ),
@@ -330,7 +330,7 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-          style: TwBodyTextStyle.bodyForContext(
+                    style: TwTextStyles.of(context).bodyForContext(
             context: context,
             color: context.twColors.pageBodyText,
           ),
@@ -374,7 +374,7 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 10),
         Text(
           _content,
-          style: TwBodyTextStyle.bodyForContext(
+          style: TwTextStyles.of(context).bodyForContext(
             context: context,
             color: context.twColors.pageBodyText,
           ),
@@ -477,6 +477,10 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
           chatSkin.tokens.jumpToLatestButtonShadow(chatSkin.colors),
         ],
       ),
+    ),
+    overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
+      context: context,
+      color: chatSkin.colors.bubbleText,
     ),
   );
 }
@@ -581,7 +585,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
       wordSpacing: 2.2,
     );
     final Color baseIconColor =
-        TwBodyTextStyle.bodyForContext(
+        TwTextStyles.of(context).bodyForContext(
           context: context,
           color: context.twColors.pageBodyText,
         ).color ??
@@ -852,7 +856,6 @@ class _SelectableCopyBreak extends StatelessWidget {
 
   final double height;
   final int lineBreaks;
-
   @override
   Widget build(BuildContext context) {
     final selectionRegistrar = SelectionContainer.maybeOf(context);
@@ -868,7 +871,7 @@ class _SelectableCopyBreak extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               text: '\n' * lineBreaks,
-              style: TwUtilityTextStyles.transparentSelectionSpacer,
+              style: TwTextStyles.of(context).transparentSelectionSpacer,
             ),
             selectionRegistrar: selectionRegistrar,
             selectionColor: Colors.transparent,
@@ -894,11 +897,11 @@ class _SocialRowState extends State<_SocialRow> {
   @override
   Widget build(BuildContext context) {
     final Color textColor =
-        TwSectionTitleTextStyle.forContext(
+        TwTextStyles.of(context).sectionTitleForContext(
           context: context,
           color: context.twColors.pageBodyText,
         ).color ??
-        TwBodyTextStyle.bodyForContext(
+        TwTextStyles.of(context).bodyForContext(
           context: context,
           color: context.twColors.pageBodyText,
         ).color ??
@@ -932,7 +935,7 @@ class _SocialRowState extends State<_SocialRow> {
               const SizedBox(width: 14),
               Text(
                 widget.entry.label,
-                style: TwBodyTextStyle.bodyForContext(
+                style: TwTextStyles.of(context).bodyForContext(
                   context: context,
                   color: context.twColors.pageBodyText,
                 ),

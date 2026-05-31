@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../theme/text_styles/body_text_style.dart';
+import 'package:tw_primitives/theme.dart';
+import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
 import 'markup_rendering.dart';
 
 class MarkdownThemeConfig {
@@ -8,12 +8,12 @@ class MarkdownThemeConfig {
     required this.baseTextColor,
     required this.linkColor,
     required this.isDark,
-    this.textScale = TwBodyTextStyle.minTextScale,
+    this.textScale = 1.0,
     this.linkPillStyle,
   });
 
   static double bodyTextScaleOf(BuildContext context) {
-    return TwBodyTextStyle.contextTextScale(context);
+    return MediaQuery.textScalerOf(context).scale(dark.twBodyBaseFontSize) / dark.twBodyBaseFontSize;
   }
 
   final Color baseTextColor;
@@ -39,8 +39,10 @@ class MarkdownSurfaceStyle {
   final Color blockquoteRailColor;
 }
 
-MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
-  final baseStyle = TwBodyTextStyle.body(
+MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config, {TextStyle? overrideBaseStyle}) {
+  final baseStyle = overrideBaseStyle ?? TwTextStyles.forBrightness(
+    config.isDark ? Brightness.dark : Brightness.light,
+  ).bodyForContextless(
     color: config.baseTextColor,
     textScale: config.textScale,
   );

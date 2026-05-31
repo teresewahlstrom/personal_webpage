@@ -106,7 +106,7 @@ class _AppModalFrame extends StatelessWidget {
                             headerTitle!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TwModalTextStyles.headerTitle(
+                            style: TwTextStyles.of(context).modalHeaderTitle(
                               color: context.twColors.pageBodyText,
                             ),
                           ),
@@ -121,7 +121,7 @@ class _AppModalFrame extends StatelessWidget {
             ),
             Expanded(
               child: DefaultTextStyle(
-                style: TwBodyTextStyle.bodyForContext(
+                style: TwTextStyles.of(context).bodyForContext(
                   context: context,
                   color: context.twColors.pageBodyText,
                 ),
@@ -165,9 +165,9 @@ class _ModalCloseButtonState extends State<_ModalCloseButton> {
         onTap: widget.onTap,
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(
+            child: Text(
             "×",
-            style: TwModalTextStyles.closeGlyph(
+            style: TwTextStyles.of(context).modalCloseGlyph(
               color: _isHovered ? widget.hoverColor : widget.color,
             ),
           ),

@@ -1,15 +1,13 @@
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/src/text_field/core/attributions.dart';
+import 'package:tw_primitives/theme.dart';
 
 /// Default [TextStyles] for [TwTextField].
 TextStyle defaultTextFieldStyleBuilder(Set<Attribution> attributions) {
-  TextStyle newStyle = const TextStyle(
-    fontFamily: 'Rubik',
-    fontSize: 16,
-    height: 1,
-    color: Colors.black,
-  );
+  // Use centralized text-style router for defaults (contextless).
+  TextStyle newStyle = TwTextStyles.forBrightness(Brightness.light)
+      .bodyForContextless(color: Colors.black, textScale: 1.0);
 
   for (final attribution in attributions) {
     if (attribution == boldAttribution) {

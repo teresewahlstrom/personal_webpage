@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/theme.dart';
 
 import '../utils/math.dart';
 
@@ -311,7 +312,9 @@ class ChatSkinTextStyles {
   final double composerMaxTextScale = 1.5;
 
   TextStyle appBarTitleStyle(double textScale, ChatSkinColors colors) {
-    const base = TextStyle(
+    final base = TwTextStyles.forBrightness(Brightness.light)
+        .bodyForContextless(color: colors.bubbleText, textScale: 1.0)
+        .copyWith(
       fontSize: 13,
       height: 1.12,
       fontWeight: FontWeight.w400,

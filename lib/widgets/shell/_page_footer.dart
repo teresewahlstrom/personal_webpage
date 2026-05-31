@@ -45,7 +45,7 @@ class PageFooter extends StatelessWidget {
           children: <Widget>[
             Text(
               '\u00A9$year $brandName. All rights reserved.',
-              style: TwFooterTextStyles.bodyForContext(
+              style: TwTextStyles.of(context).footerBodyForContext(
                 context: context,
                 color: context.twColors.pageBodyText,
               ),
@@ -130,11 +130,11 @@ class _LinkTextButton extends StatelessWidget {
           },
         ),
       ),
-      child: Text(
+        child: Text(
         label,
-        style: TwFooterTextStyles.linkForContext(
-              context: context,
-              color: context.twColors.linkText,
+        style: TwTextStyles.of(context).footerBodyForContext(
+          context: context,
+          color: context.twColors.linkText,
         ),
       ),
     );

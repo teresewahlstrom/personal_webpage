@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
+import 'package:tw_primitives/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/config.dart';
@@ -455,6 +456,10 @@ MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(BuildContext context) {
         textStyle: skin.textStyles.appBarTitleStyle(textScale, colors),
         shadows: <BoxShadow>[skin.tokens.jumpToLatestButtonShadow(colors)],
       ),
+    ),
+    overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
+      context: context,
+      color: colors.bubbleText,
     ),
   );
 }

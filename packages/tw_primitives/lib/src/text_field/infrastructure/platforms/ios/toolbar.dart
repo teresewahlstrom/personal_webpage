@@ -44,16 +44,19 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
         children: [
           if (onCutPressed != null)
             _buildButton(
+              context,
               onPressed: onCutPressed!,
               title: 'Cut',
             ),
           if (onCopyPressed != null)
             _buildButton(
+              context,
               onPressed: onCopyPressed!,
               title: 'Copy',
             ),
           if (onPastePressed != null)
             _buildButton(
+              context,
               onPressed: onPastePressed!,
               title: 'Paste',
             ),
@@ -62,10 +65,14 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
     );
   }
 
-  Widget _buildButton({
+  Widget _buildButton(BuildContext context, {
     required String title,
     required VoidCallback onPressed,
   }) {
+    final labelStyle = TwTextStyles.of(context)
+        .bodyForContext(context: context, color: context.twColors.toolbarColor)
+        .copyWith(fontSize: 12, fontWeight: FontWeight.w300);
+
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
@@ -76,13 +83,7 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
+        child: Text(title, style: labelStyle),
       ),
     );
   }

@@ -49,6 +49,10 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
         isDark: context.twIsDark,
         textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       ),
+      overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
+        context: context,
+        color: context.twColors.pageBodyText,
+      ),
     );
   }
 
