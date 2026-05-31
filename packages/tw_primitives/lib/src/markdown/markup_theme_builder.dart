@@ -14,7 +14,8 @@ class MarkdownThemeConfig {
   });
 
   static double bodyTextScaleOf(BuildContext context) {
-    return MediaQuery.textScalerOf(context).scale(twBodyBaseFontSize) / twBodyBaseFontSize;
+    final base = context.twTextStyleTokens.twBodyBaseFontSize;
+    return MediaQuery.textScalerOf(context).scale(base) / base;
   }
 
   final Color? baseTextColor;
@@ -47,6 +48,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   final TwColors colors = TwColors.forBrightness(
     config.isDark ? Brightness.dark : Brightness.light,
   );
+  final tokens = TwTextStyleTokens.forBrightness(config.isDark ? Brightness.dark : Brightness.light);
   final Color baseColor = config.baseTextColor ?? colors.pageBodyText;
   final Color linkColor = config.linkColor ?? colors.linkText;
 
@@ -145,6 +147,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
           wordSpacing: level == 1 ? 2.2 : (level == 2 ? 2.2 : null),
         );
       },
+      transparentSelectionSpacer: tokens.twTransparentSelectionSpacer,
     ),
   );
 }

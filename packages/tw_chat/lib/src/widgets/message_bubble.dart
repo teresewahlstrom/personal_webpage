@@ -894,6 +894,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       blockquoteStyle: transparent(theme.blockquoteStyle),
       headingStyleResolver: (int level) =>
           transparent(theme.headingStyleResolver(level)),
+      transparentSelectionSpacer: theme.transparentSelectionSpacer,
     );
   }
 

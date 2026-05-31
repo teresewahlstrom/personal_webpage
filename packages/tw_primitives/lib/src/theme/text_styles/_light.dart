@@ -23,7 +23,7 @@ class TwTextStyleTokensLight {
   static const double twModalHeaderLineHeight = dark.TwTextStyleTokensDark.twModalHeaderLineHeight;
   static const FontWeight twModalHeaderFontWeight = dark.TwTextStyleTokensDark.twModalHeaderFontWeight;
 
-  static const double twFooterBaseFontSize = dark.TwTextStyleTokensDark.twFooterBaseFontSize;
+  static const double twFooterBaseFontSize = 30; //dark.TwTextStyleTokensDark.twFooterBaseFontSize
 
   static const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
 

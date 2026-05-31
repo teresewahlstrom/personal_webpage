@@ -51,14 +51,14 @@ TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
     if (attribution == header1Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: twHeader1FontSize,
+        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twHeader1FontSize,
         fontWeight: FontWeight.bold,
         height: 1.0,
       );
     } else if (attribution == header2Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: twHeader2FontSize,
+        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twHeader2FontSize,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF888888),
         height: 1.0,
@@ -66,7 +66,7 @@ TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
     } else if (attribution == blockquoteAttribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: twBlockquoteFontSize,
+        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twBlockquoteFontSize,
         fontWeight: FontWeight.bold,
         height: 1.4,
         color: Colors.grey,

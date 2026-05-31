@@ -71,7 +71,7 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
   }) {
     final labelStyle = TwTextStyles.of(context).adaptBase(
       TwTextStyles.of(context).bodyForContext(context: context, color: context.twColors.toolbarColor),
-      fontSize: twToolbarFontSize,
+      fontSize: context.twTextStyleTokens.twToolbarFontSize,
       fontWeight: FontWeight.w300,
     );
 

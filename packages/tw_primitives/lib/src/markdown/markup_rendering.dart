@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../theme/container/pill.dart';
-import '../theme/text_styles/router.dart';
+// tokens are provided by the MarkupTheme instance passed into renderers
 
 import 'markup_ast.dart';
 
@@ -19,6 +19,7 @@ class MarkupTheme {
     required this.blockquoteStyle,
     required this.headingStyleResolver,
     this.linkPillStyle,
+    required this.transparentSelectionSpacer,
   });
 
   final TextStyle baseStyle;
@@ -30,6 +31,7 @@ class MarkupTheme {
   final TwLinkPillStyle? linkPillStyle;
   final TextStyle blockquoteStyle;
   final MarkupHeadingStyleResolver headingStyleResolver;
+  final TextStyle transparentSelectionSpacer;
 }
 
 extension MarkupDocumentRendering on MarkupDocument {
@@ -95,7 +97,7 @@ extension MarkupInlineRendering on MarkupInline {
             // Hidden span for selection/copy
             TextSpan(
               text: text,
-              style: effectiveStyle.merge(twTransparentSelectionSpacer),
+              style: effectiveStyle.merge(theme.transparentSelectionSpacer),
               recognizer: gestureRecognizerFactory(href!),
               semanticsLabel: null,
             ),
@@ -201,6 +203,7 @@ extension MarkupBlockRendering on MarkupBlock {
           ),
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: theme.headingStyleResolver,
+          transparentSelectionSpacer: theme.transparentSelectionSpacer,
         );
 
         return TextSpan(

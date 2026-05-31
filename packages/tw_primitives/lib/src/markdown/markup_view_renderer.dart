@@ -111,6 +111,7 @@ class MarkupViewRenderer {
           linkPillStyle: linkPillStyle?.copyWith(
             textStyle: theme.blockquoteStyle.merge(linkPillStyle.textStyle),
           ),
+            transparentSelectionSpacer: theme.transparentSelectionSpacer,
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: (int level) =>
               theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
@@ -320,7 +321,7 @@ class MarkupViewRenderer {
     required MarkupBlock nextBlock,
     required bool inListItem,
   }) {
-    final double fontSize = theme.baseStyle.fontSize ?? twBodyBaseFontSize;
+    final double fontSize = theme.baseStyle.fontSize ?? context.twTextStyleTokens.twBodyBaseFontSize;
 
     double spacing = fontSize * _style.blockBaseSpacingFactor;
     if (inListItem && nextBlock is MarkupListBlock) {
@@ -371,7 +372,7 @@ class MarkupViewRenderer {
   }
 
   double _listItemSpacing(TextStyle baseStyle, {required int listDepth}) {
-    final double fontSize = baseStyle.fontSize ?? twBodyBaseFontSize; 
+    final double fontSize = baseStyle.fontSize ?? context.twTextStyleTokens.twBodyBaseFontSize; 
 
     double spacing = fontSize * _style.listItemBaseSpacingFactor;
     if (listDepth <= 0) {

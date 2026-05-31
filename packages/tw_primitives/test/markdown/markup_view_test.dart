@@ -133,6 +133,7 @@ void main() {
       linkStyle: TextStyle(color: Colors.blue),
       blockquoteStyle: TextStyle(fontStyle: FontStyle.italic),
       headingStyleResolver: _headingStyle,
+      transparentSelectionSpacer: TextStyle(color: Colors.transparent, fontSize: 0.01, height: 1.0),
     );
 
     final span = const MarkupInline(
@@ -196,6 +197,7 @@ MarkupTheme _theme(TextStyle baseStyle, {TwLinkPillStyle? linkPillStyle}) {
       fontWeight: FontWeight.bold,
       height: 1,
     ),
+    transparentSelectionSpacer: const TextStyle(color: Colors.transparent, fontSize: 0.01, height: 1.0),
   );
 }
 
