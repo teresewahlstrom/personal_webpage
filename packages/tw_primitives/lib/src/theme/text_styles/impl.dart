@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '_dark.dart' as dark;
+import '_light.dart' as light;
 // NOTE: keep this file minimal — implementations live in per-brightness files.
 
 /// Internal interface implemented by per-brightness text-style providers.
@@ -160,28 +161,62 @@ class TwTextStylesDark implements TwTextStylesImpl {
 
 // Light-theme impl delegates to the dark impl by default but remains a distinct type.
 class TwTextStylesLight implements TwTextStylesImpl {
-  final TwTextStylesDark _dark = TwTextStylesDark();
+  // Light implementation mirrors the dark one but uses light tokens so the
+  // themes can diverge at runtime.
+  double _resolveTextScale(double textScale, {double maxTextScale = light.TwTextStyleTokensLight.twBodyDefaultMaxTextScale}) {
+    if (!textScale.isFinite || textScale <= 0) {
+      return light.TwTextStyleTokensLight.twBodyMinTextScale;
+    }
+    return textScale.clamp(light.TwTextStyleTokensLight.twBodyMinTextScale, maxTextScale).toDouble();
+  }
+
+  double _scaledFontSize(double base, double textScale, {double intensity = light.TwTextStyleTokensLight.twBodyScaleIntensity}) {
+    return base * (1 + (textScale - 1) * intensity);
+  }
 
   @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = dark.TwTextStyleTokensDark.twBodyBaseFontSize}) {
-    return _dark.bodyForContext(context: context, color: color, baseSize: baseSize);
+  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = light.TwTextStyleTokensLight.twBodyBaseFontSize}) {
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize);
+    return TextStyle(
+      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
+      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
+      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: light.TwTextStyleTokensLight.twBodyScaleIntensity),
+      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
   }
 
   @override
   TextStyle bodyForContextless({required Color color, required double textScale}) {
-    return _dark.bodyForContextless(color: color, textScale: textScale);
+    final resolved = _resolveTextScale(textScale);
+    return TextStyle(
+      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
+      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
+      fontSize: _scaledFontSize(light.TwTextStyleTokensLight.twBodyBaseFontSize, resolved, intensity: light.TwTextStyleTokensLight.twBodyScaleIntensity),
+      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
   }
 
   @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = dark.TwTextStyleTokensDark.twSectionBaseFontSize}) {
-    return _dark.sectionTitleForContext(context: context, color: color, baseSize: baseSize);
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = light.TwTextStyleTokensLight.twSectionBaseFontSize}) {
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize, maxTextScale: 2.0);
+    return TextStyle(
+      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
+      fontWeight: light.TwTextStyleTokensLight.twSectionFontWeight,
+      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: light.TwTextStyleTokensLight.twSectionScaleIntensity),
+      height: light.TwTextStyleTokensLight.twSectionLineHeight,
+      color: color,
+    );
   }
 
   @override
-  TextStyle modalHeaderTitle({required Color color}) => _dark.modalHeaderTitle(color: color);
+  TextStyle modalHeaderTitle({required Color color}) => const TextStyle(fontFamily: light.TwTextStyleTokensLight.twFontFamily, fontWeight: light.TwTextStyleTokensLight.twModalHeaderFontWeight, fontSize: light.TwTextStyleTokensLight.twModalHeaderFontSize, height: light.TwTextStyleTokensLight.twModalHeaderLineHeight).copyWith(color: color);
 
   @override
-  TextStyle modalCloseGlyph({required Color color}) => _dark.modalCloseGlyph(color: color);
+  TextStyle modalCloseGlyph({required Color color}) => const TextStyle(fontSize: light.TwTextStyleTokensLight.twModalHeaderFontSize, height: 1).copyWith(color: color);
 
   @override
   TextStyle adaptBase(TextStyle base,
@@ -195,8 +230,7 @@ class TwTextStylesLight implements TwTextStylesImpl {
       Color? backgroundColor,
       Color? decorationColor,
       List<Shadow>? shadows}) {
-    return _dark.adaptBase(
-      base,
+    return base.copyWith(
       color: color,
       fontSize: fontSize,
       fontWeight: fontWeight,
@@ -211,23 +245,44 @@ class TwTextStylesLight implements TwTextStylesImpl {
   }
 
   @override
-  TextStyle footerBodyForContext({required BuildContext context, required Color color}) => _dark.footerBodyForContext(context: context, color: color);
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontWeight: FontWeight.w700);
+  }
 
   @override
-  TextStyle get transparentSelectionSpacer => _dark.transparentSelectionSpacer;
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
+    final double baseSize = base.fontSize ?? light.TwTextStyleTokensLight.twHeader2FontSize;
+    return adaptBase(base, color: color, fontSize: baseSize * light.TwTextStyleTokensLight.twCardTitleScale);
+  }
 
   @override
-  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) => _dark.buttonLabelFrom(base, color: color);
+  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontSize: light.TwTextStyleTokensLight.twToolbarFontSize, fontWeight: FontWeight.w300);
+  }
 
   @override
-  TextStyle cardTitleFrom(TextStyle base, {Color? color}) => _dark.cardTitleFrom(base, color: color);
+  TextStyle hintFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, height: 1.4);
+  }
 
   @override
-  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) => _dark.toolbarLabelFrom(base, color: color);
+  TextStyle smallFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontSize: light.TwTextStyleTokensLight.twSmallFontSize);
+  }
 
   @override
-  TextStyle hintFrom(TextStyle base, {Color? color}) => _dark.hintFrom(base, color: color);
+  TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(light.TwTextStyleTokensLight.twFooterBaseFontSize) / light.TwTextStyleTokensLight.twFooterBaseFontSize);
+    return TextStyle(
+      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
+      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
+      fontSize: _scaledFontSize(light.TwTextStyleTokensLight.twFooterBaseFontSize, resolvedTextScale),
+      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
+  }
 
   @override
-  TextStyle smallFrom(TextStyle base, {Color? color}) => _dark.smallFrom(base, color: color);
+  TextStyle get transparentSelectionSpacer => light.TwTextStyleTokensLight.twTransparentSelectionSpacer;
 }
