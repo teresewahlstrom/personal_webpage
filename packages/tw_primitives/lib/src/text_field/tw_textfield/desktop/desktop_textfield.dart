@@ -2186,6 +2186,7 @@ const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
   DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers.cutTextWhenCmdXIsPressed,
   DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
   DefaultTwTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
   DefaultTwTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
@@ -2224,6 +2225,7 @@ const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
 /// );
 /// ```
 const defaultTextFieldImeKeyboardHandlers = <TextFieldKeyboardHandler>[
+  DefaultTwTextFieldKeyboardHandlers.cutTextWhenCmdXIsPressed,
   DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
   DefaultTwTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
   DefaultTwTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
@@ -2249,6 +2251,29 @@ const defaultTextFieldImeKeyboardHandlers = <TextFieldKeyboardHandler>[
 ];
 
 class DefaultTwTextFieldKeyboardHandlers {
+  /// [cutTextWhenCmdXIsPressed] cuts text to clipboard when primary shortcut key
+  /// (CMD on Mac, CTL on Windows) + X is pressed.
+  static TextFieldKeyboardHandlerResult cutTextWhenCmdXIsPressed({
+    required TwTextFieldContext textFieldContext,
+    required KeyEvent keyEvent,
+  }) {
+    if (!keyEvent.isPrimaryShortcutKeyPressed) {
+      return TextFieldKeyboardHandlerResult.notHandled;
+    }
+    if (keyEvent.logicalKey != LogicalKeyboardKey.keyX) {
+      return TextFieldKeyboardHandlerResult.notHandled;
+    }
+    if (textFieldContext.controller.selection.extentOffset == -1 ||
+        textFieldContext.controller.selection.isCollapsed) {
+      return TextFieldKeyboardHandlerResult.handled;
+    }
+
+    textFieldContext.controller.copySelectedTextToClipboard();
+    textFieldContext.controller.deleteSelectedText();
+
+    return TextFieldKeyboardHandlerResult.handled;
+  }
+
   /// [copyTextWhenCmdCIsPressed] copies text to clipboard when primary shortcut key
   /// (CMD on Mac, CTL on Windows) + C is pressed.
   static TextFieldKeyboardHandlerResult copyTextWhenCmdCIsPressed({
@@ -2916,6 +2941,7 @@ const defaultTextFieldSelectorHandlers = <String, TwTextFieldSelectorHandler>{
   // Control.
   MacOsSelectors.insertTab: _moveFocusNext,
   MacOsSelectors.cancelOperation: _giveUpFocus,
+  MacOsSelectors.selectAll: _selectAll,
 
   // Caret movement.
   MacOsSelectors.moveLeft: _moveCaretUpstream,
@@ -2965,6 +2991,12 @@ void _moveFocusNext({
   required TwTextFieldContext textFieldContext,
 }) {
   textFieldContext.focusNode.nextFocus();
+}
+
+void _selectAll({
+  required TwTextFieldContext textFieldContext,
+}) {
+  textFieldContext.controller.selectAll();
 }
 
 void _moveCaretUpstream({

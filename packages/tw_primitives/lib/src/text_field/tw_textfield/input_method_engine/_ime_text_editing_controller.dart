@@ -9,6 +9,7 @@ import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../../infrastructure/_logging.dart';
+import '../../infrastructure/strings.dart';
 
 final _log = imeTextFieldLog;
 
@@ -286,6 +287,96 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
         composing: composingRegion,
       );
 
+  TextSelection _normalizeSelectionForLineEndings(String text, TextSelection selection) {
+    if (!selection.isValid || !text.contains('\r')) {
+      return selection;
+    }
+
+    return TextSelection(
+      baseOffset: text.normalizeLineEndingOffset(selection.baseOffset),
+      extentOffset: text.normalizeLineEndingOffset(selection.extentOffset),
+      affinity: selection.affinity,
+      isDirectional: selection.isDirectional,
+    );
+  }
+
+  TextRange _normalizeRangeForLineEndings(String text, TextRange range) {
+    if (!range.isValid || !text.contains('\r')) {
+      return range;
+    }
+
+    return TextRange(
+      start: text.normalizeLineEndingOffset(range.start),
+      end: text.normalizeLineEndingOffset(range.end),
+    );
+  }
+
+  TextSelection _normalizeSelectionAfterInsertedText(
+    TextSelection selection, {
+    required int insertOffset,
+    required String insertedText,
+  }) {
+    if (!selection.isValid || !insertedText.contains('\r')) {
+      return selection;
+    }
+
+    return TextSelection(
+      baseOffset: _normalizeOffsetAfterInsertedText(
+        selection.baseOffset,
+        insertOffset: insertOffset,
+        insertedText: insertedText,
+      ),
+      extentOffset: _normalizeOffsetAfterInsertedText(
+        selection.extentOffset,
+        insertOffset: insertOffset,
+        insertedText: insertedText,
+      ),
+      affinity: selection.affinity,
+      isDirectional: selection.isDirectional,
+    );
+  }
+
+  TextRange _normalizeRangeAfterInsertedText(
+    TextRange range, {
+    required int insertOffset,
+    required String insertedText,
+  }) {
+    if (!range.isValid || !insertedText.contains('\r')) {
+      return range;
+    }
+
+    return TextRange(
+      start: _normalizeOffsetAfterInsertedText(
+        range.start,
+        insertOffset: insertOffset,
+        insertedText: insertedText,
+      ),
+      end: _normalizeOffsetAfterInsertedText(
+        range.end,
+        insertOffset: insertOffset,
+        insertedText: insertedText,
+      ),
+    );
+  }
+
+  int _normalizeOffsetAfterInsertedText(
+    int offset, {
+    required int insertOffset,
+    required String insertedText,
+  }) {
+    if (offset <= insertOffset) {
+      return offset;
+    }
+
+    final originalInsertEnd = insertOffset + insertedText.length;
+    final normalizedInsertedText = insertedText.normalizeLineEndings();
+    if (offset <= originalInsertEnd) {
+      return insertOffset + insertedText.normalizeLineEndingOffset(offset - insertOffset);
+    }
+
+    return offset - (insertedText.length - normalizedInsertedText.length);
+  }
+
   @override
   void updateEditingValue(TextEditingValue value) {
     _log.fine('New platform TextEditingValue: $value');
@@ -294,10 +385,11 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     _onReceivedTextEditingValueFromPlatform(value);
 
     if (_latestTextEditingValueSentToPlatform != currentTextEditingValue) {
+      final normalizedText = value.text.normalizeLineEndings();
       _sendTextChangesToPlatform = false;
-      text = AttributedText(value.text);
-      selection = value.selection;
-      composingRegion = value.composing;
+      text = AttributedText(normalizedText);
+      selection = _normalizeSelectionForLineEndings(value.text, value.selection);
+      composingRegion = _normalizeRangeForLineEndings(value.text, value.composing);
       _sendTextChangesToPlatform = true;
     }
   }
@@ -331,11 +423,22 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     for (final delta in deltas) {
       if (delta is TextEditingDeltaInsertion) {
         _log.fine('Processing insertion: $delta');
+        final textInserted = delta.textInserted.normalizeLineEndings();
+        final adjustedSelection = _normalizeSelectionAfterInsertedText(
+          delta.selection,
+          insertOffset: delta.insertionOffset,
+          insertedText: delta.textInserted,
+        );
+        final adjustedComposing = _normalizeRangeAfterInsertedText(
+          delta.composing,
+          insertOffset: delta.insertionOffset,
+          insertedText: delta.textInserted,
+        );
         if (selection.isCollapsed && delta.insertionOffset == selection.extentOffset) {
           // This action appears to be user input at the caret.
           insertAtCaret(
-            text: delta.textInserted,
-            newComposingRegion: delta.composing,
+            text: textInserted,
+            newComposingRegion: adjustedComposing,
           );
         } else {
           // We're not sure what this action represents. Either the current selection
@@ -344,11 +447,11 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
           // and then push/expand the current selection as needed around the new content.
           insert(
             newText: AttributedText(
-              delta.textInserted,
+              textInserted,
             ),
             insertIndex: delta.insertionOffset,
-            newSelection: delta.selection,
-            newComposingRegion: delta.composing,
+            newSelection: adjustedSelection,
+            newComposingRegion: adjustedComposing,
           );
         }
       } else if (delta is TextEditingDeltaDeletion) {
@@ -361,12 +464,23 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
         );
       } else if (delta is TextEditingDeltaReplacement) {
         _log.fine('Processing replacement: $delta');
+        final replacementText = delta.replacementText.normalizeLineEndings();
+        final adjustedSelection = _normalizeSelectionAfterInsertedText(
+          delta.selection,
+          insertOffset: delta.replacedRange.start,
+          insertedText: delta.replacementText,
+        );
+        final adjustedComposing = _normalizeRangeAfterInsertedText(
+          delta.composing,
+          insertOffset: delta.replacedRange.start,
+          insertedText: delta.replacementText,
+        );
         replace(
-          newText: AttributedText(delta.replacementText),
+          newText: AttributedText(replacementText),
           from: delta.replacedRange.start,
           to: delta.replacedRange.end,
-          newSelection: delta.selection,
-          newComposingRegion: delta.composing,
+          newSelection: adjustedSelection,
+          newComposingRegion: adjustedComposing,
         );
       } else if (delta is TextEditingDeltaNonTextUpdate) {
         _log.fine('Processing selection/composing change: $delta');

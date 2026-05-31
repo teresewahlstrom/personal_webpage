@@ -119,6 +119,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
   bool _isDraggingExtent = false;
   Offset? _globalDragOffset;
   Offset? _localDragOffset;
+  Offset? _touchHandleOffsetFromLineOfText;
   @override
   void initState() {
     super.initState();
@@ -188,7 +189,10 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
       return;
     }
 
-    _onHandleDragStart(details);
+    _onHandleDragStart(
+      details,
+      widget.editingController.textController.selection.base,
+    );
 
     setState(() {
       _isDraggingBase = true;
@@ -208,16 +212,23 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
       return;
     }
 
-    _onHandleDragStart(details);
+    _onHandleDragStart(
+      details,
+      widget.editingController.textController.selection.extent,
+    );
 
     setState(() {
       _isDraggingBase = false;
       _isDraggingExtent = true;
+      _globalDragOffset = details.globalPosition;
       _localDragOffset = overlayRenderBox.globalToLocal(details.globalPosition);
     });
   }
 
-  void _onHandleDragStart(DragStartDetails details) {
+  void _onHandleDragStart(
+    DragStartDetails details,
+    TextPosition handlePosition,
+  ) {
     _log.fine('_onHandleDragStart()');
 
     final textFieldRenderBox = _textFieldRenderBox;
@@ -225,11 +236,17 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
       return;
     }
 
+    final globalOffsetInMiddleOfLine = _getGlobalOffsetOfMiddleOfLine(
+      handlePosition,
+    );
+    _touchHandleOffsetFromLineOfText =
+        globalOffsetInMiddleOfLine - details.globalPosition;
+
     widget.editingController.hideToolbar();
 
     widget.textScrollController.updateAutoScrollingForTouchOffset(
       userInteractionOffsetInViewport: textFieldRenderBox.globalToLocal(
-        details.globalPosition,
+        _getEffectiveFocalPointForGlobalOffset(details.globalPosition),
       ),
     );
     widget.textScrollController.addListener(
@@ -251,7 +268,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     if (textFieldRenderBox != null) {
       widget.textScrollController.updateAutoScrollingForTouchOffset(
         userInteractionOffsetInViewport: textFieldRenderBox.globalToLocal(
-          details.globalPosition,
+          _getEffectiveFocalPointForGlobalOffset(details.globalPosition),
         ),
       );
     }
@@ -269,7 +286,9 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     if (globalDragOffset == null || textBox == null || textLayout == null) {
       return;
     }
-    final textOffset = textBox.globalToLocal(globalDragOffset);
+    final textOffset = textBox.globalToLocal(
+      _getEffectiveFocalPointForGlobalOffset(globalDragOffset),
+    );
     if (_isDraggingBase) {
       widget.editingController.textController.selection = widget
           .editingController
@@ -309,6 +328,7 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     widget.textScrollController.removeListener(
       _updateSelectionForNewDragHandleLocation,
     );
+    _touchHandleOffsetFromLineOfText = null;
 
     setState(() {
       _isDraggingBase = false;
@@ -337,6 +357,25 @@ class _IOSEditingControlsState extends State<IOSEditingControls>
     final textOffset = textLayout.getOffsetAtPosition(position);
     final globalOffset = textContentRenderBox.localToGlobal(textOffset);
     return textFieldRenderBox.globalToLocal(globalOffset);
+  }
+
+  Offset _getGlobalOffsetOfMiddleOfLine(TextPosition position) {
+    final textLayout = _textLayoutOrNull;
+    final textContentRenderBox = _textContentRenderBox;
+    if (textLayout == null || textContentRenderBox == null) {
+      return Offset.zero;
+    }
+
+    final textOffset = textLayout.getOffsetAtPosition(position);
+    final lineHeight =
+        textLayout.getCharacterBox(position)?.toRect().height ??
+        textLayout.estimatedLineHeight;
+    return textContentRenderBox.localToGlobal(textOffset) +
+        Offset(0, lineHeight / 2);
+  }
+
+  Offset _getEffectiveFocalPointForGlobalOffset(Offset globalOffset) {
+    return globalOffset + (_touchHandleOffsetFromLineOfText ?? Offset.zero);
   }
 
   Offset _textOffsetToViewportOffset(Offset textOffset) {

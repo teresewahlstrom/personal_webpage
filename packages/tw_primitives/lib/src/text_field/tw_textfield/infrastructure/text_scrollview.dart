@@ -125,7 +125,7 @@ class _TextScrollViewState extends State<TextScrollView>
     with SingleTickerProviderStateMixin
     implements TextScrollControllerDelegate {
   final _singleLineFieldAutoScrollGap = 24.0;
-  final _mulitlineFieldAutoScrollGap = 20.0;
+  final _mulitlineFieldAutoScrollGap = 52.0;
 
   final _textFieldViewportKey = GlobalKey();
   bool _ensureExtentVisibleScheduled = false;
@@ -487,12 +487,24 @@ class _TextScrollViewState extends State<TextScrollView>
   @override
   double getVerticalOffsetForTopOfLineAboveViewport() {
     final topOfFirstLine = _scrollController.offset;
+    if (topOfFirstLine <= startScrollOffset) {
+      return startScrollOffset;
+    }
+
     // Note: we nudge the vertical offset up a few pixels to see if we
     // find a text position in the line above.
     final textPositionOneLineUp = _textLayout.getPositionNearestToOffset(
       Offset(0, topOfFirstLine - 5),
     );
-    return _textLayout.getOffsetAtPosition(textPositionOneLineUp).dy;
+    final candidate = _textLayout.getOffsetAtPosition(textPositionOneLineUp).dy;
+    if (candidate < topOfFirstLine - 0.5) {
+      return max(candidate, startScrollOffset);
+    }
+
+    final fallbackLineHeight = _textLayout.getLineHeightAtPosition(
+      textPositionOneLineUp,
+    );
+    return max(topOfFirstLine - fallbackLineHeight, startScrollOffset);
   }
 
   @override
@@ -695,6 +707,7 @@ class _TextScrollViewState extends State<TextScrollView>
 enum TextFieldSizePolicy { singleLine, multiLineBounded, multiLineUnbounded }
 
 class TextScrollController with ChangeNotifier {
+  static const _autoScrollTimePerLine = Duration(milliseconds: 45);
   static const _autoScrollTimePerCharacter = Duration(milliseconds: 50);
   static const _caretVisibilityPadding = 2.0;
 
@@ -912,19 +925,9 @@ class TextScrollController with ChangeNotifier {
 
     if (_delegate!.isMultiline) {
       if (_autoScrollDirection == _AutoScrollDirection.start) {
-        _autoScrollVertically(
-          dt,
-          -_delegate!.calculateDistanceBeyondStartingAutoScrollBoundary(
-            _userInteractionOffsetInViewport!,
-          ),
-        );
+        _autoScrollOneLineUp();
       } else {
-        _autoScrollVertically(
-          dt,
-          _delegate!.calculateDistanceBeyondEndingAutoScrollBoundary(
-            _userInteractionOffsetInViewport!,
-          ),
-        );
+        _autoScrollOneLineDown();
       }
     } else {
       if (_autoScrollDirection == _AutoScrollDirection.start) {
@@ -1045,28 +1048,59 @@ class TextScrollController with ChangeNotifier {
     return speed * (dt.inMilliseconds / 1000);
   }
 
-  /// Updates the scroll offset so that a new line of text is
-  /// visible at the top of the viewport, if a line is available.
-  void _autoScrollVertically(Duration dt, double signedDistanceFromBoundary) {
+  /// Updates the scroll offset so that a new line of text is visible at the top
+  /// of the viewport, if a line is available.
+  void _autoScrollOneLineUp() {
     if (_delegate == null) {
+      _log.warning("Can't auto-scroll up. The scroll delegate is null.");
+      return;
+    }
+
+    final viewportHeight = _delegate!.viewportHeight;
+    if (viewportHeight == null) {
+      _log.warning("Can't auto-scroll up. The viewport height is null");
+      return;
+    }
+
+    final verticalOffsetForTopOfLineAboveViewport = _delegate!
+        .getVerticalOffsetForTopOfLineAboveViewport();
+    if (verticalOffsetForTopOfLineAboveViewport == null) {
       _log.warning(
-        "Can't auto-scroll vertically. The scroll delegate is null.",
+        "Can't auto-scroll up. Couldn't calculate the offset for the line above the viewport",
       );
       return;
     }
 
-    final double distance = signedDistanceFromBoundary.abs();
-    if (distance == 0) {
+    _timeOfNextAutoScroll += _autoScrollTimePerLine;
+    _setScrollOffset(verticalOffsetForTopOfLineAboveViewport);
+  }
+
+  /// Updates the scroll offset so that a new line of text is visible at the
+  /// bottom of the viewport, if a line is available.
+  void _autoScrollOneLineDown() {
+    if (_delegate == null) {
+      _log.warning("Can't auto-scroll down. The scroll delegate is null.");
       return;
     }
 
-    final double direction = signedDistanceFromBoundary.sign;
-    final double scrollDistance = _calculateAutoScrollDistance(dt, distance);
+    final viewportHeight = _delegate!.viewportHeight;
+    if (viewportHeight == null) {
+      _log.warning("Can't auto-scroll down. The viewport height is null");
+      return;
+    }
+
+    final verticalOffsetForBottomOfLineBelowViewport = _delegate!
+        .getVerticalOffsetForBottomOfLineBelowViewport();
+    if (verticalOffsetForBottomOfLineBelowViewport == null) {
+      _log.warning(
+        "Can't auto-scroll down. Couldn't calculate the offset for the line below the viewport",
+      );
+      return;
+    }
+
+    _timeOfNextAutoScroll += _autoScrollTimePerLine;
     _setScrollOffset(
-      (scrollOffset + direction * scrollDistance).clamp(
-        startScrollOffset,
-        endScrollOffset,
-      ),
+      verticalOffsetForBottomOfLineBelowViewport - viewportHeight,
     );
   }
 
@@ -1154,16 +1188,20 @@ class TextScrollController with ChangeNotifier {
 
     _log.finer('Ensuring rect is visible: $rectInContentSpace');
     if (_delegate!.isMultiline) {
-      final firstCharRect = _delegate!.getViewportCharacterRectAtPosition(
-        const TextPosition(offset: 0),
+      final firstCharRect = _toContentSpace(
+        _delegate!.getViewportCharacterRectAtPosition(
+          const TextPosition(offset: 0),
+        ),
       );
       final isAtFirstLine = rectInContentSpace.top == firstCharRect.top;
       final extraSpacingAboveTop = (isAtFirstLine
           ? rectInContentSpace.height / 2
           : 0);
 
-      final lastCharRect = _delegate!.getViewportCharacterRectAtPosition(
-        TextPosition(offset: _textController.text.length - 1),
+      final lastCharRect = _toContentSpace(
+        _delegate!.getViewportCharacterRectAtPosition(
+          TextPosition(offset: _textController.text.length - 1),
+        ),
       );
       final isAtOrPastLastLine = rectInContentSpace.top >= lastCharRect.top;
       final extraSpacingBelowBottom = (isAtOrPastLastLine

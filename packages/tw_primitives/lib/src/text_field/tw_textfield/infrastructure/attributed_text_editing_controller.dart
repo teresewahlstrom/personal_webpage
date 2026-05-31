@@ -199,12 +199,13 @@ class AttributedTextEditingController with ChangeNotifier {
     required String text,
     TextRange? newComposingRegion,
   }) {
+    final textToInsert = text.normalizeLineEndings();
     if (!selection.isCollapsed) {
       textFieldLog.warning('Attempted to insert text at the caret with an expanded selection. Selection: $selection');
     }
 
     final updatedText = _text.insertString(
-      textToInsert: text,
+      textToInsert: textToInsert,
       startOffset: selection.extentOffset,
       applyAttributions: Set.from(composingAttributions),
     );
@@ -212,7 +213,7 @@ class AttributedTextEditingController with ChangeNotifier {
     final updatedSelection = _moveSelectionForInsertion(
       selection: selection,
       insertIndex: selection.extentOffset,
-      newTextLength: text.length,
+      newTextLength: textToInsert.length,
     );
 
     update(
@@ -233,6 +234,7 @@ class AttributedTextEditingController with ChangeNotifier {
     required String text,
     TextRange? newComposingRegion,
   }) {
+    final textToInsert = text.normalizeLineEndings();
     if (!selection.isCollapsed) {
       textFieldLog.warning('Attempted to insert text at the caret with an expanded selection. Selection: $selection');
     }
@@ -240,7 +242,7 @@ class AttributedTextEditingController with ChangeNotifier {
     final upstreamAttributions = _text.getAllAttributionsAt(max(selection.extentOffset - 1, 0));
 
     final updatedText = _text.insertString(
-      textToInsert: text,
+      textToInsert: textToInsert,
       startOffset: selection.extentOffset,
       applyAttributions: upstreamAttributions,
     );
@@ -248,7 +250,7 @@ class AttributedTextEditingController with ChangeNotifier {
     final updatedSelection = _moveSelectionForInsertion(
       selection: selection,
       insertIndex: selection.extentOffset,
-      newTextLength: text.length,
+      newTextLength: textToInsert.length,
     );
 
     update(
@@ -299,19 +301,20 @@ class AttributedTextEditingController with ChangeNotifier {
     required String text,
     TextRange? newComposingRegion,
   }) {
+    final textToInsert = text.normalizeLineEndings();
     if (!selection.isCollapsed) {
       textFieldLog.warning('Attempted to insert text at the caret with an expanded selection. Selection: $selection');
     }
 
     final updatedText = _text.insertString(
-      textToInsert: text,
+      textToInsert: textToInsert,
       startOffset: selection.extentOffset,
     );
 
     final updatedSelection = _moveSelectionForInsertion(
       selection: selection,
       insertIndex: selection.extentOffset,
-      newTextLength: text.length,
+      newTextLength: textToInsert.length,
     );
 
     update(
@@ -381,6 +384,7 @@ class AttributedTextEditingController with ChangeNotifier {
     required String replacementText,
     TextRange? newComposingRegion,
   }) {
+    final textToInsert = replacementText.normalizeLineEndings();
     if (selection.isCollapsed) {
       return;
     }
@@ -392,12 +396,12 @@ class AttributedTextEditingController with ChangeNotifier {
       endOffset: selection.extentOffset,
     );
     updatedText = updatedText.insertString(
-      textToInsert: replacementText,
+      textToInsert: textToInsert,
       startOffset: selection.baseOffset,
       applyAttributions: upstreamAttributions,
     );
     final updatedSelection = TextSelection.collapsed(
-      offset: selection.baseOffset + replacementText.length,
+      offset: selection.baseOffset + textToInsert.length,
     );
 
     update(
@@ -446,6 +450,7 @@ class AttributedTextEditingController with ChangeNotifier {
     required String replacementText,
     TextRange? newComposingRegion,
   }) {
+    final textToInsert = replacementText.normalizeLineEndings();
     if (selection.isCollapsed) {
       return;
     }
@@ -455,11 +460,11 @@ class AttributedTextEditingController with ChangeNotifier {
       endOffset: selection.extentOffset,
     );
     updatedText = updatedText.insertString(
-      textToInsert: replacementText,
+      textToInsert: textToInsert,
       startOffset: selection.baseOffset,
     );
     final updatedSelection = TextSelection.collapsed(
-      offset: selection.baseOffset + replacementText.length,
+      offset: selection.baseOffset + textToInsert.length,
     );
 
     update(
@@ -690,7 +695,7 @@ class AttributedTextEditingController with ChangeNotifier {
     final clipboardData = await Clipboard.getData('text/plain');
 
     if (clipboardData != null && clipboardData.text != null) {
-      final textToPaste = clipboardData.text!;
+      final textToPaste = clipboardData.text!.normalizeLineEndings();
 
       text = text.insertString(
         textToInsert: textToPaste,

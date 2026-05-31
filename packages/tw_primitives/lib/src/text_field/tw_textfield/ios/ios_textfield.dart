@@ -10,6 +10,7 @@ import 'package:tw_primitives/src/text_field/infrastructure/flutter/flutter_sche
 import 'package:tw_primitives/src/text_field/infrastructure/flutter/text_input_configuration.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/ime_input_owner.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/ios/toolbar.dart';
+import 'package:tw_primitives/src/text_field/infrastructure/platforms/mac/mac_ime.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/platforms/mobile_documents.dart';
 import 'package:tw_primitives/src/text_field/infrastructure/signal_notifier.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/fill_width_if_constrained.dart';
@@ -259,7 +260,8 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
         (widget.textController ?? ImeAttributedTextEditingController())
           ..addListener(_onTextOrSelectionChange)
           ..onIOSFloatingCursorChange = _onFloatingCursorChange
-          ..onPerformActionPressed ??= _onPerformActionPressed;
+          ..onPerformActionPressed ??= _onPerformActionPressed
+          ..onPerformSelector ??= _onPerformSelector;
 
     _textScrollController = TextScrollController(
       textController: _textEditingController,
@@ -320,6 +322,9 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
           _onPerformActionPressed) {
         _textEditingController.onPerformActionPressed = null;
       }
+      if (_textEditingController.onPerformSelector == _onPerformSelector) {
+        _textEditingController.onPerformSelector = null;
+      }
 
       if (widget.textController != null) {
         _textEditingController = widget.textController!;
@@ -330,7 +335,8 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       _textEditingController
         ..addListener(_onTextOrSelectionChange)
         ..onIOSFloatingCursorChange = _onFloatingCursorChange
-        ..onPerformActionPressed ??= _onPerformActionPressed;
+        ..onPerformActionPressed ??= _onPerformActionPressed
+        ..onPerformSelector ??= _onPerformSelector;
     }
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
@@ -384,6 +390,13 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
       ..removeListener(_onTextOrSelectionChange)
       ..onIOSFloatingCursorChange = null
       ..detachFromIme();
+    if (_textEditingController.onPerformSelector == _onPerformSelector) {
+      _textEditingController.onPerformSelector = null;
+    }
+    if (_textEditingController.onPerformActionPressed ==
+        _onPerformActionPressed) {
+      _textEditingController.onPerformActionPressed = null;
+    }
     if (widget.textController == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         // Dispose after the current frame so that other widgets have
@@ -595,6 +608,16 @@ class TwIOSTextFieldState extends State<TwIOSTextField>
         break;
       default:
         _log.warning("User pressed unhandled action button: $action");
+    }
+  }
+
+  void _onPerformSelector(String selectorName) {
+    switch (selectorName) {
+      case MacOsSelectors.selectAll:
+        _textEditingController.selectAll();
+        break;
+      default:
+        _log.warning("User invoked unhandled selector: $selectorName");
     }
   }
 

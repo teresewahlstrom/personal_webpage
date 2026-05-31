@@ -9,6 +9,32 @@ import 'package:characters/characters.dart';
 final _separatorRegex = RegExp(r'^[\p{Z}\p{P}]$', unicode: true);
 
 extension CharacterMovement on String {
+  String normalizeLineEndings() {
+    if (!contains('\r')) {
+      return this;
+    }
+
+    return replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+  }
+
+  int normalizeLineEndingOffset(int offset) {
+    final limitedOffset = offset.clamp(0, length);
+    var normalizedOffset = 0;
+
+    for (var i = 0; i < limitedOffset; i += 1) {
+      if (this[i] == '\r' && i + 1 < length && this[i + 1] == '\n') {
+        normalizedOffset += 1;
+        if (i + 1 < limitedOffset) {
+          i += 1;
+        }
+      } else {
+        normalizedOffset += 1;
+      }
+    }
+
+    return normalizedOffset;
+  }
+
   /// Returns the code point index of the character that sits
   /// at the next start of word upstream from the given
   /// [textOffset] code point index.

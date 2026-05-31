@@ -295,6 +295,9 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
 
   void _handleSelectionDragUpdate(Offset globalPosition) {
     _selectionDragGlobalPosition = globalPosition;
+    if (_selectionAutoScrollTicker.isTicking) {
+      return;
+    }
     _handleSelectionAutoScrollTick(Duration.zero);
     if (!_selectionAutoScrollTicker.isTicking) {
       _lastSelectionAutoScrollTick = null;

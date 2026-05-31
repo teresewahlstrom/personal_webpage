@@ -57,6 +57,8 @@ class MacOsSelectors {
 
   static const String cancelOperation = 'cancelOperation:';
 
+  static const String selectAll = 'selectAll:';
+
   static const String insertTab = 'insertTab:';
   static const String insertBacktab = 'insertBacktab:';
   static const String insertNewLine = 'insertNewline:';
