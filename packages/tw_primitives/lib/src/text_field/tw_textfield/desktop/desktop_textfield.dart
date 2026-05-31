@@ -28,7 +28,7 @@ import 'package:tw_primitives/src/text_field/tw_textfield/tw_textfield.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
 import '../infrastructure/fill_width_if_constrained.dart';
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 
 final _log = textFieldLog;
 

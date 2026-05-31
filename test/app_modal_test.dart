@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_webpage/config/app_ui_config.dart';
 import 'package:personal_webpage/widgets/app_modal.dart';
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 
 void main() {
   testWidgets('showAppModal uses the shared square themed frame', (

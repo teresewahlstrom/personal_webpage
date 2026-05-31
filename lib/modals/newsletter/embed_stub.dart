@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 
 import 'embed_config.dart';
 

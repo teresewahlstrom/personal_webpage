@@ -5,7 +5,7 @@ import 'package:tw_chat/chat.dart'
     ChatOverlay,
     ChatSkin,
     ChatSkinMode;
-import 'package:tw_primitives/colors.dart' show TwColorsBuildContextExtension;
+import 'package:tw_primitives/theme.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/scrollbar.dart'
   show TwSelectableScrollArea, TwSelectableRegionState;
 

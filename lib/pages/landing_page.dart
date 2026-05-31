@@ -5,9 +5,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_chat/chat.dart' show ChatComposerLayout, ChatSkin;
 import 'package:tw_keywords/tw_keywords.dart';
-import 'package:tw_primitives/colors.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/markdown.dart';
-import 'package:tw_primitives/text_styles.dart';
+import 'package:tw_primitives/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/app_ui_config.dart';

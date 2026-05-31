@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
 
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 
 class PrivacyCookiesContent extends StatefulWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});

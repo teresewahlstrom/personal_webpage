@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 import 'app_line_theme.dart';
 export 'app_line_theme.dart';
 

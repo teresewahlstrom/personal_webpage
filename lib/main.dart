@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import 'package:tw_primitives/svg.dart';
-import 'package:tw_primitives/text_styles.dart';
+import 'package:tw_primitives/theme.dart';
 
 import 'config/app_ui_config.dart';
-import 'package:tw_primitives/colors.dart';
 import 'pages/landing_page.dart';
 import 'widgets/shell/page_header.dart' show kHeaderLogoAssetPath;
 import 'widgets/shell/page_scaffold.dart';

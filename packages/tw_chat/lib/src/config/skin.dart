@@ -1,6 +1,6 @@
 import 'skin_shared.dart';
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 export 'skin_shared.dart'
     show ChatSkinColors, ChatSkinData, ChatSkinTextStyles, ChatSkinTokens;
 

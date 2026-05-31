@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../text_styles/body_text_style.dart';
+import '../theme/text_styles/body_text_style.dart';
 import 'markup_rendering.dart';
 
 class MarkdownThemeConfig {

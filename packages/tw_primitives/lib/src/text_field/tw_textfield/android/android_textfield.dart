@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:follow_the_leader/follow_the_leader.dart';
 import 'package:super_text_layout/super_text_layout.dart';

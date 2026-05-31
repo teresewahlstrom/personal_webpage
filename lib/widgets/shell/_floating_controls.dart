@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart' show ChatLauncherStyle, ChatSkin;
-import 'package:tw_primitives/colors.dart';
+import 'package:tw_primitives/theme.dart';
 
 import '../../config/app_ui_config.dart';
 
