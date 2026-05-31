@@ -23,6 +23,9 @@ class TwTextStyleTokensLight {
   static const double twModalHeaderLineHeight = dark.TwTextStyleTokensDark.twModalHeaderLineHeight;
   static const FontWeight twModalHeaderFontWeight = dark.TwTextStyleTokensDark.twModalHeaderFontWeight;
 
+  // Strong/bold font weight used for markdown/heading emphasis in light theme
+  static const FontWeight twStrongFontWeight = FontWeight.w500;
+
   static const double twFooterBaseFontSize = dark.TwTextStyleTokensDark.twFooterBaseFontSize;
 
   static const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;

@@ -38,20 +38,23 @@ extension MarkupDocumentRendering on MarkupDocument {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
+    bool allowWidgetSpans = true,
   }) {
     return _joinBlockTextSpan(
       blocks,
       separator: MarkupDocument.blockSeparator,
       theme: theme,
       gestureRecognizerFactory: gestureRecognizerFactory,
+      allowWidgetSpans: allowWidgetSpans,
     );
   }
 }
 
 extension MarkupInlineRendering on MarkupInline {
-  TextSpan toTextSpan({
+  InlineSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
+    bool allowWidgetSpans = true,
   }) {
     final isLink = href != null && href!.isNotEmpty;
     var effectiveStyle = theme.baseStyle;
@@ -77,31 +80,25 @@ extension MarkupInlineRendering on MarkupInline {
       effectiveStyle = effectiveStyle.merge(theme.linkStyle);
       final linkPillStyle = theme.linkPillStyle;
       if (linkPillStyle != null) {
-        // Hybrid: WidgetSpan for clickable pill, hidden TextSpan for selection/copy
+        if (allowWidgetSpans) {
+          // Render a widget pill when allowed (visual path).
+          return WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: _MarkupLinkPill(
+              href: href!,
+              label: text,
+              style: linkPillStyle,
+              gestureRecognizerFactory: gestureRecognizerFactory,
+            ),
+          );
+        }
+        // For measurement or constrained contexts, fall back to an inline
+        // TextSpan to avoid WidgetSpan measurement issues inside TextPainter.
         return TextSpan(
-          children: <InlineSpan>[
-            // Visible clickable pill
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: _MarkupLinkPill(
-                href: href!,
-                label: text,
-                style: linkPillStyle.copyWith(
-                  textStyle: effectiveStyle
-                      .merge(linkPillStyle.textStyle)
-                      .copyWith(decoration: TextDecoration.none),
-                ),
-                gestureRecognizerFactory: gestureRecognizerFactory,
-              ),
-            ),
-            // Hidden span for selection/copy
-            TextSpan(
-              text: text,
-              style: effectiveStyle.merge(theme.transparentSelectionSpacer),
-              recognizer: gestureRecognizerFactory(href!),
-              semanticsLabel: null,
-            ),
-          ],
+          text: text,
+          style: effectiveStyle,
+          recognizer: gestureRecognizerFactory(href!),
+          semanticsLabel: href != text ? '$text ($href)' : null,
         );
       }
     }
@@ -174,6 +171,7 @@ extension MarkupBlockRendering on MarkupBlock {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
+    bool allowWidgetSpans = true,
   }) {
     switch (this) {
       case final MarkupParagraphBlock paragraph:
@@ -184,6 +182,7 @@ extension MarkupBlockRendering on MarkupBlock {
                 (inline) => inline.toTextSpan(
                   theme: theme,
                   gestureRecognizerFactory: gestureRecognizerFactory,
+                  allowWidgetSpans: allowWidgetSpans,
                 ),
               )
               .toList(growable: false),
@@ -198,9 +197,13 @@ extension MarkupBlockRendering on MarkupBlock {
           strikethroughStyle: headingStyle.merge(theme.strikethroughStyle),
           underlineStyle: headingStyle.merge(theme.underlineStyle),
           linkStyle: headingStyle.merge(theme.linkStyle),
-          linkPillStyle: linkPillStyle?.copyWith(
-            textStyle: headingStyle.merge(linkPillStyle.textStyle),
-          ),
+            // Applies heading text styling to pills inside headings so the
+            // pill's text visually matches the surrounding heading. Used by
+            // markdown rendering in the main app and also when markdown is
+            // rendered inside chat/message UI.
+            linkPillStyle: linkPillStyle?.copyWith(
+              textStyle: headingStyle.merge(linkPillStyle.textStyle),
+            ),
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: theme.headingStyleResolver,
           transparentSelectionSpacer: theme.transparentSelectionSpacer,
@@ -213,6 +216,7 @@ extension MarkupBlockRendering on MarkupBlock {
                 (inline) => inline.toTextSpan(
                   theme: headingTheme,
                   gestureRecognizerFactory: gestureRecognizerFactory,
+                  allowWidgetSpans: allowWidgetSpans,
                 ),
               )
               .toList(growable: false),
@@ -223,6 +227,7 @@ extension MarkupBlockRendering on MarkupBlock {
           separator: MarkupDocument.blockSeparator,
           theme: theme,
           gestureRecognizerFactory: gestureRecognizerFactory,
+          allowWidgetSpans: allowWidgetSpans,
         );
 
         return _prefixMultilineSpan(
@@ -264,12 +269,14 @@ extension MarkupListItemRendering on MarkupListItem {
   TextSpan toTextSpan({
     required MarkupTheme theme,
     required LinkGestureRecognizerFactory gestureRecognizerFactory,
+    bool allowWidgetSpans = true,
   }) {
     return _joinBlockTextSpan(
       blocks,
       separator: '\n',
       theme: theme,
       gestureRecognizerFactory: gestureRecognizerFactory,
+      allowWidgetSpans: allowWidgetSpans,
     );
   }
 }
@@ -285,6 +292,7 @@ TextSpan _joinBlockTextSpan(
   required String separator,
   required MarkupTheme theme,
   required LinkGestureRecognizerFactory gestureRecognizerFactory,
+  bool allowWidgetSpans = true,
 }) {
   final children = <InlineSpan>[];
   var wroteContent = false;
@@ -301,6 +309,7 @@ TextSpan _joinBlockTextSpan(
       block.toTextSpan(
         theme: theme,
         gestureRecognizerFactory: gestureRecognizerFactory,
+        allowWidgetSpans: allowWidgetSpans,
       ),
     );
     wroteContent = true;

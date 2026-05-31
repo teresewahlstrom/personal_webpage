@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '_dark.dart' as dark;
-import '_light.dart' as light;
+import '_styles.dart' as styles;
 // NOTE: keep this file minimal — implementations live in per-brightness files.
 
 /// Internal interface implemented by per-brightness text-style providers.
@@ -32,26 +31,32 @@ abstract class TwTextStylesImpl {
 
 // Dark-theme implementation moved here for centralized implementations.
 class TwTextStylesDark implements TwTextStylesImpl {
+  TwTextStylesDark(this.named);
+
+  final styles.NamedTextStyles named;
   // Helpers copied from legacy body text helpers but kept local to the impl.
-  double _resolveTextScale(double textScale, {double maxTextScale = dark.TwTextStyleTokensDark.twBodyDefaultMaxTextScale}) {
+  double _resolveTextScale(double textScale, {double? maxTextScale}) {
+    final double max = maxTextScale ?? named.bodyDefaultMaxTextScale;
     if (!textScale.isFinite || textScale <= 0) {
-      return dark.TwTextStyleTokensDark.twBodyMinTextScale;
+      return named.bodyMinTextScale;
     }
-    return textScale.clamp(dark.TwTextStyleTokensDark.twBodyMinTextScale, maxTextScale).toDouble();
+    return textScale.clamp(named.bodyMinTextScale, max).toDouble();
   }
 
-  double _scaledFontSize(double base, double textScale, {double intensity = dark.TwTextStyleTokensDark.twBodyScaleIntensity}) {
-    return base * (1 + (textScale - 1) * intensity);
+  double _scaledFontSize(double base, double textScale, {double? intensity}) {
+    final double eff = intensity ?? named.bodyScaleIntensity;
+    return base * (1 + (textScale - 1) * eff);
   }
 
   @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = dark.TwTextStyleTokensDark.twBodyBaseFontSize}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize);
-    return TextStyle(
-      fontFamily: dark.TwTextStyleTokensDark.twFontFamily,
-      fontWeight: dark.TwTextStyleTokensDark.twBodyFontWeight,
-      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: dark.TwTextStyleTokensDark.twBodyScaleIntensity),
-      height: dark.TwTextStyleTokensDark.twBodyLineHeight,
+  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) {
+    final double base = baseSize ?? named.bodyBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
@@ -60,34 +65,40 @@ class TwTextStylesDark implements TwTextStylesImpl {
   @override
   TextStyle bodyForContextless({required Color color, required double textScale}) {
     final resolved = _resolveTextScale(textScale);
-    return TextStyle(
-      fontFamily: dark.TwTextStyleTokensDark.twFontFamily,
-      fontWeight: dark.TwTextStyleTokensDark.twBodyFontWeight,
-      fontSize: _scaledFontSize(dark.TwTextStyleTokensDark.twBodyBaseFontSize, resolved, intensity: dark.TwTextStyleTokensDark.twBodyScaleIntensity),
-      height: dark.TwTextStyleTokensDark.twBodyLineHeight,
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(named.bodyBaseFontSize, resolved),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
   }
 
   @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = dark.TwTextStyleTokensDark.twSectionBaseFontSize}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize, maxTextScale: 2.0);
-    return TextStyle(
-      fontFamily: dark.TwTextStyleTokensDark.twFontFamily,
-      fontWeight: dark.TwTextStyleTokensDark.twSectionFontWeight,
-      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: dark.TwTextStyleTokensDark.twSectionScaleIntensity),
-      height: dark.TwTextStyleTokensDark.twSectionLineHeight,
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) {
+    final double base = baseSize ?? named.sectionBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base, maxTextScale: 2.0);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.sectionFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale, intensity: named.sectionScaleIntensity),
+      height: named.sectionLineHeight,
       color: color,
     );
   }
 
   @override
-  TextStyle modalHeaderTitle({required Color color}) =>
-      const TextStyle(fontFamily: dark.TwTextStyleTokensDark.twFontFamily, fontWeight: dark.TwTextStyleTokensDark.twModalHeaderFontWeight, fontSize: dark.TwTextStyleTokensDark.twModalHeaderFontSize, height: dark.TwTextStyleTokensDark.twModalHeaderLineHeight).copyWith(color: color);
+  TextStyle modalHeaderTitle({required Color color}) => styles.modalHeaderTitleStyle(
+        fontFamily: named.fontFamily,
+        fontWeight: named.modalHeaderFontWeight,
+        fontSize: named.modalHeaderFontSize,
+        height: named.modalHeaderLineHeight,
+        color: color,
+      );
 
   @override
-  TextStyle modalCloseGlyph({required Color color}) => const TextStyle(fontSize: dark.TwTextStyleTokensDark.twModalHeaderFontSize, height: 1).copyWith(color: color);
+  TextStyle modalCloseGlyph({required Color color}) => styles.modalCloseGlyphStyle(fontSize: named.modalHeaderFontSize, color: color);
 
   @override
   TextStyle adaptBase(TextStyle base,
@@ -123,13 +134,13 @@ class TwTextStylesDark implements TwTextStylesImpl {
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
     // Apply card title scale relative to base font size (fall back to H2 token).
-    final double baseSize = base.fontSize ?? dark.TwTextStyleTokensDark.twHeader2FontSize;
-    return adaptBase(base, color: color, fontSize: baseSize * dark.TwTextStyleTokensDark.twCardTitleScale);
+    final double baseSize = base.fontSize ?? named.header2FontSize;
+    return adaptBase(base, color: color, fontSize: baseSize * named.cardTitleScale);
   }
 
   @override
   TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: dark.TwTextStyleTokensDark.twToolbarFontSize, fontWeight: FontWeight.w300);
+    return adaptBase(base, color: color, fontSize: named.toolbarFontSize, fontWeight: FontWeight.w300);
   }
 
   @override
@@ -139,49 +150,54 @@ class TwTextStylesDark implements TwTextStylesImpl {
 
   @override
   TextStyle smallFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: dark.TwTextStyleTokensDark.twSmallFontSize);
+    return adaptBase(base, color: color, fontSize: named.smallFontSize);
   }
 
   @override
   TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(dark.TwTextStyleTokensDark.twFooterBaseFontSize) / dark.TwTextStyleTokensDark.twFooterBaseFontSize);
-    return TextStyle(
-      fontFamily: dark.TwTextStyleTokensDark.twFontFamily,
-      fontWeight: dark.TwTextStyleTokensDark.twBodyFontWeight,
-      fontSize: _scaledFontSize(dark.TwTextStyleTokensDark.twFooterBaseFontSize, resolvedTextScale),
-      height: dark.TwTextStyleTokensDark.twBodyLineHeight,
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(named.footerBaseFontSize) / named.footerBaseFontSize);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(named.footerBaseFontSize, resolvedTextScale),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
   }
 
   @override
-  TextStyle get transparentSelectionSpacer => dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
+  TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
 }
 
 // Light-theme impl delegates to the dark impl by default but remains a distinct type.
 class TwTextStylesLight implements TwTextStylesImpl {
-  // Light implementation mirrors the dark one but uses light tokens so the
-  // themes can diverge at runtime.
-  double _resolveTextScale(double textScale, {double maxTextScale = light.TwTextStyleTokensLight.twBodyDefaultMaxTextScale}) {
+  TwTextStylesLight(this.named);
+
+  final styles.NamedTextStyles named;
+
+  double _resolveTextScale(double textScale, {double? maxTextScale}) {
+    final double max = maxTextScale ?? named.bodyDefaultMaxTextScale;
     if (!textScale.isFinite || textScale <= 0) {
-      return light.TwTextStyleTokensLight.twBodyMinTextScale;
+      return named.bodyMinTextScale;
     }
-    return textScale.clamp(light.TwTextStyleTokensLight.twBodyMinTextScale, maxTextScale).toDouble();
+    return textScale.clamp(named.bodyMinTextScale, max).toDouble();
   }
 
-  double _scaledFontSize(double base, double textScale, {double intensity = light.TwTextStyleTokensLight.twBodyScaleIntensity}) {
-    return base * (1 + (textScale - 1) * intensity);
+  double _scaledFontSize(double base, double textScale, {double? intensity}) {
+    final double eff = intensity ?? named.bodyScaleIntensity;
+    return base * (1 + (textScale - 1) * eff);
   }
 
   @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = light.TwTextStyleTokensLight.twBodyBaseFontSize}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize);
-    return TextStyle(
-      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
-      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
-      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: light.TwTextStyleTokensLight.twBodyScaleIntensity),
-      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) {
+    final double base = baseSize ?? named.bodyBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
@@ -190,33 +206,30 @@ class TwTextStylesLight implements TwTextStylesImpl {
   @override
   TextStyle bodyForContextless({required Color color, required double textScale}) {
     final resolved = _resolveTextScale(textScale);
-    return TextStyle(
-      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
-      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
-      fontSize: _scaledFontSize(light.TwTextStyleTokensLight.twBodyBaseFontSize, resolved, intensity: light.TwTextStyleTokensLight.twBodyScaleIntensity),
-      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(named.bodyBaseFontSize, resolved),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
   }
 
   @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = light.TwTextStyleTokensLight.twSectionBaseFontSize}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(baseSize) / baseSize, maxTextScale: 2.0);
-    return TextStyle(
-      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
-      fontWeight: light.TwTextStyleTokensLight.twSectionFontWeight,
-      fontSize: _scaledFontSize(baseSize, resolvedTextScale, intensity: light.TwTextStyleTokensLight.twSectionScaleIntensity),
-      height: light.TwTextStyleTokensLight.twSectionLineHeight,
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) {
+    final double base = baseSize ?? named.sectionBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base, maxTextScale: 2.0);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.sectionFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale, intensity: named.sectionScaleIntensity),
+      height: named.sectionLineHeight,
       color: color,
     );
   }
 
-  @override
-  TextStyle modalHeaderTitle({required Color color}) => const TextStyle(fontFamily: light.TwTextStyleTokensLight.twFontFamily, fontWeight: light.TwTextStyleTokensLight.twModalHeaderFontWeight, fontSize: light.TwTextStyleTokensLight.twModalHeaderFontSize, height: light.TwTextStyleTokensLight.twModalHeaderLineHeight).copyWith(color: color);
-
-  @override
-  TextStyle modalCloseGlyph({required Color color}) => const TextStyle(fontSize: light.TwTextStyleTokensLight.twModalHeaderFontSize, height: 1).copyWith(color: color);
+  
 
   @override
   TextStyle adaptBase(TextStyle base,
@@ -251,13 +264,13 @@ class TwTextStylesLight implements TwTextStylesImpl {
 
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    final double baseSize = base.fontSize ?? light.TwTextStyleTokensLight.twHeader2FontSize;
-    return adaptBase(base, color: color, fontSize: baseSize * light.TwTextStyleTokensLight.twCardTitleScale);
+    final double baseSize = base.fontSize ?? named.header2FontSize;
+    return adaptBase(base, color: color, fontSize: baseSize * named.cardTitleScale);
   }
 
   @override
   TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: light.TwTextStyleTokensLight.twToolbarFontSize, fontWeight: FontWeight.w300);
+    return adaptBase(base, color: color, fontSize: named.toolbarFontSize, fontWeight: FontWeight.w300);
   }
 
   @override
@@ -267,22 +280,33 @@ class TwTextStylesLight implements TwTextStylesImpl {
 
   @override
   TextStyle smallFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: light.TwTextStyleTokensLight.twSmallFontSize);
+    return adaptBase(base, color: color, fontSize: named.smallFontSize);
   }
 
   @override
   TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(light.TwTextStyleTokensLight.twFooterBaseFontSize) / light.TwTextStyleTokensLight.twFooterBaseFontSize);
-    return TextStyle(
-      fontFamily: light.TwTextStyleTokensLight.twFontFamily,
-      fontWeight: light.TwTextStyleTokensLight.twBodyFontWeight,
-      fontSize: _scaledFontSize(light.TwTextStyleTokensLight.twFooterBaseFontSize, resolvedTextScale),
-      height: light.TwTextStyleTokensLight.twBodyLineHeight,
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(named.footerBaseFontSize) / named.footerBaseFontSize);
+    return styles.buildTextStyle(
+      fontFamily: named.fontFamily,
+      fontWeight: named.bodyFontWeight,
+      fontSize: _scaledFontSize(named.footerBaseFontSize, resolvedTextScale),
+      height: named.bodyLineHeight,
       decoration: TextDecoration.none,
       color: color,
     );
   }
+  @override
+  TextStyle modalHeaderTitle({required Color color}) => styles.modalHeaderTitleStyle(
+        fontFamily: named.fontFamily,
+        fontWeight: named.modalHeaderFontWeight,
+        fontSize: named.modalHeaderFontSize,
+        height: named.modalHeaderLineHeight,
+        color: color,
+      );
 
   @override
-  TextStyle get transparentSelectionSpacer => light.TwTextStyleTokensLight.twTransparentSelectionSpacer;
+  TextStyle modalCloseGlyph({required Color color}) => styles.modalCloseGlyphStyle(fontSize: named.modalHeaderFontSize, color: color);
+
+  @override
+  TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
 }

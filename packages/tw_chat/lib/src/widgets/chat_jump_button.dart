@@ -34,38 +34,31 @@ class ChatJumpButton extends StatelessWidget {
       size: buttonSize * tokens.jumpToLatestButtonIconRatio,
     );
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        shape: showNewMessage ? BoxShape.rectangle : BoxShape.circle,
-        borderRadius: showNewMessage
-            ? BorderRadius.circular(buttonSize / 2)
-            : null,
-        boxShadow: [tokens.jumpToLatestButtonShadow(colors)],
+    if (showNewMessage) {
+      return GestureDetector(
+        onTap: () {
+          Tooltip.dismissAllToolTips();
+          onJumpToLatest();
+        },
+        child: TwLinkPill(
+          label: 'new message',
+          leading: arrowIcon,
+        ),
+      );
+    }
+
+    return SizedBox.square(
+      dimension: buttonSize,
+      child: GestureDetector(
+        onTap: () {
+          Tooltip.dismissAllToolTips();
+          onJumpToBottom();
+        },
+        child: TwLinkPill(
+          label: '',
+          leading: arrowIcon,
+        ),
       ),
-      child: showNewMessage
-          ? TwLinkPill(
-              label: 'new message',
-              leading: arrowIcon,
-              onTap: () {
-                Tooltip.dismissAllToolTips();
-                onJumpToLatest();
-              },
-              tooltip: 'Jump to latest message',
-              semanticsLabel: 'Jump to latest message',
-            )
-          : SizedBox.square(
-              dimension: buttonSize,
-                child: TwLinkPill(
-                  label: '',
-                  leading: arrowIcon,
-                  onTap: () {
-                    Tooltip.dismissAllToolTips();
-                    onJumpToBottom();
-                  },
-                  tooltip: 'Jump to bottom',
-                  semanticsLabel: 'Jump to bottom',
-                ),
-            ),
     );
   }
 }

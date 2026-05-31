@@ -108,6 +108,10 @@ class MarkupViewRenderer {
           ),
           underlineStyle: theme.blockquoteStyle.merge(theme.underlineStyle),
           linkStyle: theme.blockquoteStyle.merge(theme.linkStyle),
+          // When rendering blockquote pills, merge the blockquote text style
+          // into the pill so the pill matches blockquote typography. This
+          // affects markdown views in the main app and also markdown shown
+          // inside chat bubbles.
           linkPillStyle: linkPillStyle?.copyWith(
             textStyle: theme.blockquoteStyle.merge(linkPillStyle.textStyle),
           ),

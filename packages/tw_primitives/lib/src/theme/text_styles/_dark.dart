@@ -24,6 +24,9 @@ class TwTextStyleTokensDark {
   static const double twModalHeaderLineHeight = 1.0;
   static const FontWeight twModalHeaderFontWeight = FontWeight.w300;
 
+  // Strong/bold font weight used for markdown/heading emphasis in dark theme
+  static const FontWeight twStrongFontWeight = FontWeight.w600;
+
   // Footer tokens
   static const double twFooterBaseFontSize = 16.0;
 

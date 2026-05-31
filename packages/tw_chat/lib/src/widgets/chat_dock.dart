@@ -305,16 +305,16 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
             child: SizedBox(
               width: launcherStyle.size,
               height: launcherStyle.size,
-              child: TwLinkPill(
-                label: '',
-                leading: Icon(
-                  launcherStyle.icon,
-                  size: launcherStyle.iconSize,
-                  color: effectiveForeground,
+                child: TwLinkPill(
+                  label: '',
+                  leading: Icon(
+                    launcherStyle.icon,
+                    size: launcherStyle.iconSize,
+                    color: effectiveForeground,
+                  ),
+                  tooltip: 'Open chat',
+                  semanticsLabel: 'Open chat',
                 ),
-                tooltip: 'Open chat',
-                semanticsLabel: 'Open chat',
-              ),
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '_dark.dart' as dark;
 import '_light.dart' as light;
 import 'impl.dart';
+import '_styles.dart' as styles;
 
 // Public convenience accessor for the canonical font family token.
 // This allows consumers to import the public `package:tw_primitives/theme.dart`
@@ -27,6 +28,7 @@ class TwTextStyleTokens {
     required this.twModalHeaderFontSize,
     required this.twModalHeaderLineHeight,
     required this.twModalHeaderFontWeight,
+    required this.twStrongFontWeight,
     required this.twFooterBaseFontSize,
     required this.twTransparentSelectionSpacer,
     required this.twHeader1FontSize,
@@ -51,6 +53,7 @@ class TwTextStyleTokens {
   final double twModalHeaderFontSize;
   final double twModalHeaderLineHeight;
   final FontWeight twModalHeaderFontWeight;
+  final FontWeight twStrongFontWeight;
   final double twFooterBaseFontSize;
   final TextStyle twTransparentSelectionSpacer;
   final double twHeader1FontSize;
@@ -80,6 +83,7 @@ class TwTextStyleTokens {
         twModalHeaderFontSize: dark.TwTextStyleTokensDark.twModalHeaderFontSize,
         twModalHeaderLineHeight: dark.TwTextStyleTokensDark.twModalHeaderLineHeight,
         twModalHeaderFontWeight: dark.TwTextStyleTokensDark.twModalHeaderFontWeight,
+        twStrongFontWeight: dark.TwTextStyleTokensDark.twStrongFontWeight,
         twFooterBaseFontSize: dark.TwTextStyleTokensDark.twFooterBaseFontSize,
         twTransparentSelectionSpacer: dark.TwTextStyleTokensDark.twTransparentSelectionSpacer,
         twHeader1FontSize: dark.TwTextStyleTokensDark.twHeader1FontSize,
@@ -105,6 +109,7 @@ class TwTextStyleTokens {
         twModalHeaderFontSize: light.TwTextStyleTokensLight.twModalHeaderFontSize,
         twModalHeaderLineHeight: light.TwTextStyleTokensLight.twModalHeaderLineHeight,
         twModalHeaderFontWeight: light.TwTextStyleTokensLight.twModalHeaderFontWeight,
+        twStrongFontWeight: light.TwTextStyleTokensLight.twStrongFontWeight,
         twFooterBaseFontSize: light.TwTextStyleTokensLight.twFooterBaseFontSize,
         twTransparentSelectionSpacer: light.TwTextStyleTokensLight.twTransparentSelectionSpacer,
         twHeader1FontSize: light.TwTextStyleTokensLight.twHeader1FontSize,
@@ -134,7 +139,11 @@ class TwTextStyles {
 
   /// Convenience: return by [Brightness].
   static TwTextStyles forBrightness(Brightness brightness) {
-    return brightness == Brightness.dark ? TwTextStyles._(TwTextStylesDark()) : TwTextStyles._(TwTextStylesLight());
+    final tokens = TwTextStyleTokens.forBrightness(brightness);
+    final named = _namedFromTokens(tokens);
+    return TwTextStyles._(brightness == Brightness.dark
+      ? TwTextStylesDark(named)
+      : TwTextStylesLight(named));
   }
 
   /// Convenience: return by [BuildContext].
@@ -196,4 +205,33 @@ class TwTextStyles {
 
 extension TwTextStylesBuildContextExtension on BuildContext {
   TwTextStyles get twTextStyles => TwTextStyles.of(this);
+}
+
+styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.NamedTextStyles(
+      fontFamily: tokens.twFontFamily,
+      bodyBaseFontSize: tokens.twBodyBaseFontSize,
+      bodyFontWeight: tokens.twBodyFontWeight,
+      bodyLineHeight: tokens.twBodyLineHeight,
+      bodyMinTextScale: tokens.twBodyMinTextScale,
+      bodyDefaultMaxTextScale: tokens.twBodyDefaultMaxTextScale,
+      bodyScaleIntensity: tokens.twBodyScaleIntensity,
+      sectionBaseFontSize: tokens.twSectionBaseFontSize,
+      sectionLineHeight: tokens.twSectionLineHeight,
+      sectionFontWeight: tokens.twSectionFontWeight,
+      sectionScaleIntensity: tokens.twSectionScaleIntensity,
+      modalHeaderFontSize: tokens.twModalHeaderFontSize,
+      modalHeaderLineHeight: tokens.twModalHeaderLineHeight,
+      modalHeaderFontWeight: tokens.twModalHeaderFontWeight,
+      footerBaseFontSize: tokens.twFooterBaseFontSize,
+      transparentSelectionSpacer: tokens.twTransparentSelectionSpacer,
+      header1FontSize: tokens.twHeader1FontSize,
+      header2FontSize: tokens.twHeader2FontSize,
+      blockquoteFontSize: tokens.twBlockquoteFontSize,
+      smallFontSize: tokens.twSmallFontSize,
+      toolbarFontSize: tokens.twToolbarFontSize,
+      cardTitleScale: tokens.twCardTitleScale,
+    );
+
+extension TwNamedTextStylesBuildContextExtension on BuildContext {
+  styles.NamedTextStyles get twNamedTextStyles => _namedFromTokens(twTextStyleTokens);
 }

@@ -60,9 +60,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   );
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
-  final FontWeight strongFontWeight = config.isDark
-      ? FontWeight.w600
-      : FontWeight.w500;
+  final FontWeight strongFontWeight = tokens.twStrongFontWeight;
   final strongStyle = baseStyle.copyWith(
     fontWeight: strongFontWeight,
     color: lifted.toColor(),

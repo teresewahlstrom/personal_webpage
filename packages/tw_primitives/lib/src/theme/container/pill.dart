@@ -98,7 +98,7 @@ TwLinkPillStyle computeDefaultTwLinkPillStyle({
 /// custom [TwLinkPillStyle] to override appearance.
 class TwLinkPill extends StatelessWidget {
   const TwLinkPill({
-    super.key,
+    Key? key,
     required this.label,
     this.onTap,
     this.leading,
@@ -108,7 +108,10 @@ class TwLinkPill extends StatelessWidget {
     this.tooltip,
     this.tooltipVisible = true,
     this.semanticsLabel,
-  });
+  })  : _externalKey = key,
+        super(key: null);
+
+  final Key? _externalKey;
 
   final String label;
   final VoidCallback? onTap;
@@ -141,20 +144,18 @@ class TwLinkPill extends StatelessWidget {
     // circular when wrapped in a fixed-size parent (e.g., SizedBox.square).
     final EdgeInsetsGeometry effectivePadding = label.isEmpty ? EdgeInsets.zero : resolved.padding;
 
+    final ShapeDecoration decoration = ShapeDecoration(
+      color: resolved.fillColor,
+      shape: StadiumBorder(side: BorderSide(color: resolved.borderColor, width: resolved.borderWidth)),
+    );
+
     Widget content = Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(9999),
-        child: Container(
-          alignment: label.isEmpty ? Alignment.center : null,
+        child: Padding(
           padding: effectivePadding,
-          decoration: BoxDecoration(
-            color: resolved.fillColor,
-            border: Border.all(color: resolved.borderColor, width: resolved.borderWidth),
-            borderRadius: BorderRadius.circular(9999),
-            boxShadow: resolved.shadows,
-          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,7 +165,9 @@ class TwLinkPill extends StatelessWidget {
               if (label.isNotEmpty)
                 Text(
                   label,
-                  style: resolved.textStyle,
+                  style: resolved.textStyle.copyWith(
+                    decoration: resolved.textStyle.decoration ?? TextDecoration.none,
+                  ),
                   strutStyle: const StrutStyle(forceStrutHeight: true, height: 1.0),
                 ),
             ],
@@ -172,6 +175,16 @@ class TwLinkPill extends StatelessWidget {
         ),
       ),
     );
+
+    // Draw the pill decoration at the top-level so tests and callers can
+    // inspect a DecoratedBox when the key is placed on the pill widget.
+    // For icon-only pills (no label) ensure the content is centered so
+    // a surrounding fixed-size parent produces a perfectly circular pill
+    // with the icon centered inside it.
+    if (label.isEmpty) {
+      content = Center(child: content);
+    }
+    content = DecoratedBox(key: _externalKey, decoration: decoration, child: content);
 
     // Optionally provide semantics label for accessibility.
     if (semanticsLabel != null && semanticsLabel!.isNotEmpty) {

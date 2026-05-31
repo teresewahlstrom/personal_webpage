@@ -69,11 +69,12 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     }
 
     final TextSpan measuredText = parsedMarkup == null
-        ? TextSpan(text: _sanitizeTextForMeasurement(rawText), style: style)
-        : parsedMarkup.document.toTextSpan(
-            theme: markupTheme,
-            gestureRecognizerFactory: (_) => null,
-          );
+      ? TextSpan(text: _sanitizeTextForMeasurement(rawText), style: style)
+      : parsedMarkup.document.toTextSpan(
+        theme: markupTheme,
+        gestureRecognizerFactory: (_) => null,
+        allowWidgetSpans: false,
+        );
 
     final painter = TextPainter(
       text: measuredText,
@@ -557,7 +558,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
         maxWidth: maxTextWidth,
         textScaler: MediaQuery.textScalerOf(context),
       ),
-      theme: _transparentMarkupTheme(markupTheme),
+      theme: _transparentMarkupTheme(context, markupTheme),
       maxWidth: maxTextWidth,
       selectable: true,
       chromeVisible: false,
@@ -796,6 +797,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     final textSpan = block.toTextSpan(
       theme: theme,
       gestureRecognizerFactory: (_) => null,
+      allowWidgetSpans: false,
     );
     final painter = TextPainter(
       text: textSpan,
@@ -872,9 +874,9 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     return List<MarkupInline>.unmodifiable(sliced);
   }
 
-  MarkupTheme _transparentMarkupTheme(MarkupTheme theme) {
+  MarkupTheme _transparentMarkupTheme(BuildContext context, MarkupTheme theme) {
     TextStyle transparent(TextStyle style) {
-      return _transparentTextStyle(style);
+      return _transparentTextStyle(context, style);
     }
 
     final linkPillStyle = theme.linkPillStyle;
@@ -885,6 +887,9 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       strikethroughStyle: transparent(theme.strikethroughStyle),
       underlineStyle: transparent(theme.underlineStyle),
       linkStyle: transparent(theme.linkStyle),
+      // Transparent pill variant used for chrome-free/selectable rendering
+      // inside chat messages: makes pill visuals invisible while preserving
+      // layout so selectable text and measurement remain consistent.
       linkPillStyle: linkPillStyle?.copyWith(
         fillColor: Colors.transparent,
         borderColor: Colors.transparent,
@@ -898,9 +903,9 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     );
   }
 
-  TextStyle _transparentTextStyle(TextStyle style) {
+  TextStyle _transparentTextStyle(BuildContext context, TextStyle style) {
     const Color transparent = Colors.transparent;
-    return TwTextStyles.forBrightness(Brightness.light).adaptBase(
+    return TwTextStyles.of(context).adaptBase(
       style,
       color: transparent,
       backgroundColor: transparent,
