@@ -33,5 +33,6 @@ class TwTextStyleTokensLight {
   static const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
   static const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
   static const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
+  static const double twCardTitleScale = dark.TwTextStyleTokensDark.twCardTitleScale;
 }
 

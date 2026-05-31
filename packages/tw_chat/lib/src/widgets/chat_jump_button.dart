@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/theme.dart';
 
 import '../config/config.dart';
 
@@ -21,10 +22,13 @@ class ChatJumpButton extends StatelessWidget {
     final tokens = skin.tokens;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final double buttonSize = tokens.jumpToLatestButtonFixedSize;
-    final TextStyle buttonTextStyle = ChatBubbleRules.textStyle(
-      context,
-      textScale,
-    ).copyWith(color: colors.bubbleText, fontWeight: FontWeight.w700);
+    final TextStyle buttonTextStyle = TwTextStyles.of(context).buttonLabelFrom(
+      ChatBubbleRules.textStyle(
+        context,
+        textScale,
+      ),
+      color: colors.bubbleText,
+    );
     final BorderSide buttonBorder = BorderSide(
       color: ChatComposerLayout.borderColor(context),
       width: 1.0,

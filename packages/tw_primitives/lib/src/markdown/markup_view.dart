@@ -12,7 +12,6 @@ class MarkupView extends StatelessWidget {
     required this.gestureRecognizerFactory,
     this.selectable = true,
     this.chromeVisible = true,
-    this.blockquoteRailColor,
     this.textAlign = TextAlign.start,
   });
 
@@ -21,7 +20,6 @@ class MarkupView extends StatelessWidget {
   final LinkGestureRecognizerFactory gestureRecognizerFactory;
   final bool selectable;
   final bool chromeVisible;
-  final Color? blockquoteRailColor;
   final TextAlign textAlign;
 
   @override
@@ -33,7 +31,6 @@ class MarkupView extends StatelessWidget {
       gestureRecognizerFactory: gestureRecognizerFactory,
       selectable: selectable,
       chromeVisible: chromeVisible,
-      blockquoteRailColor: blockquoteRailColor,
       textAlign: textAlign,
     ).build();
   }

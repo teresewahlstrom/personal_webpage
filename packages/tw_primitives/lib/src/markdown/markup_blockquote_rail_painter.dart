@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'markup_view_style.dart';
 
 class BlockQuoteRailPainter extends CustomPainter {
   const BlockQuoteRailPainter({
@@ -25,7 +26,7 @@ class BlockQuoteRailPainter extends CustomPainter {
       ..strokeWidth = railThickness
       ..strokeCap = StrokeCap.square;
 
-    const double verticalOvershoot = 3.0;
+    const double verticalOvershoot = MarkupViewStyle.blockquoteRailVerticalOverhang;
     final double railX = railInset + railThickness / 2;
     final double topY = -verticalOvershoot;
     final double bottomY = size.height + verticalOvershoot;

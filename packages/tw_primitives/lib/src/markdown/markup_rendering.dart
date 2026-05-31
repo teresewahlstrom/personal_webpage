@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/theme.dart';
 
 import 'markup_ast.dart';
 
@@ -129,11 +130,7 @@ extension MarkupInlineRendering on MarkupInline {
             // Hidden span for selection/copy
             TextSpan(
               text: text,
-              style: effectiveStyle.copyWith(
-                color: Colors.transparent,
-                height: 0.01,
-                fontSize: 0.01,
-              ),
+              style: effectiveStyle.merge(twTransparentSelectionSpacer),
               recognizer: gestureRecognizerFactory(href!),
               semanticsLabel: null,
             ),

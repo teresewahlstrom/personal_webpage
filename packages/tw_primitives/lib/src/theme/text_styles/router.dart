@@ -19,6 +19,17 @@ const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
 const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
 const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
 const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
+// Line-heights and default weights
+const double twBodyLineHeight = dark.TwTextStyleTokensDark.twBodyLineHeight;
+const FontWeight twBodyFontWeight = dark.TwTextStyleTokensDark.twBodyFontWeight;
+const double twSectionLineHeight = dark.TwTextStyleTokensDark.twSectionLineHeight;
+const FontWeight twSectionFontWeight = dark.TwTextStyleTokensDark.twSectionFontWeight;
+const double twModalHeaderLineHeight = dark.TwTextStyleTokensDark.twModalHeaderLineHeight;
+const FontWeight twModalHeaderFontWeight = dark.TwTextStyleTokensDark.twModalHeaderFontWeight;
+// Transparent spacer style for selection/copy use (contextless).
+const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
+// Professional card title scale (multiplier applied to H2/base header size).
+const double twCardTitleScale = dark.TwTextStyleTokensDark.twCardTitleScale;
 
 /// Router that exposes text-style helpers per-brightness (light/dark).
 class TwTextStyles {
@@ -51,6 +62,41 @@ class TwTextStyles {
       _impl.footerBodyForContext(context: context, color: color);
 
   TextStyle get transparentSelectionSpacer => _impl.transparentSelectionSpacer;
+
+  /// Adapt an existing [TextStyle] using centralized copy rules.
+  /// Use this to avoid calling `.copyWith` outside of the `text_styles` package.
+  TextStyle adaptBase(TextStyle base,
+      {Color? color,
+      double? fontSize,
+      FontWeight? fontWeight,
+      double? height,
+      FontStyle? fontStyle,
+      TextDecoration? decoration,
+      double? decorationThickness,
+      Color? backgroundColor,
+      Color? decorationColor,
+      List<Shadow>? shadows}) {
+    return _impl.adaptBase(
+      base,
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      decorationThickness: decorationThickness,
+      backgroundColor: backgroundColor,
+      decorationColor: decorationColor,
+      shadows: shadows,
+    );
+  }
+
+  // Convenience named helpers to keep callers succinct.
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) => _impl.buttonLabelFrom(base, color: color);
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) => _impl.cardTitleFrom(base, color: color);
+  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) => _impl.toolbarLabelFrom(base, color: color);
+  TextStyle hintFrom(TextStyle base, {Color? color}) => _impl.hintFrom(base, color: color);
+  TextStyle smallFrom(TextStyle base, {Color? color}) => _impl.smallFrom(base, color: color);
 }
 
 extension TwTextStylesBuildContextExtension on BuildContext {

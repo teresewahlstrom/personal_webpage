@@ -355,21 +355,10 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           _title,
-          style: _buildProjectCardMarkdownSurface(context).theme
-              .headingStyleResolver(1)
-              .copyWith(
-                fontSize:
-                    _buildProjectCardMarkdownSurface(
-                          context,
-                        ).theme.headingStyleResolver(1).fontSize !=
-                        null
-                    ? _buildProjectCardMarkdownSurface(
-                            context,
-                          ).theme.headingStyleResolver(1).fontSize! *
-                          (2.5 / 2.1)
-                    : null,
-                color: context.twColors.pageBodyText,
-              ),
+          style: TwTextStyles.of(context).sectionTitleForContext(
+            context: context,
+            color: context.twColors.pageBodyText,
+          ),
         ),
         const _SelectableCopyBreak(height: 10),
         Text(
@@ -478,10 +467,6 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
         ],
       ),
     ),
-    overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
-      context: context,
-      color: chatSkin.colors.bubbleText,
-    ),
   );
 }
 
@@ -579,11 +564,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     final MarkdownSurfaceStyle markdownSurface =
         _buildProjectCardMarkdownSurface(context);
     final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
-    final TextStyle cardTitleStyle = h2.copyWith(
-      fontSize: (h2.fontSize ?? 18) - 5.0,
-      letterSpacing: 1.15,
-      wordSpacing: 2.2,
-    );
+    final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
     final Color baseIconColor =
         TwTextStyles.of(context).bodyForContext(
           context: context,
@@ -746,7 +727,6 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
       textAlign: TextAlign.start,
       selectable: widget.selectable,
       chromeVisible: true,
-      blockquoteRailColor: markdownSurface.blockquoteRailColor,
     );
   }
 }
@@ -822,21 +802,10 @@ class _SocialSection extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           title,
-          style: _buildProjectCardMarkdownSurface(context).theme
-              .headingStyleResolver(1)
-              .copyWith(
-                fontSize:
-                    _buildProjectCardMarkdownSurface(
-                          context,
-                        ).theme.headingStyleResolver(1).fontSize !=
-                        null
-                    ? _buildProjectCardMarkdownSurface(
-                            context,
-                          ).theme.headingStyleResolver(1).fontSize! *
-                          (2.5 / 2.1)
-                    : null,
-                color: context.twColors.pageBodyText,
-              ),
+          style: TwTextStyles.of(context).sectionTitleForContext(
+            context: context,
+            color: context.twColors.pageBodyText,
+          ),
         ),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[

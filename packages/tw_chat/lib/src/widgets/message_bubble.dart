@@ -457,10 +457,6 @@ MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(BuildContext context) {
         shadows: <BoxShadow>[skin.tokens.jumpToLatestButtonShadow(colors)],
       ),
     ),
-    overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
-      context: context,
-      color: colors.bubbleText,
-    ),
   );
 }
 
@@ -555,7 +551,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
         gestureRecognizerFactory: gestureRecognizerFactory,
         selectable: true,
         chromeVisible: true,
-        blockquoteRailColor: markdownSurface.blockquoteRailColor,
       );
     }
 
@@ -565,7 +560,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       maxWidth: maxTextWidth,
       selectable: false,
       chromeVisible: true,
-      blockquoteRailColor: markdownSurface.blockquoteRailColor,
     );
     final Widget selectionLayer = _buildTruncatedMarkupLayer(
       document: _visibleSelectionDocument(
@@ -578,7 +572,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
       maxWidth: maxTextWidth,
       selectable: true,
       chromeVisible: false,
-      blockquoteRailColor: colors.transparent,
     );
     final double fadeHeight =
         truncatedContentHeight < tokens.bubbleTruncationMaxFadeHeight
@@ -687,7 +680,6 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
     required double maxWidth,
     required bool selectable,
     required bool chromeVisible,
-    required Color blockquoteRailColor,
   }) {
     return ClipRect(
       child: OverflowBox(
@@ -704,8 +696,7 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
             gestureRecognizerFactory: gestureRecognizerFactory,
             selectable: selectable,
             chromeVisible: chromeVisible,
-            blockquoteRailColor: blockquoteRailColor,
-          ),
+              ),
         ),
       ),
     );
@@ -919,7 +910,8 @@ class _TruncatedMessageBubbleMarkupRenderer extends StatelessWidget {
 
   TextStyle _transparentTextStyle(TextStyle style) {
     const Color transparent = Colors.transparent;
-    return style.copyWith(
+    return TwTextStyles.forBrightness(Brightness.light).adaptBase(
+      style,
       color: transparent,
       backgroundColor: transparent,
       decorationColor: transparent,

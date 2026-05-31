@@ -49,10 +49,6 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
         isDark: context.twIsDark,
         textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       ),
-      overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
-        context: context,
-        color: context.twColors.pageBodyText,
-      ),
     );
   }
 
@@ -71,7 +67,6 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
           textAlign: TextAlign.start,
           selectable: true,
           chromeVisible: true,
-          blockquoteRailColor: markdownSurface.blockquoteRailColor,
         ),
       ),
     );

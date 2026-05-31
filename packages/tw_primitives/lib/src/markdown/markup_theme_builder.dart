@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_primitives/theme.dart';
 // Use public tokens from the text styles router rather than internal files.
 import 'markup_rendering.dart';
+import 'markup_view_style.dart';
 
 class MarkdownThemeConfig {
   const MarkdownThemeConfig({
@@ -23,9 +24,12 @@ class MarkdownThemeConfig {
   final MarkupLinkPillStyle? linkPillStyle;
 }
 
-const double _underlineThickness = 1.9;
-const double _strikethroughLightThickness = 2.8;
-const double _strikethroughDarkThickness = 5.9;
+// Use canonical markdown decoration thickness constants from
+// `markup_view_style.dart` to avoid duplicated values. Refer to the
+// static members on `MarkupViewStyle`.
+const double _underlineThickness = MarkupViewStyle.underlineThickness;
+const double _strikethroughLightThickness = MarkupViewStyle.strikethroughLightThickness;
+const double _strikethroughDarkThickness = MarkupViewStyle.strikethroughDarkThickness;
 
 class MarkdownSurfaceStyle {
   const MarkdownSurfaceStyle({
@@ -39,8 +43,8 @@ class MarkdownSurfaceStyle {
   final Color blockquoteRailColor;
 }
 
-MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config, {TextStyle? overrideBaseStyle}) {
-  final baseStyle = overrideBaseStyle ?? TwTextStyles.forBrightness(
+MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
+  final baseStyle = TwTextStyles.forBrightness(
     config.isDark ? Brightness.dark : Brightness.light,
   ).bodyForContextless(
     color: config.baseTextColor,

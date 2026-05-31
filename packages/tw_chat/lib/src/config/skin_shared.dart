@@ -179,17 +179,13 @@ class ChatSkinTokens {
   final double composerCornerAccentStroke = 2.0;
   final double composerCornerAccentSegment = 12.0;
   final double composerSendIconSize = 25.0;
-  final double jumpToLatestButtonRightInset = 14.0;
+  final double jumpToLatestButtonRightInset = twChatJumpToLatestButtonRightInset;
   // 2/3 of the original 5.0 — keeps the button closer to the composer edge.
-  final double jumpToLatestButtonBottomInset = 10.0 / 3.0;
-  final double jumpToLatestButtonFixedSize = 34.0;
-  final double jumpToLatestButtonIconRatio = 0.55;
-  final double jumpToLatestButtonElevation = 0.0;
-  final EdgeInsets jumpToLatestButtonPadding = EdgeInsets.zero;
-  final double markupUnderlineThickness = 1.75;
-  final double markupDecorationThicknessBias = 0.15;
-  final double markupStrikethroughLightThicknessBias = 0.9;
-  final double markupStrikethroughDarkThicknessBias = 4.0;
+  final double jumpToLatestButtonBottomInset = twChatJumpToLatestButtonBottomInset;
+  final double jumpToLatestButtonFixedSize = twChatJumpToLatestButtonFixedSize;
+  final double jumpToLatestButtonIconRatio = twChatJumpToLatestButtonIconRatio;
+  final double jumpToLatestButtonElevation = twChatJumpToLatestButtonElevation;
+  final EdgeInsets jumpToLatestButtonPadding = twChatJumpToLatestButtonPadding;
 
   final double bubbleTruncationMaxFadeHeight = 40.0;
   final double bubbleTruncationOverlayMidAlphaUser = 0.28;
@@ -313,20 +309,20 @@ class ChatSkinTextStyles {
 
   TextStyle appBarTitleStyle(double textScale, ChatSkinColors colors) {
     final base = TwTextStyles.forBrightness(Brightness.light)
-        .bodyForContextless(color: colors.bubbleText, textScale: 1.0)
-        .copyWith(
-      fontSize: twSmallFontSize,
-      height: 1.12,
-      fontWeight: FontWeight.w400,
+        .bodyForContextless(color: colors.bubbleText, textScale: 1.0);
+    final baseAdjusted = TwTextStyles.forBrightness(Brightness.light).smallFrom(
+      base,
     );
     final scale = _resolvedTextScale(
       textScale,
       maxTextScale: defaultMaxTextScale,
     );
-    return base.copyWith(
+    // Apply color and scaled size/height using adaptBase for the final adjustments.
+    return TwTextStyles.forBrightness(Brightness.light).adaptBase(
+      baseAdjusted,
       color: colors.bubbleText,
-      fontSize: _scaledFontSize(base.fontSize!, scale, 0.7),
-      height: _scaledLineHeight(base.height!, scale, 0.18),
+      fontSize: _scaledFontSize(baseAdjusted.fontSize!, scale, 0.7),
+      height: _scaledLineHeight(baseAdjusted.height!, scale, 0.18),
     );
   }
 

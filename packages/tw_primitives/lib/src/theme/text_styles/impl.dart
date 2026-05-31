@@ -10,6 +10,22 @@ abstract class TwTextStylesImpl {
   TextStyle modalHeaderTitle({required Color color});
   TextStyle modalCloseGlyph({required Color color});
   TextStyle footerBodyForContext({required BuildContext context, required Color color});
+  TextStyle adaptBase(TextStyle base,
+      {Color? color,
+      double? fontSize,
+      FontWeight? fontWeight,
+      double? height,
+      FontStyle? fontStyle,
+      TextDecoration? decoration,
+      double? decorationThickness,
+      Color? backgroundColor,
+      Color? decorationColor,
+      List<Shadow>? shadows});
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color});
+  TextStyle cardTitleFrom(TextStyle base, {Color? color});
+  TextStyle toolbarLabelFrom(TextStyle base, {Color? color});
+  TextStyle hintFrom(TextStyle base, {Color? color});
+  TextStyle smallFrom(TextStyle base, {Color? color});
   TextStyle get transparentSelectionSpacer;
 }
 
@@ -73,6 +89,59 @@ class TwTextStylesDark implements TwTextStylesImpl {
   TextStyle modalCloseGlyph({required Color color}) => const TextStyle(fontSize: dark.TwTextStyleTokensDark.twModalHeaderFontSize, height: 1).copyWith(color: color);
 
   @override
+  TextStyle adaptBase(TextStyle base,
+      {Color? color,
+      double? fontSize,
+      FontWeight? fontWeight,
+      double? height,
+      FontStyle? fontStyle,
+      TextDecoration? decoration,
+      double? decorationThickness,
+      Color? backgroundColor,
+      Color? decorationColor,
+      List<Shadow>? shadows}) {
+    return base.copyWith(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      decorationThickness: decorationThickness,
+      backgroundColor: backgroundColor,
+      decorationColor: decorationColor,
+      shadows: shadows,
+    );
+  }
+
+  @override
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontWeight: FontWeight.w700);
+  }
+
+  @override
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
+    // Apply card title scale relative to base font size (fall back to H2 token).
+    final double baseSize = base.fontSize ?? dark.TwTextStyleTokensDark.twHeader2FontSize;
+    return adaptBase(base, color: color, fontSize: baseSize * dark.TwTextStyleTokensDark.twCardTitleScale);
+  }
+
+  @override
+  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontSize: dark.TwTextStyleTokensDark.twToolbarFontSize, fontWeight: FontWeight.w300);
+  }
+
+  @override
+  TextStyle hintFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, height: 1.4);
+  }
+
+  @override
+  TextStyle smallFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontSize: dark.TwTextStyleTokensDark.twSmallFontSize);
+  }
+
+  @override
   TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
     final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(dark.TwTextStyleTokensDark.twFooterBaseFontSize) / dark.TwTextStyleTokensDark.twFooterBaseFontSize);
     return TextStyle(
@@ -80,6 +149,7 @@ class TwTextStylesDark implements TwTextStylesImpl {
       fontWeight: dark.TwTextStyleTokensDark.twBodyFontWeight,
       fontSize: _scaledFontSize(dark.TwTextStyleTokensDark.twFooterBaseFontSize, resolvedTextScale),
       height: dark.TwTextStyleTokensDark.twBodyLineHeight,
+      decoration: TextDecoration.none,
       color: color,
     );
   }
@@ -114,8 +184,50 @@ class TwTextStylesLight implements TwTextStylesImpl {
   TextStyle modalCloseGlyph({required Color color}) => _dark.modalCloseGlyph(color: color);
 
   @override
+  TextStyle adaptBase(TextStyle base,
+      {Color? color,
+      double? fontSize,
+      FontWeight? fontWeight,
+      double? height,
+      FontStyle? fontStyle,
+      TextDecoration? decoration,
+      double? decorationThickness,
+      Color? backgroundColor,
+      Color? decorationColor,
+      List<Shadow>? shadows}) {
+    return _dark.adaptBase(
+      base,
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      decorationThickness: decorationThickness,
+      backgroundColor: backgroundColor,
+      decorationColor: decorationColor,
+      shadows: shadows,
+    );
+  }
+
+  @override
   TextStyle footerBodyForContext({required BuildContext context, required Color color}) => _dark.footerBodyForContext(context: context, color: color);
 
   @override
   TextStyle get transparentSelectionSpacer => _dark.transparentSelectionSpacer;
+
+  @override
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) => _dark.buttonLabelFrom(base, color: color);
+
+  @override
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) => _dark.cardTitleFrom(base, color: color);
+
+  @override
+  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) => _dark.toolbarLabelFrom(base, color: color);
+
+  @override
+  TextStyle hintFrom(TextStyle base, {Color? color}) => _dark.hintFrom(base, color: color);
+
+  @override
+  TextStyle smallFrom(TextStyle base, {Color? color}) => _dark.smallFrom(base, color: color);
 }

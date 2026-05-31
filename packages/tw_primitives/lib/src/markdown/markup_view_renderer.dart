@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_primitives/theme.dart';
 import '../svg/tw_svg_asset.dart';
 
 import 'markup_ast.dart';
@@ -14,7 +15,6 @@ class MarkupViewRenderer {
     required this.gestureRecognizerFactory,
     required this.selectable,
     required this.chromeVisible,
-    required this.blockquoteRailColor,
     required this.textAlign,
   });
 
@@ -24,17 +24,12 @@ class MarkupViewRenderer {
   final LinkGestureRecognizerFactory gestureRecognizerFactory;
   final bool selectable;
   final bool chromeVisible;
-  final Color? blockquoteRailColor;
   final TextAlign textAlign;
 
-  static const MarkupViewStyle _style = kMarkupViewStyle;
-  static const String _unorderedListMarkerAssetPath =
+    static const MarkupViewStyle _style = kMarkupViewStyle;
+    static const String _unorderedListMarkerAssetPath =
       'assets/images/arrow2.svg';
-  static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
-  static const double _unorderedListMarkerSizeFactor = 0.4;
-  static const double _unorderedListMarkerVerticalOffsetFactor = 0.55;
-  static const double _blockquoteRailVerticalOverhang = 3.0;
-  static const double _blockquoteInnerVerticalPadding = 2.0;
+    static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
 
   Widget build() {
     return _renderLayoutNode(
@@ -120,21 +115,20 @@ class MarkupViewRenderer {
           headingStyleResolver: (int level) =>
               theme.headingStyleResolver(level).merge(theme.blockquoteStyle),
         );
-        final Color railColor = chromeVisible
-            ? (blockquoteRailColor ??
-                  theme.baseStyle.color ??
-                  DefaultTextStyle.of(context).style.color ??
-                  Colors.transparent)
-            : Colors.transparent;
+          final Color railColor = chromeVisible
+          ? (theme.baseStyle.color ??
+            DefaultTextStyle.of(context).style.color ??
+            Colors.transparent)
+          : Colors.transparent;
         final double fontSize = theme.baseStyle.fontSize ?? 12.0;
         return _MarkupLayoutBlockquoteNode(
           indent: fontSize * _style.blockquoteIndentFactor * 3.0,
           railColor: railColor,
-          contentPadding: const EdgeInsets.fromLTRB(
+          contentPadding: EdgeInsets.fromLTRB(
             12,
-            _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+            MarkupViewStyle.blockquoteRailVerticalOverhang + MarkupViewStyle.blockquoteInnerVerticalPadding,
             0,
-            _blockquoteRailVerticalOverhang + _blockquoteInnerVerticalPadding,
+            MarkupViewStyle.blockquoteRailVerticalOverhang + MarkupViewStyle.blockquoteInnerVerticalPadding,
           ),
           child: _buildLayoutDocument(
             MarkupDocument(quote.blocks),
@@ -326,7 +320,7 @@ class MarkupViewRenderer {
     required MarkupBlock nextBlock,
     required bool inListItem,
   }) {
-    final double fontSize = theme.baseStyle.fontSize ?? 12.0;
+    final double fontSize = theme.baseStyle.fontSize ?? twBodyBaseFontSize;
 
     double spacing = fontSize * _style.blockBaseSpacingFactor;
     if (inListItem && nextBlock is MarkupListBlock) {
@@ -377,7 +371,7 @@ class MarkupViewRenderer {
   }
 
   double _listItemSpacing(TextStyle baseStyle, {required int listDepth}) {
-    final double fontSize = baseStyle.fontSize ?? 12.0;
+    final double fontSize = baseStyle.fontSize ?? twBodyBaseFontSize; 
 
     double spacing = fontSize * _style.listItemBaseSpacingFactor;
     if (listDepth <= 0) {
@@ -416,10 +410,10 @@ class MarkupViewRenderer {
   Widget _buildUnorderedListAssetMarker(TextStyle baseStyle) {
     final double fontSize = baseStyle.fontSize ?? 12.0;
     final double markerSize = _snapToDevicePixels(
-      fontSize * _unorderedListMarkerSizeFactor,
+      fontSize * MarkupViewStyle.unorderedListMarkerSizeFactor,
     );
     final double verticalOffset = _snapToDevicePixels(
-      fontSize * _unorderedListMarkerVerticalOffsetFactor,
+      fontSize * MarkupViewStyle.unorderedListMarkerVerticalOffsetFactor,
     );
     final Color? markerColor = baseStyle.color;
 

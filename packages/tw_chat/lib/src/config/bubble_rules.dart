@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
-import 'package:tw_primitives/theme.dart';
 
 import '../utils/math.dart';
 import 'composer_layout.dart';
@@ -54,10 +53,6 @@ class ChatBubbleRules {
         linkColor: skin.colors.markupLink,
         isDark: ChatSkin.isDarkOf(context),
         textScale: textScale,
-      ),
-      overrideBaseStyle: TwTextStyles.of(context).bodyForContext(
-        context: context,
-        color: skin.colors.bubbleText,
       ),
     ).bodyTextStyle;
   }

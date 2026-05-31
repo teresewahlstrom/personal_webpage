@@ -36,6 +36,9 @@ class TwTextStyleTokensDark {
   static const double twSmallFontSize = 13.0;
   static const double twToolbarFontSize = 12.0;
 
+  // Professional card title scale relative to H2/base header size
+  static const double twCardTitleScale = 0.99;
+
   // Utility
   static const TextStyle twTransparentSelectionSpacer = TextStyle(
     color: Colors.transparent,

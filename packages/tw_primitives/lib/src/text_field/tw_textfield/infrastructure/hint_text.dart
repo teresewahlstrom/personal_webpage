@@ -43,45 +43,52 @@ class StyledHintBuilder {
 /// Creates default [TextStyles] for hint text in a super text field.
 TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
   // Use centralized text-style router for hint defaults, then adjust where necessary.
-  TextStyle newStyle = TwTextStyles.forBrightness(Brightness.light)
-      .bodyForContextless(color: Colors.grey, textScale: 1.0)
-      .copyWith(height: 1.4);
+    TextStyle newStyle = TwTextStyles.forBrightness(Brightness.light)
+      .bodyForContextless(color: Colors.grey, textScale: 1.0);
+    newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(newStyle, height: 1.4);
 
   for (final attribution in attributions) {
     if (attribution == header1Attribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         fontSize: twHeader1FontSize,
         fontWeight: FontWeight.bold,
         height: 1.0,
       );
     } else if (attribution == header2Attribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         fontSize: twHeader2FontSize,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF888888),
         height: 1.0,
       );
     } else if (attribution == blockquoteAttribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         fontSize: twBlockquoteFontSize,
         fontWeight: FontWeight.bold,
         height: 1.4,
         color: Colors.grey,
       );
     } else if (attribution == boldAttribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         fontWeight: FontWeight.bold,
       );
     } else if (attribution == italicsAttribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         fontStyle: FontStyle.italic,
       );
     } else if (attribution == strikethroughAttribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         decoration: TextDecoration.lineThrough,
       );
     } else if (attribution is LinkAttribution) {
-      newStyle = newStyle.copyWith(
+      newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
+        newStyle,
         color: Colors.lightBlue,
         decoration: TextDecoration.underline,
       );
