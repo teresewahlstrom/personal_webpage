@@ -70,8 +70,8 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
     required VoidCallback onPressed,
   }) {
     final labelStyle = TwTextStyles.of(context)
-        .bodyForContext(context: context, color: context.twColors.toolbarColor)
-        .copyWith(fontSize: 12, fontWeight: FontWeight.w300);
+      .bodyForContext(context: context, color: context.twColors.toolbarColor)
+      .copyWith(fontSize: twToolbarFontSize, fontWeight: FontWeight.w300);
 
     return TextButton(
       onPressed: onPressed,

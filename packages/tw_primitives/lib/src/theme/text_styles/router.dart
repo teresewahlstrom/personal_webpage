@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/src/theme/text_styles/_light.dart' as light;
 import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
 import 'impl.dart';
 
 // Public convenience accessor for the canonical font family token.
 // This allows consumers to import the public `package:tw_primitives/theme.dart`
 // and use `twFontFamily` without reaching into `lib/src` implementation files.
-const String twFontFamily = dark.twFontFamily;
+const String twFontFamily = dark.TwTextStyleTokensDark.twFontFamily;
+
+// Expose core base-size tokens publicly so other packages can compute scales
+// without importing internal implementation files.
+const double twBodyBaseFontSize = dark.TwTextStyleTokensDark.twBodyBaseFontSize;
+const double twSectionBaseFontSize = dark.TwTextStyleTokensDark.twSectionBaseFontSize;
+const double twFooterBaseFontSize = dark.TwTextStyleTokensDark.twFooterBaseFontSize;
+const double twModalHeaderFontSize = dark.TwTextStyleTokensDark.twModalHeaderFontSize;
+const double twBodyDefaultMaxTextScale = dark.TwTextStyleTokensDark.twBodyDefaultMaxTextScale;
+const double twHeader1FontSize = dark.TwTextStyleTokensDark.twHeader1FontSize;
+const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
+const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
+const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
+const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
 
 /// Router that exposes text-style helpers per-brightness (light/dark).
 class TwTextStyles {
@@ -16,19 +28,19 @@ class TwTextStyles {
 
   /// Convenience: return by [Brightness].
   static TwTextStyles forBrightness(Brightness brightness) {
-    return brightness == Brightness.dark ? TwTextStyles._(dark.TwTextStylesDark()) : TwTextStyles._(light.TwTextStylesLight());
+    return brightness == Brightness.dark ? TwTextStyles._(TwTextStylesDark()) : TwTextStyles._(TwTextStylesLight());
   }
 
   /// Convenience: return by [BuildContext].
   static TwTextStyles of(BuildContext context) => TwTextStyles.forBrightness(Theme.of(context).brightness);
 
-  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = 17.0}) =>
+  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = twBodyBaseFontSize}) =>
       _impl.bodyForContext(context: context, color: color, baseSize: baseSize);
 
   TextStyle bodyForContextless({required Color color, required double textScale}) =>
       _impl.bodyForContextless(color: color, textScale: textScale);
 
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = 40.0}) =>
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = twSectionBaseFontSize}) =>
       _impl.sectionTitleForContext(context: context, color: color, baseSize: baseSize);
 
   TextStyle modalHeaderTitle({required Color color}) => _impl.modalHeaderTitle(color: color);

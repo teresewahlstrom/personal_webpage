@@ -315,7 +315,7 @@ class ChatSkinTextStyles {
     final base = TwTextStyles.forBrightness(Brightness.light)
         .bodyForContextless(color: colors.bubbleText, textScale: 1.0)
         .copyWith(
-      fontSize: 13,
+      fontSize: twSmallFontSize,
       height: 1.12,
       fontWeight: FontWeight.w400,
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/theme.dart';
-import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
+// Use public tokens from the text styles router rather than internal files.
 import 'markup_rendering.dart';
 
 class MarkdownThemeConfig {
@@ -13,7 +13,7 @@ class MarkdownThemeConfig {
   });
 
   static double bodyTextScaleOf(BuildContext context) {
-    return MediaQuery.textScalerOf(context).scale(dark.twBodyBaseFontSize) / dark.twBodyBaseFontSize;
+    return MediaQuery.textScalerOf(context).scale(twBodyBaseFontSize) / twBodyBaseFontSize;
   }
 
   final Color baseTextColor;

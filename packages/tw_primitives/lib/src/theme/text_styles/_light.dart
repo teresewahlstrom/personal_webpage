@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
-import 'impl.dart';
 import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
 
-class TwTextStylesLight implements TwTextStylesImpl {
-  final dark.TwTextStylesDark _dark = dark.TwTextStylesDark();
+/// Light-theme token facade that delegates to the dark canonical tokens by default.
+/// This mirrors the `TwColorsLight`/`TwColorsDark` pattern and provides
+/// matching static token names for symmetry across themes.
+class TwTextStyleTokensLight {
+  static const String twFontFamily = dark.TwTextStyleTokensDark.twFontFamily;
 
-  @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double baseSize = dark.twBodyBaseFontSize}) {
-    return _dark.bodyForContext(context: context, color: color, baseSize: baseSize);
-  }
+  static const double twBodyBaseFontSize = dark.TwTextStyleTokensDark.twBodyBaseFontSize;
+  static const FontWeight twBodyFontWeight = dark.TwTextStyleTokensDark.twBodyFontWeight;
+  static const double twBodyLineHeight = dark.TwTextStyleTokensDark.twBodyLineHeight;
+  static const double twBodyMinTextScale = dark.TwTextStyleTokensDark.twBodyMinTextScale;
+  static const double twBodyDefaultMaxTextScale = dark.TwTextStyleTokensDark.twBodyDefaultMaxTextScale;
+  static const double twBodyScaleIntensity = dark.TwTextStyleTokensDark.twBodyScaleIntensity;
 
-  @override
-  TextStyle bodyForContextless({required Color color, required double textScale}) {
-    return _dark.bodyForContextless(color: color, textScale: textScale);
-  }
+  static const double twSectionBaseFontSize = dark.TwTextStyleTokensDark.twSectionBaseFontSize;
+  static const double twSectionLineHeight = dark.TwTextStyleTokensDark.twSectionLineHeight;
+  static const FontWeight twSectionFontWeight = dark.TwTextStyleTokensDark.twSectionFontWeight;
+  static const double twSectionScaleIntensity = dark.TwTextStyleTokensDark.twSectionScaleIntensity;
 
-  @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double baseSize = dark.twSectionBaseFontSize}) {
-    return _dark.sectionTitleForContext(context: context, color: color, baseSize: baseSize);
-  }
+  static const double twModalHeaderFontSize = dark.TwTextStyleTokensDark.twModalHeaderFontSize;
+  static const double twModalHeaderLineHeight = dark.TwTextStyleTokensDark.twModalHeaderLineHeight;
+  static const FontWeight twModalHeaderFontWeight = dark.TwTextStyleTokensDark.twModalHeaderFontWeight;
 
-  @override
-  TextStyle modalHeaderTitle({required Color color}) => _dark.modalHeaderTitle(color: color);
+  static const double twFooterBaseFontSize = dark.TwTextStyleTokensDark.twFooterBaseFontSize;
 
-  @override
-  TextStyle modalCloseGlyph({required Color color}) => _dark.modalCloseGlyph(color: color);
+  static const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
 
-  @override
-  TextStyle footerBodyForContext({required BuildContext context, required Color color}) => _dark.footerBodyForContext(context: context, color: color);
-
-  @override
-  TextStyle get transparentSelectionSpacer => _dark.transparentSelectionSpacer;
+  // Header/hint tokens
+  static const double twHeader1FontSize = dark.TwTextStyleTokensDark.twHeader1FontSize;
+  static const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
+  static const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
+  static const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
+  static const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
 }
+
