@@ -6,7 +6,7 @@ import '_dark.dart' as dark;
 /// for the requested theme name. Theme name is expected to be either
 /// 'light' or 'dark' (case-insensitive).
 class TwColors {
-  const TwColors._({
+  const TwColors.create({
     required this.transparent,
     required this.bubbleText,
     required this.shellBackground,
@@ -117,123 +117,17 @@ class TwColors {
   /// Get a `TwColors` instance by theme name ('light' | 'dark').
   static TwColors forTheme(String themeName) {
     final t = themeName.toLowerCase();
-    if (t == 'dark') return TwColors._fromDark();
-    return TwColors._fromLight();
+    if (t == 'dark') return dark.twColorsDark;
+    return light.twColorsLight;
   }
 
   /// Convenience: return by [Brightness].
   static TwColors forBrightness(Brightness brightness) {
-    return brightness == Brightness.dark ? TwColors._fromDark() : TwColors._fromLight();
+    return brightness == Brightness.dark ? dark.twColorsDark : light.twColorsLight;
   }
 
   /// Convenience: return by [BuildContext].
   static TwColors of(BuildContext context) => TwColors.forBrightness(context.twBrightness);
-
-  static TwColors _fromLight() => TwColors._(
-        transparent: light.TwColorsLight.transparent,
-        bubbleText: light.TwColorsLight.bubbleText,
-        shellBackground: light.TwColorsLight.shellBackground,
-        shellOuterShadow: light.TwColorsLight.shellOuterShadow,
-        shellOuterBorder: light.TwColorsLight.shellOuterBorder,
-        shellDivider: light.TwColorsLight.shellDivider,
-        botBubbleFill: light.TwColorsLight.botBubbleFill,
-        botBubbleBorder: light.TwColorsLight.botBubbleBorder,
-        bubbleShadow: light.TwColorsLight.bubbleShadow,
-        bubbleCollapseButton: light.TwColorsLight.bubbleCollapseButton,
-        bubbleCollapseButtonIcon: light.TwColorsLight.bubbleCollapseButtonIcon,
-        composerFill: light.TwColorsLight.composerFill,
-        composerBorder: light.TwColorsLight.composerBorder,
-        composerCursor: light.TwColorsLight.composerCursor,
-        composerCornerAccent: light.TwColorsLight.composerCornerAccent,
-        composerSendIcon: light.TwColorsLight.composerSendIcon,
-        textFieldSelection: light.TwColorsLight.textFieldSelection,
-        textFieldCaret: light.TwColorsLight.textFieldCaret,
-        textFieldHint: light.TwColorsLight.textFieldHint,
-        toolbarColor: light.TwColorsLight.toolbarColor,
-        bubbleFadeMaskOpaque: light.TwColorsLight.bubbleFadeMaskOpaque,
-        bubbleFadeMaskSoft: light.TwColorsLight.bubbleFadeMaskSoft,
-        markupLink: light.TwColorsLight.markupLink,
-        scrollbarThumb: light.TwColorsLight.scrollbarThumb,
-        scrollbarThumbInactive: light.TwColorsLight.scrollbarThumbInactive,
-        scrollbarTrack: light.TwColorsLight.scrollbarTrack,
-        // app-level
-        seedColor: light.TwColorsLight.seedColor,
-        pageLoader: light.TwColorsLight.pageLoader,
-        pageBackground: light.TwColorsLight.pageBackground,
-        headerBackground: light.TwColorsLight.headerBackground,
-        buttonBackground: light.TwColorsLight.buttonBackground,
-        footerBackground: light.TwColorsLight.footerBackground,
-        modalBackground: light.TwColorsLight.modalBackground,
-        lineSubtle: light.TwColorsLight.lineSubtle,
-        lineSubtleSecondary: light.TwColorsLight.lineSubtleSecondary,
-        lineSubtleTertiary: light.TwColorsLight.lineSubtleTertiary,
-        modalHeaderBorder: light.TwColorsLight.modalHeaderBorder,
-        pageBodyText: light.TwColorsLight.pageBodyText,
-        pageScrollbarThumb: light.TwColorsLight.pageScrollbarThumb,
-        pageScrollbarThumbInactive: light.TwColorsLight.pageScrollbarThumbInactive,
-        pageScrollbarTrack: light.TwColorsLight.pageScrollbarTrack,
-        projectCardFillAlpha: light.TwColorsLight.projectCardFillAlpha,
-        linkText: light.TwColorsLight.linkText,
-        linkTextHover: light.TwColorsLight.linkTextHover,
-        modalCloseIcon: light.TwColorsLight.modalCloseIcon,
-        modalCloseIconHover: light.TwColorsLight.modalCloseIconHover,
-        lineInteractive: light.TwColorsLight.lineInteractive,
-        lineInteractiveHover: light.TwColorsLight.lineInteractiveHover,
-        modalBarrier: light.TwColorsLight.modalBarrier,
-      );
-
-  static TwColors _fromDark() => TwColors._(
-        transparent: dark.TwColorsDark.transparent,
-        bubbleText: dark.TwColorsDark.bubbleText,
-        shellBackground: dark.TwColorsDark.shellBackground,
-        shellOuterShadow: dark.TwColorsDark.shellOuterShadow,
-        shellOuterBorder: dark.TwColorsDark.shellOuterBorder,
-        shellDivider: dark.TwColorsDark.shellDivider,
-        botBubbleFill: dark.TwColorsDark.botBubbleFill,
-        botBubbleBorder: dark.TwColorsDark.botBubbleBorder,
-        bubbleShadow: dark.TwColorsDark.bubbleShadow,
-        bubbleCollapseButton: dark.TwColorsDark.bubbleCollapseButton,
-        bubbleCollapseButtonIcon: dark.TwColorsDark.bubbleCollapseButtonIcon,
-        composerFill: dark.TwColorsDark.composerFill,
-        composerBorder: dark.TwColorsDark.composerBorder,
-        composerCursor: dark.TwColorsDark.composerCursor,
-        composerCornerAccent: dark.TwColorsDark.composerCornerAccent,
-        composerSendIcon: dark.TwColorsDark.composerSendIcon,
-        textFieldSelection: dark.TwColorsDark.textFieldSelection,
-        textFieldCaret: dark.TwColorsDark.textFieldCaret,
-        textFieldHint: dark.TwColorsDark.textFieldHint,
-        toolbarColor: dark.TwColorsDark.toolbarColor,
-        bubbleFadeMaskOpaque: dark.TwColorsDark.bubbleFadeMaskOpaque,
-        bubbleFadeMaskSoft: dark.TwColorsDark.bubbleFadeMaskSoft,
-        markupLink: dark.TwColorsDark.markupLink,
-        scrollbarThumb: dark.TwColorsDark.scrollbarThumb,
-        scrollbarThumbInactive: dark.TwColorsDark.scrollbarThumbInactive,
-        scrollbarTrack: dark.TwColorsDark.scrollbarTrack,
-        // app-level
-        seedColor: dark.TwColorsDark.seedColor,
-        pageLoader: dark.TwColorsDark.pageLoader,
-        pageBackground: dark.TwColorsDark.pageBackground,
-        headerBackground: dark.TwColorsDark.headerBackground,
-        buttonBackground: dark.TwColorsDark.buttonBackground,
-        footerBackground: dark.TwColorsDark.footerBackground,
-        modalBackground: dark.TwColorsDark.modalBackground,
-        lineSubtle: dark.TwColorsDark.lineSubtle,
-        lineSubtleSecondary: dark.TwColorsDark.lineSubtleSecondary,
-        lineSubtleTertiary: dark.TwColorsDark.lineSubtleTertiary,
-        modalHeaderBorder: dark.TwColorsDark.modalHeaderBorder,
-        pageBodyText: dark.TwColorsDark.pageBodyText,
-        pageScrollbarThumb: dark.TwColorsDark.pageScrollbarThumb,
-        pageScrollbarThumbInactive: dark.TwColorsDark.pageScrollbarThumbInactive,
-        pageScrollbarTrack: dark.TwColorsDark.pageScrollbarTrack,
-        projectCardFillAlpha: dark.TwColorsDark.projectCardFillAlpha,
-        linkText: dark.TwColorsDark.linkText,
-        linkTextHover: dark.TwColorsDark.linkTextHover,
-        modalCloseIcon: dark.TwColorsDark.modalCloseIcon,
-        modalCloseIconHover: dark.TwColorsDark.modalCloseIconHover,
-        lineInteractive: dark.TwColorsDark.lineInteractive,
-        lineInteractiveHover: dark.TwColorsDark.lineInteractiveHover,
-        modalBarrier: dark.TwColorsDark.modalBarrier,
-      );
 }
 
 extension TwColorsBuildContextExtension on BuildContext {

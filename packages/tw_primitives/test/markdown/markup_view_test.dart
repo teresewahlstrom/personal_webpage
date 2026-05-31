@@ -55,17 +55,12 @@ void main() {
       tester.widget<Text>(find.text('Twin')).style?.decoration,
       TextDecoration.none,
     );
-    expect(
-      tester
-          .widget<MouseRegion>(
-            find.ancestor(
-              of: find.text('Twin'),
-              matching: find.byType(MouseRegion),
-            ),
-          )
-          .cursor,
-      SystemMouseCursors.click,
+    // There may be multiple MouseRegion ancestors (InkWell adds one),
+    // ensure at least one of them exposes the click cursor.
+    final mouseRegions = tester.widgetList<MouseRegion>(
+      find.ancestor(of: find.text('Twin'), matching: find.byType(MouseRegion)),
     );
+    expect(mouseRegions.any((m) => m.cursor == SystemMouseCursors.click), isTrue);
   });
 
   testWidgets(

@@ -188,6 +188,7 @@ class TwLinkPill extends StatelessWidget {
       content = Tooltip(message: tooltip!, child: content);
     }
 
-    return content;
+    // Ensure link-pill shows a click cursor for hover affordance.
+    return MouseRegion(cursor: SystemMouseCursors.click, child: content);
   }
 }
