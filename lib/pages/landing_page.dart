@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tw_chat/chat.dart' show ChatComposerLayout, ChatSkin;
+import 'package:tw_chat/chat.dart' show ChatSkin;
 import 'package:tw_keywords/tw_keywords.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/theme.dart';
@@ -447,25 +447,10 @@ class _ExpandableProjectCard extends StatefulWidget {
 }
 
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
-  final chatSkin = ChatSkin.dataOf(context);
-  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
-      baseTextColor: chatSkin.colors.bubbleText,
-      linkColor: chatSkin.colors.markupLink,
       isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
-      linkPillStyle: MarkupLinkPillStyle(
-        fillColor: ChatComposerLayout.fillColor(context),
-        borderColor: ChatComposerLayout.borderColor(context),
-        textStyle: chatSkin.textStyles.appBarTitleStyle(
-          textScale,
-          chatSkin.colors,
-        ),
-        shadows: <BoxShadow>[
-          chatSkin.tokens.jumpToLatestButtonShadow(chatSkin.colors),
-        ],
-      ),
     ),
   );
 }

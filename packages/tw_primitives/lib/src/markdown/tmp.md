@@ -5,7 +5,7 @@ Short answer — consumers can override at two levels: high-level surface config
   - `MarkdownThemeConfig.linkColor` — link color used for link text/underline.
   - `MarkdownThemeConfig.isDark` — brightness hint (affects strong/strike thickness choice).
   - `MarkdownThemeConfig.textScale` — base text scale passed into the builder.
-  - `MarkdownThemeConfig.linkPillStyle` — optional `MarkupLinkPillStyle` to override pill visuals.
+  - `MarkdownThemeConfig.linkPillStyle` — optional `MarkupLinkPillStyle`. When omitted a sensible default is provided by `tw_primitives` so callers don't need to construct one.
   - `buildMarkdownSurfaceStyle(...)` — builds a surface `MarkdownSurfaceStyle`; supply overrides via `MarkdownThemeConfig` (colors, brightness, textScale) instead of injecting a base `TextStyle`.
 
 - Widget-level inputs (when rendering):
@@ -47,8 +47,10 @@ Yes — consumers already override several high-level markdown inputs. Summary w
 
 
 - **Link pill visuals:** `MarkdownThemeConfig.linkPillStyle` / `MarkupLinkPillStyle` (fillColor, borderColor, textStyle, shadows). See landing_page.dart and message_bubble.dart.  
-- **Surface colors / mode / scale:** `MarkdownThemeConfig` fields (`baseTextColor`, `linkColor`, `isDark`, `textScale`) are supplied at each call site (e.g. message_bubble.dart).  
 - **Link behavior:** `gestureRecognizerFactory` passed to `MarkupView` to control link handling. Example: landing_page.dart and message_bubble.dart.  
+
+
+- **Surface colors / mode / scale:** `MarkdownThemeConfig` fields (`baseTextColor`, `linkColor`, `isDark`, `textScale`) are supplied at each call site (e.g. message_bubble.dart).  
 - **Interaction flags:** `selectable` and `chromeVisible` are set by consumers (e.g. message bubbles set selectable true/false and chromeVisible true/false). See message_bubble.dart.  
 - **Full-theme overrides / tweaks:** Some code builds or mutates a `MarkupTheme` directly for special cases (e.g. `_transparentMarkupTheme` in message_bubble.dart and tests that construct `MarkupTheme`).
 

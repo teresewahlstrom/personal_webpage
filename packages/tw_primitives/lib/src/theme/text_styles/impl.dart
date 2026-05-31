@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
+import '_dark.dart' as dark;
 // NOTE: keep this file minimal — implementations live in per-brightness files.
 
 /// Internal interface implemented by per-brightness text-style providers.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/src/theme/colors/_light.dart' as light;
-import 'package:tw_primitives/src/theme/colors/_dark.dart' as dark;
+import '_light.dart' as light;
+import '_dark.dart' as dark;
 
 /// Simple router that returns a collection of primitive theme colors
 /// for the requested theme name. Theme name is expected to be either

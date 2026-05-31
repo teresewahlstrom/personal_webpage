@@ -46,11 +46,8 @@ class ChatBubbleRules {
       ChatSkin.dataOf(context).colors.bubbleCollapseButtonIcon;
 
   static TextStyle textStyle(BuildContext context, double textScale) {
-    final skin = ChatSkin.dataOf(context);
     return buildMarkdownSurfaceStyle(
       MarkdownThemeConfig(
-        baseTextColor: skin.colors.bubbleText,
-        linkColor: skin.colors.markupLink,
         isDark: ChatSkin.isDarkOf(context),
         textScale: textScale,
       ),

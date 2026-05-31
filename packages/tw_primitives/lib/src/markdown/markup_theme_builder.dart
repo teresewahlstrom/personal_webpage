@@ -6,8 +6,8 @@ import 'markup_view_style.dart';
 
 class MarkdownThemeConfig {
   const MarkdownThemeConfig({
-    required this.baseTextColor,
-    required this.linkColor,
+    this.baseTextColor,
+    this.linkColor,
     required this.isDark,
     this.textScale = 1.0,
     this.linkPillStyle,
@@ -17,11 +17,11 @@ class MarkdownThemeConfig {
     return MediaQuery.textScalerOf(context).scale(twBodyBaseFontSize) / twBodyBaseFontSize;
   }
 
-  final Color baseTextColor;
-  final Color linkColor;
+  final Color? baseTextColor;
+  final Color? linkColor;
   final bool isDark;
   final double textScale;
-  final MarkupLinkPillStyle? linkPillStyle;
+  final TwLinkPillStyle? linkPillStyle;
 }
 
 // Use canonical markdown decoration thickness constants from
@@ -44,13 +44,18 @@ class MarkdownSurfaceStyle {
 }
 
 MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
+  final TwColors colors = TwColors.forBrightness(
+    config.isDark ? Brightness.dark : Brightness.light,
+  );
+  final Color baseColor = config.baseTextColor ?? colors.pageBodyText;
+  final Color linkColor = config.linkColor ?? colors.linkText;
+
   final baseStyle = TwTextStyles.forBrightness(
     config.isDark ? Brightness.dark : Brightness.light,
   ).bodyForContextless(
-    color: config.baseTextColor,
+    color: baseColor,
     textScale: config.textScale,
   );
-  final baseColor = config.baseTextColor;
   final hsl = HSLColor.fromColor(baseColor);
   final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
   final FontWeight strongFontWeight = config.isDark
@@ -77,11 +82,41 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   );
 
   final linkStyle = baseStyle.copyWith(
-    color: config.linkColor,
+    color: linkColor,
     decoration: TextDecoration.underline,
-    decorationColor: config.linkColor,
+    decorationColor: linkColor,
     decorationThickness: _underlineThickness,
   );
+
+  // Provide a default pill style so consumers don't need to pass one.
+  // Derive pill shadow from theme's bubble shadow (matches chat's jump button)
+
+  // Derive pill text style to match previous chat visuals (appBarTitleStyle):
+  // smallFrom(base) then scale fontSize/height using intensities 0.7 / 0.18
+  final Brightness twBrightness = config.isDark ? Brightness.dark : Brightness.light;
+  final TextStyle pillBase = TwTextStyles.forBrightness(twBrightness)
+      .bodyForContextless(color: baseColor, textScale: 1.0);
+  final TextStyle pillBaseAdjusted = TwTextStyles.forBrightness(twBrightness)
+      .smallFrom(pillBase);
+  final double resolvedScale = (config.textScale.isFinite && config.textScale > 0)
+      ? config.textScale.clamp(1.0, 1.6)
+      : 1.0;
+  final double pillFontSize = (pillBaseAdjusted.fontSize ?? 14.0) * (1 + (resolvedScale - 1) * 0.7);
+  final double pillHeight = (pillBaseAdjusted.height ?? 1.0) * (1 + (resolvedScale - 1) * 0.18);
+  final TextStyle pillTextStyle = TwTextStyles.forBrightness(twBrightness).adaptBase(
+    pillBaseAdjusted,
+    color: colors.bubbleText,
+    fontSize: pillFontSize,
+    height: pillHeight,
+  );
+
+  // Derive fill/border to match ChatComposerLayout.fillColor/borderColor.
+  // Use canonical markdown/link-pill lerp tokens rather than chat-only tokens.
+
+  final TwLinkPillStyle defaultLinkPillStyle = computeDefaultTwLinkPillStyle(
+    brightness: twBrightness,
+    textScale: resolvedScale,
+  ).copyWith(textStyle: pillTextStyle);
 
   return MarkdownSurfaceStyle(
     bodyTextStyle: baseStyle,
@@ -93,7 +128,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       strikethroughStyle: strikethroughStyle,
       underlineStyle: underlineStyle,
       linkStyle: linkStyle,
-      linkPillStyle: config.linkPillStyle,
+      linkPillStyle: config.linkPillStyle ?? defaultLinkPillStyle,
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
         const scales = <double>[2.1, 1.5];

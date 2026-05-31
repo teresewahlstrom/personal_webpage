@@ -441,21 +441,10 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
 }
 
 MarkdownSurfaceStyle _buildSharedMarkdownSurfaceForChat(BuildContext context) {
-  final skin = ChatSkin.dataOf(context);
-  final colors = skin.colors;
-  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
-      baseTextColor: colors.bubbleText,
-      linkColor: colors.markupLink,
       isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
-      linkPillStyle: MarkupLinkPillStyle(
-        fillColor: ChatComposerLayout.fillColor(context),
-        borderColor: ChatComposerLayout.borderColor(context),
-        textStyle: skin.textStyles.appBarTitleStyle(textScale, colors),
-        shadows: <BoxShadow>[skin.tokens.jumpToLatestButtonShadow(colors)],
-      ),
     ),
   );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
+import '_dark.dart' as dark;
 import 'impl.dart';
 
 // Public convenience accessor for the canonical font family token.

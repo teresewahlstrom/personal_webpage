@@ -7,6 +7,7 @@
     "check:primitives": "bash scripts/check-tw-primitives-usage.sh",
     "check:selection": "npm run check:primitives",
     "deploy": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh",
-    "build": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh"
+    "build": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh",
+    "install:git-hooks": "git config core.hooksPath .githooks"
   }
 }

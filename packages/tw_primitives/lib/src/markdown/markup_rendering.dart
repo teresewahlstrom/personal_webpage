@@ -1,47 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/theme.dart';
+import '../theme/container/pill.dart';
+import '../theme/text_styles/router.dart';
 
 import 'markup_ast.dart';
 
 typedef LinkGestureRecognizerFactory = GestureRecognizer? Function(String href);
 typedef MarkupHeadingStyleResolver = TextStyle Function(int level);
-
-class MarkupLinkPillStyle {
-  const MarkupLinkPillStyle({
-    required this.fillColor,
-    required this.borderColor,
-    required this.textStyle,
-    this.borderWidth = 1.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-    this.shadows = const <BoxShadow>[],
-  });
-
-  final Color fillColor;
-  final Color borderColor;
-  final double borderWidth;
-  final EdgeInsetsGeometry padding;
-  final List<BoxShadow> shadows;
-  final TextStyle textStyle;
-
-  MarkupLinkPillStyle copyWith({
-    Color? fillColor,
-    Color? borderColor,
-    double? borderWidth,
-    EdgeInsetsGeometry? padding,
-    List<BoxShadow>? shadows,
-    TextStyle? textStyle,
-  }) {
-    return MarkupLinkPillStyle(
-      fillColor: fillColor ?? this.fillColor,
-      borderColor: borderColor ?? this.borderColor,
-      borderWidth: borderWidth ?? this.borderWidth,
-      padding: padding ?? this.padding,
-      shadows: shadows ?? this.shadows,
-      textStyle: textStyle ?? this.textStyle,
-    );
-  }
-}
 
 class MarkupTheme {
   const MarkupTheme({
@@ -62,7 +27,7 @@ class MarkupTheme {
   final TextStyle strikethroughStyle;
   final TextStyle underlineStyle;
   final TextStyle linkStyle;
-  final MarkupLinkPillStyle? linkPillStyle;
+  final TwLinkPillStyle? linkPillStyle;
   final TextStyle blockquoteStyle;
   final MarkupHeadingStyleResolver headingStyleResolver;
 }
@@ -158,7 +123,7 @@ class _MarkupLinkPill extends StatefulWidget {
 
   final String href;
   final String label;
-  final MarkupLinkPillStyle style;
+  final TwLinkPillStyle style;
   final LinkGestureRecognizerFactory gestureRecognizerFactory;
 
   @override
@@ -189,42 +154,15 @@ class _MarkupLinkPillState extends State<_MarkupLinkPill> {
     final VoidCallback? onTap = recognizer is TapGestureRecognizer
         ? recognizer.onTap
         : null;
-
     return Semantics(
       link: true,
       label: widget.href != widget.label
           ? '${widget.label} (${widget.href})'
           : widget.label,
-      child: Stack(
-        children: [
-          DecoratedBox(
-            decoration: ShapeDecoration(
-              color: widget.style.fillColor,
-              shape: StadiumBorder(
-                side: BorderSide(
-                  color: widget.style.borderColor,
-                  width: widget.style.borderWidth,
-                ),
-              ),
-              shadows: widget.style.shadows,
-            ),
-            child: Padding(
-              padding: widget.style.padding,
-              child: Text(widget.label, style: widget.style.textStyle),
-            ),
-          ),
-          // Transparent overlay for click/tap and pointer cursor
-          Positioned.fill(
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: onTap,
-                child: Container(),
-              ),
-            ),
-          ),
-        ],
+      child: TwLinkPill(
+        label: widget.label,
+        onTap: onTap,
+        style: widget.style,
       ),
     );
   }

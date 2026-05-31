@@ -44,8 +44,6 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
   MarkdownSurfaceStyle _buildSurface(BuildContext context) {
     return buildMarkdownSurfaceStyle(
       MarkdownThemeConfig(
-        baseTextColor: context.twColors.pageBodyText,
-        linkColor: context.twColors.linkText,
         isDark: context.twIsDark,
         textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
       ),

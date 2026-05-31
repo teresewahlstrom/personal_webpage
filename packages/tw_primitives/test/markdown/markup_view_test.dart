@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_primitives/markdown.dart';
+import 'package:tw_primitives/theme.dart';
 
 void main() {
   testWidgets('top-level ordered lists have extra space above', (tester) async {
@@ -42,7 +43,7 @@ void main() {
       _MarkupTestApp(
         document: MessageMarkup.parse('[Twin](https://example.com)'),
         baseStyle: const TextStyle(fontSize: 20, height: 1),
-        linkPillStyle: const MarkupLinkPillStyle(
+        linkPillStyle: const TwLinkPillStyle(
           fillColor: Colors.white,
           borderColor: Colors.black,
           textStyle: TextStyle(fontSize: 13),
@@ -154,7 +155,7 @@ class _MarkupTestApp extends StatelessWidget {
   final MarkupDocument document;
   final TextStyle baseStyle;
   final bool chromeVisible;
-  final MarkupLinkPillStyle? linkPillStyle;
+  final TwLinkPillStyle? linkPillStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +178,7 @@ class _MarkupTestApp extends StatelessWidget {
   }
 }
 
-MarkupTheme _theme(TextStyle baseStyle, {MarkupLinkPillStyle? linkPillStyle}) {
+MarkupTheme _theme(TextStyle baseStyle, {TwLinkPillStyle? linkPillStyle}) {
   return MarkupTheme(
     baseStyle: baseStyle,
     strongStyle: const TextStyle(fontWeight: FontWeight.bold),

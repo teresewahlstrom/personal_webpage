@@ -86,27 +86,21 @@ class ThemeToggleControlButton extends StatelessWidget {
         : 'Switch app to dark';
     final double buttonSize = size ?? ShellUiConfig.headerToggleSize;
 
+    // Use TwLinkPill to keep floating controls visually consistent with
+    // markdown/chat pills. Compose a MarkupLinkPillStyle from visual tokens.
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: Tooltip(
-        message: tooltip,
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: FloatingControlTokens.animationDuration,
-            width: buttonSize,
-            height: buttonSize,
-            decoration: BoxDecoration(
-              color: visualStyle.fillColor,
-              shape: BoxShape.circle,
-              border: visualStyle.outlineStyle.borderAll,
-              boxShadow: <BoxShadow>[visualStyle.glow],
-            ),
-            child: Icon(
-              icon,
-              color: visualStyle.iconColor,
-              size: iconSize,
-            ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          width: buttonSize,
+          height: buttonSize,
+          child: TwLinkPill(
+            label: '',
+            leading: Icon(icon, color: visualStyle.iconColor, size: iconSize),
+            tooltip: tooltip,
+            semanticsLabel: tooltip,
           ),
         ),
       ),

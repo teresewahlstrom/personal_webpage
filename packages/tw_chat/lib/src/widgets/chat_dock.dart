@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'package:tw_primitives/theme.dart';
+
 import '../config/config.dart';
 import '../models/message.dart';
 import 'section.dart';
@@ -192,22 +194,9 @@ class ChatAppBar extends StatelessWidget {
     final pad = shrinkWrap
         ? tokens.appBarPaddingMinimized
         : tokens.appBarPaddingExpanded;
-    final titlePill = DecoratedBox(
+    final titlePill = TwLinkPill(
       key: const ValueKey('chat-app-bar-title-pill'),
-      decoration: ShapeDecoration(
-        color: ChatComposerLayout.fillColor(context),
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: ChatComposerLayout.borderColor(context),
-            width: 1.0,
-          ),
-        ),
-        shadows: [tokens.jumpToLatestButtonShadow(colors)],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Text('Chat with Twin', style: titleStyle),
-      ),
+      label: 'Chat with Twin',
     );
     final titleArea = Padding(
       padding: EdgeInsets.fromLTRB(
@@ -297,26 +286,6 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
         launcherStyle.foregroundColor ??
         colors.markupLink)
       : (launcherStyle.foregroundColor ?? colors.bubbleText);
-    final Color effectiveBackground =
-      launcherStyle.backgroundColor ?? ChatComposerLayout.fillColor(context);
-    final Color effectiveBorder = _isHovered
-      ? (launcherStyle.hoverBorderColor ??
-        launcherStyle.borderColor ??
-        colors.shellOuterBorder)
-      : (launcherStyle.borderColor ?? colors.shellOuterBorder);
-    final List<BoxShadow> boxShadow = launcherStyle.boxShadow.isNotEmpty
-      ? launcherStyle.boxShadow
-      : <BoxShadow>[
-        BoxShadow(
-          color: effectiveForeground.withValues(
-          alpha: launcherStyle.shadowAlpha,
-          ),
-          blurRadius: _isHovered
-            ? launcherStyle.hoverShadowBlurRadius
-            : launcherStyle.idleShadowBlurRadius,
-          offset: launcherStyle.shadowOffset,
-        ),
-        ];
 
     return Material(
       color: colors.transparent,
@@ -333,28 +302,18 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
           child: InkWell(
             onTap: widget.onExpand,
             customBorder: const CircleBorder(),
-            child: Tooltip(
-              message: 'Open chat',
-              child: AnimatedContainer(
-                duration: launcherStyle.animationDuration,
-                width: launcherStyle.size,
-                height: launcherStyle.size,
-                decoration: BoxDecoration(
-                    color: effectiveBackground,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: effectiveBorder,
-                    width: launcherStyle.borderWidth,
-                  ),
-                  boxShadow: boxShadow,
+            child: SizedBox(
+              width: launcherStyle.size,
+              height: launcherStyle.size,
+              child: TwLinkPill(
+                label: '',
+                leading: Icon(
+                  launcherStyle.icon,
+                  size: launcherStyle.iconSize,
+                  color: effectiveForeground,
                 ),
-                child: Center(
-                  child: Icon(
-                    launcherStyle.icon,
-                    size: launcherStyle.iconSize,
-                    color: effectiveForeground,
-                  ),
-                ),
+                tooltip: 'Open chat',
+                semanticsLabel: 'Open chat',
               ),
             ),
           ),

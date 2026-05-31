@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/theme.dart';
+import 'markup_rendering.dart';
+import 'markup_view_style.dart';
 import '../svg/tw_svg_asset.dart';
 
 import 'markup_ast.dart';
 import 'markup_blockquote_rail_painter.dart';
-import 'markup_rendering.dart';
-import 'markup_view_style.dart';
 
 class MarkupViewRenderer {
   MarkupViewRenderer({
@@ -98,7 +98,7 @@ class MarkupViewRenderer {
           selectable: selectable,
         );
       case final MarkupBlockquoteBlock quote:
-        final MarkupLinkPillStyle? linkPillStyle = theme.linkPillStyle;
+        final TwLinkPillStyle? linkPillStyle = theme.linkPillStyle;
         final MarkupTheme quoteTheme = MarkupTheme(
           baseStyle: theme.blockquoteStyle,
           strongStyle: theme.blockquoteStyle.merge(theme.strongStyle),

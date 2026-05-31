@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tw_primitives/src/theme/text_styles/_dark.dart' as dark;
+import '_dark.dart' as dark;
 
 /// Light-theme token facade that delegates to the dark canonical tokens by default.
 /// This mirrors the `TwColorsLight`/`TwColorsDark` pattern and provides

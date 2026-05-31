@@ -22,16 +22,12 @@ class ChatJumpButton extends StatelessWidget {
     final tokens = skin.tokens;
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final double buttonSize = tokens.jumpToLatestButtonFixedSize;
-    final TextStyle buttonTextStyle = TwTextStyles.of(context).buttonLabelFrom(
+    TwTextStyles.of(context).buttonLabelFrom(
       ChatBubbleRules.textStyle(
         context,
         textScale,
       ),
       color: colors.bubbleText,
-    );
-    final BorderSide buttonBorder = BorderSide(
-      color: ChatComposerLayout.borderColor(context),
-      width: 1.0,
     );
     final Icon arrowIcon = Icon(
       Icons.south_rounded,
@@ -46,51 +42,30 @@ class ChatJumpButton extends StatelessWidget {
             : null,
         boxShadow: [tokens.jumpToLatestButtonShadow(colors)],
       ),
-      child: Tooltip(
-        message: showNewMessage ? 'Jump to latest message' : 'Jump to bottom',
-        child: showNewMessage
-            ? FilledButton.icon(
-                onPressed: () {
-                  Tooltip.dismissAllToolTips();
-                  onJumpToLatest();
-                },
-                icon: arrowIcon,
-                label: const Text('new message'),
-                style: FilledButton.styleFrom(
-                  backgroundColor: ChatComposerLayout.fillColor(context),
-                  foregroundColor: colors.bubbleText,
-                  shape: const StadiumBorder(),
-                  side: buttonBorder,
-                  elevation: tokens.jumpToLatestButtonElevation,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  minimumSize: Size(0, buttonSize),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textStyle: buttonTextStyle,
-                ),
-              )
-            : SizedBox.square(
-                dimension: buttonSize,
-                child: FilledButton(
-                  onPressed: () {
+      child: showNewMessage
+          ? TwLinkPill(
+              label: 'new message',
+              leading: arrowIcon,
+              onTap: () {
+                Tooltip.dismissAllToolTips();
+                onJumpToLatest();
+              },
+              tooltip: 'Jump to latest message',
+              semanticsLabel: 'Jump to latest message',
+            )
+          : SizedBox.square(
+              dimension: buttonSize,
+                child: TwLinkPill(
+                  label: '',
+                  leading: arrowIcon,
+                  onTap: () {
                     Tooltip.dismissAllToolTips();
                     onJumpToBottom();
                   },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: ChatComposerLayout.fillColor(context),
-                    foregroundColor: colors.bubbleText,
-                    shape: const CircleBorder(),
-                    side: buttonBorder,
-                    elevation: tokens.jumpToLatestButtonElevation,
-                    padding: tokens.jumpToLatestButtonPadding,
-                    minimumSize: Size.zero,
-                    maximumSize: Size.square(buttonSize),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    textStyle: buttonTextStyle,
-                  ),
-                  child: arrowIcon,
+                  tooltip: 'Jump to bottom',
+                  semanticsLabel: 'Jump to bottom',
                 ),
-              ),
-      ),
+            ),
     );
   }
 }
