@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tw_chat/src/config/skin.dart';
+import 'package:tw_chat/src/config/composer_layout.dart';
 import 'package:tw_chat/src/widgets/chat_dock.dart';
 
 void main() {
@@ -31,7 +32,8 @@ void main() {
     final shape = decoration.shape as StadiumBorder;
 
     expect(find.text('Chat with Twin'), findsOneWidget);
-    expect(shape.side.color, const Color(0xFFFFFFFF));
+    final BuildContext ctx = tester.element(find.byKey(const ValueKey('chat-app-bar-title-pill')));
+    expect(shape.side.color, ChatComposerLayout.borderColor(ctx));
     expect(shape.side.width, 1.0);
   });
 

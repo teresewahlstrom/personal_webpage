@@ -13,10 +13,10 @@ class ChatLauncherStyle {
     this.size = 58,
     this.iconSize = 25,
     this.icon = Icons.chat_bubble,
-    this.foregroundColor = const Color(0xFF394183),
-    this.hoverForegroundColor = const Color(0xFF843F02),
+    this.foregroundColor,
+    this.hoverForegroundColor,
 
-    this.backgroundColor = const Color.fromARGB(255, 248, 249, 247),
+    this.backgroundColor,
     this.borderColor,
     this.hoverBorderColor,
     this.borderWidth = 1,
@@ -31,9 +31,9 @@ class ChatLauncherStyle {
   final double size;
   final double iconSize;
   final IconData icon;
-  final Color foregroundColor;
-  final Color hoverForegroundColor;
-  final Color backgroundColor;
+  final Color? foregroundColor;
+  final Color? hoverForegroundColor;
+  final Color? backgroundColor;
   final Color? borderColor;
   final Color? hoverBorderColor;
   final double borderWidth;
@@ -292,27 +292,31 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
   Widget build(BuildContext context) {
     final colors = ChatSkin.dataOf(context).colors;
     final launcherStyle = widget.launcherStyle;
-    final foregroundColor = _isHovered
-        ? launcherStyle.hoverForegroundColor
-        : launcherStyle.foregroundColor;
-    final Color borderColor = _isHovered
-        ? launcherStyle.hoverBorderColor ??
-              launcherStyle.borderColor ??
-              foregroundColor
-        : launcherStyle.borderColor ?? foregroundColor;
+    final Color effectiveForeground = _isHovered
+      ? (launcherStyle.hoverForegroundColor ??
+        launcherStyle.foregroundColor ??
+        colors.markupLink)
+      : (launcherStyle.foregroundColor ?? colors.bubbleText);
+    final Color effectiveBackground =
+      launcherStyle.backgroundColor ?? ChatComposerLayout.fillColor(context);
+    final Color effectiveBorder = _isHovered
+      ? (launcherStyle.hoverBorderColor ??
+        launcherStyle.borderColor ??
+        colors.shellOuterBorder)
+      : (launcherStyle.borderColor ?? colors.shellOuterBorder);
     final List<BoxShadow> boxShadow = launcherStyle.boxShadow.isNotEmpty
-        ? launcherStyle.boxShadow
-        : <BoxShadow>[
-            BoxShadow(
-              color: foregroundColor.withValues(
-                alpha: launcherStyle.shadowAlpha,
-              ),
-              blurRadius: _isHovered
-                  ? launcherStyle.hoverShadowBlurRadius
-                  : launcherStyle.idleShadowBlurRadius,
-              offset: launcherStyle.shadowOffset,
-            ),
-          ];
+      ? launcherStyle.boxShadow
+      : <BoxShadow>[
+        BoxShadow(
+          color: effectiveForeground.withValues(
+          alpha: launcherStyle.shadowAlpha,
+          ),
+          blurRadius: _isHovered
+            ? launcherStyle.hoverShadowBlurRadius
+            : launcherStyle.idleShadowBlurRadius,
+          offset: launcherStyle.shadowOffset,
+        ),
+        ];
 
     return Material(
       color: colors.transparent,
@@ -336,10 +340,10 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
                 width: launcherStyle.size,
                 height: launcherStyle.size,
                 decoration: BoxDecoration(
-                  color: launcherStyle.backgroundColor,
+                    color: effectiveBackground,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: borderColor,
+                    color: effectiveBorder,
                     width: launcherStyle.borderWidth,
                   ),
                   boxShadow: boxShadow,
@@ -348,7 +352,7 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
                   child: Icon(
                     launcherStyle.icon,
                     size: launcherStyle.iconSize,
-                    color: foregroundColor,
+                    color: effectiveForeground,
                   ),
                 ),
               ),
