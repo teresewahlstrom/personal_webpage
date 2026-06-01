@@ -33,6 +33,7 @@ class TwTextStyleTokensLight {
   // Header/hint tokens
   static const double twHeader1FontSize = dark.TwTextStyleTokensDark.twHeader1FontSize;
   static const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
+  static const double twProfessionalStoryH2Scale = dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale;
   static const double twHeading1LetterSpacing = dark.TwTextStyleTokensDark.twHeading1LetterSpacing;
   static const double twHeading1WordSpacing = dark.TwTextStyleTokensDark.twHeading1WordSpacing;
   static const double twHeading2LetterSpacing = dark.TwTextStyleTokensDark.twHeading2LetterSpacing;

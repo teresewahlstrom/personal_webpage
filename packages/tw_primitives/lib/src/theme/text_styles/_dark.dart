@@ -33,6 +33,7 @@ class TwTextStyleTokensDark {
   // Header/hint tokens used by text-field hint builder and similar places
   static const double twHeader1FontSize = 24.0;
   static const double twHeader2FontSize = 18.0;
+  static const double twProfessionalStoryH2Scale = 1.5;
   static const double twHeading1LetterSpacing = 0.2;
   static const double twHeading1WordSpacing = 2.2;
   static const double twHeading2LetterSpacing = 1.15;
