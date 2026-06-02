@@ -51,14 +51,14 @@ TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
     if (attribution == header1Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twHeader1FontSize,
+        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twH1FontSize,
         fontWeight: FontWeight.bold,
         height: 1.0,
       );
     } else if (attribution == header2Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twHeader2FontSize,
+        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twH2FontSize,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF888888),
         height: 1.0,

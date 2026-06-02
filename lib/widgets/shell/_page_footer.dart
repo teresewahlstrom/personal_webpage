@@ -42,7 +42,7 @@ class PageFooter extends StatelessWidget {
           runSpacing: 2,
           children: <Widget>[
             Text(
-              '\u00A9$year $brandName. All rights reserved.',
+              '\u00A9$year $brandName. All rights reserved. ',
               style: TwTextStyles.of(context).footerBodyForContext(
                 context: context,
                 color: context.twColors.pageBodyText,

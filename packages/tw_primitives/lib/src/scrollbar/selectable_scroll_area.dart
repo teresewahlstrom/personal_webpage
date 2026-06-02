@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart'
     show cupertinoTextSelectionHandleControls;
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
+
+import '../markdown/copy/markup_selection_registry.dart';
 import 'package:flutter/rendering.dart'
     show RenderBox, ScrollDirection, SelectedContent;
 import 'package:flutter/scheduler.dart' show Ticker;
@@ -242,6 +245,9 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
   ScrollController get _effectiveScrollController =>
       widget.controller ?? (_ownedController ??= ScrollController());
 
+  MarkupSelectionRegistry? _registeredRegistry;
+  SelectedContent? _lastSelectedContent;
+
   @override
   void initState() {
     super.initState();
@@ -253,16 +259,34 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final registry = MarkupSelectionRegistry.maybeOf(context);
+    if (registry != _registeredRegistry) {
+      _registeredRegistry?.copyHelper.unregisterSelectionKey(_effectiveSelectionKey);
+      registry?.copyHelper.registerSelectionKey(_effectiveSelectionKey);
+      _registeredRegistry = registry;
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant TwSelectableScrollArea oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller == null && widget.controller != null) {
       _ownedController?.dispose();
       _ownedController = null;
     }
+    if (oldWidget.selectionKey != widget.selectionKey) {
+      final oldKey = oldWidget.selectionKey ?? _internalSelectionKey;
+      final newKey = widget.selectionKey ?? _internalSelectionKey;
+      _registeredRegistry?.copyHelper.unregisterSelectionKey(oldKey);
+      _registeredRegistry?.copyHelper.registerSelectionKey(newKey);
+    }
   }
 
   @override
   void dispose() {
+    _registeredRegistry?.copyHelper.unregisterSelectionKey(_effectiveSelectionKey);
     _stopSelectionAutoScroll();
     _selectionAutoScrollTicker.dispose();
     _ownedController?.dispose();
@@ -314,6 +338,7 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
   );
 
   void _handleSelectionChanged(SelectedContent? selectedContent) {
+    _lastSelectedContent = selectedContent;
     final hasSelection = selectedContent?.plainText.isNotEmpty ?? false;
     if (_hasSelection != hasSelection) {
       setState(() {
@@ -540,8 +565,28 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
       child: result,
     );
 
-    if (widget.actions != null && widget.actions!.isNotEmpty) {
-      result = Actions(actions: widget.actions!, child: result);
+    final registry = _registeredRegistry;
+    Map<Type, Action<Intent>> effectiveActions = widget.actions ?? <Type, Action<Intent>>{};
+
+    if (registry != null && !effectiveActions.containsKey(CopySelectionTextIntent)) {
+      effectiveActions = Map<Type, Action<Intent>>.from(effectiveActions)
+        ..[CopySelectionTextIntent] = CallbackAction<CopySelectionTextIntent>(
+          onInvoke: (_) {
+            final globalPlainText = _lastSelectedContent?.plainText ?? '';
+            if (globalPlainText.isEmpty) {
+              return null;
+            }
+            final formattedText = registry.copyHelper.resolveCopyText(
+              globalPlainText: globalPlainText,
+            );
+            Clipboard.setData(ClipboardData(text: formattedText));
+            return null;
+          },
+        );
+    }
+
+    if (effectiveActions.isNotEmpty) {
+      result = Actions(actions: effectiveActions, child: result);
     }
 
     if (widget.onPointerDown != null ||

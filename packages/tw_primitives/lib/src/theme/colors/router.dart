@@ -57,8 +57,7 @@ class TwColors {
     required this.lineInteractive,
     required this.lineInteractiveHover,
     required this.modalBarrier,
-    required this.cardTitleText,
-    required this.cardContentText,
+    required this.cardMarkdownOpacity,
   });
 
   final Color transparent;
@@ -115,8 +114,7 @@ class TwColors {
   final Color lineInteractive;
   final Color lineInteractiveHover;
   final Color modalBarrier;
-  final Color cardTitleText;
-  final Color cardContentText;
+  final double cardMarkdownOpacity;
 
   /// Get a `TwColors` instance by theme name ('light' | 'dark').
   static TwColors forTheme(String themeName) {

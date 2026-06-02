@@ -31,9 +31,9 @@ class TwTextStyleTokens {
     required this.twStrongFontWeight,
     required this.twFooterBaseFontSize,
     required this.twTransparentSelectionSpacer,
-    required this.twHeader1FontSize,
-    required this.twHeader2FontSize,
-    required this.twProfessionalStoryH2Scale,
+    required this.twH1FontSize,
+    required this.twH2FontSize,
+    required this.twCardH2Scale,
     required this.twH1FontWeight,
     required this.twH2FontWeight,
     required this.twH1LetterSpacing,
@@ -62,9 +62,9 @@ class TwTextStyleTokens {
   final FontWeight twStrongFontWeight;
   final double twFooterBaseFontSize;
   final TextStyle twTransparentSelectionSpacer;
-  final double twHeader1FontSize;
-  final double twHeader2FontSize;
-  final double twProfessionalStoryH2Scale;
+  final double twH1FontSize;
+  final double twH2FontSize;
+  final double twCardH2Scale;
   final FontWeight twH1FontWeight;
   final FontWeight twH2FontWeight;
   final double twH1LetterSpacing;
@@ -98,9 +98,9 @@ class TwTextStyleTokens {
         twStrongFontWeight: dark.TwTextStyleTokensDark.twStrongFontWeight,
         twFooterBaseFontSize: dark.TwTextStyleTokensDark.twFooterBaseFontSize,
         twTransparentSelectionSpacer: dark.TwTextStyleTokensDark.twTransparentSelectionSpacer,
-        twHeader1FontSize: dark.TwTextStyleTokensDark.twHeader1FontSize,
-        twHeader2FontSize: dark.TwTextStyleTokensDark.twHeader2FontSize,
-        twProfessionalStoryH2Scale: dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale,
+        twH1FontSize: dark.TwTextStyleTokensDark.twH1FontSize,
+        twH2FontSize: dark.TwTextStyleTokensDark.twH2FontSize,
+        twCardH2Scale: dark.TwTextStyleTokensDark.twCardH2Scale,
         twH1FontWeight: dark.TwTextStyleTokensDark.twH1FontWeight,
         twH2FontWeight: dark.TwTextStyleTokensDark.twH2FontWeight,
         twH1LetterSpacing: dark.TwTextStyleTokensDark.twH1LetterSpacing,
@@ -130,9 +130,9 @@ class TwTextStyleTokens {
         twStrongFontWeight: light.TwTextStyleTokensLight.twStrongFontWeight,
         twFooterBaseFontSize: light.TwTextStyleTokensLight.twFooterBaseFontSize,
         twTransparentSelectionSpacer: light.TwTextStyleTokensLight.twTransparentSelectionSpacer,
-        twHeader1FontSize: light.TwTextStyleTokensLight.twHeader1FontSize,
-        twHeader2FontSize: light.TwTextStyleTokensLight.twHeader2FontSize,
-        twProfessionalStoryH2Scale: light.TwTextStyleTokensLight.twProfessionalStoryH2Scale,
+        twH1FontSize: light.TwTextStyleTokensLight.twH1FontSize,
+        twH2FontSize: light.TwTextStyleTokensLight.twH2FontSize,
+        twCardH2Scale: light.TwTextStyleTokensLight.twCardH2Scale,
         twH1FontWeight: light.TwTextStyleTokensLight.twH1FontWeight,
         twH2FontWeight: light.TwTextStyleTokensLight.twH2FontWeight,
         twH1LetterSpacing: light.TwTextStyleTokensLight.twH1LetterSpacing,
@@ -248,8 +248,8 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       modalHeaderFontWeight: tokens.twModalHeaderFontWeight,
       footerBaseFontSize: tokens.twFooterBaseFontSize,
       transparentSelectionSpacer: tokens.twTransparentSelectionSpacer,
-      header1FontSize: tokens.twHeader1FontSize,
-      header2FontSize: tokens.twHeader2FontSize,
+      header1FontSize: tokens.twH1FontSize,
+      header2FontSize: tokens.twH2FontSize,
       blockquoteFontSize: tokens.twBlockquoteFontSize,
       smallFontSize: tokens.twSmallFontSize,
       toolbarFontSize: tokens.twToolbarFontSize,

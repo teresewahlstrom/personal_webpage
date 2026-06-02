@@ -71,7 +71,6 @@ const TwColors twColorsDark = TwColors.create(
   modalCloseIconHover: _interactiveHover,
   modalBarrier: Color(0xBF000000),
 
-  cardTitleText: Color(0xCCD6DCF6),
-  cardContentText: Color(0xCCD6DCF6),
+  cardMarkdownOpacity: 0.85,
   cardFillAlpha: 0.65,
 );

@@ -455,7 +455,6 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
     MarkdownThemeConfig(
       isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
-      baseTextColor: context.twColors.cardContentText,
     ),
   );
 }
@@ -554,9 +553,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     final MarkdownSurfaceStyle markdownSurface =
         _buildProjectCardMarkdownSurface(context);
     final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
-    final TextStyle cardTitleStyle = TwTextStyles.of(context)
-        .cardTitleFrom(h2)
-        .copyWith(color: context.twColors.cardTitleText);
+    final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
     final Color baseIconColor =
         TwTextStyles.of(context).bodyForContext(
           context: context,
@@ -592,7 +589,10 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: Text(widget.title, style: cardTitleStyle),
+                        child: Opacity(
+                          opacity: context.twColors.cardMarkdownOpacity,
+                          child: Text(widget.title, style: cardTitleStyle),
+                        ),
                       ),
                       RotationTransition(
                         turns: Tween<double>(
@@ -618,6 +618,7 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
                       children: <Widget>[
                         const _SelectableCopyBreak(height: 12),
                         _ProjectCardMarkdownBody(
+                          title: widget.title,
                           document: widget.contentDocument,
                           selectable: _heightAnimation.value >= 1.0,
                         ),
@@ -651,10 +652,12 @@ class _ProjectCardData {
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
   const _ProjectCardMarkdownBody({
+    this.title,
     required this.document,
     required this.selectable,
   });
 
+  final String? title;
   final MarkupDocument document;
   final bool selectable;
 
@@ -712,13 +715,17 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
   Widget build(BuildContext context) {
     final MarkdownSurfaceStyle markdownSurface =
         _buildProjectCardMarkdownSurface(context);
-    return MarkupView(
-      document: widget.document,
-      theme: markdownSurface.theme,
-      gestureRecognizerFactory: _recognizerForHref,
-      textAlign: TextAlign.start,
-      selectable: widget.selectable,
-      chromeVisible: true,
+    return Opacity(
+      opacity: context.twColors.cardMarkdownOpacity,
+      child: MarkupView(
+        title: widget.title,
+        document: widget.document,
+        theme: markdownSurface.theme,
+        gestureRecognizerFactory: _recognizerForHref,
+        textAlign: TextAlign.start,
+        selectable: widget.selectable,
+        chromeVisible: true,
+      ),
     );
   }
 }

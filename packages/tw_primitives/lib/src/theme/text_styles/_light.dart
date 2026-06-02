@@ -31,9 +31,9 @@ class TwTextStyleTokensLight {
   static const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
 
   // Header/hint tokens
-  static const double twHeader1FontSize = dark.TwTextStyleTokensDark.twHeader1FontSize;
-  static const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
-  static const double twProfessionalStoryH2Scale = dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale;
+  static const double twH1FontSize = dark.TwTextStyleTokensDark.twH1FontSize;
+  static const double twH2FontSize = dark.TwTextStyleTokensDark.twH2FontSize;
+  static const double twCardH2Scale = dark.TwTextStyleTokensDark.twCardH2Scale;
   static const FontWeight twH1FontWeight = dark.TwTextStyleTokensDark.twH1FontWeight;
   static const FontWeight twH2FontWeight = dark.TwTextStyleTokensDark.twH2FontWeight;
   static const double twH1LetterSpacing = dark.TwTextStyleTokensDark.twH1LetterSpacing;

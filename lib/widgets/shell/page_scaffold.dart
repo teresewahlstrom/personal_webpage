@@ -5,9 +5,12 @@ import 'package:tw_chat/chat.dart'
         ChatOverlay,
         ChatSkin,
         ChatSkinMode;
+import 'package:flutter/rendering.dart' show SelectedContent;
 import 'package:tw_primitives/theme.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/scrollbar.dart'
     show TwSelectableScrollArea, TwSelectableRegionState;
+import 'package:tw_primitives/markdown.dart'
+    show MarkupSelectionCopyHelper, MarkupSelectionRegistry, TwWebCopyInterceptor;
 
 import '../../config/app_ui_config.dart';
 import '_grid_background.dart';
@@ -72,19 +75,44 @@ class _PageScaffoldState extends State<PageScaffold> {
   final FocusNode _pageInteractionFocusNode = FocusNode(
     debugLabel: 'page-scroll-interaction',
   );
+  final MarkupSelectionCopyHelper _pageCopyHelper = MarkupSelectionCopyHelper();
+  late final TwWebCopyInterceptor _webCopyInterceptor;
+  SelectedContent? _lastSelectedContent;
 
   @override
   void initState() {
     super.initState();
     _chatKeyboardScrollTargetController = ChatKeyboardScrollTargetController();
+    _webCopyInterceptor = TwWebCopyInterceptor(
+      () {
+        final globalPlainText = _lastSelectedContent?.plainText ?? '';
+        return _pageCopyHelper.resolveCopyText(globalPlainText: globalPlainText);
+      },
+      shouldInterceptCopy: () {
+        final hasPageSelection = _lastSelectedContent?.plainText.isNotEmpty ?? false;
+        final isChatFocused = _chatKeyboardScrollTargetController.isChatTargetListenable.value;
+        return hasPageSelection && !isChatFocused;
+      },
+    )..attach();
   }
 
   void _clearPageSelection() {
     _pageSelectionAreaKey.currentState?.clearSelection();
   }
 
+  @visibleForTesting
+  MarkupSelectionCopyHelper get pageCopyHelper => _pageCopyHelper;
+
+  @visibleForTesting
+  GlobalKey<TwSelectableRegionState> get pageSelectionAreaKey => _pageSelectionAreaKey;
+
+  @visibleForTesting
+  SelectedContent? get lastSelectedContent => _lastSelectedContent;
+
   @override
   void dispose() {
+    _webCopyInterceptor.detach();
+    _pageCopyHelper.dispose();
     _pageScrollController.dispose();
     _chatKeyboardScrollTargetController.dispose();
     _pageInteractionFocusNode.dispose();
@@ -112,8 +140,10 @@ class _PageScaffoldState extends State<PageScaffold> {
         color: context.twColors.lineSubtle,
         width: AppLineTheme.subtleWidth,
       ),
-      child: Stack(
-        children: <Widget>[
+      child: MarkupSelectionRegistry(
+        copyHelper: _pageCopyHelper,
+        child: Stack(
+          children: <Widget>[
           SafeArea(
             bottom: true,
             top: false,
@@ -132,6 +162,9 @@ class _PageScaffoldState extends State<PageScaffold> {
                               controller: _pageScrollController,
                               selectionKey: _pageSelectionAreaKey,
                               interactionFocusNode: _pageInteractionFocusNode,
+                              onSelectionChanged: (content) {
+                                _lastSelectedContent = content;
+                              },
                               isKeyboardScrollBlocked:
                                   _chatKeyboardScrollTargetController
                                       .isChatTargetListenable,
@@ -217,6 +250,7 @@ class _PageScaffoldState extends State<PageScaffold> {
             ),
         ],
       ),
+     ),
     );
   }
 }

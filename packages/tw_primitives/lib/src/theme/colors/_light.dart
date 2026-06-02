@@ -71,7 +71,6 @@ const TwColors twColorsLight = TwColors.create(
   modalCloseIconHover: _interactiveHover,
   modalBarrier: Color(0xBF000000),
   
-  cardTitleText: _chatMainAccent,
-  cardContentText: Color(0xCC000000),
+  cardMarkdownOpacity: 0.85,
   cardFillAlpha: 0.70,
 );

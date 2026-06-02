@@ -131,7 +131,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       linkPillStyle: config.linkPillStyle ?? defaultLinkPillStyle,
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
-        final scales = <double>[2.1, tokens.twProfessionalStoryH2Scale];
+        final scales = <double>[2.1, tokens.twCardH2Scale];
         final weights = <FontWeight>[tokens.twH1FontWeight, tokens.twH2FontWeight];
         final clampedLevel = level.clamp(1, 2);
         final index = clampedLevel - 1;
