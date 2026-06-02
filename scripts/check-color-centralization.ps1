@@ -5,9 +5,15 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 
 $rg = Get-Command rg -ErrorAction SilentlyContinue
 if (-not $rg) {
-  $fallback = 'C:\Users\teres\AppData\Local\Microsoft\WinGet\Links\rg.exe'
-  if (Test-Path $fallback) {
-    $rg = @{ Source = $fallback }
+  $fallbacks = @(
+    'C:\Users\teres\AppData\Local\Microsoft\WinGet\Links\rg.exe',
+    'C:\Users\teres\AppData\Local\Programs\Antigravity IDE\resources\app\node_modules\@vscode\ripgrep\bin\rg.exe'
+  )
+  foreach ($fb in $fallbacks) {
+    if (Test-Path $fb) {
+      $rg = @{ Source = $fb }
+      break
+    }
   }
 }
 
