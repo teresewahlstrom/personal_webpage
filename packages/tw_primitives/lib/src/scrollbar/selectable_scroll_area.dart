@@ -225,7 +225,7 @@ class TwSelectableScrollArea extends StatefulWidget {
 class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
     with SingleTickerProviderStateMixin {
   static const double _selectionAutoScrollBoundary = 56;
-  static const double _selectionAutoScrollMaxSpeed = 720;
+  static const double _selectionAutoScrollMaxSpeed = 360;
 
   late final TwSelectableSecondaryClickGuard _secondaryClickGuard;
   ScrollController? _ownedController;

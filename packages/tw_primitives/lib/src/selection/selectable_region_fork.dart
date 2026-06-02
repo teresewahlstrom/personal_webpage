@@ -1041,6 +1041,7 @@ class SelectableRegionState extends State<SelectableRegion>
                 SelectableRegionSelectionStatus.changing;
         }
     }
+    _notifySelectionDragUpdate(details.globalPosition);
     _updateSelectedContentIfNeeded();
   }
 

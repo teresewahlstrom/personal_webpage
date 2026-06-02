@@ -707,8 +707,8 @@ class _TextScrollViewState extends State<TextScrollView>
 enum TextFieldSizePolicy { singleLine, multiLineBounded, multiLineUnbounded }
 
 class TextScrollController with ChangeNotifier {
-  static const _autoScrollTimePerLine = Duration(milliseconds: 45);
-  static const _autoScrollTimePerCharacter = Duration(milliseconds: 50);
+  static const _autoScrollTimePerLine = Duration(milliseconds: 110);
+  static const _autoScrollTimePerCharacter = Duration(milliseconds: 90);
   static const _caretVisibilityPadding = 2.0;
 
   TextScrollController({
@@ -1030,8 +1030,8 @@ class TextScrollController with ChangeNotifier {
     Duration dt,
     double distanceFromAutoScrollBound,
   ) {
-    const minPixelsPerSecond = 50;
-    const maxPixelsPerSecond = 1500;
+    const minPixelsPerSecond = 24;
+    const maxPixelsPerSecond = 420;
     const maxDistanceFromScrollBound = 75;
 
     final speedPercent =

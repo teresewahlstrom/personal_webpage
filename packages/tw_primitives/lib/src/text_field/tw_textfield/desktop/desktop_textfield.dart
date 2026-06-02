@@ -76,10 +76,11 @@ class TwDesktopTextField extends StatefulWidget {
     this.tapHandlers = const [],
     this.scrollController,
     List<TextFieldKeyboardHandler>? keyboardHandlers,
-  })  : keyboardHandlers = keyboardHandlers ??
-            (inputSource == TextInputSource.keyboard
-                ? defaultTextFieldKeyboardHandlers
-                : defaultTextFieldImeKeyboardHandlers);
+  }) : keyboardHandlers =
+           keyboardHandlers ??
+           (inputSource == TextInputSource.keyboard
+               ? defaultTextFieldKeyboardHandlers
+               : defaultTextFieldImeKeyboardHandlers);
 
   final FocusNode? focusNode;
 
@@ -161,11 +162,13 @@ class TwDesktopTextField extends StatefulWidget {
   TwDesktopTextFieldState createState() => TwDesktopTextFieldState();
 }
 
-class TwDesktopTextFieldState extends State<TwDesktopTextField> implements ProseTextBlock, ImeInputOwner {
+class TwDesktopTextFieldState extends State<TwDesktopTextField>
+    implements ProseTextBlock, ImeInputOwner {
   final _textKey = GlobalKey<ProseTextState>();
   final _textScrollKey = GlobalKey<TwTextFieldScrollviewState>();
   late FocusNode _focusNode;
-  bool _hasFocus = false; // cache whether we have focus so we know when it changes
+  bool _hasFocus =
+      false; // cache whether we have focus so we know when it changes
 
   late TwTextFieldContext _textFieldContext;
   late ImeAttributedTextEditingController _controller;
@@ -177,7 +180,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   TextDirection? _contentTextDirection;
 
   /// The text direction applied to the inner text.
-  TextDirection get _textDirection => _contentTextDirection ?? TextDirection.ltr;
+  TextDirection get _textDirection =>
+      _contentTextDirection ?? TextDirection.ltr;
 
   TextAlign get _textAlign =>
       widget.textAlign ??
@@ -197,26 +201,33 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   void initState() {
     super.initState();
 
-    _focusNode = (widget.focusNode ?? FocusNode())..addListener(_updateSelectionAndComposingRegionOnFocusChange);
+    _focusNode = (widget.focusNode ?? FocusNode())
+      ..addListener(_updateSelectionAndComposingRegionOnFocusChange);
 
     _controller = widget.textController != null
         ? widget.textController is ImeAttributedTextEditingController
-            ? (widget.textController as ImeAttributedTextEditingController)
-            : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
+              ? (widget.textController as ImeAttributedTextEditingController)
+              : ImeAttributedTextEditingController(
+                  controller: widget.textController,
+                  disposeClientController: false,
+                )
         : ImeAttributedTextEditingController();
     _controller.addListener(_onSelectionOrContentChange);
 
     _ownsScrollController = widget.scrollController == null;
     _scrollController = widget.scrollController ?? ScrollController();
-    _textFieldScroller = TextFieldScroller() //
-      ..attach(_scrollController);
+    _textFieldScroller =
+        TextFieldScroller() //
+          ..attach(_scrollController);
 
     _createTextFieldContext();
 
     // Check if we need to update the selection.
     _updateSelectionAndComposingRegionOnFocusChange();
 
-    _contentTextDirection = getParagraphDirection(_controller.text.toPlainText());
+    _contentTextDirection = getParagraphDirection(
+      _controller.text.toPlainText(),
+    );
   }
 
   @override
@@ -224,11 +235,14 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
-      _focusNode.removeListener(_updateSelectionAndComposingRegionOnFocusChange);
+      _focusNode.removeListener(
+        _updateSelectionAndComposingRegionOnFocusChange,
+      );
       if (oldWidget.focusNode == null) {
         _focusNode.dispose();
       }
-      _focusNode = (widget.focusNode ?? FocusNode())..addListener(_updateSelectionAndComposingRegionOnFocusChange);
+      _focusNode = (widget.focusNode ?? FocusNode())
+        ..addListener(_updateSelectionAndComposingRegionOnFocusChange);
 
       // Check if we need to update the selection.
       _updateSelectionAndComposingRegionOnFocusChange();
@@ -238,13 +252,17 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       _controller.removeListener(_onSelectionOrContentChange);
       // When the given textController isn't an ImeAttributedTextEditingController,
       // we wrap it with one. So we need to dispose it.
-      if (oldWidget.textController == null || oldWidget.textController is! ImeAttributedTextEditingController) {
+      if (oldWidget.textController == null ||
+          oldWidget.textController is! ImeAttributedTextEditingController) {
         _controller.dispose();
       }
       _controller = widget.textController != null
           ? widget.textController is ImeAttributedTextEditingController
-              ? (widget.textController as ImeAttributedTextEditingController)
-              : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
+                ? (widget.textController as ImeAttributedTextEditingController)
+                : ImeAttributedTextEditingController(
+                    controller: widget.textController,
+                    disposeClientController: false,
+                  )
           : ImeAttributedTextEditingController();
 
       _controller.addListener(_onSelectionOrContentChange);
@@ -310,7 +328,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   /// to the top-left corner of the [textLayout] within this text field.
   Offset get textLayoutOffsetInField {
     final fieldBox = context.findRenderObject() as RenderBox;
-    final textLayoutBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+    final textLayoutBox =
+        _textKey.currentContext!.findRenderObject() as RenderBox;
     return textLayoutBox.localToGlobal(Offset.zero, ancestor: fieldBox);
   }
 
@@ -331,8 +350,12 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
     // controller's text position to the end of the available content.
     //
     // This behavior matches Flutter's standard behavior.
-    if (_focusNode.hasFocus && !_hasFocus && _controller.selection.extentOffset == -1) {
-      _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
+    if (_focusNode.hasFocus &&
+        !_hasFocus &&
+        _controller.selection.extentOffset == -1) {
+      _controller.selection = TextSelection.collapsed(
+        offset: _controller.text.length,
+      );
     }
     if (!_focusNode.hasFocus) {
       // We lost focus. Clear the composing region.
@@ -352,7 +375,9 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
     // Even though we calling `onNextFrame`, it doesn't necessarily mean
     // a new frame will be scheduled. Call setState to ensure the text direction is updated.
     setState(() {
-      _contentTextDirection = getParagraphDirection(_controller.text.toPlainText());
+      _contentTextDirection = getParagraphDirection(
+        _controller.text.toPlainText(),
+      );
     });
   }
 
@@ -360,9 +385,14 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   bool _updateViewportHeight() {
     final estimatedLineHeight = _getEstimatedLineHeight();
     final estimatedLinesOfText = _getEstimatedLinesOfText();
-    final estimatedContentHeight = (estimatedLinesOfText * estimatedLineHeight) + widget.padding.vertical;
-    final minHeight = widget.minLines != null ? widget.minLines! * estimatedLineHeight + widget.padding.vertical : null;
-    final maxHeight = widget.maxLines != null ? widget.maxLines! * estimatedLineHeight + widget.padding.vertical : null;
+    final estimatedContentHeight =
+        (estimatedLinesOfText * estimatedLineHeight) + widget.padding.vertical;
+    final minHeight = widget.minLines != null
+        ? widget.minLines! * estimatedLineHeight + widget.padding.vertical
+        : null;
+    final maxHeight = widget.maxLines != null
+        ? widget.maxLines! * estimatedLineHeight + widget.padding.vertical
+        : null;
     double? viewportHeight;
     if (maxHeight != null && estimatedContentHeight > maxHeight) {
       viewportHeight = maxHeight;
@@ -391,7 +421,9 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       return 0;
     }
 
-    final offsetAtEndOfText = textLayout.getOffsetAtPosition(TextPosition(offset: _controller.text.length));
+    final offsetAtEndOfText = textLayout.getOffsetAtPosition(
+      TextPosition(offset: _controller.text.length),
+    );
     int lineCount = (offsetAtEndOfText.dy / _getEstimatedLineHeight()).ceil();
 
     if (_controller.text.toPlainText().endsWith('\n')) {
@@ -413,7 +445,7 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
     final lineHeight = _controller.text.isEmpty || textLayout == null
         ? 0.0
         : textLayout.getHeightForCaret(const TextPosition(offset: 0)) ??
-            textLayout.getLineHeightAtPosition(const TextPosition(offset: 0));
+              textLayout.getLineHeightAtPosition(const TextPosition(offset: 0));
     if (lineHeight > 0) {
       return lineHeight;
     }
@@ -422,7 +454,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
   }
 
   bool get _shouldShowComposingUnderline =>
-      widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS;
+      widget.showComposingUnderline ??
+      defaultTargetPlatform == TargetPlatform.macOS;
 
   @override
   Widget build(BuildContext context) {
@@ -445,10 +478,7 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       isMultiline: isMultiline,
       tapHandlers: widget.tapHandlers,
       child: MultiListenableBuilder(
-        listenables: {
-          _focusNode,
-          _controller,
-        },
+        listenables: {_focusNode, _controller},
         builder: (context) {
           return _buildDecoration(
             child: TwTextFieldScrollview(
@@ -489,18 +519,20 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
             // the scroll view uses custom physics for gesture handling.
             ? ScrollbarWithCustomPhysics(
                 controller: _scrollController,
-                physics: ScrollConfiguration.of(context).getScrollPhysics(context),
+                physics: ScrollConfiguration.of(
+                  context,
+                ).getScrollPhysics(context),
                 child: textField,
               )
             : textField,
-          ),
+      ),
     );
   }
 
-  Widget _buildDecoration({
-    required Widget child,
-  }) {
-    return widget.decorationBuilder != null ? widget.decorationBuilder!(context, child) : child;
+  Widget _buildDecoration({required Widget child}) {
+    return widget.decorationBuilder != null
+        ? widget.decorationBuilder!(context, child)
+        : child;
   }
 
   Widget _buildTextInputSystem({
@@ -508,7 +540,9 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
     required Widget child,
   }) {
     return IntentBlocker(
-      intents: CurrentPlatform.isApple ? appleBlockedIntents : nonAppleBlockedIntents,
+      intents: CurrentPlatform.isApple
+          ? appleBlockedIntents
+          : nonAppleBlockedIntents,
       child: TwTextFieldKeyboardInteractor(
         focusNode: _focusNode,
         textFieldContext: _textFieldContext,
@@ -520,7 +554,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
                 focusNode: _focusNode,
                 textFieldContext: _textFieldContext,
                 isMultiline: isMultiline,
-                selectorHandlers: widget.selectorHandlers ?? defaultTextFieldSelectorHandlers,
+                selectorHandlers:
+                    widget.selectorHandlers ?? defaultTextFieldSelectorHandlers,
                 imeConfiguration: widget.imeConfiguration,
                 textStyleBuilder: widget.textStyleBuilder,
                 textAlign: widget.textAlign,
@@ -537,15 +572,25 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
       textDirection: _textDirection,
       child: SuperText(
         key: _textKey,
-        richText: _controller.text.computeInlineSpan(context, widget.textStyleBuilder, widget.inlineWidgetBuilders),
+        richText: _controller.text.computeInlineSpan(
+          context,
+          widget.textStyleBuilder,
+          widget.inlineWidgetBuilders,
+        ),
         textAlign: _textAlign,
         textDirection: _textDirection,
         textScaler: _textScaler,
         layerBeneathBuilder: (context, textLayout) {
           final isTextEmpty = _controller.text.isEmpty;
-          final showHint = widget.hintBuilder != null &&
-              ((isTextEmpty && widget.hintBehavior == HintBehavior.displayHintUntilTextEntered) ||
-                  (isTextEmpty && !_focusNode.hasFocus && widget.hintBehavior == HintBehavior.displayHintUntilFocus));
+          final showHint =
+              widget.hintBuilder != null &&
+              ((isTextEmpty &&
+                      widget.hintBehavior ==
+                          HintBehavior.displayHintUntilTextEntered) ||
+                  (isTextEmpty &&
+                      !_focusNode.hasFocus &&
+                      widget.hintBehavior ==
+                          HintBehavior.displayHintUntilFocus));
 
           return Stack(
             children: [
@@ -557,11 +602,14 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField> implements Prose
                   selection: widget.textController?.selection,
                 ),
               // Underline beneath the composing region.
-              if (widget.textController?.composingRegion.isValid == true && _shouldShowComposingUnderline)
+              if (widget.textController?.composingRegion.isValid == true &&
+                  _shouldShowComposingUnderline)
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
-                    color: widget.textStyleBuilder({}).color ?? context.twColors.pageBodyText,
+                    color:
+                        widget.textStyleBuilder({}).color ??
+                        context.twColors.pageBodyText,
                   ),
                   underlines: [
                     TextLayoutUnderline(
@@ -649,7 +697,12 @@ class TwTextFieldGestureInteractor extends StatefulWidget {
   State createState() => _TwTextFieldGestureInteractorState();
 }
 
-class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInteractor> {
+class _TwTextFieldGestureInteractorState
+    extends State<TwTextFieldGestureInteractor> {
+  static const double _maxPointerScrollLinesPerEvent = 1.25;
+  static const double _maxPointerScrollExtentFractionPerEvent = 0.08;
+  static const double _minPointerScrollPixelsPerEvent = 4.0;
+
   _SelectionType _selectionType = _SelectionType.position;
   Offset? _dragStartInViewport;
   Offset? _dragStartInText;
@@ -658,14 +711,15 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
   Rect? _dragRectInViewport;
 
   final _dragGutterExtent = 24;
-  final _maxDragSpeed = 20;
+  final _maxDragSpeed = 7;
 
   /// Holds which kind of device started a pan gesture, e.g., a mouse or a trackpad.
   PointerDeviceKind? _panGestureDevice;
 
   ProseTextLayout get _textLayout => widget.textKey.currentState!.textLayout;
 
-  TwTextFieldScrollviewState get _textScroll => widget.textScrollKey.currentState!;
+  TwTextFieldScrollviewState get _textScroll =>
+      widget.textScrollKey.currentState!;
 
   final _mouseCursor = ValueNotifier<MouseCursor>(SystemMouseCursors.text);
 
@@ -674,7 +728,8 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
   }
 
   void _updateMouseCursor(Offset globalPosition) {
-    final localPosition = (context.findRenderObject() as RenderBox).globalToLocal(globalPosition);
+    final localPosition = (context.findRenderObject() as RenderBox)
+        .globalToLocal(globalPosition);
     final textOffset = _getTextOffset(localPosition);
 
     for (final handler in widget.tapHandlers) {
@@ -743,9 +798,16 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
     final tapTextPosition = _getPositionNearestToTextOffset(textOffset);
     _log.finer("Tap text position: $tapTextPosition");
 
-    final expandSelection = HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shiftRight) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.shift);
+    final expandSelection =
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftRight,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shift,
+        );
 
     setState(() {
       widget.textController.selection = expandSelection
@@ -756,7 +818,9 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
           : TextSelection.collapsed(offset: tapTextPosition.offset);
       widget.textController.composingRegion = TextRange.empty;
 
-      _log.finer("New text field selection: ${widget.textController.selection}");
+      _log.finer(
+        "New text field selection: ${widget.textController.selection}",
+      );
     });
   }
 
@@ -797,7 +861,9 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
     if (tapTextPosition != null) {
       setState(() {
-        widget.textController.selection = _textLayout.getWordSelectionAt(tapTextPosition);
+        widget.textController.selection = _textLayout.getWordSelectionAt(
+          tapTextPosition,
+        );
       });
     } else {
       _clearSelection();
@@ -866,7 +932,10 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
     if (tapTextPosition != null) {
       setState(() {
-        widget.textController.selection = _getParagraphSelectionAt(tapTextPosition, TextAffinity.downstream);
+        widget.textController.selection = _getParagraphSelectionAt(
+          tapTextPosition,
+          TextAffinity.downstream,
+        );
       });
     } else {
       _clearSelection();
@@ -968,11 +1037,17 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
       return;
     }
 
+    _textScroll.onAutoScrollTick = _handleSelectionAutoScrollTick;
     _log.fine("User started pan");
     _dragStartInViewport = details.localPosition;
     _dragStartInText = _getTextOffset(_dragStartInViewport!);
 
-    _dragRectInViewport = Rect.fromLTWH(_dragStartInViewport!.dx, _dragStartInViewport!.dy, 1, 1);
+    _dragRectInViewport = Rect.fromLTWH(
+      _dragStartInViewport!.dx,
+      _dragStartInViewport!.dy,
+      1,
+      1,
+    );
 
     widget.focusNode.requestFocus();
   }
@@ -993,7 +1068,10 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
     setState(() {
       _dragEndInViewport = details.localPosition;
       _dragEndInText = _getTextOffset(_dragEndInViewport!);
-      _dragRectInViewport = Rect.fromPoints(_dragStartInViewport!, _dragEndInViewport!);
+      _dragRectInViewport = Rect.fromPoints(
+        _dragStartInViewport!,
+        _dragEndInViewport!,
+      );
       _log.finer('_onPanUpdate - drag rect: $_dragRectInViewport');
       _updateDragSelection();
 
@@ -1017,6 +1095,7 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
       _dragRectInViewport = null;
     });
 
+    _textScroll.onAutoScrollTick = null;
     _textScroll.stopScrollingToStart();
     _textScroll.stopScrollingToEnd();
   }
@@ -1029,6 +1108,7 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
       _dragRectInViewport = null;
     });
 
+    _textScroll.onAutoScrollTick = null;
     _textScroll.stopScrollingToStart();
     _textScroll.stopScrollingToEnd();
   }
@@ -1039,13 +1119,25 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
     }
 
     setState(() {
-      final startDragOffset = _getPositionNearestToTextOffset(_dragStartInText!).offset;
-      final endDragOffset = _getPositionNearestToTextOffset(_dragEndInText!).offset;
-      final affinity = startDragOffset <= endDragOffset ? TextAffinity.downstream : TextAffinity.upstream;
+      final startDragOffset = _getPositionNearestToTextOffset(
+        _dragStartInText!,
+      ).offset;
+      final endDragOffset = _getPositionNearestToTextOffset(
+        _dragEndInText!,
+      ).offset;
+      final affinity = startDragOffset <= endDragOffset
+          ? TextAffinity.downstream
+          : TextAffinity.upstream;
 
       if (_selectionType == _SelectionType.paragraph) {
-        final baseParagraphSelection = _getParagraphSelectionAt(TextPosition(offset: startDragOffset), affinity);
-        final extentParagraphSelection = _getParagraphSelectionAt(TextPosition(offset: endDragOffset), affinity);
+        final baseParagraphSelection = _getParagraphSelectionAt(
+          TextPosition(offset: startDragOffset),
+          affinity,
+        );
+        final extentParagraphSelection = _getParagraphSelectionAt(
+          TextPosition(offset: endDragOffset),
+          affinity,
+        );
 
         widget.textController.selection = _combineSelections(
           baseParagraphSelection,
@@ -1053,8 +1145,12 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
           affinity,
         );
       } else if (_selectionType == _SelectionType.word) {
-        final baseParagraphSelection = _textLayout.getWordSelectionAt(TextPosition(offset: startDragOffset));
-        final extentParagraphSelection = _textLayout.getWordSelectionAt(TextPosition(offset: endDragOffset));
+        final baseParagraphSelection = _textLayout.getWordSelectionAt(
+          TextPosition(offset: startDragOffset),
+        );
+        final extentParagraphSelection = _textLayout.getWordSelectionAt(
+          TextPosition(offset: endDragOffset),
+        );
 
         widget.textController.selection = _combineSelections(
           baseParagraphSelection,
@@ -1088,7 +1184,9 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
   void _clearSelection() {
     setState(() {
-      widget.textController.selection = const TextSelection.collapsed(offset: -1);
+      widget.textController.selection = const TextSelection.collapsed(
+        offset: -1,
+      );
     });
   }
 
@@ -1098,13 +1196,44 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
   /// form of mouse scrolling.
   void _onPointerSignal(PointerSignalEvent event) {
     if (event is PointerScrollEvent) {
-      _scrollVertically(event.scrollDelta.dy);
+      _scrollVertically(_normalizePointerScrollDelta(event));
     }
+  }
+
+  double _normalizePointerScrollDelta(PointerScrollEvent event) {
+    final double delta = event.scrollDelta.dy;
+    final double lineStep =
+        widget.textScrollKey.currentState!.widget.estimatedLineHeight;
+    final ScrollController scrollController =
+        widget.textScrollKey.currentState!.widget.scrollController;
+    final double maxLineStep = lineStep * _maxPointerScrollLinesPerEvent;
+    final double maxRangeStep = scrollController.hasClients
+        ? scrollController.position.maxScrollExtent *
+              _maxPointerScrollExtentFractionPerEvent
+        : maxLineStep;
+    final double maxWheelStep = min(
+      maxLineStep,
+      max(maxRangeStep, _minPointerScrollPixelsPerEvent),
+    );
+    if (delta.abs() <= maxWheelStep) {
+      return delta;
+    }
+    return delta.sign * maxWheelStep;
+  }
+
+  void _handleSelectionAutoScrollTick() {
+    if (_dragEndInViewport == null) {
+      return;
+    }
+    _dragEndInText = _getTextOffset(_dragEndInViewport!);
+    _updateDragSelection();
   }
 
   void _scrollIfNearBoundary() {
     if (_dragEndInViewport == null) {
-      _log.finer("_scrollIfNearBoundary - Can't scroll near boundary because _dragEndInViewport is null");
+      _log.finer(
+        "_scrollIfNearBoundary - Can't scroll near boundary because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
@@ -1151,7 +1280,9 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
   void _startScrollingToStart() {
     if (_dragEndInViewport == null) {
-      _log.finer("_scrollUp - Can't scroll up because _dragEndInViewport is null");
+      _log.finer(
+        "_scrollUp - Can't scroll up because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
@@ -1169,13 +1300,18 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
   void _startScrollingToEnd() {
     if (_dragEndInViewport == null) {
-      _log.finer("_scrollDown - Can't scroll down because _dragEndInViewport is null");
+      _log.finer(
+        "_scrollDown - Can't scroll down because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
 
     final editorBox = context.findRenderObject() as RenderBox;
-    final gutterAmount = (editorBox.size.height - _dragEndInViewport!.dy).clamp(0.0, _dragGutterExtent);
+    final gutterAmount = (editorBox.size.height - _dragEndInViewport!.dy).clamp(
+      0.0,
+      _dragGutterExtent,
+    );
     final speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
     final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!;
 
@@ -1189,7 +1325,10 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
   /// Scrolls the document vertically by [delta] pixels.
   void _scrollVertically(double delta) {
     final newScrollOffset = (_textScroll.widget.scrollController.offset + delta)
-        .clamp(0.0, _textScroll.widget.scrollController.position.maxScrollExtent);
+        .clamp(
+          0.0,
+          _textScroll.widget.scrollController.position.maxScrollExtent,
+        );
     _textScroll.widget.scrollController.jumpTo(newScrollOffset);
     _updateDragSelection();
   }
@@ -1203,13 +1342,23 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
   TextPosition? _getPositionAtOffset(Offset textFieldOffset) {
     final textOffset = _getTextOffset(textFieldOffset);
-    final textBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+    final textBox =
+        widget.textKey.currentContext!.findRenderObject() as RenderBox;
 
-    return textBox.size.contains(textOffset) ? _textLayout.getPositionAtOffset(textOffset) : null;
+    return textBox.size.contains(textOffset)
+        ? _textLayout.getPositionAtOffset(textOffset)
+        : null;
   }
 
-  TextSelection _getParagraphSelectionAt(TextPosition textPosition, TextAffinity affinity) {
-    return _textLayout.expandSelection(textPosition, paragraphExpansionFilter, affinity);
+  TextSelection _getParagraphSelectionAt(
+    TextPosition textPosition,
+    TextAffinity affinity,
+  ) {
+    return _textLayout.expandSelection(
+      textPosition,
+      paragraphExpansionFilter,
+      affinity,
+    );
   }
 
   TextPosition _getPositionNearestToTextOffset(Offset textOffset) {
@@ -1218,7 +1367,8 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
 
   Offset _getTextOffset(Offset textFieldOffset) {
     final textFieldBox = context.findRenderObject() as RenderBox;
-    final textBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+    final textBox =
+        widget.textKey.currentContext!.findRenderObject() as RenderBox;
     return textBox.globalToLocal(textFieldOffset, ancestor: textFieldBox);
   }
 
@@ -1235,45 +1385,45 @@ class _TwTextFieldGestureInteractorState extends State<TwTextFieldGestureInterac
         child: RawGestureDetector(
           behavior: HitTestBehavior.translucent,
           gestures: <Type, GestureRecognizerFactory>{
-            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
-              () => TapSequenceGestureRecognizer(),
-              (TapSequenceGestureRecognizer recognizer) {
-                recognizer
-                  ..onTapDown = _onTapDown
-                  ..onTapUp = _onTapUp
-                  ..onTapCancel = _onTapCancel
-                  ..onDoubleTapDown = _onDoubleTapDown
-                  ..onDoubleTapUp = _onDoubleTapUp
-                  ..onDoubleTap = _onDoubleTap
-                  ..onDoubleTapCancel = _onDoubleTapCancel
-                  ..onTripleTapDown = _onTripleTapDown
-                  ..onTripleTapUp = _onTripleTapUp
-                  ..onTripleTapCancel = _onTripleTapCancel
-                  ..onTripleTap = _onTripleTap
-                  ..gestureSettings = gestureSettings;
-              },
-            ),
-            PanGestureRecognizer: GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
-              () => PanGestureRecognizer(),
-              (PanGestureRecognizer recognizer) {
-                recognizer
-                  ..onStart = _onPanStart
-                  ..onUpdate = _onPanUpdate
-                  ..onEnd = _onPanEnd
-                  ..onCancel = _onPanCancel
-                  ..gestureSettings = gestureSettings;
-              },
-            ),
+            TapSequenceGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<
+                  TapSequenceGestureRecognizer
+                >(() => TapSequenceGestureRecognizer(), (
+                  TapSequenceGestureRecognizer recognizer,
+                ) {
+                  recognizer
+                    ..onTapDown = _onTapDown
+                    ..onTapUp = _onTapUp
+                    ..onTapCancel = _onTapCancel
+                    ..onDoubleTapDown = _onDoubleTapDown
+                    ..onDoubleTapUp = _onDoubleTapUp
+                    ..onDoubleTap = _onDoubleTap
+                    ..onDoubleTapCancel = _onDoubleTapCancel
+                    ..onTripleTapDown = _onTripleTapDown
+                    ..onTripleTapUp = _onTripleTapUp
+                    ..onTripleTapCancel = _onTripleTapCancel
+                    ..onTripleTap = _onTripleTap
+                    ..gestureSettings = gestureSettings;
+                }),
+            PanGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+                  () => PanGestureRecognizer(),
+                  (PanGestureRecognizer recognizer) {
+                    recognizer
+                      ..onStart = _onPanStart
+                      ..onUpdate = _onPanUpdate
+                      ..onEnd = _onPanEnd
+                      ..onCancel = _onPanCancel
+                      ..gestureSettings = gestureSettings;
+                  },
+                ),
           },
           child: Listener(
             onPointerHover: _onMouseMove,
             child: ValueListenableBuilder(
               valueListenable: _mouseCursor,
               builder: (context, mouseCursor, child) {
-                return MouseRegion(
-                  cursor: mouseCursor,
-                  child: child,
-                );
+                return MouseRegion(cursor: mouseCursor, child: child);
               },
               child: widget.child,
             ),
@@ -1345,7 +1495,8 @@ class TwTextFieldKeyboardInteractor extends StatefulWidget {
   State createState() => _TwTextFieldKeyboardInteractorState();
 }
 
-class _TwTextFieldKeyboardInteractorState extends State<TwTextFieldKeyboardInteractor> {
+class _TwTextFieldKeyboardInteractorState
+    extends State<TwTextFieldKeyboardInteractor> {
   @override
   void initState() {
     super.initState();
@@ -1373,19 +1524,24 @@ class _TwTextFieldKeyboardInteractorState extends State<TwTextFieldKeyboardInter
     }
 
     _log.fine("Clearing selection because TwTextField lost focus");
-    widget.textFieldContext.controller.selection = const TextSelection.collapsed(offset: -1);
+    widget.textFieldContext.controller.selection =
+        const TextSelection.collapsed(offset: -1);
   }
 
   KeyEventResult _onKeyPressed(FocusNode focusNode, KeyEvent keyEvent) {
-    _log.fine('_onKeyPressed - keyEvent: ${keyEvent.logicalKey}, character: ${keyEvent.character}');
+    _log.fine(
+      '_onKeyPressed - keyEvent: ${keyEvent.logicalKey}, character: ${keyEvent.character}',
+    );
     if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
       _log.finer('_onKeyPressed - not a "down" event. Ignoring.');
       return KeyEventResult.ignored;
     }
 
-    TextFieldKeyboardHandlerResult result = TextFieldKeyboardHandlerResult.notHandled;
+    TextFieldKeyboardHandlerResult result =
+        TextFieldKeyboardHandlerResult.notHandled;
     int index = 0;
-    while (result == TextFieldKeyboardHandlerResult.notHandled && index < widget.keyboardActions.length) {
+    while (result == TextFieldKeyboardHandlerResult.notHandled &&
+        index < widget.keyboardActions.length) {
       result = widget.keyboardActions[index](
         textFieldContext: widget.textFieldContext,
         keyEvent: keyEvent,
@@ -1482,7 +1638,8 @@ class TwTextFieldImeInteractor extends StatefulWidget {
   final Widget child;
 
   @override
-  State<TwTextFieldImeInteractor> createState() => _TwTextFieldImeInteractorState();
+  State<TwTextFieldImeInteractor> createState() =>
+      _TwTextFieldImeInteractorState();
 }
 
 class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
@@ -1508,8 +1665,12 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
   void didUpdateWidget(TwTextFieldImeInteractor oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.focusNode != oldWidget.focusNode) {
-      oldWidget.focusNode.removeListener(_updateSelectionAndImeConnectionOnFocusChange);
-      widget.focusNode.addListener(_updateSelectionAndImeConnectionOnFocusChange);
+      oldWidget.focusNode.removeListener(
+        _updateSelectionAndImeConnectionOnFocusChange,
+      );
+      widget.focusNode.addListener(
+        _updateSelectionAndImeConnectionOnFocusChange,
+      );
 
       if (widget.focusNode.hasFocus) {
         // We got an already focused FocusNode, we need to attach to the IME.
@@ -1524,7 +1685,9 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
       if (_textController.onPerformSelector == _onPerformSelector) {
         _textController.onPerformSelector = null;
       }
-      _textController.inputConnectionNotifier.removeListener(_onImeConnectionChanged);
+      _textController.inputConnectionNotifier.removeListener(
+        _onImeConnectionChanged,
+      );
 
       _textController = widget.textFieldContext.imeController!
         ..inputConnectionNotifier.addListener(_onImeConnectionChanged)
@@ -1534,7 +1697,10 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
         widget.imeConfiguration != null &&
-        (oldWidget.imeConfiguration == null || !widget.imeConfiguration!.isEquivalentTo(oldWidget.imeConfiguration!)) &&
+        (oldWidget.imeConfiguration == null ||
+            !widget.imeConfiguration!.isEquivalentTo(
+              oldWidget.imeConfiguration!,
+            )) &&
         _textController.isAttachedToIme) {
       _textController.updateTextInputConfiguration(
         viewId: View.of(context).viewId,
@@ -1550,8 +1716,12 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
 
   @override
   void dispose() {
-    widget.focusNode.removeListener(_updateSelectionAndImeConnectionOnFocusChange);
-    _textController.inputConnectionNotifier.removeListener(_onImeConnectionChanged);
+    widget.focusNode.removeListener(
+      _updateSelectionAndImeConnectionOnFocusChange,
+    );
+    _textController.inputConnectionNotifier.removeListener(
+      _onImeConnectionChanged,
+    );
     if (_textController.onPerformSelector == _onPerformSelector) {
       _textController.onPerformSelector = null;
     }
@@ -1567,7 +1737,9 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
         _log.info('Attaching TextInputClient to TextInput');
         setState(() {
           if (!_textController.selection.isValid) {
-            _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+            _textController.selection = TextSelection.collapsed(
+              offset: _textController.text.length,
+            );
           }
 
           if (widget.imeConfiguration != null) {
@@ -1575,8 +1747,12 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
           } else {
             _textController.attachToIme(
               viewId: View.of(context).viewId,
-              textInputType: widget.isMultiline ? TextInputType.multiline : TextInputType.text,
-              textInputAction: widget.isMultiline ? TextInputAction.newline : TextInputAction.done,
+              textInputType: widget.isMultiline
+                  ? TextInputType.multiline
+                  : TextInputType.text,
+              textInputAction: widget.isMultiline
+                  ? TextInputAction.newline
+                  : TextInputAction.done,
             );
           }
         });
@@ -1630,13 +1806,16 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
   ///
   /// This is needed to display the OS emoji & symbols panel at the selected position.
   void _reportSizeAndTransformToIme() {
-    final renderBox = widget.textKey.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox =
+        widget.textKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) {
       return;
     }
 
-    _textController.inputConnectionNotifier.value!
-        .setEditableSizeAndTransform(renderBox.size, renderBox.getTransformTo(null));
+    _textController.inputConnectionNotifier.value!.setEditableSizeAndTransform(
+      renderBox.size,
+      renderBox.getTransformTo(null),
+    );
   }
 
   void _reportCaretRectToIme() {
@@ -1701,12 +1880,16 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
     final position = TextPosition(offset: selection.baseOffset);
     final textLayout = text.textLayout;
     final caretOffset = textLayout.getOffsetForCaret(position);
-    final caretHeight = textLayout.getHeightForCaret(position) ?? textLayout.estimatedLineHeight;
+    final caretHeight =
+        textLayout.getHeightForCaret(position) ??
+        textLayout.estimatedLineHeight;
     final caretRect = caretOffset & Size(1, caretHeight);
 
     // Convert the coordinates from the text layout space to the text field space.
     final textRenderBox = text.context.findRenderObject() as RenderBox;
-    final textOffset = renderBox.globalToLocal(textRenderBox.localToGlobal(Offset.zero));
+    final textOffset = renderBox.globalToLocal(
+      textRenderBox.localToGlobal(Offset.zero),
+    );
     final caretOffsetInTextFieldSpace = caretRect.shift(textOffset);
 
     return caretOffsetInTextFieldSpace;
@@ -1806,11 +1989,14 @@ class TwTextFieldScrollview extends StatefulWidget {
   TwTextFieldScrollviewState createState() => TwTextFieldScrollviewState();
 }
 
-class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with SingleTickerProviderStateMixin {
+class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
+    with SingleTickerProviderStateMixin {
   bool _scrollToStartOnTick = false;
   bool _scrollToEndOnTick = false;
   double _scrollAmountPerFrame = 0;
   late Ticker _ticker;
+
+  VoidCallback? onAutoScrollTick;
 
   @override
   void initState() {
@@ -1866,21 +2052,36 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     }
 
     final viewportBox = context.findRenderObject() as RenderBox;
-    final textBox = widget.textKey.currentContext!.findRenderObject() as RenderBox;
+    final textBox =
+        widget.textKey.currentContext!.findRenderObject() as RenderBox;
     // Note: the textBoxOffset will be negative.
-    final textBoxOffset = textBox.globalToLocal(Offset.zero, ancestor: viewportBox);
+    final textBoxOffset = textBox.globalToLocal(
+      Offset.zero,
+      ancestor: viewportBox,
+    );
 
-    final selectionExtentOffsetInText = _textLayout.getOffsetAtPosition(selection.extent);
+    final selectionExtentOffsetInText = _textLayout.getOffsetAtPosition(
+      selection.extent,
+    );
 
     const gutterExtent = 0; // _dragGutterExtent
 
-    final beyondLeftViewportEdge = min(-textBoxOffset.dx + selectionExtentOffsetInText.dx - gutterExtent, 0).abs();
-    final beyondRightViewportEdge =
-        max((-textBoxOffset.dx + selectionExtentOffsetInText.dx + gutterExtent) - viewportBox.size.width, 0);
+    final beyondLeftViewportEdge = min(
+      -textBoxOffset.dx + selectionExtentOffsetInText.dx - gutterExtent,
+      0,
+    ).abs();
+    final beyondRightViewportEdge = max(
+      (-textBoxOffset.dx + selectionExtentOffsetInText.dx + gutterExtent) -
+          viewportBox.size.width,
+      0,
+    );
 
     if (beyondLeftViewportEdge > 0) {
-      final newScrollPosition = (widget.scrollController.offset - beyondLeftViewportEdge)
-          .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+      final newScrollPosition =
+          (widget.scrollController.offset - beyondLeftViewportEdge).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -1888,8 +2089,11 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
         curve: Curves.easeOut,
       );
     } else if (beyondRightViewportEdge > 0) {
-      final newScrollPosition = (beyondRightViewportEdge + widget.scrollController.offset)
-          .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+      final newScrollPosition =
+          (beyondRightViewportEdge + widget.scrollController.offset).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -1906,42 +2110,61 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     }
 
     final extentOffset = _textLayout.getOffsetAtPosition(selection.extent);
-    final extentLineHeight = _textLayout.getLineHeightAtPosition(selection.extent);
+    final extentLineHeight = _textLayout.getLineHeightAtPosition(
+      selection.extent,
+    );
 
     const gutterExtent = 0; // _dragGutterExtent
-    final extentLineIndex = (extentOffset.dy / widget.estimatedLineHeight).round();
+    final extentLineIndex = (extentOffset.dy / widget.estimatedLineHeight)
+        .round();
 
-    final firstCharY = _textLayout.getCharacterBox(const TextPosition(offset: 0))?.top ?? 0.0;
+    final firstCharY =
+        _textLayout.getCharacterBox(const TextPosition(offset: 0))?.top ?? 0.0;
     final isAtFirstLine = extentOffset.dy == firstCharY;
 
     final myBox = context.findRenderObject() as RenderBox;
     final beyondTopExtent = min<double>(
-            extentOffset.dy - //
-                widget.scrollController.offset -
-                gutterExtent -
-              (isAtFirstLine ? extentLineHeight / 2 : 0),
-            0)
-        .abs();
+      extentOffset.dy - //
+          widget.scrollController.offset -
+          gutterExtent -
+          (isAtFirstLine ? extentLineHeight / 2 : 0),
+      0,
+    ).abs();
 
     final beyondBottomExtent = max<double>(
-          ((extentLineIndex + 1) * widget.estimatedLineHeight) -
-            myBox.size.height -
-            widget.scrollController.offset +
-            gutterExtent +
-            (extentLineHeight / 2) +
-            (widget.estimatedLineHeight / 2), // manual adjustment to avoid line getting half cut off
-        0);
+      ((extentLineIndex + 1) * widget.estimatedLineHeight) -
+          myBox.size.height -
+          widget.scrollController.offset +
+          gutterExtent +
+          (extentLineHeight / 2) +
+          (widget.estimatedLineHeight /
+              2), // manual adjustment to avoid line getting half cut off
+      0,
+    );
 
     _log.finer('_ensureSelectionExtentIsVisible - Ensuring extent is visible.');
-    _log.finer('_ensureSelectionExtentIsVisible    - interaction size: ${myBox.size}');
-    _log.finer('_ensureSelectionExtentIsVisible    - scroll extent: ${widget.scrollController.offset}');
-    _log.finer('_ensureSelectionExtentIsVisible    - extent rect: $extentOffset');
-    _log.finer('_ensureSelectionExtentIsVisible    - beyond top: $beyondTopExtent');
-    _log.finer('_ensureSelectionExtentIsVisible    - beyond bottom: $beyondBottomExtent');
+    _log.finer(
+      '_ensureSelectionExtentIsVisible    - interaction size: ${myBox.size}',
+    );
+    _log.finer(
+      '_ensureSelectionExtentIsVisible    - scroll extent: ${widget.scrollController.offset}',
+    );
+    _log.finer(
+      '_ensureSelectionExtentIsVisible    - extent rect: $extentOffset',
+    );
+    _log.finer(
+      '_ensureSelectionExtentIsVisible    - beyond top: $beyondTopExtent',
+    );
+    _log.finer(
+      '_ensureSelectionExtentIsVisible    - beyond bottom: $beyondBottomExtent',
+    );
 
     if (beyondTopExtent > 0) {
-      final newScrollPosition = (widget.scrollController.offset - beyondTopExtent)
-          .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+      final newScrollPosition =
+          (widget.scrollController.offset - beyondTopExtent).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -1949,8 +2172,11 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
         curve: Curves.easeOut,
       );
     } else if (beyondBottomExtent > 0) {
-      final newScrollPosition = (beyondBottomExtent + widget.scrollController.offset)
-          .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+      final newScrollPosition =
+          (beyondBottomExtent + widget.scrollController.offset).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -1989,7 +2215,9 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
       return;
     }
 
-    widget.scrollController.position.jumpTo(widget.scrollController.offset - _scrollAmountPerFrame);
+    widget.scrollController.position.jumpTo(
+      widget.scrollController.offset - _scrollAmountPerFrame,
+    );
   }
 
   void startScrollingToEnd({required double amountPerFrame}) {
@@ -2017,11 +2245,14 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
   }
 
   void scrollToEnd() {
-    if (widget.scrollController.offset >= widget.scrollController.position.maxScrollExtent) {
+    if (widget.scrollController.offset >=
+        widget.scrollController.position.maxScrollExtent) {
       return;
     }
 
-    widget.scrollController.position.jumpTo(widget.scrollController.offset + _scrollAmountPerFrame);
+    widget.scrollController.position.jumpTo(
+      widget.scrollController.offset + _scrollAmountPerFrame,
+    );
   }
 
   /// Animates the scroll position like a ballistic particle with friction, beginning
@@ -2042,7 +2273,8 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     final pos = widget.scrollController.position;
 
     if (pos is ScrollPositionWithSingleContext) {
-      if (pos.pixels > pos.minScrollExtent && pos.pixels < pos.maxScrollExtent) {
+      if (pos.pixels > pos.minScrollExtent &&
+          pos.pixels < pos.maxScrollExtent) {
         pos.goIdle();
       }
     }
@@ -2055,12 +2287,14 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview> with Singl
     if (_scrollToEndOnTick) {
       scrollToEnd();
     }
+    onAutoScrollTick?.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ScrollPhysics platformPhysics =
-        ScrollConfiguration.of(context).getScrollPhysics(context);
+    final ScrollPhysics platformPhysics = ScrollConfiguration.of(
+      context,
+    ).getScrollPhysics(context);
 
     return SizedBox(
       height: widget.viewportHeight,
@@ -2143,14 +2377,17 @@ enum TextFieldKeyboardHandlerResult {
   notHandled,
 }
 
-typedef TextFieldKeyboardHandler = TextFieldKeyboardHandlerResult Function({
-  required TwTextFieldContext textFieldContext,
-  required KeyEvent keyEvent,
-});
+typedef TextFieldKeyboardHandler =
+    TextFieldKeyboardHandlerResult Function({
+      required TwTextFieldContext textFieldContext,
+      required KeyEvent keyEvent,
+    });
 
 /// A [TextFieldKeyboardHandler] that reports [TextFieldKeyboardHandlerResult.blocked]
 /// for any key combination that matches one of the given [keys].
-TextFieldKeyboardHandler ignoreTextFieldKeyCombos(List<ShortcutActivator> keys) {
+TextFieldKeyboardHandler ignoreTextFieldKeyCombos(
+  List<ShortcutActivator> keys,
+) {
   return ({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
@@ -2182,9 +2419,11 @@ TextFieldKeyboardHandler ignoreTextFieldKeyCombos(List<ShortcutActivator> keys) 
 const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
   DefaultTwTextFieldKeyboardHandlers.scrollOnPageUp,
   DefaultTwTextFieldKeyboardHandlers.scrollOnPageDown,
-  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
+  DefaultTwTextFieldKeyboardHandlers
+      .scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
-  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers
+      .scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
   DefaultTwTextFieldKeyboardHandlers.cutTextWhenCmdXIsPressed,
   DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
@@ -2195,8 +2434,10 @@ const defaultTextFieldKeyboardHandlers = <TextFieldKeyboardHandler>[
   DefaultTwTextFieldKeyboardHandlers.moveToLineStartWithHome,
   DefaultTwTextFieldKeyboardHandlers.moveToLineEndWithEnd,
   DefaultTwTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
-  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
-  DefaultTwTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
+  DefaultTwTextFieldKeyboardHandlers
+      .deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
+  DefaultTwTextFieldKeyboardHandlers
+      .deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
   DefaultTwTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
   DefaultTwTextFieldKeyboardHandlers.insertNewlineWhenEnterIsPressed,
   DefaultTwTextFieldKeyboardHandlers.blockControlKeys,
@@ -2229,7 +2470,8 @@ const defaultTextFieldImeKeyboardHandlers = <TextFieldKeyboardHandler>[
   DefaultTwTextFieldKeyboardHandlers.copyTextWhenCmdCIsPressed,
   DefaultTwTextFieldKeyboardHandlers.pasteTextWhenCmdVIsPressed,
   DefaultTwTextFieldKeyboardHandlers.selectAllTextFieldWhenCmdAIsPressed,
-  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
+  DefaultTwTextFieldKeyboardHandlers
+      .scrollToBeginningOfDocumentOnCtrlOrCmdAndHome,
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnCtrlOrCmdAndEnd,
   // WARNING: No keyboard handlers below this point will run on Mac. On Mac, most
   // common shortcuts are recognized by the OS. This line short circuits TwTextField
@@ -2238,15 +2480,18 @@ const defaultTextFieldImeKeyboardHandlers = <TextFieldKeyboardHandler>[
   DefaultTwTextFieldKeyboardHandlers.sendKeyEventToMacOs,
   DefaultTwTextFieldKeyboardHandlers.scrollOnPageUp,
   DefaultTwTextFieldKeyboardHandlers.scrollOnPageDown,
-  DefaultTwTextFieldKeyboardHandlers.scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
+  DefaultTwTextFieldKeyboardHandlers
+      .scrollToBeginningOfDocumentOnHomeOnMacOrWeb,
   DefaultTwTextFieldKeyboardHandlers.scrollToEndOfDocumentOnEndOnMacOrWeb,
   DefaultTwTextFieldKeyboardHandlers.moveCaretToStartOrEnd,
   DefaultTwTextFieldKeyboardHandlers.moveUpDownLeftAndRightWithArrowKeys,
   DefaultTwTextFieldKeyboardHandlers.moveToLineStartWithHome,
   DefaultTwTextFieldKeyboardHandlers.moveToLineEndWithEnd,
   DefaultTwTextFieldKeyboardHandlers.deleteWordWhenAltBackSpaceIsPressedOnMac,
-  DefaultTwTextFieldKeyboardHandlers.deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
-  DefaultTwTextFieldKeyboardHandlers.deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
+  DefaultTwTextFieldKeyboardHandlers
+      .deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux,
+  DefaultTwTextFieldKeyboardHandlers
+      .deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed,
   DefaultTwTextFieldKeyboardHandlers.deleteTextWhenBackspaceOrDeleteIsPressed,
 ];
 
@@ -2351,7 +2596,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     if (defaultTargetPlatform != TargetPlatform.macOS) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
-    if (keyEvent.logicalKey != LogicalKeyboardKey.keyA && keyEvent.logicalKey != LogicalKeyboardKey.keyE) {
+    if (keyEvent.logicalKey != LogicalKeyboardKey.keyA &&
+        keyEvent.logicalKey != LogicalKeyboardKey.keyE) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
     if (textFieldContext.controller.selection.extentOffset == -1) {
@@ -2361,8 +2607,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     keyEvent.logicalKey == LogicalKeyboardKey.keyA
         ? moveLeft = true
         : keyEvent.logicalKey == LogicalKeyboardKey.keyE
-            ? moveLeft = false
-            : null;
+        ? moveLeft = false
+        : null;
 
     textFieldContext.controller.moveCaretHorizontally(
       textLayout: textFieldContext.getTextLayout(),
@@ -2390,7 +2636,8 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (CurrentPlatform.isWeb && (textFieldContext.controller.composingRegion.isValid)) {
+    if (CurrentPlatform.isWeb &&
+        (textFieldContext.controller.composingRegion.isValid)) {
       // We are composing a character on web. It's possible that a native element is being displayed,
       // like an emoji picker or a character selection panel.
       // We need to let the OS handle the key so the user can navigate
@@ -2405,26 +2652,33 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.handled;
     }
 
-    if (defaultTargetPlatform == TargetPlatform.windows && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.windows &&
+        HardwareKeyboard.instance.isAltPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
     if (defaultTargetPlatform == TargetPlatform.linux &&
         HardwareKeyboard.instance.isAltPressed &&
-        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp || keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
+        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
+            keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
     if (keyEvent.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      _log.finer('moveUpDownLeftAndRightWithArrowKeys - handling left arrow key');
+      _log.finer(
+        'moveUpDownLeftAndRightWithArrowKeys - handling left arrow key',
+      );
 
       MovementModifier? movementModifier;
-      if ((defaultTargetPlatform == TargetPlatform.windows || defaultTargetPlatform == TargetPlatform.linux) &&
+      if ((defaultTargetPlatform == TargetPlatform.windows ||
+              defaultTargetPlatform == TargetPlatform.linux) &&
           HardwareKeyboard.instance.isControlPressed) {
         movementModifier = MovementModifier.word;
-      } else if (defaultTargetPlatform == TargetPlatform.macOS && HardwareKeyboard.instance.isMetaPressed) {
+      } else if (defaultTargetPlatform == TargetPlatform.macOS &&
+          HardwareKeyboard.instance.isMetaPressed) {
         movementModifier = MovementModifier.line;
-      } else if (defaultTargetPlatform == TargetPlatform.macOS && HardwareKeyboard.instance.isAltPressed) {
+      } else if (defaultTargetPlatform == TargetPlatform.macOS &&
+          HardwareKeyboard.instance.isAltPressed) {
         movementModifier = MovementModifier.word;
       }
 
@@ -2435,15 +2689,20 @@ class DefaultTwTextFieldKeyboardHandlers {
         movementModifier: movementModifier,
       );
     } else if (keyEvent.logicalKey == LogicalKeyboardKey.arrowRight) {
-      _log.finer('moveUpDownLeftAndRightWithArrowKeys - handling right arrow key');
+      _log.finer(
+        'moveUpDownLeftAndRightWithArrowKeys - handling right arrow key',
+      );
 
       MovementModifier? movementModifier;
-      if ((defaultTargetPlatform == TargetPlatform.windows || defaultTargetPlatform == TargetPlatform.linux) &&
+      if ((defaultTargetPlatform == TargetPlatform.windows ||
+              defaultTargetPlatform == TargetPlatform.linux) &&
           HardwareKeyboard.instance.isControlPressed) {
         movementModifier = MovementModifier.word;
-      } else if (defaultTargetPlatform == TargetPlatform.macOS && HardwareKeyboard.instance.isMetaPressed) {
+      } else if (defaultTargetPlatform == TargetPlatform.macOS &&
+          HardwareKeyboard.instance.isMetaPressed) {
         movementModifier = MovementModifier.line;
-      } else if (defaultTargetPlatform == TargetPlatform.macOS && HardwareKeyboard.instance.isAltPressed) {
+      } else if (defaultTargetPlatform == TargetPlatform.macOS &&
+          HardwareKeyboard.instance.isAltPressed) {
         movementModifier = MovementModifier.word;
       }
 
@@ -2461,7 +2720,9 @@ class DefaultTwTextFieldKeyboardHandlers {
         moveUp: true,
       );
     } else if (keyEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
-      _log.finer('moveUpDownLeftAndRightWithArrowKeys - handling down arrow key');
+      _log.finer(
+        'moveUpDownLeftAndRightWithArrowKeys - handling down arrow key',
+      );
       textFieldContext.controller.moveCaretVertically(
         textLayout: textFieldContext.getTextLayout(),
         expandSelection: HardwareKeyboard.instance.isShiftPressed,
@@ -2476,7 +2737,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
+    if (defaultTargetPlatform != TargetPlatform.windows &&
+        defaultTargetPlatform != TargetPlatform.linux) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
@@ -2497,7 +2759,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
+    if (defaultTargetPlatform != TargetPlatform.windows &&
+        defaultTargetPlatform != TargetPlatform.linux) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
@@ -2521,7 +2784,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) {
+    if (HardwareKeyboard.instance.isMetaPressed ||
+        HardwareKeyboard.instance.isControlPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
@@ -2551,11 +2815,13 @@ class DefaultTwTextFieldKeyboardHandlers {
 
   /// Deletes text between the beginning of the line and the caret, when the user
   /// presses CMD + Backspace, or CTL + Backspace.
-  static TextFieldKeyboardHandlerResult deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed({
+  static TextFieldKeyboardHandlerResult
+  deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (!keyEvent.isPrimaryShortcutKeyPressed || keyEvent.logicalKey != LogicalKeyboardKey.backspace) {
+    if (!keyEvent.isPrimaryShortcutKeyPressed ||
+        keyEvent.logicalKey != LogicalKeyboardKey.backspace) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
     if (textFieldContext.controller.selection.extentOffset < 0) {
@@ -2569,7 +2835,9 @@ class DefaultTwTextFieldKeyboardHandlers {
 
     if (textFieldContext
             .getTextLayout()
-            .getPositionAtStartOfLine(textFieldContext.controller.selection.extent)
+            .getPositionAtStartOfLine(
+              textFieldContext.controller.selection.extent,
+            )
             .offset ==
         textFieldContext.controller.selection.extentOffset) {
       // The caret is sitting at the beginning of a line. There's nothing for us to
@@ -2578,13 +2846,16 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.handled;
     }
 
-    textFieldContext.controller.deleteTextOnLineBeforeCaret(textLayout: textFieldContext.getTextLayout());
+    textFieldContext.controller.deleteTextOnLineBeforeCaret(
+      textLayout: textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
   /// [deleteTextWhenBackspaceOrDeleteIsPressed] deletes single characters when delete or backspace is pressed.
-  static TextFieldKeyboardHandlerResult deleteTextWhenBackspaceOrDeleteIsPressed({
+  static TextFieldKeyboardHandlerResult
+  deleteTextWhenBackspaceOrDeleteIsPressed({
     required TwTextFieldContext textFieldContext,
     ProseTextLayout? textLayout,
     required KeyEvent keyEvent,
@@ -2599,7 +2870,9 @@ class DefaultTwTextFieldKeyboardHandlers {
     }
 
     if (textFieldContext.controller.selection.isCollapsed) {
-      textFieldContext.controller.deleteCharacter(isBackspace ? TextAffinity.upstream : TextAffinity.downstream);
+      textFieldContext.controller.deleteCharacter(
+        isBackspace ? TextAffinity.upstream : TextAffinity.downstream,
+      );
     } else {
       textFieldContext.controller.deleteSelectedText();
     }
@@ -2608,7 +2881,8 @@ class DefaultTwTextFieldKeyboardHandlers {
   }
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Alt+Backspace is pressed on Mac.
-  static TextFieldKeyboardHandlerResult deleteWordWhenAltBackSpaceIsPressedOnMac({
+  static TextFieldKeyboardHandlerResult
+  deleteWordWhenAltBackSpaceIsPressedOnMac({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2616,40 +2890,53 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (keyEvent.logicalKey != LogicalKeyboardKey.backspace || !HardwareKeyboard.instance.isAltPressed) {
+    if (keyEvent.logicalKey != LogicalKeyboardKey.backspace ||
+        !HardwareKeyboard.instance.isAltPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
     if (textFieldContext.controller.selection.extentOffset < 0) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    _deleteUpstreamWord(textFieldContext.controller, textFieldContext.getTextLayout());
+    _deleteUpstreamWord(
+      textFieldContext.controller,
+      textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Ctl+Backspace is pressed on Windows/Linux.
-  static TextFieldKeyboardHandlerResult deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux({
+  static TextFieldKeyboardHandlerResult
+  deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform != TargetPlatform.windows && defaultTargetPlatform != TargetPlatform.linux) {
+    if (defaultTargetPlatform != TargetPlatform.windows &&
+        defaultTargetPlatform != TargetPlatform.linux) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (keyEvent.logicalKey != LogicalKeyboardKey.backspace || !HardwareKeyboard.instance.isControlPressed) {
+    if (keyEvent.logicalKey != LogicalKeyboardKey.backspace ||
+        !HardwareKeyboard.instance.isControlPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
     if (textFieldContext.controller.selection.extentOffset < 0) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    _deleteUpstreamWord(textFieldContext.controller, textFieldContext.getTextLayout());
+    _deleteUpstreamWord(
+      textFieldContext.controller,
+      textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
-  static void _deleteUpstreamWord(AttributedTextEditingController controller, ProseTextLayout textLayout) {
+  static void _deleteUpstreamWord(
+    AttributedTextEditingController controller,
+    ProseTextLayout textLayout,
+  ) {
     if (!controller.selection.isCollapsed) {
       controller.deleteSelectedText();
       return;
@@ -2670,7 +2957,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     ProseTextLayout? textLayout,
     required KeyEvent keyEvent,
   }) {
-    if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+    if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
+        keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
     if (!textFieldContext.controller.selection.isCollapsed) {
@@ -2686,7 +2974,8 @@ class DefaultTwTextFieldKeyboardHandlers {
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform == TargetPlatform.macOS && !CurrentPlatform.isWeb) {
+    if (defaultTargetPlatform == TargetPlatform.macOS &&
+        !CurrentPlatform.isWeb) {
       // On macOS, we let the IME handle all key events. Then, the IME might generate
       // selectors which express the user intent, e.g, moveLeftAndModifySelection:.
       //
@@ -2720,7 +3009,9 @@ class DefaultTwTextFieldKeyboardHandlers {
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Scrolls down by the viewport height, or as far as possible,
@@ -2744,7 +3035,9 @@ class DefaultTwTextFieldKeyboardHandlers {
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Scrolls the viewport to the top of the content, when the user presses
@@ -2752,7 +3045,8 @@ class DefaultTwTextFieldKeyboardHandlers {
   ///
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
-  static TextFieldKeyboardHandlerResult scrollToBeginningOfDocumentOnCtrlOrCmdAndHome({
+  static TextFieldKeyboardHandlerResult
+  scrollToBeginningOfDocumentOnCtrlOrCmdAndHome({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2768,15 +3062,20 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (!CurrentPlatform.isApple && !HardwareKeyboard.instance.isControlPressed) {
+    if (!CurrentPlatform.isApple &&
+        !HardwareKeyboard.instance.isControlPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled = _scrollToBeginningOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToBeginningOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Scrolls the viewport to the bottom of the content, when the user presses
@@ -2800,15 +3099,20 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (!CurrentPlatform.isApple && !HardwareKeyboard.instance.isControlPressed) {
+    if (!CurrentPlatform.isApple &&
+        !HardwareKeyboard.instance.isControlPressed) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled = _scrollToEndOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToEndOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Scrolls the viewport to the top of the content, when the user presses
@@ -2816,7 +3120,8 @@ class DefaultTwTextFieldKeyboardHandlers {
   ///
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
-  static TextFieldKeyboardHandlerResult scrollToBeginningOfDocumentOnHomeOnMacOrWeb({
+  static TextFieldKeyboardHandlerResult
+  scrollToBeginningOfDocumentOnHomeOnMacOrWeb({
     required TwTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2828,15 +3133,20 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (defaultTargetPlatform != TargetPlatform.macOS && !CurrentPlatform.isWeb) {
+    if (defaultTargetPlatform != TargetPlatform.macOS &&
+        !CurrentPlatform.isWeb) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled = _scrollToBeginningOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToBeginningOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Scrolls the viewport to the bottom of the content, when the user presses
@@ -2856,15 +3166,20 @@ class DefaultTwTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    if (defaultTargetPlatform != TargetPlatform.macOS && !CurrentPlatform.isWeb) {
+    if (defaultTargetPlatform != TargetPlatform.macOS &&
+        !CurrentPlatform.isWeb) {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled = _scrollToEndOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToEndOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
-    return scrolled ? TextFieldKeyboardHandlerResult.handled : TextFieldKeyboardHandlerResult.notHandled;
+    return scrolled
+        ? TextFieldKeyboardHandlerResult.handled
+        : TextFieldKeyboardHandlerResult.notHandled;
   }
 
   /// Halt execution of the current key event if the key pressed is one of
@@ -2933,9 +3248,8 @@ class _EstimatedLineHeight {
 }
 
 /// A callback to handle a `performSelector` call.
-typedef TwTextFieldSelectorHandler = void Function({
-  required TwTextFieldContext textFieldContext,
-});
+typedef TwTextFieldSelectorHandler =
+    void Function({required TwTextFieldContext textFieldContext});
 
 const defaultTextFieldSelectorHandlers = <String, TwTextFieldSelectorHandler>{
   // Control.
@@ -2961,9 +3275,12 @@ const defaultTextFieldSelectorHandlers = <String, TwTextFieldSelectorHandler>{
   MacOsSelectors.moveUpAndModifySelection: _expandSelectionLineUp,
   MacOsSelectors.moveDownAndModifySelection: _expandSelectionLineDown,
   MacOsSelectors.moveWordLeftAndModifySelection: _expandSelectionWordUpstream,
-  MacOsSelectors.moveWordRightAndModifySelection: _expandSelectionWordDownstream,
-  MacOsSelectors.moveToLeftEndOfLineAndModifySelection: _expandSelectionLineUpstream,
-  MacOsSelectors.moveToRightEndOfLineAndModifySelection: _expandSelectionLineDownstream,
+  MacOsSelectors.moveWordRightAndModifySelection:
+      _expandSelectionWordDownstream,
+  MacOsSelectors.moveToLeftEndOfLineAndModifySelection:
+      _expandSelectionLineUpstream,
+  MacOsSelectors.moveToRightEndOfLineAndModifySelection:
+      _expandSelectionLineDownstream,
 
   // Deletion.
   MacOsSelectors.deleteBackward: _deleteUpstream,
@@ -2981,27 +3298,19 @@ const defaultTextFieldSelectorHandlers = <String, TwTextFieldSelectorHandler>{
   MacOsSelectors.scrollPageDown: _scrollPageDown,
 };
 
-void _giveUpFocus({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _giveUpFocus({required TwTextFieldContext textFieldContext}) {
   textFieldContext.focusNode.unfocus();
 }
 
-void _moveFocusNext({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveFocusNext({required TwTextFieldContext textFieldContext}) {
   textFieldContext.focusNode.nextFocus();
 }
 
-void _selectAll({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _selectAll({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.selectAll();
 }
 
-void _moveCaretUpstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveCaretUpstream({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3010,9 +3319,7 @@ void _moveCaretUpstream({
   );
 }
 
-void _moveCaretDownstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveCaretDownstream({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3021,9 +3328,7 @@ void _moveCaretDownstream({
   );
 }
 
-void _moveCaretUp({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveCaretUp({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: true,
@@ -3031,9 +3336,7 @@ void _moveCaretUp({
   );
 }
 
-void _moveCaretDown({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveCaretDown({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: false,
@@ -3041,9 +3344,7 @@ void _moveCaretDown({
   );
 }
 
-void _moveWordUpstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveWordUpstream({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3052,9 +3353,7 @@ void _moveWordUpstream({
   );
 }
 
-void _moveWordDownstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveWordDownstream({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3063,9 +3362,7 @@ void _moveWordDownstream({
   );
 }
 
-void _moveLineBeginning({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveLineBeginning({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3074,9 +3371,7 @@ void _moveLineBeginning({
   );
 }
 
-void _moveLineEnd({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _moveLineEnd({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3085,9 +3380,7 @@ void _moveLineEnd({
   );
 }
 
-void _expandSelectionUpstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _expandSelectionUpstream({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3107,9 +3400,7 @@ void _expandSelectionDownstream({
   );
 }
 
-void _expandSelectionLineUp({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _expandSelectionLineUp({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: true,
@@ -3117,9 +3408,7 @@ void _expandSelectionLineUp({
   );
 }
 
-void _expandSelectionLineDown({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _expandSelectionLineDown({required TwTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: false,
@@ -3171,9 +3460,7 @@ void _expandSelectionLineDownstream({
   );
 }
 
-void _deleteUpstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteUpstream({required TwTextFieldContext textFieldContext}) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.upstream);
   } else {
@@ -3181,9 +3468,7 @@ void _deleteUpstream({
   }
 }
 
-void _deleteDownstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteDownstream({required TwTextFieldContext textFieldContext}) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.downstream);
   } else {
@@ -3191,9 +3476,7 @@ void _deleteDownstream({
   }
 }
 
-void _deleteWordUpstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteWordUpstream({required TwTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
     return;
@@ -3208,9 +3491,7 @@ void _deleteWordUpstream({
   textFieldContext.controller.deleteSelectedText();
 }
 
-void _deleteWordDownstream({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteWordDownstream({required TwTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
     return;
@@ -3226,15 +3507,18 @@ void _deleteWordDownstream({
   textFieldContext.controller.deleteSelectedText();
 }
 
-void _deleteToBeginningOfLine({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteToBeginningOfLine({required TwTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelection();
     return;
   }
 
-  if (textFieldContext.getTextLayout().getPositionAtStartOfLine(textFieldContext.controller.selection.extent).offset ==
+  if (textFieldContext
+          .getTextLayout()
+          .getPositionAtStartOfLine(
+            textFieldContext.controller.selection.extent,
+          )
+          .offset ==
       textFieldContext.controller.selection.extentOffset) {
     // The caret is sitting at the beginning of a line. There's nothing for us to
     // delete upstream on this line. But we also don't want a regular BACKSPACE to
@@ -3242,25 +3526,30 @@ void _deleteToBeginningOfLine({
     return;
   }
 
-  textFieldContext.controller.deleteTextOnLineBeforeCaret(textLayout: textFieldContext.getTextLayout());
+  textFieldContext.controller.deleteTextOnLineBeforeCaret(
+    textLayout: textFieldContext.getTextLayout(),
+  );
 }
 
-void _deleteToEndOfLine({
-  required TwTextFieldContext textFieldContext,
-}) {
+void _deleteToEndOfLine({required TwTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelection();
     return;
   }
 
-  if (textFieldContext.getTextLayout().getPositionAtEndOfLine(textFieldContext.controller.selection.extent).offset ==
+  if (textFieldContext
+          .getTextLayout()
+          .getPositionAtEndOfLine(textFieldContext.controller.selection.extent)
+          .offset ==
       textFieldContext.controller.selection.extentOffset) {
     // The caret is sitting at the end of a line. There's nothing for us to
     // delete downstream on this line.
     return;
   }
 
-  textFieldContext.controller.deleteTextOnLineAfterCaret(textLayout: textFieldContext.getTextLayout());
+  textFieldContext.controller.deleteTextOnLineAfterCaret(
+    textLayout: textFieldContext.getTextLayout(),
+  );
 }
 
 /// Scrolls to the top of the textfield.
@@ -3273,8 +3562,10 @@ bool _scrollToBeginningOfDocument({
   required TwTextFieldContext textFieldContext,
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
-  final ScrollPosition? ancestorScrollable =
-      textFieldContext.textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+  final ScrollPosition? ancestorScrollable = textFieldContext
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // The text field doesn't have any scrollable content. There is no ancestor
@@ -3315,12 +3606,12 @@ bool _scrollToBeginningOfDocument({
 /// scrollable to its end.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollToEndOfDocument({
-  required TwTextFieldContext textFieldContext,
-}) {
+bool _scrollToEndOfDocument({required TwTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
-  final ScrollPosition? ancestorScrollable =
-      textFieldContext.textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+  final ScrollPosition? ancestorScrollable = textFieldContext
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // The text field doesn't have any scrollable content. There is no ancestor
@@ -3367,12 +3658,12 @@ bool _scrollToEndOfDocument({
 /// scrollable up by its viewport height.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollPageUp({
-  required TwTextFieldContext textFieldContext,
-}) {
+bool _scrollPageUp({required TwTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
-  final ScrollPosition? ancestorScrollable =
-      textFieldContext.textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+  final ScrollPosition? ancestorScrollable = textFieldContext
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // No scrollable content within `SuperDesktopField` and ancestor scrollable
@@ -3400,7 +3691,10 @@ bool _scrollPageUp({
 
   // Scroll up ancestor scrollable by viewport height.
   ancestorScrollable.animateTo(
-    max(ancestorScrollable.pixels - ancestorScrollable.viewportDimension, ancestorScrollable.minScrollExtent),
+    max(
+      ancestorScrollable.pixels - ancestorScrollable.viewportDimension,
+      ancestorScrollable.minScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -3414,12 +3708,12 @@ bool _scrollPageUp({
 /// scrollable down by its viewport height.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollPageDown({
-  required TwTextFieldContext textFieldContext,
-}) {
+bool _scrollPageDown({required TwTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
-  final ScrollPosition? ancestorScrollable =
-      textFieldContext.textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+  final ScrollPosition? ancestorScrollable = textFieldContext
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // No scrollable content within `SuperDesktopField` and ancestor scrollable
@@ -3447,11 +3741,13 @@ bool _scrollPageDown({
 
   // Scroll down ancestor scrollable by viewport height.
   ancestorScrollable.animateTo(
-    min(ancestorScrollable.pixels + ancestorScrollable.viewportDimension, ancestorScrollable.maxScrollExtent),
+    min(
+      ancestorScrollable.pixels + ancestorScrollable.viewportDimension,
+      ancestorScrollable.maxScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
 
   return true;
 }
-
