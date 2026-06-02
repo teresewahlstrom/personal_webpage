@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart'
-  show
-    ChatKeyboardScrollTargetController,
-    ChatOverlay,
-    ChatSkin,
-    ChatSkinMode;
+    show
+        ChatKeyboardScrollTargetController,
+        ChatOverlay,
+        ChatSkin,
+        ChatSkinMode;
 import 'package:tw_primitives/theme.dart' show TwColorsBuildContextExtension;
 import 'package:tw_primitives/scrollbar.dart'
-  show TwSelectableScrollArea, TwSelectableRegionState;
+    show TwSelectableScrollArea, TwSelectableRegionState;
 
 import '../../config/app_ui_config.dart';
 import '_grid_background.dart';
@@ -54,8 +54,8 @@ class PageScaffold extends StatefulWidget {
   final ChatSkinMode initialChatSkinMode;
 
   static void clearPageSelection(BuildContext context) {
-    final _PageScaffoldState? state =
-        context.findAncestorStateOfType<_PageScaffoldState>();
+    final _PageScaffoldState? state = context
+        .findAncestorStateOfType<_PageScaffoldState>();
     state?._clearPageSelection();
   }
 
@@ -65,8 +65,9 @@ class PageScaffold extends StatefulWidget {
 
 class _PageScaffoldState extends State<PageScaffold> {
   final ScrollController _pageScrollController = ScrollController();
-  late final ChatKeyboardScrollTargetController _chatKeyboardScrollTargetController;
-    final GlobalKey<TwSelectableRegionState> _pageSelectionAreaKey =
+  late final ChatKeyboardScrollTargetController
+  _chatKeyboardScrollTargetController;
+  final GlobalKey<TwSelectableRegionState> _pageSelectionAreaKey =
       GlobalKey<TwSelectableRegionState>();
   final FocusNode _pageInteractionFocusNode = FocusNode(
     debugLabel: 'page-scroll-interaction',
@@ -112,109 +113,110 @@ class _PageScaffoldState extends State<PageScaffold> {
         width: AppLineTheme.subtleWidth,
       ),
       child: Stack(
-          children: <Widget>[
-            SafeArea(
-              bottom: true,
-              top: false,
-              left: false,
-              right: false,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        AbsorbPointer(
-                          absorbing: widget.isPageLoading,
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              return TwSelectableScrollArea.scrollView(
-                                        controller: _pageScrollController,
-                                        selectionKey: _pageSelectionAreaKey,
-                                    interactionFocusNode:
-                                      _pageInteractionFocusNode,
-                                        isKeyboardScrollBlocked:
-                                            _chatKeyboardScrollTargetController
-                                                .isChatTargetListenable,
-                                        onPointerDown: () {
-                                          _chatKeyboardScrollTargetController
-                                              .setChatTarget(false);
-                                        },
-                                        thumbColor: context.twColors.pageScrollbarThumb,
-                                        thumbInactiveColor: context.twColors.pageScrollbarThumbInactive,
-                                        trackColor: context.twColors.pageScrollbarTrack,
-                                        thickness:
-                                          ShellUiConfig.pageScrollbarThickness,
-                                        minThumbLength:
-                                            chatTokens.scrollbarMinThumbLength,
-                                        crossAxisMargin:
-                                            ShellUiConfig.pageScrollbarCrossAxisMargin,
-                                        radius: chatTokens.scrollbarRadius,
-                                        thumbVisibility: true,
-                                        interactive: true,
-                                        trackVisibility: false,
-                                      physics: const ClampingScrollPhysics(
-                                        parent: AlwaysScrollableScrollPhysics(),
-                                      ),
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          minHeight: constraints.maxHeight,
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: footer != null
-                                              ? MainAxisAlignment.spaceBetween
-                                              : MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                const PageHeader(),
-                                                widget.child,
-                                              ],
-                                            ),
-                                            ...[footer].whereType<Widget>(),
-                                          ],
-                                        ),
-                                      ),
-                              );
-                            },
-                          ),
+        children: <Widget>[
+          SafeArea(
+            bottom: true,
+            top: false,
+            left: false,
+            right: false,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      AbsorbPointer(
+                        absorbing: widget.isPageLoading,
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            return TwSelectableScrollArea.scrollView(
+                              controller: _pageScrollController,
+                              selectionKey: _pageSelectionAreaKey,
+                              interactionFocusNode: _pageInteractionFocusNode,
+                              isKeyboardScrollBlocked:
+                                  _chatKeyboardScrollTargetController
+                                      .isChatTargetListenable,
+                              onPointerDown: () {
+                                _chatKeyboardScrollTargetController
+                                    .setChatTarget(false);
+                              },
+                              thumbColor: context.twColors.pageScrollbarThumb,
+                              thumbInactiveColor:
+                                  context.twColors.pageScrollbarThumbInactive,
+                              thickness: ShellUiConfig.pageScrollbarThickness,
+                              minThumbLength:
+                                  chatTokens.scrollbarMinThumbLength,
+                              crossAxisMargin:
+                                  ShellUiConfig.pageScrollbarCrossAxisMargin,
+                              radius: chatTokens.scrollbarRadius,
+                              thumbVisibility: true,
+                              interactive: true,
+                              contentPhysics: const ClampingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics(),
+                              ),
+                              scrollbarDragPhysics:
+                                  const ClampingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics(),
+                              ),
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: constraints.maxHeight,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: footer != null
+                                      ? MainAxisAlignment.spaceBetween
+                                      : MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        const PageHeader(),
+                                        widget.child,
+                                      ],
+                                    ),
+                                    ...[footer].whereType<Widget>(),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        if (widget.isPageLoading)
-                          const Center(child: _PageLoadingIndicator()),
-                      ],
-                    ),
+                      ),
+                      if (widget.isPageLoading)
+                        const Center(child: _PageLoadingIndicator()),
+                    ],
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          if (widget.showThemeToggle && widget.onToggleTheme != null)
+            Positioned(
+              right: mediaQuery.viewPadding.right + 10.0,
+              top: floatingTopInset,
+              child: ThemeToggleControlButton(
+                isDarkMode: widget.isDarkMode,
+                onTap: widget.onToggleTheme!,
               ),
             ),
-            if (widget.showThemeToggle && widget.onToggleTheme != null)
-              Positioned(
-                right: mediaQuery.viewPadding.right + 10.0,
-                top: floatingTopInset,
-                child: ThemeToggleControlButton(
-                  isDarkMode: widget.isDarkMode,
-                  onTap: widget.onToggleTheme!,
-                ),
-              ),
-            if (AppRuntimeConfig.showChatInUi)
-              ChatOverlay(
-                backendUrl: AppRuntimeConfig.twinBackendUrl,
-                useBackend: AppRuntimeConfig.useChatBackend,
-                backendDisabledReply: AppRuntimeConfig.backendDisabledReply,
-                keyboardScrollTargetController:
-                    _chatKeyboardScrollTargetController,
-                chatSkinMode: widget.initialChatSkinMode,
-                onChatInteractionClaimed: _clearPageSelection,
-                minimizedBottomOffset: floatingInset,
-                minimizedRightInset: floatingInset,
-                launcherStyle: buildChatLauncherStyle(context),
-              ),
-          ],
-        ),
+          if (AppRuntimeConfig.showChatInUi)
+            ChatOverlay(
+              backendUrl: AppRuntimeConfig.twinBackendUrl,
+              useBackend: AppRuntimeConfig.useChatBackend,
+              backendDisabledReply: AppRuntimeConfig.backendDisabledReply,
+              keyboardScrollTargetController:
+                  _chatKeyboardScrollTargetController,
+              chatSkinMode: widget.initialChatSkinMode,
+              onChatInteractionClaimed: _clearPageSelection,
+              minimizedBottomOffset: floatingInset,
+              minimizedRightInset: floatingInset,
+              launcherStyle: buildChatLauncherStyle(context),
+            ),
+        ],
+      ),
     );
   }
 }

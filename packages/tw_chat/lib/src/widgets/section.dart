@@ -210,25 +210,9 @@ class _ChatSectionState extends State<ChatSection> {
                       _coordinator.handleChatPointerInteractionStart,
                   onChatPointerInteractionEnd:
                       _coordinator.handleChatPointerInteractionEnd,
-                  hasActiveChatSelection: () =>
-                      _coordinator.isChatSelectionActive,
                   scrollbarTopInset: chatScrollbarTopInset,
                   scrollbarBottomInset: chatScrollbarBottomInset,
                   contentBottomInset: chatContentBottomInset,
-                  jumpToLatestButton: null,
-                  buildScrollbarTrack:
-                      ({
-                        required double thickness,
-                        required double crossAxisInset,
-                        required double topInset,
-                        required double bottomInset,
-                      }) => ChatScrollbar.buildTrack(
-                        context: context,
-                        thickness: thickness,
-                        crossAxisInset: crossAxisInset,
-                        topInset: topInset,
-                        bottomInset: bottomInset,
-                      ),
                 );
               },
             ),

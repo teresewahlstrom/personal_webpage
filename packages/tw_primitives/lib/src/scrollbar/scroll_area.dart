@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 
 import 'scroll_surface_interaction.dart';
+import 'scroll_area_layout.dart';
 import 'tw_scrollbar.dart';
 
 /// Composes a scrollable content area with the Tw scrollbar treatment.
@@ -11,22 +12,19 @@ class TwScrollArea extends StatefulWidget {
     required ScrollController controller,
     required Widget child,
     this.activationPulse,
-    this.track,
+    this.backgroundTrack,
     this.overlayChildren = const <Widget>[],
     this.hideSystemScrollbars = true,
     this.thumbColor = TwScrollbarDefaults.thumbColor,
     this.thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    this.trackColor = TwScrollbarDefaults.trackColor,
+    this.scrollbarTrackColor,
     this.thickness = TwScrollbarDefaults.thickness,
     this.minThumbLength = TwScrollbarDefaults.minThumbLength,
     this.crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    this.mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     this.radius = TwScrollbarDefaults.radius,
-    this.padding,
-    this.physics = const ClampingScrollPhysics(),
-    this.excludeScrollViewFromSelection = false,
-    this.enableDesktopKeyboardScroll = false,
-    this.keyboardScrollLineStep = 120,
+    this.scrollbarInsets = EdgeInsets.zero,
+    this.scrollbarDragPhysics = const ClampingScrollPhysics(),
+    this.desktopKeyboardScrollLineStep,
     this.isKeyboardScrollBlocked,
     this.onDesktopTap,
     this.onPointerDown,
@@ -34,13 +32,23 @@ class TwScrollArea extends StatefulWidget {
     this.onPointerCancel,
     this.thumbVisibility = true,
     this.interactive = true,
-    this.trackVisibility = false,
     this.fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     this.timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
-  }) : _controller = controller,
+  }) : assert(thickness >= 0),
+       assert(crossAxisMargin >= 0),
+       assert(minThumbLength >= 0),
+       assert(
+         desktopKeyboardScrollLineStep == null ||
+             desktopKeyboardScrollLineStep > 0,
+       ),
+       contentPhysics = null,
+       scrollbarColumnWidth = null,
+       padding = null,
+       excludeScrollViewFromSelection = false,
+       _controller = controller,
        _child = child,
-      _scrollDirection = null,
-      _primary = false;
+       _scrollDirection = null,
+       _primary = false;
 
   factory TwScrollArea.scrollView({
     Key? key,
@@ -49,22 +57,23 @@ class TwScrollArea extends StatefulWidget {
     Axis scrollDirection = Axis.vertical,
     bool primary = false,
     ValueListenable<Object?>? activationPulse,
-    Widget? track,
+    Widget? backgroundTrack,
     List<Widget> overlayChildren = const <Widget>[],
     bool hideSystemScrollbars = true,
     Color thumbColor = TwScrollbarDefaults.thumbColor,
     Color thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    Color trackColor = TwScrollbarDefaults.trackColor,
+    Color? scrollbarTrackColor,
     double thickness = TwScrollbarDefaults.thickness,
     double minThumbLength = TwScrollbarDefaults.minThumbLength,
     double crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    double mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     Radius radius = TwScrollbarDefaults.radius,
+    EdgeInsetsGeometry scrollbarInsets = EdgeInsets.zero,
+    double? scrollbarColumnWidth,
     EdgeInsetsGeometry? padding,
-    ScrollPhysics physics = const ClampingScrollPhysics(),
+    ScrollPhysics contentPhysics = const ClampingScrollPhysics(),
+    ScrollPhysics scrollbarDragPhysics = const ClampingScrollPhysics(),
     bool excludeScrollViewFromSelection = false,
-    bool enableDesktopKeyboardScroll = true,
-    double keyboardScrollLineStep = 120,
+    double? desktopKeyboardScrollLineStep = 120,
     ValueListenable<bool>? isKeyboardScrollBlocked,
     VoidCallback? onDesktopTap,
     VoidCallback? onPointerDown,
@@ -72,7 +81,6 @@ class TwScrollArea extends StatefulWidget {
     VoidCallback? onPointerCancel,
     bool thumbVisibility = true,
     bool interactive = true,
-    bool trackVisibility = false,
     Duration fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     Duration timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
   }) {
@@ -82,22 +90,23 @@ class TwScrollArea extends StatefulWidget {
       scrollDirection: scrollDirection,
       primary: primary,
       activationPulse: activationPulse,
-      track: track,
+      backgroundTrack: backgroundTrack,
       overlayChildren: overlayChildren,
       hideSystemScrollbars: hideSystemScrollbars,
       thumbColor: thumbColor,
       thumbInactiveColor: thumbInactiveColor,
-      trackColor: trackColor,
+      scrollbarTrackColor: scrollbarTrackColor,
       thickness: thickness,
       minThumbLength: minThumbLength,
       crossAxisMargin: crossAxisMargin,
-      mainAxisMargin: mainAxisMargin,
       radius: radius,
+      scrollbarInsets: scrollbarInsets,
+      scrollbarColumnWidth: scrollbarColumnWidth,
       padding: padding,
-      physics: physics,
+      contentPhysics: contentPhysics,
+      scrollbarDragPhysics: scrollbarDragPhysics,
       excludeScrollViewFromSelection: excludeScrollViewFromSelection,
-      enableDesktopKeyboardScroll: enableDesktopKeyboardScroll,
-      keyboardScrollLineStep: keyboardScrollLineStep,
+      desktopKeyboardScrollLineStep: desktopKeyboardScrollLineStep,
       isKeyboardScrollBlocked: isKeyboardScrollBlocked,
       onDesktopTap: onDesktopTap,
       onPointerDown: onPointerDown,
@@ -105,7 +114,6 @@ class TwScrollArea extends StatefulWidget {
       onPointerCancel: onPointerCancel,
       thumbVisibility: thumbVisibility,
       interactive: interactive,
-      trackVisibility: trackVisibility,
       fadeDuration: fadeDuration,
       timeToFade: timeToFade,
       child: child,
@@ -119,22 +127,23 @@ class TwScrollArea extends StatefulWidget {
     required Axis scrollDirection,
     required bool primary,
     this.activationPulse,
-    this.track,
+    this.backgroundTrack,
     this.overlayChildren = const <Widget>[],
     this.hideSystemScrollbars = true,
     this.thumbColor = TwScrollbarDefaults.thumbColor,
     this.thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    this.trackColor = TwScrollbarDefaults.trackColor,
+    this.scrollbarTrackColor,
     this.thickness = TwScrollbarDefaults.thickness,
     this.minThumbLength = TwScrollbarDefaults.minThumbLength,
     this.crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    this.mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     this.radius = TwScrollbarDefaults.radius,
+    this.scrollbarInsets = EdgeInsets.zero,
+    this.scrollbarColumnWidth,
     this.padding,
-    this.physics = const ClampingScrollPhysics(),
+    this.contentPhysics = const ClampingScrollPhysics(),
+    this.scrollbarDragPhysics = const ClampingScrollPhysics(),
     this.excludeScrollViewFromSelection = false,
-    this.enableDesktopKeyboardScroll = false,
-    this.keyboardScrollLineStep = 120,
+    this.desktopKeyboardScrollLineStep = 120,
     this.isKeyboardScrollBlocked,
     this.onDesktopTap,
     this.onPointerDown,
@@ -142,36 +151,67 @@ class TwScrollArea extends StatefulWidget {
     this.onPointerCancel,
     this.thumbVisibility = true,
     this.interactive = true,
-    this.trackVisibility = false,
     this.fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     this.timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
-  }) : _controller = controller,
+  }) : assert(thickness >= 0),
+       assert(crossAxisMargin >= 0),
+       assert(minThumbLength >= 0),
+       assert(scrollbarColumnWidth == null || scrollbarColumnWidth >= 0),
+       assert(
+         desktopKeyboardScrollLineStep == null ||
+             desktopKeyboardScrollLineStep > 0,
+       ),
+       _controller = controller,
        _child = child,
-      _scrollDirection = scrollDirection,
-      _primary = primary;
+       _scrollDirection = scrollDirection,
+       _primary = primary;
 
   final ScrollController? _controller;
   final Widget _child;
   final Axis? _scrollDirection;
   final bool _primary;
   final ValueListenable<Object?>? activationPulse;
-  final Widget? track;
+  final Widget? backgroundTrack;
   final List<Widget> overlayChildren;
   final bool hideSystemScrollbars;
 
   final Color thumbColor;
   final Color thumbInactiveColor;
-  final Color trackColor;
-  final double thickness;
+
+  /// Painter track color for the scrollbar.
+  ///
+  /// `null` keeps the painter track hidden. A non-null [Color] makes the
+  /// painter track visible with that color.
+  final Color? scrollbarTrackColor;
   final double minThumbLength;
   final double crossAxisMargin;
-  final double mainAxisMargin;
+  final double thickness;
   final Radius radius;
+  final EdgeInsetsGeometry scrollbarInsets;
+
+  /// Layout space reserved beside the content for the scrollbar column.
+  ///
+  /// When `null`, the reserved width is derived automatically from
+  /// `thickness + (crossAxisMargin * 2)`. Use `0` to opt into overlay behavior,
+  /// where content is not padded away from the scrollbar. Positive values
+  /// reserve that explicit amount of space.
+  final double? scrollbarColumnWidth;
+
+  /// Caller-owned content breathing room.
+  ///
+  /// For scroll views, this padding is combined internally with
+  /// [scrollbarColumnWidth] so the rendered content padding includes both the
+  /// requested breathing room and any reserved scrollbar column.
   final EdgeInsetsGeometry? padding;
-  final ScrollPhysics physics;
+  final ScrollPhysics? contentPhysics;
+  final ScrollPhysics scrollbarDragPhysics;
   final bool excludeScrollViewFromSelection;
-  final bool enableDesktopKeyboardScroll;
-  final double keyboardScrollLineStep;
+
+  /// Desktop keyboard scroll step.
+  ///
+  /// `null` disables desktop keyboard scrolling. A positive value enables it
+  /// and uses that distance for each line-step scroll.
+  final double? desktopKeyboardScrollLineStep;
   final ValueListenable<bool>? isKeyboardScrollBlocked;
   final VoidCallback? onDesktopTap;
   final VoidCallback? onPointerDown;
@@ -179,9 +219,17 @@ class TwScrollArea extends StatefulWidget {
   final VoidCallback? onPointerCancel;
   final bool thumbVisibility;
   final bool interactive;
-  final bool trackVisibility;
   final Duration fadeDuration;
   final Duration timeToFade;
+
+  bool get _enableDesktopKeyboardScroll =>
+      desktopKeyboardScrollLineStep != null;
+
+  double get _resolvedScrollbarColumnWidth => resolveScrollbarColumnWidth(
+    scrollbarColumnWidth: scrollbarColumnWidth,
+    thickness: thickness,
+    crossAxisMargin: crossAxisMargin,
+  );
 
   @override
   State<TwScrollArea> createState() => _TwScrollAreaState();
@@ -218,8 +266,8 @@ class _TwScrollAreaState extends State<TwScrollArea> {
 
     final Widget child = TwScrollSurfaceInteraction(
       controller: controller,
-      enableDesktopKeyboardScroll: widget.enableDesktopKeyboardScroll,
-      keyboardScrollLineStep: widget.keyboardScrollLineStep,
+      enableDesktopKeyboardScroll: widget._enableDesktopKeyboardScroll,
+      keyboardScrollLineStep: widget.desktopKeyboardScrollLineStep ?? 120,
       isKeyboardScrollBlocked: widget.isKeyboardScrollBlocked,
       onDesktopTap: widget.onDesktopTap,
       onPointerDown: widget.onPointerDown,
@@ -233,29 +281,30 @@ class _TwScrollAreaState extends State<TwScrollArea> {
       activationPulse: widget.activationPulse,
       thumbColor: widget.thumbColor,
       thumbInactiveColor: widget.thumbInactiveColor,
-      trackColor: widget.trackColor,
+      trackColor: widget.scrollbarTrackColor ?? Colors.transparent,
       thickness: widget.thickness,
       minThumbLength: widget.minThumbLength,
       crossAxisMargin: widget.crossAxisMargin,
-      mainAxisMargin: widget.mainAxisMargin,
+      mainAxisMargin: TwScrollbarDefaults.mainAxisMargin,
       radius: widget.radius,
-      padding: widget.padding,
-      physics: widget.physics,
+      scrollbarInsets: widget.scrollbarInsets,
+      physics: widget.scrollbarDragPhysics,
       thumbVisibility: widget.thumbVisibility,
       interactive: widget.interactive,
-      trackVisibility: widget.trackVisibility,
+      trackVisibility: widget.scrollbarTrackColor != null,
       fadeDuration: widget.fadeDuration,
       timeToFade: widget.timeToFade,
       child: child,
     );
 
-    final area = widget.track == null && widget.overlayChildren.isEmpty
+    final area =
+        widget.backgroundTrack == null && widget.overlayChildren.isEmpty
         ? scrollbar
         : Stack(
             fit: StackFit.expand,
             clipBehavior: Clip.none,
             children: [
-              if (widget.track != null) widget.track!,
+              if (widget.backgroundTrack != null) widget.backgroundTrack!,
               scrollbar,
               ...widget.overlayChildren,
             ],
@@ -271,17 +320,25 @@ class _TwScrollAreaState extends State<TwScrollArea> {
     );
   }
 
-  Widget _buildScrollView(
-    ScrollController controller,
-  ) {
+  Widget _buildScrollView(ScrollController controller) {
     final usePrimary =
         widget._scrollDirection == Axis.vertical && widget._primary;
+    final TextDirection textDirection = Directionality.of(context);
+    final EdgeInsets resolvedContentPadding = resolveScrollAreaContentPadding(
+      contentPadding: widget.padding,
+      scrollDirection: widget._scrollDirection!,
+      textDirection: textDirection,
+      scrollbarColumnWidth: widget._resolvedScrollbarColumnWidth,
+    );
+    final Widget scrollContent = resolvedContentPadding == EdgeInsets.zero
+        ? widget._child
+        : Padding(padding: resolvedContentPadding, child: widget._child);
     Widget scrollView = SingleChildScrollView(
       controller: usePrimary ? null : controller,
       primary: usePrimary,
       scrollDirection: widget._scrollDirection!,
-      physics: widget.physics,
-      child: widget._child,
+      physics: widget.contentPhysics ?? const ClampingScrollPhysics(),
+      child: scrollContent,
     );
     if (widget.excludeScrollViewFromSelection) {
       scrollView = SelectionContainer.disabled(child: scrollView);

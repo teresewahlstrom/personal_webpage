@@ -46,4 +46,43 @@ void main() {
     expect(shape.side.color, frameBorder.color);
     expect(shape.side.width, frameBorder.width);
   });
+
+  testWidgets('showAppModal respects custom content padding override', (
+    WidgetTester tester,
+  ) async {
+    const EdgeInsets customPadding = EdgeInsets.fromLTRB(10, 11, 12, 13);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (BuildContext context) {
+              return TextButton(
+                onPressed: () {
+                  showAppModal(
+                    context: context,
+                    contentPadding: customPadding,
+                    builder: (_, _) => const Text('Modal body'),
+                  );
+                },
+                child: const Text('Open'),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+
+    final Finder modalContentPadding = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byWidgetPredicate(
+        (Widget widget) => widget is Padding && widget.padding == customPadding,
+      ),
+    );
+
+    expect(modalContentPadding, findsOneWidget);
+  });
 }

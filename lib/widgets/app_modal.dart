@@ -11,6 +11,7 @@ Future<void> showAppModal({
   required BuildContext context,
   required AppModalChildBuilder builder,
   String? headerTitle,
+  EdgeInsets? contentPadding,
 }) {
   final Size viewportSize = MediaQuery.of(context).size;
   return showDialog<void>(
@@ -29,7 +30,8 @@ Future<void> showAppModal({
         closeIconColor: context.twColors.modalCloseIcon,
         closeIconHoverColor: context.twColors.modalCloseIconHover,
         insetPadding: ModalUiConfig.insetPaddingFor(viewportSize),
-        contentPadding: ModalUiConfig.contentPaddingFor(viewportSize),
+        contentPadding:
+            contentPadding ?? ModalUiConfig.contentPaddingFor(viewportSize),
         maxWidth: ModalUiConfig.maxWidth,
         maxHeightFactor: ModalUiConfig.maxHeightFactorFor(viewportSize),
         headerTitle: headerTitle,
@@ -165,7 +167,7 @@ class _ModalCloseButtonState extends State<_ModalCloseButton> {
         onTap: widget.onTap,
         child: Padding(
           padding: const EdgeInsets.all(8),
-            child: Text(
+          child: Text(
             "×",
             style: TwTextStyles.of(context).modalCloseGlyph(
               color: _isHovered ? widget.hoverColor : widget.color,

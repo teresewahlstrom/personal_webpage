@@ -9,6 +9,7 @@ import 'package:flutter/scheduler.dart' show Ticker;
 import '../selection/tw_selectable_region.dart';
 import '../selection/tw_selection_toolbar.dart';
 import 'selectable_secondary_click_guard.dart';
+import 'scroll_area_layout.dart';
 import 'scroll_area.dart';
 import 'tw_scrollbar.dart';
 
@@ -24,7 +25,6 @@ class TwSelectableScrollArea extends StatefulWidget {
     this.selectionControls,
     this.selectionKey,
     this.interactionFocusNode,
-    this.canRequestFocus = true,
     this.contextMenuBuilder,
     this.magnifierConfiguration = TextMagnifierConfiguration.disabled,
     this.onSelectionChanged,
@@ -34,32 +34,39 @@ class TwSelectableScrollArea extends StatefulWidget {
     this.onPointerDown,
     this.onPointerUp,
     this.onPointerCancel,
-    this.enableDesktopKeyboardScroll = true,
-    this.keyboardScrollLineStep = 120,
+    this.desktopKeyboardScrollLineStep,
     this.isKeyboardScrollBlocked,
     this.enableWebSecondaryClickGuard = true,
     this.scrollDirection = Axis.vertical,
     this.primary = false,
     this.activationPulse,
-    this.track,
+    this.backgroundTrack,
     this.overlayChildren = const <Widget>[],
     this.hideSystemScrollbars = true,
     this.thumbColor = TwScrollbarDefaults.thumbColor,
     this.thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    this.trackColor = TwScrollbarDefaults.trackColor,
+    this.scrollbarTrackColor,
     this.thickness = TwScrollbarDefaults.thickness,
     this.minThumbLength = TwScrollbarDefaults.minThumbLength,
     this.crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    this.mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     this.radius = TwScrollbarDefaults.radius,
+    this.scrollbarInsets = EdgeInsets.zero,
+    this.scrollbarColumnWidth,
     this.padding,
-    this.physics = const ClampingScrollPhysics(),
+    this.contentPhysics = const ClampingScrollPhysics(),
+    this.scrollbarDragPhysics = const ClampingScrollPhysics(),
     this.thumbVisibility = true,
     this.interactive = true,
-    this.trackVisibility = false,
     this.fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     this.timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
-  });
+  }) : assert(thickness >= 0),
+       assert(crossAxisMargin >= 0),
+       assert(minThumbLength >= 0),
+       assert(scrollbarColumnWidth == null || scrollbarColumnWidth >= 0),
+       assert(
+         desktopKeyboardScrollLineStep == null ||
+             desktopKeyboardScrollLineStep > 0,
+       );
 
   factory TwSelectableScrollArea.scrollView({
     Key? key,
@@ -68,7 +75,6 @@ class TwSelectableScrollArea extends StatefulWidget {
     TextSelectionControls? selectionControls,
     GlobalKey<TwSelectableRegionState>? selectionKey,
     FocusNode? interactionFocusNode,
-    bool canRequestFocus = true,
     TwSelectableRegionContextMenuBuilder? contextMenuBuilder,
     TextMagnifierConfiguration magnifierConfiguration =
         TextMagnifierConfiguration.disabled,
@@ -79,31 +85,31 @@ class TwSelectableScrollArea extends StatefulWidget {
     VoidCallback? onPointerDown,
     VoidCallback? onPointerUp,
     VoidCallback? onPointerCancel,
-    bool enableDesktopKeyboardScroll = true,
-    double keyboardScrollLineStep = 120,
+    double? desktopKeyboardScrollLineStep = 120,
     ValueListenable<bool>? isKeyboardScrollBlocked,
     bool enableWebSecondaryClickGuard = true,
     Axis scrollDirection = Axis.vertical,
     bool primary = false,
     ValueListenable<Object?>? activationPulse,
-    Widget? track,
+    Widget? backgroundTrack,
     List<Widget> overlayChildren = const <Widget>[],
     bool hideSystemScrollbars = true,
     Color thumbColor = TwScrollbarDefaults.thumbColor,
     Color thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    Color trackColor = TwScrollbarDefaults.trackColor,
+    Color? scrollbarTrackColor,
     double thickness = TwScrollbarDefaults.thickness,
     double minThumbLength = TwScrollbarDefaults.minThumbLength,
     double crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    double mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     Radius radius = TwScrollbarDefaults.radius,
+    double? scrollbarColumnWidth,
     EdgeInsetsGeometry? padding,
-    ScrollPhysics physics = const ClampingScrollPhysics(),
+    ScrollPhysics contentPhysics = const ClampingScrollPhysics(),
+    ScrollPhysics scrollbarDragPhysics = const ClampingScrollPhysics(),
     bool thumbVisibility = true,
     bool interactive = true,
-    bool trackVisibility = false,
     Duration fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     Duration timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
+    EdgeInsetsGeometry scrollbarInsets = EdgeInsets.zero,
   }) {
     return TwSelectableScrollArea._(
       key: key,
@@ -111,7 +117,6 @@ class TwSelectableScrollArea extends StatefulWidget {
       selectionControls: selectionControls,
       selectionKey: selectionKey,
       interactionFocusNode: interactionFocusNode,
-      canRequestFocus: canRequestFocus,
       contextMenuBuilder: contextMenuBuilder,
       magnifierConfiguration: magnifierConfiguration,
       onSelectionChanged: onSelectionChanged,
@@ -121,29 +126,29 @@ class TwSelectableScrollArea extends StatefulWidget {
       onPointerDown: onPointerDown,
       onPointerUp: onPointerUp,
       onPointerCancel: onPointerCancel,
-      enableDesktopKeyboardScroll: enableDesktopKeyboardScroll,
-      keyboardScrollLineStep: keyboardScrollLineStep,
+      desktopKeyboardScrollLineStep: desktopKeyboardScrollLineStep,
       isKeyboardScrollBlocked: isKeyboardScrollBlocked,
       enableWebSecondaryClickGuard: enableWebSecondaryClickGuard,
       scrollDirection: scrollDirection,
       primary: primary,
       activationPulse: activationPulse,
-      track: track,
+      backgroundTrack: backgroundTrack,
       overlayChildren: overlayChildren,
       hideSystemScrollbars: hideSystemScrollbars,
       thumbColor: thumbColor,
       thumbInactiveColor: thumbInactiveColor,
-      trackColor: trackColor,
+      scrollbarTrackColor: scrollbarTrackColor,
       thickness: thickness,
       minThumbLength: minThumbLength,
       crossAxisMargin: crossAxisMargin,
-      mainAxisMargin: mainAxisMargin,
       radius: radius,
+      scrollbarInsets: scrollbarInsets,
+      scrollbarColumnWidth: scrollbarColumnWidth,
       padding: padding,
-      physics: physics,
+      contentPhysics: contentPhysics,
+      scrollbarDragPhysics: scrollbarDragPhysics,
       thumbVisibility: thumbVisibility,
       interactive: interactive,
-      trackVisibility: trackVisibility,
       fadeDuration: fadeDuration,
       timeToFade: timeToFade,
       child: child,
@@ -155,7 +160,6 @@ class TwSelectableScrollArea extends StatefulWidget {
   final TextSelectionControls? selectionControls;
   final GlobalKey<TwSelectableRegionState>? selectionKey;
   final FocusNode? interactionFocusNode;
-  final bool canRequestFocus;
   final TwSelectableRegionContextMenuBuilder? contextMenuBuilder;
   final TextMagnifierConfiguration magnifierConfiguration;
   final ValueChanged<SelectedContent?>? onSelectionChanged;
@@ -165,29 +169,52 @@ class TwSelectableScrollArea extends StatefulWidget {
   final VoidCallback? onPointerDown;
   final VoidCallback? onPointerUp;
   final VoidCallback? onPointerCancel;
-  final bool enableDesktopKeyboardScroll;
-  final double keyboardScrollLineStep;
+
+  /// Desktop keyboard scroll step.
+  ///
+  /// `null` disables desktop keyboard scrolling. A positive value enables it
+  /// and uses that distance for each line-step scroll.
+  final double? desktopKeyboardScrollLineStep;
   final ValueListenable<bool>? isKeyboardScrollBlocked;
   final bool enableWebSecondaryClickGuard;
   final Axis scrollDirection;
   final bool primary;
   final ValueListenable<Object?>? activationPulse;
-  final Widget? track;
+  final Widget? backgroundTrack;
   final List<Widget> overlayChildren;
   final bool hideSystemScrollbars;
   final Color thumbColor;
   final Color thumbInactiveColor;
-  final Color trackColor;
+
+  /// Painter track color for the scrollbar.
+  ///
+  /// `null` keeps the painter track hidden. A non-null [Color] makes the
+  /// painter track visible with that color.
+  final Color? scrollbarTrackColor;
   final double thickness;
   final double minThumbLength;
   final double crossAxisMargin;
-  final double mainAxisMargin;
   final Radius radius;
+  final EdgeInsetsGeometry scrollbarInsets;
+
+  /// Layout space reserved beside the content for the scrollbar column.
+  ///
+  /// When `null`, the reserved width is derived automatically from
+  /// `thickness + (crossAxisMargin * 2)`. Use `0` to opt into overlay behavior,
+  /// where content is not padded away from the scrollbar. Positive values
+  /// reserve that explicit amount of space.
+  final double? scrollbarColumnWidth;
+
+  /// Caller-owned content breathing room.
+  ///
+  /// For scroll views, this padding is combined internally with
+  /// [scrollbarColumnWidth] so the rendered content padding includes both the
+  /// requested breathing room and any reserved scrollbar column.
   final EdgeInsetsGeometry? padding;
-  final ScrollPhysics physics;
+  final ScrollPhysics contentPhysics;
+  final ScrollPhysics scrollbarDragPhysics;
   final bool thumbVisibility;
   final bool interactive;
-  final bool trackVisibility;
   final Duration fadeDuration;
   final Duration timeToFade;
 
@@ -258,8 +285,12 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
       return null;
     }
 
-    final padding =
-        widget.padding?.resolve(Directionality.of(context)) ?? EdgeInsets.zero;
+    final padding = resolveScrollAreaContentPadding(
+      contentPadding: widget.padding,
+      scrollDirection: widget.scrollDirection,
+      textDirection: Directionality.of(context),
+      scrollbarColumnWidth: _resolvedScrollbarColumnWidth,
+    );
     final size = renderObject.size;
     final localBounds = Rect.fromLTRB(
       padding.left.clamp(0.0, size.width).toDouble(),
@@ -275,6 +306,12 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
       renderObject.localToGlobal(localBounds.bottomRight),
     );
   }
+
+  double get _resolvedScrollbarColumnWidth => resolveScrollbarColumnWidth(
+    scrollbarColumnWidth: widget.scrollbarColumnWidth,
+    thickness: widget.thickness,
+    crossAxisMargin: widget.crossAxisMargin,
+  );
 
   void _handleSelectionChanged(SelectedContent? selectedContent) {
     final hasSelection = selectedContent?.plainText.isNotEmpty ?? false;
@@ -420,27 +457,27 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
       scrollDirection: widget.scrollDirection,
       primary: widget.primary,
       activationPulse: widget.activationPulse,
-      track: widget.track,
+      backgroundTrack: widget.backgroundTrack,
       overlayChildren: widget.overlayChildren,
       hideSystemScrollbars: widget.hideSystemScrollbars,
       thumbColor: widget.thumbColor,
       thumbInactiveColor: widget.thumbInactiveColor,
-      trackColor: widget.trackColor,
+      scrollbarTrackColor: widget.scrollbarTrackColor,
       thickness: widget.thickness,
       minThumbLength: widget.minThumbLength,
       crossAxisMargin: widget.crossAxisMargin,
-      mainAxisMargin: widget.mainAxisMargin,
       radius: widget.radius,
+      scrollbarColumnWidth: widget.scrollbarColumnWidth,
       padding: widget.padding,
-      physics: widget.physics,
+      contentPhysics: widget.contentPhysics,
+      scrollbarDragPhysics: widget.scrollbarDragPhysics,
+      scrollbarInsets: widget.scrollbarInsets,
       excludeScrollViewFromSelection: true,
-      enableDesktopKeyboardScroll: widget.enableDesktopKeyboardScroll,
-      keyboardScrollLineStep: widget.keyboardScrollLineStep,
+      desktopKeyboardScrollLineStep: widget.desktopKeyboardScrollLineStep,
       isKeyboardScrollBlocked: widget.isKeyboardScrollBlocked,
       onDesktopTap: _handleDesktopTap,
       thumbVisibility: widget.thumbVisibility,
       interactive: widget.interactive,
-      trackVisibility: widget.trackVisibility,
       fadeDuration: widget.fadeDuration,
       timeToFade: widget.timeToFade,
       child: TwSelectableRegion(

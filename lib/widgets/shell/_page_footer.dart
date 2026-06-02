@@ -32,9 +32,7 @@ class PageFooter extends StatelessWidget {
       padding: ShellUiConfig.footerPadding,
       decoration: BoxDecoration(
         color: context.twColors.footerBackground,
-        border: Border(
-          top: footerLine.borderSide,
-        ),
+        border: Border(top: footerLine.borderSide),
       ),
       child: Center(
         child: Wrap(
@@ -69,17 +67,17 @@ class PageFooter extends StatelessWidget {
         mode: LaunchMode.platformDefault,
       );
       if (!launched && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open $rawUrl')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open $rawUrl')));
       }
     } catch (_) {
       if (!context.mounted) {
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open $rawUrl')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not open $rawUrl')));
     }
   }
 
@@ -104,7 +102,6 @@ class _LinkTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
@@ -112,25 +109,25 @@ class _LinkTextButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         minimumSize: WidgetStateProperty.all(Size.zero),
         padding: WidgetStateProperty.all(EdgeInsets.zero),
-        overlayColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.hovered) ||
-                states.contains(WidgetState.focused)) {
-              return context.twColors.transparent;
-            }
-            return null;
-          },
-        ),
-        foregroundColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-                if (states.contains(WidgetState.hovered)) {
-                  return context.twColors.linkTextHover;
-                }
-                return context.twColors.linkText;
-          },
-        ),
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.hovered) ||
+              states.contains(WidgetState.focused)) {
+            return context.twColors.transparent;
+          }
+          return null;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>((
+          Set<WidgetState> states,
+        ) {
+          if (states.contains(WidgetState.hovered)) {
+            return context.twColors.linkTextHover;
+          }
+          return context.twColors.linkText;
+        }),
       ),
-        child: Text(
+      child: Text(
         label,
         style: TwTextStyles.of(context).footerBodyForContext(
           context: context,

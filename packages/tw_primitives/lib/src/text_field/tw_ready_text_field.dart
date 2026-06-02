@@ -89,15 +89,13 @@ class TwReadyTextField extends StatefulWidget {
     this.hideSystemScrollbars = true,
     this.thumbColor = TwScrollbarDefaults.thumbColor,
     this.thumbInactiveColor = TwScrollbarDefaults.thumbInactiveColor,
-    this.trackColor = TwScrollbarDefaults.trackColor,
+    this.scrollbarTrackColor,
     this.thickness = TwScrollbarDefaults.thickness,
     this.minThumbLength = TwScrollbarDefaults.minThumbLength,
     this.crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
-    this.mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     this.radius = TwScrollbarDefaults.radius,
     this.thumbVisibility = true,
     this.interactive = true,
-    this.trackVisibility = false,
     this.fadeDuration = TwScrollbarDefaults.thumbFadeDuration,
     this.timeToFade = TwScrollbarDefaults.thumbFadeOutDelay,
     this.scrollPhysics = const ClampingScrollPhysics(),
@@ -130,15 +128,13 @@ class TwReadyTextField extends StatefulWidget {
   final bool hideSystemScrollbars;
   final Color thumbColor;
   final Color thumbInactiveColor;
-  final Color trackColor;
+  final Color? scrollbarTrackColor;
   final double thickness;
   final double minThumbLength;
   final double crossAxisMargin;
-  final double mainAxisMargin;
   final Radius radius;
   final bool thumbVisibility;
   final bool interactive;
-  final bool trackVisibility;
   final Duration fadeDuration;
   final Duration timeToFade;
   final ScrollPhysics scrollPhysics;
@@ -240,16 +236,14 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
       hideSystemScrollbars: widget.hideSystemScrollbars,
       thumbColor: widget.thumbColor,
       thumbInactiveColor: widget.thumbInactiveColor,
-      trackColor: widget.trackColor,
+        scrollbarTrackColor: widget.scrollbarTrackColor,
       thickness: widget.thickness,
       minThumbLength: widget.minThumbLength,
       crossAxisMargin: widget.crossAxisMargin,
-      mainAxisMargin: widget.mainAxisMargin,
       radius: widget.radius,
-      physics: widget.scrollPhysics,
+      scrollbarDragPhysics: widget.scrollPhysics,
       thumbVisibility: widget.thumbVisibility,
       interactive: widget.interactive,
-      trackVisibility: widget.trackVisibility,
       fadeDuration: widget.fadeDuration,
       timeToFade: widget.timeToFade,
       child: textField,

@@ -27,12 +27,9 @@ class ChatMessageListArea extends StatefulWidget {
     required this.onRequestChatKeyboardTarget,
     required this.onChatPointerInteractionStart,
     required this.onChatPointerInteractionEnd,
-    required this.hasActiveChatSelection,
     required this.scrollbarTopInset,
     required this.scrollbarBottomInset,
     required this.contentBottomInset,
-    required this.jumpToLatestButton,
-    required this.buildScrollbarTrack,
   });
 
   final List<ChatMessage> messages;
@@ -52,18 +49,9 @@ class ChatMessageListArea extends StatefulWidget {
   final VoidCallback onRequestChatKeyboardTarget;
   final VoidCallback onChatPointerInteractionStart;
   final VoidCallback onChatPointerInteractionEnd;
-  final bool Function() hasActiveChatSelection;
   final double scrollbarTopInset;
   final double scrollbarBottomInset;
   final double contentBottomInset;
-  final Widget? jumpToLatestButton;
-  final Widget Function({
-    required double thickness,
-    required double crossAxisInset,
-    required double topInset,
-    required double bottomInset,
-  })
-  buildScrollbarTrack;
 
   @override
   State<ChatMessageListArea> createState() => _ChatMessageListAreaState();
@@ -73,6 +61,16 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
   @override
   Widget build(BuildContext context) {
     final tokens = ChatSkin.tokens;
+    final EdgeInsets scrollbarInsets = EdgeInsets.only(
+      top: widget.scrollbarTopInset,
+      bottom: widget.scrollbarBottomInset,
+    );
+    final double reservedScrollbarSpan =
+        tokens.scrollbarThickness + (tokens.scrollbarThumbCrossAxisMargin * 2);
+    final double bubbleContentRightPadding =
+        (tokens.bubbleViewportPadding.right - reservedScrollbarSpan)
+            .clamp(0.0, double.infinity)
+            .toDouble();
 
     return tw_scrollbar.TwSelectableScrollArea.scrollView(
       controller: widget.chatScroll,
@@ -100,38 +98,20 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
       magnifierConfiguration: TextMagnifierConfiguration.disabled,
       thumbColor: ChatScrollbar.thumbColor(context),
       thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
-      trackColor: ChatScrollbar.trackColor(context),
+      scrollbarTrackColor:
+          widget.showChatScrollbarTrack ? ChatScrollbar.trackColor(context) : null,
       thickness: tokens.scrollbarThickness,
       minThumbLength: tokens.scrollbarMinThumbLength,
       crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
-      mainAxisMargin: 0,
-      padding: EdgeInsets.only(
-        top: widget.scrollbarTopInset,
-        bottom: widget.scrollbarBottomInset,
-      ),
+      scrollbarColumnWidth: reservedScrollbarSpan,
+      scrollbarInsets: scrollbarInsets,
       radius: tokens.scrollbarRadius,
       thumbVisibility: true,
       interactive: true,
-      trackVisibility: false,
-      track: widget.showChatScrollbarTrack
-          ? widget.buildScrollbarTrack(
-              thickness: tokens.scrollbarThickness,
-              crossAxisInset: tokens.scrollbarThumbCrossAxisMargin,
-              topInset: widget.scrollbarTopInset,
-              bottomInset: widget.scrollbarBottomInset,
-            )
-          : null,
-      overlayChildren: [
-        if (widget.jumpToLatestButton != null)
-          Positioned(
-            right: tokens.jumpToLatestButtonRightInset,
-            bottom: tokens.jumpToLatestButtonBottomInset,
-            child: widget.jumpToLatestButton!,
-          ),
-      ],
       child: Padding(
         padding: tokens.bubbleViewportPadding.copyWith(
           top: 0,
+          right: bubbleContentRightPadding,
           bottom: 0,
         ),
         child: Column(
@@ -142,8 +122,9 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
                 key: widget.messageBubbleKeys[entry.$2.id],
                 availableWidth: widget.availableWidth,
                 text: entry.$2.text,
-                selectionListenerNotifier:
-                    widget.selectionNotifierForMessage(entry.$2.id),
+                selectionListenerNotifier: widget.selectionNotifierForMessage(
+                  entry.$2.id,
+                ),
                 isUserBubble: entry.$2.role == ChatRole.user,
                 isTypingIndicator:
                     entry.$2.role == ChatRole.bot && entry.$2.isPending,

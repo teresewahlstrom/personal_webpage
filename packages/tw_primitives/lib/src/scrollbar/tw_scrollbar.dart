@@ -97,7 +97,7 @@ class TwScrollbar extends StatelessWidget {
     this.crossAxisMargin = TwScrollbarDefaults.crossAxisMargin,
     this.mainAxisMargin = TwScrollbarDefaults.mainAxisMargin,
     this.radius = TwScrollbarDefaults.radius,
-    this.padding,
+    this.scrollbarInsets = EdgeInsets.zero,
     this.physics = const ClampingScrollPhysics(),
     this.thumbVisibility = true,
     this.interactive = true,
@@ -117,7 +117,7 @@ class TwScrollbar extends StatelessWidget {
   final double crossAxisMargin;
   final double mainAxisMargin;
   final Radius radius;
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry scrollbarInsets;
   final ScrollPhysics physics;
   final bool thumbVisibility;
   final bool interactive;
@@ -127,6 +127,9 @@ class TwScrollbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsets resolvedScrollbarInsets = scrollbarInsets.resolve(
+      Directionality.of(context),
+    );
     return _TwRawScrollbar(
       controller: controller,
       activationPulse: activationPulse,
@@ -137,7 +140,7 @@ class TwScrollbar extends StatelessWidget {
       minThumbLength: minThumbLength,
       crossAxisMargin: crossAxisMargin,
       mainAxisMargin: mainAxisMargin,
-      padding: padding?.resolve(Directionality.of(context)),
+      padding: resolvedScrollbarInsets,
       radius: radius,
       physics: physics,
       thumbColor: thumbColor,

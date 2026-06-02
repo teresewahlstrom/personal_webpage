@@ -115,15 +115,13 @@ final class ShellUiConfig {
 }
 
 final class ModalUiConfig {
-  static final Color barrierColor = TwColors.forBrightness(Brightness.light).modalBarrier;
+  static final Color barrierColor = TwColors.forBrightness(
+    Brightness.light,
+  ).modalBarrier;
   static const EdgeInsets insetPadding = EdgeInsets.all(14);
-  static const EdgeInsets contentPadding = EdgeInsets.fromLTRB(24, 20, 24, 20);
-  static const EdgeInsets contentPaddingCompact = EdgeInsets.fromLTRB(
-    14,
-    12,
-    14,
-    12,
-  );
+  static const EdgeInsets contentPadding = EdgeInsets.fromLTRB(0, 0, 0, 0);
+  static const EdgeInsets contentPaddingCompact = EdgeInsets.fromLTRB(14, 12, 14, 12);
+
   static const double maxWidth = 650;
   static const double maxHeightFactor = 0.9;
   static const double maxHeightFactorCompact = 0.96;
