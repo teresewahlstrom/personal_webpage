@@ -77,7 +77,14 @@ class _ChatSectionState extends State<ChatSection> {
           widget.isChatKeyboardScrollTarget.value &&
           _coordinator.isChatSelectionActive,
     )..attach();
+    widget.isChatKeyboardScrollTarget.addListener(_handleScrollTargetChange);
     HardwareKeyboard.instance.addHandler(_handleChatKeyEvent);
+  }
+
+  void _handleScrollTargetChange() {
+    if (!widget.isChatKeyboardScrollTarget.value) {
+      _coordinator.clearChatSelection();
+    }
   }
 
   bool _handleChatKeyEvent(KeyEvent event) {
@@ -125,6 +132,13 @@ class _ChatSectionState extends State<ChatSection> {
       );
     }
 
+    if (oldWidget.isChatKeyboardScrollTarget !=
+        widget.isChatKeyboardScrollTarget) {
+      oldWidget.isChatKeyboardScrollTarget
+          .removeListener(_handleScrollTargetChange);
+      widget.isChatKeyboardScrollTarget.addListener(_handleScrollTargetChange);
+    }
+
     _coordinator.handleWidgetUpdate(
       messages: widget.messages,
       becameVisible: !oldWidget.isVisible && widget.isVisible,
@@ -134,6 +148,7 @@ class _ChatSectionState extends State<ChatSection> {
 
   @override
   void dispose() {
+    widget.isChatKeyboardScrollTarget.removeListener(_handleScrollTargetChange);
     HardwareKeyboard.instance.removeHandler(_handleChatKeyEvent);
     _webCopyInterceptor.detach();
     _coordinator.dispose();
