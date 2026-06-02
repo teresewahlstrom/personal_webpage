@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/markdown.dart';
-import 'package:tw_primitives/scrollbar.dart' show TwSelectableScrollArea;
-
 import 'package:tw_primitives/theme.dart';
 
 class PrivacyCookiesContent extends StatefulWidget {
@@ -56,9 +54,8 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: TwSelectableScrollArea.scrollView(
-        padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-        thumbVisibility: true,
+      child: TwPanelScrollArea(
+        selectable: true,
         child: MarkupView(
           document: _contentDocument,
           theme: markdownSurface.theme,

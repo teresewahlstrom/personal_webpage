@@ -162,97 +162,6 @@ class _ChatDockState extends State<ChatDock> {
   }
 }
 
-class ChatAppBar extends StatelessWidget {
-  const ChatAppBar({
-    super.key,
-    required this.onDisplayStateToggle,
-    required this.displayStateToggleIcon,
-    required this.displayStateToggleTooltip,
-    required this.tokens,
-    this.isDisplayStateToggleTooltipVisible = true,
-    this.shrinkWrap = false,
-  });
-
-  final VoidCallback onDisplayStateToggle;
-  final IconData displayStateToggleIcon;
-  final String displayStateToggleTooltip;
-  final ChatSkinTokens tokens;
-  final bool isDisplayStateToggleTooltipVisible;
-  final bool shrinkWrap;
-
-  @override
-  Widget build(BuildContext context) {
-    final skin = ChatSkin.dataOf(context);
-    final colors = skin.colors;
-    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final titleStyle = skin.textStyles.appBarTitleStyle(textScale, colors);
-    final iconColor =
-        titleStyle.color ??
-        DefaultTextStyle.of(context).style.color ??
-        Theme.of(context).textTheme.titleMedium?.color ??
-        colors.bubbleText;
-    final pad = shrinkWrap
-        ? tokens.appBarPaddingMinimized
-        : tokens.appBarPaddingExpanded;
-    final titlePill = TwLinkPill(
-      key: const ValueKey('chat-app-bar-title-pill'),
-      label: 'Chat with Twin',
-    );
-    final titleArea = Padding(
-      padding: EdgeInsets.fromLTRB(
-        pad.left,
-        pad.top,
-        tokens.appBarActionGap + tokens.appBarActionWidth,
-        pad.bottom,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [titlePill],
-      ),
-    );
-    final action = Positioned(
-      key: const ValueKey('chat-app-bar-action-bounds'),
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: tokens.appBarActionWidth,
-      child: FractionallySizedBox(
-        alignment: Alignment.topCenter,
-        heightFactor: tokens.appBarActionHeightFactor,
-        child: SizedBox(
-          key: const ValueKey('chat-app-bar-action-container'),
-          width: tokens.appBarActionWidth,
-          child: Material(
-            color: colors.transparent,
-            child: TooltipVisibility(
-              visible: isDisplayStateToggleTooltipVisible,
-              child: Tooltip(
-                message: displayStateToggleTooltip,
-                child: InkWell(
-                  onTap: onDisplayStateToggle,
-                  child: Center(
-                    child: Icon(displayStateToggleIcon, color: iconColor),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    if (shrinkWrap) {
-      return Stack(children: [titleArea, action]);
-    }
-
-    return SizedBox(
-      width: double.infinity,
-      child: Stack(children: [titleArea, action]),
-    );
-  }
-}
-
 class MinimizedChatLauncher extends StatefulWidget {
   const MinimizedChatLauncher({
     super.key,
@@ -282,10 +191,10 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
     final colors = ChatSkin.dataOf(context).colors;
     final launcherStyle = widget.launcherStyle;
     final Color effectiveForeground = _isHovered
-      ? (launcherStyle.hoverForegroundColor ??
-        launcherStyle.foregroundColor ??
-        colors.markupLink)
-      : (launcherStyle.foregroundColor ?? colors.bubbleText);
+        ? (launcherStyle.hoverForegroundColor ??
+              launcherStyle.foregroundColor ??
+              colors.markupLink)
+        : (launcherStyle.foregroundColor ?? colors.bubbleText);
 
     return Material(
       color: colors.transparent,
@@ -305,16 +214,16 @@ class _MinimizedChatLauncherState extends State<MinimizedChatLauncher> {
             child: SizedBox(
               width: launcherStyle.size,
               height: launcherStyle.size,
-                child: TwLinkPill(
-                  label: '',
-                  leading: Icon(
-                    launcherStyle.icon,
-                    size: launcherStyle.iconSize,
-                    color: effectiveForeground,
-                  ),
-                  tooltip: 'Open chat',
-                  semanticsLabel: 'Open chat',
+              child: TwLinkPill(
+                label: '',
+                leading: Icon(
+                  launcherStyle.icon,
+                  size: launcherStyle.iconSize,
+                  color: effectiveForeground,
                 ),
+                tooltip: 'Open chat',
+                semanticsLabel: 'Open chat',
+              ),
             ),
           ),
         ),
@@ -368,60 +277,26 @@ class FloatingChatWindow extends StatelessWidget {
         },
         child: Material(
           color: colors.transparent,
-          child: Container(
-            decoration: _chatShellDecoration(
-              context: context,
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ChatSection(
-                    messages: messages,
-                    onSend: onSend,
-                    onStop: onStop,
-                    isChatKeyboardScrollTarget: isChatKeyboardScrollTarget,
-                    onSetChatKeyboardScrollTarget:
-                        onSetChatKeyboardScrollTarget,
-                    isVisible: isVisible,
-                    panelWidth: width,
-                    panelHeight: maxHeight,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: ChatAppBar(
-                    onDisplayStateToggle: onMinimize,
-                    displayStateToggleIcon: Icons.expand_more_rounded,
-                    displayStateToggleTooltip: 'Minimize chat',
-                    isDisplayStateToggleTooltipVisible: isVisible,
-                    tokens: tokens,
-                  ),
-                ),
-              ],
+          child: TwPanelContainer(
+            title: const TwPanelTitle(label: 'Chat with Twin'),
+            onClose: onMinimize,
+            closeIcon: Icons.expand_more_rounded,
+            closeTooltip: 'Minimize chat',
+            isCloseTooltipVisible: isVisible,
+            overlapHeader: true,
+            body: ChatSection(
+              messages: messages,
+              onSend: onSend,
+              onStop: onStop,
+              isChatKeyboardScrollTarget: isChatKeyboardScrollTarget,
+              onSetChatKeyboardScrollTarget: onSetChatKeyboardScrollTarget,
+              isVisible: isVisible,
+              panelWidth: width,
+              panelHeight: maxHeight,
             ),
           ),
         ),
       ),
     );
   }
-}
-
-BoxDecoration _chatShellDecoration({
-  required BuildContext context,
-  required BorderRadius borderRadius,
-}) {
-  final colors = ChatSkin.dataOf(context).colors;
-  final tokens = ChatSkin.tokens;
-  return BoxDecoration(
-    color: ChatLayout.shellFill(context),
-    borderRadius: borderRadius,
-    border: Border.all(
-      color: colors.shellOuterBorder,
-      width: tokens.shellOuterBorderWidth,
-    ),
-    boxShadow: [tokens.shellShadow(colors)],
-  );
 }

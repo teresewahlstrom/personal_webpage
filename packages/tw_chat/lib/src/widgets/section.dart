@@ -260,17 +260,6 @@ class _ChatSectionState extends State<ChatSection> {
           ),
         ),
         Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: tokens.chatListTopShadowHeight,
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: tokens.shellTopShadowDecoration(colors),
-            ),
-          ),
-        ),
-        Positioned(
           left: 0,
           right: 0,
           bottom: 0,

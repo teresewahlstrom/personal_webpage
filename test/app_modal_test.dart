@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:personal_webpage/config/app_ui_config.dart';
 import 'package:personal_webpage/widgets/app_modal.dart';
 import 'package:tw_primitives/theme.dart';
 
@@ -32,19 +31,38 @@ void main() {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
 
-    final Dialog dialog = tester.widget<Dialog>(find.byType(Dialog));
-    final RoundedRectangleBorder shape =
-        dialog.shape! as RoundedRectangleBorder;
-    final TwColors tw = TwColors.forBrightness(Brightness.light);
-    final AppLineStyle frameBorder = AppLineStyle(
-      color: tw.lineSubtle,
-      width: AppLineTheme.subtleWidth,
+    final TwPanelContainer panel = tester.widget<TwPanelContainer>(
+      find.byType(TwPanelContainer),
+    );
+    expect(panel, isNotNull);
+
+    final decoratedBoxes = tester.widgetList<DecoratedBox>(
+      find.descendant(
+        of: find.byType(TwPanelContainer),
+        matching: find.byType(DecoratedBox),
+      ),
     );
 
-    expect(dialog.backgroundColor, tw.modalBackground);
-    expect(shape.borderRadius, BorderRadius.zero);
-    expect(shape.side.color, frameBorder.color);
-    expect(shape.side.width, frameBorder.width);
+    final bgBox = decoratedBoxes.firstWhere(
+      (box) =>
+          box.decoration is BoxDecoration &&
+          (box.decoration as BoxDecoration).color != null,
+    );
+    final bgDecoration = bgBox.decoration as BoxDecoration;
+
+    final borderBox = decoratedBoxes.firstWhere(
+      (box) =>
+          box.decoration is BoxDecoration &&
+          (box.decoration as BoxDecoration).border != null,
+    );
+    final borderDecoration = borderBox.decoration as BoxDecoration;
+
+    final tw = TwColors.forBrightness(Brightness.light);
+
+    expect(bgDecoration.color, tw.shellBackground);
+    expect(bgDecoration.borderRadius, BorderRadius.zero);
+    expect(borderDecoration.border!.top.color, tw.shellOuterBorder);
+    expect(borderDecoration.border!.top.width, 1.0);
   });
 
   testWidgets('showAppModal respects custom content padding override', (
@@ -77,9 +95,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final Finder modalContentPadding = find.descendant(
-      of: find.byType(Dialog),
+      of: find.byType(TwPanelContainer),
       matching: find.byWidgetPredicate(
-        (Widget widget) => widget is Padding && widget.padding == customPadding,
+        (Widget widget) =>
+            widget is TwPanelScope && widget.containerPadding == customPadding,
       ),
     );
 

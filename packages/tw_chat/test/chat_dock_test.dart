@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tw_chat/src/config/skin.dart';
 import 'package:tw_chat/src/config/composer_layout.dart';
-import 'package:tw_chat/src/widgets/chat_dock.dart';
+import 'package:tw_primitives/theme.dart';
 
 void main() {
   testWidgets('chat app bar title renders in a pill matching chat controls', (
@@ -14,11 +14,12 @@ void main() {
         mode: ChatSkinMode.light,
         child: MaterialApp(
           home: Material(
-            child: ChatAppBar(
-              onDisplayStateToggle: _noop,
-              displayStateToggleIcon: Icons.close,
-              displayStateToggleTooltip: 'Close chat',
-              tokens: ChatSkin.tokens,
+            child: TwPanelContainer(
+              title: TwPanelTitle(label: 'Chat with Twin'),
+              onClose: _noop,
+              closeIcon: Icons.close,
+              closeTooltip: 'Close chat',
+              body: SizedBox.shrink(),
             ),
           ),
         ),
@@ -32,7 +33,9 @@ void main() {
     final shape = decoration.shape as StadiumBorder;
 
     expect(find.text('Chat with Twin'), findsOneWidget);
-    final BuildContext ctx = tester.element(find.byKey(const ValueKey('chat-app-bar-title-pill')));
+    final BuildContext ctx = tester.element(
+      find.byKey(const ValueKey('chat-app-bar-title-pill')),
+    );
     expect(shape.side.color, ChatComposerLayout.borderColor(ctx));
     expect(shape.side.width, 1.0);
   });
@@ -45,11 +48,12 @@ void main() {
         mode: ChatSkinMode.light,
         child: MaterialApp(
           home: Material(
-            child: ChatAppBar(
-              onDisplayStateToggle: _noop,
-              displayStateToggleIcon: Icons.expand_more_rounded,
-              displayStateToggleTooltip: 'Minimize chat',
-              tokens: ChatSkin.tokens,
+            child: TwPanelContainer(
+              title: TwPanelTitle(label: 'Chat with Twin'),
+              onClose: _noop,
+              closeIcon: Icons.expand_more_rounded,
+              closeTooltip: 'Minimize chat',
+              body: SizedBox.shrink(),
             ),
           ),
         ),
@@ -69,10 +73,7 @@ void main() {
 
     expect(
       actionContainerRect.height,
-      closeTo(
-        actionBoundsRect.height * ChatSkin.tokens.appBarActionHeightFactor,
-        0.5,
-      ),
+      closeTo(actionBoundsRect.height * 0.75, 0.5),
     );
     expect(hitAreaRect.height, greaterThan(0));
     expect(hitAreaRect.top, greaterThanOrEqualTo(actionBoundsRect.top));

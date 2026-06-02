@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:tw_primitives/scrollbar.dart' as tw_scrollbar;
+import 'package:tw_primitives/theme.dart' show TwPanelScrollArea;
 
 import '../config/config.dart';
 import '../models/message.dart';
@@ -72,7 +73,10 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
             .clamp(0.0, double.infinity)
             .toDouble();
 
-    return tw_scrollbar.TwSelectableScrollArea.scrollView(
+    return TwPanelScrollArea(
+      selectable: true,
+      padding: EdgeInsets.zero,
+      overlapHeaderTopInset: 0,
       controller: widget.chatScroll,
       selectionKey: widget.chatSelectionAreaKey,
       interactionFocusNode: widget.chatFocusNode,
@@ -95,19 +99,8 @@ class _ChatMessageListAreaState extends State<ChatMessageListArea> {
           },
         ),
       },
-      magnifierConfiguration: TextMagnifierConfiguration.disabled,
-      thumbColor: ChatScrollbar.thumbColor(context),
-      thumbInactiveColor: ChatScrollbar.thumbInactiveColor(context),
-      scrollbarTrackColor:
-          widget.showChatScrollbarTrack ? ChatScrollbar.trackColor(context) : null,
-      thickness: tokens.scrollbarThickness,
-      minThumbLength: tokens.scrollbarMinThumbLength,
-      crossAxisMargin: tokens.scrollbarThumbCrossAxisMargin,
-      scrollbarColumnWidth: reservedScrollbarSpan,
+      showTrack: widget.showChatScrollbarTrack,
       scrollbarInsets: scrollbarInsets,
-      radius: tokens.scrollbarRadius,
-      thumbVisibility: true,
-      interactive: true,
       child: Padding(
         padding: tokens.bubbleViewportPadding.copyWith(
           top: 0,

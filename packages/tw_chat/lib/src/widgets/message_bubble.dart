@@ -161,8 +161,8 @@ class _ChatMessageBubbleState extends State<ChatMessageBubble> {
     final truncatedContentHeight =
         measuredLayout.lineHeight * ChatBubbleRules.collapsedVisibleLines;
     final bubbleTopMargin = widget.isFirstMessage
-        ? tokens.chatListTopShadowHeight + 15
-        : tokens.bubbleVerticalMargin;
+      ? tokens.chatListTopShadowHeight + 0
+      : tokens.bubbleVerticalMargin;
     final collapseButtonOverflowLeft = tokens.collapseButtonRightInset < 0
         ? -tokens.collapseButtonRightInset
         : 0.0;

@@ -32,7 +32,7 @@ class MarkupViewRenderer {
     static const String _unorderedListMarkerAssetPackage = 'tw_primitives';
 
   Widget build() {
-    return _renderLayoutNode(
+    final Widget root = _renderLayoutNode(
       _buildLayoutDocument(
         document,
         theme,
@@ -40,6 +40,10 @@ class MarkupViewRenderer {
         chromeVisible: chromeVisible,
       ),
     );
+    if (!selectable) {
+      return SelectionContainer.disabled(child: root);
+    }
+    return root;
   }
 
   _MarkupLayoutNode _buildLayoutDocument(

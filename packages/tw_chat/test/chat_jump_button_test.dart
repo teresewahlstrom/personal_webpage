@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tw_primitives/theme.dart';
 
 import 'package:tw_chat/src/widgets/chat_jump_button.dart';
 
@@ -39,7 +40,11 @@ void main() {
     expect(find.text('new message'), findsNothing);
     expect(find.byIcon(Icons.south_rounded), findsOneWidget);
 
-    await tester.tap(find.byType(FilledButton));
+    await tester.tap(
+      find.byWidgetPredicate(
+        (widget) => widget is GestureDetector && widget.child is TwLinkPill,
+      ),
+    );
     await tester.pump();
 
     expect(latestPressed, 0);
@@ -60,7 +65,11 @@ void main() {
     expect(find.text('new message'), findsOneWidget);
     expect(find.byIcon(Icons.south_rounded), findsOneWidget);
 
-    await tester.tap(find.byType(FilledButton));
+    await tester.tap(
+      find.byWidgetPredicate(
+        (widget) => widget is GestureDetector && widget.child is TwLinkPill,
+      ),
+    );
     await tester.pump();
 
     expect(latestPressed, 1);

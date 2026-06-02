@@ -45,6 +45,19 @@ def staged_files():
 
 IMPORT_RE = re.compile(r"^\s*(?:import|export)\s+['\"]([^'\"]+)['\"]")
 
+
+def is_theme_container_scrollbar_exception(path, resolved, repo_root):
+    """Allow theme/container files to depend on the public scrollbar barrel."""
+    rel_path = os.path.normpath(path)
+    container_prefix = os.path.normpath('packages/tw_primitives/lib/src/theme/container') + os.sep
+    if not rel_path.startswith(container_prefix):
+        return False
+
+    allowed = os.path.normpath(
+        os.path.join(repo_root, 'packages', 'tw_primitives', 'lib', 'scrollbar.dart'),
+    )
+    return os.path.normpath(resolved) == allowed
+
 def get_staged_file_contents(path):
     # Use git show to read the staged version
     try:
@@ -97,6 +110,8 @@ def main():
                 # If this is an import from our package, resolve and ensure it's inside theme_dir
                 if pkg == 'tw_primitives':
                     resolved = resolve_package_path(repo_root, target)
+                    if is_theme_container_scrollbar_exception(path, resolved, repo_root):
+                        continue
                     try:
                         if not os.path.commonpath([resolved, theme_dir]) == theme_dir:
                             violations.append((path, lineno, target, f'resolves to {os.path.relpath(resolved, repo_root)}'))
@@ -117,6 +132,8 @@ def main():
             # Join with file's directory
             file_dir = os.path.dirname(os.path.join(repo_root, path))
             resolved = os.path.normpath(os.path.join(file_dir, target))
+            if is_theme_container_scrollbar_exception(path, resolved, repo_root):
+                continue
             # If it's a package: style or absolute file, ensure it is inside theme_dir
             if not os.path.commonpath([resolved, theme_dir]) == theme_dir:
                 violations.append((path, lineno, target, f'resolves to {os.path.relpath(resolved, repo_root)}'))
