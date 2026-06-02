@@ -33,6 +33,11 @@ class TwTextStyleTokens {
     required this.twTransparentSelectionSpacer,
     required this.twHeader1FontSize,
     required this.twHeader2FontSize,
+    required this.twProfessionalStoryH2Scale,
+    required this.twHeading1LetterSpacing,
+    required this.twHeading1WordSpacing,
+    required this.twHeading2LetterSpacing,
+    required this.twHeading2WordSpacing,
     required this.twBlockquoteFontSize,
     required this.twSmallFontSize,
     required this.twToolbarFontSize,
@@ -58,6 +63,11 @@ class TwTextStyleTokens {
   final TextStyle twTransparentSelectionSpacer;
   final double twHeader1FontSize;
   final double twHeader2FontSize;
+  final double twProfessionalStoryH2Scale;
+  final double twHeading1LetterSpacing;
+  final double twHeading1WordSpacing;
+  final double twHeading2LetterSpacing;
+  final double twHeading2WordSpacing;
   final double twBlockquoteFontSize;
   final double twSmallFontSize;
   final double twToolbarFontSize;
@@ -88,6 +98,11 @@ class TwTextStyleTokens {
         twTransparentSelectionSpacer: dark.TwTextStyleTokensDark.twTransparentSelectionSpacer,
         twHeader1FontSize: dark.TwTextStyleTokensDark.twHeader1FontSize,
         twHeader2FontSize: dark.TwTextStyleTokensDark.twHeader2FontSize,
+        twProfessionalStoryH2Scale: dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale,
+        twHeading1LetterSpacing: dark.TwTextStyleTokensDark.twHeading1LetterSpacing,
+        twHeading1WordSpacing: dark.TwTextStyleTokensDark.twHeading1WordSpacing,
+        twHeading2LetterSpacing: dark.TwTextStyleTokensDark.twHeading2LetterSpacing,
+        twHeading2WordSpacing: dark.TwTextStyleTokensDark.twHeading2WordSpacing,
         twBlockquoteFontSize: dark.TwTextStyleTokensDark.twBlockquoteFontSize,
         twSmallFontSize: dark.TwTextStyleTokensDark.twSmallFontSize,
         twToolbarFontSize: dark.TwTextStyleTokensDark.twToolbarFontSize,
@@ -114,6 +129,11 @@ class TwTextStyleTokens {
         twTransparentSelectionSpacer: light.TwTextStyleTokensLight.twTransparentSelectionSpacer,
         twHeader1FontSize: light.TwTextStyleTokensLight.twHeader1FontSize,
         twHeader2FontSize: light.TwTextStyleTokensLight.twHeader2FontSize,
+        twProfessionalStoryH2Scale: light.TwTextStyleTokensLight.twProfessionalStoryH2Scale,
+        twHeading1LetterSpacing: light.TwTextStyleTokensLight.twHeading1LetterSpacing,
+        twHeading1WordSpacing: light.TwTextStyleTokensLight.twHeading1WordSpacing,
+        twHeading2LetterSpacing: light.TwTextStyleTokensLight.twHeading2LetterSpacing,
+        twHeading2WordSpacing: light.TwTextStyleTokensLight.twHeading2WordSpacing,
         twBlockquoteFontSize: light.TwTextStyleTokensLight.twBlockquoteFontSize,
         twSmallFontSize: light.TwTextStyleTokensLight.twSmallFontSize,
         twToolbarFontSize: light.TwTextStyleTokensLight.twToolbarFontSize,

@@ -131,18 +131,24 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       linkPillStyle: config.linkPillStyle ?? defaultLinkPillStyle,
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
-        const scales = <double>[2.1, 1.5];
+        final scales = <double>[2.1, tokens.twProfessionalStoryH2Scale];
         const weights = <FontWeight>[FontWeight.w300, FontWeight.w400];
         final clampedLevel = level.clamp(1, 2);
         final index = clampedLevel - 1;
 
-        // Apply letterSpacing/wordSpacing for H1 and H2
+        final double? letterSpacing = clampedLevel == 1
+            ? tokens.twHeading1LetterSpacing
+            : (clampedLevel == 2 ? tokens.twHeading2LetterSpacing : null);
+        final double? wordSpacing = clampedLevel == 1
+            ? tokens.twHeading1WordSpacing
+            : (clampedLevel == 2 ? tokens.twHeading2WordSpacing : null);
+
         return strongStyle.copyWith(
           fontSize: baseStyle.fontSize! * scales[index],
           fontWeight: weights[index],
           height: 1.2,
-          letterSpacing: level == 1 ? 0.2 : (level == 2 ? 1.15 : null),
-          wordSpacing: level == 1 ? 2.2 : (level == 2 ? 2.2 : null),
+          letterSpacing: letterSpacing,
+          wordSpacing: wordSpacing,
         );
       },
       transparentSelectionSpacer: tokens.twTransparentSelectionSpacer,

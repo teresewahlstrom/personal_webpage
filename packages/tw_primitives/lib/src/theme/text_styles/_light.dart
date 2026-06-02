@@ -33,9 +33,13 @@ class TwTextStyleTokensLight {
   // Header/hint tokens
   static const double twHeader1FontSize = dark.TwTextStyleTokensDark.twHeader1FontSize;
   static const double twHeader2FontSize = dark.TwTextStyleTokensDark.twHeader2FontSize;
+  static const double twProfessionalStoryH2Scale = dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale;
+  static const double twHeading1LetterSpacing = dark.TwTextStyleTokensDark.twHeading1LetterSpacing;
+  static const double twHeading1WordSpacing = dark.TwTextStyleTokensDark.twHeading1WordSpacing;
+  static const double twHeading2LetterSpacing = dark.TwTextStyleTokensDark.twHeading2LetterSpacing;
+  static const double twHeading2WordSpacing = dark.TwTextStyleTokensDark.twHeading2WordSpacing;
   static const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
   static const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
   static const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
   static const double twCardTitleScale = dark.TwTextStyleTokensDark.twCardTitleScale;
 }
-
