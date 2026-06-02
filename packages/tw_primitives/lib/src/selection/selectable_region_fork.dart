@@ -473,6 +473,12 @@ class SelectableRegionState extends State<SelectableRegion>
   @visibleForTesting
   SelectionOverlay? get selectionOverlay => _selectionOverlay;
 
+  /// Whether the start selection handle is currently being dragged.
+  bool get isDraggingStartHandle => _selectionOverlay?.isDraggingStartHandle ?? false;
+
+  /// Whether the end selection handle is currently being dragged.
+  bool get isDraggingEndHandle => _selectionOverlay?.isDraggingEndHandle ?? false;
+
   /// The text processing service used to retrieve the native text processing actions.
   final ProcessTextService _processTextService = DefaultProcessTextService();
 
@@ -673,11 +679,17 @@ class SelectableRegionState extends State<SelectableRegion>
   }
 
   /// Refreshes selection geometry after the viewport containing this region moves.
-  void refreshSelectionForViewportChange() {
+  void refreshSelectionForViewportChange({
+    Offset? userDragStartPosition,
+    Offset? userDragEndPosition,
+  }) {
     if (!_hasActiveSelection) {
       return;
     }
-    _selectionDelegate._updateLastSelectionEdgeLocationsFromGeometries();
+    _selectionDelegate._updateLastSelectionEdgeLocationsFromGeometries(
+      userDragStartPosition: userDragStartPosition,
+      userDragEndPosition: userDragEndPosition,
+    );
     _selectionDelegate.didChangeSelectables();
     _updateSelectionOverlay();
     _selectionOverlay?.markNeedsBuild();
@@ -2602,32 +2614,47 @@ class StaticSelectionContainerDelegate
 
   /// Updates the last selection edge locations of both start and end selection
   /// edges based on their [SelectionGeometry].
-  void _updateLastSelectionEdgeLocationsFromGeometries() {
+  void _updateLastSelectionEdgeLocationsFromGeometries({
+    Offset? userDragStartPosition,
+    Offset? userDragEndPosition,
+  }) {
     if (currentSelectionStartIndex != -1 &&
         selectables[currentSelectionStartIndex].value.hasSelection) {
-      final Selectable start = selectables[currentSelectionStartIndex];
-      final Offset localStartEdge =
-          start.value.startSelectionPoint!.localPosition +
-          Offset(0, -start.value.startSelectionPoint!.lineHeight / 2);
-      updateLastSelectionEdgeLocation(
-        globalSelectionEdgeLocation: MatrixUtils.transformPoint(
+      final Offset globalStartEdge;
+      if (userDragStartPosition != null) {
+        globalStartEdge = userDragStartPosition;
+      } else {
+        final Selectable start = selectables[currentSelectionStartIndex];
+        final Offset localStartEdge =
+            start.value.startSelectionPoint!.localPosition +
+            Offset(0, -start.value.startSelectionPoint!.lineHeight / 2);
+        globalStartEdge = MatrixUtils.transformPoint(
           start.getTransformTo(null),
           localStartEdge,
-        ),
+        );
+      }
+      updateLastSelectionEdgeLocation(
+        globalSelectionEdgeLocation: globalStartEdge,
         forEnd: false,
       );
     }
     if (currentSelectionEndIndex != -1 &&
         selectables[currentSelectionEndIndex].value.hasSelection) {
-      final Selectable end = selectables[currentSelectionEndIndex];
-      final Offset localEndEdge =
-          end.value.endSelectionPoint!.localPosition +
-          Offset(0, -end.value.endSelectionPoint!.lineHeight / 2);
-      updateLastSelectionEdgeLocation(
-        globalSelectionEdgeLocation: MatrixUtils.transformPoint(
+      final Offset globalEndEdge;
+      if (userDragEndPosition != null) {
+        globalEndEdge = userDragEndPosition;
+      } else {
+        final Selectable end = selectables[currentSelectionEndIndex];
+        final Offset localEndEdge =
+            end.value.endSelectionPoint!.localPosition +
+            Offset(0, -end.value.endSelectionPoint!.lineHeight / 2);
+        globalEndEdge = MatrixUtils.transformPoint(
           end.getTransformTo(null),
           localEndEdge,
-        ),
+        );
+      }
+      updateLastSelectionEdgeLocation(
+        globalSelectionEdgeLocation: globalEndEdge,
         forEnd: true,
       );
     }

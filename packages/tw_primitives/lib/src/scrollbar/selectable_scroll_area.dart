@@ -408,7 +408,22 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
     }
     controller.jumpTo(nextOffset);
     _effectiveSelectionKey.currentState?.markViewportScrollInProgress();
-    _effectiveSelectionKey.currentState?.refreshSelectionForViewportChange();
+    
+    final selectionState = _effectiveSelectionKey.currentState;
+    if (selectionState != null) {
+      final isDraggingStart = selectionState.isDraggingStartHandle;
+      final isDraggingEnd = selectionState.isDraggingEndHandle;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (selectionState.mounted) {
+          selectionState.refreshSelectionForViewportChange(
+            userDragStartPosition: isDraggingStart ? _selectionDragGlobalPosition : null,
+            userDragEndPosition: isDraggingEnd || (!isDraggingStart && !isDraggingEnd)
+                ? _selectionDragGlobalPosition
+                : null,
+          );
+        }
+      });
+    }
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -421,16 +436,42 @@ class _TwSelectableScrollAreaState extends State<TwSelectableScrollArea>
         notification is ScrollUpdateNotification ||
         notification is OverscrollNotification) {
       selectionState.markViewportScrollInProgress();
-      selectionState.refreshSelectionForViewportChange();
+      if (_selectionDragGlobalPosition != null) {
+        final isDraggingStart = selectionState.isDraggingStartHandle;
+        final isDraggingEnd = selectionState.isDraggingEndHandle;
+        selectionState.refreshSelectionForViewportChange(
+          userDragStartPosition: isDraggingStart ? _selectionDragGlobalPosition : null,
+          userDragEndPosition: isDraggingEnd || (!isDraggingStart && !isDraggingEnd)
+              ? _selectionDragGlobalPosition
+              : null,
+        );
+      }
     } else if (notification is UserScrollNotification) {
       if (notification.direction == ScrollDirection.idle) {
         selectionState.markViewportScrollSettled();
       } else {
         selectionState.markViewportScrollInProgress();
-        selectionState.refreshSelectionForViewportChange();
+        if (_selectionDragGlobalPosition != null) {
+          final isDraggingStart = selectionState.isDraggingStartHandle;
+          final isDraggingEnd = selectionState.isDraggingEndHandle;
+          selectionState.refreshSelectionForViewportChange(
+            userDragStartPosition: isDraggingStart ? _selectionDragGlobalPosition : null,
+            userDragEndPosition: isDraggingEnd || (!isDraggingStart && !isDraggingEnd)
+                ? _selectionDragGlobalPosition
+                : null,
+          );
+        }
       }
     } else if (notification is ScrollEndNotification) {
       selectionState.markViewportScrollSettled();
+      final isDraggingStart = selectionState.isDraggingStartHandle;
+      final isDraggingEnd = selectionState.isDraggingEndHandle;
+      selectionState.refreshSelectionForViewportChange(
+        userDragStartPosition: isDraggingStart ? _selectionDragGlobalPosition : null,
+        userDragEndPosition: isDraggingEnd || (!isDraggingStart && !isDraggingEnd)
+            ? _selectionDragGlobalPosition
+            : null,
+      );
     }
     return false;
   }

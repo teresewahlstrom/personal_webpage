@@ -49,7 +49,7 @@ class TwColors {
     required this.pageScrollbarThumb,
     required this.pageScrollbarThumbInactive,
     required this.pageScrollbarTrack,
-    required this.projectCardFillAlpha,
+    required this.cardFillAlpha,
     required this.linkText,
     required this.linkTextHover,
     required this.modalCloseIcon,
@@ -57,6 +57,8 @@ class TwColors {
     required this.lineInteractive,
     required this.lineInteractiveHover,
     required this.modalBarrier,
+    required this.cardTitleText,
+    required this.cardContentText,
   });
 
   final Color transparent;
@@ -105,7 +107,7 @@ class TwColors {
   final Color pageScrollbarThumb;
   final Color pageScrollbarThumbInactive;
   final Color pageScrollbarTrack;
-  final double projectCardFillAlpha;
+  final double cardFillAlpha;
   final Color linkText;
   final Color linkTextHover;
   final Color modalCloseIcon;
@@ -113,6 +115,8 @@ class TwColors {
   final Color lineInteractive;
   final Color lineInteractiveHover;
   final Color modalBarrier;
+  final Color cardTitleText;
+  final Color cardContentText;
 
   /// Get a `TwColors` instance by theme name ('light' | 'dark').
   static TwColors forTheme(String themeName) {

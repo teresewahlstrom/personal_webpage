@@ -61,7 +61,7 @@ final class ShellUiConfig {
     return Color.lerp(
       pageBackgroundFor(brightness),
       gridLineFor(brightness).color,
-      TwColors.forBrightness(brightness).projectCardFillAlpha,
+      TwColors.forBrightness(brightness).cardFillAlpha,
     )!;
   }
 
@@ -139,7 +139,7 @@ final class ModalUiConfig {
     return Color.lerp(
       backgroundFor(brightness),
       frameBorderFor(brightness).color,
-      TwColors.forBrightness(brightness).projectCardFillAlpha,
+      TwColors.forBrightness(brightness).cardFillAlpha,
     )!;
   }
 

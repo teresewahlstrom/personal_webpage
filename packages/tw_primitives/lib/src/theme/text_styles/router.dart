@@ -34,14 +34,15 @@ class TwTextStyleTokens {
     required this.twHeader1FontSize,
     required this.twHeader2FontSize,
     required this.twProfessionalStoryH2Scale,
-    required this.twHeading1LetterSpacing,
-    required this.twHeading1WordSpacing,
-    required this.twHeading2LetterSpacing,
-    required this.twHeading2WordSpacing,
+    required this.twH1FontWeight,
+    required this.twH2FontWeight,
+    required this.twH1LetterSpacing,
+    required this.twH1WordSpacing,
+    required this.twH2LetterSpacing,
+    required this.twH2WordSpacing,
     required this.twBlockquoteFontSize,
     required this.twSmallFontSize,
     required this.twToolbarFontSize,
-    required this.twCardTitleScale,
   });
 
   final String twFontFamily;
@@ -64,14 +65,15 @@ class TwTextStyleTokens {
   final double twHeader1FontSize;
   final double twHeader2FontSize;
   final double twProfessionalStoryH2Scale;
-  final double twHeading1LetterSpacing;
-  final double twHeading1WordSpacing;
-  final double twHeading2LetterSpacing;
-  final double twHeading2WordSpacing;
+  final FontWeight twH1FontWeight;
+  final FontWeight twH2FontWeight;
+  final double twH1LetterSpacing;
+  final double twH1WordSpacing;
+  final double twH2LetterSpacing;
+  final double twH2WordSpacing;
   final double twBlockquoteFontSize;
   final double twSmallFontSize;
   final double twToolbarFontSize;
-  final double twCardTitleScale;
 
   static TwTextStyleTokens forBrightness(Brightness brightness) {
     if (brightness == Brightness.dark) return TwTextStyleTokens._fromDark();
@@ -99,14 +101,15 @@ class TwTextStyleTokens {
         twHeader1FontSize: dark.TwTextStyleTokensDark.twHeader1FontSize,
         twHeader2FontSize: dark.TwTextStyleTokensDark.twHeader2FontSize,
         twProfessionalStoryH2Scale: dark.TwTextStyleTokensDark.twProfessionalStoryH2Scale,
-        twHeading1LetterSpacing: dark.TwTextStyleTokensDark.twHeading1LetterSpacing,
-        twHeading1WordSpacing: dark.TwTextStyleTokensDark.twHeading1WordSpacing,
-        twHeading2LetterSpacing: dark.TwTextStyleTokensDark.twHeading2LetterSpacing,
-        twHeading2WordSpacing: dark.TwTextStyleTokensDark.twHeading2WordSpacing,
+        twH1FontWeight: dark.TwTextStyleTokensDark.twH1FontWeight,
+        twH2FontWeight: dark.TwTextStyleTokensDark.twH2FontWeight,
+        twH1LetterSpacing: dark.TwTextStyleTokensDark.twH1LetterSpacing,
+        twH1WordSpacing: dark.TwTextStyleTokensDark.twH1WordSpacing,
+        twH2LetterSpacing: dark.TwTextStyleTokensDark.twH2LetterSpacing,
+        twH2WordSpacing: dark.TwTextStyleTokensDark.twH2WordSpacing,
         twBlockquoteFontSize: dark.TwTextStyleTokensDark.twBlockquoteFontSize,
         twSmallFontSize: dark.TwTextStyleTokensDark.twSmallFontSize,
         twToolbarFontSize: dark.TwTextStyleTokensDark.twToolbarFontSize,
-        twCardTitleScale: dark.TwTextStyleTokensDark.twCardTitleScale,
       );
 
   static TwTextStyleTokens _fromLight() => TwTextStyleTokens._(
@@ -130,14 +133,15 @@ class TwTextStyleTokens {
         twHeader1FontSize: light.TwTextStyleTokensLight.twHeader1FontSize,
         twHeader2FontSize: light.TwTextStyleTokensLight.twHeader2FontSize,
         twProfessionalStoryH2Scale: light.TwTextStyleTokensLight.twProfessionalStoryH2Scale,
-        twHeading1LetterSpacing: light.TwTextStyleTokensLight.twHeading1LetterSpacing,
-        twHeading1WordSpacing: light.TwTextStyleTokensLight.twHeading1WordSpacing,
-        twHeading2LetterSpacing: light.TwTextStyleTokensLight.twHeading2LetterSpacing,
-        twHeading2WordSpacing: light.TwTextStyleTokensLight.twHeading2WordSpacing,
+        twH1FontWeight: light.TwTextStyleTokensLight.twH1FontWeight,
+        twH2FontWeight: light.TwTextStyleTokensLight.twH2FontWeight,
+        twH1LetterSpacing: light.TwTextStyleTokensLight.twH1LetterSpacing,
+        twH1WordSpacing: light.TwTextStyleTokensLight.twH1WordSpacing,
+        twH2LetterSpacing: light.TwTextStyleTokensLight.twH2LetterSpacing,
+        twH2WordSpacing: light.TwTextStyleTokensLight.twH2WordSpacing,
         twBlockquoteFontSize: light.TwTextStyleTokensLight.twBlockquoteFontSize,
         twSmallFontSize: light.TwTextStyleTokensLight.twSmallFontSize,
         twToolbarFontSize: light.TwTextStyleTokensLight.twToolbarFontSize,
-        twCardTitleScale: light.TwTextStyleTokensLight.twCardTitleScale,
       );
 }
 
@@ -249,7 +253,6 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       blockquoteFontSize: tokens.twBlockquoteFontSize,
       smallFontSize: tokens.twSmallFontSize,
       toolbarFontSize: tokens.twToolbarFontSize,
-      cardTitleScale: tokens.twCardTitleScale,
     );
 
 extension TwNamedTextStylesBuildContextExtension on BuildContext {

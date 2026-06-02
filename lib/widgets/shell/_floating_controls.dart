@@ -52,7 +52,7 @@ FloatingControlVisualStyle floatingControlVisualStyleFor(BuildContext context) {
     fillColor: Color.lerp(
       tw.pageBackground,
       tw.lineSubtle,
-      tw.projectCardFillAlpha,
+      tw.cardFillAlpha,
     )!,
     outlineStyle: AppLineStyle(color: tw.lineSubtle, width: AppLineTheme.subtleWidth),
     iconColor: tw.pageBodyText,

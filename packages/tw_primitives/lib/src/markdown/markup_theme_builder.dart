@@ -132,16 +132,16 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
       blockquoteStyle: baseStyle.copyWith(fontStyle: FontStyle.italic),
       headingStyleResolver: (int level) {
         final scales = <double>[2.1, tokens.twProfessionalStoryH2Scale];
-        const weights = <FontWeight>[FontWeight.w300, FontWeight.w400];
+        final weights = <FontWeight>[tokens.twH1FontWeight, tokens.twH2FontWeight];
         final clampedLevel = level.clamp(1, 2);
         final index = clampedLevel - 1;
 
         final double? letterSpacing = clampedLevel == 1
-            ? tokens.twHeading1LetterSpacing
-            : (clampedLevel == 2 ? tokens.twHeading2LetterSpacing : null);
+            ? tokens.twH1LetterSpacing
+            : (clampedLevel == 2 ? tokens.twH2LetterSpacing : null);
         final double? wordSpacing = clampedLevel == 1
-            ? tokens.twHeading1WordSpacing
-            : (clampedLevel == 2 ? tokens.twHeading2WordSpacing : null);
+            ? tokens.twH1WordSpacing
+            : (clampedLevel == 2 ? tokens.twH2WordSpacing : null);
 
         return strongStyle.copyWith(
           fontSize: baseStyle.fontSize! * scales[index],

@@ -75,7 +75,6 @@ class NamedTextStyles {
     required this.blockquoteFontSize,
     required this.smallFontSize,
     required this.toolbarFontSize,
-    required this.cardTitleScale,
   });
 
   final String fontFamily;
@@ -103,7 +102,6 @@ class NamedTextStyles {
   final double blockquoteFontSize;
   final double smallFontSize;
   final double toolbarFontSize;
-  final double cardTitleScale;
 
   // Designer-facing base TextStyle builders. Callers should pass the desired
   // color so dynamic color tokens remain separate from the typographic bases.
@@ -182,7 +180,7 @@ class NamedTextStyles {
   TextStyle cardTitleBase({required Color color}) => buildTextStyle(
         fontFamily: fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: bodyBaseFontSize * cardTitleScale,
+        fontSize: bodyBaseFontSize,
         height: bodyLineHeight,
         color: color,
       );

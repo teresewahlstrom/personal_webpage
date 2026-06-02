@@ -31,21 +31,20 @@ class TwTextStyleTokensDark {
   static const double twFooterBaseFontSize = 16.0;
 
   // Header/hint tokens used by text-field hint builder and similar places
-  static const double twHeader1FontSize = 24.0;
-  static const double twHeader2FontSize = 18.0;
-  static const double twProfessionalStoryH2Scale = 1.5;
-  static const double twHeading1LetterSpacing = 0.2;
-  static const double twHeading1WordSpacing = 2.2;
-  static const double twHeading2LetterSpacing = 1.15;
-  static const double twHeading2WordSpacing = 2.2;
+  static const double twHeader1FontSize = 19.0;
+  static const double twHeader2FontSize = 15.0;
+  static const double twProfessionalStoryH2Scale = 1.35;
+  static const FontWeight twH1FontWeight = FontWeight.w300;
+  static const FontWeight twH2FontWeight = FontWeight.w500;
+  static const double twH1LetterSpacing = 0.2;
+  static const double twH1WordSpacing = 2.2;
+  static const double twH2LetterSpacing = 1.15;
+  static const double twH2WordSpacing = 2.2;
   static const double twBlockquoteFontSize = 20.0;
   
   // Small UI and toolbar font sizes
   static const double twSmallFontSize = 13.0;
   static const double twToolbarFontSize = 12.0;
-
-  // Professional card title scale relative to H2/base header size
-  static const double twCardTitleScale = 0.99;
 
   // Utility
   static const TextStyle twTransparentSelectionSpacer = TextStyle(

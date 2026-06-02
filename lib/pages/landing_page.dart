@@ -409,7 +409,11 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         for (int index = 0; index < widget.cards.length; index++) ...<Widget>[
-          if (index > 0) const _SelectableCopyBreak(height: 14),
+          if (index > 0)
+            const _SelectableCopyBreak(
+              height: 14,
+              padding: EdgeInsets.only(left: 12), // to match the proffessional story text indentation
+            ),
           _ExpandableProjectCard(
             title: widget.cards[index].title,
             contentDocument: widget.cards[index].contentDocument,
@@ -451,6 +455,7 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
     MarkdownThemeConfig(
       isDark: ChatSkin.isDarkOf(context),
       textScale: MarkdownThemeConfig.bodyTextScaleOf(context),
+      baseTextColor: context.twColors.cardContentText,
     ),
   );
 }
@@ -544,12 +549,14 @@ class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
     final Color cardFill = Color.lerp(
       context.twColors.pageBackground,
       context.twColors.lineSubtle,
-      context.twColors.projectCardFillAlpha,
+      context.twColors.cardFillAlpha,
     )!;
     final MarkdownSurfaceStyle markdownSurface =
         _buildProjectCardMarkdownSurface(context);
     final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
-    final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
+    final TextStyle cardTitleStyle = TwTextStyles.of(context)
+        .cardTitleFrom(h2)
+        .copyWith(color: context.twColors.cardTitleText);
     final Color baseIconColor =
         TwTextStyles.of(context).bodyForContext(
           context: context,
@@ -798,7 +805,10 @@ class _SocialSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10),
             child: _SocialRow(entry: entry),
           ),
-          const _SelectableCopyBreak(height: 6),
+          const _SelectableCopyBreak(
+            height: 6,
+            padding: EdgeInsets.only(left: 55), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
+          ),
         ],
       ],
     );
@@ -806,10 +816,16 @@ class _SocialSection extends StatelessWidget {
 }
 
 class _SelectableCopyBreak extends StatelessWidget {
-  const _SelectableCopyBreak({required this.height, this.lineBreaks = 1});
+  const _SelectableCopyBreak({
+    required this.height,
+    this.lineBreaks = 1,
+    this.padding = EdgeInsets.zero,
+  });
 
   final double height;
   final int lineBreaks;
+  final EdgeInsetsGeometry padding;
+
   @override
   Widget build(BuildContext context) {
     final selectionRegistrar = SelectionContainer.maybeOf(context);
@@ -820,15 +836,18 @@ class _SelectableCopyBreak extends StatelessWidget {
     return SizedBox(
       height: height,
       child: IgnorePointer(
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: RichText(
-            text: TextSpan(
-              text: '\n' * lineBreaks,
-              style: TwTextStyles.of(context).transparentSelectionSpacer,
+        child: Padding(
+          padding: padding,
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: RichText(
+              text: TextSpan(
+                text: '\n' * lineBreaks,
+                style: TwTextStyles.of(context).transparentSelectionSpacer,
+              ),
+              selectionRegistrar: selectionRegistrar,
+              selectionColor: Colors.transparent,
             ),
-            selectionRegistrar: selectionRegistrar,
-            selectionColor: Colors.transparent,
           ),
         ),
       ),

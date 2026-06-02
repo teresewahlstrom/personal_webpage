@@ -61,7 +61,6 @@ const TwColors twColorsLight = TwColors.create(
   pageScrollbarThumb: Color(0xFFFFFFFF),
   pageScrollbarThumbInactive: Color(0xFFFFFFFF),
   pageScrollbarTrack: Color(0x00F8F9F7),
-  projectCardFillAlpha: 0.70,
 
   linkText: _interactive,
   linkTextHover: _interactiveHover,
@@ -71,4 +70,8 @@ const TwColors twColorsLight = TwColors.create(
   modalCloseIcon: _interactive,
   modalCloseIconHover: _interactiveHover,
   modalBarrier: Color(0xBF000000),
+  
+  cardTitleText: _chatMainAccent,
+  cardContentText: Color(0xCC000000),
+  cardFillAlpha: 0.70,
 );

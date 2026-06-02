@@ -133,9 +133,7 @@ class TwTextStylesDark implements TwTextStylesImpl {
 
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    // Apply card title scale relative to base font size (fall back to H2 token).
-    final double baseSize = base.fontSize ?? named.header2FontSize;
-    return adaptBase(base, color: color, fontSize: baseSize * named.cardTitleScale);
+    return adaptBase(base, color: color);
   }
 
   @override
@@ -264,8 +262,7 @@ class TwTextStylesLight implements TwTextStylesImpl {
 
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    final double baseSize = base.fontSize ?? named.header2FontSize;
-    return adaptBase(base, color: color, fontSize: baseSize * named.cardTitleScale);
+    return adaptBase(base, color: color);
   }
 
   @override
