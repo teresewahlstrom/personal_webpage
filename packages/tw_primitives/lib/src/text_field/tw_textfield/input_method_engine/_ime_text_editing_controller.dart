@@ -386,6 +386,9 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
     if (_latestTextEditingValueSentToPlatform != currentTextEditingValue) {
       final normalizedText = value.text.normalizeLineEndings();
+      if (normalizedText.length - text.length > 1) {
+        markAsJustPasted();
+      }
       _sendTextChangesToPlatform = false;
       text = AttributedText(normalizedText);
       selection = _normalizeSelectionForLineEndings(value.text, value.selection);
@@ -424,6 +427,9 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
       if (delta is TextEditingDeltaInsertion) {
         _log.fine('Processing insertion: $delta');
         final textInserted = delta.textInserted.normalizeLineEndings();
+        if (textInserted.length > 1) {
+          markAsJustPasted();
+        }
         final adjustedSelection = _normalizeSelectionAfterInsertedText(
           delta.selection,
           insertOffset: delta.insertionOffset,
@@ -465,6 +471,9 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
       } else if (delta is TextEditingDeltaReplacement) {
         _log.fine('Processing replacement: $delta');
         final replacementText = delta.replacementText.normalizeLineEndings();
+        if (replacementText.length > 1) {
+          markAsJustPasted();
+        }
         final adjustedSelection = _normalizeSelectionAfterInsertedText(
           delta.selection,
           insertOffset: delta.replacedRange.start,
@@ -550,6 +559,19 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     onPerformSelector?.call(selectorName);
   }
   //------ End TextInputClient -----
+
+  @override
+  bool get hasJustPasted => _realController.hasJustPasted;
+
+  @override
+  void clearHasJustPastedFlag() {
+    _realController.clearHasJustPastedFlag();
+  }
+
+  @override
+  void markAsJustPasted() {
+    _realController.markAsJustPasted();
+  }
 
   @override
   AttributedText get text => _realController.text;

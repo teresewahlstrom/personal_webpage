@@ -2013,6 +2013,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
   bool _scrollToEndOnTick = false;
   bool _animateScrollOnNextEnsureVisible = false;
   bool _isAnimatingPasteScroll = false;
+  bool _ensureSelectionExtentVisibleScheduled = false;
   double _scrollAmountPerFrame = 0;
   late Ticker _ticker;
 
@@ -2054,14 +2055,33 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
     if (widget.textController.hasJustPasted) {
       _animateScrollOnNextEnsureVisible = true;
     }
-    // Use a post-frame callback to "ensure selection extent is visible"
-    // so that any pending visual content changes can happen before
-    // attempting to calculate the visual position of the selection extent.
+    _scheduleEnsureSelectionExtentIsVisibleAfterLayout();
+  }
+
+  void _scheduleEnsureSelectionExtentIsVisibleAfterLayout() {
+    if (_ensureSelectionExtentVisibleScheduled) {
+      return;
+    }
+
+    _ensureSelectionExtentVisibleScheduled = true;
     onNextFrame((_) {
+      if (!mounted) {
+        return;
+      }
+
       _ensureSelectionExtentIsVisible();
       if (widget.textController.hasJustPasted) {
         widget.textController.clearHasJustPastedFlag();
       }
+
+      onNextFrame((_) {
+        _ensureSelectionExtentVisibleScheduled = false;
+        if (!mounted) {
+          return;
+        }
+
+        _ensureSelectionExtentIsVisible();
+      });
     });
   }
 

@@ -34,6 +34,11 @@ class AttributedTextEditingController with ChangeNotifier {
     _hasJustPasted = false;
   }
 
+  /// Sets the [hasJustPasted] flag.
+  void markAsJustPasted() {
+    _hasJustPasted = true;
+  }
+
   TextSelection _selection;
   TextSelection get selection => _selection;
   set selection(TextSelection newValue) {

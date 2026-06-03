@@ -2,6 +2,7 @@ import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_primitives/src/text_field/tw_textfield/infrastructure/attributed_text_editing_controller.dart';
+import 'package:tw_primitives/src/text_field/tw_textfield/input_method_engine/_ime_text_editing_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +65,64 @@ void main() {
       controller.clearHasJustPastedFlag();
 
       expect(controller.hasJustPasted, isFalse);
+    });
+
+    group('ImeAttributedTextEditingController', () {
+      test('updateEditingValueWithDeltas sets hasJustPasted flag on multi-character insertions and replacements', () {
+        final controller = ImeAttributedTextEditingController();
+        expect(controller.hasJustPasted, isFalse);
+
+        // Insertion of 1 character should not set paste flag
+        controller.updateEditingValueWithDeltas([
+          TextEditingDeltaInsertion(
+            oldText: '',
+            textInserted: 'a',
+            insertionOffset: 0,
+            selection: const TextSelection.collapsed(offset: 1),
+            composing: TextRange.empty,
+          ),
+        ]);
+        expect(controller.hasJustPasted, isFalse);
+
+        // Insertion of >1 characters should set paste flag
+        controller.updateEditingValueWithDeltas([
+          TextEditingDeltaInsertion(
+            oldText: 'a',
+            textInserted: 'hello',
+            insertionOffset: 1,
+            selection: const TextSelection.collapsed(offset: 6),
+            composing: TextRange.empty,
+          ),
+        ]);
+        expect(controller.hasJustPasted, isTrue);
+
+        controller.clearHasJustPastedFlag();
+        expect(controller.hasJustPasted, isFalse);
+
+        // Replacement of 1 character should not set paste flag
+        controller.updateEditingValueWithDeltas([
+          TextEditingDeltaReplacement(
+            oldText: 'ahello',
+            replacementText: 'x',
+            replacedRange: const TextRange(start: 0, end: 1),
+            selection: const TextSelection.collapsed(offset: 1),
+            composing: TextRange.empty,
+          ),
+        ]);
+        expect(controller.hasJustPasted, isFalse);
+
+        // Replacement of >1 characters should set paste flag
+        controller.updateEditingValueWithDeltas([
+          TextEditingDeltaReplacement(
+            oldText: 'xhello',
+            replacementText: 'world',
+            replacedRange: const TextRange(start: 0, end: 1),
+            selection: const TextSelection.collapsed(offset: 5),
+            composing: TextRange.empty,
+          ),
+        ]);
+        expect(controller.hasJustPasted, isTrue);
+      });
     });
   });
 }
