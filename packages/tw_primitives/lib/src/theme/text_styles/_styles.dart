@@ -75,6 +75,16 @@ class NamedTextStyles {
     required this.blockquoteFontSize,
     required this.smallFontSize,
     required this.toolbarFontSize,
+    // new tokens for assembly
+    required this.strongFontWeight,
+    required this.h1FontWeight,
+    required this.h2FontWeight,
+    required this.h1LetterSpacing,
+    required this.h1WordSpacing,
+    required this.h2LetterSpacing,
+    required this.h2WordSpacing,
+    required this.cardH2Scale,
+    required this.strikethroughThickness,
   });
 
   final String fontFamily;
@@ -103,4 +113,180 @@ class NamedTextStyles {
   final double smallFontSize;
   final double toolbarFontSize;
 
+  final FontWeight strongFontWeight;
+  final FontWeight h1FontWeight;
+  final FontWeight h2FontWeight;
+  final double h1LetterSpacing;
+  final double h1WordSpacing;
+  final double h2LetterSpacing;
+  final double h2WordSpacing;
+  final double cardH2Scale;
+  final double strikethroughThickness;
+
+  double _resolveTextScale(double textScale, {double? maxTextScale}) {
+    final double max = maxTextScale ?? bodyDefaultMaxTextScale;
+    if (!textScale.isFinite || textScale <= 0) {
+      return bodyMinTextScale;
+    }
+    return textScale.clamp(bodyMinTextScale, max).toDouble();
+  }
+
+  double _scaledFontSize(double base, double textScale, {double? intensity}) {
+    final double eff = intensity ?? bodyScaleIntensity;
+    return base * (1 + (textScale - 1) * eff);
+  }
+
+  TextStyle bodyForContext(BuildContext context, {required Color color, double? baseSize}) {
+    final double base = baseSize ?? bodyBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base);
+    return buildTextStyle(
+      fontFamily: fontFamily,
+      fontWeight: bodyFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale),
+      height: bodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
+  }
+
+  TextStyle bodyForContextless({required Color color, required double textScale}) {
+    final resolved = _resolveTextScale(textScale);
+    return buildTextStyle(
+      fontFamily: fontFamily,
+      fontWeight: bodyFontWeight,
+      fontSize: _scaledFontSize(bodyBaseFontSize, resolved),
+      height: bodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
+  }
+
+  TextStyle sectionTitleForContext(BuildContext context, {required Color color, double? baseSize}) {
+    final double base = baseSize ?? sectionBaseFontSize;
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base, maxTextScale: 2.0);
+    return buildTextStyle(
+      fontFamily: fontFamily,
+      fontWeight: sectionFontWeight,
+      fontSize: _scaledFontSize(base, resolvedTextScale, intensity: sectionScaleIntensity),
+      height: sectionLineHeight,
+      color: color,
+    );
+  }
+
+  TextStyle modalHeaderTitle({required Color color}) => modalHeaderTitleStyle(
+        fontFamily: fontFamily,
+        fontWeight: modalHeaderFontWeight,
+        fontSize: modalHeaderFontSize,
+        height: modalHeaderLineHeight,
+        color: color,
+      );
+
+  TextStyle modalCloseGlyph({required Color color}) => modalCloseGlyphStyle(
+        fontSize: modalHeaderFontSize,
+        color: color,
+      );
+
+  TextStyle footerBodyForContext(BuildContext context, {required Color color}) {
+    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(footerBaseFontSize) / footerBaseFontSize);
+    return buildTextStyle(
+      fontFamily: fontFamily,
+      fontWeight: bodyFontWeight,
+      fontSize: _scaledFontSize(footerBaseFontSize, resolvedTextScale),
+      height: bodyLineHeight,
+      decoration: TextDecoration.none,
+      color: color,
+    );
+  }
+
+  TextStyle adaptBase(TextStyle base, {
+    Color? color,
+    double? fontSize,
+    FontWeight? fontWeight,
+    double? height,
+    FontStyle? fontStyle,
+    TextDecoration? decoration,
+    double? decorationThickness,
+    Color? backgroundColor,
+    Color? decorationColor,
+    List<Shadow>? shadows,
+  }) {
+    return base.copyWith(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      decorationThickness: decorationThickness,
+      backgroundColor: backgroundColor,
+      decorationColor: decorationColor,
+      shadows: shadows,
+    );
+  }
+
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontWeight: FontWeight.w700);
+  }
+
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color);
+  }
+
+  TextStyle smallFrom(TextStyle base, {Color? color}) {
+    return adaptBase(base, color: color, fontSize: smallFontSize);
+  }
+
+  TextStyle strongFrom(TextStyle base) {
+    final Color baseColor = base.color ?? Colors.black;
+    final hsl = HSLColor.fromColor(baseColor);
+    final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
+    return base.copyWith(
+      fontWeight: strongFontWeight,
+      color: lifted.toColor(),
+    );
+  }
+
+  TextStyle blockquoteFrom(TextStyle base) => base.copyWith(fontStyle: FontStyle.italic);
+
+  TextStyle strikethroughFrom(TextStyle base) => base.copyWith(
+        decoration: TextDecoration.lineThrough,
+        decorationColor: base.color,
+        decorationThickness: strikethroughThickness,
+      );
+
+  TextStyle underlineFrom(TextStyle base) => base.copyWith(
+        decoration: TextDecoration.underline,
+        decorationColor: base.color,
+        decorationThickness: 1.75,
+      );
+
+  TextStyle linkFrom(TextStyle base, {required Color linkColor}) => base.copyWith(
+        color: linkColor,
+        decoration: TextDecoration.underline,
+        decorationColor: linkColor,
+        decorationThickness: 1.75,
+      );
+
+  TextStyle h1From(TextStyle base) {
+    final strong = strongFrom(base);
+    return strong.copyWith(
+      fontSize: base.fontSize! * 2.1,
+      fontWeight: h1FontWeight,
+      height: 1.2,
+      letterSpacing: h1LetterSpacing,
+      wordSpacing: h1WordSpacing,
+    );
+  }
+
+  TextStyle h2From(TextStyle base) {
+    final strong = strongFrom(base);
+    return strong.copyWith(
+      fontSize: base.fontSize! * cardH2Scale,
+      fontWeight: h2FontWeight,
+      height: 1.2,
+      letterSpacing: h2LetterSpacing,
+      wordSpacing: h2WordSpacing,
+    );
+  }
 }
+

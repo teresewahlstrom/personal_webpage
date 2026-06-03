@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '_styles.dart' as styles;
-// NOTE: keep this file minimal — implementations live in per-brightness files.
 
 /// Internal interface implemented by per-brightness text-style providers.
 abstract class TwTextStylesImpl {
@@ -25,263 +24,196 @@ abstract class TwTextStylesImpl {
   TextStyle cardTitleFrom(TextStyle base, {Color? color});
   TextStyle smallFrom(TextStyle base, {Color? color});
   TextStyle get transparentSelectionSpacer;
+
+  TextStyle strongFrom(TextStyle base);
+  TextStyle blockquoteFrom(TextStyle base);
+  TextStyle strikethroughFrom(TextStyle base);
+  TextStyle underlineFrom(TextStyle base);
+  TextStyle linkFrom(TextStyle base, {required Color linkColor});
+  TextStyle h1From(TextStyle base);
+  TextStyle h2From(TextStyle base);
 }
 
-// Dark-theme implementation moved here for centralized implementations.
+// Dark-theme implementation delegating to NamedTextStyles.
 class TwTextStylesDark implements TwTextStylesImpl {
   TwTextStylesDark(this.named);
 
   final styles.NamedTextStyles named;
-  // Helpers copied from legacy body text helpers but kept local to the impl.
-  double _resolveTextScale(double textScale, {double? maxTextScale}) {
-    final double max = maxTextScale ?? named.bodyDefaultMaxTextScale;
-    if (!textScale.isFinite || textScale <= 0) {
-      return named.bodyMinTextScale;
-    }
-    return textScale.clamp(named.bodyMinTextScale, max).toDouble();
-  }
-
-  double _scaledFontSize(double base, double textScale, {double? intensity}) {
-    final double eff = intensity ?? named.bodyScaleIntensity;
-    return base * (1 + (textScale - 1) * eff);
-  }
 
   @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) {
-    final double base = baseSize ?? named.bodyBaseFontSize;
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(base, resolvedTextScale),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
+  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) =>
+      named.bodyForContext(context, color: color, baseSize: baseSize);
 
   @override
-  TextStyle bodyForContextless({required Color color, required double textScale}) {
-    final resolved = _resolveTextScale(textScale);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(named.bodyBaseFontSize, resolved),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
+  TextStyle bodyForContextless({required Color color, required double textScale}) =>
+      named.bodyForContextless(color: color, textScale: textScale);
 
   @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) {
-    final double base = baseSize ?? named.sectionBaseFontSize;
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base, maxTextScale: 2.0);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.sectionFontWeight,
-      fontSize: _scaledFontSize(base, resolvedTextScale, intensity: named.sectionScaleIntensity),
-      height: named.sectionLineHeight,
-      color: color,
-    );
-  }
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) =>
+      named.sectionTitleForContext(context, color: color, baseSize: baseSize);
 
   @override
-  TextStyle modalHeaderTitle({required Color color}) => styles.modalHeaderTitleStyle(
-        fontFamily: named.fontFamily,
-        fontWeight: named.modalHeaderFontWeight,
-        fontSize: named.modalHeaderFontSize,
-        height: named.modalHeaderLineHeight,
-        color: color,
-      );
+  TextStyle modalHeaderTitle({required Color color}) =>
+      named.modalHeaderTitle(color: color);
 
   @override
-  TextStyle modalCloseGlyph({required Color color}) => styles.modalCloseGlyphStyle(fontSize: named.modalHeaderFontSize, color: color);
+  TextStyle modalCloseGlyph({required Color color}) =>
+      named.modalCloseGlyph(color: color);
 
   @override
   TextStyle adaptBase(TextStyle base,
-      {Color? color,
-      double? fontSize,
-      FontWeight? fontWeight,
-      double? height,
-      FontStyle? fontStyle,
-      TextDecoration? decoration,
-      double? decorationThickness,
-      Color? backgroundColor,
-      Color? decorationColor,
-      List<Shadow>? shadows}) {
-    return base.copyWith(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      height: height,
-      fontStyle: fontStyle,
-      decoration: decoration,
-      decorationThickness: decorationThickness,
-      backgroundColor: backgroundColor,
-      decorationColor: decorationColor,
-      shadows: shadows,
-    );
-  }
+          {Color? color,
+          double? fontSize,
+          FontWeight? fontWeight,
+          double? height,
+          FontStyle? fontStyle,
+          TextDecoration? decoration,
+          double? decorationThickness,
+          Color? backgroundColor,
+          Color? decorationColor,
+          List<Shadow>? shadows}) =>
+      named.adaptBase(base,
+          color: color,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          fontStyle: fontStyle,
+          decoration: decoration,
+          decorationThickness: decorationThickness,
+          backgroundColor: backgroundColor,
+          decorationColor: decorationColor,
+          shadows: shadows);
 
   @override
-  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontWeight: FontWeight.w700);
-  }
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) =>
+      named.buttonLabelFrom(base, color: color);
 
   @override
-  TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color);
-  }
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) =>
+      named.cardTitleFrom(base, color: color);
 
   @override
-  TextStyle smallFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: named.smallFontSize);
-  }
+  TextStyle smallFrom(TextStyle base, {Color? color}) =>
+      named.smallFrom(base, color: color);
 
   @override
-  TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(named.footerBaseFontSize) / named.footerBaseFontSize);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(named.footerBaseFontSize, resolvedTextScale),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
+  TextStyle footerBodyForContext({required BuildContext context, required Color color}) =>
+      named.footerBodyForContext(context, color: color);
 
   @override
   TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
+
+  @override
+  TextStyle strongFrom(TextStyle base) => named.strongFrom(base);
+
+  @override
+  TextStyle blockquoteFrom(TextStyle base) => named.blockquoteFrom(base);
+
+  @override
+  TextStyle strikethroughFrom(TextStyle base) => named.strikethroughFrom(base);
+
+  @override
+  TextStyle underlineFrom(TextStyle base) => named.underlineFrom(base);
+
+  @override
+  TextStyle linkFrom(TextStyle base, {required Color linkColor}) =>
+      named.linkFrom(base, linkColor: linkColor);
+
+  @override
+  TextStyle h1From(TextStyle base) => named.h1From(base);
+
+  @override
+  TextStyle h2From(TextStyle base) => named.h2From(base);
 }
 
-// Light-theme impl delegates to the dark impl by default but remains a distinct type.
+// Light-theme implementation also delegating to NamedTextStyles.
 class TwTextStylesLight implements TwTextStylesImpl {
   TwTextStylesLight(this.named);
 
   final styles.NamedTextStyles named;
 
-  double _resolveTextScale(double textScale, {double? maxTextScale}) {
-    final double max = maxTextScale ?? named.bodyDefaultMaxTextScale;
-    if (!textScale.isFinite || textScale <= 0) {
-      return named.bodyMinTextScale;
-    }
-    return textScale.clamp(named.bodyMinTextScale, max).toDouble();
-  }
-
-  double _scaledFontSize(double base, double textScale, {double? intensity}) {
-    final double eff = intensity ?? named.bodyScaleIntensity;
-    return base * (1 + (textScale - 1) * eff);
-  }
+  @override
+  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) =>
+      named.bodyForContext(context, color: color, baseSize: baseSize);
 
   @override
-  TextStyle bodyForContext({required BuildContext context, required Color color, double? baseSize}) {
-    final double base = baseSize ?? named.bodyBaseFontSize;
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(base, resolvedTextScale),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
+  TextStyle bodyForContextless({required Color color, required double textScale}) =>
+      named.bodyForContextless(color: color, textScale: textScale);
 
   @override
-  TextStyle bodyForContextless({required Color color, required double textScale}) {
-    final resolved = _resolveTextScale(textScale);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(named.bodyBaseFontSize, resolved),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
+  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) =>
+      named.sectionTitleForContext(context, color: color, baseSize: baseSize);
 
   @override
-  TextStyle sectionTitleForContext({required BuildContext context, required Color color, double? baseSize}) {
-    final double base = baseSize ?? named.sectionBaseFontSize;
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(base) / base, maxTextScale: 2.0);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.sectionFontWeight,
-      fontSize: _scaledFontSize(base, resolvedTextScale, intensity: named.sectionScaleIntensity),
-      height: named.sectionLineHeight,
-      color: color,
-    );
-  }
+  TextStyle modalHeaderTitle({required Color color}) =>
+      named.modalHeaderTitle(color: color);
 
-  
+  @override
+  TextStyle modalCloseGlyph({required Color color}) =>
+      named.modalCloseGlyph(color: color);
 
   @override
   TextStyle adaptBase(TextStyle base,
-      {Color? color,
-      double? fontSize,
-      FontWeight? fontWeight,
-      double? height,
-      FontStyle? fontStyle,
-      TextDecoration? decoration,
-      double? decorationThickness,
-      Color? backgroundColor,
-      Color? decorationColor,
-      List<Shadow>? shadows}) {
-    return base.copyWith(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      height: height,
-      fontStyle: fontStyle,
-      decoration: decoration,
-      decorationThickness: decorationThickness,
-      backgroundColor: backgroundColor,
-      decorationColor: decorationColor,
-      shadows: shadows,
-    );
-  }
+          {Color? color,
+          double? fontSize,
+          FontWeight? fontWeight,
+          double? height,
+          FontStyle? fontStyle,
+          TextDecoration? decoration,
+          double? decorationThickness,
+          Color? backgroundColor,
+          Color? decorationColor,
+          List<Shadow>? shadows}) =>
+      named.adaptBase(base,
+          color: color,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          fontStyle: fontStyle,
+          decoration: decoration,
+          decorationThickness: decorationThickness,
+          backgroundColor: backgroundColor,
+          decorationColor: decorationColor,
+          shadows: shadows);
 
   @override
-  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontWeight: FontWeight.w700);
-  }
+  TextStyle buttonLabelFrom(TextStyle base, {Color? color}) =>
+      named.buttonLabelFrom(base, color: color);
 
   @override
-  TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color);
-  }
+  TextStyle cardTitleFrom(TextStyle base, {Color? color}) =>
+      named.cardTitleFrom(base, color: color);
 
   @override
-  TextStyle smallFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: named.smallFontSize);
-  }
+  TextStyle smallFrom(TextStyle base, {Color? color}) =>
+      named.smallFrom(base, color: color);
 
   @override
-  TextStyle footerBodyForContext({required BuildContext context, required Color color}) {
-    final resolvedTextScale = _resolveTextScale(MediaQuery.textScalerOf(context).scale(named.footerBaseFontSize) / named.footerBaseFontSize);
-    return styles.buildTextStyle(
-      fontFamily: named.fontFamily,
-      fontWeight: named.bodyFontWeight,
-      fontSize: _scaledFontSize(named.footerBaseFontSize, resolvedTextScale),
-      height: named.bodyLineHeight,
-      decoration: TextDecoration.none,
-      color: color,
-    );
-  }
-  @override
-  TextStyle modalHeaderTitle({required Color color}) => styles.modalHeaderTitleStyle(
-        fontFamily: named.fontFamily,
-        fontWeight: named.modalHeaderFontWeight,
-        fontSize: named.modalHeaderFontSize,
-        height: named.modalHeaderLineHeight,
-        color: color,
-      );
-
-  @override
-  TextStyle modalCloseGlyph({required Color color}) => styles.modalCloseGlyphStyle(fontSize: named.modalHeaderFontSize, color: color);
+  TextStyle footerBodyForContext({required BuildContext context, required Color color}) =>
+      named.footerBodyForContext(context, color: color);
 
   @override
   TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
+
+  @override
+  TextStyle strongFrom(TextStyle base) => named.strongFrom(base);
+
+  @override
+  TextStyle blockquoteFrom(TextStyle base) => named.blockquoteFrom(base);
+
+  @override
+  TextStyle strikethroughFrom(TextStyle base) => named.strikethroughFrom(base);
+
+  @override
+  TextStyle underlineFrom(TextStyle base) => named.underlineFrom(base);
+
+  @override
+  TextStyle linkFrom(TextStyle base, {required Color linkColor}) =>
+      named.linkFrom(base, linkColor: linkColor);
+
+  @override
+  TextStyle h1From(TextStyle base) => named.h1From(base);
+
+  @override
+  TextStyle h2From(TextStyle base) => named.h2From(base);
 }

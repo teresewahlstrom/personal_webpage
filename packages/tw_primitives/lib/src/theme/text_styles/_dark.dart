@@ -48,6 +48,8 @@ class TwTextStyleTokensDark {
   static const double twSmallFontSize = 13.0;
   static const double twToolbarFontSize = 12.0;
 
+  static const double twStrikethroughThickness = 4.0;
+
   // Utility
   static const TextStyle twTransparentSelectionSpacer = TextStyle(
     color: Colors.transparent,
@@ -55,3 +57,4 @@ class TwTextStyleTokensDark {
     height: 1.0,
   );
 }
+

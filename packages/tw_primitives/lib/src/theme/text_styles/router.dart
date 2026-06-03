@@ -44,6 +44,7 @@ class TwTextStyleTokens {
     required this.twBlockquoteFontSize,
     required this.twSmallFontSize,
     required this.twToolbarFontSize,
+    required this.twStrikethroughThickness,
   });
 
   final String twFontFamily;
@@ -76,6 +77,7 @@ class TwTextStyleTokens {
   final double twBlockquoteFontSize;
   final double twSmallFontSize;
   final double twToolbarFontSize;
+  final double twStrikethroughThickness;
 
   static TwTextStyleTokens forBrightness(Brightness brightness) {
     if (brightness == Brightness.dark) return TwTextStyleTokens._fromDark();
@@ -113,6 +115,7 @@ class TwTextStyleTokens {
         twBlockquoteFontSize: dark.TwTextStyleTokensDark.twBlockquoteFontSize,
         twSmallFontSize: dark.TwTextStyleTokensDark.twSmallFontSize,
         twToolbarFontSize: dark.TwTextStyleTokensDark.twToolbarFontSize,
+        twStrikethroughThickness: dark.TwTextStyleTokensDark.twStrikethroughThickness,
       );
 
   static TwTextStyleTokens _fromLight() => TwTextStyleTokens._(
@@ -146,7 +149,9 @@ class TwTextStyleTokens {
         twBlockquoteFontSize: light.TwTextStyleTokensLight.twBlockquoteFontSize,
         twSmallFontSize: light.TwTextStyleTokensLight.twSmallFontSize,
         twToolbarFontSize: light.TwTextStyleTokensLight.twToolbarFontSize,
+        twStrikethroughThickness: light.TwTextStyleTokensLight.twStrikethroughThickness,
       );
+
 }
 
 extension TwTextStyleTokensBuildContextExtension on BuildContext {
@@ -221,7 +226,15 @@ class TwTextStyles {
   TextStyle buttonLabelFrom(TextStyle base, {Color? color}) => _impl.buttonLabelFrom(base, color: color);
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) => _impl.cardTitleFrom(base, color: color);
   TextStyle smallFrom(TextStyle base, {Color? color}) => _impl.smallFrom(base, color: color);
+  TextStyle strongFrom(TextStyle base) => _impl.strongFrom(base);
+  TextStyle blockquoteFrom(TextStyle base) => _impl.blockquoteFrom(base);
+  TextStyle strikethroughFrom(TextStyle base) => _impl.strikethroughFrom(base);
+  TextStyle underlineFrom(TextStyle base) => _impl.underlineFrom(base);
+  TextStyle linkFrom(TextStyle base, {required Color linkColor}) => _impl.linkFrom(base, linkColor: linkColor);
+  TextStyle h1From(TextStyle base) => _impl.h1From(base);
+  TextStyle h2From(TextStyle base) => _impl.h2From(base);
 }
+
 
 extension TwTextStylesBuildContextExtension on BuildContext {
   TwTextStyles get twTextStyles => TwTextStyles.of(this);
@@ -249,4 +262,14 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       blockquoteFontSize: tokens.twBlockquoteFontSize,
       smallFontSize: tokens.twSmallFontSize,
       toolbarFontSize: tokens.twToolbarFontSize,
+      strongFontWeight: tokens.twStrongFontWeight,
+      h1FontWeight: tokens.twH1FontWeight,
+      h2FontWeight: tokens.twH2FontWeight,
+      h1LetterSpacing: tokens.twH1LetterSpacing,
+      h1WordSpacing: tokens.twH1WordSpacing,
+      h2LetterSpacing: tokens.twH2LetterSpacing,
+      h2WordSpacing: tokens.twH2WordSpacing,
+      cardH2Scale: tokens.twCardH2Scale,
+      strikethroughThickness: tokens.twStrikethroughThickness,
     );
+

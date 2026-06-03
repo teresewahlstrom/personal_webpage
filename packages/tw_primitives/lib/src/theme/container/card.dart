@@ -217,20 +217,9 @@ class _TwExpandableCardState extends State<TwExpandableCard>
       color: context.twColors.pageBodyText,
       textScale: MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) / tokens.twBodyBaseFontSize,
     );
-    final lifts = HSLColor.fromColor(context.twColors.pageBodyText);
-    final lifted = lifts.withLightness((lifts.lightness * 1.10).clamp(0.0, 1.0));
-    final strongStyle = baseStyle.copyWith(
-      fontWeight: tokens.twStrongFontWeight,
-      color: lifted.toColor(),
-    );
-    final h2 = strongStyle.copyWith(
-      fontSize: baseStyle.fontSize! * tokens.twCardH2Scale,
-      fontWeight: tokens.twH2FontWeight,
-      height: 1.2,
-      letterSpacing: tokens.twH2LetterSpacing,
-      wordSpacing: tokens.twH2WordSpacing,
-    );
+    final h2 = TwTextStyles.of(context).h2From(baseStyle);
     final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
+
 
     final border = widget.border ?? Border.all(
       color: context.twColors.lineSubtle,
