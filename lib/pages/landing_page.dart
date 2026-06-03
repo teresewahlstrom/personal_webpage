@@ -256,7 +256,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 25),
+                        const _SelectableCopyBreak(height: 25, lineBreaks: 2),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
                           builder:
@@ -282,24 +282,27 @@ class _LandingPageState extends State<LandingPage> {
                                 );
                               },
                         ),
-                        const SizedBox(height: 37),
+                        const _SelectableCopyBreak(height: 37, lineBreaks: 2),
                         _SocialSection(
                           title: "Contact, Connect, Follow",
                           entries: <_SocialItem>[
                             _SocialItem(
                               icon: const Icon(Icons.email_outlined),
                               label: "terese@t1grid.com",
+                              copyUrl: "mailto:terese@t1grid.com",
                               onTap: () =>
                                   _launchUrl("mailto:terese@t1grid.com"),
                             ),
                             _SocialItem(
                               icon: const Icon(Icons.phone_outlined),
                               label: "+46 709 800 525",
+                              copyUrl: "tel:+46709800525",
                               onTap: () => _launchUrl("tel:+46709800525"),
                             ),
                             _SocialItem(
                               icon: const Icon(Icons.calendar_month_outlined),
                               label: "Video meeting",
+                              copyUrl: "https://cal.com/teresew/discuss",
                               onTap: () =>
                                   _launchUrl("https://cal.com/teresew/discuss"),
                             ),
@@ -313,6 +316,7 @@ class _LandingPageState extends State<LandingPage> {
                             _SocialItem(
                               icon: const FaIcon(FontAwesomeIcons.linkedin),
                               label: "LinkedIn",
+                              copyUrl: "https://www.linkedin.com/in/teresewahlstrom",
                               onTap: () => _launchUrl(
                                 "https://www.linkedin.com/in/teresewahlstrom",
                               ),
@@ -354,8 +358,16 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(
-          _title,
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: '# ',
+                style: TwTextStyles.of(context).transparentSelectionSpacer,
+              ),
+              TextSpan(text: _title),
+            ],
+          ),
           style: TwTextStyles.of(context).h1DisplayForContext(
             context: context,
             color: context.twColors.pageBodyText,
@@ -623,8 +635,16 @@ class _SocialSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text(
-          title,
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: '# ',
+                style: TwTextStyles.of(context).transparentSelectionSpacer,
+              ),
+              TextSpan(text: title),
+            ],
+          ),
           style: TwTextStyles.of(context).h1DisplayForContext(
             context: context,
             color: context.twColors.pageBodyText,
@@ -737,8 +757,17 @@ class _SocialRowState extends State<_SocialRow> {
                 ),
               ),
               const SizedBox(width: 14),
-              Text(
-                widget.entry.label,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: widget.entry.label),
+                    if (widget.entry.copyUrl != null)
+                      TextSpan(
+                        text: ' (${widget.entry.copyUrl})',
+                        style: TwTextStyles.of(context).transparentSelectionSpacer,
+                      ),
+                  ],
+                ),
                 style: TwTextStyles.of(context).bodyForContext(
                   context: context,
                   color: context.twColors.pageBodyText,
@@ -757,9 +786,11 @@ class _SocialItem {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.copyUrl,
   });
 
   final Widget icon;
   final String label;
+  final String? copyUrl;
   final VoidCallback onTap;
 }

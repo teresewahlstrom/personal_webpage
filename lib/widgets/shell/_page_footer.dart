@@ -41,8 +41,18 @@ class PageFooter extends StatelessWidget {
           spacing: 4,
           runSpacing: 2,
           children: <Widget>[
-            Text(
-              '\u00A9$year $brandName. All rights reserved. ',
+            Text.rich(
+              TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                    text: '\n\n',
+                    style: TwTextStyles.of(context).transparentSelectionSpacer,
+                  ),
+                  TextSpan(
+                    text: '\u00A9$year $brandName. All rights reserved. ',
+                  ),
+                ],
+              ),
               style: TwTextStyles.of(context).footerBodyForContext(
                 context: context,
                 color: context.twColors.pageBodyText,
