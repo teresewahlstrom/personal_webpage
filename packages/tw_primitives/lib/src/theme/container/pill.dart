@@ -6,7 +6,7 @@ import '../../theme/colors/router.dart';
 // presentation defaults). These mirror the values used by the markdown
 // tokens but live next to the widget for easier discovery.
 const EdgeInsets kTwLinkPillDefaultPadding = EdgeInsets.symmetric(
-  horizontal: 8,
+  horizontal: 6,
   vertical: 2,
 );
 const double kTwLinkPillDefaultBorderWidth = 1.0;
@@ -19,7 +19,7 @@ class TwLinkPillStyle {
     required this.borderColor,
     required this.textStyle,
     this.borderWidth = 1.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    this.padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
     this.shadows = const <BoxShadow>[],
   });
 
@@ -120,6 +120,7 @@ class TwLinkPill extends StatelessWidget {
     this.tooltip,
     this.tooltipVisible = true,
     this.semanticsLabel,
+    this.clickable,
   }) : _externalKey = key,
        super(key: null);
 
@@ -140,6 +141,7 @@ class TwLinkPill extends StatelessWidget {
   final String? tooltip;
   final bool tooltipVisible;
   final String? semanticsLabel;
+  final bool? clickable;
 
   TwLinkPillStyle _resolveDefault(BuildContext context) {
     final Brightness resolvedBrightness =
@@ -172,44 +174,53 @@ class TwLinkPill extends StatelessWidget {
       ),
     );
 
-    Widget content = Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        mouseCursor: SystemMouseCursors.click,
-        borderRadius: BorderRadius.circular(9999),
-        child: Padding(
-          padding: effectivePadding,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (leading != null)
-                IconTheme(
-                  data: IconThemeData(
-                    color: resolved.textStyle.color,
-                    size: resolved.textStyle.fontSize,
-                  ),
-                  child: leading!,
-                ),
-              if (leading != null && label.isNotEmpty) const SizedBox(width: 8),
-              if (label.isNotEmpty)
-                Text(
-                  label,
-                  style: resolved.textStyle.copyWith(
-                    decoration:
-                        resolved.textStyle.decoration ?? TextDecoration.none,
-                  ),
-                  strutStyle: const StrutStyle(
-                    forceStrutHeight: true,
-                    height: 1.0,
-                  ),
-                ),
-            ],
-          ),
-        ),
+    final bool isClickable = clickable ?? (onTap != null);
+
+    Widget innerContent = Padding(
+      padding: effectivePadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (leading != null)
+            IconTheme(
+              data: IconThemeData(
+                color: resolved.textStyle.color,
+                size: resolved.textStyle.fontSize,
+              ),
+              child: leading!,
+            ),
+          if (leading != null && label.isNotEmpty) const SizedBox(width: 8),
+          if (label.isNotEmpty)
+            Text(
+              label,
+              style: resolved.textStyle.copyWith(
+                decoration:
+                    resolved.textStyle.decoration ?? TextDecoration.none,
+              ),
+              strutStyle: const StrutStyle(
+                forceStrutHeight: true,
+                height: 1.0,
+              ),
+            ),
+        ],
       ),
     );
+
+    Widget content;
+    if (isClickable) {
+      content = Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          mouseCursor: SystemMouseCursors.click,
+          borderRadius: BorderRadius.circular(9999),
+          child: innerContent,
+        ),
+      );
+    } else {
+      content = innerContent;
+    }
 
     // Draw the pill decoration at the top-level so tests and callers can
     // inspect a DecoratedBox when the key is placed on the pill widget.
@@ -227,7 +238,7 @@ class TwLinkPill extends StatelessWidget {
 
     // Optionally provide semantics label for accessibility.
     if (semanticsLabel != null && semanticsLabel!.isNotEmpty) {
-      content = Semantics(button: true, label: semanticsLabel, child: content);
+      content = Semantics(button: isClickable, label: semanticsLabel, child: content);
     }
 
     // Optionally show a tooltip (wrapped outside semantics to avoid
@@ -237,6 +248,9 @@ class TwLinkPill extends StatelessWidget {
     }
 
     // Ensure link-pill shows a click cursor for hover affordance.
-    return MouseRegion(cursor: SystemMouseCursors.click, child: content);
+    return MouseRegion(
+      cursor: isClickable ? SystemMouseCursors.click : MouseCursor.defer,
+      child: content,
+    );
   }
 }

@@ -425,10 +425,12 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               });
             },
             childBuilder: (BuildContext context, bool isExpanded) {
+              final double spacing = (context.twTextStyleTokens.twH2ToBodySpacing - 7.0)
+                  .clamp(0.0, double.infinity);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const _SelectableCopyBreak(height: 12),
+                  _SelectableCopyBreak(height: spacing),
                   _ProjectCardMarkdownBody(
                     title: widget.cards[index].title,
                     document: widget.cards[index].contentDocument,

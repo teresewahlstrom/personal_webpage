@@ -34,6 +34,7 @@ class TwTextStyleTokens {
     required this.twH1FontSize,
     required this.twH2FontSize,
     required this.twCardH2Scale,
+    required this.twH2ToBodySpacing,
     required this.twH1FontWeight,
     required this.twH2FontWeight,
     required this.twH1LetterSpacing,
@@ -65,6 +66,7 @@ class TwTextStyleTokens {
   final double twH1FontSize;
   final double twH2FontSize;
   final double twCardH2Scale;
+  final double twH2ToBodySpacing;
   final FontWeight twH1FontWeight;
   final FontWeight twH2FontWeight;
   final double twH1LetterSpacing;
@@ -101,6 +103,7 @@ class TwTextStyleTokens {
         twH1FontSize: dark.TwTextStyleTokensDark.twH1FontSize,
         twH2FontSize: dark.TwTextStyleTokensDark.twH2FontSize,
         twCardH2Scale: dark.TwTextStyleTokensDark.twCardH2Scale,
+        twH2ToBodySpacing: dark.TwTextStyleTokensDark.twH2ToBodySpacing,
         twH1FontWeight: dark.TwTextStyleTokensDark.twH1FontWeight,
         twH2FontWeight: dark.TwTextStyleTokensDark.twH2FontWeight,
         twH1LetterSpacing: dark.TwTextStyleTokensDark.twH1LetterSpacing,
@@ -133,6 +136,7 @@ class TwTextStyleTokens {
         twH1FontSize: light.TwTextStyleTokensLight.twH1FontSize,
         twH2FontSize: light.TwTextStyleTokensLight.twH2FontSize,
         twCardH2Scale: light.TwTextStyleTokensLight.twCardH2Scale,
+        twH2ToBodySpacing: light.TwTextStyleTokensLight.twH2ToBodySpacing,
         twH1FontWeight: light.TwTextStyleTokensLight.twH1FontWeight,
         twH2FontWeight: light.TwTextStyleTokensLight.twH2FontWeight,
         twH1LetterSpacing: light.TwTextStyleTokensLight.twH1LetterSpacing,

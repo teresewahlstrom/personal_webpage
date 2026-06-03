@@ -34,6 +34,7 @@ class TwTextStyleTokensDark {
   static const double twH1FontSize = 19.0;
   static const double twH2FontSize = 15.0;
   static const double twCardH2Scale = 1.35;
+  static const double twH2ToBodySpacing = twBodyBaseFontSize * 0.75 + (twBodyBaseFontSize * twCardH2Scale) * -0.14;
   
   static const FontWeight twH1FontWeight = FontWeight.w300;
   static const FontWeight twH2FontWeight = FontWeight.w500;

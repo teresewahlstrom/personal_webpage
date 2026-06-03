@@ -8,10 +8,11 @@ import 'pill.dart' show TwLinkPill;
 
 /// A shared, canonical title widget matching the Chat title pill visual.
 class TwPanelTitle extends StatelessWidget {
-  const TwPanelTitle({super.key, required this.label, this.onTap});
+  const TwPanelTitle({super.key, required this.label, this.onTap, this.clickable});
 
   final String label;
   final VoidCallback? onTap;
+  final bool? clickable;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class TwPanelTitle extends StatelessWidget {
       key: const ValueKey('chat-app-bar-title-pill'),
       label: label,
       onTap: onTap,
+      clickable: clickable,
     );
   }
 }

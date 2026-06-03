@@ -34,6 +34,7 @@ class TwTextStyleTokensLight {
   static const double twH1FontSize = dark.TwTextStyleTokensDark.twH1FontSize;
   static const double twH2FontSize = dark.TwTextStyleTokensDark.twH2FontSize;
   static const double twCardH2Scale = dark.TwTextStyleTokensDark.twCardH2Scale;
+  static const double twH2ToBodySpacing = dark.TwTextStyleTokensDark.twH2ToBodySpacing;
   static const FontWeight twH1FontWeight = dark.TwTextStyleTokensDark.twH1FontWeight;
   static const FontWeight twH2FontWeight = dark.TwTextStyleTokensDark.twH2FontWeight;
   static const double twH1LetterSpacing = dark.TwTextStyleTokensDark.twH1LetterSpacing;

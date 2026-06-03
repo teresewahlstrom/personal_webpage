@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tw_primitives/markdown.dart';
@@ -164,7 +165,7 @@ class _MarkupTestApp extends StatelessWidget {
             child: MarkupView(
               document: document,
               theme: _theme(baseStyle, linkPillStyle: linkPillStyle),
-              gestureRecognizerFactory: (_) => null,
+              gestureRecognizerFactory: (_) => TapGestureRecognizer()..onTap = () {},
               chromeVisible: chromeVisible,
             ),
           ),
