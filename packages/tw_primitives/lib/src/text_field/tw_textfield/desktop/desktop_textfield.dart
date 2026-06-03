@@ -711,7 +711,7 @@ class _TwTextFieldGestureInteractorState
   Rect? _dragRectInViewport;
 
   final _dragGutterExtent = 24;
-  final _maxDragSpeed = 7;
+  final _maxDragSpeed = 3;
 
   /// Holds which kind of device started a pan gesture, e.g., a mouse or a trackpad.
   PointerDeviceKind? _panGestureDevice;
@@ -1287,9 +1287,19 @@ class _TwTextFieldGestureInteractorState
       return;
     }
 
-    final gutterAmount = _dragEndInViewport!.dy.clamp(0.0, _dragGutterExtent);
-    final speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
-    final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!;
+    final dy = _dragEndInViewport!.dy;
+    double speedPercent;
+    if (dy < 0) {
+      final distanceOutside = -dy;
+      speedPercent = 1.0 + (distanceOutside / 50.0);
+    } else {
+      final gutterAmount = dy.clamp(0.0, _dragGutterExtent);
+      speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
+    }
+
+    final maxSpeedLimit = _maxDragSpeed * 3.0;
+    final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!
+        .clamp(0.0, maxSpeedLimit);
 
     _textScroll.startScrollingToStart(amountPerFrame: scrollAmount);
   }
@@ -1308,12 +1318,22 @@ class _TwTextFieldGestureInteractorState
     }
 
     final editorBox = context.findRenderObject() as RenderBox;
-    final gutterAmount = (editorBox.size.height - _dragEndInViewport!.dy).clamp(
-      0.0,
-      _dragGutterExtent,
-    );
-    final speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
-    final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!;
+    final dy = _dragEndInViewport!.dy;
+    double speedPercent;
+    if (dy > editorBox.size.height) {
+      final distanceOutside = dy - editorBox.size.height;
+      speedPercent = 1.0 + (distanceOutside / 50.0);
+    } else {
+      final gutterAmount = (editorBox.size.height - dy).clamp(
+        0.0,
+        _dragGutterExtent,
+      );
+      speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
+    }
+
+    final maxSpeedLimit = _maxDragSpeed * 3.0;
+    final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!
+        .clamp(0.0, maxSpeedLimit);
 
     _textScroll.startScrollingToEnd(amountPerFrame: scrollAmount);
   }
@@ -1993,6 +2013,8 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
     with SingleTickerProviderStateMixin {
   bool _scrollToStartOnTick = false;
   bool _scrollToEndOnTick = false;
+  bool _animateScrollOnNextEnsureVisible = false;
+  bool _isAnimatingPasteScroll = false;
   double _scrollAmountPerFrame = 0;
   late Ticker _ticker;
 
@@ -2031,10 +2053,38 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
   ProseTextLayout get _textLayout => widget.textKey.currentState!.textLayout;
 
   void _onSelectionOrContentChange() {
+    if (widget.textController.hasJustPasted) {
+      _animateScrollOnNextEnsureVisible = true;
+    }
     // Use a post-frame callback to "ensure selection extent is visible"
     // so that any pending visual content changes can happen before
     // attempting to calculate the visual position of the selection extent.
-    onNextFrame((_) => _ensureSelectionExtentIsVisible());
+    onNextFrame((_) {
+      _ensureSelectionExtentIsVisible();
+      if (widget.textController.hasJustPasted) {
+        widget.textController.clearHasJustPastedFlag();
+      }
+    });
+  }
+
+  void _animateTo(double newScrollPosition) {
+    if (_animateScrollOnNextEnsureVisible || _isAnimatingPasteScroll) {
+      _animateScrollOnNextEnsureVisible = false;
+      _isAnimatingPasteScroll = true;
+      widget.scrollController.animateTo(
+        newScrollPosition,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+      ).whenComplete(() {
+        _isAnimatingPasteScroll = false;
+      });
+    } else {
+      widget.scrollController.animateTo(
+        newScrollPosition,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   void _ensureSelectionExtentIsVisible() {
@@ -2083,11 +2133,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
             widget.scrollController.position.maxScrollExtent,
           );
 
-      widget.scrollController.animateTo(
-        newScrollPosition,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
+      _animateTo(newScrollPosition);
     } else if (beyondRightViewportEdge > 0) {
       final newScrollPosition =
           (beyondRightViewportEdge + widget.scrollController.offset).clamp(
@@ -2095,11 +2141,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
             widget.scrollController.position.maxScrollExtent,
           );
 
-      widget.scrollController.animateTo(
-        newScrollPosition,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
+      _animateTo(newScrollPosition);
     }
   }
 
@@ -2166,11 +2208,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
             widget.scrollController.position.maxScrollExtent,
           );
 
-      widget.scrollController.animateTo(
-        newScrollPosition,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
+      _animateTo(newScrollPosition);
     } else if (beyondBottomExtent > 0) {
       final newScrollPosition =
           (beyondBottomExtent + widget.scrollController.offset).clamp(
@@ -2178,11 +2216,7 @@ class TwTextFieldScrollviewState extends State<TwTextFieldScrollview>
             widget.scrollController.position.maxScrollExtent,
           );
 
-      widget.scrollController.animateTo(
-        newScrollPosition,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
+      _animateTo(newScrollPosition);
     }
   }
 

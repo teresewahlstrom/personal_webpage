@@ -21,6 +21,19 @@ class AttributedTextEditingController with ChangeNotifier {
     text?.addListener(notifyListeners);
   }
 
+  bool _hasJustPasted = false;
+
+  /// Whether the user has just pasted text from the clipboard.
+  ///
+  /// This is a transient flag that is set to `true` when a clipboard paste
+  /// operation completes, and should be cleared once consumed.
+  bool get hasJustPasted => _hasJustPasted;
+
+  /// Clears the [hasJustPasted] flag.
+  void clearHasJustPastedFlag() {
+    _hasJustPasted = false;
+  }
+
   TextSelection _selection;
   TextSelection get selection => _selection;
   set selection(TextSelection newValue) {
@@ -696,6 +709,8 @@ class AttributedTextEditingController with ChangeNotifier {
 
     if (clipboardData != null && clipboardData.text != null) {
       final textToPaste = clipboardData.text!.normalizeLineEndings();
+
+      _hasJustPasted = true;
 
       text = text.insertString(
         textToInsert: textToPaste,

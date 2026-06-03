@@ -302,7 +302,7 @@ class _TwReadyTextFieldState extends State<TwReadyTextField> {
     final wasAtBottom = currentOffset >= (_lastMaxScrollExtent - 0.5);
     _lastMaxScrollExtent = nextMaxScrollExtent;
     if (grew && nextMaxScrollExtent > 0.0) {
-      if (wasAtBottom) {
+      if (wasAtBottom && !_textController.raw.hasJustPasted) {
         _effectiveScrollController.jumpTo(nextMaxScrollExtent);
       }
       _scrollbarActivationPulse.value = Object();

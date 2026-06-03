@@ -33,5 +33,37 @@ void main() {
       expect(controller.text.toPlainText(), 'a\n\nb');
       expect(controller.selection, const TextSelection.collapsed(offset: 4));
     });
+
+    test('pasteClipboard sets and clearHasJustPastedFlag clears hasJustPasted flag', () async {
+      final controller = AttributedTextEditingController(
+        text: AttributedText(),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'Clipboard.getData') {
+            return <String, dynamic>{'text': 'hello'};
+          }
+          return null;
+        },
+      );
+      addTearDown(() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        );
+      });
+
+      expect(controller.hasJustPasted, isFalse);
+
+      await controller.pasteClipboard();
+
+      expect(controller.hasJustPasted, isTrue);
+
+      controller.clearHasJustPastedFlag();
+
+      expect(controller.hasJustPasted, isFalse);
+    });
   });
 }

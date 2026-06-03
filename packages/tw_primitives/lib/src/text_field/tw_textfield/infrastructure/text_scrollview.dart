@@ -129,6 +129,8 @@ class _TextScrollViewState extends State<TextScrollView>
 
   final _textFieldViewportKey = GlobalKey();
   bool _ensureExtentVisibleScheduled = false;
+  bool _animateScrollOnNextEnsureVisible = false;
+  bool _isAnimatingPasteScroll = false;
 
   // Owned only when widget.scrollController is null.
   ScrollController? _ownedScrollController;
@@ -534,6 +536,19 @@ class _TextScrollViewState extends State<TextScrollView>
     }
 
     final targetScrollOffset = widget.textScrollController.targetScrollOffset;
+    if (_animateScrollOnNextEnsureVisible || _isAnimatingPasteScroll) {
+      _animateScrollOnNextEnsureVisible = false;
+      _isAnimatingPasteScroll = true;
+      _scrollController.animateTo(
+        targetScrollOffset,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+      ).whenComplete(() {
+        _isAnimatingPasteScroll = false;
+      });
+      return;
+    }
+
     if (widget.perLineAutoScrollDuration == Duration.zero || !isMultiline) {
       _scrollController.jumpTo(targetScrollOffset);
     } else {
@@ -564,6 +579,9 @@ class _TextScrollViewState extends State<TextScrollView>
   }
 
   void _onTextOrSelectionChanged() {
+    if (widget.textEditingController.hasJustPasted) {
+      _animateScrollOnNextEnsureVisible = true;
+    }
     // After the text changes, the user might have entered new lines.
     // Schedule a rebuild so our size is updated.
     scheduleBuildAfterBuild();
@@ -582,6 +600,7 @@ class _TextScrollViewState extends State<TextScrollView>
       }
 
       widget.textScrollController.ensureExtentIsVisible();
+      widget.textEditingController.clearHasJustPastedFlag();
 
       onNextFrame((_) {
         _ensureExtentVisibleScheduled = false;
@@ -1031,7 +1050,7 @@ class TextScrollController with ChangeNotifier {
     double distanceFromAutoScrollBound,
   ) {
     const minPixelsPerSecond = 24;
-    const maxPixelsPerSecond = 420;
+    const maxPixelsPerSecond = 200;
     const maxDistanceFromScrollBound = 75;
 
     final speedPercent =
