@@ -347,6 +347,18 @@ class _HeroStatement extends StatelessWidget {
   static const String _title = "About Me";
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
+
+  TextStyle _titleStyle(BuildContext context) {
+    final tokens = context.twTextStyleTokens;
+    final baseStyle = TwTextStyles.of(context).bodyForContextless(
+      color: context.twColors.pageBodyText,
+      textScale:
+          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
+          tokens.twBodyBaseFontSize,
+    );
+    return TwTextStyles.of(context).h1From(baseStyle);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -355,10 +367,7 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           _title,
-          style: TwTextStyles.of(context).sectionTitleForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
+          style: _titleStyle(context),
         ),
         const _SelectableCopyBreak(height: 10),
         Text(
@@ -425,7 +434,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               });
             },
             childBuilder: (BuildContext context, bool isExpanded) {
-              final double spacing = (context.twTextStyleTokens.twH2ToBodySpacing - 7.0)
+              final double spacing = (context.twMarkdownLayoutTokens.twH2ToBodySpacing - 7.0)
                   .clamp(0.0, double.infinity);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -616,6 +625,17 @@ class _SocialSection extends StatelessWidget {
   final String title;
   final List<_SocialItem> entries;
 
+  TextStyle _titleStyle(BuildContext context) {
+    final tokens = context.twTextStyleTokens;
+    final baseStyle = TwTextStyles.of(context).bodyForContextless(
+      color: context.twColors.pageBodyText,
+      textScale:
+          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
+          tokens.twBodyBaseFontSize,
+    );
+    return TwTextStyles.of(context).h1From(baseStyle);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -624,10 +644,7 @@ class _SocialSection extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           title,
-          style: TwTextStyles.of(context).sectionTitleForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
+          style: _titleStyle(context),
         ),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[

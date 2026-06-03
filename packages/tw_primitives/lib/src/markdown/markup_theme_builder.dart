@@ -41,7 +41,6 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
   final TwColors colors = TwColors.forBrightness(
     config.isDark ? Brightness.dark : Brightness.light,
   );
-  final tokens = TwTextStyleTokens.forBrightness(config.isDark ? Brightness.dark : Brightness.light);
   final Color baseColor = config.baseTextColor ?? colors.pageBodyText;
   final Color linkColor = config.linkColor ?? colors.linkText;
 
@@ -102,7 +101,7 @@ MarkdownSurfaceStyle buildMarkdownSurfaceStyle(MarkdownThemeConfig config) {
         }
         return textStyles.h2From(baseStyle);
       },
-      transparentSelectionSpacer: tokens.twTransparentSelectionSpacer,
+      transparentSelectionSpacer: textStyles.transparentSelectionSpacer,
     ),
   );
 }

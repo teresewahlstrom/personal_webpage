@@ -101,7 +101,7 @@ class TwTextStylesDark implements TwTextStylesImpl {
       named.footerBodyForContext(context, color: color);
 
   @override
-  TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
+    TextStyle get transparentSelectionSpacer => styles.twTransparentSelectionSpacer;
 
   @override
   TextStyle strongFrom(TextStyle base) => named.strongFrom(base);
@@ -193,7 +193,7 @@ class TwTextStylesLight implements TwTextStylesImpl {
       named.footerBodyForContext(context, color: color);
 
   @override
-  TextStyle get transparentSelectionSpacer => named.transparentSelectionSpacer;
+    TextStyle get transparentSelectionSpacer => styles.twTransparentSelectionSpacer;
 
   @override
   TextStyle strongFrom(TextStyle base) => named.strongFrom(base);

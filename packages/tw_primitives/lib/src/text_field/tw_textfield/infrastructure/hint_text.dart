@@ -43,6 +43,7 @@ class StyledHintBuilder {
 /// Creates default [TextStyles] for hint text in a super text field.
 TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
   // Use centralized text-style router for hint defaults, then adjust where necessary.
+    final tokens = TwTextStyleTokens.forBrightness(Brightness.light);
     TextStyle newStyle = TwTextStyles.forBrightness(Brightness.light)
       .bodyForContextless(color: Colors.grey, textScale: 1.0);
     newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(newStyle, height: 1.4);
@@ -51,14 +52,14 @@ TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
     if (attribution == header1Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twH1FontSize,
+        fontSize: tokens.twBodyBaseFontSize * tokens.twH1Scale,
         fontWeight: FontWeight.bold,
         height: 1.0,
       );
     } else if (attribution == header2Attribution) {
       newStyle = TwTextStyles.forBrightness(Brightness.light).adaptBase(
         newStyle,
-        fontSize: TwTextStyleTokens.forBrightness(Brightness.light).twH2FontSize,
+        fontSize: tokens.twBodyBaseFontSize * tokens.twH2Scale,
         fontWeight: FontWeight.bold,
         color: const Color(0xFF888888),
         height: 1.0,

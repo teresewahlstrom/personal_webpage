@@ -7,6 +7,7 @@ import '_dark.dart' as dark;
 class TwTextStyleTokensLight {
   static const String twFontFamily = dark.TwTextStyleTokensDark.twFontFamily;
 
+  // Body text tokens
   static const double twBodyBaseFontSize = dark.TwTextStyleTokensDark.twBodyBaseFontSize;
   static const FontWeight twBodyFontWeight = dark.TwTextStyleTokensDark.twBodyFontWeight;
   static const double twBodyLineHeight = dark.TwTextStyleTokensDark.twBodyLineHeight;
@@ -14,34 +15,35 @@ class TwTextStyleTokensLight {
   static const double twBodyDefaultMaxTextScale = dark.TwTextStyleTokensDark.twBodyDefaultMaxTextScale;
   static const double twBodyScaleIntensity = dark.TwTextStyleTokensDark.twBodyScaleIntensity;
 
+  // Section title tokens
   static const double twSectionBaseFontSize = dark.TwTextStyleTokensDark.twSectionBaseFontSize;
   static const double twSectionLineHeight = dark.TwTextStyleTokensDark.twSectionLineHeight;
   static const FontWeight twSectionFontWeight = dark.TwTextStyleTokensDark.twSectionFontWeight;
   static const double twSectionScaleIntensity = dark.TwTextStyleTokensDark.twSectionScaleIntensity;
 
+  // Modal tokens
   static const double twModalHeaderFontSize = dark.TwTextStyleTokensDark.twModalHeaderFontSize;
   static const double twModalHeaderLineHeight = dark.TwTextStyleTokensDark.twModalHeaderLineHeight;
   static const FontWeight twModalHeaderFontWeight = dark.TwTextStyleTokensDark.twModalHeaderFontWeight;
 
-  // Strong/bold font weight used for markdown/heading emphasis in light theme
-  static const FontWeight twStrongFontWeight = FontWeight.w500;
-
+  // Footer tokens
   static const double twFooterBaseFontSize = dark.TwTextStyleTokensDark.twFooterBaseFontSize;
 
-  static const TextStyle twTransparentSelectionSpacer = dark.TwTextStyleTokensDark.twTransparentSelectionSpacer;
-
-  // Header/hint tokens
-  static const double twH1FontSize = dark.TwTextStyleTokensDark.twH1FontSize;
-  static const double twH2FontSize = dark.TwTextStyleTokensDark.twH2FontSize;
-  static const double twCardH2Scale = dark.TwTextStyleTokensDark.twCardH2Scale;
-  static const double twH2ToBodySpacing = dark.TwTextStyleTokensDark.twH2ToBodySpacing;
+  // H1 tokens
+  static const double twH1Scale = dark.TwTextStyleTokensDark.twH1Scale;
   static const FontWeight twH1FontWeight = dark.TwTextStyleTokensDark.twH1FontWeight;
-  static const FontWeight twH2FontWeight = dark.TwTextStyleTokensDark.twH2FontWeight;
   static const double twH1LetterSpacing = dark.TwTextStyleTokensDark.twH1LetterSpacing;
   static const double twH1WordSpacing = dark.TwTextStyleTokensDark.twH1WordSpacing;
+
+  // H2 tokens
+  static const double twH2Scale = dark.TwTextStyleTokensDark.twH2Scale;
+  static const FontWeight twH2FontWeight = dark.TwTextStyleTokensDark.twH2FontWeight;
   static const double twH2LetterSpacing = dark.TwTextStyleTokensDark.twH2LetterSpacing;
   static const double twH2WordSpacing = dark.TwTextStyleTokensDark.twH2WordSpacing;
+
   static const double twBlockquoteFontSize = dark.TwTextStyleTokensDark.twBlockquoteFontSize;
+
+  // Small UI and toolbar font sizes
   static const double twSmallFontSize = dark.TwTextStyleTokensDark.twSmallFontSize;
   static const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
 

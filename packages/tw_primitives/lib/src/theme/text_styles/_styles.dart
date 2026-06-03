@@ -42,6 +42,12 @@ TextStyle modalHeaderTitleStyle({required String fontFamily, required FontWeight
   return buildTextStyle(fontFamily: fontFamily, fontWeight: fontWeight, fontSize: fontSize, height: height, color: color);
 }
 
+const TextStyle twTransparentSelectionSpacer = TextStyle(
+  color: Colors.transparent,
+  fontSize: 0.01,
+  height: 1.0,
+);
+
 /// Designer-friendly named styles container.
 ///
 /// This aggregates the token values and named `TextStyle` bases so a
@@ -68,21 +74,18 @@ class NamedTextStyles {
     required this.modalHeaderFontWeight,
     // footer
     required this.footerBaseFontSize,
-    required this.transparentSelectionSpacer,
     // misc
-    required this.header1FontSize,
-    required this.header2FontSize,
     required this.blockquoteFontSize,
     required this.smallFontSize,
     required this.toolbarFontSize,
     // new tokens for assembly
-    required this.strongFontWeight,
     required this.h1FontWeight,
     required this.h2FontWeight,
     required this.h1LetterSpacing,
     required this.h1WordSpacing,
     required this.h2LetterSpacing,
     required this.h2WordSpacing,
+    required this.cardH1Scale,
     required this.cardH2Scale,
     required this.strikethroughThickness,
   });
@@ -105,21 +108,18 @@ class NamedTextStyles {
   final FontWeight modalHeaderFontWeight;
 
   final double footerBaseFontSize;
-  final TextStyle transparentSelectionSpacer;
 
-  final double header1FontSize;
-  final double header2FontSize;
   final double blockquoteFontSize;
   final double smallFontSize;
   final double toolbarFontSize;
 
-  final FontWeight strongFontWeight;
   final FontWeight h1FontWeight;
   final FontWeight h2FontWeight;
   final double h1LetterSpacing;
   final double h1WordSpacing;
   final double h2LetterSpacing;
   final double h2WordSpacing;
+  final double cardH1Scale;
   final double cardH2Scale;
   final double strikethroughThickness;
 
@@ -241,7 +241,7 @@ class NamedTextStyles {
     final hsl = HSLColor.fromColor(baseColor);
     final lifted = hsl.withLightness((hsl.lightness * 1.10).clamp(0.0, 1.0));
     return base.copyWith(
-      fontWeight: strongFontWeight,
+      fontWeight: FontWeight.w700,
       color: lifted.toColor(),
     );
   }
@@ -270,7 +270,7 @@ class NamedTextStyles {
   TextStyle h1From(TextStyle base) {
     final strong = strongFrom(base);
     return strong.copyWith(
-      fontSize: base.fontSize! * 2.1,
+      fontSize: base.fontSize! * cardH1Scale,
       fontWeight: h1FontWeight,
       height: 1.2,
       letterSpacing: h1LetterSpacing,
