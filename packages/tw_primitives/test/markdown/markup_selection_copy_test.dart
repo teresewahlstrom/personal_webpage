@@ -68,6 +68,38 @@ void main() {
         '## Heading 2',
       );
     });
+
+    test('Keeps one blank line above headings after paragraph text', () {
+      final doc = MessageMarkup.parse('Paragraph text.\n## Heading');
+      final projection = SelectionCopyProjection.fromDocument(doc);
+
+      expect(
+        projection.copySlice(start: 0, end: projection.visibleLength),
+        'Paragraph text.\n\n## Heading',
+      );
+    });
+
+    test('Preserves escaped literal markdown characters', () {
+      final doc = MessageMarkup.parse(
+        '- Escaped markdown: \\*literal asterisks\\*',
+      );
+      final projection = SelectionCopyProjection.fromDocument(doc);
+
+      expect(
+        projection.copySlice(start: 0, end: projection.visibleLength),
+        '- Escaped markdown: \\*literal asterisks\\*',
+      );
+    });
+
+    test('Uses 4-space indentation for nested unordered list items', () {
+      final doc = MessageMarkup.parse('- Parent\n    - Child');
+      final projection = SelectionCopyProjection.fromDocument(doc);
+
+      expect(
+        projection.copySlice(start: 0, end: projection.visibleLength),
+        '- Parent\n    - Child',
+      );
+    });
   });
 
   group('MarkupSelectionCopyFormatter Tests', () {

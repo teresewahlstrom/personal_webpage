@@ -345,17 +345,18 @@ class _TwExpandableCardState extends State<TwExpandableCard>
                   final double alphaFactor = _heightAnimation.value * floatOpacity;
                   return IgnorePointer(
                     child: Container(
-                      height: headerHeight + 20.0,
+                      height: headerHeight + 13.0,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
                             cardFill.withValues(alpha: alphaFactor),
-                            cardFill.withValues(alpha: 0.85 * alphaFactor),
+                            cardFill.withValues(alpha: 0.92 * alphaFactor),
+                            cardFill.withValues(alpha: 0.8 * alphaFactor),
                             cardFill.withValues(alpha: 0.0),
                           ],
-                          stops: const [0.0, 0.9, 1.0],
+                          stops: const [0.0, 0.16, 0.75, 1.0],
                         ),
                       ),
                     ),

@@ -52,7 +52,7 @@ void main() {
         },
       );
 
-      expect(copied, 'tail.\n\n## Markdown Showcase\n\n- **Bold**');
+      expect(copied, 'tail.\n\n## Markdown Showcase\n- **Bold**');
     },
   );
 }

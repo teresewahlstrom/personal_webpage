@@ -158,7 +158,11 @@ class SelectionCopyProjection {
       if (wroteLeadingCopy) {
         buffer.write(segment.leadingCopy);
       }
-      buffer.write(segment.visibleText.substring(localStart, localEnd));
+      buffer.write(
+        _escapeMarkdownVisibleText(
+          segment.visibleText.substring(localStart, localEnd),
+        ),
+      );
       if (wroteLeadingCopy && localEnd == segment.visibleLength) {
         buffer.write(segment.trailingCopy);
       }
@@ -210,6 +214,7 @@ List<_SelectionCopySegment> _buildJoinedBlockSegments(
   required String copySeparator,
 }) {
   final segments = <_SelectionCopySegment>[];
+  MarkupBlock? previousBlock;
 
   for (final block in blocks) {
     final blockSegments = _buildBlockSegments(block);
@@ -217,14 +222,22 @@ List<_SelectionCopySegment> _buildJoinedBlockSegments(
       continue;
     }
     if (segments.isNotEmpty) {
+      final resolvedCopySeparator = previousBlock == null
+          ? copySeparator
+          : _copySeparatorBetweenBlocks(
+              previous: previousBlock,
+              next: block,
+              defaultSeparator: copySeparator,
+            );
       segments.add(
         _buildVisibleSeparatorSegment(
           visibleSeparator: visibleSeparator,
-          copySeparator: copySeparator,
+          copySeparator: resolvedCopySeparator,
         ),
       );
     }
     segments.addAll(blockSegments);
+    previousBlock = block;
   }
 
   return segments;
@@ -283,7 +296,7 @@ List<_SelectionCopySegment> _buildListSegments(MarkupListBlock block) {
         copySeparator: '\n',
       ),
       firstLinePrefix: block.ordered ? '' : marker,
-      continuationPrefix: ' ' * marker.length,
+      continuationPrefix: block.ordered ? ' ' * marker.length : ' ' * 4,
     );
     segments.addAll(itemSegments);
   }
@@ -318,6 +331,25 @@ List<_SelectionCopySegment> _buildInlineSegments(List<MarkupInline> inlines) {
   return segments;
 }
 
+String _copySeparatorBetweenBlocks({
+  required MarkupBlock previous,
+  required MarkupBlock next,
+  required String defaultSeparator,
+}) {
+  if (next is MarkupHeadingBlock) {
+    return '\n\n';
+  }
+
+  final followsHeading = previous is MarkupHeadingBlock;
+  final consecutiveLists = previous is MarkupListBlock && next is MarkupListBlock;
+
+  if (followsHeading || consecutiveLists) {
+    return '\n';
+  }
+
+  return defaultSeparator;
+}
+
 String _markdownHeadingPrefix(int level) {
   return switch (level) {
     1 => '# ',
@@ -344,6 +376,10 @@ String _inlineLeadingMarkdown(MarkupInline inline) {
     buffer.write('[');
   }
   return buffer.toString();
+}
+
+String _escapeMarkdownVisibleText(String text) {
+  return text.replaceAll('*', r'\*');
 }
 
 String _inlineTrailingMarkdown(MarkupInline inline) {
