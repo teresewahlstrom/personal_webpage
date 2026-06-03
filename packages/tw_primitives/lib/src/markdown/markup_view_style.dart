@@ -28,7 +28,7 @@ class MarkupViewStyle {
     strikethroughDarkThicknessBias;
 
   // Presentation/layout tokens used by the markup view renderer.
-  static const double unorderedListMarkerSizeFactor = 0.4;
+  static const double unorderedListMarkerSizeFactor = 0.30;
   static const double unorderedListMarkerVerticalOffsetFactor = 0.55;
   static const double blockquoteRailVerticalOverhang = 3.0;
   static const double blockquoteInnerVerticalPadding = 2.0;

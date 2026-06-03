@@ -38,24 +38,16 @@ class TwColors {
     required this.pageLoader,
     required this.pageBackground,
     required this.headerBackground,
-    required this.buttonBackground,
     required this.footerBackground,
     required this.modalBackground,
     required this.lineSubtle,
     required this.lineSubtleSecondary,
-    required this.lineSubtleTertiary,
-    required this.modalHeaderBorder,
     required this.pageBodyText,
     required this.pageScrollbarThumb,
     required this.pageScrollbarThumbInactive,
-    required this.pageScrollbarTrack,
     required this.cardFillAlpha,
     required this.linkText,
     required this.linkTextHover,
-    required this.modalCloseIcon,
-    required this.modalCloseIconHover,
-    required this.lineInteractive,
-    required this.lineInteractiveHover,
     required this.modalBarrier,
     required this.cardMarkdownOpacity,
   });
@@ -95,24 +87,16 @@ class TwColors {
   final Color pageLoader;
   final Color pageBackground;
   final Color headerBackground;
-  final Color buttonBackground;
   final Color footerBackground;
   final Color modalBackground;
   final Color lineSubtle;
   final Color lineSubtleSecondary;
-  final Color lineSubtleTertiary;
-  final Color modalHeaderBorder;
   final Color pageBodyText;
   final Color pageScrollbarThumb;
   final Color pageScrollbarThumbInactive;
-  final Color pageScrollbarTrack;
   final double cardFillAlpha;
   final Color linkText;
   final Color linkTextHover;
-  final Color modalCloseIcon;
-  final Color modalCloseIconHover;
-  final Color lineInteractive;
-  final Color lineInteractiveHover;
   final Color modalBarrier;
   final double cardMarkdownOpacity;
 

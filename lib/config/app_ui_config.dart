@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:tw_primitives/theme.dart';
-import 'app_line_theme.dart';
 export 'app_line_theme.dart';
 
 final class AppRuntimeConfig {
@@ -52,66 +51,6 @@ final class ShellUiConfig {
   static Color pageBackgroundFor(Brightness brightness) {
     return TwColors.forBrightness(brightness).pageBackground;
   }
-
-  static AppLineStyle gridLineFor(Brightness brightness) {
-    return AppLineTheme.subtleFor(brightness);
-  }
-
-  static Color projectCardFillFor(Brightness brightness) {
-    return Color.lerp(
-      pageBackgroundFor(brightness),
-      gridLineFor(brightness).color,
-      TwColors.forBrightness(brightness).cardFillAlpha,
-    )!;
-  }
-
-  static Color headerBackgroundFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).headerBackground;
-  }
-
-  static AppLineStyle headerBorderFor(Brightness brightness) {
-    return AppLineTheme.subtleSecondaryFor(brightness);
-  }
-
-  static Color headerToggleFor(Brightness brightness) {
-    return AppLineTheme.interactiveFor(brightness).color;
-  }
-
-  static Color headerToggleHoverFor(Brightness brightness) {
-    return AppLineTheme.interactiveFor(brightness, hovered: true).color;
-  }
-
-  static Color buttonBackgroundFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).buttonBackground;
-  }
-
-  static Color pageScrollbarThumbFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).pageScrollbarThumb;
-  }
-
-  static Color pageScrollbarThumbInactiveFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).pageScrollbarThumbInactive;
-  }
-
-  static Color pageScrollbarTrackFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).pageScrollbarTrack;
-  }
-
-  static Color footerBackgroundFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).footerBackground;
-  }
-
-  static AppLineStyle footerBorderFor(Brightness brightness) {
-    return AppLineTheme.subtleSecondaryFor(brightness);
-  }
-
-  static Color linkTextFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).linkText;
-  }
-
-  static Color linkTextHoverFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).linkTextHover;
-  }
 }
 
 final class ModalUiConfig {
@@ -127,33 +66,6 @@ final class ModalUiConfig {
   static const double maxHeightFactorCompact = 0.96;
   static const double headerHeight = 52;
 
-  static Color backgroundFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).modalBackground;
-  }
-
-  static AppLineStyle frameBorderFor(Brightness brightness) {
-    return AppLineTheme.subtleFor(brightness);
-  }
-
-  static Color frameFillFor(Brightness brightness) {
-    return Color.lerp(
-      backgroundFor(brightness),
-      frameBorderFor(brightness).color,
-      TwColors.forBrightness(brightness).cardFillAlpha,
-    )!;
-  }
-
-  static Color headerBorderFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).modalHeaderBorder;
-  }
-
-  static Color closeIconFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).modalCloseIcon;
-  }
-
-  static Color closeIconHoverFor(Brightness brightness) {
-    return TwColors.forBrightness(brightness).modalCloseIconHover;
-  }
 
   static bool isCompact(Size viewportSize) {
     return viewportSize.width <= 720 || viewportSize.height <= 760;

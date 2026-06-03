@@ -23,8 +23,6 @@ abstract class TwTextStylesImpl {
       List<Shadow>? shadows});
   TextStyle buttonLabelFrom(TextStyle base, {Color? color});
   TextStyle cardTitleFrom(TextStyle base, {Color? color});
-  TextStyle toolbarLabelFrom(TextStyle base, {Color? color});
-  TextStyle hintFrom(TextStyle base, {Color? color});
   TextStyle smallFrom(TextStyle base, {Color? color});
   TextStyle get transparentSelectionSpacer;
 }
@@ -134,16 +132,6 @@ class TwTextStylesDark implements TwTextStylesImpl {
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
     return adaptBase(base, color: color);
-  }
-
-  @override
-  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: named.toolbarFontSize, fontWeight: FontWeight.w300);
-  }
-
-  @override
-  TextStyle hintFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, height: 1.4);
   }
 
   @override
@@ -263,16 +251,6 @@ class TwTextStylesLight implements TwTextStylesImpl {
   @override
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
     return adaptBase(base, color: color);
-  }
-
-  @override
-  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, fontSize: named.toolbarFontSize, fontWeight: FontWeight.w300);
-  }
-
-  @override
-  TextStyle hintFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color, height: 1.4);
   }
 
   @override

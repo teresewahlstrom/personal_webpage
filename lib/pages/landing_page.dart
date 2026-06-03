@@ -1,5 +1,5 @@
 import 'package:flutter/gestures.dart'
-    show TapGestureRecognizer, kPrimaryButton, kTouchSlop;
+    show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -346,7 +346,7 @@ class _HeroStatement extends StatelessWidget {
 
   static const String _title = "About Me";
   static const String _content =
-      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
+      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -414,16 +414,29 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               height: 14,
               padding: EdgeInsets.only(left: 12), // to match the proffessional story text indentation
             ),
-          _ExpandableProjectCard(
+          TwExpandableCard(
             title: widget.cards[index].title,
-            contentDocument: widget.cards[index].contentDocument,
             isExpanded: _expandedStates[index],
+            border: gridLineStyle.borderAll,
             onTap: () {
+              PageScaffold.clearPageSelection(context);
               setState(() {
                 _expandedStates[index] = !_expandedStates[index];
               });
             },
-            gridLineStyle: gridLineStyle,
+            childBuilder: (BuildContext context, bool isExpanded) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const _SelectableCopyBreak(height: 12),
+                  _ProjectCardMarkdownBody(
+                    title: widget.cards[index].title,
+                    document: widget.cards[index].contentDocument,
+                    selectable: isExpanded,
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ],
@@ -431,24 +444,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   }
 }
 
-class _ExpandableProjectCard extends StatefulWidget {
-  const _ExpandableProjectCard({
-    required this.title,
-    required this.contentDocument,
-    required this.isExpanded,
-    required this.onTap,
-    required this.gridLineStyle,
-  });
 
-  final String title;
-  final MarkupDocument contentDocument;
-  final bool isExpanded;
-  final VoidCallback onTap;
-  final AppLineStyle gridLineStyle;
-
-  @override
-  State<_ExpandableProjectCard> createState() => _ExpandableProjectCardState();
-}
 
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
   return buildMarkdownSurfaceStyle(
@@ -459,182 +455,7 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
   );
 }
 
-class _ExpandableProjectCardState extends State<_ExpandableProjectCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _heightAnimation;
-  bool _isHovered = false;
-  int? _headerPointer;
-  Offset? _headerPointerDownPosition;
-  bool _headerTapEligible = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _heightAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    );
-    if (widget.isExpanded) {
-      _animationController.forward();
-    }
-  }
-
-  @override
-  void didUpdateWidget(_ExpandableProjectCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isExpanded != oldWidget.isExpanded) {
-      if (widget.isExpanded) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _clearHeaderPointerTracking() {
-    _headerPointer = null;
-    _headerPointerDownPosition = null;
-    _headerTapEligible = false;
-  }
-
-  void _handleCardTap() {
-    PageScaffold.clearPageSelection(context);
-    widget.onTap();
-  }
-
-  void _handleHeaderPointerDown(PointerDownEvent event) {
-    if (event.buttons != kPrimaryButton) {
-      _clearHeaderPointerTracking();
-      return;
-    }
-    _headerPointer = event.pointer;
-    _headerPointerDownPosition = event.position;
-    _headerTapEligible = true;
-  }
-
-  void _handleHeaderPointerMove(PointerMoveEvent event) {
-    if (!_headerTapEligible ||
-        event.pointer != _headerPointer ||
-        _headerPointerDownPosition == null) {
-      return;
-    }
-    if ((event.position - _headerPointerDownPosition!).distance > kTouchSlop) {
-      _headerTapEligible = false;
-    }
-  }
-
-  void _handleHeaderPointerUp(PointerUpEvent event) {
-    final bool shouldToggle =
-        _headerTapEligible && event.pointer == _headerPointer;
-    _clearHeaderPointerTracking();
-    if (shouldToggle) {
-      _handleCardTap();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Color cardFill = Color.lerp(
-      context.twColors.pageBackground,
-      context.twColors.lineSubtle,
-      context.twColors.cardFillAlpha,
-    )!;
-    final MarkdownSurfaceStyle markdownSurface =
-        _buildProjectCardMarkdownSurface(context);
-    final TextStyle h2 = markdownSurface.theme.headingStyleResolver(2);
-    final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
-    final Color baseIconColor =
-        TwTextStyles.of(context).bodyForContext(
-          context: context,
-          color: context.twColors.pageBodyText,
-        ).color ??
-        Theme.of(context).textTheme.bodyMedium?.color ??
-        context.twColors.pageBodyText;
-    final Color iconColor = _isHovered ? context.twColors.linkTextHover : baseIconColor;
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: cardFill,
-          border: widget.gridLineStyle.borderAll,
-          borderRadius: BorderRadius.zero,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const _SelectableCopyBreak(height: 0),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Listener(
-                  behavior: HitTestBehavior.translucent,
-                  onPointerDown: _handleHeaderPointerDown,
-                  onPointerMove: _handleHeaderPointerMove,
-                  onPointerUp: _handleHeaderPointerUp,
-                  onPointerCancel: (_) => _clearHeaderPointerTracking(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Opacity(
-                          opacity: context.twColors.cardMarkdownOpacity,
-                          child: Text(widget.title, style: cardTitleStyle),
-                        ),
-                      ),
-                      RotationTransition(
-                        turns: Tween<double>(
-                          begin: 0,
-                          end: 0.5,
-                        ).animate(_heightAnimation),
-                        child: Icon(Icons.expand_more, color: iconColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizeTransition(
-                sizeFactor: _heightAnimation,
-                child: AnimatedBuilder(
-                  animation: _heightAnimation,
-                  builder: (BuildContext context, Widget? child) {
-                    if (_heightAnimation.status == AnimationStatus.dismissed) {
-                      return SelectionContainer.disabled(child: child!);
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const _SelectableCopyBreak(height: 12),
-                        _ProjectCardMarkdownBody(
-                          title: widget.title,
-                          document: widget.contentDocument,
-                          selectable: _heightAnimation.value >= 1.0,
-                        ),
-                      ],
-                    );
-                  },
-                  child: const SizedBox.shrink(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _ProjectCardsContent {
   const _ProjectCardsContent({required this.cards, this.introDocument});

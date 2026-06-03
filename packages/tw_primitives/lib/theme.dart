@@ -9,3 +9,4 @@ export 'src/theme/chat_tokens.dart';
 // container style widget exports
 export 'src/theme/container/pill.dart';
 export 'src/theme/container/panel.dart';
+export 'src/theme/container/card.dart';

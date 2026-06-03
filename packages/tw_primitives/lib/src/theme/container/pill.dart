@@ -6,8 +6,8 @@ import '../../theme/colors/router.dart';
 // presentation defaults). These mirror the values used by the markdown
 // tokens but live next to the widget for easier discovery.
 const EdgeInsets kTwLinkPillDefaultPadding = EdgeInsets.symmetric(
-  horizontal: 10,
-  vertical: 4,
+  horizontal: 8,
+  vertical: 2,
 );
 const double kTwLinkPillDefaultBorderWidth = 1.0;
 const double kTwLinkPillFillLerpTLight = 0.70;
@@ -19,7 +19,7 @@ class TwLinkPillStyle {
     required this.borderColor,
     required this.textStyle,
     this.borderWidth = 1.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
     this.shadows = const <BoxShadow>[],
   });
 

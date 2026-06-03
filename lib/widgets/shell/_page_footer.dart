@@ -49,7 +49,7 @@ class PageFooter extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            _LinkTextButton(
+            TwLinkPill(
               label: privacyLabel,
               onTap: () => _openBuiltInPrivacyModal(context),
             ),
@@ -94,46 +94,4 @@ class PageFooter extends StatelessWidget {
   }
 }
 
-class _LinkTextButton extends StatelessWidget {
-  const _LinkTextButton({required this.label, required this.onTap});
 
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onTap,
-      style: ButtonStyle(
-        visualDensity: VisualDensity.compact,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minimumSize: WidgetStateProperty.all(Size.zero),
-        padding: WidgetStateProperty.all(EdgeInsets.zero),
-        overlayColor: WidgetStateProperty.resolveWith<Color?>((
-          Set<WidgetState> states,
-        ) {
-          if (states.contains(WidgetState.hovered) ||
-              states.contains(WidgetState.focused)) {
-            return context.twColors.transparent;
-          }
-          return null;
-        }),
-        foregroundColor: WidgetStateProperty.resolveWith<Color>((
-          Set<WidgetState> states,
-        ) {
-          if (states.contains(WidgetState.hovered)) {
-            return context.twColors.linkTextHover;
-          }
-          return context.twColors.linkText;
-        }),
-      ),
-      child: Text(
-        label,
-        style: TwTextStyles.of(context).footerBodyForContext(
-          context: context,
-          color: context.twColors.linkText,
-        ),
-      ),
-    );
-  }
-}

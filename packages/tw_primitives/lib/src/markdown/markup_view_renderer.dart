@@ -134,7 +134,7 @@ class MarkupViewRenderer {
           indent: fontSize * _style.blockquoteIndentFactor * 3.0,
           railColor: railColor,
           contentPadding: EdgeInsets.fromLTRB(
-            12,
+            20,
             MarkupViewStyle.blockquoteRailVerticalOverhang + MarkupViewStyle.blockquoteInnerVerticalPadding,
             0,
             MarkupViewStyle.blockquoteRailVerticalOverhang + MarkupViewStyle.blockquoteInnerVerticalPadding,

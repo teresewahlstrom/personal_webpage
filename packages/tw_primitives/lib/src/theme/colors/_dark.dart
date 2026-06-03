@@ -48,27 +48,18 @@ const TwColors twColorsDark = TwColors.create(
   pageLoader: Color(0xFF90E8F8),
   pageBackground: _mainBgd,
   headerBackground: _mainBgd,
-  buttonBackground: _mainBgd,
   footerBackground: _mainBgd,
   modalBackground: _mainBgd,
 
   lineSubtle: Color(0xFF2B364A),
   lineSubtleSecondary: Color(0x397199FF),
-  lineSubtleTertiary: Color(0x397199FF),
-  modalHeaderBorder: Color(0x3390E8F8),
 
   pageBodyText: _text,
   pageScrollbarThumb: Color(0x397199FF),
   pageScrollbarThumbInactive: Color(0xFF283143),
-  pageScrollbarTrack: Color(0x004EF0FF),
 
   linkText: _interactive,
   linkTextHover: _interactiveHover,
-  lineInteractive: _interactive,
-  lineInteractiveHover: _interactiveHover,
-
-  modalCloseIcon: _interactive,
-  modalCloseIconHover: _interactiveHover,
   modalBarrier: Color(0xBF000000),
 
   cardMarkdownOpacity: 0.85,

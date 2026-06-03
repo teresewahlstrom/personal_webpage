@@ -126,7 +126,7 @@ Some service providers may process data outside the EEA. Where required, they us
 
 ## External Links
 
-Our website may contain links to external websites, such as [GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement). If you follow an external link, the external website processes your data under its own privacy policy.
+Our website may contain links to external websites. If you follow an external link, the external website processes your data under its own privacy policy.
 
 ## Your Rights
 

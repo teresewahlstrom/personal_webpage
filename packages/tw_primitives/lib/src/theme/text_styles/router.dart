@@ -149,12 +149,6 @@ extension TwTextStyleTokensBuildContextExtension on BuildContext {
   TwTextStyleTokens get twTextStyleTokens => TwTextStyleTokens.forBrightness(Theme.of(this).brightness);
 }
 
-/// Backwards-compatible simple router alias so callers can use a straightforward
-/// conditional mapping like `RouterTextStyles.forBrightness(brightness).twBodyBaseFontSize`.
-class RouterTextStyles {
-  static TwTextStyleTokens forBrightness(Brightness brightness) => TwTextStyleTokens.forBrightness(brightness);
-}
-
 /// Router that exposes text-style helpers per-brightness (light/dark).
 class TwTextStyles {
   const TwTextStyles._(this._impl);
@@ -222,8 +216,6 @@ class TwTextStyles {
   // Convenience named helpers to keep callers succinct.
   TextStyle buttonLabelFrom(TextStyle base, {Color? color}) => _impl.buttonLabelFrom(base, color: color);
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) => _impl.cardTitleFrom(base, color: color);
-  TextStyle toolbarLabelFrom(TextStyle base, {Color? color}) => _impl.toolbarLabelFrom(base, color: color);
-  TextStyle hintFrom(TextStyle base, {Color? color}) => _impl.hintFrom(base, color: color);
   TextStyle smallFrom(TextStyle base, {Color? color}) => _impl.smallFrom(base, color: color);
 }
 
@@ -254,7 +246,3 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       smallFontSize: tokens.twSmallFontSize,
       toolbarFontSize: tokens.twToolbarFontSize,
     );
-
-extension TwNamedTextStylesBuildContextExtension on BuildContext {
-  styles.NamedTextStyles get twNamedTextStyles => _namedFromTokens(twTextStyleTokens);
-}
