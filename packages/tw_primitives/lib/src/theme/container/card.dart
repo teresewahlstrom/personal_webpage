@@ -60,6 +60,9 @@ class _TwExpandableCardState extends State<TwExpandableCard>
     }
   }
 
+  bool _lastFullyExpanded = false;
+  Widget? _cachedChild;
+
   @override
   void didUpdateWidget(TwExpandableCard oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -70,6 +73,10 @@ class _TwExpandableCardState extends State<TwExpandableCard>
         _animationController.reverse();
       }
     }
+    // Invalidate the child cache when the widget configuration changes,
+    // so we pick up theme changes, new documents, etc., but we preserve
+    // the cache during internal state changes (hover, scroll).
+    _cachedChild = null;
   }
 
   @override
@@ -292,9 +299,13 @@ class _TwExpandableCardState extends State<TwExpandableCard>
               if (_heightAnimation.status == AnimationStatus.dismissed) {
                 return SelectionContainer.disabled(child: const SizedBox.shrink());
               }
+              if (_cachedChild == null || _lastFullyExpanded != fullyExpanded) {
+                _lastFullyExpanded = fullyExpanded;
+                _cachedChild = widget.childBuilder(context, fullyExpanded);
+              }
               return Padding(
                 padding: widget.contentPadding,
-                child: widget.childBuilder(context, fullyExpanded),
+                child: _cachedChild!,
               );
             },
           ),
