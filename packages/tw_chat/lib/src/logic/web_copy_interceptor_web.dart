@@ -9,8 +9,8 @@ typedef ChatCopyGuard = bool Function();
 class ChatWebCopyInterceptor {
   ChatWebCopyInterceptor(
     this._resolveCopyText, {
-    required ChatCopyGuard shouldInterceptCopy,
-  }) : _shouldInterceptCopy = shouldInterceptCopy;
+    required this._shouldInterceptCopy,
+  });
 
   final ChatCopyTextResolver _resolveCopyText;
   final ChatCopyGuard _shouldInterceptCopy;

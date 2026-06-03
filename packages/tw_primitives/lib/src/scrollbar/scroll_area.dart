@@ -9,8 +9,8 @@ import 'tw_scrollbar.dart';
 class TwScrollArea extends StatefulWidget {
   const TwScrollArea({
     super.key,
-    required ScrollController controller,
-    required Widget child,
+    required ScrollController this._controller,
+    required this._child,
     this.activationPulse,
     this.backgroundTrack,
     this.overlayChildren = const <Widget>[],
@@ -45,8 +45,6 @@ class TwScrollArea extends StatefulWidget {
        scrollbarColumnWidth = null,
        padding = null,
        excludeScrollViewFromSelection = false,
-       _controller = controller,
-       _child = child,
        _scrollDirection = null,
        _primary = false;
 
@@ -122,10 +120,10 @@ class TwScrollArea extends StatefulWidget {
 
   const TwScrollArea._scrollView({
     super.key,
-    ScrollController? controller,
-    required Widget child,
-    required Axis scrollDirection,
-    required bool primary,
+    this._controller,
+    required this._child,
+    required Axis this._scrollDirection,
+    required this._primary,
     this.activationPulse,
     this.backgroundTrack,
     this.overlayChildren = const <Widget>[],
@@ -160,11 +158,7 @@ class TwScrollArea extends StatefulWidget {
        assert(
          desktopKeyboardScrollLineStep == null ||
              desktopKeyboardScrollLineStep > 0,
-       ),
-       _controller = controller,
-       _child = child,
-       _scrollDirection = scrollDirection,
-       _primary = primary;
+       );
 
   final ScrollController? _controller;
   final Widget _child;

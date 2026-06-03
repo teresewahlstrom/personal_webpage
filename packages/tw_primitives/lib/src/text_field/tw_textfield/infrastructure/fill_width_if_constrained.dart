@@ -58,8 +58,8 @@ class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
 
 class RenderFillWidthIfConstrained extends RenderProxyBox {
   RenderFillWidthIfConstrained({
-    required double? Function() findAncestorScrollableWidth,
-  }) : _findAncestorScrollableWidth = findAncestorScrollableWidth;
+    required this._findAncestorScrollableWidth,
+  });
 
   /// Informs this [RenderFillWidthIfConstrained] about the width of an ancestor [Scrollable],
   /// which may be used to set the width of the [child] `RenderObject`.

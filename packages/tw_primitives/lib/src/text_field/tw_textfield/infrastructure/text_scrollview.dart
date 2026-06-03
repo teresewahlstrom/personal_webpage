@@ -731,9 +731,9 @@ class TextScrollController with ChangeNotifier {
   static const _caretVisibilityPadding = 2.0;
 
   TextScrollController({
-    required AttributedTextEditingController textController,
+    required this._textController,
     required TickerProvider tickerProvider,
-  }) : _textController = textController {
+  }) {
     _ticker = tickerProvider.createTicker(_autoScrollTick);
   }
 
@@ -1437,18 +1437,13 @@ class _TextLinesLimiter extends SingleChildRenderObjectWidget {
 
 class _RenderTextViewport extends RenderProxyBox {
   _RenderTextViewport({
-    required GlobalKey<ProseTextState> textKey,
-    required ScrollController scrollController,
-    int? minLines,
-    int? maxLines,
-    double? lineHeight,
-    EdgeInsets? padding,
-  }) : _textKey = textKey,
-       _scrollController = scrollController,
-       _minLines = minLines,
-       _maxLines = maxLines,
-       _lineHeight = lineHeight,
-       _padding = padding;
+    required this._textKey,
+    required this._scrollController,
+    this._minLines,
+    this._maxLines,
+    this._lineHeight,
+    this._padding,
+  });
 
   GlobalKey<ProseTextState> _textKey;
   set textKey(GlobalKey<ProseTextState> value) {

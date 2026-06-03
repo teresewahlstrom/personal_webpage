@@ -9,8 +9,8 @@ typedef TwCopyGuard = bool Function();
 class TwWebCopyInterceptor {
   TwWebCopyInterceptor(
     this._resolveCopyText, {
-    required TwCopyGuard shouldInterceptCopy,
-  }) : _shouldInterceptCopy = shouldInterceptCopy;
+    required this._shouldInterceptCopy,
+  });
 
   final TwCopyTextResolver _resolveCopyText;
   final TwCopyGuard _shouldInterceptCopy;

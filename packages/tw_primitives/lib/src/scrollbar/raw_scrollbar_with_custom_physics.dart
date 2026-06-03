@@ -1166,42 +1166,32 @@ class RawScrollbarWithCustomPhysicsState<T extends RawScrollbarWithCustomPhysics
 class ScrollbarPainter extends ChangeNotifier implements CustomPainter {
   /// Creates a scrollbar with customizations given by construction arguments.
   ScrollbarPainter({
-    required Color color,
+    required this._color,
     required this.fadeoutOpacityAnimation,
-    Color trackColor = const Color(0x00000000),
-    Color trackBorderColor = const Color(0x00000000),
-    TextDirection? textDirection,
-    double thickness = _kScrollbarThickness,
+    this._trackColor = const Color(0x00000000),
+    this._trackBorderColor = const Color(0x00000000),
+    this._textDirection,
+    this._thickness = _kScrollbarThickness,
     EdgeInsets padding = EdgeInsets.zero,
-    double mainAxisMargin = 0.0,
-    double crossAxisMargin = 0.0,
+    this._mainAxisMargin = 0.0,
+    this._crossAxisMargin = 0.0,
     Radius? radius,
-    Radius? trackRadius,
+    this._trackRadius,
     OutlinedBorder? shape,
     double minLength = _kMinThumbExtent,
     double? minOverscrollLength,
-    ScrollbarOrientation? scrollbarOrientation,
-    bool ignorePointer = false,
+    this._scrollbarOrientation,
+    this._ignorePointer = false,
   })  : assert(radius == null || shape == null),
         assert(minLength >= 0),
         assert(minOverscrollLength == null || minOverscrollLength <= minLength),
         assert(minOverscrollLength == null || minOverscrollLength >= 0),
         assert(padding.isNonNegative),
-        _color = color,
-        _textDirection = textDirection,
-        _thickness = thickness,
         _radius = radius,
         _shape = shape,
         _padding = padding,
-        _mainAxisMargin = mainAxisMargin,
-        _crossAxisMargin = crossAxisMargin,
         _minLength = minLength,
-        _trackColor = trackColor,
-        _trackBorderColor = trackBorderColor,
-        _trackRadius = trackRadius,
-        _scrollbarOrientation = scrollbarOrientation,
-        _minOverscrollLength = minOverscrollLength ?? minLength,
-        _ignorePointer = ignorePointer {
+        _minOverscrollLength = minOverscrollLength ?? minLength {
     fadeoutOpacityAnimation.addListener(notifyListeners);
   }
 
@@ -1910,9 +1900,9 @@ class ScrollbarPainter extends ChangeNotifier implements CustomPainter {
 class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
   _ThumbPressGestureRecognizer({
     required Object super.debugOwner,
-    required GlobalKey customPaintKey,
+    required this._customPaintKey,
     required super.duration,
-  }) : _customPaintKey = customPaintKey;
+  });
 
   final GlobalKey _customPaintKey;
 
@@ -1940,8 +1930,8 @@ class _ThumbPressGestureRecognizer extends LongPressGestureRecognizer {
 class _TrackTapGestureRecognizer extends TapGestureRecognizer {
   _TrackTapGestureRecognizer({
     required super.debugOwner,
-    required GlobalKey customPaintKey,
-  }) : _customPaintKey = customPaintKey;
+    required this._customPaintKey,
+  });
 
   final GlobalKey _customPaintKey;
 

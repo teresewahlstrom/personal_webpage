@@ -100,12 +100,10 @@ class _FakeTextScrollControllerDelegate
   static const _caretContentTop = 50.0;
 
   _FakeTextScrollControllerDelegate({
-    Rect? caretRect,
-    Rect? lastCharacterRect,
-    double? endScrollOffsetValue,
-  }) : _caretRect = caretRect,
-       _lastCharacterRect = lastCharacterRect,
-       _endScrollOffsetValue = endScrollOffsetValue;
+    this._caretRect,
+    this._lastCharacterRect,
+    this._endScrollOffsetValue,
+  });
 
   double currentScrollOffsetValue = 0;
   final Rect? _caretRect;

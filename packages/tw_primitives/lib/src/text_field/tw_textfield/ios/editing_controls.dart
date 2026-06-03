@@ -765,11 +765,10 @@ class IOSEditingOverlayController with ChangeNotifier {
   IOSEditingOverlayController({
     required this.textController,
     required this.caretBlinkController,
-    required LeaderLink toolbarFocalPoint,
-    required LeaderLink magnifierFocalPoint,
+    required this._toolbarFocalPoint,
+    required this._magnifierFocalPoint,
     required this.overlayController,
-  }) : _toolbarFocalPoint = toolbarFocalPoint,
-       _magnifierFocalPoint = magnifierFocalPoint {
+  }) {
     overlayController.addListener(_overlayControllerChanged);
   }
 

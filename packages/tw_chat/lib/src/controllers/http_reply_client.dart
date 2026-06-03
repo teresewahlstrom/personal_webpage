@@ -9,10 +9,9 @@ class HttpReplyClient extends ReplyClient {
   HttpReplyClient({
     required Uri baseUri,
     http.Client? httpClient,
-    Duration timeout = const Duration(seconds: 30),
+    this._timeout = const Duration(seconds: 30),
   }) : _chatUri = baseUri.resolve('/api/chat'),
-       _httpClient = httpClient ?? http.Client(),
-       _timeout = timeout;
+       _httpClient = httpClient ?? http.Client();
 
   final Uri _chatUri;
   final http.Client _httpClient;

@@ -53,8 +53,8 @@ class IOSFloatingCursor extends StatelessWidget {
 /// new offsets back to [TextPosition]s.
 class FloatingCursorController with ChangeNotifier {
   FloatingCursorController({
-    required AttributedTextEditingController textController,
-  }) : _textController = textController;
+    required this._textController,
+  });
 
   final AttributedTextEditingController _textController;
 

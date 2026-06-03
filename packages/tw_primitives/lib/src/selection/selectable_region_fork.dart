@@ -4185,8 +4185,8 @@ class _SelectionListenerState extends State<SelectionListener> {
 final class _SelectionListenerDelegate extends StaticSelectionContainerDelegate
     implements SelectionDetails {
   _SelectionListenerDelegate({
-    required SelectionListenerNotifier selectionNotifier,
-  }) : _selectionNotifier = selectionNotifier {
+    required this._selectionNotifier,
+  }) {
     _selectionNotifier._registerSelectionListenerDelegate(this);
   }
 

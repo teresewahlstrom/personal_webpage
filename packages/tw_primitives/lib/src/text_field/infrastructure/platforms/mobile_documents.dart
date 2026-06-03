@@ -357,10 +357,9 @@ class MagnifierAndToolbarController with ChangeNotifier {
 class GestureEditingController with ChangeNotifier {
   GestureEditingController({
     required this.selectionLinks,
-    required MagnifierAndToolbarController overlayController,
-    required LeaderLink magnifierFocalPointLink,
-  })  : _magnifierFocalPointLink = magnifierFocalPointLink,
-        _overlayController = overlayController {
+    required this._overlayController,
+    required this._magnifierFocalPointLink,
+  }) {
     _overlayController.addListener(_toolbarChanged);
   }
 
@@ -472,13 +471,10 @@ class GestureEditingController with ChangeNotifier {
 class DragHandleAutoScroller {
   DragHandleAutoScroller({
     required TickerProvider vsync,
-    required AxisOffset dragAutoScrollBoundary,
-    required ScrollPosition Function() getScrollPosition,
-    required RenderBox Function() getViewportBox,
-  })  : _autoScroller = AutoScroller(vsync: vsync),
-        _dragAutoScrollBoundary = dragAutoScrollBoundary,
-        _getScrollPosition = getScrollPosition,
-        _getViewportBox = getViewportBox;
+    required this._dragAutoScrollBoundary,
+    required this._getScrollPosition,
+    required this._getViewportBox,
+  })  : _autoScroller = AutoScroller(vsync: vsync);
 
   void dispose() {
     _autoScroller.dispose();

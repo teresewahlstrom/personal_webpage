@@ -10,10 +10,9 @@ import '_logging.dart';
 class AutoScroller {
   AutoScroller({
     required TickerProvider vsync,
-    double maxScrollSpeed = 5,
-    ScrollPosition? scrollPosition,
-  })  : _maxScrollSpeed = maxScrollSpeed,
-        _scrollPosition = scrollPosition {
+    this._maxScrollSpeed = 5,
+    this._scrollPosition,
+  }) {
     _ticker = vsync.createTicker(_onTick);
   }
 

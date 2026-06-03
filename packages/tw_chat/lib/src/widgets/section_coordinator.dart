@@ -14,10 +14,9 @@ typedef ChatMessageBubbleKeyMap = Map<String, GlobalKey<State>>;
 
 class SectionCoordinator extends ChangeNotifier {
   SectionCoordinator({
-    required bool Function() isMounted,
-    required VoidCallback onSetChatKeyboardScrollTarget,
-  }) : _isMounted = isMounted,
-       _onSetChatKeyboardScrollTarget = onSetChatKeyboardScrollTarget;
+    required this._isMounted,
+    required this._onSetChatKeyboardScrollTarget,
+  });
 
   final bool Function() _isMounted;
   VoidCallback _onSetChatKeyboardScrollTarget;

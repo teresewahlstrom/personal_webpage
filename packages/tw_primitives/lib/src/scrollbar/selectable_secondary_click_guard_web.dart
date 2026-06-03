@@ -8,10 +8,9 @@ typedef SelectableSecondaryClickGuardBoundsResolver = Rect? Function();
 
 class TwSelectableSecondaryClickGuard {
   TwSelectableSecondaryClickGuard({
-    required SelectableSecondaryClickGuardPredicate shouldGuard,
-    required SelectableSecondaryClickGuardBoundsResolver boundsResolver,
-  }) : _shouldGuard = shouldGuard,
-       _boundsResolver = boundsResolver;
+    required this._shouldGuard,
+    required this._boundsResolver,
+  });
 
   final SelectableSecondaryClickGuardPredicate _shouldGuard;
   final SelectableSecondaryClickGuardBoundsResolver _boundsResolver;

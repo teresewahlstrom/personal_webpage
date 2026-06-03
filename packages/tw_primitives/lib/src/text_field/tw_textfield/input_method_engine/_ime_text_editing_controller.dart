@@ -35,16 +35,12 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     with TextInputClient, DeltaTextInputClient {
   ImeAttributedTextEditingController({
     AttributedTextEditingController? controller,
-    bool disposeClientController = true,
-    void Function(RawFloatingCursorPoint)? onIOSFloatingCursorChange,
-    Brightness keyboardAppearance = Brightness.light,
-    TextInputConnectionFactory? inputConnectionFactory,
+    this._disposeClientController = true,
+    this._onIOSFloatingCursorChange,
+    this._keyboardAppearance = Brightness.light,
+    this._inputConnectionFactory,
     this.onPerformSelector,
-  })  : _realController = controller ?? AttributedTextEditingController(),
-        _disposeClientController = disposeClientController,
-        _inputConnectionFactory = inputConnectionFactory,
-        _onIOSFloatingCursorChange = onIOSFloatingCursorChange,
-        _keyboardAppearance = keyboardAppearance {
+  })  : _realController = controller ?? AttributedTextEditingController() {
     _realController.addListener(_onInnerControllerChange);
   }
 

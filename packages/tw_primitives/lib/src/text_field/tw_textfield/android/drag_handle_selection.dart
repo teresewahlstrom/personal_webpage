@@ -10,10 +10,9 @@ import 'package:super_text_layout/super_text_layout.dart';
 class AndroidDocumentDragHandleSelectionStrategy {
   AndroidDocumentDragHandleSelectionStrategy({
     required GlobalKey textContentKey,
-    required ProseTextLayout textLayout,
-    required void Function(TextSelection) select,
-  }) : _textLayout = textLayout,
-       _select = select;
+    required this._textLayout,
+    required this._select,
+  });
 
   final ProseTextLayout _textLayout;
   final void Function(TextSelection) _select;

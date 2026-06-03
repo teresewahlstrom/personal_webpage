@@ -938,8 +938,8 @@ class AndroidEditingOverlayController with ChangeNotifier {
   AndroidEditingOverlayController({
     required this.textController,
     required this.caretBlinkController,
-    required LeaderLink magnifierFocalPoint,
-  }) : _magnifierFocalPoint = magnifierFocalPoint;
+    required this._magnifierFocalPoint,
+  });
 
   @override
   void dispose() {
