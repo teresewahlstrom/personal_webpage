@@ -35,7 +35,7 @@ class TwTextStyleTokensDark {
 
   // H2 tokens
   static const double twH2Scale = 1.3;
-  static const FontWeight twH2FontWeight = FontWeight.w500;
+  static const FontWeight twH2FontWeight = FontWeight.w400;
   static const double twH2LetterSpacing = 1.15;
   static const double twH2WordSpacing = 2.2;
 
