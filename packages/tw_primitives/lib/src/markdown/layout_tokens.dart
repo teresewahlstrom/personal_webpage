@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import '../theme/text_styles/router.dart';
 
 class TwMarkdownLayoutTokens {
   const TwMarkdownLayoutTokens._({
     required this.twH2ToBodySpacing,
   });
 
-  // Layout tokens are intentionally theme-agnostic.
-  static const double twBodyBaseFontSize = 17.0;
-  static const double twH2Scale = 1.3;
-  static const double _twH2ToBodySpacing =
-      twBodyBaseFontSize * 0.75 +
-      (twBodyBaseFontSize * twH2Scale) * -0.14;
-
-  static const TwMarkdownLayoutTokens instance = TwMarkdownLayoutTokens._(
-    twH2ToBodySpacing: _twH2ToBodySpacing,
-  );
+  static TwMarkdownLayoutTokens forBrightness(Brightness brightness) {
+    final textTokens = TwTextStyleTokens.forBrightness(brightness);
+    return TwMarkdownLayoutTokens._(
+      twH2ToBodySpacing:
+          textTokens.twBodyBaseFontSize * 0.75 +
+          (textTokens.twBodyBaseFontSize * textTokens.twH2Scale) * -0.14,
+    );
+  }
 
   final double twH2ToBodySpacing;
 }
 
 extension TwMarkdownLayoutTokensBuildContextExtension on BuildContext {
-  TwMarkdownLayoutTokens get twMarkdownLayoutTokens => TwMarkdownLayoutTokens.instance;
+  TwMarkdownLayoutTokens get twMarkdownLayoutTokens =>
+      TwMarkdownLayoutTokens.forBrightness(Theme.of(this).brightness);
 }

@@ -348,17 +348,6 @@ class _HeroStatement extends StatelessWidget {
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
 
-  TextStyle _titleStyle(BuildContext context) {
-    final tokens = context.twTextStyleTokens;
-    final baseStyle = TwTextStyles.of(context).bodyForContextless(
-      color: context.twColors.pageBodyText,
-      textScale:
-          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
-          tokens.twBodyBaseFontSize,
-    );
-    return TwTextStyles.of(context).h1From(baseStyle);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -367,7 +356,10 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           _title,
-          style: _titleStyle(context),
+          style: TwTextStyles.of(context).h1DisplayForContext(
+            context: context,
+            color: context.twColors.pageBodyText,
+          ),
         ),
         const _SelectableCopyBreak(height: 10),
         Text(
@@ -625,17 +617,6 @@ class _SocialSection extends StatelessWidget {
   final String title;
   final List<_SocialItem> entries;
 
-  TextStyle _titleStyle(BuildContext context) {
-    final tokens = context.twTextStyleTokens;
-    final baseStyle = TwTextStyles.of(context).bodyForContextless(
-      color: context.twColors.pageBodyText,
-      textScale:
-          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
-          tokens.twBodyBaseFontSize,
-    );
-    return TwTextStyles.of(context).h1From(baseStyle);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -644,7 +625,10 @@ class _SocialSection extends StatelessWidget {
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
         Text(
           title,
-          style: _titleStyle(context),
+          style: TwTextStyles.of(context).h1DisplayForContext(
+            context: context,
+            color: context.twColors.pageBodyText,
+          ),
         ),
         const _SelectableCopyBreak(height: 10),
         for (final _SocialItem entry in entries) ...<Widget>[

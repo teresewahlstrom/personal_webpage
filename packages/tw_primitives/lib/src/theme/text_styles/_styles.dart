@@ -85,8 +85,8 @@ class NamedTextStyles {
     required this.h1WordSpacing,
     required this.h2LetterSpacing,
     required this.h2WordSpacing,
-    required this.cardH1Scale,
-    required this.cardH2Scale,
+    required this.h1Scale,
+    required this.h2Scale,
     required this.strikethroughThickness,
   });
 
@@ -119,8 +119,8 @@ class NamedTextStyles {
   final double h1WordSpacing;
   final double h2LetterSpacing;
   final double h2WordSpacing;
-  final double cardH1Scale;
-  final double cardH2Scale;
+  final double h1Scale;
+  final double h2Scale;
   final double strikethroughThickness;
 
   double _resolveTextScale(double textScale, {double? maxTextScale}) {
@@ -270,7 +270,7 @@ class NamedTextStyles {
   TextStyle h1From(TextStyle base) {
     final strong = strongFrom(base);
     return strong.copyWith(
-      fontSize: base.fontSize! * cardH1Scale,
+      fontSize: base.fontSize! * h1Scale,
       fontWeight: h1FontWeight,
       height: 1.2,
       letterSpacing: h1LetterSpacing,
@@ -281,7 +281,7 @@ class NamedTextStyles {
   TextStyle h2From(TextStyle base) {
     final strong = strongFrom(base);
     return strong.copyWith(
-      fontSize: base.fontSize! * cardH2Scale,
+      fontSize: base.fontSize! * h2Scale,
       fontWeight: h2FontWeight,
       height: 1.2,
       letterSpacing: h2LetterSpacing,

@@ -176,6 +176,18 @@ class TwTextStyles {
   TextStyle footerBodyForContext({required BuildContext context, required Color color}) =>
       _impl.footerBodyForContext(context: context, color: color);
 
+  /// Build an H1 display style by deriving from body base size at current text scale.
+  TextStyle h1DisplayForContext({required BuildContext context, required Color color}) {
+    final tokens = TwTextStyleTokens.forBrightness(Theme.of(context).brightness);
+    final baseStyle = bodyForContextless(
+      color: color,
+      textScale:
+          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
+          tokens.twBodyBaseFontSize,
+    );
+    return h1From(baseStyle);
+  }
+
   TextStyle get transparentSelectionSpacer => _impl.transparentSelectionSpacer;
 
   /// Adapt an existing [TextStyle] using centralized copy rules.
@@ -249,8 +261,8 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       h1WordSpacing: tokens.twH1WordSpacing,
       h2LetterSpacing: tokens.twH2LetterSpacing,
       h2WordSpacing: tokens.twH2WordSpacing,
-      cardH1Scale: tokens.twH1Scale,
-      cardH2Scale: tokens.twH2Scale,
+      h1Scale: tokens.twH1Scale,
+      h2Scale: tokens.twH2Scale,
       strikethroughThickness: tokens.twStrikethroughThickness,
     );
 
