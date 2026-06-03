@@ -118,5 +118,39 @@ void main() {
 
       expect(result, 'Page title\nClick [here](https://example.com) for **details**.');
     });
+
+    test('keeps title before body when selected plain text includes both', () {
+      final doc = MessageMarkup.parse('Body paragraph.');
+      final instance = MarkupSelectionInstance(
+        document: doc,
+        selectedRange: const SelectedContentRange(startOffset: 0, endOffset: 15),
+        selectedPlainText: 'Card Title\nBody paragraph.',
+        title: 'Card Title',
+      );
+
+      final result = MarkupSelectionCopyFormatter.formatCopy(
+        globalPlainText: 'Card Title\nBody paragraph.',
+        instances: [instance],
+      );
+
+      expect(result, '## Card Title\nBody paragraph.');
+    });
+
+    test('adds a line break after promoted title when global text lacks one', () {
+      final doc = MessageMarkup.parse('Body paragraph.');
+      final instance = MarkupSelectionInstance(
+        document: doc,
+        selectedRange: const SelectedContentRange(startOffset: 0, endOffset: 15),
+        selectedPlainText: 'Body paragraph.',
+        title: 'Card Title',
+      );
+
+      final result = MarkupSelectionCopyFormatter.formatCopy(
+        globalPlainText: 'Card TitleBody paragraph.',
+        instances: [instance],
+      );
+
+      expect(result, '## Card Title\nBody paragraph.');
+    });
   });
 }

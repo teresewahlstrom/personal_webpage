@@ -67,7 +67,7 @@ class _T1GridAppState extends State<T1GridApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Terese W personal website",
+      title: "Terese Wahlström personal website",
       themeAnimationDuration: Duration.zero,
       theme: ThemeData(
         useMaterial3: false,

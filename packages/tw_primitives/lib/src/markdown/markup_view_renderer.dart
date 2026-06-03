@@ -66,6 +66,8 @@ class MarkupViewRenderer {
               nextBlock: block,
               inListItem: inListItem,
             ),
+            selectionLineBreaks: 1,
+            includeSelectableCopyBreak: chromeVisible,
           ),
         );
       }
@@ -221,7 +223,12 @@ class MarkupViewRenderer {
               .toList(growable: false),
         );
       case final _MarkupLayoutGapNode gap:
-        return SizedBox(height: gap.height);
+        return _buildSelectableCopyBreak(
+          height: gap.height,
+          lineBreaks: gap.selectionLineBreaks,
+          includeSelectableCopyBreak: gap.includeSelectableCopyBreak,
+          transparentSelectionSpacer: theme.transparentSelectionSpacer,
+        );
       case final _MarkupLayoutTextNode text:
         return _buildSelectableRichText(
           text.text,
@@ -257,7 +264,14 @@ class MarkupViewRenderer {
     final children = <Widget>[];
 
     if (item.topSpacing > 0) {
-      children.add(SizedBox(height: item.topSpacing));
+      children.add(
+        _buildSelectableCopyBreak(
+          height: item.topSpacing,
+          lineBreaks: 1,
+          includeSelectableCopyBreak: chromeVisible,
+          transparentSelectionSpacer: theme.transparentSelectionSpacer,
+        ),
+      );
     }
 
     children.add(
@@ -320,6 +334,40 @@ class MarkupViewRenderer {
           ? (DefaultSelectionStyle.of(context).selectionColor ??
                 DefaultSelectionStyle.defaultColor)
           : null,
+    );
+  }
+
+  Widget _buildSelectableCopyBreak({
+    required double height,
+    required int lineBreaks,
+    required bool includeSelectableCopyBreak,
+    required TextStyle transparentSelectionSpacer,
+  }) {
+    final platform = Theme.of(context).platform;
+    final bool allowSelectableCopyBreak =
+        includeSelectableCopyBreak &&
+        platform != TargetPlatform.android &&
+        platform != TargetPlatform.iOS;
+
+    if (!allowSelectableCopyBreak) {
+      return SizedBox(height: height);
+    }
+
+    return SizedBox(
+      height: height,
+      child: IgnorePointer(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: RichText(
+            text: TextSpan(
+              text: '\n' * lineBreaks,
+              style: transparentSelectionSpacer,
+            ),
+            selectionRegistrar: SelectionContainer.maybeOf(context),
+            selectionColor: Colors.transparent,
+          ),
+        ),
+      ),
     );
   }
 
@@ -461,9 +509,15 @@ class _MarkupLayoutColumnNode extends _MarkupLayoutNode {
 }
 
 class _MarkupLayoutGapNode extends _MarkupLayoutNode {
-  const _MarkupLayoutGapNode({required this.height});
+  const _MarkupLayoutGapNode({
+    required this.height,
+    required this.selectionLineBreaks,
+    required this.includeSelectableCopyBreak,
+  });
 
   final double height;
+  final int selectionLineBreaks;
+  final bool includeSelectableCopyBreak;
 }
 
 sealed class _MarkupLayoutMarkerNode {

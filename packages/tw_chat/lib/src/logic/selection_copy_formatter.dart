@@ -5,6 +5,8 @@ import 'package:tw_primitives/markdown.dart';
 
 import '../models/message.dart';
 
+const int _fullMessageStartSnapTolerance = 3;
+
 String formatChatSelectionCopy({
   required List<ChatMessage> messages,
   required Map<String, SelectedContentRange> selectedRanges,
@@ -54,8 +56,15 @@ String formatChatSelectionCopy({
             selectedPlainText,
             preferredStart: fallbackStart,
           );
-    final int start = matchedRange?.$1 ?? fallbackStart;
-    final int end = matchedRange?.$2 ?? fallbackEnd;
+    final int anchoredStart = matchedRange == null
+      ? fallbackStart
+      : math.min(matchedRange.$1, fallbackStart);
+    final int start = anchoredStart <= _fullMessageStartSnapTolerance
+        ? 0
+        : anchoredStart;
+    final int end = matchedRange == null
+      ? fallbackEnd
+      : math.max(matchedRange.$2, fallbackEnd);
     final bool includeLeadingCopyAtStart = matchedRange != null
         ? projection.shouldIncludeLeadingCopyAtStart(
             start: start,

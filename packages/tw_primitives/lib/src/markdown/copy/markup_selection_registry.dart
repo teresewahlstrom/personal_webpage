@@ -25,7 +25,7 @@ class MarkupSelectionCopyFormatter {
     required String globalPlainText,
     required List<MarkupSelectionInstance> instances,
   }) {
-    var result = globalPlainText;
+    final edits = <_CopyEdit>[];
     for (final instance in instances) {
       if (instance.selectedRange == null || instance.selectedPlainText.isEmpty) {
         continue;
@@ -59,29 +59,76 @@ class MarkupSelectionCopyFormatter {
             )
           : false;
 
-      final markdownSlice = projection.copySlice(
+      var markdownSlice = projection.copySlice(
         start: finalStart,
         end: finalEnd,
         includeLeadingCopyAtStart: includeLeadingCopyAtStart,
       );
 
       final targetText = instance.selectedPlainText;
-      if (result.contains(targetText)) {
-        result = result.replaceFirst(targetText, markdownSlice);
+      final titleText = instance.title;
+      final bool targetIncludesTitle =
+          titleText != null && targetText.startsWith(titleText);
+      if (targetIncludesTitle) {
+        markdownSlice = '## $titleText\n$markdownSlice';
       }
 
-      if (instance.title != null) {
-        final titleText = instance.title!;
-        if (result.contains(titleText)) {
-          final index = result.indexOf(titleText);
-          if (index == 0 || (index > 0 && !result.substring(0, index).endsWith('## '))) {
-            result = result.replaceFirst(titleText, '## $titleText');
-          }
+      final targetIndex = globalPlainText.indexOf(targetText);
+      if (targetIndex != -1) {
+        edits.add(
+          _CopyEdit(
+            start: targetIndex,
+            end: targetIndex + targetText.length,
+            replacement: markdownSlice,
+          ),
+        );
+      }
+
+      if (titleText != null && !targetIncludesTitle) {
+        final titleIndex = targetIndex == -1
+            ? globalPlainText.indexOf(titleText)
+            : globalPlainText.lastIndexOf(titleText, targetIndex);
+        if (titleIndex != -1) {
+          final titleEnd = titleIndex + titleText.length;
+          final needsTrailingLineBreak = titleEnd >= globalPlainText.length ||
+              globalPlainText[titleEnd] != '\n';
+          edits.add(
+            _CopyEdit(
+              start: titleIndex,
+              end: titleIndex + titleText.length,
+              replacement: needsTrailingLineBreak
+                  ? '## $titleText\n'
+                  : '## $titleText',
+            ),
+          );
         }
       }
     }
+
+    if (edits.isEmpty) {
+      return globalPlainText;
+    }
+
+    edits.sort((left, right) => right.start.compareTo(left.start));
+
+    var result = globalPlainText;
+    for (final edit in edits) {
+      result = result.replaceRange(edit.start, edit.end, edit.replacement);
+    }
     return result;
   }
+}
+
+class _CopyEdit {
+  const _CopyEdit({
+    required this.start,
+    required this.end,
+    required this.replacement,
+  });
+
+  final int start;
+  final int end;
+  final String replacement;
 }
 
 class MarkupSelectionCopyHelper {

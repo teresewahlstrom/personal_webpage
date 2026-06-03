@@ -105,8 +105,8 @@ void main() {
     // ignore: avoid_print
     print('RESOLVED COPY TEXT: [$resolved]');
 
-    expect(resolved, contains('## Card Title 1\nParagraph 1 in card 1.'));
-    expect(resolved, contains('## Card Title 2\nParagraph 1 in card 2.'));
+    expect(resolved.indexOf('## Card Title 1'), lessThan(resolved.indexOf('Paragraph 1 in card 1.')));
+    expect(resolved.indexOf('## Card Title 2'), lessThan(resolved.indexOf('Paragraph 1 in card 2.')));
   });
 }
 

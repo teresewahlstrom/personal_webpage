@@ -226,38 +226,42 @@ class _TwExpandableCardState extends State<TwExpandableCard>
       width: 1.0,
     );
 
-    final Widget header = MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: Listener(
-        key: _headerKey,
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: _handleHeaderPointerDown,
-        onPointerMove: _handleHeaderPointerMove,
-        onPointerUp: _handleHeaderPointerUp,
-        onPointerCancel: (_) => _clearHeaderPointerTracking(),
-        child: Padding(
-          padding: widget.headerPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Opacity(
-                  opacity: context.twColors.cardMarkdownOpacity,
-                  child: Text(widget.title, style: cardTitleStyle),
+    Widget buildHeader({Key? key}) {
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Listener(
+          key: key,
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: _handleHeaderPointerDown,
+          onPointerMove: _handleHeaderPointerMove,
+          onPointerUp: _handleHeaderPointerUp,
+          onPointerCancel: (_) => _clearHeaderPointerTracking(),
+          child: Padding(
+            padding: widget.headerPadding,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Opacity(
+                    opacity: context.twColors.cardMarkdownOpacity,
+                    child: Text(widget.title, style: cardTitleStyle),
+                  ),
                 ),
-              ),
-              RotationTransition(
-                turns: Tween<double>(
-                  begin: 0,
-                  end: 0.5,
-                ).animate(_heightAnimation),
-                child: Icon(Icons.expand_more, color: iconColor),
-              ),
-            ],
+                RotationTransition(
+                  turns: Tween<double>(
+                    begin: 0,
+                    end: 0.5,
+                  ).animate(_heightAnimation),
+                  child: Icon(Icons.expand_more, color: iconColor),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    final Widget header = buildHeader(key: _headerKey);
 
     final bool isClosed = !widget.isExpanded && _heightAnimation.isDismissed;
     if (isClosed) {
@@ -278,20 +282,7 @@ class _TwExpandableCardState extends State<TwExpandableCard>
     final Widget cardChild = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // Header space reservation
-        AnimatedBuilder(
-          animation: _heightAnimation,
-          builder: (context, child) {
-            double headerHeight = 44.0;
-            try {
-              final RenderBox? headerBox = _headerKey.currentContext?.findRenderObject() as RenderBox?;
-              if (headerBox != null && headerBox.hasSize) {
-                headerHeight = headerBox.size.height;
-              }
-            } catch (_) {}
-            return SizedBox(height: headerHeight);
-          },
-        ),
+        header,
         SizeTransition(
           sizeFactor: _heightAnimation,
           child: AnimatedBuilder(
@@ -326,52 +317,56 @@ class _TwExpandableCardState extends State<TwExpandableCard>
             // 1. Content and placeholder
             cardChild,
 
-            // 2. Floating Top Shadow / Gradient
-            Positioned(
-              top: _floatOffset,
-              left: 0,
-              right: 0,
-              child: AnimatedBuilder(
-                animation: _heightAnimation,
-                builder: (context, child) {
-                  double headerHeight = 44.0;
-                  try {
-                    final RenderBox? headerBox = _headerKey.currentContext?.findRenderObject() as RenderBox?;
-                    if (headerBox != null && headerBox.hasSize) {
-                      headerHeight = headerBox.size.height;
-                    }
-                  } catch (_) {}
-                  final double floatOpacity = (_floatOffset / 16.0).clamp(0.0, 1.0);
-                  final double alphaFactor = _heightAnimation.value * floatOpacity;
-                  return IgnorePointer(
-                    child: Container(
-                      height: headerHeight + 13.0,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            cardFill.withValues(alpha: alphaFactor),
-                            cardFill.withValues(alpha: 0.92 * alphaFactor),
-                            cardFill.withValues(alpha: 0.8 * alphaFactor),
-                            cardFill.withValues(alpha: 0.0),
-                          ],
-                          stops: const [0.0, 0.16, 0.75, 1.0],
+            if (_isFloating) ...<Widget>[
+              // 2. Floating Top Shadow / Gradient
+              Positioned(
+                top: _floatOffset,
+                left: 0,
+                right: 0,
+                child: AnimatedBuilder(
+                  animation: _heightAnimation,
+                  builder: (context, child) {
+                    double headerHeight = 44.0;
+                    try {
+                      final RenderBox? headerBox = _headerKey.currentContext?.findRenderObject() as RenderBox?;
+                      if (headerBox != null && headerBox.hasSize) {
+                        headerHeight = headerBox.size.height;
+                      }
+                    } catch (_) {}
+                    final double floatOpacity = (_floatOffset / 16.0).clamp(0.0, 1.0);
+                    final double alphaFactor = _heightAnimation.value * floatOpacity;
+                    return IgnorePointer(
+                      child: Container(
+                        height: headerHeight + 13.0,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              cardFill.withValues(alpha: alphaFactor),
+                              cardFill.withValues(alpha: 0.92 * alphaFactor),
+                              cardFill.withValues(alpha: 0.8 * alphaFactor),
+                              cardFill.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.0, 0.16, 0.75, 1.0],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
 
-            // 3. Floating Header
-            Positioned(
-              top: _floatOffset,
-              left: 0,
-              right: 0,
-              child: header,
-            ),
+              // 3. Floating Header
+              Positioned(
+                top: _floatOffset,
+                left: 0,
+                right: 0,
+                child: SelectionContainer.disabled(
+                  child: buildHeader(),
+                ),
+              ),
+            ],
           ],
         ),
       ),
