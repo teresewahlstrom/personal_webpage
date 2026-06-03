@@ -594,7 +594,8 @@ class TwDesktopTextFieldState extends State<TwDesktopTextField>
 
           return Stack(
             children: [
-              if (widget.textController?.selection.isValid == true)
+              if (_focusNode.hasFocus &&
+                  widget.textController?.selection.isValid == true)
                 // Selection highlight beneath the text.
                 TextLayoutSelectionHighlight(
                   textLayout: textLayout,
@@ -1543,9 +1544,7 @@ class _TwTextFieldKeyboardInteractorState
       return;
     }
 
-    _log.fine("Clearing selection because TwTextField lost focus");
-    widget.textFieldContext.controller.selection =
-        const TextSelection.collapsed(offset: -1);
+    _log.fine("TwTextField lost focus");
   }
 
   KeyEventResult _onKeyPressed(FocusNode focusNode, KeyEvent keyEvent) {
@@ -1781,7 +1780,6 @@ class _TwTextFieldImeInteractorState extends State<TwTextFieldImeInteractor> {
       _log.info('Lost focus. Detaching TextInputClient from TextInput.');
       setState(() {
         _textController.detachFromIme();
-        _textController.selection = const TextSelection.collapsed(offset: -1);
       });
     }
   }
