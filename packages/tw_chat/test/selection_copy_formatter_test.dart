@@ -105,4 +105,33 @@ void main() {
     expect(copied, startsWith('---\nTwin'));
     expect(copied, contains('## Prototype Mode'));
   });
+
+  test('full message copy survives missing visual separators in selected text', () {
+    const raw =
+        '## Prototype Mode\nEventually this will be a real AI chat.\n\nSecond paragraph.';
+    const selectedPlainText =
+        'Prototype Mode\nEventually this will be a real AI chat.Second paragraph.';
+
+    final copied = formatChatSelectionCopy(
+      messages: <ChatMessage>[
+        ChatMessage(
+          id: 'message-1',
+          role: ChatRole.bot,
+          text: raw,
+          createdAt: DateTime(2026, 6, 4, 8, 15),
+        ),
+      ],
+      selectedRanges: const <String, SelectedContentRange>{
+        'message-1': SelectedContentRange(startOffset: 0, endOffset: 68),
+      },
+      selectedPlainTextByMessage: const <String, String>{
+        'message-1': selectedPlainText,
+      },
+    );
+
+    expect(copied, startsWith('---\nTwin'));
+    expect(copied, contains('## Prototype Mode'));
+    expect(copied, contains('Eventually this will be a real AI chat.'));
+    expect(copied, contains('Second paragraph.'));
+  });
 }

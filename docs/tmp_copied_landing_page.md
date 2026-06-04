@@ -1,7 +1,9 @@
 
 
-About Me
+# About Me
 Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.
+
+
 ## Cross-Functional Leader
 The hardest problems in technical organizations do not sit inside a single function. They emerge at the seams: where engineering specifications meet operational constraints, where technical feasibility and commercial commitment operate on mismatched assumptions, and where a process that works in the lab fails in the field for reasons no single team can fully see.
 
@@ -117,10 +119,14 @@ Formal applied AI engineering study has complemented this implementation-driven 
 Consistent with her broader engineering work, the objective is not to replace technical reasoning, but to make expert judgment more visible, more transferable, and more dependable under real-world complexity.
 
 
-Contact, Connect, Follow
-terese@t1grid.com
-+46 709 800 525
-Video meeting
+
+
+# Contact, Connect, Follow
+terese@t1grid.com (mailto:terese@t1grid.com)
++46 709 800 525 (tel:+46709800525)
+Video meeting (https://cal.com/teresew/discuss)
 Newsletter
-LinkedIn
+LinkedIn (https://www.linkedin.com/in/teresewahlstrom)
+
+
 ©2026 T1 grid. All rights reserved. Privacy & Cookies Note.

@@ -6,6 +6,7 @@ import 'package:tw_primitives/markdown.dart';
 import '../models/message.dart';
 
 const int _fullMessageStartSnapTolerance = 3;
+const int _fullMessageEndSnapTolerance = 3;
 
 String formatChatSelectionCopy({
   required List<ChatMessage> messages,
@@ -46,8 +47,47 @@ String formatChatSelectionCopy({
         fallbackStart == 0 && fallbackEnd == projection.visibleLength;
     final bool rangeLengthMatchesSelectedText =
         selectedPlainText.length == (fallbackEnd - fallbackStart);
-    final bool shouldAnchorToSelectedText =
+    final String visibleWithoutSeparators = projection.visibleText.replaceAll(
+      '\n',
+      '',
+    );
+    final String selectedWithoutSeparators = selectedPlainText.replaceAll(
+      '\n',
+      '',
+    );
+    final bool selectedLooksLikeWholeMessage =
+        selectedWithoutSeparators.isNotEmpty &&
+        (selectedWithoutSeparators.length >=
+            visibleWithoutSeparators.length - _fullMessageEndSnapTolerance) &&
+        visibleWithoutSeparators.startsWith(selectedWithoutSeparators);
+    final bool shouldPromoteToWholeMessage =
         !copyWholeMessage &&
+        fallbackStart <= _fullMessageStartSnapTolerance &&
+        selectedLooksLikeWholeMessage;
+
+    if (copyWholeMessage || shouldPromoteToWholeMessage) {
+      final int start = 0;
+      final int end = projection.visibleLength;
+      if (wroteAny || start == 0) {
+        buffer.write(
+          _buildSelectionCopyMessageHeader(
+            message,
+            isFirstMessage: entry.$1 == 0,
+          ),
+        );
+      }
+      buffer.write(
+        projection.copySlice(
+          start: start,
+          end: end,
+          includeLeadingCopyAtStart: false,
+        ),
+      );
+      wroteAny = true;
+      continue;
+    }
+
+    final bool shouldAnchorToSelectedText =
         selectedPlainText.isNotEmpty &&
         (!rangeCoversWholeMessage || !rangeLengthMatchesSelectedText);
     final matchedRange = !shouldAnchorToSelectedText
