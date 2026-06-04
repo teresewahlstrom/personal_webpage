@@ -2345,6 +2345,7 @@ class SelectableRegionState extends State<SelectableRegion>
   }
 
   int? _outsidePointerId;
+  PointerDeviceKind? _outsidePointerKind;
   Offset? _outsidePointerDownPosition;
   double _outsidePointerDragDist = 0.0;
 
@@ -2353,14 +2354,19 @@ class SelectableRegionState extends State<SelectableRegion>
       return;
     }
     if (event.pointer == _outsidePointerId) {
+      final bool isPrecise = _outsidePointerKind == PointerDeviceKind.mouse ||
+          _outsidePointerKind == PointerDeviceKind.stylus ||
+          _outsidePointerKind == PointerDeviceKind.invertedStylus;
+      final double slop = isPrecise ? 8.0 : 20.0;
+
       if (event is PointerMoveEvent) {
         final double dist = (event.position - _outsidePointerDownPosition!).distance;
         _outsidePointerDragDist = max(_outsidePointerDragDist, dist);
-        if (_outsidePointerDragDist > 12.0) {
+        if (_outsidePointerDragDist > slop) {
           _cancelOutsideTapTracking();
         }
       } else if (event is PointerUpEvent) {
-        if (_outsidePointerDragDist <= 12.0) {
+        if (_outsidePointerDragDist <= slop) {
           if (kIsWeb) {
             _clearSelectionFromUserInteraction();
             _focusNode.unfocus();
@@ -2377,6 +2383,7 @@ class SelectableRegionState extends State<SelectableRegion>
     if (_outsidePointerId != null) {
       GestureBinding.instance.pointerRouter.removeGlobalRoute(_handleGlobalPointerEvent);
       _outsidePointerId = null;
+      _outsidePointerKind = null;
       _outsidePointerDownPosition = null;
       _outsidePointerDragDist = 0.0;
     }
@@ -2433,6 +2440,7 @@ class SelectableRegionState extends State<SelectableRegion>
         if (kIsWeb) {
           _cancelOutsideTapTracking();
           _outsidePointerId = event.pointer;
+          _outsidePointerKind = event.kind;
           _outsidePointerDownPosition = event.position;
           _outsidePointerDragDist = 0.0;
           GestureBinding.instance.pointerRouter.addGlobalRoute(_handleGlobalPointerEvent);
