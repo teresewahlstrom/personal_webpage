@@ -800,7 +800,7 @@ class _SocialRowState extends State<_SocialRow> {
     final Color color = _isHovered
         ? textColor.withValues(alpha: 0.82)
         : textColor;
-    return MouseRegion(
+    final Widget row = MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -810,6 +810,8 @@ class _SocialRowState extends State<_SocialRow> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
+            borderRadius: BorderRadius.circular(6),
+            hoverColor: textColor.withValues(alpha: 0.07),
             mouseCursor: SystemMouseCursors.click,
             onTap: widget.entry.onTap,
             child: Padding(
@@ -854,6 +856,12 @@ class _SocialRowState extends State<_SocialRow> {
         ),
       ),
     );
+
+    final String? tooltip = widget.entry.copyUrl;
+    if (tooltip == null || tooltip.isEmpty) {
+      return row;
+    }
+    return Tooltip(message: tooltip, child: row);
   }
 }
 

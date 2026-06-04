@@ -198,10 +198,7 @@ class TwLinkPill extends StatelessWidget {
                 decoration:
                     resolved.textStyle.decoration ?? TextDecoration.none,
               ),
-              strutStyle: const StrutStyle(
-                forceStrutHeight: true,
-                height: 1.0,
-              ),
+              strutStyle: const StrutStyle(forceStrutHeight: true, height: 1.0),
             ),
         ],
       ),
@@ -214,6 +211,7 @@ class TwLinkPill extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           mouseCursor: SystemMouseCursors.click,
+          hoverColor: resolved.textStyle.color?.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(9999),
           child: innerContent,
         ),
@@ -238,7 +236,11 @@ class TwLinkPill extends StatelessWidget {
 
     // Optionally provide semantics label for accessibility.
     if (semanticsLabel != null && semanticsLabel!.isNotEmpty) {
-      content = Semantics(button: isClickable, label: semanticsLabel, child: content);
+      content = Semantics(
+        button: isClickable,
+        label: semanticsLabel,
+        child: content,
+      );
     }
 
     // Optionally show a tooltip (wrapped outside semantics to avoid

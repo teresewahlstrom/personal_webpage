@@ -162,6 +162,7 @@ class _MarkupLinkPillState extends State<_MarkupLinkPill> {
         label: widget.label,
         onTap: onTap,
         style: widget.style,
+        tooltip: widget.href,
       ),
     );
   }
@@ -197,13 +198,13 @@ extension MarkupBlockRendering on MarkupBlock {
           strikethroughStyle: headingStyle.merge(theme.strikethroughStyle),
           underlineStyle: headingStyle.merge(theme.underlineStyle),
           linkStyle: headingStyle.merge(theme.linkStyle),
-            // Applies heading text styling to pills inside headings so the
-            // pill's text visually matches the surrounding heading. Used by
-            // markdown rendering in the main app and also when markdown is
-            // rendered inside chat/message UI.
-            linkPillStyle: linkPillStyle?.copyWith(
-              textStyle: headingStyle.merge(linkPillStyle.textStyle),
-            ),
+          // Applies heading text styling to pills inside headings so the
+          // pill's text visually matches the surrounding heading. Used by
+          // markdown rendering in the main app and also when markdown is
+          // rendered inside chat/message UI.
+          linkPillStyle: linkPillStyle?.copyWith(
+            textStyle: headingStyle.merge(linkPillStyle.textStyle),
+          ),
           blockquoteStyle: theme.blockquoteStyle,
           headingStyleResolver: theme.headingStyleResolver,
           transparentSelectionSpacer: theme.transparentSelectionSpacer,

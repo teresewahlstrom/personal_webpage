@@ -40,6 +40,7 @@ Future<void> showAppModal({
                 ? null
                 : TwPanelTitle(label: headerTitle),
             onClose: close,
+            closeIconSize: 19,
             padding:
                 contentPadding ?? ModalUiConfig.contentPaddingFor(viewportSize),
             body: DefaultTextStyle(

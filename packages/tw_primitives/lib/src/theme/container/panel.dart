@@ -8,7 +8,12 @@ import 'pill.dart' show TwLinkPill;
 
 /// A shared, canonical title widget matching the Chat title pill visual.
 class TwPanelTitle extends StatelessWidget {
-  const TwPanelTitle({super.key, required this.label, this.onTap, this.clickable});
+  const TwPanelTitle({
+    super.key,
+    required this.label,
+    this.onTap,
+    this.clickable,
+  });
 
   final String label;
   final VoidCallback? onTap;
@@ -65,6 +70,7 @@ class TwPanelContainer extends StatefulWidget {
     this.title,
     this.onClose,
     this.closeIcon = Icons.close,
+    this.closeIconSize,
     this.closeTooltip = 'Close',
     this.isCloseTooltipVisible = true,
     this.footer,
@@ -79,6 +85,7 @@ class TwPanelContainer extends StatefulWidget {
   final Widget? title;
   final VoidCallback? onClose;
   final IconData closeIcon;
+  final double? closeIconSize;
   final String closeTooltip;
   final bool isCloseTooltipVisible;
   final Widget? footer;
@@ -197,7 +204,13 @@ class _TwPanelContainerState extends State<TwPanelContainer> {
                   label: widget.closeTooltip,
                   child: InkWell(
                     onTap: widget.onClose,
-                    child: Center(child: Icon(widget.closeIcon, color: iconColor)),
+                    child: Center(
+                      child: Icon(
+                        widget.closeIcon,
+                        color: iconColor,
+                        size: widget.closeIconSize,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -283,9 +296,7 @@ class _TwPanelContainerState extends State<TwPanelContainer> {
     if (widget.overlapHeader) {
       mainContent = Stack(
         children: [
-          Positioned.fill(
-            child: scopedBody,
-          ),
+          Positioned.fill(child: scopedBody),
           Positioned(
             top: 0,
             left: 0,
@@ -296,12 +307,7 @@ class _TwPanelContainerState extends State<TwPanelContainer> {
             ),
           ),
           if (headerWidget != null)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: headerWidget,
-            ),
+            Positioned(top: 0, left: 0, right: 0, child: headerWidget),
           if (widget.bottomShadowHeight > 0)
             Positioned(
               bottom: 0,
@@ -323,10 +329,7 @@ class _TwPanelContainerState extends State<TwPanelContainer> {
                   return false;
                 },
                 child: SizeChangedLayoutNotifier(
-                  child: KeyedSubtree(
-                    key: _footerKey,
-                    child: widget.footer!,
-                  ),
+                  child: KeyedSubtree(key: _footerKey, child: widget.footer!),
                 ),
               ),
             ),
@@ -384,10 +387,7 @@ class _TwPanelContainerState extends State<TwPanelContainer> {
     if (widget.borderRadius == BorderRadius.zero) {
       return ClipRect(child: decorated);
     } else {
-      return ClipRRect(
-        borderRadius: widget.borderRadius,
-        child: decorated,
-      );
+      return ClipRRect(borderRadius: widget.borderRadius, child: decorated);
     }
   }
 }
@@ -455,41 +455,47 @@ class TwPanelScrollArea extends StatelessWidget {
       }
       if (panelScope.hasHeader && panelScope.overlapHeader) {
         final double headerPaddingShift = overlapHeaderTopInset;
-        effectivePadding =
-        EdgeInsets.only(top: headerPaddingShift).add(effectivePadding);
+        effectivePadding = EdgeInsets.only(
+          top: headerPaddingShift,
+        ).add(effectivePadding);
       }
       if (panelScope.overlapHeader) {
         final double bottomOffset =
             panelScope.bottomShadowHeight + panelScope.footerHeight;
         if (bottomOffset > 0) {
-          effectivePadding =
-              EdgeInsets.only(bottom: bottomOffset).add(effectivePadding);
+          effectivePadding = EdgeInsets.only(
+            bottom: bottomOffset,
+          ).add(effectivePadding);
         }
       }
     }
 
-    EdgeInsetsGeometry effectiveScrollbarInsets =
-        const EdgeInsets.only(right: 2.0).add(scrollbarInsets);
+    EdgeInsetsGeometry effectiveScrollbarInsets = const EdgeInsets.only(
+      right: 2.0,
+    ).add(scrollbarInsets);
     if (panelScope != null) {
       if (panelScope.hasHeader && panelScope.overlapHeader) {
-        final double currentTop = scrollbarInsets.resolve(TextDirection.ltr).top;
+        final double currentTop = scrollbarInsets
+            .resolve(TextDirection.ltr)
+            .top;
         const double unifiedHeaderScrollbarInset = 32.0;
         if (currentTop < unifiedHeaderScrollbarInset) {
-          effectiveScrollbarInsets =
-              EdgeInsets.only(top: unifiedHeaderScrollbarInset - currentTop)
-                  .add(effectiveScrollbarInsets);
+          effectiveScrollbarInsets = EdgeInsets.only(
+            top: unifiedHeaderScrollbarInset - currentTop,
+          ).add(effectiveScrollbarInsets);
         }
       }
       if (panelScope.overlapHeader) {
         final double bottomOffset =
             panelScope.bottomShadowHeight + panelScope.footerHeight;
         if (bottomOffset > 0) {
-          final double currentBottom =
-              scrollbarInsets.resolve(TextDirection.ltr).bottom;
+          final double currentBottom = scrollbarInsets
+              .resolve(TextDirection.ltr)
+              .bottom;
           if (currentBottom < bottomOffset) {
-            effectiveScrollbarInsets =
-                EdgeInsets.only(bottom: bottomOffset - currentBottom)
-                    .add(effectiveScrollbarInsets);
+            effectiveScrollbarInsets = EdgeInsets.only(
+              bottom: bottomOffset - currentBottom,
+            ).add(effectiveScrollbarInsets);
           }
         }
       }

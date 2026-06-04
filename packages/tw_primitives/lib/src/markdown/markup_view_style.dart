@@ -1,5 +1,3 @@
-
-
 // Canonical markdown-related tokens for decoration thickness and biases.
 // These values are used by the markdown rendering pipeline for underline
 // and strikethrough geometry. They were previously in
@@ -23,13 +21,13 @@ class MarkupViewStyle {
 
   // Backwards-compatible non-bias names used by other markdown builders.
   static const double strikethroughLightThickness =
-    strikethroughLightThicknessBias;
+      strikethroughLightThicknessBias;
   static const double strikethroughDarkThickness =
-    strikethroughDarkThicknessBias;
+      strikethroughDarkThicknessBias;
 
   // Presentation/layout tokens used by the markup view renderer.
   static const double unorderedListMarkerSizeFactor = 0.30;
-  static const double unorderedListMarkerVerticalOffsetFactor = 0.55;
+  static const double unorderedListMarkerVerticalOffsetFactor = 0.60;
   static const double blockquoteRailVerticalOverhang = 3.0;
   static const double blockquoteInnerVerticalPadding = 2.0;
 
