@@ -124,7 +124,7 @@ Her approach follows a consistent pattern:
 * **Validate:** Anchor probabilistic reasoning against deterministic tools, explicit constraints, and source-grounded evidence.
 * **Escalate:** Preserve clear boundaries between supported inference, unresolved uncertainty, and required human expertise.
 
-Applied AI engineering:
+**Applied AI engineering:**
 
 This capability has been developed through hands-on design and evaluation of retrieval-backed technical reasoning systems, including context-aware retrieval architectures, evidence-routing logic, structured context assembly pipelines, deterministic tool integration, and formal evaluation frameworks for retrieval quality, grounding reliability, abstention behavior, and workflow usefulness.
 

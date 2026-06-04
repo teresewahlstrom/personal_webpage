@@ -245,34 +245,56 @@ class _TwExpandableCardState extends State<TwExpandableCard>
         Border.all(color: context.twColors.lineSubtle, width: 1.0);
 
     Widget buildHeader({Key? key}) {
-      return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Listener(
-          key: key,
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: _handleHeaderPointerDown,
-          onPointerMove: _handleHeaderPointerMove,
-          onPointerUp: _handleHeaderPointerUp,
-          onPointerCancel: (_) => _clearHeaderPointerTracking(),
-          child: Padding(
-            padding: widget.headerPadding,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Opacity(
-                    opacity: context.twColors.cardMarkdownOpacity,
-                    child: Text(widget.title, style: cardTitleStyle),
+      final DefaultSelectionStyle inheritedSelectionStyle =
+          DefaultSelectionStyle.of(context);
+
+      return DefaultSelectionStyle(
+        selectionColor: inheritedSelectionStyle.selectionColor,
+        cursorColor: inheritedSelectionStyle.cursorColor,
+        mouseCursor: SystemMouseCursors.click,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Listener(
+            key: key,
+            behavior: HitTestBehavior.opaque,
+            onPointerDown: _handleHeaderPointerDown,
+            onPointerMove: _handleHeaderPointerMove,
+            onPointerUp: _handleHeaderPointerUp,
+            onPointerCancel: (_) => _clearHeaderPointerTracking(),
+            child: Padding(
+              padding: widget.headerPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Opacity(
+                      opacity: context.twColors.cardMarkdownOpacity,
+                      child: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: '## ',
+                              style: TwTextStyles.of(
+                                context,
+                              ).transparentSelectionSpacer,
+                            ),
+                            TextSpan(text: widget.title),
+                          ],
+                        ),
+                        semanticsLabel: widget.title,
+                        style: cardTitleStyle,
+                      ),
+                    ),
                   ),
-                ),
-                RotationTransition(
-                  turns: Tween<double>(
-                    begin: 0,
-                    end: 0.5,
-                  ).animate(_heightAnimation),
-                  child: Icon(Icons.expand_more, color: iconColor),
-                ),
-              ],
+                  RotationTransition(
+                    turns: Tween<double>(
+                      begin: 0,
+                      end: 0.5,
+                    ).animate(_heightAnimation),
+                    child: Icon(Icons.expand_more, color: iconColor),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

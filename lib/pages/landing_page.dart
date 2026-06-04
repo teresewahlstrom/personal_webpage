@@ -444,9 +444,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const _SelectableCopyBreak(height: 12),
+                  const _SelectableCopyBreak(height: 2),
                   _ProjectCardMarkdownBody(
-                    title: widget.cards[index].title,
                     document: widget.cards[index].contentDocument,
                     selectable: isExpanded,
                   ),
@@ -485,12 +484,10 @@ class _ProjectCardData {
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
   const _ProjectCardMarkdownBody({
-    this.title,
     required this.document,
     required this.selectable,
   });
 
-  final String? title;
   final MarkupDocument document;
   final bool selectable;
 
@@ -551,7 +548,6 @@ class _ProjectCardMarkdownBodyState extends State<_ProjectCardMarkdownBody> {
     return Opacity(
       opacity: context.twColors.cardMarkdownOpacity,
       child: MarkupView(
-        title: widget.title,
         document: widget.document,
         theme: markdownSurface.theme,
         gestureRecognizerFactory: _recognizerForHref,

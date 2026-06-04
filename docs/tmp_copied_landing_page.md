@@ -108,7 +108,7 @@ Her approach follows a consistent pattern:
 - **Validate:** Anchor probabilistic reasoning against deterministic tools, explicit constraints, and source-grounded evidence.
 - **Escalate:** Preserve clear boundaries between supported inference, unresolved uncertainty, and required human expertise.
 
-Applied AI engineering:
+**Applied AI engineering:**
 
 This capability has been developed through hands-on design and evaluation of retrieval-backed technical reasoning systems, including context-aware retrieval architectures, evidence-routing logic, structured context assembly pipelines, deterministic tool integration, and formal evaluation frameworks for retrieval quality, grounding reliability, abstention behavior, and workflow usefulness.
 
@@ -117,6 +117,7 @@ In parallel, she has built domain-specific AI reasoning systems that reconstruct
 Formal applied AI engineering study has complemented this implementation-driven work, but the central focus has remained practical system design: building AI systems that make complex technical reasoning more accessible, traceable, and operationally reliable.
 
 Consistent with her broader engineering work, the objective is not to replace technical reasoning, but to make expert judgment more visible, more transferable, and more dependable under real-world complexity.
+
 
 
 
