@@ -11,7 +11,7 @@ Through structured investigation, technical curiosity, and evidence-driven analy
 
 Her experience spans factory-floor operations, engineering development, customer-facing technical delivery, and live ISO-certified production environments. This breadth allows her to engage deeply with engineering complexity without demanding oversimplification, while translating critical variables for commercial and operational stakeholders without distortion. She creates the structural trust teams need for operational reality to surface openly, for decisions to stay grounded in technical truth, and for coordinated execution to hold under pressure.
 
-**Cross-functional alignment in practice**
+Cross-functional alignment in practice:
 
 - **Commercial Guardrails at GE Additive:** Working across applications engineering, operators, suppliers, and sales teams, she evaluated whether customer applications genuinely fit the technology and, if so, what configuration, implementation scope, and support structure the commitment required. The objective was not simply to close a deal, but to ensure the commercial promise matched technical capability before hidden implementation risk reached the customer.
 - **Technical Delivery Alignment at Markforged:** She rebuilt training and support systems so product engineering, operators, field engineers, and customer-facing teams shared the same mental model of process behavior, failure mechanisms, and escalation logic. When a customer's system underperformed, the organizational response was coordinated rather than conflicted because everyone operated from the same technical ground.
@@ -29,7 +29,7 @@ She treats friction as a design signal. Repeated manual workarounds, unclear han
 - **Reconstruct:** Isolate the deeper structural weaknesses, variable interactions, or recurring constraints behind localized failure.
 - **Encode:** Translate those insights into usable infrastructure built to outlast any individual and improve execution reliability over time.
 
-**Systemic intervention in practice**
+Systemic intervention in practice:
 
 - **Shared Diagnostic Reference System:** Recognizing that floor-level evidence and process data were being discarded rather than used to build shared understanding, she preserved and structured defect parts, process history, and in-situ documentation into a unified reference. This created a practical shared ground where operators and engineers could evaluate production failures together, shortening the path from isolated observation to shared diagnosis. As its value became visible, others began contributing their own cases and observations, and it evolved into a shared team reference.
 - **Reusable Decision Logic:** She translated the configuration dependencies of a complex production system, including equipment parameters, material constraints, and workflow sequences, into structured decision logic for technical evaluation and purchasing. Teams that previously relied on a scarce domain expert could make decisions with greater speed and consistency without that dependency.
@@ -47,7 +47,7 @@ Her method is consistent:
 - **Formalize:** Reconstruct their logical, mathematical, or procedural relationships.
 - **Automate:** Encode that logic into practical systems such as templates, scripts, models, workflows, and decision-support tools that others can execute consistently.
 
-**Logic systems in action**
+Logic systems in action:
 
 - **At GE Additive:** She co-developed and adapted commercially deployed logic systems that translated process dependencies, equipment constraints, consumable dynamics, and production-cycle behavior into predictive configuration and evaluation tools. These systems anchored model assumptions against live production behavior so customer feasibility, configuration, and purchasing decisions could move forward on a clearer evidence base.
 - **At Markforged:** She encoded multi-stage manufacturing dependencies into structured configuration tools and operational logic frameworks that reduced ambiguity across deployment planning, consumable management, workflow coordination, and technical support.
@@ -82,7 +82,7 @@ Within additive manufacturing, she has developed substantial depth in **Metal Bi
 
 She converts expert-dependent process realities into structured decision logic, operational frameworks, and technical guidance that help teams determine where additive manufacturing creates true industrial value and what is required to make that value reliable, scalable, and operationally trustworthy.
 
-**Core AM contributions**
+Core AM contributions:
 
 - **Strategic technology evaluation at Volvo Cars:** Her work included technology scouting, proof-of-concept validation, production-suitability assessment, and make-versus-buy decision support that clarified where additive manufacturing met application-specific technical requirements and held up against lifecycle cost, environmental, and safety constraints, enabling earlier rejection of poor-fit use cases.
 - **Technical-commercial qualification:** At GE Additive, this included customer application feasibility analysis, benchmark strategy, configuration support, and ROI-based decision frameworks under real purchase pressure, helping purchase decisions move forward on a clearer evidence base. At Markforged, it included enabling commercial teams to navigate technical customer discovery, distinguish realistic industrial fit from superficial possibility, and articulate longer-term manufacturing deployment strategies, improving the quality of both qualification and expectation-setting.
@@ -108,7 +108,7 @@ Her approach follows a consistent pattern:
 - **Validate:** Anchor probabilistic reasoning against deterministic tools, explicit constraints, and source-grounded evidence.
 - **Escalate:** Preserve clear boundaries between supported inference, unresolved uncertainty, and required human expertise.
 
-**Applied AI engineering**
+Applied AI engineering:
 
 This capability has been developed through hands-on design and evaluation of retrieval-backed technical reasoning systems, including context-aware retrieval architectures, evidence-routing logic, structured context assembly pipelines, deterministic tool integration, and formal evaluation frameworks for retrieval quality, grounding reliability, abstention behavior, and workflow usefulness.
 
@@ -117,7 +117,6 @@ In parallel, she has built domain-specific AI reasoning systems that reconstruct
 Formal applied AI engineering study has complemented this implementation-driven work, but the central focus has remained practical system design: building AI systems that make complex technical reasoning more accessible, traceable, and operationally reliable.
 
 Consistent with her broader engineering work, the objective is not to replace technical reasoning, but to make expert judgment more visible, more transferable, and more dependable under real-world complexity.
-
 
 
 

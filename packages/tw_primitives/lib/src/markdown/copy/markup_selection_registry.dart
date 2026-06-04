@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart' hide SelectionListener, SelectionListenerNotifier;
-import 'package:flutter/rendering.dart' show SelectedContentRange, SelectionStatus;
-import '../../../../scrollbar.dart' show TwSelectableRegionState, SelectionListenerNotifier;
+import 'package:flutter/material.dart'
+    hide SelectionListener, SelectionListenerNotifier;
+import 'package:flutter/rendering.dart'
+    show SelectedContentRange, SelectionStatus;
+import '../../../../scrollbar.dart'
+    show TwSelectableRegionState, SelectionListenerNotifier;
 import '../markup_ast.dart';
 import 'selection_copy_projection.dart';
 
@@ -27,11 +30,14 @@ class MarkupSelectionCopyFormatter {
   }) {
     final edits = <_CopyEdit>[];
     for (final instance in instances) {
-      if (instance.selectedRange == null || instance.selectedPlainText.isEmpty) {
+      if (instance.selectedRange == null ||
+          instance.selectedPlainText.isEmpty) {
         continue;
       }
 
-      final projection = SelectionCopyProjection.fromDocument(instance.document);
+      final projection = SelectionCopyProjection.fromDocument(
+        instance.document,
+      );
       if (projection.isEmpty) {
         continue;
       }
@@ -70,7 +76,9 @@ class MarkupSelectionCopyFormatter {
       final bool targetIncludesTitle =
           titleText != null && targetText.startsWith(titleText);
       if (targetIncludesTitle) {
-        markdownSlice = '## $titleText\n$markdownSlice';
+        final targetIndex = globalPlainText.indexOf(targetText);
+        markdownSlice =
+            '${_leadingBlankLineBeforeTitle(globalPlainText, targetIndex)}## $titleText\n$markdownSlice';
       }
 
       final targetIndex = globalPlainText.indexOf(targetText);
@@ -90,15 +98,16 @@ class MarkupSelectionCopyFormatter {
             : globalPlainText.lastIndexOf(titleText, targetIndex);
         if (titleIndex != -1) {
           final titleEnd = titleIndex + titleText.length;
-          final needsTrailingLineBreak = titleEnd >= globalPlainText.length ||
+          final needsTrailingLineBreak =
+              titleEnd >= globalPlainText.length ||
               globalPlainText[titleEnd] != '\n';
           edits.add(
             _CopyEdit(
               start: titleIndex,
               end: titleIndex + titleText.length,
               replacement: needsTrailingLineBreak
-                  ? '## $titleText\n'
-                  : '## $titleText',
+                  ? '${_leadingBlankLineBeforeTitle(globalPlainText, titleIndex)}## $titleText\n'
+                  : '${_leadingBlankLineBeforeTitle(globalPlainText, titleIndex)}## $titleText',
             ),
           );
         }
@@ -117,6 +126,16 @@ class MarkupSelectionCopyFormatter {
     }
     return result;
   }
+}
+
+String _leadingBlankLineBeforeTitle(String globalPlainText, int titleIndex) {
+  if (titleIndex <= 1 || titleIndex > globalPlainText.length) {
+    return '';
+  }
+  if (globalPlainText[titleIndex - 1] != '\n') {
+    return '';
+  }
+  return globalPlainText[titleIndex - 2] == '\n' ? '' : '\n';
 }
 
 class _CopyEdit {
@@ -212,7 +231,8 @@ class MarkupSelectionRegistry extends InheritedWidget {
   final MarkupSelectionCopyHelper copyHelper;
 
   static MarkupSelectionRegistry? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MarkupSelectionRegistry>();
+    return context
+        .dependOnInheritedWidgetOfExactType<MarkupSelectionRegistry>();
   }
 
   @override

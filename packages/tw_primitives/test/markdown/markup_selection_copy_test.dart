@@ -25,7 +25,10 @@ void main() {
       expect(projection.visibleLength, 19);
 
       // Slice entire text
-      expect(projection.copySlice(start: 0, end: 19), 'Hello **bold** *emphasis*');
+      expect(
+        projection.copySlice(start: 0, end: 19),
+        'Hello **bold** *emphasis*',
+      );
       // Slice only bold portion
       expect(projection.copySlice(start: 6, end: 10), '**bold**');
       // Slice crossing boundaries
@@ -39,7 +42,10 @@ void main() {
       expect(projection.visibleText, 'T1 grid');
       expect(projection.visibleLength, 7);
 
-      expect(projection.copySlice(start: 0, end: 7), '[T1 grid](https://t1grid.com)');
+      expect(
+        projection.copySlice(start: 0, end: 7),
+        '[T1 grid](https://t1grid.com)',
+      );
       expect(projection.copySlice(start: 3, end: 7), 'grid');
     });
 
@@ -49,7 +55,10 @@ void main() {
 
       expect(projection.visibleText, 'Quote line 1\nQuote line 2');
 
-      expect(projection.copySlice(start: 0, end: 25), '> Quote line 1\n> Quote line 2');
+      expect(
+        projection.copySlice(start: 0, end: 25),
+        '> Quote line 1\n> Quote line 2',
+      );
     });
 
     test('Formats headers', () {
@@ -104,10 +113,15 @@ void main() {
 
   group('MarkupSelectionCopyFormatter Tests', () {
     test('replaces plain text selection with formatted markdown', () {
-      final doc = MessageMarkup.parse('Click [here](https://example.com) for **details**.');
+      final doc = MessageMarkup.parse(
+        'Click [here](https://example.com) for **details**.',
+      );
       final instance = MarkupSelectionInstance(
         document: doc,
-        selectedRange: const SelectedContentRange(startOffset: 6, endOffset: 17),
+        selectedRange: const SelectedContentRange(
+          startOffset: 6,
+          endOffset: 17,
+        ),
         selectedPlainText: 'here for details',
       );
 
@@ -116,14 +130,20 @@ void main() {
         instances: [instance],
       );
 
-      expect(result, 'Page title\nClick [here](https://example.com) for **details**.');
+      expect(
+        result,
+        'Page title\nClick [here](https://example.com) for **details**.',
+      );
     });
 
     test('keeps title before body when selected plain text includes both', () {
       final doc = MessageMarkup.parse('Body paragraph.');
       final instance = MarkupSelectionInstance(
         document: doc,
-        selectedRange: const SelectedContentRange(startOffset: 0, endOffset: 15),
+        selectedRange: const SelectedContentRange(
+          startOffset: 0,
+          endOffset: 15,
+        ),
         selectedPlainText: 'Card Title\nBody paragraph.',
         title: 'Card Title',
       );
@@ -136,21 +156,67 @@ void main() {
       expect(result, '## Card Title\nBody paragraph.');
     });
 
-    test('adds a line break after promoted title when global text lacks one', () {
+    test('adds a blank line before promoted title in multi-card copy', () {
       final doc = MessageMarkup.parse('Body paragraph.');
       final instance = MarkupSelectionInstance(
         document: doc,
-        selectedRange: const SelectedContentRange(startOffset: 0, endOffset: 15),
+        selectedRange: const SelectedContentRange(
+          startOffset: 0,
+          endOffset: 15,
+        ),
         selectedPlainText: 'Body paragraph.',
-        title: 'Card Title',
+        title: 'Second Card',
       );
 
       final result = MarkupSelectionCopyFormatter.formatCopy(
-        globalPlainText: 'Card TitleBody paragraph.',
+        globalPlainText: 'First card ending.\nSecond Card\nBody paragraph.',
         instances: [instance],
       );
 
-      expect(result, '## Card Title\nBody paragraph.');
+      expect(result, 'First card ending.\n\n## Second Card\nBody paragraph.');
     });
+
+    test('adds a blank line before promoted title selected with body', () {
+      final doc = MessageMarkup.parse('Body paragraph.');
+      final instance = MarkupSelectionInstance(
+        document: doc,
+        selectedRange: const SelectedContentRange(
+          startOffset: 0,
+          endOffset: 15,
+        ),
+        selectedPlainText: 'Second Card\nBody paragraph.',
+        title: 'Second Card',
+      );
+
+      final result = MarkupSelectionCopyFormatter.formatCopy(
+        globalPlainText: 'First card ending.\nSecond Card\nBody paragraph.',
+        instances: [instance],
+      );
+
+      expect(result, 'First card ending.\n\n## Second Card\nBody paragraph.');
+    });
+
+    test(
+      'adds a line break after promoted title when global text lacks one',
+      () {
+        final doc = MessageMarkup.parse('Body paragraph.');
+        final instance = MarkupSelectionInstance(
+          document: doc,
+          selectedRange: const SelectedContentRange(
+            startOffset: 0,
+            endOffset: 15,
+          ),
+          selectedPlainText: 'Body paragraph.',
+          title: 'Card Title',
+        );
+
+        final result = MarkupSelectionCopyFormatter.formatCopy(
+          globalPlainText: 'Card TitleBody paragraph.',
+          instances: [instance],
+        );
+
+        expect(result, '## Card Title\nBody paragraph.');
+      },
+    );
   });
 }

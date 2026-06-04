@@ -1,5 +1,4 @@
-import 'package:flutter/gestures.dart'
-    show TapGestureRecognizer;
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -267,7 +266,8 @@ class _LandingPageState extends State<LandingPage> {
                                 if (snapshot.hasError) {
                                   return Text(
                                     'Could not load professional stories.',
-                                    style: TwTextStyles.of(context).bodyForContext(
+                                    style: TwTextStyles.of(context)
+                                        .bodyForContext(
                                           context: context,
                                           color: context.twColors.pageBodyText,
                                         ),
@@ -316,7 +316,8 @@ class _LandingPageState extends State<LandingPage> {
                             _SocialItem(
                               icon: const FaIcon(FontAwesomeIcons.linkedin),
                               label: "LinkedIn",
-                              copyUrl: "https://www.linkedin.com/in/teresewahlstrom",
+                              copyUrl:
+                                  "https://www.linkedin.com/in/teresewahlstrom",
                               onTap: () => _launchUrl(
                                 "https://www.linkedin.com/in/teresewahlstrom",
                               ),
@@ -334,7 +335,7 @@ class _LandingPageState extends State<LandingPage> {
         }
 
         return DefaultTextStyle(
-                    style: TwTextStyles.of(context).bodyForContext(
+          style: TwTextStyles.of(context).bodyForContext(
             context: context,
             color: context.twColors.pageBodyText,
           ),
@@ -425,7 +426,9 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
           if (index > 0)
             const _SelectableCopyBreak(
               height: 14,
-              padding: EdgeInsets.only(left: 12), // to match the proffessional story text indentation
+              padding: EdgeInsets.only(
+                left: 12,
+              ), // to match the proffessional story text indentation
             ),
           TwExpandableCard(
             title: widget.cards[index].title,
@@ -438,12 +441,10 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               });
             },
             childBuilder: (BuildContext context, bool isExpanded) {
-              final double spacing = (context.twMarkdownLayoutTokens.twH2ToBodySpacing - 7.0)
-                  .clamp(0.0, double.infinity);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _SelectableCopyBreak(height: spacing),
+                  const _SelectableCopyBreak(height: 12),
                   _ProjectCardMarkdownBody(
                     title: widget.cards[index].title,
                     document: widget.cards[index].contentDocument,
@@ -459,8 +460,6 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   }
 }
 
-
-
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
   return buildMarkdownSurfaceStyle(
     MarkdownThemeConfig(
@@ -469,8 +468,6 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
     ),
   );
 }
-
-
 
 class _ProjectCardsContent {
   const _ProjectCardsContent({required this.cards, this.introDocument});
@@ -658,7 +655,9 @@ class _SocialSection extends StatelessWidget {
           ),
           const _SelectableCopyBreak(
             height: 6,
-            padding: EdgeInsets.only(left: 55), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
+            padding: EdgeInsets.only(
+              left: 55,
+            ), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
           ),
         ],
       ],
@@ -721,14 +720,18 @@ class _SocialRowState extends State<_SocialRow> {
   @override
   Widget build(BuildContext context) {
     final Color textColor =
-        TwTextStyles.of(context).sectionTitleForContext(
-          context: context,
-          color: context.twColors.pageBodyText,
-        ).color ??
-        TwTextStyles.of(context).bodyForContext(
-          context: context,
-          color: context.twColors.pageBodyText,
-        ).color ??
+        TwTextStyles.of(context)
+            .sectionTitleForContext(
+              context: context,
+              color: context.twColors.pageBodyText,
+            )
+            .color ??
+        TwTextStyles.of(context)
+            .bodyForContext(
+              context: context,
+              color: context.twColors.pageBodyText,
+            )
+            .color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         context.twColors.pageBodyText;
     final Color color = _isHovered
@@ -764,7 +767,9 @@ class _SocialRowState extends State<_SocialRow> {
                     if (widget.entry.copyUrl != null)
                       TextSpan(
                         text: ' (${widget.entry.copyUrl})',
-                        style: TwTextStyles.of(context).transparentSelectionSpacer,
+                        style: TwTextStyles.of(
+                          context,
+                        ).transparentSelectionSpacer,
                       ),
                   ],
                 ),
