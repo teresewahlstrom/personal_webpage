@@ -9,11 +9,13 @@ Flutter web personal site with a local chat prototype split into three layers:
 Backend setup and run details are documented in [backend/README.md](backend/README.md).
 RagGraph orchestration is backend-owned (gateway/twin), not frontend-owned.
 
+Primary Flutter entrypoint: `lib/main.dart`.
+
 ## Local Development
 
 Prerequisites:
 
-- Flutter SDK on PATH
+- Flutter SDK on PATH. On this workstation, prefer `D:\tools\flutter\flutter\bin`.
 - Node.js and npm
 - A Python virtual environment at `.venv` in the workspace root (used by `scripts/run-twin.ps1`)
 - `.env` in the workspace root with your OpenAI API key
@@ -35,9 +37,27 @@ Stop the local stack:
 That opens and stops tracked PowerShell windows for the Python twin, the Node.js gateway, and Flutter Web.
 Omit `-WithFlutter` in either command if you only want the backends.
 
+Useful start flags:
+
+- `-InstallGateway`: runs `npm install` for `backend/gateway` before starting the gateway.
+- `-FlutterPubGet`: runs `flutter pub get` before launching Flutter.
+- `-Device chrome`: selects the Flutter device.
+- `-WebRenderer auto|html|canvaskit|skwasm`: selects the Flutter web renderer.
+- `-TwinHost`, `-TwinPort`, and `-GatewayUrl`: override local service endpoints.
+
 If `backend/twin/repo` is not present locally, set `TWIN_REPO_ROOT` in `.env` to a twin runtime checkout before starting the backend.
 
 The Python twin keeps in-memory session history while it is running, so that memory resets when the twin process restarts.
+
+## Frontend Notes
+
+The app is a Flutter Web app with local packages under `packages/`:
+
+- `tw_chat`: chat dock and chat UI
+- `tw_primitives`: shared theme, markdown, scroll, panel, and pill primitives
+- `tw_keywords`: subject keyword data and keyword rendering support
+
+Bundled font and icon notices are tracked in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Troubleshooting (Web)
 
