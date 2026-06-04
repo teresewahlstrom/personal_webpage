@@ -3253,9 +3253,11 @@ abstract class MultiSelectableSelectionContainerDelegate
     final Rect? drawableArea = hasSize
         ? Rect.fromLTWH(0, 0, containerSize.width, containerSize.height)
         : null;
+    final int start = min(currentSelectionStartIndex, currentSelectionEndIndex);
+    final int end = max(currentSelectionStartIndex, currentSelectionEndIndex);
     for (
-      int index = currentSelectionStartIndex;
-      index <= currentSelectionEndIndex;
+      int index = start;
+      index <= end;
       index++
     ) {
       final List<Rect> currSelectableSelectionRects =
