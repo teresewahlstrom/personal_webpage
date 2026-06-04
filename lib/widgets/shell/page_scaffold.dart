@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tw_chat/chat.dart'
     show
         ChatKeyboardScrollTargetController,
+        ChatLayout,
         ChatOverlay,
         ChatSkin,
         ChatSkinMode;
@@ -130,7 +131,6 @@ class _PageScaffoldState extends State<PageScaffold> {
             privacyLabel: 'Privacy & Cookies Note.',
           )
         : null;
-    final double floatingTopInset = mediaQuery.viewPadding.top + 10.0;
     final double floatingInset = FloatingControlInset.forViewportWidth(
       mediaQuery.size.width,
     );
@@ -227,13 +227,37 @@ class _PageScaffoldState extends State<PageScaffold> {
             ),
           ),
           if (widget.showThemeToggle && widget.onToggleTheme != null)
-            Positioned(
-              right: mediaQuery.viewPadding.right + 10.0,
-              top: floatingTopInset,
-              child: ThemeToggleControlButton(
-                isDarkMode: widget.isDarkMode,
-                onTap: widget.onToggleTheme!,
-              ),
+            Builder(
+              builder: (context) {
+                final double keyboardHeight = mediaQuery.viewInsets.bottom;
+                final double minimizedBottomOffset = floatingInset;
+                final double launcherSize = ShellUiConfig.headerToggleSize * 1.5;
+                final double themeToggleSize = ShellUiConfig.headerToggleSize;
+                const double themeToggleGap = 12.0;
+
+                final bool hasChat = AppRuntimeConfig.showChatInUi;
+                final chatMargin = ChatLayout.dockHorizontalMargin(
+                  viewportSize: mediaQuery.size,
+                  viewPadding: mediaQuery.viewPadding,
+                );
+                final double minimizedRightInset = mediaQuery.viewPadding.right +
+                    (chatMargin > floatingInset ? chatMargin : floatingInset);
+
+                final double rightOffset = minimizedRightInset +
+                    (hasChat ? (launcherSize - themeToggleSize) / 2 : 0.0);
+                final double bottomOffset = keyboardHeight +
+                    minimizedBottomOffset +
+                    (hasChat ? (launcherSize + themeToggleGap) : 0.0);
+
+                return Positioned(
+                  right: rightOffset,
+                  bottom: bottomOffset,
+                  child: ThemeToggleControlButton(
+                    isDarkMode: widget.isDarkMode,
+                    onTap: widget.onToggleTheme!,
+                  ),
+                );
+              },
             ),
           if (AppRuntimeConfig.showChatInUi)
             ChatOverlay(

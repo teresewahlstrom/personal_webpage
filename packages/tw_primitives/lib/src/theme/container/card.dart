@@ -234,34 +234,37 @@ class _TwExpandableCardState extends State<TwExpandableCard>
     );
 
     Widget buildHeader({Key? key}) {
-      return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Listener(
-          key: key,
-          behavior: HitTestBehavior.translucent,
-          onPointerDown: _handleHeaderPointerDown,
-          onPointerMove: _handleHeaderPointerMove,
-          onPointerUp: _handleHeaderPointerUp,
-          onPointerCancel: (_) => _clearHeaderPointerTracking(),
-          child: Padding(
-            padding: widget.headerPadding,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Opacity(
-                    opacity: context.twColors.cardMarkdownOpacity,
-                    child: Text(widget.title, style: cardTitleStyle),
+      return DefaultSelectionStyle(
+        mouseCursor: SystemMouseCursors.click,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Listener(
+            key: key,
+            behavior: HitTestBehavior.opaque,
+            onPointerDown: _handleHeaderPointerDown,
+            onPointerMove: _handleHeaderPointerMove,
+            onPointerUp: _handleHeaderPointerUp,
+            onPointerCancel: (_) => _clearHeaderPointerTracking(),
+            child: Padding(
+              padding: widget.headerPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Opacity(
+                      opacity: context.twColors.cardMarkdownOpacity,
+                      child: Text(widget.title, style: cardTitleStyle),
+                    ),
                   ),
-                ),
-                RotationTransition(
-                  turns: Tween<double>(
-                    begin: 0,
-                    end: 0.5,
-                  ).animate(_heightAnimation),
-                  child: Icon(Icons.expand_more, color: iconColor),
-                ),
-              ],
+                  RotationTransition(
+                    turns: Tween<double>(
+                      begin: 0,
+                      end: 0.5,
+                    ).animate(_heightAnimation),
+                    child: Icon(Icons.expand_more, color: iconColor),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
