@@ -474,10 +474,12 @@ class SelectableRegionState extends State<SelectableRegion>
   SelectionOverlay? get selectionOverlay => _selectionOverlay;
 
   /// Whether the start selection handle is currently being dragged.
-  bool get isDraggingStartHandle => _selectionOverlay?.isDraggingStartHandle ?? false;
+  bool get isDraggingStartHandle =>
+      _selectionOverlay?.isDraggingStartHandle ?? false;
 
   /// Whether the end selection handle is currently being dragged.
-  bool get isDraggingEndHandle => _selectionOverlay?.isDraggingEndHandle ?? false;
+  bool get isDraggingEndHandle =>
+      _selectionOverlay?.isDraggingEndHandle ?? false;
 
   /// The text processing service used to retrieve the native text processing actions.
   final ProcessTextService _processTextService = DefaultProcessTextService();
@@ -2354,13 +2356,15 @@ class SelectableRegionState extends State<SelectableRegion>
       return;
     }
     if (event.pointer == _outsidePointerId) {
-      final bool isPrecise = _outsidePointerKind == PointerDeviceKind.mouse ||
+      final bool isPrecise =
+          _outsidePointerKind == PointerDeviceKind.mouse ||
           _outsidePointerKind == PointerDeviceKind.stylus ||
           _outsidePointerKind == PointerDeviceKind.invertedStylus;
       final double slop = isPrecise ? 8.0 : 20.0;
 
       if (event is PointerMoveEvent) {
-        final double dist = (event.position - _outsidePointerDownPosition!).distance;
+        final double dist =
+            (event.position - _outsidePointerDownPosition!).distance;
         _outsidePointerDragDist = max(_outsidePointerDragDist, dist);
         if (_outsidePointerDragDist > slop) {
           _cancelOutsideTapTracking();
@@ -2381,7 +2385,9 @@ class SelectableRegionState extends State<SelectableRegion>
 
   void _cancelOutsideTapTracking() {
     if (_outsidePointerId != null) {
-      GestureBinding.instance.pointerRouter.removeGlobalRoute(_handleGlobalPointerEvent);
+      GestureBinding.instance.pointerRouter.removeGlobalRoute(
+        _handleGlobalPointerEvent,
+      );
       _outsidePointerId = null;
       _outsidePointerKind = null;
       _outsidePointerDownPosition = null;
@@ -2443,7 +2449,9 @@ class SelectableRegionState extends State<SelectableRegion>
           _outsidePointerKind = event.kind;
           _outsidePointerDownPosition = event.position;
           _outsidePointerDragDist = 0.0;
-          GestureBinding.instance.pointerRouter.addGlobalRoute(_handleGlobalPointerEvent);
+          GestureBinding.instance.pointerRouter.addGlobalRoute(
+            _handleGlobalPointerEvent,
+          );
         }
       },
       child: CompositedTransformTarget(
@@ -2775,7 +2783,9 @@ class StaticSelectionContainerDelegate
       globalSelectionEdgeLocation: event.globalPosition,
       forEnd: event.type == SelectionEventType.endEdgeUpdate,
     );
-    return super.handleSelectionEdgeUpdate(event);
+    final SelectionResult result = super.handleSelectionEdgeUpdate(event);
+    _ensureInteriorSelectablesUpdated();
+    return result;
   }
 
   @override
@@ -2844,6 +2854,40 @@ class StaticSelectionContainerDelegate
     }
   }
 
+  void _ensureInteriorSelectablesUpdated() {
+    if (_lastStartEdgeUpdateGlobalPosition == null ||
+        _lastEndEdgeUpdateGlobalPosition == null ||
+        currentSelectionStartIndex == -1 ||
+        currentSelectionEndIndex == -1) {
+      return;
+    }
+
+    final int start = min(currentSelectionStartIndex, currentSelectionEndIndex);
+    final int end = max(currentSelectionStartIndex, currentSelectionEndIndex);
+    for (var index = start; index <= end; index += 1) {
+      _ensureSelectableHasGestureEdges(selectables[index]);
+    }
+  }
+
+  void _ensureSelectableHasGestureEdges(Selectable selectable) {
+    if (_lastStartEdgeUpdateGlobalPosition != null &&
+        _hasReceivedStartEvent.add(selectable)) {
+      selectable.dispatchSelectionEvent(
+        SelectionEdgeUpdateEvent.forStart(
+          globalPosition: _lastStartEdgeUpdateGlobalPosition!,
+        ),
+      );
+    }
+    if (_lastEndEdgeUpdateGlobalPosition != null &&
+        _hasReceivedEndEvent.add(selectable)) {
+      selectable.dispatchSelectionEvent(
+        SelectionEdgeUpdateEvent.forEnd(
+          globalPosition: _lastEndEdgeUpdateGlobalPosition!,
+        ),
+      );
+    }
+  }
+
   @override
   void didChangeSelectables() {
     if (_lastEndEdgeUpdateGlobalPosition != null) {
@@ -2867,6 +2911,7 @@ class StaticSelectionContainerDelegate
     _hasReceivedStartEvent.removeWhere(
       (Selectable selectable) => !selectableSet.contains(selectable),
     );
+    _ensureInteriorSelectablesUpdated();
     super.didChangeSelectables();
   }
 }
@@ -3255,11 +3300,7 @@ abstract class MultiSelectableSelectionContainerDelegate
         : null;
     final int start = min(currentSelectionStartIndex, currentSelectionEndIndex);
     final int end = max(currentSelectionStartIndex, currentSelectionEndIndex);
-    for (
-      int index = start;
-      index <= end;
-      index++
-    ) {
+    for (int index = start; index <= end; index++) {
       final List<Rect> currSelectableSelectionRects =
           selectables[index].value.selectionRects;
       final List<Rect> selectionRectsWithinDrawableArea =
@@ -4236,9 +4277,7 @@ class _SelectionListenerState extends State<SelectionListener> {
 
 final class _SelectionListenerDelegate extends StaticSelectionContainerDelegate
     implements SelectionDetails {
-  _SelectionListenerDelegate({
-    required this._selectionNotifier,
-  }) {
+  _SelectionListenerDelegate({required this._selectionNotifier}) {
     _selectionNotifier._registerSelectionListenerDelegate(this);
   }
 

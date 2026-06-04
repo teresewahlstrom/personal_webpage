@@ -135,16 +135,19 @@ class _TwExpandableCardState extends State<TwExpandableCard>
           scrollableBox != null &&
           cardBox.hasSize &&
           scrollableBox.hasSize) {
-        final double cardTopInScrollable =
-            cardBox.localToGlobal(Offset.zero, ancestor: scrollableBox).dy;
+        final double cardTopInScrollable = cardBox
+            .localToGlobal(Offset.zero, ancestor: scrollableBox)
+            .dy;
         final RenderBox? headerBox =
             _headerKey.currentContext?.findRenderObject() as RenderBox?;
         final double headerHeight = headerBox?.size.height ?? 0.0;
         final double cardHeight = cardBox.size.height;
         final double maxFloatOffset = cardHeight - headerHeight;
 
-        final double newOffset =
-            (-cardTopInScrollable).clamp(0.0, maxFloatOffset);
+        final double newOffset = (-cardTopInScrollable).clamp(
+          0.0,
+          maxFloatOffset,
+        );
         final bool newIsFloating =
             cardTopInScrollable < 0 && newOffset < maxFloatOffset;
 
@@ -204,67 +207,72 @@ class _TwExpandableCardState extends State<TwExpandableCard>
   Widget build(BuildContext context) {
     _updateScrollListener();
 
-    final Color cardFill = widget.backgroundColor ?? Color.lerp(
-      context.twColors.pageBackground,
-      context.twColors.lineSubtle,
-      context.twColors.cardFillAlpha,
-    )!;
+    final Color cardFill =
+        widget.backgroundColor ??
+        Color.lerp(
+          context.twColors.pageBackground,
+          context.twColors.lineSubtle,
+          context.twColors.cardFillAlpha,
+        )!;
 
     final baseIconColor =
-        TwTextStyles.of(context).bodyForContext(
-          context: context,
-          color: context.twColors.pageBodyText,
-        ).color ??
+        TwTextStyles.of(context)
+            .bodyForContext(
+              context: context,
+              color: context.twColors.pageBodyText,
+            )
+            .color ??
         Theme.of(context).textTheme.bodyMedium?.color ??
         context.twColors.pageBodyText;
-    final Color iconColor = _isHovered ? context.twColors.linkTextHover : baseIconColor;
+    final Color iconColor = _isHovered
+        ? context.twColors.linkTextHover
+        : baseIconColor;
 
-    final tokens = TwTextStyleTokens.forBrightness(Theme.of(context).brightness);
+    final tokens = TwTextStyleTokens.forBrightness(
+      Theme.of(context).brightness,
+    );
     final baseStyle = TwTextStyles.of(context).bodyForContextless(
       color: context.twColors.pageBodyText,
-      textScale: MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) / tokens.twBodyBaseFontSize,
+      textScale:
+          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
+          tokens.twBodyBaseFontSize,
     );
     final h2 = TwTextStyles.of(context).h2From(baseStyle);
     final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
 
-
-    final border = widget.border ?? Border.all(
-      color: context.twColors.lineSubtle,
-      width: 1.0,
-    );
+    final border =
+        widget.border ??
+        Border.all(color: context.twColors.lineSubtle, width: 1.0);
 
     Widget buildHeader({Key? key}) {
-      return DefaultSelectionStyle(
-        mouseCursor: SystemMouseCursors.click,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Listener(
-            key: key,
-            behavior: HitTestBehavior.opaque,
-            onPointerDown: _handleHeaderPointerDown,
-            onPointerMove: _handleHeaderPointerMove,
-            onPointerUp: _handleHeaderPointerUp,
-            onPointerCancel: (_) => _clearHeaderPointerTracking(),
-            child: Padding(
-              padding: widget.headerPadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Opacity(
-                      opacity: context.twColors.cardMarkdownOpacity,
-                      child: Text(widget.title, style: cardTitleStyle),
-                    ),
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Listener(
+          key: key,
+          behavior: HitTestBehavior.opaque,
+          onPointerDown: _handleHeaderPointerDown,
+          onPointerMove: _handleHeaderPointerMove,
+          onPointerUp: _handleHeaderPointerUp,
+          onPointerCancel: (_) => _clearHeaderPointerTracking(),
+          child: Padding(
+            padding: widget.headerPadding,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Opacity(
+                    opacity: context.twColors.cardMarkdownOpacity,
+                    child: Text(widget.title, style: cardTitleStyle),
                   ),
-                  RotationTransition(
-                    turns: Tween<double>(
-                      begin: 0,
-                      end: 0.5,
-                    ).animate(_heightAnimation),
-                    child: Icon(Icons.expand_more, color: iconColor),
-                  ),
-                ],
-              ),
+                ),
+                RotationTransition(
+                  turns: Tween<double>(
+                    begin: 0,
+                    end: 0.5,
+                  ).animate(_heightAnimation),
+                  child: Icon(Icons.expand_more, color: iconColor),
+                ),
+              ],
             ),
           ),
         ),
@@ -300,7 +308,9 @@ class _TwExpandableCardState extends State<TwExpandableCard>
             builder: (BuildContext context, Widget? child) {
               final bool fullyExpanded = _heightAnimation.value >= 1.0;
               if (_heightAnimation.status == AnimationStatus.dismissed) {
-                return SelectionContainer.disabled(child: const SizedBox.shrink());
+                return SelectionContainer.disabled(
+                  child: const SizedBox.shrink(),
+                );
               }
               if (_cachedChild == null || _lastFullyExpanded != fullyExpanded) {
                 _lastFullyExpanded = fullyExpanded;
@@ -342,13 +352,19 @@ class _TwExpandableCardState extends State<TwExpandableCard>
                   builder: (context, child) {
                     double headerHeight = 44.0;
                     try {
-                      final RenderBox? headerBox = _headerKey.currentContext?.findRenderObject() as RenderBox?;
+                      final RenderBox? headerBox =
+                          _headerKey.currentContext?.findRenderObject()
+                              as RenderBox?;
                       if (headerBox != null && headerBox.hasSize) {
                         headerHeight = headerBox.size.height;
                       }
                     } catch (_) {}
-                    final double floatOpacity = (_floatOffset / 16.0).clamp(0.0, 1.0);
-                    final double alphaFactor = _heightAnimation.value * floatOpacity;
+                    final double floatOpacity = (_floatOffset / 16.0).clamp(
+                      0.0,
+                      1.0,
+                    );
+                    final double alphaFactor =
+                        _heightAnimation.value * floatOpacity;
                     return IgnorePointer(
                       child: Container(
                         height: headerHeight + 13.0,
@@ -376,9 +392,7 @@ class _TwExpandableCardState extends State<TwExpandableCard>
                 top: _floatOffset,
                 left: 0,
                 right: 0,
-                child: SelectionContainer.disabled(
-                  child: buildHeader(),
-                ),
+                child: SelectionContainer.disabled(child: buildHeader()),
               ),
             ],
           ],
