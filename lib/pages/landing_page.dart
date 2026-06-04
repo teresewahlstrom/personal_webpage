@@ -704,18 +704,25 @@ class _SocialSection extends StatelessWidget {
           ),
         ),
         const _SelectableCopyBreak(height: 10),
-        for (final _SocialItem entry in entries) ...<Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: _SocialRow(entry: entry),
+        IntrinsicWidth(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              for (final _SocialItem entry in entries) ...<Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: _SocialRow(entry: entry),
+                ),
+                const _SelectableCopyBreak(
+                  height: 6,
+                  padding: EdgeInsets.only(
+                    left: 55,
+                  ), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
+                ),
+              ],
+            ],
           ),
-          const _SelectableCopyBreak(
-            height: 6,
-            padding: EdgeInsets.only(
-              left: 55,
-            ), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
-          ),
-        ],
+        ),
       ],
     );
   }
@@ -794,47 +801,55 @@ class _SocialRowState extends State<_SocialRow> {
         ? textColor.withValues(alpha: 0.82)
         : textColor;
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.entry.onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // Reserve a fixed icon slot so all labels start at the same x-position.
-              SizedBox(
-                width: 27,
-                height: 27,
-                child: Center(
-                  // Use IconTheme so both Material Icon and FaIcon inherit size/color.
-                  child: IconTheme(
-                    data: IconThemeData(size: 27, color: color),
-                    child: widget.entry.icon,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: widget.entry.label),
-                    if (widget.entry.copyUrl != null)
-                      TextSpan(
-                        text: ' (${widget.entry.copyUrl})',
-                        style: TwTextStyles.of(
-                          context,
-                        ).transparentSelectionSpacer,
+      child: Semantics(
+        button: true,
+        label: widget.entry.label,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            mouseCursor: SystemMouseCursors.click,
+            onTap: widget.entry.onTap,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(4, 6, 24, 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Reserve a fixed icon slot so all labels start at the same x-position.
+                  SizedBox(
+                    width: 27,
+                    height: 27,
+                    child: Center(
+                      // Use IconTheme so both Material Icon and FaIcon inherit size/color.
+                      child: IconTheme(
+                        data: IconThemeData(size: 27, color: color),
+                        child: widget.entry.icon,
                       ),
-                  ],
-                ),
-                style: TwTextStyles.of(context).bodyForContext(
-                  context: context,
-                  color: context.twColors.pageBodyText,
-                ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: widget.entry.label),
+                        if (widget.entry.copyUrl != null)
+                          TextSpan(
+                            text: ' (${widget.entry.copyUrl})',
+                            style: TwTextStyles.of(
+                              context,
+                            ).transparentSelectionSpacer,
+                          ),
+                      ],
+                    ),
+                    style: TwTextStyles.of(
+                      context,
+                    ).bodyForContext(context: context, color: color),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
