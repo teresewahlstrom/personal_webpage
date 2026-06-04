@@ -128,6 +128,62 @@ class MarkupSelectionCopyFormatter {
   }
 }
 
+String formatPlainHeadingCopy({
+  required String globalPlainText,
+  required Iterable<String> headings,
+}) {
+  final edits = <_CopyEdit>[];
+  for (final heading in headings) {
+    if (heading.isEmpty) {
+      continue;
+    }
+    var searchStart = 0;
+    while (searchStart < globalPlainText.length) {
+      final titleIndex = globalPlainText.indexOf(heading, searchStart);
+      if (titleIndex == -1) {
+        break;
+      }
+      final titleEnd = titleIndex + heading.length;
+      final atLineStart =
+          titleIndex == 0 || globalPlainText[titleIndex - 1] == '\n';
+      final atLineEnd =
+          titleEnd == globalPlainText.length ||
+          globalPlainText[titleEnd] == '\n';
+      final alreadyFormatted =
+          titleIndex >= 3 &&
+          globalPlainText.substring(titleIndex - 3, titleIndex) == '## ';
+
+      if (atLineStart && atLineEnd && !alreadyFormatted) {
+        final needsTrailingLineBreak =
+            titleEnd >= globalPlainText.length ||
+            globalPlainText[titleEnd] != '\n';
+        edits.add(
+          _CopyEdit(
+            start: titleIndex,
+            end: titleEnd,
+            replacement: needsTrailingLineBreak
+                ? '${_leadingBlankLineBeforeTitle(globalPlainText, titleIndex)}## $heading\n'
+                : '${_leadingBlankLineBeforeTitle(globalPlainText, titleIndex)}## $heading',
+          ),
+        );
+      }
+      searchStart = titleEnd;
+    }
+  }
+
+  if (edits.isEmpty) {
+    return globalPlainText;
+  }
+
+  edits.sort((left, right) => right.start.compareTo(left.start));
+
+  var result = globalPlainText;
+  for (final edit in edits) {
+    result = result.replaceRange(edit.start, edit.end, edit.replacement);
+  }
+  return result;
+}
+
 String _leadingBlankLineBeforeTitle(String globalPlainText, int titleIndex) {
   if (titleIndex <= 1 || titleIndex > globalPlainText.length) {
     return '';
@@ -153,6 +209,7 @@ class _CopyEdit {
 class MarkupSelectionCopyHelper {
   final Map<Object, MarkupDocument> documents = {};
   final Map<Object, String> _titles = {};
+  final Map<Object, String> _plainHeadings = {};
   final Set<GlobalKey<TwSelectableRegionState>> selectionKeys = {};
   final Map<Object, SelectionListenerNotifier> _notifiers = {};
 
@@ -172,6 +229,14 @@ class MarkupSelectionCopyHelper {
     _titles.remove(key);
     final notifier = _notifiers.remove(key);
     notifier?.dispose();
+  }
+
+  void registerPlainHeading(Object key, String heading) {
+    _plainHeadings[key] = heading;
+  }
+
+  void unregisterPlainHeading(Object key) {
+    _plainHeadings.remove(key);
   }
 
   void registerSelectionKey(GlobalKey<TwSelectableRegionState> selectionKey) {
@@ -204,9 +269,13 @@ class MarkupSelectionCopyHelper {
         ),
       );
     }
-    return MarkupSelectionCopyFormatter.formatCopy(
+    final markdownFormattedText = MarkupSelectionCopyFormatter.formatCopy(
       globalPlainText: globalPlainText,
       instances: instances,
+    );
+    return formatPlainHeadingCopy(
+      globalPlainText: markdownFormattedText,
+      headings: _plainHeadings.values,
     );
   }
 
@@ -217,6 +286,7 @@ class MarkupSelectionCopyHelper {
     _notifiers.clear();
     documents.clear();
     _titles.clear();
+    _plainHeadings.clear();
     selectionKeys.clear();
   }
 }

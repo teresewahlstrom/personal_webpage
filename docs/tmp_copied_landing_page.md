@@ -120,7 +120,6 @@ Consistent with her broader engineering work, the objective is not to replace te
 
 
 
-
 # Contact, Connect, Follow
 terese@t1grid.com (mailto:terese@t1grid.com)
 +46 709 800 525 (tel:+46709800525)

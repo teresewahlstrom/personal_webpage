@@ -430,33 +430,93 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 left: 12,
               ), // to match the proffessional story text indentation
             ),
-          TwExpandableCard(
-            title: widget.cards[index].title,
-            isExpanded: _expandedStates[index],
-            border: gridLineStyle.borderAll,
-            onTap: () {
-              PageScaffold.clearPageSelection(context);
-              setState(() {
-                _expandedStates[index] = !_expandedStates[index];
-              });
-            },
-            childBuilder: (BuildContext context, bool isExpanded) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const _SelectableCopyBreak(height: 2),
-                  _ProjectCardMarkdownBody(
-                    document: widget.cards[index].contentDocument,
-                    selectable: isExpanded,
-                  ),
-                ],
-              );
-            },
+          _PlainCopyHeadingRegistration(
+            heading: widget.cards[index].title,
+            child: TwExpandableCard(
+              title: widget.cards[index].title,
+              isExpanded: _expandedStates[index],
+              border: gridLineStyle.borderAll,
+              onTap: () {
+                PageScaffold.clearPageSelection(context);
+                setState(() {
+                  _expandedStates[index] = !_expandedStates[index];
+                });
+              },
+              childBuilder: (BuildContext context, bool isExpanded) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const _SelectableCopyBreak(height: 12),
+                    _ProjectCardMarkdownBody(
+                      document: widget.cards[index].contentDocument,
+                      selectable: isExpanded,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ],
       ],
     );
   }
+}
+
+class _PlainCopyHeadingRegistration extends StatefulWidget {
+  const _PlainCopyHeadingRegistration({
+    required this.heading,
+    required this.child,
+  });
+
+  final String heading;
+  final Widget child;
+
+  @override
+  State<_PlainCopyHeadingRegistration> createState() =>
+      _PlainCopyHeadingRegistrationState();
+}
+
+class _PlainCopyHeadingRegistrationState
+    extends State<_PlainCopyHeadingRegistration> {
+  final Object _registrationKey = Object();
+  MarkupSelectionRegistry? _registry;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateRegistration();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlainCopyHeadingRegistration oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.heading != oldWidget.heading) {
+      _updateRegistration();
+    }
+  }
+
+  @override
+  void dispose() {
+    _registry?.copyHelper.unregisterPlainHeading(_registrationKey);
+    super.dispose();
+  }
+
+  void _updateRegistration() {
+    final MarkupSelectionRegistry? registry = MarkupSelectionRegistry.maybeOf(
+      context,
+    );
+    if (registry != _registry) {
+      _registry?.copyHelper.unregisterPlainHeading(_registrationKey);
+      _registry = registry;
+    }
+    _registry?.copyHelper.registerPlainHeading(
+      _registrationKey,
+      widget.heading,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
 
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {

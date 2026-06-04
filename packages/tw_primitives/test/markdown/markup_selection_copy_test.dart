@@ -218,5 +218,27 @@ void main() {
         expect(result, '## Card Title\nBody paragraph.');
       },
     );
+
+    test('promotes registered plain heading lines', () {
+      final result = formatPlainHeadingCopy(
+        globalPlainText: 'First card ending.\nSecond Card\nBody paragraph.',
+        headings: const <String>['Second Card'],
+      );
+
+      expect(result, 'First card ending.\n\n## Second Card\nBody paragraph.');
+    });
+
+    test('does not promote registered heading text inside paragraphs', () {
+      final result = formatPlainHeadingCopy(
+        globalPlainText:
+            'Second Card\nA paragraph that mentions Second Card inline.',
+        headings: const <String>['Second Card'],
+      );
+
+      expect(
+        result,
+        '## Second Card\nA paragraph that mentions Second Card inline.',
+      );
+    });
   });
 }

@@ -269,21 +269,7 @@ class _TwExpandableCardState extends State<TwExpandableCard>
                   Expanded(
                     child: Opacity(
                       opacity: context.twColors.cardMarkdownOpacity,
-                      child: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: '## ',
-                              style: TwTextStyles.of(
-                                context,
-                              ).transparentSelectionSpacer,
-                            ),
-                            TextSpan(text: widget.title),
-                          ],
-                        ),
-                        semanticsLabel: widget.title,
-                        style: cardTitleStyle,
-                      ),
+                      child: Text(widget.title, style: cardTitleStyle),
                     ),
                   ),
                   RotationTransition(
