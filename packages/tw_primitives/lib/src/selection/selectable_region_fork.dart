@@ -2344,9 +2344,48 @@ class SelectableRegionState extends State<SelectableRegion>
     _selectable = null;
   }
 
+  int? _outsidePointerId;
+  Offset? _outsidePointerDownPosition;
+  double _outsidePointerDragDist = 0.0;
+
+  void _handleGlobalPointerEvent(PointerEvent event) {
+    if (_outsidePointerId == null) {
+      return;
+    }
+    if (event.pointer == _outsidePointerId) {
+      if (event is PointerMoveEvent) {
+        final double dist = (event.position - _outsidePointerDownPosition!).distance;
+        _outsidePointerDragDist = max(_outsidePointerDragDist, dist);
+        if (_outsidePointerDragDist > 12.0) {
+          _cancelOutsideTapTracking();
+        }
+      } else if (event is PointerUpEvent) {
+        if (_outsidePointerDragDist <= 12.0) {
+          if (kIsWeb) {
+            _clearSelectionFromUserInteraction();
+            _focusNode.unfocus();
+          }
+        }
+        _cancelOutsideTapTracking();
+      } else if (event is PointerCancelEvent) {
+        _cancelOutsideTapTracking();
+      }
+    }
+  }
+
+  void _cancelOutsideTapTracking() {
+    if (_outsidePointerId != null) {
+      GestureBinding.instance.pointerRouter.removeGlobalRoute(_handleGlobalPointerEvent);
+      _outsidePointerId = null;
+      _outsidePointerDownPosition = null;
+      _outsidePointerDragDist = 0.0;
+    }
+  }
+
   @protected
   @override
   void dispose() {
+    _cancelOutsideTapTracking();
     _selectable?.removeListener(_updateSelectionStatus);
     _selectable?.pushHandleLayers(null, null);
     _selectionDelegate.dispose();
@@ -2392,8 +2431,11 @@ class SelectableRegionState extends State<SelectableRegion>
         // Tapping outside the selectable region does not unfocus
         // the region on non-web platforms.
         if (kIsWeb) {
-          _clearSelectionFromUserInteraction();
-          _focusNode.unfocus();
+          _cancelOutsideTapTracking();
+          _outsidePointerId = event.pointer;
+          _outsidePointerDownPosition = event.position;
+          _outsidePointerDragDist = 0.0;
+          GestureBinding.instance.pointerRouter.addGlobalRoute(_handleGlobalPointerEvent);
         }
       },
       child: CompositedTransformTarget(
