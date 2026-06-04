@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart' show ValueListenable;
-import 'package:flutter/gestures.dart' show PointerDeviceKind;
+import 'package:flutter/gestures.dart' show PointerDeviceKind, GestureBinding, PointerScrollEvent, PointerSignalEvent;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter/services.dart';
 
 class TwScrollSurfaceInteraction extends StatefulWidget {
@@ -37,6 +38,60 @@ class TwScrollSurfaceInteraction extends StatefulWidget {
 class _TwScrollSurfaceInteractionState extends State<TwScrollSurfaceInteraction> {
   FocusNode? _keyboardScrollFocusNode;
   Timer? _keyboardScrollTimer;
+  double? _targetScrollOffset;
+
+  void _handlePointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent) {
+      return;
+    }
+    final ScrollController? controller = widget.controller;
+    if (controller == null || !controller.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = controller.position;
+    final double delta = position.axis == Axis.vertical
+        ? event.scrollDelta.dy
+        : (event.scrollDelta.dx != 0 ? event.scrollDelta.dx : event.scrollDelta.dy);
+
+    if (delta == 0.0) {
+      return;
+    }
+
+    GestureBinding.instance.pointerSignalResolver.register(event, (PointerEvent resolvedEvent) {
+      final double baseOffset = _targetScrollOffset ?? position.pixels;
+      double target = baseOffset + delta;
+      target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
+
+      _targetScrollOffset = target;
+
+      controller.animateTo(
+        target,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOutCubic,
+      ).then((_) {
+        if (controller.hasClients && controller.position.pixels == _targetScrollOffset) {
+          _targetScrollOffset = null;
+        }
+      });
+    });
+  }
+
+  bool _isUserDrivenScroll(ScrollNotification notification) {
+    if (notification is UserScrollNotification) {
+      return notification.direction != ScrollDirection.idle;
+    }
+    if (notification is ScrollStartNotification) {
+      return notification.dragDetails != null;
+    }
+    if (notification is ScrollUpdateNotification) {
+      return notification.dragDetails != null;
+    }
+    if (notification is OverscrollNotification) {
+      return notification.dragDetails != null;
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -195,6 +250,19 @@ class _TwScrollSurfaceInteractionState extends State<TwScrollSurfaceInteraction>
         child: result,
       );
     }
+
+    result = Listener(
+      onPointerSignal: _handlePointerSignal,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          if (_isUserDrivenScroll(notification)) {
+            _targetScrollOffset = null;
+          }
+          return false;
+        },
+        child: result,
+      ),
+    );
 
     return result;
   }

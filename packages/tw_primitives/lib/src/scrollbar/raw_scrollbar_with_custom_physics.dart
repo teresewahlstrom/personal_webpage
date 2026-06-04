@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+// ignore: implementation_imports
+import 'package:flutter/src/widgets/selectable_region.dart' as upstream_selectable_region;
 
 const double _kMinThumbExtent = 18.0;
 const double _kMinInteractiveSize = 48.0;
@@ -1082,49 +1084,102 @@ class RawScrollbarWithCustomPhysicsState<T extends RawScrollbarWithCustomPhysics
   Widget build(BuildContext context) {
     updateScrollbarPainter();
 
-    return NotificationListener<ScrollMetricsNotification>(
-      onNotification: _handleScrollMetricsNotification,
-      child: NotificationListener<ScrollNotification>(
-        onNotification: _handleScrollNotification,
-        child: RepaintBoundary(
-          child: Listener(
-            onPointerSignal: _receivedPointerSignal,
-            child: RawGestureDetector(
-              gestures: _gestures,
-              child: MouseRegion(
-                cursor: _isHoveringThumb ? SystemMouseCursors.basic : MouseCursor.defer,
-                onExit: (PointerExitEvent event) {
-                  switch (event.kind) {
-                    case PointerDeviceKind.mouse:
-                    case PointerDeviceKind.trackpad:
-                      if (enableGestures) {
-                        handleHoverExit(event);
-                      }
-                    case PointerDeviceKind.stylus:
-                    case PointerDeviceKind.invertedStylus:
-                    case PointerDeviceKind.unknown:
-                    case PointerDeviceKind.touch:
-                      break;
-                  }
-                },
-                onHover: (PointerHoverEvent event) {
-                  switch (event.kind) {
-                    case PointerDeviceKind.mouse:
-                    case PointerDeviceKind.trackpad:
-                      if (enableGestures) {
-                        handleHover(event);
-                      }
-                    case PointerDeviceKind.stylus:
-                    case PointerDeviceKind.invertedStylus:
-                    case PointerDeviceKind.unknown:
-                    case PointerDeviceKind.touch:
-                      break;
-                  }
-                },
-                child: CustomPaint(
-                  key: _scrollbarPainterKey,
-                  foregroundPainter: scrollbarPainter,
-                  child: RepaintBoundary(child: widget.child),
+    Widget scrollbarShield = const SizedBox.shrink();
+    if (enableGestures) {
+      final ScrollController? scrollController = _effectiveScrollController;
+      final Axis direction = (scrollController != null && scrollController.hasClients)
+          ? scrollController.position.axis
+          : (widget.scrollbarOrientation == ScrollbarOrientation.top || widget.scrollbarOrientation == ScrollbarOrientation.bottom
+              ? Axis.horizontal
+              : Axis.vertical);
+      final TextDirection textDirection = Directionality.of(context);
+      final double thickness = widget.thickness ?? _kScrollbarThickness;
+      final double crossAxisMargin = widget.crossAxisMargin;
+      final double columnWidth = thickness + crossAxisMargin * 2;
+      final EdgeInsets resolvedPadding = widget.padding ?? EdgeInsets.zero;
+
+      if (direction == Axis.vertical) {
+        final bool isLeft = widget.scrollbarOrientation == ScrollbarOrientation.left ||
+            (widget.scrollbarOrientation == null && textDirection == TextDirection.rtl);
+        scrollbarShield = Positioned(
+          left: isLeft ? resolvedPadding.left : null,
+          right: isLeft ? null : resolvedPadding.right,
+          top: resolvedPadding.top,
+          bottom: resolvedPadding.bottom,
+          width: columnWidth,
+          child: const AbsorbPointer(
+            child: ColoredBox(color: Color(0x00000000)),
+          ),
+        );
+      } else {
+        final bool isTop = widget.scrollbarOrientation == ScrollbarOrientation.top;
+        scrollbarShield = Positioned(
+          left: resolvedPadding.left,
+          right: resolvedPadding.right,
+          top: isTop ? resolvedPadding.top : null,
+          bottom: isTop ? null : resolvedPadding.bottom,
+          height: columnWidth,
+          child: const AbsorbPointer(
+            child: ColoredBox(color: Color(0x00000000)),
+          ),
+        );
+      }
+    }
+
+    final Widget childWithShield = Stack(
+      fit: StackFit.passthrough,
+      children: <Widget>[
+        widget.child,
+        scrollbarShield,
+      ],
+    );
+
+    return TapRegion(
+      groupId: upstream_selectable_region.SelectableRegion,
+      child: NotificationListener<ScrollMetricsNotification>(
+        onNotification: _handleScrollMetricsNotification,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: _handleScrollNotification,
+          child: RepaintBoundary(
+            child: Listener(
+              onPointerSignal: _receivedPointerSignal,
+              child: RawGestureDetector(
+                gestures: _gestures,
+                child: MouseRegion(
+                  cursor: _isHoveringThumb ? SystemMouseCursors.basic : MouseCursor.defer,
+                  onExit: (PointerExitEvent event) {
+                    switch (event.kind) {
+                      case PointerDeviceKind.mouse:
+                      case PointerDeviceKind.trackpad:
+                        if (enableGestures) {
+                          handleHoverExit(event);
+                        }
+                      case PointerDeviceKind.stylus:
+                      case PointerDeviceKind.invertedStylus:
+                      case PointerDeviceKind.unknown:
+                      case PointerDeviceKind.touch:
+                        break;
+                    }
+                  },
+                  onHover: (PointerHoverEvent event) {
+                    switch (event.kind) {
+                      case PointerDeviceKind.mouse:
+                      case PointerDeviceKind.trackpad:
+                        if (enableGestures) {
+                          handleHover(event);
+                        }
+                      case PointerDeviceKind.stylus:
+                      case PointerDeviceKind.invertedStylus:
+                      case PointerDeviceKind.unknown:
+                      case PointerDeviceKind.touch:
+                        break;
+                    }
+                  },
+                  child: CustomPaint(
+                    key: _scrollbarPainterKey,
+                    foregroundPainter: scrollbarPainter,
+                    child: RepaintBoundary(child: childWithShield),
+                  ),
                 ),
               ),
             ),
