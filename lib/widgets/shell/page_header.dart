@@ -30,7 +30,8 @@ class _PageHeaderState extends State<PageHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final Color? logoColor = _usesTextColorTint ? context.twColors.pageBodyText : null;
+    final Color? logoColor =
+        _usesTextColorTint ? context.twColors.headerLogoTint : null;
     final AppLineStyle headerLine = AppLineStyle(
       color: context.twColors.lineSubtleSecondary,
       width: AppLineTheme.subtleSecondaryWidth,

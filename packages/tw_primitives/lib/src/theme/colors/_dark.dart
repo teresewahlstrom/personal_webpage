@@ -55,6 +55,7 @@ const TwColors twColorsDark = TwColors.create(
   lineSubtleSecondary: Color(0x397199FF),
 
   pageBodyText: _text,
+  headerLogoTint: _text,
   pageScrollbarThumb: Color(0x397199FF),
   pageScrollbarThumbInactive: Color(0xFF283143),
 

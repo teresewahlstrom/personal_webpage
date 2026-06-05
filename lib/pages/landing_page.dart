@@ -255,7 +255,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const _SelectableCopyBreak(height: 25, lineBreaks: 2),
+                        const _SelectableCopyBreak(height: 18, lineBreaks: 2),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
                           builder:
@@ -284,7 +284,7 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                         const _SelectableCopyBreak(height: 37, lineBreaks: 2),
                         _SocialSection(
-                          title: "Contact, Connect, Follow",
+                          title: "Contact Connect Follow",
                           entries: <_SocialItem>[
                             _SocialItem(
                               icon: const Icon(Icons.email_outlined),
@@ -425,7 +425,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
         for (int index = 0; index < widget.cards.length; index++) ...<Widget>[
           if (index > 0)
             const _SelectableCopyBreak(
-              height: 14,
+              height: 16,
               padding: EdgeInsets.only(
                 left: 12,
               ), // to match the proffessional story text indentation

@@ -43,6 +43,7 @@ class TwColors {
     required this.lineSubtle,
     required this.lineSubtleSecondary,
     required this.pageBodyText,
+    required this.headerLogoTint,
     required this.pageScrollbarThumb,
     required this.pageScrollbarThumbInactive,
     required this.cardFillAlpha,
@@ -92,6 +93,7 @@ class TwColors {
   final Color lineSubtle;
   final Color lineSubtleSecondary;
   final Color pageBodyText;
+  final Color headerLogoTint;
   final Color pageScrollbarThumb;
   final Color pageScrollbarThumbInactive;
   final double cardFillAlpha;

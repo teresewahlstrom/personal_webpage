@@ -8,8 +8,8 @@ const Color _chatComposerFill = Color(0xFFF8F9F7);
 const Color _interactive = Color(0xFF394183);
 const Color _interactiveHover = Color(0xFF843F02);
 
-const Color _text =  Color(0xFF000000);
-const Color _mainBgd = Color.fromARGB(255, 238, 238, 238);
+const Color _text =  Color.fromARGB(255, 61, 54, 51);
+const Color _mainBgd = Color.fromARGB(255, 243, 239, 234);
 
 /// Light-theme color tokens used by primitives and chat skin.
 const TwColors twColorsLight = TwColors.create(
@@ -55,13 +55,14 @@ const TwColors twColorsLight = TwColors.create(
   lineSubtleSecondary: Color(0xFFFFFFFF),
 
   pageBodyText: _text,
+  headerLogoTint: Color.fromARGB(255, 63, 54, 52),
   pageScrollbarThumb: Color(0xFFFFFFFF),
   pageScrollbarThumbInactive: Color(0xFFFFFFFF),
 
-  linkText: _interactive,
+  linkText: Color.fromARGB(255, 19, 211, 12),
   linkTextHover: _interactiveHover,
   modalBarrier: Color(0xBF000000),
   
   cardMarkdownOpacity: 0.85,
-  cardFillAlpha: 0.70,
+  cardFillAlpha: 0.80,
 );
