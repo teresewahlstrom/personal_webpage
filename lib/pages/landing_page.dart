@@ -349,38 +349,41 @@ class _LandingPageState extends State<LandingPage> {
 class _HeroStatement extends StatelessWidget {
   const _HeroStatement();
 
-  static const String _title = "About Me";
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle baseBody = TwTextStyles.of(context).bodyForContext(
+      context: context,
+      color: context.twColors.pageBodyText,
+    );
+    final TextStyle h1Style =
+        TwTextStyles.of(context).h1From(baseBody);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: '# ',
-                style: TwTextStyles.of(context).transparentSelectionSpacer,
-              ),
-              TextSpan(text: _title),
-            ],
-          ),
-          style: TwTextStyles.of(context).h1DisplayForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
+        Opacity(
+          opacity: context.twColors.heroPortraitOpacity,
+          child: ClipOval(
+            child: Image.asset(
+              'assets/FB_IMG_1780682807710.jpg',
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        const _SelectableCopyBreak(height: 10),
+        const SizedBox(height: 12),
+        Text(
+          'Terese Wahlström',
+          style: h1Style,
+        ),
+        const SizedBox(height: 12),
         Text(
           _content,
-          style: TwTextStyles.of(context).bodyForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
+          style: baseBody,
         ),
       ],
     );

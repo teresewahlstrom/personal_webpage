@@ -51,6 +51,7 @@ class TwColors {
     required this.linkTextHover,
     required this.modalBarrier,
     required this.cardMarkdownOpacity,
+    required this.heroPortraitOpacity,
   });
 
   final Color transparent;
@@ -101,6 +102,7 @@ class TwColors {
   final Color linkTextHover;
   final Color modalBarrier;
   final double cardMarkdownOpacity;
+  final double heroPortraitOpacity;
 
   /// Get a `TwColors` instance by theme name ('light' | 'dark').
   static TwColors forTheme(String themeName) {

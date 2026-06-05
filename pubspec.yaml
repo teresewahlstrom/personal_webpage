@@ -35,6 +35,7 @@ flutter:
     - assets/t1_logo/t1_logo.svg
     - assets/t1_logo/t1_logo_favicon_dark.svg
     - assets/t1_logo/t1_logo_favicon_light.svg
+    - assets/FB_IMG_1780682807710.jpg
     - lib/subjects/index.json
     - lib/subjects/Terese/keywords.md
     - lib/subjects/Terese/professional_story.md
