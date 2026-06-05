@@ -349,7 +349,6 @@ class _LandingPageState extends State<LandingPage> {
 class _HeroStatement extends StatelessWidget {
   const _HeroStatement();
 
-  static const String _title = "About Me";
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
 
@@ -379,22 +378,6 @@ class _HeroStatement extends StatelessWidget {
           style: h1Style,
         ),
         const SizedBox(height: 12),
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: '# ',
-                style: TwTextStyles.of(context).transparentSelectionSpacer,
-              ),
-              TextSpan(text: _title),
-            ],
-          ),
-          style: TwTextStyles.of(context).h1DisplayForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
-        ),
-        const _SelectableCopyBreak(height: 10),
         Text(
           _content,
           style: baseBody,
