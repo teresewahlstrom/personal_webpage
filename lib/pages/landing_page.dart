@@ -445,13 +445,30 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                   _expandedStates[index] = !_expandedStates[index];
                 });
               },
-              childBuilder: (BuildContext context, bool isExpanded) {
+              persistentChildBuilder: (BuildContext context) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const _SelectableCopyBreak(height: 12),
                     _ProjectCardMarkdownBody(
-                      document: widget.cards[index].contentDocument,
+                      document: widget.cards[index].summaryDocument,
+                      selectable: true,
+                    ),
+                  ],
+                );
+              },
+              childBuilder: (BuildContext context, bool isExpanded) {
+                final MarkupDocument? deepDiveDocument =
+                    widget.cards[index].deepDiveDocument;
+                if (deepDiveDocument == null) {
+                  return const SizedBox.shrink();
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const _SelectableCopyBreak(height: 12),
+                    _ProjectCardMarkdownBody(
+                      document: deepDiveDocument,
                       selectable: isExpanded,
                     ),
                   ],
@@ -539,10 +556,15 @@ class _ProjectCardsContent {
 }
 
 class _ProjectCardData {
-  const _ProjectCardData({required this.title, required this.contentDocument});
+  const _ProjectCardData({
+    required this.title,
+    required this.summaryDocument,
+    this.deepDiveDocument,
+  });
 
   final String title;
-  final MarkupDocument contentDocument;
+  final MarkupDocument summaryDocument;
+  final MarkupDocument? deepDiveDocument;
 }
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
@@ -672,9 +694,28 @@ class _ProjectCardsMarkdownLoader {
       );
     }
 
+    final Match? summaryBreak = RegExp(r'\n\s*\n').firstMatch(contentMarkdown);
+    final String summaryMarkdown;
+    final String deepDiveMarkdown;
+    if (summaryBreak == null) {
+      summaryMarkdown = contentMarkdown;
+      deepDiveMarkdown = '';
+    } else {
+      summaryMarkdown = contentMarkdown.substring(0, summaryBreak.start).trim();
+      deepDiveMarkdown = contentMarkdown.substring(summaryBreak.end).trim();
+    }
+    if (summaryMarkdown.isEmpty) {
+      throw FormatException(
+        'Professional story section missing summary in $sourceAssetPath.',
+      );
+    }
+
     return _ProjectCardData(
       title: title,
-      contentDocument: MessageMarkup.parse(contentMarkdown),
+      summaryDocument: MessageMarkup.parse(summaryMarkdown),
+      deepDiveDocument: deepDiveMarkdown.isEmpty
+          ? null
+          : MessageMarkup.parse(deepDiveMarkdown),
     );
   }
 }

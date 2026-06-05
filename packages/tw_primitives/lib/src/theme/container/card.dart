@@ -7,6 +7,7 @@ class TwExpandableCard extends StatefulWidget {
   const TwExpandableCard({
     super.key,
     required this.title,
+    this.persistentChildBuilder,
     required this.childBuilder,
     required this.isExpanded,
     required this.onTap,
@@ -17,6 +18,7 @@ class TwExpandableCard extends StatefulWidget {
   });
 
   final String title;
+  final WidgetBuilder? persistentChildBuilder;
   final Widget Function(BuildContext context, bool isExpanded) childBuilder;
   final bool isExpanded;
   final VoidCallback onTap;
@@ -288,6 +290,7 @@ class _TwExpandableCardState extends State<TwExpandableCard>
     }
 
     final Widget header = buildHeader(key: _headerKey);
+    final Widget? persistentChild = widget.persistentChildBuilder?.call(context);
 
     final bool isClosed = !widget.isExpanded && _heightAnimation.isDismissed;
     if (isClosed) {
@@ -300,7 +303,18 @@ class _TwExpandableCardState extends State<TwExpandableCard>
             border: border,
             borderRadius: BorderRadius.zero,
           ),
-          child: header,
+          child: persistentChild == null
+              ? header
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    header,
+                    Padding(
+                      padding: widget.contentPadding,
+                      child: persistentChild,
+                    ),
+                  ],
+                ),
         ),
       );
     }
@@ -309,6 +323,11 @@ class _TwExpandableCardState extends State<TwExpandableCard>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         header,
+        if (persistentChild != null)
+          Padding(
+            padding: widget.contentPadding,
+            child: persistentChild,
+          ),
         SizeTransition(
           sizeFactor: _heightAnimation,
           child: AnimatedBuilder(
