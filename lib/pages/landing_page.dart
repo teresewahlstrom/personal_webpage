@@ -355,10 +355,30 @@ class _HeroStatement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle baseBody = TwTextStyles.of(context).bodyForContext(
+      context: context,
+      color: context.twColors.pageBodyText,
+    );
+    final TextStyle h2Style =
+        TwTextStyles.of(context).h2From(baseBody);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
+        ClipOval(
+          child: Image.asset(
+            'assets/FB_IMG_1780682807710.jpg',
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Terese Wahlström',
+          style: h2Style,
+        ),
+        const SizedBox(height: 12),
         Text.rich(
           TextSpan(
             children: [
@@ -377,10 +397,7 @@ class _HeroStatement extends StatelessWidget {
         const _SelectableCopyBreak(height: 10),
         Text(
           _content,
-          style: TwTextStyles.of(context).bodyForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
+          style: baseBody,
         ),
       ],
     );
