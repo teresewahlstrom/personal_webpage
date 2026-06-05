@@ -1,0 +1,6 @@
+# configuration file for hydrated_seo build-time pre-renderer
+site_url: "https://www.t1grid.com/"
+output_dir: "build/web"
+render_delay_ms: 2000
+routes:
+  - "/"

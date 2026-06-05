@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hydrated_seo/hydrated_seo.dart';
 import 'package:tw_chat/chat.dart' show ChatSkinMode;
 import 'package:tw_primitives/svg.dart';
 import 'package:tw_primitives/theme.dart';
@@ -93,16 +94,39 @@ class _T1GridAppState extends State<T1GridApp> {
         fontFamily: twFontFamily,
       ),
       themeMode: _themeMode,
-      home: PageScaffold(
-        showThemeToggle: true,
-        isDarkMode: _isDarkMode,
-        onToggleTheme: _toggleThemeMode,
-        isPageLoading: !_isPageContentReady,
-        showFooter: true,
-        initialChatSkinMode: _isDarkMode
-            ? ChatSkinMode.dark
-            : ChatSkinMode.light,
-        child: LandingPage(onContentReadyChanged: _setPageContentReady),
+      home: SeoSchema(
+        schemaData: const <String, dynamic>{
+          "@type": "Person",
+          "name": "Terese Wahlström",
+          "jobTitle": "Mechanical Engineer",
+          "url": "https://www.t1grid.com/",
+          "sameAs": [
+            "https://www.linkedin.com/in/teresewahlstrom"
+          ],
+          "knowsAbout": [
+            "AI-assisted workflows",
+            "Knowledge systems",
+            "Additive manufacturing",
+            "Engineering tooling"
+          ]
+        },
+        child: SeoMeta(
+          title: "Terese Wahlström - T1 Grid",
+          description: "Mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling.",
+          ogImage: "https://www.t1grid.com/assets/t1_logo/t1_logo.svg",
+          canonicalUrl: "https://www.t1grid.com/",
+          child: PageScaffold(
+            showThemeToggle: true,
+            isDarkMode: _isDarkMode,
+            onToggleTheme: _toggleThemeMode,
+            isPageLoading: !_isPageContentReady,
+            showFooter: true,
+            initialChatSkinMode: _isDarkMode
+                ? ChatSkinMode.dark
+                : ChatSkinMode.light,
+            child: LandingPage(onContentReadyChanged: _setPageContentReady),
+          ),
+        ),
       ),
     );
   }
