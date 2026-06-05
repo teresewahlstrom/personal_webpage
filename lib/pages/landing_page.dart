@@ -364,12 +364,15 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        ClipOval(
-          child: Image.asset(
-            'assets/FB_IMG_1780682807710.jpg',
-            width: 120,
-            height: 120,
-            fit: BoxFit.cover,
+        Opacity(
+          opacity: context.twColors.heroPortraitOpacity,
+          child: ClipOval(
+            child: Image.asset(
+              'assets/FB_IMG_1780682807710.jpg',
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const SizedBox(height: 12),

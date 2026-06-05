@@ -65,4 +65,5 @@ const TwColors twColorsLight = TwColors.create(
   
   cardMarkdownOpacity: 0.85,
   cardFillAlpha: 0.80,
+  heroPortraitOpacity: 0.10,
 );
