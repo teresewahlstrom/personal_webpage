@@ -359,8 +359,8 @@ class _HeroStatement extends StatelessWidget {
       context: context,
       color: context.twColors.pageBodyText,
     );
-    final TextStyle h2Style =
-        TwTextStyles.of(context).h2From(baseBody);
+    final TextStyle h1Style =
+        TwTextStyles.of(context).h1From(baseBody);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -376,7 +376,7 @@ class _HeroStatement extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           'Terese Wahlström',
-          style: h2Style,
+          style: h1Style,
         ),
         const SizedBox(height: 12),
         Text.rich(
