@@ -33,6 +33,21 @@ final class ShellUiConfig {
   static const double gridSpacing = 25;
   static const double gridYStart = 15;
 
+  // Hero portrait shape — rounded-rectangle corner radii (logical pixels).
+  // Set all four to 60 (half the 120×120 portrait size) to reproduce a circle,
+  // or choose different values per corner to get a custom shape.
+  static const double heroPortraitRadiusTopLeft = 38;
+  static const double heroPortraitRadiusTopRight = 38;
+  static const double heroPortraitRadiusBottomRight = 22;
+  static const double heroPortraitRadiusBottomLeft = 22;
+
+  static BorderRadius get heroPortraitBorderRadius => const BorderRadius.only(
+        topLeft: Radius.circular(heroPortraitRadiusTopLeft),
+        topRight: Radius.circular(heroPortraitRadiusTopRight),
+        bottomRight: Radius.circular(heroPortraitRadiusBottomRight),
+        bottomLeft: Radius.circular(heroPortraitRadiusBottomLeft),
+      );
+
   static const double pageScrollbarCrossAxisMargin = 0.0;
   static const double pageScrollbarThickness = 7.0;
 

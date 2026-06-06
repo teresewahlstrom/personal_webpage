@@ -383,7 +383,8 @@ class _HeroStatement extends StatelessWidget {
             background: context.twColors.pageBackground,
             sourceWeight: context.twColors.heroPortraitOpacity,
           ),
-          child: ClipOval(
+          child: ClipRRect(
+            borderRadius: ShellUiConfig.heroPortraitBorderRadius,
             child: Image.asset(
               'assets/FB_IMG_1780682807710.jpg',
               width: 120,
