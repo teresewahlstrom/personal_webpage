@@ -36,10 +36,10 @@ final class ShellUiConfig {
   // Hero portrait shape — rounded-rectangle corner radii (logical pixels).
   // Set all four to 60 (half the 120×120 portrait size) to reproduce a circle,
   // or choose different values per corner to get a custom shape.
-  static const double heroPortraitRadiusTopLeft = 38;
-  static const double heroPortraitRadiusTopRight = 38;
-  static const double heroPortraitRadiusBottomRight = 22;
-  static const double heroPortraitRadiusBottomLeft = 22;
+  static const double heroPortraitRadiusTopLeft = 10;
+  static const double heroPortraitRadiusTopRight = 50;
+  static const double heroPortraitRadiusBottomRight = 15;
+  static const double heroPortraitRadiusBottomLeft = 15;
 
   static BorderRadius get heroPortraitBorderRadius => const BorderRadius.only(
         topLeft: Radius.circular(heroPortraitRadiusTopLeft),
