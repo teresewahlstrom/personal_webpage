@@ -352,6 +352,20 @@ class _HeroStatement extends StatelessWidget {
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
 
+  static ColorFilter _lerpToBackgroundFilter({
+    required Color background,
+    required double sourceWeight,
+  }) {
+    final double clampedSourceWeight = sourceWeight.clamp(0.0, 1.0);
+    final double backgroundWeight = 1.0 - clampedSourceWeight;
+    return ColorFilter.matrix(<double>[
+      clampedSourceWeight, 0, 0, 0, backgroundWeight * background.red,
+      0, clampedSourceWeight, 0, 0, backgroundWeight * background.green,
+      0, 0, clampedSourceWeight, 0, backgroundWeight * background.blue,
+      0, 0, 0, 1, 0,
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle baseBody = TwTextStyles.of(context).bodyForContext(
@@ -364,8 +378,11 @@ class _HeroStatement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Opacity(
-          opacity: context.twColors.heroPortraitOpacity,
+        ColorFiltered(
+          colorFilter: _lerpToBackgroundFilter(
+            background: context.twColors.pageBackground,
+            sourceWeight: context.twColors.heroPortraitOpacity,
+          ),
           child: ClipOval(
             child: Image.asset(
               'assets/FB_IMG_1780682807710.jpg',
