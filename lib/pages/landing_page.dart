@@ -340,9 +340,13 @@ class _HeroStatement extends StatelessWidget {
       context: context,
       color: context.twColors.pageBodyText,
     );
-    final TextStyle h1Style =
-        TwTextStyles.of(context).h1From(baseBody);
-    final bool isWide = MediaQuery.sizeOf(context).width >= 450;
+    final TextStyle h1Style = () {
+      final style = TwTextStyles.of(context).h1From(baseBody);
+      return style.copyWith(
+        fontSize: style.fontSize != null ? style.fontSize! + 10 : null,
+      );
+    }();
+    final bool isWide = MediaQuery.sizeOf(context).width >= 320;
 
     final Widget profilePic = ColorFiltered(
       colorFilter: _lerpToBackgroundFilter(
@@ -369,7 +373,7 @@ class _HeroStatement extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               profilePic,
-              const SizedBox(width: 24),
+              SizedBox(width: MediaQuery.sizeOf(context).width >= 450 ? 24 : 16),
               Expanded(child: socialCard),
             ],
           )
