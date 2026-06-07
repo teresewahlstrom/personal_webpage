@@ -41,7 +41,6 @@ class TwColors {
     required this.footerBackground,
     required this.modalBackground,
     required this.lineSubtle,
-    required this.lineSubtleSecondary,
     required this.pageBodyText,
     required this.headerLogoTint,
     required this.pageScrollbarThumb,
@@ -92,7 +91,6 @@ class TwColors {
   final Color footerBackground;
   final Color modalBackground;
   final Color lineSubtle;
-  final Color lineSubtleSecondary;
   final Color pageBodyText;
   final Color headerLogoTint;
   final Color pageScrollbarThumb;

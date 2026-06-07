@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:tw_primitives/theme.dart' show TwPanelScrollArea;
 
+import '../../config/app_ui_config.dart';
 import 'embed.dart';
 import 'embed_config.dart';
 
@@ -19,6 +20,7 @@ class NewsletterModalContent extends StatelessWidget {
           return TwPanelScrollArea(
             selectable: true,
             scrollbarColumnWidth: 0.0,
+            overlapHeaderTopInset: ModalUiConfig.headerHeight,
             child: ConstrainedBox(
               constraints: BoxConstraints(minWidth: constraints.maxWidth),
               child: Center(

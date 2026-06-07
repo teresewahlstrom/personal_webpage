@@ -19,11 +19,6 @@ class PageFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int year = DateTime.now().year;
-    final AppLineStyle footerLine = AppLineStyle(
-      color: context.twColors.lineSubtleSecondary,
-      width: AppLineTheme.subtleSecondaryWidth,
-    );
-
     return Container(
       width: double.infinity,
       constraints: const BoxConstraints(
@@ -31,39 +26,40 @@ class PageFooter extends StatelessWidget {
       ),
       padding: ShellUiConfig.footerPadding,
       decoration: BoxDecoration(
-        color: context.twColors.footerBackground,
-        border: Border(top: footerLine.borderSide),
+        color: context.twColors.transparent,
       ),
       child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 4,
-          runSpacing: 2,
-          children: <Widget>[
-            Text.rich(
-              TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: '\n\n',
-                    style: TwTextStyles.of(context).transparentSelectionSpacer,
-                  ),
-                  TextSpan(
-                    text: '\u00A9$year $brandName. All rights reserved. ',
-                  ),
-                ],
+        child: DefaultTextStyle(
+          style: TwTextStyles.of(context).footerBodyForContext(
+            context: context,
+            color: context.twColors.pageBodyText,
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 4,
+            runSpacing: 2,
+            children: <Widget>[
+              Text.rich(
+                TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '\n\n',
+                      style: TwTextStyles.of(context).transparentSelectionSpacer,
+                    ),
+                    TextSpan(
+                      text: '\u00A9$year $brandName. All rights reserved. ',
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
-              style: TwTextStyles.of(context).footerBodyForContext(
-                context: context,
-                color: context.twColors.pageBodyText,
+              TwLinkPill(
+                label: privacyLabel,
+                onTap: () => _openBuiltInPrivacyModal(context),
               ),
-              textAlign: TextAlign.center,
-            ),
-            TwLinkPill(
-              label: privacyLabel,
-              onTap: () => _openBuiltInPrivacyModal(context),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

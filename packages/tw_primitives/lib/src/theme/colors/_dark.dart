@@ -51,8 +51,7 @@ const TwColors twColorsDark = TwColors.create(
   footerBackground: _mainBgd,
   modalBackground: _mainBgd,
 
-  lineSubtle: Color(0xFF2B364A),
-  lineSubtleSecondary: Color(0x397199FF),
+  lineSubtle: Color.fromARGB(255, 33, 51, 83),
 
   pageBodyText: _text,
   headerLogoTint: _text,

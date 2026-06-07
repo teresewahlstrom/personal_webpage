@@ -5,6 +5,8 @@ import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/scrollbar.dart' show TwSelectableRegionState;
 import 'package:tw_primitives/theme.dart';
 
+import '../config/app_ui_config.dart';
+
 class PrivacyCookiesContent extends StatefulWidget {
   const PrivacyCookiesContent({super.key, required this.onLaunchUrl});
 
@@ -83,6 +85,7 @@ class _PrivacyCookiesContentState extends State<PrivacyCookiesContent> {
         child: TwPanelScrollArea(
           selectable: true,
           selectionKey: _selectionKey,
+          overlapHeaderTopInset: ModalUiConfig.headerHeight,
           onSelectionChanged: (content) {
             _lastSelectedContent = content;
           },
@@ -107,8 +110,6 @@ const String _contentMarkdown = '''
 We do not use analytics or advertising cookies on this website. Some third-party services may use essential cookies or similar technologies when you choose to interact with them.
 
 ## What is Collected and Why
-
-* **Newsletter subscriptions:** If you sign up for the newsletter, your name and email address are processed by [Brevo](https://www.brevo.com/legal/privacypolicy/). We use this information to send the newsletter based on your consent, until you unsubscribe. Brevo uses a double-opt-in process to confirm your subscription.
 
 * **Meeting bookings:** If you book a call, your name, email address and any information you choose to provide are processed by [Cal.com](https://cal.com/privacy). We use this information to arrange the meeting you request.
 

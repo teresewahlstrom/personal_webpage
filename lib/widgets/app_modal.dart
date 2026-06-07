@@ -22,18 +22,18 @@ Future<void> showAppModal({
       void close() => Navigator.of(dialogContext).pop();
       final double keyboardHeight = KeyboardHeight.of(dialogContext);
       final double availableHeight = viewportSize.height - keyboardHeight;
+      final EdgeInsets inset = ModalUiConfig.insetPaddingFor(viewportSize);
+      final double maxHeight = availableHeight - (inset.top + inset.bottom);
 
       return Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
         shadowColor: Colors.transparent,
-        insetPadding: ModalUiConfig.insetPaddingFor(viewportSize),
+        insetPadding: inset,
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: ModalUiConfig.maxWidth,
-            maxHeight:
-                availableHeight *
-                ModalUiConfig.maxHeightFactorFor(viewportSize),
+            maxHeight: maxHeight,
           ),
           child: TwPanelContainer(
             title: headerTitle == null

@@ -2,7 +2,23 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:tw_keywords/tw_keywords.dart';
+
+final class SubjectKeywordData {
+  final String id;
+  final String name;
+
+  const SubjectKeywordData({
+    required this.id,
+    required this.name,
+  });
+
+  factory SubjectKeywordData.fromJson(Map<String, dynamic> json) {
+    return SubjectKeywordData(
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+    );
+  }
+}
 
 final class SubjectRegistry {
   static const String _indexAssetPath = 'lib/subjects/index.json';
@@ -242,89 +258,7 @@ final class SubjectRegistry {
       subject[key] = value;
     }
 
-    final List<String> tableLines = lines
-        .skip(frontMatterEnd + 1)
-        .where((String line) => line.trim().startsWith('|'))
-        .toList(growable: false);
-    if (tableLines.length < 2) {
-      throw FormatException('Expected $file to contain a keyword table.');
-    }
-
-    final List<String> headers = _splitMarkdownTableRow(tableLines.first);
-    final List<Map<String, dynamic>> keywords = <Map<String, dynamic>>[];
-    for (final String tableLine in tableLines.skip(1)) {
-      final List<String> cells = _splitMarkdownTableRow(tableLine);
-      if (_isMarkdownSeparatorRow(cells)) {
-        continue;
-      }
-      if (cells.length != headers.length) {
-        throw FormatException(
-          'Expected keyword row in $file to have ${headers.length} cells.',
-        );
-      }
-
-      final Map<String, dynamic> keyword = <String, dynamic>{};
-      for (int index = 0; index < headers.length; index++) {
-        final String key = headers[index];
-        final String value = cells[index];
-        if (value.isEmpty) {
-          continue;
-        }
-
-        keyword[key] = switch (key) {
-          'weight' || 'lockOrder' => int.parse(value),
-          'em' || 'lockGapEm' => double.parse(value),
-          _ => value,
-        };
-      }
-      keywords.add(keyword);
-    }
-
-    subject['keywords'] = keywords;
     return subject;
-  }
-
-  static bool _isMarkdownSeparatorRow(List<String> cells) {
-    return cells.every((String cell) => RegExp(r'^:?-{3,}:?$').hasMatch(cell));
-  }
-
-  static List<String> _splitMarkdownTableRow(String line) {
-    final String trimmed = line.trim();
-    final String row = trimmed
-        .replaceFirst(RegExp(r'^\|'), '')
-        .replaceFirst(RegExp(r'\|$'), '');
-    final List<String> cells = <String>[];
-    final StringBuffer cell = StringBuffer();
-
-    for (int index = 0; index < row.length; index++) {
-      final String character = row[index];
-      if (character == '\\' &&
-          index + 1 < row.length &&
-          row[index + 1] == '|') {
-        cell.write('|');
-        index++;
-      } else if (character == '|') {
-        cells.add(cell.toString().trim());
-        cell.clear();
-      } else {
-        cell.write(character);
-      }
-    }
-
-    cells.add(cell.toString().trim());
-    return cells;
-  }
-
-  static List<dynamic> _readRequiredList(
-    Map<String, dynamic> json,
-    String key,
-    String source,
-  ) {
-    final dynamic value = json[key];
-    if (value is! List<dynamic>) {
-      throw FormatException('Expected "$key" in $source to be a list.');
-    }
-    return value;
   }
 
   static String _readRequiredString(
@@ -354,6 +288,18 @@ final class SubjectRegistry {
       throw FormatException(
         'Expected "$key" in $source to be a string or null.',
       );
+    }
+    return value;
+  }
+
+  static List<dynamic> _readRequiredList(
+    Map<String, dynamic> json,
+    String key,
+    String source,
+  ) {
+    final dynamic value = json[key];
+    if (value is! List<dynamic>) {
+      throw FormatException('Expected "$key" in $source to be a list.');
     }
     return value;
   }

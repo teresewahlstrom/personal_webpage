@@ -48,5 +48,13 @@ class TwTextStyleTokensLight {
   static const double twToolbarFontSize = dark.TwTextStyleTokensDark.twToolbarFontSize;
 
   static const double twStrikethroughThickness = 0.9;
+
+  static const List<Shadow> twCardTitleShadows = [
+    Shadow(
+      color: Colors.black26,
+      offset: Offset(0, 1.0),
+      blurRadius: 2.0,
+    ),
+  ];
 }
 

@@ -88,6 +88,7 @@ class NamedTextStyles {
     required this.h1Scale,
     required this.h2Scale,
     required this.strikethroughThickness,
+    required this.twCardTitleShadows,
   });
 
   final String fontFamily;
@@ -122,6 +123,7 @@ class NamedTextStyles {
   final double h1Scale;
   final double h2Scale;
   final double strikethroughThickness;
+  final List<Shadow> twCardTitleShadows;
 
   double _resolveTextScale(double textScale, {double? maxTextScale}) {
     final double max = maxTextScale ?? bodyDefaultMaxTextScale;
@@ -229,7 +231,12 @@ class NamedTextStyles {
   }
 
   TextStyle cardTitleFrom(TextStyle base, {Color? color}) {
-    return adaptBase(base, color: color);
+    return adaptBase(
+      base,
+      color: color,
+      fontSize: base.fontSize != null ? base.fontSize! * 0.75 : null,
+      shadows: twCardTitleShadows,
+    );
   }
 
   TextStyle smallFrom(TextStyle base, {Color? color}) {

@@ -16,8 +16,6 @@ dependencies:
     path: packages/tw_chat
   tw_primitives:
     path: packages/tw_primitives
-  tw_keywords:
-    path: packages/tw_keywords
   hydrated_seo:
     path: packages/hydrated_seo
   web: ^1.1.1

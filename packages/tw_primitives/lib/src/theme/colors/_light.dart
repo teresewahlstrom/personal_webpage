@@ -5,7 +5,6 @@ const Color _chatMainAccent = Color(0xFF843F02);
 const Color _chatSoftAccent = Color.fromARGB(255, 214, 214, 214);
 const Color _chatComposerFill = Color(0xFFF8F9F7);
 
-const Color _interactive = Color(0xFF394183);
 const Color _interactiveHover = Color(0xFF843F02);
 
 const Color _text =  Color.fromARGB(255, 61, 54, 51);
@@ -51,8 +50,7 @@ const TwColors twColorsLight = TwColors.create(
   footerBackground: _mainBgd,
   modalBackground: _mainBgd,
 
-  lineSubtle: Color(0xFFFFFFFF),
-  lineSubtleSecondary: Color(0xFFFFFFFF),
+  lineSubtle: Color(0xFFC0B6B0),
 
   pageBodyText: _text,
   headerLogoTint: Color.fromARGB(255, 63, 54, 52),

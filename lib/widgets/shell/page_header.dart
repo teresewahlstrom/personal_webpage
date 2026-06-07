@@ -32,10 +32,6 @@ class _PageHeaderState extends State<PageHeader> {
   Widget build(BuildContext context) {
     final Color? logoColor =
         _usesTextColorTint ? context.twColors.headerLogoTint : null;
-    final AppLineStyle headerLine = AppLineStyle(
-      color: context.twColors.lineSubtleSecondary,
-      width: AppLineTheme.subtleSecondaryWidth,
-    );
     final EdgeInsets safeInsets = MediaQuery.viewPaddingOf(context);
     final EdgeInsets contentPadding = EdgeInsets.fromLTRB(
       ShellUiConfig.headerPadding.left + safeInsets.left,
@@ -48,8 +44,7 @@ class _PageHeaderState extends State<PageHeader> {
       height: ShellUiConfig.headerMinHeight + safeInsets.top,
         child: DecoratedBox(
         decoration: BoxDecoration(
-          color: context.twColors.headerBackground,
-          border: Border(bottom: headerLine.borderSide),
+          color: context.twColors.transparent,
         ),
         child: Padding(
           padding: contentPadding,

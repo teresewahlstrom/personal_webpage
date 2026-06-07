@@ -156,7 +156,17 @@ class TwLinkPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TwLinkPillStyle base = style ?? _resolveDefault(context);
-    final TwLinkPillStyle resolved = base;
+    final double? defaultFontSize = DefaultTextStyle.of(context).style.fontSize;
+    final TwLinkPillStyle resolved;
+    if (defaultFontSize != null) {
+      resolved = base.copyWith(
+        textStyle: base.textStyle.copyWith(
+          fontSize: defaultFontSize - 2.0,
+        ),
+      );
+    } else {
+      resolved = base;
+    }
 
     // Use zero padding for icon-only pills so they can become perfectly
     // circular when wrapped in a fixed-size parent (e.g., SizedBox.square).

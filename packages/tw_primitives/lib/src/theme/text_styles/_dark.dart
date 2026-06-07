@@ -25,7 +25,7 @@ class TwTextStyleTokensDark {
   static const FontWeight twModalHeaderFontWeight = FontWeight.w300;
 
   // Footer tokens
-  static const double twFooterBaseFontSize = 16.0;
+  static const double twFooterBaseFontSize = 13.0;
 
   // H1 tokens
   static const double twH1Scale = 2.0;
@@ -46,5 +46,13 @@ class TwTextStyleTokensDark {
   static const double twToolbarFontSize = 12.0;
 
   static const double twStrikethroughThickness = 4.0;
+
+  static const List<Shadow> twCardTitleShadows = [
+    Shadow(
+      color: Colors.black,
+      offset: Offset(0, 1.5),
+      blurRadius: 3.0,
+    ),
+  ];
 }
 

@@ -478,7 +478,7 @@ class TwPanelScrollArea extends StatelessWidget {
         final double currentTop = scrollbarInsets
             .resolve(TextDirection.ltr)
             .top;
-        const double unifiedHeaderScrollbarInset = 32.0;
+        final double unifiedHeaderScrollbarInset = overlapHeaderTopInset - 8.0;
         if (currentTop < unifiedHeaderScrollbarInset) {
           effectiveScrollbarInsets = EdgeInsets.only(
             top: unifiedHeaderScrollbarInset - currentTop,

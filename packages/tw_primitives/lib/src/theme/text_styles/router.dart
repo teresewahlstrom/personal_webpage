@@ -41,6 +41,7 @@ class TwTextStyleTokens {
     required this.twSmallFontSize,
     required this.twToolbarFontSize,
     required this.twStrikethroughThickness,
+    required this.twCardTitleShadows,
   });
 
   final String twFontFamily;
@@ -70,6 +71,7 @@ class TwTextStyleTokens {
   final double twSmallFontSize;
   final double twToolbarFontSize;
   final double twStrikethroughThickness;
+  final List<Shadow> twCardTitleShadows;
 
   static TwTextStyleTokens forBrightness(Brightness brightness) {
     if (brightness == Brightness.dark) return TwTextStyleTokens._fromDark();
@@ -104,6 +106,7 @@ class TwTextStyleTokens {
         twSmallFontSize: dark.TwTextStyleTokensDark.twSmallFontSize,
         twToolbarFontSize: dark.TwTextStyleTokensDark.twToolbarFontSize,
         twStrikethroughThickness: dark.TwTextStyleTokensDark.twStrikethroughThickness,
+        twCardTitleShadows: dark.TwTextStyleTokensDark.twCardTitleShadows,
       );
 
   static TwTextStyleTokens _fromLight() => TwTextStyleTokens._(
@@ -134,6 +137,7 @@ class TwTextStyleTokens {
         twSmallFontSize: light.TwTextStyleTokensLight.twSmallFontSize,
         twToolbarFontSize: light.TwTextStyleTokensLight.twToolbarFontSize,
         twStrikethroughThickness: light.TwTextStyleTokensLight.twStrikethroughThickness,
+        twCardTitleShadows: light.TwTextStyleTokensLight.twCardTitleShadows,
       );
 
 }
@@ -264,5 +268,6 @@ styles.NamedTextStyles _namedFromTokens(TwTextStyleTokens tokens) => styles.Name
       h1Scale: tokens.twH1Scale,
       h2Scale: tokens.twH2Scale,
       strikethroughThickness: tokens.twStrikethroughThickness,
+      twCardTitleShadows: tokens.twCardTitleShadows,
     );
 

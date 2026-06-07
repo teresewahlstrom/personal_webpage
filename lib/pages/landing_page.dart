@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tw_chat/chat.dart' show ChatSkin;
-import 'package:tw_keywords/tw_keywords.dart';
 import 'package:tw_primitives/markdown.dart';
 import 'package:tw_primitives/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../config/app_ui_config.dart';
-import '../modals/newsletter/newsletter_modal.dart';
+import '../modals/project_story_modal.dart';
 import '../services/subject_keywords_registry.dart';
 import '../widgets/app_modal.dart';
 import '../widgets/shell/page_scaffold.dart';
@@ -26,16 +25,12 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  static const bool _showKeywordGraph = false;
   static const String _projectCardsAssetPath =
       'lib/subjects/Terese/professional_story.md';
 
   late Future<SubjectKeywordData> _subjectFuture;
   late Future<_ProjectCardsContent> _projectCardsFuture;
   bool? _lastReportedContentReady;
-  double _cachedCloudHeightRatio = 0.80;
-  double _lastCloudHeightRatioWidth = double.infinity;
-  bool? _lastCloudInWideLayout;
 
   @override
   void initState() {
@@ -83,27 +78,67 @@ class _LandingPageState extends State<LandingPage> {
     });
   }
 
-  double _getCloudHeightRatio(double viewportWidth) {
-    // Recalculate when width changes enough to matter, and always when crossing
-    // the 900px layout breakpoint.
-    final bool isWideLayout = viewportWidth >= 900;
-    if (_lastCloudInWideLayout == null ||
-        _lastCloudInWideLayout != isWideLayout ||
-        (viewportWidth - _lastCloudHeightRatioWidth).abs() > 50.0) {
-      _lastCloudInWideLayout = isWideLayout;
-      _lastCloudHeightRatioWidth = viewportWidth;
-      _cachedCloudHeightRatio = isWideLayout ? 0.52 : 0.80;
-    }
-    return _cachedCloudHeightRatio;
-  }
 
-  void _openNewsletterModal() {
-    showAppModal(
-      context: context,
-      headerTitle: 'Subscribe',
-      builder: (BuildContext context, VoidCallback close) {
-        return const NewsletterModalContent();
-      },
+
+  Widget _buildSocialCard(BuildContext context) {
+    final List<_SocialItem> entries = <_SocialItem>[
+      _SocialItem(
+        icon: const Icon(Icons.email_outlined),
+        label: "terese@t1grid.com",
+        copyUrl: "mailto:terese@t1grid.com",
+        onTap: () => _launchUrl("mailto:terese@t1grid.com"),
+      ),
+      _SocialItem(
+        icon: const Icon(Icons.phone_outlined),
+        label: "+46 709 800 525",
+        copyUrl: "tel:+46709800525",
+        onTap: () => _launchUrl("tel:+46709800525"),
+      ),
+      _SocialItem(
+        icon: const Icon(Icons.calendar_month_outlined),
+        label: "Video meeting",
+        copyUrl: "https://cal.com/teresew/discuss",
+        onTap: () => _launchUrl("https://cal.com/teresew/discuss"),
+      ),
+      _SocialItem(
+        icon: const FaIcon(FontAwesomeIcons.linkedin),
+        label: "LinkedIn",
+        copyUrl: "https://www.linkedin.com/in/teresewahlstrom",
+        onTap: () => _launchUrl("https://www.linkedin.com/in/teresewahlstrom"),
+      ),
+    ];
+
+    return Container(
+      child: Material(
+        color: context.twColors.transparent,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: context.twColors.botBubbleBorder,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.zero,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            for (int i = 0; i < entries.length; i++) ...<Widget>[
+              _SocialRow(entry: entries[i]),
+              if (i < entries.length - 1) ...<Widget>[
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: context.twIsDark
+                      ? context.twColors.lineSubtle
+                      : context.twColors.botBubbleBorder.withValues(alpha: 0.5),
+                ),
+                const _SelectableCopyBreak(height: 0, lineBreaks: 1),
+              ],
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -114,7 +149,6 @@ class _LandingPageState extends State<LandingPage> {
       builder: (BuildContext context, AsyncSnapshot<SubjectKeywordData> snapshot) {
         final bool isContentReady =
             snapshot.connectionState == ConnectionState.done;
-        final Size viewport = MediaQuery.sizeOf(context);
         if (_lastReportedContentReady != isContentReady) {
           _lastReportedContentReady = isContentReady;
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -165,14 +199,6 @@ class _LandingPageState extends State<LandingPage> {
           // Fallback to 400px instead of dynamic viewport calculation
           content = const SizedBox(height: 400.0);
         } else {
-          final SubjectKeywordData subject = snapshot.data!;
-          final Color keywordGraphicFill = context.twColors.pageBackground;
-          final AppLineStyle keywordGraphicLine = AppLineStyle(
-            color: context.twColors.lineSubtle,
-            width: AppLineTheme.subtleWidth,
-          );
-          // heightRatio: taller on mobile (portrait), shallower on wide desktop.
-          final double cloudHeightRatio = _getCloudHeightRatio(viewport.width);
 
           content = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -186,8 +212,9 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 15),
-                        const _HeroStatement(),
+                        _HeroStatement(
+                          socialCard: _buildSocialCard(context),
+                        ),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
                           builder:
@@ -224,27 +251,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
-              if (_showKeywordGraph)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 700),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 11),
-                      child: WordCloud(
-                        keywords: subject.keywords,
-                        heightRatio: cloudHeightRatio,
-                        maxContentWidth: 700,
-                        frameStyle: WordCloudFrameStyle(
-                          backgroundColor: keywordGraphicFill,
-                          borderSide: keywordGraphicLine.borderSide,
-                          borderRadius: BorderRadius.zero,
-                          padding: const EdgeInsets.all(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+
 
               Align(
                 alignment: Alignment.topCenter,
@@ -282,48 +289,6 @@ class _LandingPageState extends State<LandingPage> {
                                 );
                               },
                         ),
-                        const _SelectableCopyBreak(height: 37, lineBreaks: 2),
-                        _SocialSection(
-                          title: "Contact Connect Follow",
-                          entries: <_SocialItem>[
-                            _SocialItem(
-                              icon: const Icon(Icons.email_outlined),
-                              label: "terese@t1grid.com",
-                              copyUrl: "mailto:terese@t1grid.com",
-                              onTap: () =>
-                                  _launchUrl("mailto:terese@t1grid.com"),
-                            ),
-                            _SocialItem(
-                              icon: const Icon(Icons.phone_outlined),
-                              label: "+46 709 800 525",
-                              copyUrl: "tel:+46709800525",
-                              onTap: () => _launchUrl("tel:+46709800525"),
-                            ),
-                            _SocialItem(
-                              icon: const Icon(Icons.calendar_month_outlined),
-                              label: "Video meeting",
-                              copyUrl: "https://cal.com/teresew/discuss",
-                              onTap: () =>
-                                  _launchUrl("https://cal.com/teresew/discuss"),
-                            ),
-                            _SocialItem(
-                              icon: const Icon(
-                                Icons.notifications_active_outlined,
-                              ),
-                              label: "Newsletter",
-                              onTap: _openNewsletterModal,
-                            ),
-                            _SocialItem(
-                              icon: const FaIcon(FontAwesomeIcons.linkedin),
-                              label: "LinkedIn",
-                              copyUrl:
-                                  "https://www.linkedin.com/in/teresewahlstrom",
-                              onTap: () => _launchUrl(
-                                "https://www.linkedin.com/in/teresewahlstrom",
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -347,7 +312,9 @@ class _LandingPageState extends State<LandingPage> {
 }
 
 class _HeroStatement extends StatelessWidget {
-  const _HeroStatement();
+  const _HeroStatement({required this.socialCard});
+
+  final Widget socialCard;
 
   static const String _content =
       "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.\n";
@@ -374,26 +341,47 @@ class _HeroStatement extends StatelessWidget {
     );
     final TextStyle h1Style =
         TwTextStyles.of(context).h1From(baseBody);
+    final bool isWide = MediaQuery.sizeOf(context).width >= 450;
+
+    final Widget profilePic = ColorFiltered(
+      colorFilter: _lerpToBackgroundFilter(
+        background: context.twColors.pageBackground,
+        sourceWeight: context.twColors.heroPortraitOpacity,
+      ),
+      child: ClipRRect(
+        borderRadius: ShellUiConfig.heroPortraitBorderRadius,
+        child: Image.asset(
+          'assets/FB_IMG_1780682807710.jpg',
+          width: 120,
+          height: 120,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        ColorFiltered(
-          colorFilter: _lerpToBackgroundFilter(
-            background: context.twColors.pageBackground,
-            sourceWeight: context.twColors.heroPortraitOpacity,
+        const _SelectableCopyBreak(height: 6, lineBreaks: 2),
+        if (isWide)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              profilePic,
+              const SizedBox(width: 24),
+              Expanded(child: socialCard),
+            ],
+          )
+        else
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              profilePic,
+              const SizedBox(height: 16),
+              socialCard,
+            ],
           ),
-          child: ClipRRect(
-            borderRadius: ShellUiConfig.heroPortraitBorderRadius,
-            child: Image.asset(
-              'assets/FB_IMG_1780682807710.jpg',
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 30),
         Text(
           'Terese Wahlström',
           style: h1Style,
@@ -408,42 +396,17 @@ class _HeroStatement extends StatelessWidget {
   }
 }
 
-class _ProjectsSection extends StatefulWidget {
+class _ProjectsSection extends StatelessWidget {
   const _ProjectsSection({required this.cards});
 
   final List<_ProjectCardData> cards;
 
   @override
-  State<_ProjectsSection> createState() => _ProjectsSectionState();
-}
-
-class _ProjectsSectionState extends State<_ProjectsSection> {
-  List<bool> _expandedStates = <bool>[];
-
-  @override
-  void initState() {
-    super.initState();
-    _expandedStates = List<bool>.filled(widget.cards.length, false);
-  }
-
-  @override
-  void didUpdateWidget(covariant _ProjectsSection oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.cards.length != oldWidget.cards.length) {
-      _expandedStates = List<bool>.filled(widget.cards.length, false);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final AppLineStyle gridLineStyle = AppLineStyle(
-      color: context.twColors.lineSubtle,
-      width: AppLineTheme.subtleWidth,
-    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        for (int index = 0; index < widget.cards.length; index++) ...<Widget>[
+        for (int index = 0; index < cards.length; index++) ...<Widget>[
           if (index > 0)
             const _SelectableCopyBreak(
               height: 16,
@@ -452,27 +415,19 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
               ), // to match the proffessional story text indentation
             ),
           _PlainCopyHeadingRegistration(
-            heading: widget.cards[index].title,
+            heading: cards[index].title,
             child: TwExpandableCard(
-              title: widget.cards[index].title,
-              isExpanded: _expandedStates[index],
-              border: gridLineStyle.borderAll,
+              title: cards[index].title,
               onTap: () {
                 PageScaffold.clearPageSelection(context);
-                setState(() {
-                  _expandedStates[index] = !_expandedStates[index];
-                });
-              },
-              childBuilder: (BuildContext context, bool isExpanded) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const _SelectableCopyBreak(height: 12),
-                    _ProjectCardMarkdownBody(
-                      document: widget.cards[index].contentDocument,
-                      selectable: isExpanded,
-                    ),
-                  ],
+                showAppModal(
+                  context: context,
+                  headerTitle: cards[index].title,
+                  builder: (BuildContext context, VoidCallback close) {
+                    return ProjectStoryModalContent(
+                      contentDocument: cards[index].contentDocument,
+                    );
+                  },
                 );
               },
             ),
@@ -697,57 +652,6 @@ class _ProjectCardsMarkdownLoader {
   }
 }
 
-class _SocialSection extends StatelessWidget {
-  const _SocialSection({required this.title, required this.entries});
-
-  final String title;
-  final List<_SocialItem> entries;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const _SelectableCopyBreak(height: 20, lineBreaks: 2),
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: '# ',
-                style: TwTextStyles.of(context).transparentSelectionSpacer,
-              ),
-              TextSpan(text: title),
-            ],
-          ),
-          style: TwTextStyles.of(context).h1DisplayForContext(
-            context: context,
-            color: context.twColors.pageBodyText,
-          ),
-        ),
-        const _SelectableCopyBreak(height: 10),
-        IntrinsicWidth(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              for (final _SocialItem entry in entries) ...<Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: _SocialRow(entry: entry),
-                ),
-                const _SelectableCopyBreak(
-                  height: 6,
-                  padding: EdgeInsets.only(
-                    left: 55,
-                  ), // This alignment is computed from the total offset of the social row text labels (10 outer padding + 4 internal padding + 27 icon slot + 14 spacer = 55 pixels).
-                ),
-              ],
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _SelectableCopyBreak extends StatelessWidget {
   const _SelectableCopyBreak({
@@ -821,6 +725,25 @@ class _SocialRowState extends State<_SocialRow> {
     final Color color = _isHovered
         ? textColor.withValues(alpha: 0.82)
         : textColor;
+
+    final tokens = TwTextStyleTokens.forBrightness(
+      Theme.of(context).brightness,
+    );
+    final baseStyle = TwTextStyles.of(context).bodyForContextless(
+      color: color,
+      textScale:
+          MediaQuery.textScalerOf(context).scale(tokens.twBodyBaseFontSize) /
+          tokens.twBodyBaseFontSize,
+    );
+    final h2 = TwTextStyles.of(context).h2From(baseStyle);
+    final TextStyle cardTitleStyle = TwTextStyles.of(context).cardTitleFrom(h2);
+    final TextStyle linkTextStyle = cardTitleStyle.copyWith(
+      fontWeight: FontWeight.w300,
+      fontSize: cardTitleStyle.fontSize != null
+          ? cardTitleStyle.fontSize! - 2.0
+          : null,
+    );
+
     final Widget row = MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -829,46 +752,44 @@ class _SocialRowState extends State<_SocialRow> {
         button: true,
         label: widget.entry.label,
         child: Material(
-          color: Colors.transparent,
+          color: context.twColors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(6),
             hoverColor: textColor.withValues(alpha: 0.07),
             mouseCursor: SystemMouseCursors.click,
             onTap: widget.entry.onTap,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(4, 6, 24, 6),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 9),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   // Reserve a fixed icon slot so all labels start at the same x-position.
                   SizedBox(
-                    width: 27,
-                    height: 27,
+                    width: 25,
+                    height: 25,
                     child: Center(
                       // Use IconTheme so both Material Icon and FaIcon inherit size/color.
                       child: IconTheme(
-                        data: IconThemeData(size: 27, color: color),
+                        data: IconThemeData(size: 25, color: color),
                         child: widget.entry.icon,
                       ),
                     ),
                   ),
                   const SizedBox(width: 14),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(text: widget.entry.label),
-                        if (widget.entry.copyUrl != null)
-                          TextSpan(
-                            text: ' (${widget.entry.copyUrl})',
-                            style: TwTextStyles.of(
-                              context,
-                            ).transparentSelectionSpacer,
-                          ),
-                      ],
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: widget.entry.label),
+                          if (widget.entry.copyUrl != null)
+                            TextSpan(
+                              text: ' (${widget.entry.copyUrl})',
+                              style: TwTextStyles.of(
+                                context,
+                              ).transparentSelectionSpacer,
+                            ),
+                        ],
+                      ),
+                      style: linkTextStyle,
                     ),
-                    style: TwTextStyles.of(
-                      context,
-                    ).bodyForContext(context: context, color: color),
                   ),
                 ],
               ),
