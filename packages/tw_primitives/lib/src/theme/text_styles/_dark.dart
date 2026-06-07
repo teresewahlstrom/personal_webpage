@@ -50,8 +50,13 @@ class TwTextStyleTokensDark {
   static const List<Shadow> twCardTitleShadows = [
     Shadow(
       color: Colors.black,
-      offset: Offset(0, 1.5),
-      blurRadius: 3.0,
+      offset: Offset(0, 2.0),
+      blurRadius: 4.0,
+    ),
+    Shadow(
+      color: Colors.black,
+      offset: Offset(0, 4.0),
+      blurRadius: 8.0,
     ),
   ];
 }

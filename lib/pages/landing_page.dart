@@ -11,6 +11,7 @@ import '../config/app_ui_config.dart';
 import '../modals/project_story_modal.dart';
 import '../services/subject_keywords_registry.dart';
 import '../widgets/app_modal.dart';
+import '../widgets/capabilities_map.dart';
 import '../widgets/shell/page_scaffold.dart';
 
 class LandingPage extends StatefulWidget {
@@ -262,7 +263,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const _SelectableCopyBreak(height: 18, lineBreaks: 2),
+                        const _SelectableCopyBreak(height: 0, lineBreaks: 1),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
                           builder:
@@ -283,13 +284,13 @@ class _LandingPageState extends State<LandingPage> {
                                 if (!snapshot.hasData) {
                                   return const SizedBox(height: 37);
                                 }
-
-                                return _ProjectsSection(
-                                  cards: snapshot.data!.cards,
-                                );
+  
+                                 return CapabilitiesMap(
+                                   cards: snapshot.data!.cards,
+                                 );
                               },
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 0),
                       ],
                     ),
                   ),
@@ -396,104 +397,7 @@ class _HeroStatement extends StatelessWidget {
   }
 }
 
-class _ProjectsSection extends StatelessWidget {
-  const _ProjectsSection({required this.cards});
 
-  final List<_ProjectCardData> cards;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        for (int index = 0; index < cards.length; index++) ...<Widget>[
-          if (index > 0)
-            const _SelectableCopyBreak(
-              height: 16,
-              padding: EdgeInsets.only(
-                left: 12,
-              ), // to match the proffessional story text indentation
-            ),
-          _PlainCopyHeadingRegistration(
-            heading: cards[index].title,
-            child: TwExpandableCard(
-              title: cards[index].title,
-              onTap: () {
-                PageScaffold.clearPageSelection(context);
-                showAppModal(
-                  context: context,
-                  headerTitle: cards[index].title,
-                  builder: (BuildContext context, VoidCallback close) {
-                    return ProjectStoryModalContent(
-                      contentDocument: cards[index].contentDocument,
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-class _PlainCopyHeadingRegistration extends StatefulWidget {
-  const _PlainCopyHeadingRegistration({
-    required this.heading,
-    required this.child,
-  });
-
-  final String heading;
-  final Widget child;
-
-  @override
-  State<_PlainCopyHeadingRegistration> createState() =>
-      _PlainCopyHeadingRegistrationState();
-}
-
-class _PlainCopyHeadingRegistrationState
-    extends State<_PlainCopyHeadingRegistration> {
-  final Object _registrationKey = Object();
-  MarkupSelectionRegistry? _registry;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateRegistration();
-  }
-
-  @override
-  void didUpdateWidget(covariant _PlainCopyHeadingRegistration oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.heading != oldWidget.heading) {
-      _updateRegistration();
-    }
-  }
-
-  @override
-  void dispose() {
-    _registry?.copyHelper.unregisterPlainHeading(_registrationKey);
-    super.dispose();
-  }
-
-  void _updateRegistration() {
-    final MarkupSelectionRegistry? registry = MarkupSelectionRegistry.maybeOf(
-      context,
-    );
-    if (registry != _registry) {
-      _registry?.copyHelper.unregisterPlainHeading(_registrationKey);
-      _registry = registry;
-    }
-    _registry?.copyHelper.registerPlainHeading(
-      _registrationKey,
-      widget.heading,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
-}
 
 MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
   return buildMarkdownSurfaceStyle(
@@ -507,15 +411,8 @@ MarkdownSurfaceStyle _buildProjectCardMarkdownSurface(BuildContext context) {
 class _ProjectCardsContent {
   const _ProjectCardsContent({required this.cards, this.introDocument});
 
-  final List<_ProjectCardData> cards;
+  final List<ProjectCardData> cards;
   final MarkupDocument? introDocument;
-}
-
-class _ProjectCardData {
-  const _ProjectCardData({required this.title, required this.contentDocument});
-
-  final String title;
-  final MarkupDocument contentDocument;
 }
 
 class _ProjectCardMarkdownBody extends StatefulWidget {
@@ -610,7 +507,7 @@ class _ProjectCardsMarkdownLoader {
         .toList(growable: false);
 
     final List<String> cardSections = <String>[...normalizedSections];
-    final List<_ProjectCardData> cards = cardSections
+    final List<ProjectCardData> cards = cardSections
         .map(
           (String section) =>
               _parseCardSection(section, sourceAssetPath: sourceAssetPath),
@@ -626,7 +523,7 @@ class _ProjectCardsMarkdownLoader {
     return _ProjectCardsContent(cards: cards, introDocument: null);
   }
 
-  static _ProjectCardData _parseCardSection(
+  static ProjectCardData _parseCardSection(
     String section, {
     required String sourceAssetPath,
   }) {
@@ -645,7 +542,7 @@ class _ProjectCardsMarkdownLoader {
       );
     }
 
-    return _ProjectCardData(
+    return ProjectCardData(
       title: title,
       contentDocument: MessageMarkup.parse(contentMarkdown),
     );
@@ -740,7 +637,7 @@ class _SocialRowState extends State<_SocialRow> {
     final TextStyle linkTextStyle = cardTitleStyle.copyWith(
       fontWeight: FontWeight.w300,
       fontSize: cardTitleStyle.fontSize != null
-          ? cardTitleStyle.fontSize! - 2.0
+          ? cardTitleStyle.fontSize! - 3.5
           : null,
     );
 
