@@ -138,7 +138,7 @@ class _PageScaffoldState extends State<PageScaffold> {
       backgroundColor: context.twColors.pageBackground,
       gridLineStyle: AppLineStyle(
         color: context.twIsDark
-            ? const Color(0xFF00F0FF)
+            ? context.twColors.linkTextHover
             : context.twColors.lineSubtle,
         width: AppLineTheme.subtleWidth,
       ),

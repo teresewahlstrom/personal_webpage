@@ -18,12 +18,22 @@ class GridBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final HSLColor baseHsl = HSLColor.fromColor(backgroundColor);
+    final double topSaturation =
+        (baseHsl.saturation + 0.10).clamp(0.0, 1.0).toDouble();
+    final double topLightness =
+        (baseHsl.lightness + 0.06).clamp(0.0, 1.0).toDouble();
+    final double bottomLightness =
+        (baseHsl.lightness - 0.05).clamp(0.0, 1.0).toDouble();
     final Color gradientTop = isDark
-        ? const Color(0xFF0A1231)
+        ? baseHsl
+              .withSaturation(topSaturation)
+              .withLightness(topLightness)
+              .toColor()
         : backgroundColor;
-    final Color gradientMiddle = isDark ? const Color(0xFF070B1D) : backgroundColor;
+    final Color gradientMiddle = backgroundColor;
     final Color gradientBottom = isDark
-        ? const Color(0xFF03050F)
+        ? baseHsl.withLightness(bottomLightness).toColor()
         : backgroundColor;
     return Container(
       decoration: BoxDecoration(
@@ -165,11 +175,11 @@ class _GridPainter extends CustomPainter {
       Offset(size.width * 0.50, size.height * 0.92),
       size.longestSide * 0.95,
       <Color>[
-        Colors.white.withValues(alpha: 0.98),
-        Colors.white.withValues(alpha: 0.82),
-        Colors.white.withValues(alpha: 0.46),
-        Colors.white.withValues(alpha: 0.10),
-        Colors.white.withValues(alpha: 0.0),
+        baseColor.withValues(alpha: 0.98),
+        baseColor.withValues(alpha: 0.82),
+        baseColor.withValues(alpha: 0.46),
+        baseColor.withValues(alpha: 0.10),
+        baseColor.withValues(alpha: 0.0),
       ],
       const <double>[0.0, 0.30, 0.58, 0.84, 1.0],
     );
