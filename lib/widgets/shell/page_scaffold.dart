@@ -137,7 +137,9 @@ class _PageScaffoldState extends State<PageScaffold> {
     return GridBackground(
       backgroundColor: context.twColors.pageBackground,
       gridLineStyle: AppLineStyle(
-        color: context.twColors.lineSubtle,
+        color: context.twIsDark
+            ? const Color(0xFF00F0FF)
+            : context.twColors.lineSubtle,
         width: AppLineTheme.subtleWidth,
       ),
       child: MarkupSelectionRegistry(

@@ -17,8 +17,27 @@ class GridBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color gradientTop = isDark
+        ? const Color(0xFF0A1231)
+        : backgroundColor;
+    final Color gradientMiddle = isDark ? const Color(0xFF070B1D) : backgroundColor;
+    final Color gradientBottom = isDark
+        ? const Color(0xFF03050F)
+        : backgroundColor;
     return Container(
-      color: backgroundColor,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            gradientTop,
+            gradientMiddle,
+            gradientBottom,
+          ],
+          stops: const <double>[0.0, 0.52, 1.0],
+        ),
+      ),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -122,8 +141,42 @@ class _GridPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..isAntiAlias = true;
 
+    final ui.Shader glowFade = ui.Gradient.linear(
+      Offset(0, horizonY),
+      Offset(0, size.height),
+      <Color>[
+        baseColor.withValues(alpha: 0.0),
+        baseColor.withValues(alpha: 0.0),
+        baseColor.withValues(alpha: 0.25),
+        baseColor.withValues(alpha: 0.55),
+      ],
+      const <double>[0.0, 0.38, 0.70, 1.0],
+    );
+
+    final Paint glowPaint = Paint()
+      ..shader = glowFade
+      ..strokeWidth = gridLineStyle.width * 4.25
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.5)
+      ..isAntiAlias = true;
+
+    final ui.Shader radialMask = ui.Gradient.radial(
+      Offset(size.width * 0.50, size.height * 0.92),
+      size.longestSide * 0.95,
+      <Color>[
+        Colors.white.withValues(alpha: 0.98),
+        Colors.white.withValues(alpha: 0.82),
+        Colors.white.withValues(alpha: 0.46),
+        Colors.white.withValues(alpha: 0.10),
+        Colors.white.withValues(alpha: 0.0),
+      ],
+      const <double>[0.0, 0.30, 0.58, 0.84, 1.0],
+    );
+
     canvas.save();
     canvas.clipRect(bounds);
+    canvas.saveLayer(bounds, Paint());
 
     const int lineCount = 75;
 
@@ -150,6 +203,11 @@ class _GridPainter extends CustomPainter {
         v: lineCount.toDouble(),
       );
 
+      canvas.drawLine(
+        start,
+        end,
+        glowPaint,
+      );
       canvas.drawLine(
         start,
         end,
@@ -183,10 +241,20 @@ class _GridPainter extends CustomPainter {
       canvas.drawLine(
         start,
         end,
+        glowPaint,
+      );
+      canvas.drawLine(
+        start,
+        end,
         v % 5 == 0 ? majorPaint : minorPaint,
       );
     }
 
+    final Paint radialMaskPaint = Paint()
+      ..shader = radialMask
+      ..blendMode = BlendMode.dstIn;
+    canvas.drawRect(bounds, radialMaskPaint);
+    canvas.restore();
     canvas.restore();
   }
 

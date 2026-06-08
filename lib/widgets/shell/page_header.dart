@@ -56,7 +56,7 @@ class _PageHeaderState extends State<PageHeader> {
               child: Row(
                 children: <Widget>[
                   Opacity(
-                    opacity: context.twIsDark ? 0.62 : 0.54,
+                    opacity: context.twIsDark ? 0.86 : 0.72,
                     child: SizedBox(
                       width: ShellUiConfig.headerLogoWidth,
                       height: ShellUiConfig.headerLogoHeight,

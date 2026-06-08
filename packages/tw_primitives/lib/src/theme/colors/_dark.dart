@@ -9,7 +9,7 @@ const Color _interactive = Color(0xFF90E8F8);
 const Color _interactiveHover = Color(0xFF90E8F8);
 
 const Color _text =  Color(0xD6DCF6F8);
-const Color _mainBgd = Color(0xFF212835);
+const Color _mainBgd = Color(0xFF070B1D);
 
 /// Dark-theme color tokens used by primitives and chat skin.
 const TwColors twColorsDark = TwColors.create(
