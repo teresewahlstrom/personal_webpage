@@ -34,11 +34,15 @@ class _MapNode {
   });
 
   double getRx(bool isCompact) {
-    if (id == 'computational') return isCompact ? 0.17 : 0.15;
-    if (id == 'rd') return isCompact ? 0.64 : 0.68;
-    if (id == 'physical' || id == 'digital' || id == 'services') return isCompact ? 0.80 : 0.82;
-    if (id == 'metal') return isCompact ? 0.24 : 0.22;
-    if (id == 'ai') return isCompact ? 0.62 : 0.66;
+    if (id == 'architect') return 0.50;
+    if (id == 'leader') return 0.50;
+    if (id == 'computational') return isCompact ? 0.24 : 0.23;
+    if (id == 'rd') return isCompact ? 0.70 : 0.71;
+    if (id == 'physical' || id == 'digital' || id == 'services') {
+      return isCompact ? 0.84 : 0.86;
+    }
+    if (id == 'metal') return isCompact ? 0.27 : 0.28;
+    if (id == 'ai') return isCompact ? 0.68 : 0.70;
     return rx;
   }
 
@@ -81,8 +85,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Capability Architect',
       label: 'Capability\nArchitect',
       icon: Icons.interests_outlined,
-      rx: 0.46,
-      ry: 0.49,
+      rx: 0.50,
+      ry: 0.50,
       connections: <String>['leader', 'computational', 'metal', 'ai', 'rd'],
     ),
     _MapNode(
@@ -90,8 +94,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Cross-Functional Leader',
       label: 'Cross-Functional\nLeader',
       icon: Icons.schema_outlined,
-      rx: 0.46,
-      ry: 0.08,
+      rx: 0.50,
+      ry: 0.11,
       connections: <String>['architect', 'rd'],
     ),
     _MapNode(
@@ -99,8 +103,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Computational Engineer',
       label: 'Computational\nEngineer',
       icon: Icons.terminal_outlined,
-      rx: 0.15,
-      ry: 0.38,
+      rx: 0.23,
+      ry: 0.37,
       connections: <String>['architect', 'ai', 'metal'],
     ),
     _MapNode(
@@ -108,8 +112,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Product R&D Engineer',
       label: 'Product R&D\nEngineer',
       icon: Icons.biotech_outlined,
-      rx: 0.68,
-      ry: 0.38,
+      rx: 0.71,
+      ry: 0.37,
       connections: <String>['architect', 'leader', 'metal', 'physical', 'digital', 'services'],
     ),
     _MapNode(
@@ -117,8 +121,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Metal 3D Printing Specialist',
       label: 'Metal 3D Printing\nSpecialist',
       icon: Icons.layers_outlined,
-      rx: 0.22,
-      ry: 0.84,
+      rx: 0.28,
+      ry: 0.82,
       connections: <String>['architect', 'computational', 'rd'],
     ),
     _MapNode(
@@ -126,8 +130,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'AI Systems for Technical Work',
       label: 'AI Systems for\nTechnical Work',
       icon: Icons.memory_outlined,
-      rx: 0.66,
-      ry: 0.84,
+      rx: 0.70,
+      ry: 0.82,
       connections: <String>['architect', 'computational', 'digital'],
     ),
     // Subcategories
@@ -136,8 +140,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Product R&D Engineer',
       label: 'Physical',
       icon: Icons.inventory_2_outlined,
-      rx: 0.82,
-      ry: 0.20,
+      rx: 0.86,
+      ry: 0.21,
       connections: <String>['rd'],
       isSubcategory: true,
     ),
@@ -146,8 +150,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Product R&D Engineer',
       label: 'Digital',
       icon: Icons.computer_outlined,
-      rx: 0.82,
-      ry: 0.38,
+      rx: 0.86,
+      ry: 0.37,
       connections: <String>['rd', 'ai'],
       isSubcategory: true,
     ),
@@ -156,8 +160,8 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       title: 'Product R&D Engineer',
       label: 'Services',
       icon: Icons.cloud_outlined,
-      rx: 0.82,
-      ry: 0.56,
+      rx: 0.86,
+      ry: 0.53,
       connections: <String>['rd'],
       isSubcategory: true,
     ),
@@ -178,7 +182,7 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
       builder: (BuildContext context, BoxConstraints constraints) {
         final double width = constraints.maxWidth;
         final bool isCompact = width < 550;
-        final double height = width * (isCompact ? 0.85 : 0.74);
+        final double height = width * (isCompact ? 0.88 : 0.76);
 
         return SizedBox(
           width: width,
@@ -200,9 +204,11 @@ class _CapabilitiesMapState extends State<CapabilitiesMap> {
                   final double nodeWidth = node.isSubcategory
                       ? (isCompact ? 70.0 : 90.0)
                       : (isCompact ? 100.0 : 140.0);
-                  final double circleSize = node.isSubcategory
-                      ? (isCompact ? 26.0 : 34.0)
-                      : (isCompact ? 34.0 : 44.0);
+                  final double circleSize = node.id == 'architect'
+                      ? (isCompact ? 42.0 : 54.0)
+                      : (node.isSubcategory
+                          ? (isCompact ? 23.0 : 30.0)
+                          : (isCompact ? 34.0 : 44.0));
 
                   final bool isHovered = _hoveredNodeId == node.id;
                   final bool isDimmed = _hoveredNodeId != null &&
@@ -275,37 +281,54 @@ class _MapNodeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double circleSize = node.isSubcategory
-        ? (isCompact ? 26.0 : 34.0)
-        : (isCompact ? 34.0 : 44.0);
-    final double iconSize = node.isSubcategory
-        ? (isCompact ? 13.0 : 16.0)
-        : (isCompact ? 16.0 : 20.0);
-    final double fontSize = node.isSubcategory
-        ? (isCompact ? 10.5 : 12.5)
-        : (isCompact ? 11.5 : 13.5);
+    final bool isArchitect = node.id == 'architect';
+    final double circleSize = isArchitect
+        ? (isCompact ? 42.0 : 54.0)
+        : (node.isSubcategory
+            ? (isCompact ? 23.0 : 30.0)
+            : (isCompact ? 34.0 : 44.0));
+    final double iconSize = isArchitect
+        ? (isCompact ? 19.0 : 24.0)
+        : (node.isSubcategory
+            ? (isCompact ? 11.0 : 14.0)
+            : (isCompact ? 16.0 : 20.0));
+    final double fontSize = isArchitect
+        ? (isCompact ? 12.5 : 15.0)
+        : (node.isSubcategory
+            ? (isCompact ? 10.0 : 12.0)
+            : (isCompact ? 11.5 : 13.5));
 
     final Color activeColor = context.twColors.linkTextHover;
     final Color textColor = isDimmed
         ? context.twColors.pageBodyText.withValues(alpha: 0.3)
-        : context.twColors.pageBodyText;
+        : context.twColors.pageBodyText.withValues(
+            alpha: node.isSubcategory ? 0.72 : 1.0,
+          );
 
     final Color circleBorderColor = isHovered
         ? activeColor
         : (isDimmed
             ? context.twColors.botBubbleBorder.withValues(alpha: 0.2)
-            : context.twColors.botBubbleBorder.withValues(alpha: 0.6));
+            : context.twColors.botBubbleBorder.withValues(
+                alpha: isArchitect ? 0.85 : (node.isSubcategory ? 0.34 : 0.6),
+              ));
 
     // Transparent background by default, translucent active color on hover
     final Color circleBg = isHovered
         ? activeColor.withValues(alpha: 0.15)
-        : context.twColors.transparent;
+        : (isArchitect
+            ? context.twColors.pageBackground.withValues(alpha: 0.42)
+            : context.twColors.pageBackground.withValues(
+                alpha: node.isSubcategory ? 0.18 : 0.28,
+              ));
 
     final Color iconColor = isHovered
         ? activeColor
         : (isDimmed
             ? context.twColors.pageBodyText.withValues(alpha: 0.35)
-            : context.twColors.pageBodyText.withValues(alpha: 0.85));
+            : context.twColors.pageBodyText.withValues(
+                alpha: node.isSubcategory ? 0.58 : 0.85,
+              ));
 
     final List<Shadow> textShadows = <Shadow>[
       // Halo masking shadows in the theme background color to cover intersecting connection lines
@@ -352,7 +375,15 @@ class _MapNodeWidget extends StatelessWidget {
                           spreadRadius: 1.0,
                         )
                       ]
-                    : null,
+                    : [
+                        BoxShadow(
+                          color: activeColor.withValues(
+                            alpha: isArchitect ? 0.12 : 0.045,
+                          ),
+                          blurRadius: isArchitect ? 18.0 : 10.0,
+                          spreadRadius: isArchitect ? 1.0 : 0.0,
+                        ),
+                      ],
               ),
               child: Center(
                 child: TweenAnimationBuilder<Color?>(
@@ -381,7 +412,9 @@ class _MapNodeWidget extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Rubik',
                   fontSize: fontSize,
-                  fontWeight: isHovered ? FontWeight.w400 : FontWeight.w300,
+                  fontWeight: isArchitect
+                      ? FontWeight.w400
+                      : (isHovered ? FontWeight.w400 : FontWeight.w300),
                   color: textColor,
                   height: 1.25,
                   shadows: textShadows,
@@ -412,13 +445,18 @@ class _MapConnectionsPainter extends CustomPainter {
   });
 
   double _getCircleSize(_MapNode node, bool isCompact) {
+    if (node.id == 'architect') {
+      return isCompact ? 42.0 : 54.0;
+    }
     return node.isSubcategory
-        ? (isCompact ? 26.0 : 34.0)
+        ? (isCompact ? 23.0 : 30.0)
         : (isCompact ? 34.0 : 44.0);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
+    _paintAnchoringLayer(canvas, size);
+
     final edges = _getUniqueEdges();
 
     for (final edge in edges) {
@@ -439,16 +477,24 @@ class _MapConnectionsPainter extends CustomPainter {
       final Offset direction = p2 - p1;
       final double distance = direction.distance;
 
-      final Offset p1Shortened = distance > r1 ? p1 + (direction * (r1 / distance)) : p1;
-      final Offset p2Shortened = distance > r2 ? p2 - (direction * (r2 / distance)) : p2;
+      final Offset p1Shortened = distance > r1
+          ? p1 + (direction * (r1 / distance))
+          : p1;
+      final Offset p2Shortened = distance > r2
+          ? p2 - (direction * (r2 / distance))
+          : p2;
 
       final isEdgeHighlighted = hoveredNodeId != null &&
           (edge.from == hoveredNodeId || edge.to == hoveredNodeId);
       final isAnyHovered = hoveredNodeId != null;
 
+      final bool isArchitectEdge =
+          edge.from == 'architect' || edge.to == 'architect';
+      final bool isSupportingEdge =
+          fromNode.isSubcategory || toNode.isSubcategory;
       final double opacity = isAnyHovered
           ? (isEdgeHighlighted ? 0.90 : 0.05)
-          : 0.25;
+          : (isArchitectEdge ? 0.38 : (isSupportingEdge ? 0.16 : 0.24));
 
       final paintColor = isEdgeHighlighted ? activeColor : lineColor;
 
@@ -456,8 +502,10 @@ class _MapConnectionsPainter extends CustomPainter {
         ..color = paintColor.withValues(alpha: opacity)
         ..style = PaintingStyle.stroke
         ..strokeWidth = isEdgeHighlighted 
-            ? (isCompact ? 2.0 : 2.5) 
-            : (isCompact ? 0.75 : 1.25)
+            ? (isCompact ? 2.0 : 2.5)
+            : (isArchitectEdge
+                ? (isCompact ? 1.15 : 1.55)
+                : (isCompact ? 0.75 : 1.15))
         ..strokeCap = StrokeCap.round;
 
       final path = Path();
@@ -495,6 +543,77 @@ class _MapConnectionsPainter extends CustomPainter {
       }
 
       canvas.drawPath(path, mainPaint);
+    }
+  }
+
+  void _paintAnchoringLayer(Canvas canvas, Size size) {
+    final Offset center = Offset(size.width * 0.50, size.height * 0.50);
+    final Paint radialGlow = Paint()
+      ..shader = RadialGradient(
+        colors: <Color>[
+          activeColor.withValues(alpha: 0.075),
+          lineColor.withValues(alpha: 0.030),
+          lineColor.withValues(alpha: 0.0),
+        ],
+        stops: const <double>[0.0, 0.44, 1.0],
+      ).createShader(
+        Rect.fromCircle(
+          center: center,
+          radius: size.shortestSide * (isCompact ? 0.42 : 0.38),
+        ),
+      );
+    canvas.drawCircle(
+      center,
+      size.shortestSide * (isCompact ? 0.42 : 0.38),
+      radialGlow,
+    );
+
+    final Paint guidePaint = Paint()
+      ..color = lineColor.withValues(alpha: 0.13)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = isCompact ? 0.55 : 0.75
+      ..strokeCap = StrokeCap.round;
+    final Paint guideGlowPaint = Paint()
+      ..color = activeColor.withValues(alpha: 0.035)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = isCompact ? 5.0 : 7.0
+      ..strokeCap = StrokeCap.round;
+
+    final List<Offset> guidePoints = <Offset>[
+      Offset(size.width * 0.50, size.height * 0.11),
+      Offset(size.width * 0.23, size.height * 0.37),
+      Offset(size.width * 0.71, size.height * 0.37),
+      Offset(size.width * 0.28, size.height * 0.82),
+      Offset(size.width * 0.70, size.height * 0.82),
+    ];
+
+    for (final Offset point in guidePoints) {
+      final Path path = Path()
+        ..moveTo(center.dx, center.dy)
+        ..quadraticBezierTo(
+          (center.dx + point.dx) / 2,
+          (center.dy + point.dy) / 2 - size.height * 0.018,
+          point.dx,
+          point.dy,
+        );
+      canvas.drawPath(path, guideGlowPaint);
+      canvas.drawPath(path, guidePaint);
+    }
+
+    final Paint nodeAnchorPaint = Paint()
+      ..color = lineColor.withValues(alpha: 0.10)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.75;
+    for (final _MapNode node in nodes) {
+      final Offset nodeCenter = Offset(
+        node.getRx(isCompact) * size.width,
+        node.getRy(isCompact) * size.height,
+      );
+      canvas.drawCircle(
+        nodeCenter,
+        _getCircleSize(node, isCompact) * (node.isSubcategory ? 0.80 : 0.72),
+        nodeAnchorPaint,
+      );
     }
   }
 

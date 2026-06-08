@@ -91,6 +91,8 @@ class _GridPainter extends CustomPainter {
 
     final Color baseColor = gridLineStyle.color;
 
+    _paintDepthLayer(canvas, size, baseColor);
+
     final ui.Shader verticalFade = ui.Gradient.linear(
       Offset(0, horizonY),
       Offset(0, size.height),
@@ -186,6 +188,73 @@ class _GridPainter extends CustomPainter {
     }
 
     canvas.restore();
+  }
+
+  void _paintDepthLayer(Canvas canvas, Size size, Color baseColor) {
+    final Rect bounds = Offset.zero & size;
+    final Offset upperCenter = Offset(size.width * 0.52, size.height * 0.34);
+    final Paint atmospherePaint = Paint()
+      ..shader = ui.Gradient.radial(
+        upperCenter,
+        size.shortestSide * 0.68,
+        <Color>[
+          baseColor.withValues(alpha: 0.050),
+          baseColor.withValues(alpha: 0.018),
+          baseColor.withValues(alpha: 0.0),
+        ],
+        const <double>[0.0, 0.48, 1.0],
+      );
+    canvas.drawRect(bounds, atmospherePaint);
+
+    final Paint structuralPaint = Paint()
+      ..color = baseColor.withValues(alpha: 0.075)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = gridLineStyle.width * 0.75
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
+    final Paint structuralGlowPaint = Paint()
+      ..color = baseColor.withValues(alpha: 0.025)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = gridLineStyle.width * 4.5
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
+
+    final List<Path> traces = <Path>[
+      Path()
+        ..moveTo(size.width * 0.12, size.height * 0.26)
+        ..lineTo(size.width * 0.38, size.height * 0.20)
+        ..lineTo(size.width * 0.62, size.height * 0.28),
+      Path()
+        ..moveTo(size.width * 0.78, size.height * 0.38)
+        ..lineTo(size.width * 0.58, size.height * 0.46)
+        ..lineTo(size.width * 0.34, size.height * 0.40),
+      Path()
+        ..moveTo(size.width * 0.20, size.height * 0.58)
+        ..lineTo(size.width * 0.43, size.height * 0.54)
+        ..lineTo(size.width * 0.70, size.height * 0.61),
+    ];
+
+    for (final Path trace in traces) {
+      canvas.drawPath(trace, structuralGlowPaint);
+      canvas.drawPath(trace, structuralPaint);
+    }
+
+    final Paint particlePaint = Paint()
+      ..color = baseColor.withValues(alpha: 0.11)
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+    final List<Offset> particles = <Offset>[
+      Offset(size.width * 0.18, size.height * 0.33),
+      Offset(size.width * 0.37, size.height * 0.23),
+      Offset(size.width * 0.64, size.height * 0.30),
+      Offset(size.width * 0.76, size.height * 0.42),
+      Offset(size.width * 0.28, size.height * 0.56),
+      Offset(size.width * 0.58, size.height * 0.52),
+    ];
+
+    for (final Offset particle in particles) {
+      canvas.drawCircle(particle, 1.0, particlePaint);
+    }
   }
 
   double _calculatePerspectiveScale({

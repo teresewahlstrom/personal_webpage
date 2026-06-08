@@ -51,17 +51,17 @@ final class ShellUiConfig {
   static const double pageScrollbarCrossAxisMargin = 0.0;
   static const double pageScrollbarThickness = 7.0;
 
-  static const double headerMinHeight = 56;
+  static const double headerMinHeight = 52;
   static const double headerMaxWidth = 700;
-  static const double headerLogoWidth = 56;
-  static const double headerLogoHeight = 40;
+  static const double headerLogoWidth = 42;
+  static const double headerLogoHeight = 30;
   static const double headerToggleSize = 42;
   static const EdgeInsets headerPadding = EdgeInsets.symmetric(horizontal: 11);
 
   static const double footerMinHeight = 50;
   static const EdgeInsets footerPadding = EdgeInsets.symmetric(
     horizontal: 16,
-    vertical: 10,
+    vertical: 14,
   );
   static Color pageBackgroundFor(Brightness brightness) {
     return TwColors.forBrightness(brightness).pageBackground;

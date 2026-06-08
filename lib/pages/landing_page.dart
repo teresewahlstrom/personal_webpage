@@ -231,8 +231,11 @@ class _LandingPageState extends State<LandingPage> {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const _SelectableCopyBreak(
-                                      height: 10,
+                                    _SelectableCopyBreak(
+                                      height:
+                                          MediaQuery.sizeOf(context).width < 550
+                                          ? 8
+                                          : 10,
                                       lineBreaks: 1,
                                     ),
                                     _ProjectCardMarkdownBody(
@@ -253,7 +256,6 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
 
-
               Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
@@ -263,7 +265,11 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const _SelectableCopyBreak(height: 0, lineBreaks: 1),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).width < 550
+                              ? 14
+                              : 18,
+                        ),
                         FutureBuilder<_ProjectCardsContent>(
                           future: _projectCardsFuture,
                           builder:
@@ -284,13 +290,17 @@ class _LandingPageState extends State<LandingPage> {
                                 if (!snapshot.hasData) {
                                   return const SizedBox(height: 37);
                                 }
-  
-                                 return CapabilitiesMap(
-                                   cards: snapshot.data!.cards,
-                                 );
+
+                                return CapabilitiesMap(
+                                  cards: snapshot.data!.cards,
+                                );
                               },
                         ),
-                        const SizedBox(height: 0),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).width < 550
+                              ? 28
+                              : 34,
+                        ),
                       ],
                     ),
                   ),
@@ -346,7 +356,10 @@ class _HeroStatement extends StatelessWidget {
         fontSize: style.fontSize != null ? style.fontSize! + 10 : null,
       );
     }();
-    final bool isWide = MediaQuery.sizeOf(context).width >= 320;
+    final double viewportWidth = MediaQuery.sizeOf(context).width;
+    final bool isWide = viewportWidth >= 340;
+    final bool isCompact = viewportWidth < 550;
+    final double portraitSize = isCompact ? 108.0 : 120.0;
 
     final Widget profilePic = ColorFiltered(
       colorFilter: _lerpToBackgroundFilter(
@@ -357,8 +370,8 @@ class _HeroStatement extends StatelessWidget {
         borderRadius: ShellUiConfig.heroPortraitBorderRadius,
         child: Image.asset(
           'assets/FB_IMG_1780682807710.jpg',
-          width: 120,
-          height: 120,
+          width: portraitSize,
+          height: portraitSize,
           fit: BoxFit.cover,
         ),
       ),
@@ -367,13 +380,16 @@ class _HeroStatement extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _SelectableCopyBreak(height: 6, lineBreaks: 2),
+        _SelectableCopyBreak(
+          height: isCompact ? 2 : 6,
+          lineBreaks: isCompact ? 1 : 2,
+        ),
         if (isWide)
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               profilePic,
-              SizedBox(width: MediaQuery.sizeOf(context).width >= 450 ? 24 : 16),
+              SizedBox(width: viewportWidth >= 450 ? 22 : 14),
               Expanded(child: socialCard),
             ],
           )
@@ -382,16 +398,16 @@ class _HeroStatement extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               profilePic,
-              const SizedBox(height: 16),
+              SizedBox(height: isCompact ? 12 : 16),
               socialCard,
             ],
           ),
-        const SizedBox(height: 30),
+        SizedBox(height: isCompact ? 22 : 30),
         Text(
           'Terese Wahlström',
           style: h1Style,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: isCompact ? 9 : 12),
         Text(
           _content,
           style: baseBody,

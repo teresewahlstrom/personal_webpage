@@ -42,7 +42,7 @@ class _PageHeaderState extends State<PageHeader> {
     return SizedBox(
       width: double.infinity,
       height: ShellUiConfig.headerMinHeight + safeInsets.top,
-        child: DecoratedBox(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: context.twColors.transparent,
         ),
@@ -55,16 +55,22 @@ class _PageHeaderState extends State<PageHeader> {
               ),
               child: Row(
                 children: <Widget>[
-                  SizedBox(
-                    width: ShellUiConfig.headerLogoWidth,
-                    height: ShellUiConfig.headerLogoHeight,
-                    child: _isSvgLogo
-                        ? TwSvgAsset(
-                            widget.logoAssetPath,
-                            fit: BoxFit.contain,
-                            color: logoColor,
-                          )
-                        : Image.asset(widget.logoAssetPath, fit: BoxFit.contain),
+                  Opacity(
+                    opacity: context.twIsDark ? 0.62 : 0.54,
+                    child: SizedBox(
+                      width: ShellUiConfig.headerLogoWidth,
+                      height: ShellUiConfig.headerLogoHeight,
+                      child: _isSvgLogo
+                          ? TwSvgAsset(
+                              widget.logoAssetPath,
+                              fit: BoxFit.contain,
+                              color: logoColor,
+                            )
+                          : Image.asset(
+                              widget.logoAssetPath,
+                              fit: BoxFit.contain,
+                            ),
+                    ),
                   ),
                   const Spacer(),
                 ],
