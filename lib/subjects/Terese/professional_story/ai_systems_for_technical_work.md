@@ -3,7 +3,7 @@ id: ai-systems-for-technical-work
 title: AI Systems for Technical Work
 category: AI & KNOWLEDGE SYSTEMS
 short: I build AI-enabled systems that help people navigate complex technical knowledge through structured information, traceable evidence, and clear validation boundaries.
-image: assets/content/{theme}/capability/ai.png
+image: lib/subjects/Terese/assets/content/{theme}/capability/ai.png
 order: 6
 ---
 

@@ -3,7 +3,7 @@ id: capability-architect
 title: Capability Architect
 category: SYSTEMS & ENABLEMENT
 short: I turn scattered technical knowledge into clear workflows, shared resources, and practical decision-support tools, so teams can work more consistently and independently.
-image: assets/content/{theme}/capability/capability_architect.png
+image: lib/subjects/Terese/assets/content/{theme}/capability/capability_architect.png
 order: 1
 ---
 

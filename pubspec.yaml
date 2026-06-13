@@ -34,8 +34,8 @@ flutter:
     - assets/t1_logo/t1_logo_favicon_dark.svg
     - assets/t1_logo/t1_logo_favicon_light.svg
     - assets/profile_pic.jpg
-    - assets/content/dark/capability/
-    - assets/content/light/capability/
+    - lib/subjects/Terese/assets/content/dark/capability/
+    - lib/subjects/Terese/assets/content/light/capability/
     - lib/subjects/Terese/professional_story/
 
   fonts:
