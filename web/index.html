@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html style="height: 100%; margin: 0; background: #EEEEEE;">
+  <head>
+    <base href="$FLUTTER_BASE_HREF" />
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta
+      name="description"
+      content="Personal website of Terese Wahlström — mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling."
+    />
+    <link rel="canonical" href="https://www.t1grid.com/" />
+    <meta
+      property="og:title"
+      content="Terese Wahlström personal website"
+    />
+    <meta
+      property="og:description"
+      content="Personal website of Terese Wahlström — mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.t1grid.com/" />
+    <meta property="og:site_name" content="T1 grid" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Terese Wahlström personal website"
+    />
+    <meta
+      name="twitter:description"
+      content="Personal website of Terese Wahlström — mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling."
+    />
+    <meta id="theme-color" name="theme-color" content="#F8F9F7" />
+    <title>Terese Wahlström personal website</title>
+    <link id="app-icon" rel="icon" href="assets/t1_logo/t1_logo_favicon_dark.svg" type="image/svg+xml" />
+    <link id="app-shortcut-icon" rel="shortcut icon" href="assets/t1_logo/t1_logo_favicon_dark.svg" type="image/svg+xml" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Terese Wahlström",
+        "url": "https://www.t1grid.com/",
+        "jobTitle": "Mechanical Engineer",
+        "description": "Mechanical engineer working across AI-assisted workflows, knowledge systems, additive manufacturing, and engineering tooling.",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "T1 grid"
+        },
+        "sameAs": ["https://www.linkedin.com/in/teresewahlstrom"]
+      }
+    </script>
+    <script>
+      (function () {
+        var darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        var themeColor = document.getElementById('theme-color');
+        var iconLink = document.getElementById('app-icon');
+        var shortcutIconLink = document.getElementById('app-shortcut-icon');
+        var lightIcon = 'assets/t1_logo/t1_logo_favicon_dark.svg';
+        var darkIcon = 'assets/t1_logo/t1_logo_favicon_light.svg';
+        var lightBackground = '#EEEEEE';
+        var darkBackground = '#212835';
+
+        function setHostBackground(color) {
+          document.documentElement.style.background = color;
+          if (document.body) {
+            document.body.style.background = color;
+          }
+          var appRoot = document.getElementById('app');
+          if (appRoot) {
+            appRoot.style.background = color;
+          }
+        }
+
+        function applyBrowserTheme(event) {
+          var prefersDark = event.matches;
+          var iconHref = prefersDark ? darkIcon : lightIcon;
+          var background = prefersDark ? darkBackground : lightBackground;
+
+          themeColor.setAttribute('content', background);
+          iconLink.setAttribute('href', iconHref);
+          shortcutIconLink.setAttribute('href', iconHref);
+          setHostBackground(background);
+        }
+
+        applyBrowserTheme(darkModeQuery);
+        document.addEventListener('DOMContentLoaded', function () {
+          applyBrowserTheme(darkModeQuery);
+        });
+        darkModeQuery.addEventListener('change', applyBrowserTheme);
+      })();
+    </script>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #EEEEEE;
+      }
+      #app {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #EEEEEE;
+      }
+      img {
+        -webkit-user-drag: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="flutter_bootstrap.js" async></script>
+  </body>
+</html>

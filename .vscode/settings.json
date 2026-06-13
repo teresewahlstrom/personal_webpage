@@ -1,0 +1,15 @@
+{
+  "python.analysis.extraPaths": [
+    "backend/twin/repo/src"
+  ]
+
+  ,"dart.analysisExcludedFolders": [
+    "${workspaceFolder}/packages/tw_super_editor"
+  ],
+  "files.watcherExclude": {
+    "**/packages/tw_super_editor/**": true
+  },
+  "search.exclude": {
+    "**/packages/tw_super_editor/**": true
+  }
+}

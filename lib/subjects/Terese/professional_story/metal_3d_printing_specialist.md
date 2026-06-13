@@ -1,0 +1,19 @@
+---
+id: metal-3d-printing-specialist
+title: Metal 3D Printing Specialist
+category: AM & MANUFACTURING
+short: I help organisations evaluate and industrialise metal additive manufacturing with attention to applications, process economics, quality, and production readiness.
+image: assets/content/{theme}/capability/3D-printing.png
+order: 4
+---
+
+**Terese helps organisations turn metal additive manufacturing (AM, also known as 3D printing) from technical potential into practical industrial value. She focuses on establishing a realistic, supportable path from concept to repeatable production capability.**
+
+True expertise in metal additive manufacturing cannot be gained from a single vantage point. Her perspective is built on a comparative analysis across technologies and conventional manufacturing methods, ensuring AM is evaluated against real economic and physical baselines rather than treated as the default solution. With technical depth in **Metal Binder Jetting** and **Electron Beam Melting**, she has worked across Volvo Cars, GE Additive, and Markforged, spanning early-stage evaluation, technical-commercial qualification, and live ISO 9001 production. This end-to-end exposure allows her to convert expert-dependent process realities into structured decision logic and help organisations establish execution that can be operated, supported, and trusted.
+
+## Core AM contributions
+
+* **Strategic technology evaluation - Volvo Cars:** Her work included technology scouting, comparative proof-of-concept evaluation across diverse printers, materials, and AM processes, production-suitability assessment, and make-versus-buy decision support. Building on technology analysis spanning literature, case studies, and applied industrial work since her [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478), she evaluated where AM met application-specific technical requirements and held up against lifecycle-cost, environmental, and safety constraints. This enabled better technology choices and earlier rejection of poor-fit use cases.
+* **Technical-commercial qualification and delivery under uncertainty - GE Additive:** She built feasibility analyses and ROI frameworks to determine whether customer applications genuinely fit the technology. When a prospective customer needed demo parts from an unreleased material on a timeline that the standard logistics route could not meet, she persuaded materials R&D to establish workable parameters, identified and secured an accelerated alternative HIP route, and aligned operators, suppliers, and shipments around the delivery. The accelerated delivery helped the customer reach a critical test milestone and preserve the opportunity. The resulting customer relationship has since generated more than EUR 4 million in cumulative equipment and service revenue.
+* **Production systems execution - Markforged and GE Additive:** In an ISO 9001 production environment for metal binder jetting at Markforged and in pre-sales benchmark production at GE Additive, she worked across order intake, CAD optimisation for manufacturability, build preparation, scheduling, quality logic, and process handoffs. This gave her a grounded understanding of what it takes to move AM from promising applications into repeatable, supportable execution.
+* **Process analysis and troubleshooting - Markforged:** She introduced structured logging, operational baselines, and control-chart monitoring to detect drift earlier in live metal binder-jetting production. By connecting build histories and process data with physical defect morphology, she helped teams reason more systematically about likely failure stages and establish clearer boundaries between first-line troubleshooting and issues requiring escalation to materials R&D.

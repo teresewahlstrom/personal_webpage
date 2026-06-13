@@ -1,0 +1,49 @@
+name: personal_webpage
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  font_awesome_flutter: ^11.0.0
+  url_launcher: ^6.3.1
+  tw_chat:
+    path: packages/tw_chat
+  tw_primitives:
+    path: packages/tw_primitives
+  hydrated_seo:
+    path: packages/hydrated_seo
+  web: ^1.1.1
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/t1_logo/t1_logo.svg
+    - assets/t1_logo/t1_logo_favicon_dark.svg
+    - assets/t1_logo/t1_logo_favicon_light.svg
+    - assets/profile_pic.jpg
+    - assets/content/dark/capability/
+    - assets/content/light/capability/
+    - lib/subjects/Terese/professional_story/
+
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik/Rubik-VariableFont_wght.ttf
+        - asset: assets/fonts/Rubik/Rubik-Italic-VariableFont_wght.ttf
+          style: italic
+    # ComingSoon replaced by Rubik for section titles
+
+

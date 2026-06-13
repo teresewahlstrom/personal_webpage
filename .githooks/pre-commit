@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Pre-commit hook: run theme import checks
+HOOK_DIR="$(cd "$(dirname "$0")" && pwd)"
+python3 "$HOOK_DIR/check_theme_imports.py"
+rc=$?
+if [ $rc -ne 0 ]; then
+  echo "pre-commit checks failed: theme import policy"
+  exit $rc
+fi
+exit 0
+#!/usr/bin/env sh
+set -eu
+
+dart run scripts/check_tw_primitives_usage.dart

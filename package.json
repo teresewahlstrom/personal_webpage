@@ -1,0 +1,13 @@
+{
+  "name": "personal-webpage-flutter-deploy-shim",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "check:colors": "node ./scripts/check-color-centralization.cjs",
+    "check:primitives": "bash scripts/check-tw-primitives-usage.sh",
+    "check:selection": "npm run check:primitives",
+    "deploy": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh",
+    "build": "npm run check:colors && npm run check:primitives && bash cloudflare-pages-build.sh",
+    "install:git-hooks": "git config core.hooksPath .githooks"
+  }
+}
