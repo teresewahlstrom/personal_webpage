@@ -2,7 +2,7 @@
 id: metal-3d-printing-specialist
 title: Metal 3D Printing Specialist
 category: AM & MANUFACTURING
-short: I help organisations evaluate and industrialise metal additive manufacturing with attention to applications, process economics, quality, and production readiness.
+short: I identify suitable applications to print, evaluate ROI, prepare parts digitally for production, and solve process and quality challenges across the manufacturing chain - connecting technical decisions to business outcomes.
 image: lib/subjects/Terese/assets/content/{theme}/capability/3D-printing.png
 order: 4
 ---
