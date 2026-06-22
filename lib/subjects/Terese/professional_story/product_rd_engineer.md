@@ -1,11 +1,11 @@
 ---
-
 id: product-rd-engineer
 title: R&D Engineer
 category: PHYSICAL & DIGITAL
 short: I develop and improve products across physical and digital contexts. I connect user needs, technical constraints, and operational realities to shape solutions that are practical to build, reliable to use, and easier to improve.
 image: lib/subjects/Terese/assets/content/{theme}/capability/RnD.png
 order: 2
+---
 
 # R&D Engineer in Products (Physical & Digital) and Services
 
