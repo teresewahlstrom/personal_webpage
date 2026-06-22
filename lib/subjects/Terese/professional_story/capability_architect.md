@@ -7,9 +7,11 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/capability_architec
 order: 1
 ---
 
-**Terese treats organisational capability like an engineering problem: something that can be mapped, structured, tested, and improved. She builds the structures that let technical teams operate more independently and consistently.**
+Terese treats organisational capability like an engineering problem: something that can be mapped, structured, tested, and improved. She builds the structures that let technical teams operate more independently and consistently.
 
-When a technical organisation encounters recurring friction-repeated questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, or manual workarounds-she treats those patterns as design signals. They often indicate that important workflows, decision logic, or expertise remain fragmented, implicit, or poorly connected. Her work focuses on making those underlying structures visible, then rebuilding them into frameworks, templates, workflows, diagnostic systems, and enablement mechanisms that reduce execution friction and help teams operate with greater clarity, consistency, and independence.
+Throughout her career, Terese repeatedly encountered the same patterns: recurring questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, and manual workarounds. Rather than treating these as isolated problems, she learned to view them as design signals. They often indicate that important workflows, decision logic, or expertise remain fragmented, implicit, or poorly connected.
+
+Her work focuses on making those underlying structures visible, then rebuilding them into frameworks, templates, workflows, diagnostic systems, and enablement mechanisms that reduce execution friction and help teams operate with greater clarity, consistency, and independence.
 
 Her approach follows a consistent pattern: **Map** - **Structure** - **Enable**
 
