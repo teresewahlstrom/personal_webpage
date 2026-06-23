@@ -47,7 +47,7 @@ Alongside this, she developed a growing interest in programming, automation, com
 
 Today her experience spans both physical and digital product development. While her academic foundation is stronger on the physical side, years of self-directed software development have increasingly expanded her capabilities within digital products and systems.
 
-Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, and software development. On the physical side, this includes engineering, manufacturing, industrialisation, and product realisation. On the digital side, it includes software tools, workflow applications, AI-enabled systems, and decision-support products.
+Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, and software development, enabling contributions that range from physical product development and industrialisation to software tools, AI-enabled systems, and decision-support tools.
 
 **Example – Volvo Cars / Polestar 2**
 
