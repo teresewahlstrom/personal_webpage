@@ -9,6 +9,8 @@ order: 6
 
 **Terese focuses on building structures that make probabilistic AI systems more transparent, grounded, and easier for human experts to verify.**
 
+Terese focuses on building systems where human expertise, structured knowledge, deterministic logic, and AI reasoning work together. Her interest is not AI as a standalone technology, but how it can help make complex technical knowledge easier to understand, validate, and apply in practice.
+
 Deploying AI in technical environments can recreate a familiar risk: critical reasoning becomes an untraceable, unpredictable black box. As with unmapped human expertise, the organisation may receive an answer without having a reliable way to examine the evidence, validate the logic, or identify when escalation is required. Raw generative text is therefore not enough for complex engineering, maintenance, or configuration tasks; the system must be anchored to verifiable ground truth. She bridges the gap between software development and domain expertise, building structured infrastructure where AI acts as an integrated component of an organisation's technical framework. Through self-directed development and exploration-including building interactive digital twin concepts with **Flutter** frontends and **Python-based Retrieval-Augmented Generation (RAG)**-she designs architectures that ground model interactions in explicit documentation, make the supporting evidence, validation steps, and fallback boundaries visible, and establish clear routes for human review.
 
 Her approach follows a consistent pattern: **Represent** - **Retrieve** - **Validate** - **Escalate**
