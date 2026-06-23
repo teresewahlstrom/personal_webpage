@@ -13,6 +13,8 @@ order: 2
 
 Rather than focusing solely on designing components or delivering features, she helps organisations understand what reality is revealing and translate those insights into products, workflows, tools, and decisions that are practical to implement, operate, and improve.
 
+The products she worked with were rarely standalone artefacts — success depended on how technology, workflows, supporting equipment, and operational decisions interacted.
+
 Much of Terese's work has taken place in environments where products, processes, and supporting systems had evolved organically over time rather than through deliberate design. By questioning assumptions, examining how people actually worked, and testing alternatives against reality, she repeatedly identified opportunities to improve how products were developed, implemented, supported, and scaled.
 
 ---
@@ -46,6 +48,8 @@ Terese's formal education is rooted in Mechanical Engineering with Industrial De
 Alongside this, she developed a growing interest in programming, automation, computational geometry, and software development. Curiosity about how complex engineering problems could be represented, analysed, and solved computationally gradually expanded her work into scripting, workflow automation, technical software, AI-enabled systems, and digital products.
 
 Today her experience spans both physical and digital engineering. While her academic foundation is stronger on the physical side, years of self-directed software development have increasingly expanded her capabilities within digital products and systems.
+
+Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, and to a limited extent also software development, enabling contributions across both physical and digital product development.
 
 **Example – Volvo Cars / Polestar 2**
 Collaborated with industrial designers to map complex interior-pattern concepts across double-curved surfaces. By developing a faster geometry-processing workflow, she reduced lead times from weeks to hours and enabled faster design iteration.
