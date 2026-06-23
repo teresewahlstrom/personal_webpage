@@ -43,13 +43,13 @@ Understanding those interdependencies helped her identify opportunities to impro
 
 **Example – Markforged**
 
-Through customer training and direct production exposure, she identified recurring gaps between how the product ecosystem was configured and what customers needed for reliable long-term operation. These observations influenced sales guidance, auxiliary-equipment recommendations, onboarding logic, configuration checklists, workflow assumptions, support practices, and product-management prioritisation.
+Through customer training and direct production exposure, she identified recurring gaps between how the product ecosystem was configured and what customers needed for reliable long-term operation. These observations were translated into revised sales guidance, updated configuration checklists, clearer auxiliary-equipment recommendations, onboarding improvements, and product-management discussions about how the broader ecosystem should support customer success.
 
 ---
 
 ## Evaluation, Validation & Benchmarking
 
-Many product decisions cannot be resolved through assumptions alone. They require evidence.
+In emerging technologies, teams often disagree about what is technically possible, commercially viable, or valuable to users. Rather than relying on assumptions, Terese uses benchmarking, prototype builds, validation work, and comparative studies to establish evidence and reduce uncertainty.
 
 Throughout her career, Terese has used benchmarking, prototype builds, demo parts, comparative studies, and process validation to evaluate technologies, parameters, workflows, design approaches, and customer use cases.
 
@@ -59,7 +59,7 @@ Rather than viewing benchmarking as a purely technical exercise, she uses it as 
 
 **Examples – Volvo Cars, GE Additive & Markforged**
 
-Demo parts, benchmark studies, application-development projects, and customer-facing validation work were frequently used to evaluate technologies, manufacturing approaches, process capability, customer value, design possibilities, and commercial viability.
+Demo parts, benchmark studies, application-development projects, and customer-facing validation work were repeatedly used to answer questions that could not be resolved through debate alone: whether a technology could meet requirements, whether a use case was commercially viable, and whether a proposed improvement delivered meaningful value in practice.
 
 ---
 
