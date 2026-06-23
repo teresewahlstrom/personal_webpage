@@ -37,8 +37,6 @@ In emerging technologies, teams often disagree about what is technically possibl
 **Examples – Volvo Cars, GE Additive & Markforged**
 Demo parts, benchmark studies, application-development projects, and customer-facing validation work were repeatedly used to answer questions that could not be resolved through debate alone: whether a technology could meet requirements, whether a use case was commercially viable, and whether a proposed improvement delivered meaningful value in practice.
 
-
-
 ---
 
 ## Physical & Digital Engineering
@@ -47,17 +45,20 @@ Terese's formal education is rooted in Mechanical Engineering with Industrial De
 
 Alongside this, she developed a growing interest in programming, automation, computational geometry, and software development. Curiosity about how complex engineering problems could be represented, analysed, and solved computationally gradually expanded her work into scripting, workflow automation, technical software, AI-enabled systems, and digital products.
 
-Today her experience spans both physical and digital engineering. While her academic foundation is stronger on the physical side, years of self-directed software development have increasingly expanded her capabilities within digital products and systems.
+Today her experience spans both physical and digital product development. While her academic foundation is stronger on the physical side, years of self-directed software development have increasingly expanded her capabilities within digital products and systems.
 
-Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, and to a limited extent also software development, enabling contributions across both physical and digital product development.
+Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, and software development. On the physical side, this includes engineering, manufacturing, industrialisation, and product realisation. On the digital side, it includes software tools, workflow applications, AI-enabled systems, and decision-support products.
 
 **Example – Volvo Cars / Polestar 2**
+
 Collaborated with industrial designers to map complex interior-pattern concepts across double-curved surfaces. By developing a faster geometry-processing workflow, she reduced lead times from weeks to hours and enabled faster design iteration.
 
 **Example – Formula Student**
+
 Owned driver ergonomics and steering-wheel development while contributing to the carbon-fibre manufacturing group. Driver feedback was translated into validated geometry through iterative prototyping, 3D scanning, CAD modelling, and structural optimisation before final manufacturing using carbon-fibre vacuum infusion and polyurethane grip moulding. The resulting vehicle placed 4th out of 113 combustion-class cars at Silverstone.
 
 **Example – Independent Development**
+
 Developed software prototypes and technical tools spanning workflow visualisation, AI-enabled knowledge systems, automation, and decision support. These projects explore how software can make complex information easier to navigate, validate, and act upon.
 
 ---
