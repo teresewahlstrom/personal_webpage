@@ -2,7 +2,7 @@
 id: capability-architect
 title: Capability Architect
 category: SYSTEMS & ENABLEMENT
-short: I transform expertise, decisions, and organisational logic into scalable capability — designing the structures that allow organisations to execute consistently without depending on specific individuals.
+short: Turning fragmented expertise into scalable capability
 image: lib/subjects/Terese/assets/content/{theme}/capability/capability_architect.png
 order: 1
 ---
