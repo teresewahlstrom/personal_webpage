@@ -2,20 +2,18 @@
 id: product-rd-engineer
 title: Product R&D Engineer
 category: PHYSICAL & DIGITAL
-short: I develop and improve products, workflows, and technical solutions across physical and digital contexts. By combining engineering, evidence, and practical experience, I help organisations turn insights into solutions that work in practice.
+short: My experience spans many stages of product development — from user understanding and validation through engineering, implementation, and industrialisation — across both physical and digital contexts.
 image: lib/subjects/Terese/assets/content/{theme}/capability/RnD.png
 order: 2
 ---
 
 # Technical Product Development Across Physical & Digital Products, Services, and Systems
 
-**Terese turns insight into solutions that work in practice.**
-
-Rather than focusing solely on designing components or delivering features, she helps organisations understand what reality is revealing and translate those insights into products, workflows, tools, and decisions that are practical to implement, operate, and improve.
+Throughout her career, Terese has contributed to many stages of product development across physical and digital contexts, from early evaluation and concept validation through implementation, operation, and continuous improvement.
 
 The products she worked with were rarely standalone artefacts — success depended on how technology, workflows, supporting equipment, and operational decisions interacted.
 
-Much of Terese's work has taken place in environments where products, processes, and supporting systems had evolved organically over time rather than through deliberate design. By questioning assumptions, examining how people actually worked, and testing alternatives against reality, she repeatedly identified opportunities to improve how products were developed, implemented, supported, and scaled.
+Much of her work has taken place in environments where products, processes, and supporting systems had evolved organically over time. Contributing across multiple stages of development gave her a practical understanding of how decisions made early — in design, validation, and configuration — shape what is possible later in implementation and scale.
 
 ---
 
