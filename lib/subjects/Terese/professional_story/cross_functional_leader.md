@@ -2,7 +2,7 @@
 id: cross-functional-leader
 title: Cross-Functional Leader
 category: EXECUTION & ALIGNMENT
-short: I create alignment across technical, operational, and commercial boundaries. By making dependencies, trade-offs, and priorities visible, I help teams move toward shared goals with greater clarity and confidence.
+short: Aligning technical, operational, and commercial priorities
 image: lib/subjects/Terese/assets/content/{theme}/capability/cross-functional_leader.png
 order: 3
 ---
