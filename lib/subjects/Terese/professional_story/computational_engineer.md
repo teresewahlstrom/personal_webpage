@@ -2,7 +2,7 @@
 id: computational-engineer
 title: Computational Engineer
 category: MATH & LOGIC
-short: I use mathematics, coding, and engineering logic to turn complex problems into explicit models, scripts, and tools that support faster, better-informed decisions.
+short: Turning engineering reasoning into models, tools & automation
 image: lib/subjects/Terese/assets/content/{theme}/capability/computational_eng.png
 order: 5
 ---
