@@ -2,7 +2,7 @@
 id: capability-architect
 title: Capability Architect
 category: SYSTEMS & ENABLEMENT
-short: Turning fragmented expertise into scalable capability
+short: Turning fragmented expertise and undiscovered complexity into scalable organisational capability.
 image: lib/subjects/Terese/assets/content/{theme}/capability/capability_architect.png
 order: 1
 ---
