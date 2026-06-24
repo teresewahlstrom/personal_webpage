@@ -2,6 +2,9 @@
 Turns complexity into clarity.
 Architecting the systems, capabilities, and decision structures that help organisations align expertise, technology, and execution.
 
+Turns complexity into clarity.
+Making critical reasoning explicit, transferable, and scalable.
+
 ## open-to
 Open to freelance projects, co-founder conversations, and selected speaking opportunities.
 
