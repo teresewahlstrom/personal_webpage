@@ -2,22 +2,22 @@
 id: capability-architect
 title: Capability Architect
 category: SYSTEMS & ENABLEMENT
-short: I identify capability gaps and build the knowledge, processes, tools, decision structures, and team capabilities needed to perform consistently at scale.
+short: I transform expertise, decisions, and organisational logic into scalable capability — designing the structures that allow organisations to execute consistently without depending on specific individuals.
 image: lib/subjects/Terese/assets/content/{theme}/capability/capability_architect.png
 order: 1
 ---
 
-Terese treats organisational capability like an engineering problem: something that can be mapped, structured, tested, and improved. She builds the structures that let technical teams operate more independently and consistently.
+Terese treats organisational capability like an engineering problem: understanding how work actually gets done, identifying where execution depends on individuals rather than systems, and designing the structures needed for consistent performance at scale. Her work reduces organisational fragility by making critical knowledge, decisions, and workflows less dependent on specific individuals and more supported by repeatable, transferable systems.
 
-Throughout her career, Terese repeatedly encountered the same patterns: recurring questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, and manual workarounds. Rather than treating these as isolated problems, she learned to view them as design signals. They often indicate that important workflows, decision logic, or expertise remain fragmented, implicit, or poorly connected.
+Throughout her career, Terese repeatedly encountered the same patterns: recurring questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, and manual workarounds. Rather than treating these as isolated problems, she learned to view them as design signals. They often indicate deeper capability gaps: work depends on individual experience, critical decisions lack structure, responsibilities are unclear, or important knowledge and processes have not been translated into repeatable organisational systems.
 
-Her work focuses on making those underlying structures visible, then rebuilding them into frameworks, templates, workflows, diagnostic systems, and enablement mechanisms that reduce execution friction and help teams operate with greater clarity, consistency, and independence.
+Terese does not simply capture existing knowledge. She combines expertise from multiple stakeholders with her own engineering judgement, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. The solution is not always a knowledge resource. Depending on the problem, it may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organisational capability, not documentation.
 
-Her approach follows a consistent pattern: **Map** - **Structure** - **Enable**
+Her approach follows a consistent pattern: **Diagnose** - **Design** - **Enable**
 
-* **Map:** Identify the knowledge, dependencies, and decision points that govern the system.
-* **Structure:** Organise that logic into a form that others can understand and navigate.
-* **Enable:** Build practical systems that help teams apply, reuse, and improve knowledge over time.
+* **Diagnose:** Identify where execution breaks down. Understand the dependencies, decisions, bottlenecks, and failure modes that create fragility.
+* **Design:** Create the processes, decision frameworks, tools, models, ownership structures, and knowledge resources the situation requires — including elements that do not yet exist.
+* **Enable:** Embed those structures into how people actually work, so improvements become repeatable and do not depend on her continued involvement.
 
 ## Capability architecture in practice
 
