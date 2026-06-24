@@ -2,7 +2,7 @@
 id: product-rd-engineer
 title: Product R&D Engineer
 category: PHYSICAL & DIGITAL
-short: My experience spans many stages of product development — from user understanding and validation through engineering, implementation, and industrialisation — across both physical and digital contexts.
+short: Bridging user insight, engineering, and industrial implementation
 image: lib/subjects/Terese/assets/content/{theme}/capability/RnD.png
 order: 2
 ---
