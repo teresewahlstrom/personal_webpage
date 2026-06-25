@@ -7,8 +7,6 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/RnD.png
 order: 2
 ---
 
-# Technical Product Development Across Physical & Digital Products, Services, and Systems
-
 Throughout her career, Terese has contributed to many stages of product development across physical and digital contexts, from early evaluation and concept validation through implementation, operation, and continuous improvement.
 
 The products she worked with were rarely standalone artefacts — success depended on how technology, workflows, supporting equipment, and operational decisions interacted.
