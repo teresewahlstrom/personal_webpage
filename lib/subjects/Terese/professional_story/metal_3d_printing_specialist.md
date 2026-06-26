@@ -13,7 +13,7 @@ Throughout her career, she has repeatedly helped organisations answer the questi
 
 At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components. Together, these experiences provided first-hand insight into the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-This end-to-end perspective enables her to translate expert-dependent manufacturing knowledge into structured decision frameworks and operational workflows—helping organisations build metal AM capabilities that are reliable, transferable, and resilient in day-to-day operation.
+This end-to-end perspective enables her to translate expert-dependent manufacturing knowledge into structured decision frameworks, operational workflows, and organisational capability—helping organisations build metal AM systems that are reliable, transferable, and resilient in day-to-day operation.
 
 ## Core AM contributions
 
@@ -21,12 +21,12 @@ This end-to-end perspective enables her to translate expert-dependent manufactur
 
   This capability was initially developed through extensive independent research conducted for her  [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478)—downloaded more than 6,500 times across more than 50 countries—and has since been refined through nearly a decade of industrial application across the additive-manufacturing value chain.
 
+* **Technical and economic decision support – Across Volvo Cars, GE Additive, and Markforged:** She translated engineering analysis into business decision support for additive manufacturing adoption and industrialisation. Her work included business case development, ROI and production-economics modelling, manufacturing-capacity planning, machine configuration studies, make-versus-buy analysis, and investment decision support. By combining engineering understanding with economic modelling, she helped organisations determine not only whether applications could be manufactured successfully, but whether they represented commercially sound investments.
+
 * **Design for Additive Manufacturing (DfAM) and process adaptation – Across Volvo Cars, GE Additive, and Markforged:** She improved product manufacturability by adapting either the manufacturing process to the design or the design to the manufacturing process, depending on the application and design freedom available. This included three complementary levels of engineering:
   1. **Process adaptation** – Enabling existing designs through build preparation, process optimisation, post-processing strategies, and limited geometry adaptations where permitted.
   2. **Component redesign** – Redesigning individual components to improve manufacturability, sustainability, performance, and production economics.
   3. **Assembly redesign** – Rethinking complete assemblies where additive manufacturing enabled part consolidation and fundamentally different engineering solutions.
-
-* **Technical and economic decision support – Across Volvo Cars, GE Additive, and Markforged:** She translated engineering analysis into business decision support for additive manufacturing adoption and industrialisation. Her work included business case development, ROI and production-economics modelling, manufacturing-capacity planning, machine configuration studies, make-versus-buy analysis, and investment decision support. By combining engineering understanding with economic modelling, she helped organisations determine not only whether applications could be manufactured successfully, but whether they represented commercially sound investments.
 
 * **Technical-commercial qualification and delivery under uncertainty – Across GE Additive and Markforged:** She assessed whether applications, processes, and production systems were sufficiently mature to support customer commitments. This included evaluating manufacturing risks, process maturity, post-processing requirements, production readiness, and qualification evidence while balancing technical uncertainty with commercial responsibility. Working within machine OEMs frequently meant qualifying applications using technologies that were still evolving, requiring careful judgement about achievable performance, acceptable risk, and the boundaries of reliable delivery.
 
@@ -35,3 +35,5 @@ This end-to-end perspective enables her to translate expert-dependent manufactur
 * **Process analysis and troubleshooting – Markforged:** She introduced structured logging, operational baselines, statistical process monitoring, and systematic defect analysis to detect process drift earlier and improve troubleshooting. By connecting build histories and process data with physical defect morphology, she helped establish clearer diagnostic logic, enabling faster root-cause analysis and more effective escalation to Materials R&D.
 
 * **Capability building and knowledge transfer – Markforged:** She transformed expert-dependent manufacturing knowledge into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
+
+  Across these environments, Terese has consistently focused on the same objective: helping organisations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated specialist expertise by embedding manufacturing knowledge into repeatable systems.
