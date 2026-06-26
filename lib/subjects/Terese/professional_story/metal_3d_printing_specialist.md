@@ -17,7 +17,6 @@ This end-to-end experience enables her to translate expert-dependent process kno
 
 ## Core AM contributions
 
-
 * **Strategic technology evaluation – Volvo Cars:** Her work included technology scouting, comparative proof-of-concept evaluation across AM technologies, production-suitability assessment, and make-versus-buy decision support. She assessed where additive manufacturing met application-specific technical requirements and where conventional manufacturing remained the better choice, balancing technical capability with lifecycle cost, environmental impact, and safety considerations. This enabled better technology selection, stronger business cases, and earlier rejection of poor-fit applications.
 
   This capability was built on an extensive foundation of independent research established during her [Master's thesis] (https://lup.lub.lu.se/student-papers/search/publication/8868478)—downloaded more than 6,500 times across 50+ countries—and expanded over nearly a decade as she continued to develop her expertise through industrial application and continuous learning across the additive manufacturing field.
