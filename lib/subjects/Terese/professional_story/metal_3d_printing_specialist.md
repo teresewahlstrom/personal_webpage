@@ -11,9 +11,9 @@ order: 4
 
 Throughout her career, she has repeatedly helped organisations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
-At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components. Together, these experiences provided first-hand insight into the technical, commercial, and operational realities required to establish reliable industrial metal AM.
+At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
 
-This end-to-end perspective enables her to translate expert-dependent manufacturing knowledge into structured decision frameworks, operational workflows, and organisational capability—helping organisations build metal AM systems that are reliable, transferable, and resilient in day-to-day operation.
+Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to translate expert-dependent manufacturing knowledge into structured decision frameworks and operational workflows, helping organisations build metal AM capabilities that are reliable, transferable, and resilient in day-to-day operation.
 
 ## Core AM contributions
 
