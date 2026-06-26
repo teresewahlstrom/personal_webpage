@@ -7,13 +7,13 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/3D-printing.png
 order: 4
 ---
 
-**Terese industrialises metal additive manufacturing (AM, more commonly known as 3D printing). She has worked across the entire industrial value chain — evaluating technologies as an industrial adopter, helping industrialise them from within machine manufacturers, and relying on them in certified production. This gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
+**Terese industrialises metal additive manufacturing (AM, more commonly known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialise them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
 
-Her perspective is built on having had skin in the game at every stage of the supply chain. Throughout her career, she has repeatedly helped answer questions such as: *Is this application a good fit for AM? Which AM technology is most appropriate, and how does it compare with conventional manufacturing? Is it technically and economically viable? And can it be scaled into reliable production?*
+Throughout her career, she has repeatedly helped organisations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
-At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she experienced metal AM from within machine manufacturers that both developed the technology and operated it to manufacture customer parts and production components. Together, these perspectives provided first-hand insight into the technical, commercial, and operational realities required to deliver reliable industrial metal AM.
+At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components. Together, these experiences provided first-hand insight into the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-This end-to-end experience enables her to translate expert-dependent process knowledge into structured decision logic, helping organisations establish manufacturing capabilities that can be operated, supported, scaled, and trusted.
+This end-to-end perspective enables her to translate expert-dependent manufacturing knowledge into structured decision frameworks and operational workflows—helping organisations build metal AM capabilities that are reliable, transferable, and resilient in day-to-day operation.
 
 ## Core AM contributions
 
