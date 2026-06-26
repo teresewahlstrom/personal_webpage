@@ -7,11 +7,9 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/3D-printing.png
 order: 4
 ---
 
-**Terese helps organisations turn metal additive manufacturing (AM, also known as 3D printing) from technical potential into practical industrial value. She focuses on establishing a realistic, supportable path from concept to repeatable production capability.**
+**Terese industrialises metal additive manufacturing. She has seen it from the perspective of the printer OEM, the printer customer, and the customer of the printed goods, giving her a unique perspective on what it takes to carry industrialisation through from evaluation to production.**
 
-True expertise in metal additive manufacturing cannot be gained from a single vantage point. Her perspective is built on continuous comparative evaluation — across AM technologies, process variants, material and parameter combinations, and conventional manufacturing alternatives — because in AM, no decision holds without understanding what else was on the table and why it was set aside. 
-
-She has worked with AM across Volvo Cars, GE Additive, and Markforged, spanning early-stage evaluation, technical-commercial qualification, and live ISO 9001 production. This end-to-end exposure allows her to convert expert-dependent process realities into structured decision logic and help organisations establish execution that can be operated, supported, and trusted.
+Her perspective is built on continuous comparative evaluation—across AM technologies, process variants, material and parameter combinations, and conventional manufacturing alternatives—because in additive manufacturing, no decision stands on its own. Every choice only makes sense in the context of the alternatives that were considered and why they were rejected. With technical depth in **Metal Binder Jetting** and **Electron Beam Melting**, she has worked across Volvo Cars, GE Additive, and Markforged, spanning early-stage evaluation, technical-commercial qualification, and live ISO 9001 production. This end-to-end exposure allows her to convert expert-dependent process realities into structured decision logic and help organisations establish execution that can be operated, supported, and trusted.
 
 ## Core AM contributions
 
