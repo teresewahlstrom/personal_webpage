@@ -15,7 +15,7 @@ class ProjectCardsMarkdownLoader {
     'lib/subjects/Terese/professional_story/capability_architect.md',
     'lib/subjects/Terese/professional_story/product_rd_engineer.md',
     'lib/subjects/Terese/professional_story/cross_functional_leader.md',
-    'lib/subjects/Terese/professional_story/metal_3d_printing_specialist.md',
+    'lib/subjects/Terese/professional_story/metal_am_specialist.md',
     'lib/subjects/Terese/professional_story/computational_engineer.md',
     'lib/subjects/Terese/professional_story/ai_systems_for_technical_work.md',
   ];

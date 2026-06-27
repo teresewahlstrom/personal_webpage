@@ -3,7 +3,7 @@ id: cross-functional-leader
 title: Cross-Functional Leader
 category: EXECUTION & ALIGNMENT
 short: Repairing the interfaces between organisational functions
-image: lib/subjects/Terese/assets/content/{theme}/capability/cross-functional_leader.png
+image: lib/subjects/Terese/assets/content/{theme}/capability/cross-functional-leader.png
 order: 3
 ---
 

@@ -1,9 +1,9 @@
 ---
-id: metal-3d-printing-specialist
+id: metal-am-specialist
 title: Metal AM Specialist
 category: AM & MANUFACTURING
 short: Industrialising metal additive manufacturing
-image: lib/subjects/Terese/assets/content/{theme}/capability/3D-printing.png
+image: lib/subjects/Terese/assets/content/{theme}/capability/metal_am_specialist.png
 order: 4
 ---
 

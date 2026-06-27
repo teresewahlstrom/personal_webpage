@@ -3,7 +3,7 @@ id: computational-engineer
 title: Computational Engineer
 category: MATH & LOGIC
 short: Turning engineering reasoning into models, tools & automation
-image: lib/subjects/Terese/assets/content/{theme}/capability/computational_eng.png
+image: lib/subjects/Terese/assets/content/{theme}/capability/computational-engineer.png
 order: 5
 ---
 
