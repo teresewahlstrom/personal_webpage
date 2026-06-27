@@ -13,13 +13,15 @@ Engineering drawings, commercial contracts, and factory schedules speak differen
 
 ## Learning from organisational misalignment
 
-Early in her career, Terese repeatedly found herself at the same juncture across very different settings — between commercial and engineering teams, between R&D disciplines, between production and development. Each function had optimised for its own reality. Each believed the others understood their constraints. They did not.
+Early in her career, Terese repeatedly found herself at the same organisational boundaries—between commercial and engineering teams, between different R&D disciplines, and between production and development. She watched capable, well-intentioned people become frustrated, not because they lacked competence, but because they were working from different assumptions, different priorities, and different pieces of information.
 
-Sales assumed engineering had agreed. Engineering assumed sales understood the limitations. Operations inherited the consequences. No single function had acted in bad faith. The misalignment had grown quietly through gaps that nobody had been asked to manage.
+Each function had optimised for its own reality. Each believed the others understood their constraints. They did not.
 
-That was the insight that took longest to articulate: the problem was rarely that people lacked competence or commitment. It was that nobody owned the gap itself — the point where responsibilities, information, and unspoken assumptions crossed organisational boundaries. Everyone owned their function. Nobody owned what happened between them.
+Sales assumed engineering had agreed. Engineering assumed sales understood the limitations. Operations inherited the consequences. Nobody had acted in bad faith. Everyone was trying to solve the problem they could see.
 
-Those experiences shaped how she works. Her first instinct is rarely to solve the problem. It is to understand what problem each person believes they are trying to solve. That process often reveals that different parts of the organisation are trying to solve different problems altogether — and that the real work is making that visible before anyone commits to a solution. Only once the assumptions, constraints, responsibilities, and missing context are on the table does she begin designing a way forward.
+Those experiences left a lasting impression. Repeatedly seeing talented colleagues become isolated, frustrated, or forced into conflict by the way responsibilities, information, and decisions flowed between teams convinced Terese that this was not simply "how organisations work." It was a design problem.
+
+That insight fundamentally changed how she approaches leadership. Her first instinct is rarely to solve the problem. It is to understand what problem each person believes they are trying to solve. Only after the assumptions, constraints, responsibilities, and missing context have become visible does she begin designing a way forward.
 
 Because she consistently approached problems this way, colleagues across organisations and reporting lines increasingly sought her out. People rarely came because they expected her to own the problem. They came because experience had taught them that, after talking it through with her, the situation would usually become clearer and the next step easier to see.
 
