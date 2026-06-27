@@ -13,7 +13,7 @@ Engineering drawings, commercial commitments, and production realities speak dif
 
 ## Learning from organisational misalignment
 
-Terese repeatedly found herself at the same organisational boundaries — between commercial and engineering teams, between different R&D disciplines, and between production and development. She watched capable, well-intentioned people become frustrated, not because they lacked competence, but because they were working from different assumptions, different priorities, and different pieces of information.
+Role after role, Terese began noticing the same pattern. Capable, well-intentioned people became frustrated—not because they lacked competence, but because they were working from different assumptions, different priorities, and different pieces of information.
 
 Each function had optimised for its own reality. Each believed the others understood their constraints. They did not.
 
@@ -22,10 +22,6 @@ Sales assumed engineering had agreed. Engineering assumed sales understood the l
 Those experiences fundamentally changed how Terese thought about organisations. Repeatedly seeing talented colleagues become isolated, frustrated, or forced into conflict by the way responsibilities, information, and unspoken assumptions moved between teams convinced her that the problem was rarely competence or commitment. It was that nobody owned the gap. Everyone owned their function. Nobody owned what happened between them.
 
 That was not simply how organisations worked. It was a design problem.
-
-That insight fundamentally changed how she approaches leadership. Her first instinct is rarely to solve the problem. It is to understand what problem each person believes they are trying to solve. Only then does she begin designing a way forward.
-
-Because she consistently approached problems this way, colleagues across organisations and reporting lines increasingly sought her out. People rarely came because they expected her to own the problem. They came because experience had taught them that, after talking it through with her, the situation would usually become clearer and the next step easier to see.
 
 
 ## In practice
