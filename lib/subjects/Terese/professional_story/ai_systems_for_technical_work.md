@@ -2,7 +2,7 @@
 id: ai-systems-for-technical-work
 title: AI Systems for Technical Work
 category: AI & KNOWLEDGE SYSTEMS
-short: Building Al systems grounded in evidence and expertise
+short: Building AI systems grounded in evidence and expertise
 image: lib/subjects/Terese/assets/content/{theme}/capability/ai.png
 order: 6
 ---
@@ -23,5 +23,6 @@ Her approach follows a consistent pattern: **Represent** - **Retrieve** - **Vali
 * **Escalate:** Distinguish between supported conclusions, unresolved uncertainty, and questions that require human expertise.
 
 ## AI systems in practice
-* **Retrieval-backed professional knowledge system - Twin Tess:** Curiosity about whether retrieval and structured evidence could make AI reasoning genuinely verifiable — rather than merely plausible — led her to build a structured digital-twin system using her own professional knowledge as the test environment. The system grounds model interactions in explicit source material, makes supporting evidence and validation steps visible, and establishes clear fallback boundaries when available evidence is insufficient. Behind the interface, it combines sparse and dense retrieval, hybrid ranking, metadata-aware filtering, semantic routing, and structured context assembly — alongside evaluation datasets and source-traceability mechanisms — to surface relevant material and guide responses toward bounded conclusions.
-* **Privacy-bounded deployment exploration - Independent development:** She evaluated architectural options for local open-weight models and EU-hosted services under privacy and data-residency constraints, comparing the trade-offs between confidentiality, latency, throughput, and implementation complexity.
+* **Retrieval-backed professional knowledge system – Twin Tess:** Curiosity about whether retrieval and structured evidence could make AI reasoning genuinely verifiable — rather than merely plausible — led her to build a structured digital-twin system using her own professional knowledge as the test environment. The system grounds model interactions in explicit source material, makes supporting evidence and validation steps visible, and establishes clear fallback boundaries when available evidence is insufficient. Behind the interface, it combines sparse and dense retrieval, hybrid ranking, metadata-aware filtering, semantic routing, and structured context assembly — alongside evaluation datasets and source-traceability mechanisms — to surface relevant material and guide responses toward bounded conclusions.
+
+* **Privacy-bounded deployment exploration – Independent development:** She evaluated architectural options for local open-weight models and EU-hosted services under privacy and data-residency constraints, comparing the trade-offs between confidentiality, latency, throughput, and implementation complexity.

@@ -38,6 +38,4 @@ Together, these experiences provided an end-to-end understanding of the technica
 
 * **Capability building and knowledge transfer – Markforged:** She transformed expert-dependent manufacturing knowledge into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
 
-* **Capability building and knowledge transfer – Markforged:** She transformed expert-dependent manufacturing knowledge into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
-
   This reflects a recurring theme throughout her career: helping organisations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated specialist expertise by embedding manufacturing knowledge into repeatable systems.
