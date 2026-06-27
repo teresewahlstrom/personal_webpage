@@ -13,6 +13,8 @@ Throughout her career, Terese repeatedly encountered the same patterns: recurrin
 
 Terese does not simply capture existing knowledge. She combines expertise from multiple stakeholders with her own engineering judgement, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. The solution is not always a knowledge resource. Depending on the problem, it may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organisational capability, not documentation.
 
+One principle recurs throughout this work: whenever critical reasoning exists only inside people's heads, organisations become unnecessarily fragile. Rather than expecting individuals to remember every rule, exception, dependency, or decision pathway, Terese looks for ways to embed that reasoning into workflows, decision frameworks, reference systems, and tools. By placing guidance where it is needed instead of relying on memory or informal communication, teams can make better decisions more consistently, misunderstandings become less frequent, and expertise becomes easier to scale.
+
 Her approach follows a consistent pattern: **Diagnose** - **Design** - **Enable**
 
 * **Diagnose:** Identify where execution breaks down. Understand the dependencies, decisions, bottlenecks, and failure modes that create fragility.
