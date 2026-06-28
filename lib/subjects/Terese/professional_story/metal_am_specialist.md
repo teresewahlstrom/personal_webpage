@@ -15,7 +15,7 @@ At Volvo Cars, she evaluated additive manufacturing from the perspective of an i
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to turn tacit judgment into shared operating structure, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
 
-## Core AM contributions
+## Metal AM in practice
 
 * **Strategic technology evaluation – Volvo Cars:** Her work included technology scouting, comparative proof-of-concept evaluation across AM technologies, production-suitability assessment, and make-versus-buy decision support. She assessed where additive manufacturing met application-specific technical requirements and where conventional manufacturing remained the better choice, balancing technical capability with lifecycle cost, environmental impact, and safety considerations. This enabled better technology selection, stronger business cases, and earlier rejection of poor-fit applications.
 
@@ -40,4 +40,4 @@ Together, these experiences provided an end-to-end understanding of the technica
 
 * **Capability building and knowledge transfer – Markforged:** She turned specialized manufacturing know-how into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
 
-  This reflects a recurring theme throughout her career: helping organizations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated experts by embedding manufacturing insights into operational tools and reference systems.
+  This reflects a recurring theme throughout her career: helping organizations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated experts by embedding manufacturing insights into operational tools, training material, troubleshooting guides, and shared references.

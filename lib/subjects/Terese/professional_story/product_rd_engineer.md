@@ -7,35 +7,32 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/RnD.png
 order: 2
 ---
 
-**Terese works across product R&D where ideas, applications, components, workflows, and technical systems need to become practical, validated solutions. Her domain expertise combines product development, industrial design, application engineering, technical validation, and user feedback across both physical and digital products and systems.**
+**Terese works across product R&D where ideas, applications, components, workflows, and technical concepts need to be shaped from early ambiguity into practical, validated solutions. Her domain expertise combines product development, industrial design, application engineering, technical validation, and user feedback across physical, digital, service-based, and hybrid products.**
 
 She contributes through both hands-on engineering and integrative R&D work: forming concepts, developing geometry, evaluating feasibility, validating technical direction, adapting designs and processes, supporting product improvements, and translating technical possibilities into solutions that can be built, used, and improved.
 
-The products and systems she works with are rarely standalone artifacts. Success depends on how technology, workflows, supporting equipment, configuration decisions, documentation, training, production systems, and long-term use interact.
+The products and offerings she works with are rarely standalone artifacts. Success often depends on how technology, workflows, supporting equipment, configuration decisions, documentation, training, production, and long-term use interact.
 
 This gives her a practical understanding of product R&D as an interconnected technical domain. Strong solutions are not created from technical possibility alone; they require an understanding of users, engineering constraints, manufacturability, operating conditions, validation evidence, and implementation realities.
 
 ## Product R&D in practice
 
-* **Turning ambiguity into technical direction:** Product R&D often begins before there is a complete requirement or fixed solution. Terese contributes in this early space by connecting user needs, technical constraints, manufacturing possibilities, operational pain points, and business context to form clearer product, application, or workflow concepts. She moves from scattered observations to a concrete technical direction: identifying what problem is worth solving, what form a solution could take, and what needs to be tested before further investment makes sense.
+* **Turning ambiguity into validated direction:** Product R&D often begins before there is a complete requirement or fixed solution. Terese contributes in this early space by connecting user needs, technical constraints, manufacturing possibilities, operational pain points, and business context to form clearer product, application, or workflow concepts. Rather than relying on assumptions, she uses benchmarking, prototype builds, validation work, and comparative studies to establish evidence, reduce uncertainty, and identify what needs to be tested before further investment makes sense.
 
-  This concept-development capability has appeared across physical products, digital products, and service systems: identifying additive-manufacturing applications and design opportunities, developing geometry and workflow solutions, and shaping software and AI-enabled systems that make technical knowledge easier to navigate and apply.
-
-  *Example – Independent development:* Her software and AI projects began from recognizing a recurring problem in technical work: knowledge is often difficult to find, validate, and apply when needed. Rather than treating this only as a documentation problem, she explored technical product concepts for workflow visualization, retrieval-backed knowledge systems, and AI-assisted workflow support — turning an observed need into concrete prototypes and technical systems.
-
-* **Connecting product design with user reality:** Many product challenges are not caused by the core technology itself, but by gaps between how the product was designed, sold, documented, supported, and ultimately used. By working closely with early users, production environments, customer support, and customer training, Terese repeatedly identified these gaps and translated them into practical improvements in onboarding, configuration guidance, workflow design, customer enablement, and product-development priorities.
-
-  *Example – Markforged:* Repeated exposure to customer questions, operational workarounds, and production challenges revealed gaps between how the product ecosystem was configured and what customers needed for reliable long-term operation. These observations were translated into revised sales guidance, clearer auxiliary-equipment and consumables recommendations, onboarding improvements, and product-management discussions about how the broader ecosystem should support customer success.
-
-* **Validating ideas before implementation:** In emerging technologies, teams often disagree about what is technically possible, commercially viable, or valuable to users. Rather than relying on assumptions, Terese uses benchmarking, prototype builds, validation work, and comparative studies to establish evidence and reduce uncertainty.
+  This capability has appeared across physical products, digital products, and service-related work: identifying opportunities, developing geometry and workflow solutions, and shaping software concepts that make technical knowledge easier to navigate and apply.
 
   *Example – Volvo Cars, GE Additive & Markforged:* Demo parts, benchmark studies, application-engineering projects, and customer-facing validation work were repeatedly used to answer questions that could not be resolved through debate alone: whether a technology could meet requirements, whether a use case was commercially viable, and whether a proposed improvement delivered meaningful value in practice.
 
-* **Working across product and service systems:** Across physical, digital, and service-based contexts, Terese brings a product R&D perspective shaped by engineering feasibility, user reality, implementation constraints, and long-term use. Her formal foundation is Mechanical Engineering with Industrial Design from Lund University, combining product development, engineering analysis, CAD, manufacturing, materials, and design.
+  *Example – Independent development:* Her software and AI projects began from recognizing a recurring problem in technical work: knowledge is often difficult to find, validate, and apply when needed. Rather than treating this only as a documentation problem, she explored technical product concepts for workflow visualization, retrieval-backed knowledge systems, and AI-assisted workflow support — turning an observed need into concrete prototypes and working concepts.
 
-  Alongside this, she developed a growing interest in programming, automation, computational geometry, and software development. Curiosity about how complex engineering problems could be represented, analyzed, and solved computationally gradually expanded her work into scripting, workflow automation, technical software, AI-enabled systems, and digital products.
+* **Connecting product design with user reality:** Many product challenges are not caused by the core technology itself, but by gaps between how the product was designed, sold, documented, supported, and ultimately used. By working closely with early users, production environments, customer support, and customer training, Terese repeatedly identified these gaps and translated them into practical improvements in onboarding, configuration guidance, workflow design, customer enablement, and product-development priorities.
 
-  Today her experience spans both physical and digital product development. Her academic foundation is strongest on the physical side, while years of self-directed software development have expanded her ability to contribute to digital products, workflow tools, and AI-enabled technical systems. Her technical background includes CAD, engineering analysis, FEM, topology optimization, geometry processing, manufacturing logic, software development, and decision-support tooling.
+  *Example – Markforged:* Repeated exposure to customer questions, operational workarounds, and production challenges revealed gaps between how the product, supporting equipment, consumables, onboarding, and customer workflow were configured and what customers needed for reliable long-term operation. These observations were translated into revised sales guidance, clearer auxiliary-equipment and consumables recommendations, onboarding improvements, and product-management discussions about how the broader offering should support customer success.
+
+
+* **Applying an engineering foundation across product forms:** Terese's foundation is Mechanical Engineering with Industrial Design from Lund University, combining product development, engineering analysis, CAD, manufacturing, materials, and design. Her later work in programming, automation, computational geometry, and digital product concepts expanded that foundation rather than replacing it.
+
+  This gives her a practical R&D base across physical products, digital products, service-based products, and hybrid offerings — whether the work involves a manufactured component, a software concept, an enabling service, or a combined product-service offering.
 
   *Example – Volvo Cars / Polestar 2:* Collaborated with industrial designers to map complex interior-pattern concepts across double-curved surfaces. By developing a faster geometry-processing workflow, she reduced lead times from weeks to hours and enabled faster design iteration.
 
@@ -47,7 +44,7 @@ This gives her a practical understanding of product R&D as an interconnected tec
 
   This has included assessing manufacturing suitability, preparing components for production, developing process knowledge, evaluating economics, supporting customer adoption, and identifying risks before they become operational problems.
 
-  Much of this work has been performed within additive manufacturing, where successful implementation depends on far more than simply producing a part. Material behavior, process capability, quality requirements, production readiness, support infrastructure, operator knowledge, and business-case viability all influence whether an application succeeds.
+  Much of this work has been performed in advanced manufacturing environments, where successful implementation depends on far more than simply producing a part. Material behavior, process capability, quality requirements, production readiness, support infrastructure, operator knowledge, and business-case viability all influence whether an application succeeds.
 
   By combining technical understanding with operational and commercial awareness, she helps connect product possibilities with practical implementation realities.
 
