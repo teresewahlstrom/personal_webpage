@@ -16,6 +16,9 @@ Making critical reasoning explicit, transferable, and scalable across people, to
 Turns complexity into clarity.
 Making important technical reasoning explicit, transferable, and scalable across people, tools, and work.
 
+## Hero, option E
+Terese turns complexity into things people can use: products, tools, workflows, models, and organizational capability. Her work sits between engineering depth, product logic, knowledge structure, and implementation, helping teams define what should be built, build what is needed, and make the reasoning reusable.
+
 ## good phrasings i do not know were to put
 operates between technical depth, organisational capability, product logic, and knowledge infrastructure.
 
@@ -33,3 +36,19 @@ Open to freelance projects, co-founder conversations, and selected speaking oppo
 **Metal AM Specialist** Industrialising metal additive manufacturing
 **Computational Engineer** Turning engineering reasoning into models, tools & automation
 **AI Systems for Technical Work** Building AI systems grounded in evidence and expertise
+
+
+* Product R&D is about shaping and building solutions.
+* Capability Architect is about making organizational capability repeatable.
+* Computational Engineer is about codifying engineering logic.
+* AI Systems is about making AI-supported reasoning traceable.
+* Cross-Functional Leader is about resolving organizational interface failures.
+* Metal AM Specialist is the domain-depth chapter.
+
+
+* Capability Architect: you make knowledge, decisions, and workflows scalable.
+* Product R&D Engineer: you turn ambiguity into validated, buildable product direction.
+* Cross-Functional Leader: you repair the spaces between functions.
+* Metal AM Specialist: you bring deep industrial domain expertise.
+* Computational Engineer: you turn repeated engineering reasoning into models/tools.
+* AI Systems for Technical Work: you extend that same knowledge-structuring instinct into AI.

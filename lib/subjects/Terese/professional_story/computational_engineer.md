@@ -13,7 +13,7 @@ Throughout her career, Terese repeatedly encountered engineering problems that r
 
 Many engineering problems become difficult when the governing logic is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
 
-The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgement focused on the parts of the problem that still require interpretation, trade-offs, and validation.
+The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgment focused on the parts of the problem that still require interpretation, trade-offs, and validation.
 
 Whether the problem involved economics, geometry, manufacturing, or decision-making, she repeatedly found that the underlying challenge was the same: important logic existed, but it had not yet been codified or structured.
 

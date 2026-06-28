@@ -106,7 +106,9 @@ class _LandingPageState extends State<LandingPage> {
                       builder: (BuildContext context) {
                         final double width = MediaQuery.sizeOf(context).width;
                         final bool isSmallScreen = width < 640;
-                        final double horizontalPadding = isSmallScreen ? 4.0 : 11.0;
+                        final double horizontalPadding = isSmallScreen
+                            ? 4.0
+                            : 11.0;
                         return Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: horizontalPadding,
@@ -139,7 +141,7 @@ class _HeroStatement extends StatelessWidget {
   const _HeroStatement();
 
   static const String _content =
-      "Turns complexity into clarity. A rare breed of creative systems thinker, cross-domain integrator, and driver of change.";
+      "Terese turns complexity into things people can use: products, tools, workflows, models, and organizational capability. Her work sits between engineering depth, product logic, knowledge structure, and implementation, helping teams define what should be built, build what is needed, and make the reasoning reusable.";
 
   static ColorFilter _lerpToBackgroundFilter({
     required Color background,
