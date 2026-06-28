@@ -7,15 +7,15 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/computational-engin
 order: 5
 ---
 
-**Terese transforms engineering complexity into scalable analytical leverage. She focuses on turning complex engineering reasoning into explicit, repeatable models, scripts, and decision-support tools.**
+**Terese transforms engineering complexity into scalable analytical leverage. She focuses on turning complex engineering reasoning into structured, repeatable models, scripts, and computational tools.**
 
-Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. Rather than repeatedly solving the same problem manually, she became interested in making the underlying logic explicit.
+Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. Rather than repeatedly solving the same problem manually, she became interested in making the underlying logic visible and programmatically reusable.
 
-Many engineering problems become difficult when the reasoning needed to solve them is scattered across physical behaviour, tacit assumptions, spreadsheets, expert judgement, and repetitive manual work. By translating that reasoning into models, scripts, and decision-support tools, complex work becomes easier to scale, validate, and improve.
+Many engineering problems become difficult when the governing logic is scattered across physical behaviour, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
 
 The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgement focused on the parts of the problem that still require interpretation, trade-offs, and validation.
 
-Whether the problem involved economics, geometry, manufacturing, or decision-making, she repeatedly found that the underlying challenge was the same: important logic existed, but it had not yet been made explicit.
+Whether the problem involved economics, geometry, manufacturing, or decision-making, she repeatedly found that the underlying challenge was the same: important logic existed, but it had not yet been codified or structured.
 
 Her approach follows a consistent pattern: **Abstract** - **Model** - **Compute** - **Validate**
 

@@ -25,7 +25,7 @@ This concept-development capability has appeared across both physical and digita
 
 **Example – Independent Development**
 
-Terese's independent software and AI projects began from recognising a recurring problem in technical work: complex knowledge is often difficult to find, validate, and apply at the moment it is needed. Rather than treating this only as a documentation problem, she explored technical product concepts for workflow visualisation, retrieval-backed knowledge systems, and AI-enabled decision support — turning an observed need into concrete prototypes and technical systems.
+Terese's independent software and AI projects began from recognising a recurring problem in technical work: complex knowledge is often difficult to find, verify, and put into practice at the moment it is needed. Rather than treating this only as a documentation problem, she explored technical product concepts for workflow visualisation, retrieval-backed knowledge systems, and AI-assisted workflow support — turning an observed need into concrete prototypes and technical systems.
 
 
 ## Product Context and User Reality
@@ -58,7 +58,7 @@ Today her experience spans both physical and digital product development. Her ac
 
 This combination allows her to connect physical engineering problems with the digital tools, computational logic, and software systems increasingly needed to support modern technical work.
 
-Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, manufacturing logic, software development, and decision-support tooling. This enables contributions that range from physical product development and industrialisation to technical software, AI-enabled knowledge systems, and workflow automation.
+Her technical background includes CAD, engineering analysis, FEM, topology optimisation, geometry processing, manufacturing logic, software development, and analytical tools. This enables contributions that range from physical product development and industrialisation to technical software, AI-enabled knowledge systems, and workflow automation.
 
 **Example – Volvo Cars / Polestar 2**
 
@@ -70,7 +70,7 @@ Owned driver ergonomics and steering-wheel development while contributing to the
 
 **Example – Independent Development**
 
-Developed software prototypes and technical tools spanning workflow visualisation, AI-enabled knowledge systems, automation, and decision support. These projects explore how software concepts can be formed from observed technical-work problems and developed into tools that make complex information easier to navigate, validate, and act upon.
+Developed software prototypes and technical tools spanning workflow visualisation, AI-enabled knowledge systems, automation, and interactive guidance. These projects explore how software concepts can be formed from observed technical-work problems and developed into tools that make complex information easier to navigate, validate, and act upon.
 
 
 ## Application Development & Industrialisation
