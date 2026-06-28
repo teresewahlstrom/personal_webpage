@@ -2,18 +2,18 @@
 id: metal-am-specialist
 title: Metal AM Specialist
 category: AM & MANUFACTURING
-short: Industrialising metal additive manufacturing
+short: Industrializing metal additive manufacturing
 image: lib/subjects/Terese/assets/content/{theme}/capability/metal_am_specialist.png
 order: 4
 ---
 
-**Terese industrialises metal additive manufacturing (AM, more commonly known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialise them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
+**Terese industrializes metal additive manufacturing (AM, more commonly known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
 
-Throughout her career, she has repeatedly helped organisations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
+Throughout her career, she has repeatedly helped organizations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
 At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
 
-Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to turn tacit judgment into shared operating structure, helping organisations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
+Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to turn tacit judgment into shared operating structure, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
 
 ## Core AM contributions
 
@@ -21,12 +21,12 @@ Together, these experiences provided an end-to-end understanding of the technica
 
   This capability was initially developed through extensive independent research conducted for her  [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478)—downloaded more than 6,500 times across more than 50 countries—and has since been refined through nearly a decade of industrial application across the additive-manufacturing value chain.
 
-* **Technical and economic decision support – Across Volvo Cars, GE Additive, and Markforged:** She translated engineering analysis into business decision support for additive manufacturing adoption and industrialisation. Her work included business case development, ROI and production-economics modelling, manufacturing-capacity planning, machine configuration studies, make-versus-buy analysis, and investment decision support. By combining engineering understanding with economic modelling, she helped organisations determine not only whether applications could be manufactured successfully, but whether they represented commercially sound investments.
+* **Technical and economic decision support – Across Volvo Cars, GE Additive, and Markforged:** She translated engineering analysis into business decision support for additive manufacturing adoption and industrialization. Her work included business case development, ROI and production-economics modeling, manufacturing-capacity planning, machine configuration studies, make-versus-buy analysis, and investment decision support. By combining engineering understanding with economic modeling, she helped organizations determine not only whether applications could be manufactured successfully, but whether they represented commercially sound investments.
 
 * **Design for Additive Manufacturing (DfAM) and process adaptation – Across Volvo Cars, GE Additive, and Markforged:** She improved product manufacturability by adapting either the manufacturing process to the design or the design to the manufacturing process, depending on the application and design freedom available.
 
   This included three complementary levels of engineering:
-  1. **Process adaptation** – Enabling existing designs through build preparation, process optimisation, post-processing strategies, and limited geometry adaptations where permitted.
+  1. **Process adaptation** – Enabling existing designs through build preparation, process optimization, post-processing strategies, and limited geometry adaptations where permitted.
   2. **Component redesign** – Redesigning individual components to improve manufacturability, sustainability, performance, and production economics.
   3. **Assembly redesign** – Rethinking complete assemblies where additive manufacturing enabled part consolidation and fundamentally different engineering solutions.
 
@@ -40,4 +40,4 @@ Together, these experiences provided an end-to-end understanding of the technica
 
 * **Capability building and knowledge transfer – Markforged:** She turned specialized manufacturing know-how into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
 
-  This reflects a recurring theme throughout her career: helping organisations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated experts by embedding manufacturing insights into operational tools and reference systems.
+  This reflects a recurring theme throughout her career: helping organizations make better engineering decisions earlier, establish more reliable manufacturing capability, and reduce dependence on isolated experts by embedding manufacturing insights into operational tools and reference systems.
