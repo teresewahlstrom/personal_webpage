@@ -7,13 +7,13 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/metal_am_specialist
 order: 4
 ---
 
-**Terese industrializes metal additive manufacturing (AM, more commonly known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
+**Terese industrializes metal additive manufacturing (AM, also known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
 
 Metal AM is one of Terese's deepest specialist domains and a major proof environment for her broader product, computational, and capability-building work.
 
 Throughout her career, she has repeatedly helped organizations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
-At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
+At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked from within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to turn tacit judgment into shared operating structure, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
 
