@@ -25,12 +25,10 @@ Together, these experiences provided an end-to-end understanding of the technica
 
 * **Technical and economic decision support – Across Volvo Cars, GE Additive, and Markforged:** She translated engineering analysis into business decision support for additive manufacturing adoption and industrialization. Her work included business case development, ROI and production-economics modeling, manufacturing-capacity planning, machine configuration studies, make-versus-buy analysis, and investment decision support. By combining engineering understanding with economic modeling, she helped organizations determine not only whether applications could be manufactured successfully, but whether they represented commercially sound investments.
 
-* **Design for Additive Manufacturing (DfAM) and process adaptation – Across Volvo Cars, GE Additive, and Markforged:** She improved product manufacturability by adapting either the manufacturing process to the design or the design to the manufacturing process, depending on the application and design freedom available.
-
-  This included three complementary levels of engineering:
-  1. **Process adaptation** – Enabling existing designs through build preparation, process optimization, post-processing strategies, and limited geometry adaptations where permitted.
-  2. **Component redesign** – Redesigning individual components to improve manufacturability, sustainability, performance, and production economics.
-  3. **Assembly redesign** – Rethinking complete assemblies where additive manufacturing enabled part consolidation and fundamentally different engineering solutions.
+* **Design for Additive Manufacturing (DfAM) and process adaptation – Across Volvo Cars, GE Additive, and Markforged:** Sometimes, a geometry cannot be manufactured reliably or cost efficiently without tweaks to geometry and/or process. Without this realisation, companies might miss out on potentials. Terese work has often included finding those adaptations with consideration to what the customer allows at these levels:
+  * **Adapting process** - considering strategies in build preparation, process parameters, and post-processing. Documenting process to make sure that it's repeatable for the next run.
+  * **Adapting geometry** - Even slight tweaks to the geometry could have an impact on manufacturability. Sometimes it is beneficial to do a larger redesign of the individual component or even of an assembly.
+  *  **Finding out what is a real spec** - Quite often details on drawings and requests are not based on real needs, questioning specification that hinders manufacturing could sometimes be the easiest solution.
 
   An important enabler of this work is Terese's advanced CAD capability. She is comfortable developing highly complex geometries that would be impractical to manufacture conventionally. Although effective additive-manufacturing design rarely depends on geometric complexity alone—and many successful applications remain relatively simple—this capability allows her to exploit additive manufacturing's full design freedom whenever the engineering case justifies it.
 
