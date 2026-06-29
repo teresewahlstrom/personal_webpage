@@ -7,13 +7,13 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/cross-functional-le
 order: 3
 ---
 
-**Every technical organization depends on the boundaries between its functions: engineering and production, sales and technical specialists, customers and developers. When those boundaries are well-managed, organizations move quickly. When they are not, the failures that accumulate there become the real bottlenecks.**
+**Terese leads across technical, commercial, and operational boundaries. She helps people with different expertise, priorities, and constraints align around a shared understanding of complex problems, enabling organizations to make better decisions and execute with greater confidence.**
 
-Engineering constraints, commercial commitments, and production realities speak different languages. Terese has spent her career working where those meet — not as a coordinator, but as someone who diagnoses why the handoff is failing and builds what is needed to make it work.
+Every technical organization depends on the boundaries between its functions: engineering and production, sales and technical specialists, customers and developers. When those boundaries are well-managed, organizations move quickly. When they are not, the failures that accumulate there become the real bottlenecks.
 
 ## Learning from organizational misalignment
 
-Role after role, Terese noticed the same pattern: capable, well-intentioned people growing frustrated—pulled in different directions by different assumptions, terminology, priorities, and measures of success. Each perspective made sense in isolation. Together, they no longer aligned.
+Role after role, Terese noticed the same pattern: capable, well-intentioned people growing frustrated—pulled in different directions by different assumptions, terminology, priorities, and measures of success. Each perspective made sense in isolation. Together, they no longer align.
 
 Sales assumed engineering had agreed. Engineering assumed sales understood the constraints. Different engineering disciplines struggled to reconcile problems that only emerged where their work came together. Production inherited decisions it had never been part of. Leadership often underestimated what organizational change required because they could not see the work beneath it.
 
