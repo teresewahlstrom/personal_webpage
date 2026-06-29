@@ -24,7 +24,11 @@ That insight reshaped how Terese approaches leadership. Rather than accepting th
 
 ## Cross-functional leadership in practice
 
-* **Managing technical uncertainty under commercial pressure – GE Additive:** New machines and materials were still evolving while customers were evaluating major investments. Sales needed benchmark results to keep opportunities moving. Terese planned and delivered those programs, working closely with R&D, operators, suppliers, and commercial teams to make technical constraints visible, establish realistic expectations, and give customers the evidence they needed to make informed investment decisions.
+* **Leading customer benchmark programs – GE Additive:** Customers were often evaluating major investments in additive manufacturing technologies ranging from well-established to emerging. They needed to understand whether their application could be manufactured successfully, what performance and production economics could realistically be expected, and whether the technology was the right fit for their needs.
+
+Terese led benchmark programs that brought together customers, sales, operators, suppliers, and R&D to generate the evidence needed for those decisions. Depending on the customer's application, this included manufactured benchmark parts, engineering guidance, production-economics estimates, productivity assessments, and process recommendations.
+
+For emerging machines and materials, she worked closely with R&D to adapt benchmark activities as the technology and process understanding evolved. Throughout the process, she made technical constraints visible, set realistic expectations, helped customers make informed investment decisions, and enabled commercial teams to move opportunities forward with confidence.
 
 * **A shared operational baseline where none existed – Markforged:** The organization believed it had a training problem. In reality, it had a shared-understanding problem. Different functions—and often different individuals—held different views of how the technology worked and what constituted best practice. The answer a customer received depended entirely on who they asked.
 
