@@ -13,7 +13,7 @@ Every technical organization depends on the boundaries between its functions: en
 
 ## Learning from organizational misalignment
 
-Role after role, Terese noticed the same pattern: capable, well-intentioned people growing frustrated—pulled in different directions by different assumptions, terminology, priorities, and measures of success. Each perspective made sense in isolation. Together, they no longer align.
+Throughout her career, Terese repeatedly encountered the same pattern: capable, well-intentioned people growing frustrated—pulled in different directions by different assumptions, terminology, priorities, and measures of success. Each perspective made sense in isolation. Together, they no longer aligned.
 
 Sales assumed engineering had agreed. Engineering assumed sales understood the constraints. Different engineering disciplines struggled to reconcile problems that only emerged where their work came together. Production inherited decisions it had never been part of. Leadership often underestimated what organizational change required because they could not see the work beneath it.
 
