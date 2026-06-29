@@ -9,11 +9,11 @@ order: 5
 
 **Terese transforms engineering complexity into scalable analytical leverage. She focuses on turning complex engineering reasoning into structured, repeatable models, scripts, and computational tools.**
 
-Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. Rather than repeatedly solving the same problem manually, she became interested in making the underlying logic visible and programmatically reusable.
+Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed manually over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. Rather than repeatedly solving the same problem manually, she became interested in making the underlying logic visible and programmatically reusable.
 
 Many engineering problems become difficult when the governing logic is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
 
-The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgment focused on the parts of the problem that still require interpretation, trade-offs, and validation.
+The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgment focused on the aspects that still require interpretation, trade-offs, and validation.
 
 Whether the problem involved economics, geometry, manufacturing, or decision-making, she repeatedly found that the underlying challenge was the same: important logic existed, but it had not yet been codified or structured.
 
@@ -21,12 +21,12 @@ Her approach follows a consistent pattern: **Abstract** - **Model** - **Compute*
 
 * **Abstract:** Translate the physical or operational problem into relevant variables, constraints, and relationships.
 * **Model:** Represent the governing logic mathematically, geometrically, or procedurally.
-* **Compute:** Use analytical tools, scripts, or algorithms to evaluate options, automate repetitive steps, or support better decisions.
+* **Compute:** Use analytical tools, scripts, or algorithms to evaluate options, or automate repetitive steps.
 * **Validate:** Compare the output against engineering reality and refine the model where necessary.
 
 ## Computational engineering in practice
 
-* **Production economics and cost modeling – GE Additive:** Estimating production economics often required multiple assumptions about equipment utilization, consumable demand, and production-cycle behavior to be combined manually. To make those trade-offs easier to evaluate, she co-developed an Excel-based configuration, productivity-estimation, and cost-estimation model. By linking production-cycle behavior, equipment constraints, powder demand, and consumable use, she turned messy, multi-variable scenarios into clear cost and ROI calculations. Sales and application engineering used the model to support customer purchase decisions, while internal teams used it to estimate the material cost of machine and Materials R&D work before committing resources. The model was also sold to customers and adapted to their specific needs.
+* **Production economics and cost modeling – GE Additive:** Estimating production economics often required multiple assumptions about equipment utilization, consumable demand, and production-cycle behavior to be combined manually. To make those trade-offs easier to evaluate, she co-developed an Excel-based configuration, productivity-estimation, and cost-estimation model. By linking production-cycle behavior, equipment constraints, powder demand, and consumable use, she turned messy, multi-variable scenarios into clear cost and ROI calculations. Sales and application engineering used the model to guide prospects, while internal teams used it to estimate proposed R&D projects before committing resources [actually before deciding which projects should be run]. Additionally, the Excel template was sold to customers and adapted to their specific needs.
 
 * **Powder-reuse strategy and process modeling – GE Additive:** Through commercial and application-engineering work, she repeatedly encountered unrealistic assumptions about material demand, consumables consumption, configuration logic, and powder-reuse economics. Existing cost calculations often focused on the component itself while underrepresenting the surrounding powder, support material, and operational realities that influenced true material consumption. To establish a more realistic basis for decision-making, she developed process and powder-reuse models that allowed customers to evaluate how far powder reuse could responsibly be pushed while accounting for safety margins, scrap rates, packing density in vacuum environments, validation requirements, and regulatory constraints. This challenged both overly optimistic cost expectations and unnecessarily conservative single-use assumptions, helping customers identify more viable operating strategies and improve unit economics.
 
