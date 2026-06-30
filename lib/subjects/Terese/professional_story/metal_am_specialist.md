@@ -7,7 +7,7 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/metal_am_specialist
 order: 4
 ---
 
-**Terese industrializes metal Additive Manufacturing (AM, also known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
+**Terese industrializes metal Additive Manufacturing (AM), the industrial form of what is commonly known as 3D printing. She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
 
 AM is one of Terese's deepest specialist domains and one of the strongest demonstrations of her broader capabilities in product R&D, computational engineering, cross-functional leadership, and capability architecture. Building on the research presented in her widely read [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) (with over 6,500 downloads across 50+ countries), her expertise has since been refined through nearly a decade of industrial practice across the metal AM value chain.
 
