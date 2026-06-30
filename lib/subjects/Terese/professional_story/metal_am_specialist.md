@@ -17,7 +17,7 @@ At Volvo Cars, she evaluated AM from the perspective of an industrial adopter. A
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to dependable industrial capability. Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
+Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to dependable industrial adoption. Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
 
 
 ## Metal AM in practice
@@ -44,4 +44,4 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
 * **Capability building and knowledge transfer – Markforged:** She turned specialized manufacturing know-how into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
 
-  This reflects a recurring theme throughout her career: helping organizations move metal additive manufacturing from technical potential to dependable industrial capability by embedding manufacturing expertise into the systems, processes, and knowledge that support everyday engineering and production.
+  This reflects a recurring theme throughout her career: helping organizations move metal additive manufacturing from technical potential to repeatable industrial practice by embedding manufacturing expertise into the systems, processes, and knowledge that support everyday engineering and production.
