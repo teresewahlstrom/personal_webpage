@@ -35,7 +35,7 @@ Across these roles, her focus has been remarkably consistent: *understanding wha
 
   * **Adapting geometry** – Even relatively small design changes can significantly improve manufacturability. This may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit additive manufacturing.
 
-  * **Challenge requirements** – Engineering drawings and specifications do not always reflect true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
+  * **Challenge requirements** – Engineering drawings and specifications do not always reflect the product's true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
 
   An important enabler of this work is Terese's advanced geometric modelling capability. She is comfortable working across parametric solids, surface modelling, meshes, Sub-D, scan data, and geometry scripting. This breadth allows her to exploit Additive Manufacturing's design freedom where it creates engineering value, while remaining equally comfortable with simpler, more conventional solutions.
   
