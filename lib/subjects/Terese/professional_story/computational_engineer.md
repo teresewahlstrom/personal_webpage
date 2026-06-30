@@ -9,11 +9,14 @@ order: 5
 
 **Terese transforms engineering complexity into scalable analytical leverage. She focuses on turning complex engineering reasoning into structured, repeatable models, scripts, and computational tools.**
 
-Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. She became interested in making the underlying logic explicit and programmatically reusable. The governing logic behind many engineering problems is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
+Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. She became interested in making the underlying reasoning explicit and programmatically reusable.
+
+The governing principles behind many engineering problems are often scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
 
 The value lies in creating analytical leverage: capturing the reasoning that should be reused, while keeping engineering judgment focused where interpretation, trade-offs, and validation are still required.
 
-Whether the problem involved economics, geometry, manufacturing, or decision-making, the underlying challenge was often the same: important logic existed, but it had not yet been codified or structured.
+Whether the problem involved economics, geometry, manufacturing, or decision-making, the underlying challenge was often the same: important knowledge existed, but it had not yet been codified or structured
+
 
 Her approach follows a consistent pattern: **Abstract** - **Model** - **Compute** - **Validate**
 
