@@ -13,7 +13,7 @@ Metal AM is one of Terese's deepest specialist domains and one of the strongest 
 
 A consistent question has run through that career: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
-At Volvo Cars, she evaluated AM from the perspective of an industrial adopter. At GE Additive and Markforged, she worked from within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
+At Volvo Cars, she evaluated AM from the perspective of an industrial adopter—investing in additive manufacturing equipment and sourcing printed components. At GE Additive and Markforged, she worked from within machine manufacturers that not only developed and sold additive manufacturing systems, but also operated them to validate, externally demonstrate, and industrialize the technology in real production environments.
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
