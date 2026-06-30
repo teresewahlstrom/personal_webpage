@@ -19,9 +19,9 @@ While much of her industrial experience has been in advanced manufacturing techn
 
 ## Product R&D in practice
 
-* **Resolving uncertainty before commitment – Volvo Cars, GE Additive, and Markforged:** Terese has helped teams answer practical R&D questions before major decisions were made: whether a technology could meet requirements, whether the economics made sense, what risks needed to be resolved, and what would need to be true for an idea to move toward reliable use.
+* **Resolving uncertainty before commitment – Volvo Cars, GE Additive, and Markforged:** Before a technology or application could be committed to, it was often genuinely unknown whether it could meet requirements, whether the economics made sense, or what risks needed to be resolved. Terese designed benchmark programs and proof-of-concept studies as structured experiments — ways to learn the answer rather than assume it. A benchmark here is evidence-generation: a deliberately designed test of a specific hypothesis about feasibility, performance, or economics, designed to fail informatively if the idea didn't hold up.
 
-  She has done this through benchmark programs, proof-of-concept studies, application-engineering projects, feasibility assessments, and implementation analysis. The result was clearer decision criteria, earlier rejection of poor-fit applications, stronger technical foundations for investment decisions, and more realistic implementation paths.
+  The result was clearer decision criteria, earlier rejection of poor-fit applications, stronger technical foundations for investment decisions, and more realistic implementation paths.
 
 * **Translating user reality into product improvements – Markforged and GE Additive:** Many product problems appear not in the core technology alone, but where design intent, product behavior, configuration, documentation, sales, support, and real use do not fully align. Terese has worked close enough to users, production environments, customer questions, and operational workarounds to identify those gaps and turn them into product improvements.
 
