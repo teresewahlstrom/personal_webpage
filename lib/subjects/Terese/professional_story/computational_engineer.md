@@ -9,7 +9,7 @@ order: 5
 
 **Many engineering problems only become tractable once they have been reformulated into explicit mathematical, geometric, procedural, or informational representations. Terese's instinct, across very different domains, is to find that representation — and then build the model, script, or structure that makes the underlying reasoning computable.**
 
-The governing logic behind a problem is rarely visible at the outset. It is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. Terese's contribution is not any single tool, but a consistent move: identifying what kind of representation a problem actually needs — shape, system, procedure, or knowledge — and building the structure that exposes its logic.
+The governing logic behind a problem is rarely visible at the outset. It is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. Before deciding how to solve a problem, Terese first asks what actually governs it. Her contribution is not any single tool, but identifying the representation that makes those governing relationships explicit — whether that representation is geometric, mathematical, procedural, or informational.
 
 That representation differs by problem. Sometimes the right representation is geometric. Sometimes it is a system of interacting variables. Sometimes it is an explicit procedure. Sometimes it is a structured body of knowledge. What stays constant is the underlying move: **Abstract** – **Model** – **Compute** – **Validate**.
 
