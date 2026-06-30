@@ -15,7 +15,7 @@ Deploying AI in technical environments can recreate a familiar risk: critical re
 
 She bridges the gap between software development and domain expertise by designing the reasoning environments in which AI operates. Her focus is not the model itself, but the reasoning architecture around it: how knowledge is represented, how evidence is surfaced, where deterministic logic belongs, and how human expertise remains part of the decision process.
 
-Through self-directed development and exploration—including building interactive digital twin concepts with **Flutter** frontends and **Python-based Retrieval-Augmented Generation (RAG)**—she has applied these principles by grounding model interactions in explicit documentation, making supporting evidence, validation steps, and fallback boundaries visible, and establishing clear routes for human review.
+Through self-directed development and exploration—including building interactive digital twin concepts with Flutter frontends and Python-based Retrieval-Augmented Generation (RAG)—she has explored how these principles can be implemented in practice, grounding model interactions in explicit documentation, making supporting evidence, validation steps, and fallback boundaries visible, and establishing clear routes for human review.
 
 Her approach follows a consistent pattern: **Represent** - **Retrieve** - **Validate** - **Escalate**
 
