@@ -2,36 +2,30 @@
 id: computational-engineer
 title: Computational Engineer
 category: MATH & LOGIC
-short: Turning engineering reasoning into models, tools & automation
+short: Reformulating engineering problems into computable representations
 image: lib/subjects/Terese/assets/content/{theme}/capability/computational-engineer.png
 order: 5
 ---
 
-**Terese transforms engineering complexity into scalable analytical leverage. She focuses on turning complex engineering reasoning into structured, repeatable models, scripts, and computational tools.**
+**Many engineering problems only become tractable once they have been reformulated into explicit mathematical, geometric, procedural, or informational representations. Terese's instinct, across very different domains, is to find that representation — and then build the model, script, or structure that makes the underlying reasoning computable.**
 
-Throughout her career, Terese repeatedly encountered engineering problems that required the same reasoning to be performed over and over again: estimating costs, evaluating manufacturing constraints, preparing production builds, exploring design trade-offs, or assessing application suitability. She became interested in making the underlying reasoning explicit and programmatically reusable.
+The governing logic behind a problem is rarely visible at the outset. It is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. Terese's contribution is not any single tool, but a consistent move: identifying what kind of representation a problem actually needs — shape, system, procedure, or knowledge — and building the structure that exposes its logic.
 
-The governing logic behind many engineering problems is scattered across physical behavior, tacit assumptions, spreadsheets, and repetitive manual work. By translating that reasoning into models, scripts, and analysis tools, complex work becomes easier to scale, verify, and iterate upon.
+That representation differs by problem. Sometimes the right representation is geometric. Sometimes it is a system of interacting variables. Sometimes it is an explicit procedure. Sometimes it is a structured body of knowledge. What stays constant is the underlying move: **Abstract** – **Model** – **Compute** – **Validate**.
 
-The value comes from creating analytical leverage: capturing the reasoning that should be reused while keeping engineering judgment focused where interpretation, trade-offs, and validation are still required.
+* **Abstract:** Translate the problem into the variables, constraints, or structures that actually govern it.
+* **Model:** Represent that structure mathematically, geometrically, procedurally, or informationally.
+* **Compute:** Use the representation to evaluate options, generate solutions, or automate repetitive reasoning.
+* **Validate:** Compare the output against engineering reality and refine the representation where necessary.
 
-Whether the problem involved economics, geometry, manufacturing, or decision-making, the underlying challenge was often the same: important reasoning existed, but it had not yet been codified or structured.
+## Four manifestations of computation
 
-When that reasoning is primarily analytical, Terese's approach follows a consistent pattern:
+* **Geometry as computation – Polestar 2, Volvo Cars:** Some problems are computational because they are geometric. Working with industrial designers, Terese mapped complex interior-pattern concepts onto double-curved surfaces — translating a design intent that existed only as visual language into a mathematical representation of surface and pattern that could be evaluated, adjusted, and manufactured. What had taken weeks of manual iteration became a matter of hours once the geometry itself was represented computationally, rather than handled case by case. The same instinct recurred elsewhere, including complex surface mapping, repeated motifs, Voronoi structures, and mathematically inspired geometries such as minimal surfaces, wherever the engineering problem benefited from an explicit geometric representation.
 
-**Abstract** – **Model** – **Compute** – **Validate**
+* **Systems as computation – Production economics modeling, GE Additive:** Some problems are computational because they involve too many interacting variables to reason about by hand. Production economics in additive manufacturing depends on equipment utilization, production-cycle behavior, consumable demand, and machine configuration — variables that interact in ways that resist mental arithmetic or static spreadsheets built around a single assumption set. Terese co-developed a model that represented these as an explicit system of interacting variables and constraints, allowing trade-offs to be evaluated rather than guessed at. The model's value was not that it replaced a spreadsheet — it was that it made an inherently multivariate problem newly tractable.
 
-* **Abstract:** Translate the physical or operational problem into relevant variables, constraints, and relationships.
-* **Model:** Represent the governing logic mathematically, geometrically, or procedurally.
-* **Compute:** Use analytical tools, scripts, or algorithms to evaluate options, or automate repetitive steps.
-* **Validate:** Compare the output against engineering reality and refine the model where necessary.
+* **Automation as computation – Geometry-driven build optimization, GE Additive:** Some problems are computational because they are procedural — the same reasoning applied over and over, with no inherent need for human judgment once the rules are made explicit. Nesting and stacking parts for production builds consumed significant time without adding engineering value. Terese encoded the underlying logic — thermal limits, spacing requirements, boundary constraints — as rule-based geometric algorithms in Python, turning a repetitive manual task into an explicit, automatable procedure.
 
-## Computational engineering in practice
+* **Knowledge as computation – Twin Tess, independent development:** Some problems are computational because the bottleneck is not calculation but representation of knowledge itself — making expertise queryable, evidence retrievable, and reasoning structured enough to verify. In building Twin Tess, Terese treated professional knowledge as a system to be represented: combining sparse and dense retrieval, hybrid ranking, metadata-aware filtering, semantic routing, and structured context assembly to surface relevant evidence and ground responses in source material. Here, computation is not solving an equation or running a simulation — it is structuring information so that reasoning over it becomes traceable.
 
-* **Production economics and cost modeling – GE Additive:** Evaluating production economics often required equipment utilization, production-cycle behavior, consumable demand, and machine configuration to be combined manually before meaningful trade-offs could be explored. Terese found that individual salespeople and departments often relied on their own ad hoc costing spreadsheets. Each encoded different assumptions about machine configuration, consumables, productivity, and production economics, leading to inconsistent estimates and customer recommendations. To make that reasoning explicit and reusable, she co-developed an Excel-based configuration, productivity, and cost model. Sales and application engineering used it to guide customer decisions, while internal teams used it to evaluate proposed R&D work before deciding which projects should be pursued. The model was also adapted and sold to customers for their own planning and decision-making.
-
-* **Powder-reuse strategy and process modeling – GE Additive:** Through commercial and application-engineering work, she repeatedly encountered unrealistic assumptions about material demand, consumables consumption, configuration logic, and powder-reuse economics. Existing cost calculations often focused on the component itself while underrepresenting the surrounding powder, support material, and operational realities that influenced true material consumption. To establish a more realistic basis for decision-making, she developed process and powder-reuse models that allowed customers to evaluate how far powder reuse could responsibly be pushed while accounting for safety margins, scrap rates, packing density in vacuum environments, validation requirements, and regulatory constraints. This challenged both overly optimistic cost expectations and unnecessarily conservative single-use assumptions, helping customers identify more viable operating strategies and improve unit economics.
-
-* **Geometry-driven build optimization – GE Additive:** After repeatedly performing nesting and stacking work that consumed significant time without adding engineering value, she independently designed rule-based geometric logic and implemented it in Python scripts. The tools respected thermal, spacing, and boundary constraints, reduced manual pre-build preparation, and allowed her to handle recurring production work more efficiently despite limited available resources.
-
-* **Computational geometry – Volvo Cars, GE Additive, and Markforged:** She used geometry-driven workflows to create and adapt complex surface patterns, repeated motifs, Voronoi structures, and mathematically inspired geometries such as minimal surfaces, including Schwarz-P-type forms.
+Across geometry, systems, procedures, and knowledge, the pattern is the same: a problem that initially resists clear reasoning becomes solvable once it is given the right computational representation.
