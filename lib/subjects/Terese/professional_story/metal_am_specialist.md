@@ -9,7 +9,7 @@ order: 4
 
 **Terese industrializes metal Additive Manufacturing (AM, also known as 3D printing). She has worked across the entire industrial value chain—evaluating technologies as an industrial adopter, helping develop and industrialize them from within machine manufacturers, and relying on them in certified production. This breadth of experience gives her a practical understanding of what it takes to move metal AM from proof of concept to dependable industrial capability.**
 
-Metal AM is one of Terese's deepest specialist domains and a major proof environment for her broader product, computational, and capability-building work. Built on the foundation of her widely read [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) (with over 6,500 downloads across 50+ countries), her expertise has since been refined through nearly a decade of industrial practice across the additive manufacturing value chain.
+Metal AM is one of Terese's deepest specialist domains and a major proof environment for her broader product, computational, and capability-building work. Built on the foundation of her widely read [Master's thesis](https://lup.lub.lu.se/student-papers/search/publication/8868478) (with over 6,500 downloads across 50+ countries), her expertise has since been refined through nearly a decade of industrial practice across the Additive Manufacturing value chain.
 
 Throughout her career, she has repeatedly helped organizations answer the questions that determine successful adoption: *Is this application a good fit for AM? Which technology is most appropriate? Is it technically and economically viable? And can it be scaled into reliable production?*
 
@@ -17,7 +17,7 @@ At Volvo Cars, she evaluated AM from the perspective of an industrial adopter. A
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to dependable industrial adoption. Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
+Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to reliable industrial adoption. Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
 
 
 ## Metal AM in practice
@@ -36,7 +36,7 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
   * **Challenge requirements** – Engineering drawings and specifications do not always reflect true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
 
-  An important enabler of this work is Terese's advanced geometric modelling capability. She is comfortable working across parametric solids, surface modelling, meshes, Sub-D, scan data, and geometry scripting. This breadth allows her to exploit additive manufacturing's design freedom where it creates engineering value, while remaining equally comfortable with simpler, more conventional solutions.
+An important enabler of this work is Terese's advanced geometric modelling capability. She is comfortable working across parametric solids, surface modelling, meshes, Sub-D, scan data, and geometry scripting. This breadth allows her to exploit Additive Manufacturing's design freedom where it creates engineering value, while remaining equally comfortable with simpler, more conventional solutions.
 
 * **Production systems execution – Markforged and GE Additive:** She worked across the complete AM workflow required to turn qualified applications into manufactured parts—from manufacturability review and build preparation through production planning, scheduling, quality control, and process handoffs. Experience from both ISO 9001 production at Markforged and benchmark manufacturing at GE Additive provided first-hand insight into how engineering, operations, and quality systems must work together to achieve repeatable industrial execution.
 
@@ -44,4 +44,4 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
 * **Capability building and knowledge transfer – Markforged:** She turned specialized manufacturing know-how into structured training, troubleshooting frameworks, documentation, and operational guidance that enabled operators, engineers, and support teams to work more independently while improving consistency across production.
 
-  This reflects a recurring theme throughout her career: helping organizations move metal additive manufacturing from technical potential to repeatable industrial practice by embedding manufacturing expertise into the systems, processes, and knowledge that support everyday engineering and production.
+  This reflects a recurring theme throughout her career: helping organizations move metal additive manufacturing from technical potential to repeatable industrial capability by embedding manufacturing expertise into the systems, processes, and knowledge that support everyday engineering and production.
