@@ -33,7 +33,7 @@ Across these roles, her focus has been remarkably consistent: *understanding wha
 
   * **Adapt process** – Optimizing process parameters, build preparation (such as support strategies and orientation), and post-processing to manufacture existing designs more reliably.
 
-  * **Adapt geometry** – Even relatively small design changes can significantly improve manufacturability. This may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit additive manufacturing.
+  * **Adapt geometry** – Even relatively small design changes can significantly improve manufacturability. This may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit AM.
 
   * **Challenge requirements** – Engineering drawings and specifications do not always reflect the product's true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
 
