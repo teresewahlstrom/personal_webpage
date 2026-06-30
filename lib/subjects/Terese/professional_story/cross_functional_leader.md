@@ -17,7 +17,7 @@ Throughout her career, Terese repeatedly encountered the same pattern: capable, 
 
 Sales assumed engineering had agreed. Engineering assumed sales understood the constraints. Different engineering disciplines struggled to reconcile problems that only emerged where their work came together. Production inherited decisions it had never been part of. Leadership often underestimated what organizational change required because they could not see the work beneath it.
 
-The problem was rarely competence or commitment. It was that nobody owned the space between functions. Everyone owned their lane. Nobody owned what happened at the intersections—and the longer that disconnect went unaddressed, the more organizational damage it caused.
+Nobody owned the space between functions. Everyone owned their lane. Nobody owned what happened at the intersections—and the longer that disconnect went unaddressed, the more organizational damage it caused.
 
 That insight reshaped how Terese approaches leadership. Rather than accepting the first definition of the problem, she first works to understand how each party sees it, then builds a shared understanding that everyone can align behind before designing a way forward.
 
