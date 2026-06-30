@@ -27,7 +27,7 @@ While much of her industrial experience has been in advanced manufacturing techn
 
   Recurring customer questions, training challenges, support issues, and operational workarounds often revealed product opportunities rather than user shortcomings.
 
-  This included improvements to physical and software-enabled product behavior, revised sales guidance, clearer equipment and consumables recommendations, onboarding improvements, configuration guidance, workflow design, customer enablement, and product-management discussions about how the broader offering should support customer success.
+  This included improvements to physical and software-enabled product behavior, revised sales guidance, clearer equipment and consumables recommendations, onboarding improvements, configuration guidance, workflow design, customer enablement, and product-management discussions about how the broader offering and product design should support customer success.
 
 * **Building across product forms:** Terese builds physical artifacts, digital tools, product logic, service structures, workflows, and reusable decision support.
 
