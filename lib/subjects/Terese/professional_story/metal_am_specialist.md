@@ -17,7 +17,8 @@ At Volvo Cars, she evaluated additive manufacturing from the perspective of an i
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-This perspective enables her to translate specialist manufacturing judgement into reliable industrial practice, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
+Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to dependable industrial capability. Whether evaluating technologies, qualifying applications, stabilizing production, or reducing dependence on isolated experts, Terese helps organizations make metal AM commercially and operationally viable.
+
 
 ## Metal AM in practice
 
