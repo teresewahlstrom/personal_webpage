@@ -36,7 +36,7 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
   * **Challenge requirements** – Engineering drawings and specifications do not always reflect true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
 
-An important enabler of this work is Terese's advanced geometric modelling capability. She is comfortable working across parametric solids, surface modelling, meshes, Sub-D, scan data, and geometry scripting. This breadth allows her to exploit Additive Manufacturing's design freedom where it creates engineering value, while remaining equally comfortable with simpler, more conventional solutions.
+  An important enabler of this work is Terese's advanced geometric modelling capability. She is comfortable working across parametric solids, surface modelling, meshes, Sub-D, scan data, and geometry scripting. This breadth allows her to exploit Additive Manufacturing's design freedom where it creates engineering value, while remaining equally comfortable with simpler, more conventional solutions.
 
 * **Production systems execution – Markforged and GE Additive:** She worked across the complete AM workflow required to turn qualified applications into manufactured parts—from manufacturability review and build preparation through production planning, scheduling, quality control, and process handoffs. Experience from both ISO 9001 production at Markforged and benchmark manufacturing at GE Additive provided first-hand insight into how engineering, operations, and quality systems must work together to achieve repeatable industrial execution.
 
