@@ -15,7 +15,9 @@ Throughout her career, she has repeatedly helped organizations answer the questi
 
 At Volvo Cars, she evaluated additive manufacturing from the perspective of an industrial adopter. At GE Additive and Markforged, she worked from within machine manufacturers that both advanced the technology and operated it to produce customer parts and production components.
 
-Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM. This perspective enables her to turn tacit judgment into shared operating structure, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
+Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
+
+This perspective enables her to translate specialist manufacturing judgement into reliable industrial practice, helping organizations build metal AM capabilities that are reliable, highly adaptable, and resilient in day-to-day operation.
 
 ## Metal AM in practice
 
