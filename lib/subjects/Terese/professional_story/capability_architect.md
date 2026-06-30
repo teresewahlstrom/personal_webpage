@@ -21,7 +21,6 @@ Her approach follows a consistent pattern: **Diagnose** - **Design** - **Enable*
 * **Design:** Create/capture the processes, decision frameworks, tools, models, ownership structures, and knowledge resources the situation requires — including elements that do not yet exist.
 * **Enable:** Embed those structures into how people actually work, so improvements become repeatable and do not depend on her continued involvement.
 
-This capability is especially valuable in capability architecture, systems enablement, technical transformation, and operational development contexts where organizations need to make expert work more repeatable. Her strength lies in finding the hidden logic behind recurring problems, then turning that logic into workflows, decision structures, tools, training systems, or shared references that others can use without depending on one specialist.
 
 ## Capability architecture in practice
 
