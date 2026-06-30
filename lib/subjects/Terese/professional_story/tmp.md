@@ -19,6 +19,10 @@ Making important technical reasoning explicit, transferable, and scalable across
 ## Hero, option E
 Terese turns complexity into things people can use: products, tools, workflows, models, and organizational capability. Her work sits between engineering depth, product logic, knowledge structure, and implementation, helping teams define what should be built, build what is needed, and make the reasoning reusable.
 
+# hero
+A systems-oriented engineer who repeatedly discovers the underlying structure of complex technical problems, makes that structure explicit, and turns it into products, organizational capability, computational models, and AI-supported reasoning systems.
+
+
 ## good phrasings i do not know were to put
 operates between technical depth, organisational capability, product logic, and knowledge infrastructure.
 
