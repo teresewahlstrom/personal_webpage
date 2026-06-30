@@ -17,7 +17,9 @@ The value comes from creating analytical leverage: capturing the reasoning that 
 
 Whether the problem involved economics, geometry, manufacturing, or decision-making, the underlying challenge was often the same: important reasoning existed, but it had not yet been codified or structured.
 
-Her approach follows a consistent pattern: **Abstract** - **Model** - **Compute** - **Validate**
+When that reasoning is primarily analytical, Terese's approach follows a consistent pattern:
+
+**Abstract** – **Model** – **Compute** – **Validate**
 
 * **Abstract:** Translate the physical or operational problem into relevant variables, constraints, and relationships.
 * **Model:** Represent the governing logic mathematically, geometrically, or procedurally.
