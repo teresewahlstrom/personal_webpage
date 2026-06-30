@@ -13,7 +13,7 @@ Throughout her career, Terese repeatedly encountered the same patterns: recurrin
 
 Terese does not simply capture existing knowledge. She combines expertise from multiple stakeholders with her own engineering judgment, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. The solution is not always a knowledge resource. Depending on the problem, it may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organizational capability, not documentation.
 
-One principle guides this work: organizations become fragile when important knowledge exists only in people's heads. Terese therefore looks for opportunities to embed that knowledge directly into workflows, decision frameworks, tools, and reference systems so that good decisions become part of everyday work rather than depending on memory or informal communication.
+One principle guides her work: important knowledge should not exist only in people's heads. Terese therefore looks for opportunities to embed that knowledge directly into workflows, decision frameworks, tools, and reference systems so that good decisions become part of everyday work, making organizations less dependent on individual experts.
 
 Her approach follows a consistent pattern: **Diagnose** - **Design** - **Enable**
 
