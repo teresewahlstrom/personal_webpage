@@ -17,7 +17,9 @@ She bridges the gap between software development and domain expertise by designi
 
 Through self-directed development and exploration—including building interactive digital twin concepts with Flutter frontends and Python-based Retrieval-Augmented Generation (RAG)—she has explored how these principles can be implemented in practice, grounding model interactions in explicit documentation, making supporting evidence, validation steps, and fallback boundaries visible, and establishing clear routes for human review.
 
-Her approach follows a consistent pattern: **Represent** - **Retrieve** - **Validate** - **Escalate**
+When that reasoning is implemented within AI-supported knowledge systems, the same principles become:
+
+**Represent** – **Retrieve** – **Validate** – **Escalate**
 
 * **Represent:** Structure knowledge into queryable, structured formats.
 * **Retrieve:** Surface the evidence most relevant to the current problem.
