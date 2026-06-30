@@ -19,8 +19,6 @@ Sales assumed engineering had agreed. Engineering assumed sales understood the c
 
 Nobody owned the space between functions. Everyone owned their lane. Nobody owned what happened at the intersections—and the longer that disconnect went unaddressed, the more organizational damage it caused.
 
-That insight reshaped how Terese approaches leadership. Rather than accepting the first definition of the problem, she first works to understand how each party sees it, then builds a shared understanding that everyone can align behind before designing a way forward.
-
 
 ## Cross-functional leadership in practice
 
