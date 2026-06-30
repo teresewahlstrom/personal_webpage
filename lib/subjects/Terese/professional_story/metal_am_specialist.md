@@ -17,7 +17,7 @@ At Volvo Cars, she evaluated AM from the perspective of an industrial adopter. A
 
 Together, these experiences provided an end-to-end understanding of the technical, commercial, and operational realities required to establish reliable industrial metal AM.
 
-Across these roles, her focus has been remarkably consistent: understanding what has to become true before metal AM can move from technical potential to reliable industrial adoption. Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
+Across these roles, her focus has been remarkably consistent: *understanding what has to become true before metal AM can move from technical potential to reliable industrial adoption.* Whether evaluating technologies, qualifying applications, stabilizing production, or embedding expertise into everyday work, Terese helps organizations make metal AM commercially and operationally viable.
 
 ## Metal AM in practice
 
