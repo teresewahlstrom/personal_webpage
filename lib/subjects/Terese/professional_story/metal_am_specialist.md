@@ -30,7 +30,7 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
   Her work commonly operates at three complementary levels:
 
-  * **Adapting process** – Optimising build preparation, process parameters, support strategies, orientation, and post-processing to manufacture existing designs more reliably. Where appropriate, she also documents the resulting process to improve repeatability and future production.
+  * **Adapting process** – Optimizing build preparation, process parameters, support strategies, orientation, and post-processing to manufacture existing designs more reliably. Where appropriate, she also documents the resulting process to improve repeatability and future production.
 
   * **Adapting geometry** – Even relatively small design changes can significantly improve manufacturability. Depending on the available design freedom, this may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit additive manufacturing.
 
