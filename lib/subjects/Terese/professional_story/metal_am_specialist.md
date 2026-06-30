@@ -30,11 +30,11 @@ Across these roles, her focus has been remarkably consistent: understanding what
 
   Her work commonly operates at three complementary levels:
 
-  * **Process adaptation** – Optimising build preparation, process parameters, support strategies, orientation, and post-processing to manufacture existing designs more reliably. Where appropriate, she also documents the resulting process to improve repeatability and future production.
+  * **Adapting process** – Optimising build preparation, process parameters, support strategies, orientation, and post-processing to manufacture existing designs more reliably. Where appropriate, she also documents the resulting process to improve repeatability and future production.
 
-  * **Geometry adaptation** – Even relatively small design changes can significantly improve manufacturability. Depending on the available design freedom, this may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit additive manufacturing.
+  * **Adapting geometry** – Even relatively small design changes can significantly improve manufacturability. Depending on the available design freedom, this may range from minor geometric adjustments to complete redesign of individual components or even entire assemblies to better exploit additive manufacturing.
 
-  * **Requirement challenge** – Engineering drawings and specifications do not always reflect true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
+  * **Challenge requirements** – Engineering drawings and specifications do not always reflect true functional requirements. By distinguishing essential requirements from inherited assumptions or unnecessary constraints, she has often identified simpler and more manufacturable solutions without compromising the product's intended function.
 
   An important enabler of this work is Terese's advanced CAD capability. She is comfortable developing highly complex geometries that would be impractical to manufacture conventionally. Although successful additive-manufacturing design rarely depends on geometric complexity alone—and many effective applications remain relatively simple—this capability allows her to exploit additive manufacturing's full design freedom whenever the engineering case justifies it.
 
