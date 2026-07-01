@@ -11,13 +11,16 @@ order: 1
 
 Throughout her career, Terese repeatedly encountered the same patterns: recurring questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, and manual workarounds. Rather than treating these as isolated problems, she learned to view them as design signals. They often indicate deeper capability gaps: work depends on individual experience, critical decisions lack structure, responsibilities are unclear, or important knowledge and processes have not been translated into repeatable organizational systems.
 
-Terese does not simply capture existing knowledge. She combines expertise from multiple stakeholders with her own engineering judgment, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. Depending on the problem, the solution may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organizational capability: *turning expert knowledge into repeatable organizational practice rather than leaving it dependent on individual experts*.
+Terese does not simply capture existing knowledge. She combines expertise from multiple stakeholders with her own engineering judgment, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. Depending on the problem, the solution may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organizational capability: *turning expert knowledge into repeatable organizational practice rather than leaving it dependent on individual experts.*
 
 Her approach follows a consistent pattern: **Diagnose** – **Design** – **Enable**
 
 * **Diagnose:** Identify where execution breaks down. Understand the dependencies, decisions, bottlenecks, and failure modes that create fragility.
-* **Design:** Create, capture, or refine the processes, decision frameworks, tools, models, ownership structures, and knowledge resources the situation requires — including structures that do not yet exist.
+
+* **Design:** Create or refine the processes, decision frameworks, tools, models, ownership structures, and knowledge resources the situation requires — including structures that do not yet exist.
+
 * **Enable:** Embed those structures into how people actually work, so improvements become repeatable and do not depend on her continued involvement.
+
 
 ## Capability architecture in practice
 
