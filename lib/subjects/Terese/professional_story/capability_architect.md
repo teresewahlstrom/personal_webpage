@@ -11,7 +11,7 @@ order: 1
 
 Throughout her career, Terese repeatedly encountered the same patterns: recurring questions, inconsistent decisions, unclear handoffs, troubleshooting dead ends, and manual workarounds. Rather than treating these as isolated problems, she learned to view them as design signals. They often indicate deeper capability gaps: work depends on individual experience, critical decisions lack structure, responsibilities are unclear, or important knowledge and processes have not been translated into repeatable organizational systems.
 
-Terese combines expertise from multiple stakeholders with her own engineering judgment, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. Depending on the problem, the solution may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organizational capability: *turning expert knowledge into repeatable systems and practices rather than leaving it dependent on individual experts.*
+Terese combines expertise from multiple stakeholders with her own engineering judgment, analysis, and systems thinking to identify what is missing, challenge assumptions, and design better ways of working. Depending on the problem, the solution may be a workflow, decision framework, diagnostic tool, training architecture, escalation model, feedback mechanism, or shared reference system. The objective is reliable organizational capability: *turning expert knowledge into repeatable practice rather than leaving it dependent on individual experts.*
 
 Her approach follows a consistent pattern: **Diagnose** – **Design** – **Enable**
 
