@@ -7,7 +7,7 @@ image: lib/subjects/Terese/assets/content/{theme}/capability/ai.png
 order: 6
 ---
 
-**Terese designs AI-supported environments where human expertise, structured knowledge, deterministic logic, and AI reasoning work together. She builds reasoning environments that make complex technical knowledge more accessible without making it less trustworthy, helping people navigate, verify, and apply it with confidence grounded in evidence.**
+**Terese designs AI-supported environments where human expertise, structured knowledge, deterministic logic, and AI reasoning work together. She builds reasoning environments that make complex technical knowledge more accessible without making it less trustworthy by grounding AI-supported reasoning in evidence, explicit constraints, and human expertise.**
 
 After years of working in technical environments where specialized expertise was scattered, inconsistently applied, or confined to specific individuals, Terese became interested in how AI could help address that problem. If computational engineering is about finding the representation that makes a problem tractable, AI introduces a new kind of problem to represent: not a shape, a system, or a procedure, but reasoning itself—and the evidence, constraints, and escalation paths that make that reasoning trustworthy enough to act on.
 
