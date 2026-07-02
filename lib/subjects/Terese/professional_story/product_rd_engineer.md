@@ -9,11 +9,11 @@ order: 2
 
 **Terese works across product R&D from early exploration into practical, validated solutions. She contributes on both sides of the work: defining what should be built and building what the solution requires — across physical, digital, service, and hybrid product forms.**
 
-Her foundation combines Mechanical Engineering with Industrial Design and years of engineering-led product development across CAD, prototyping, application engineering, customer-facing validation, and production exposure. Alongside that, she has experimented with software as both a development tool and a product medium — building digital tools, software prototypes, user-interface logic, and product outputs that help users operate and interpret complex technical systems.
+Her foundation combines Mechanical Engineering with Industrial Design and years of engineering-led product development spanning CAD, prototyping, application engineering, customer validation, and production. Alongside that, she has explored software as both a development tool and a product medium, building digital tools, software prototypes, user-interface logic, and technical outputs that help people work with complex systems.
 
-Her R&D work has included concept development, feasibility evaluation, benchmarking, geometry development, user feedback, technical-commercial trade-offs, software-enabled product behavior, service structures, and implementation readiness.
+Her work has included concept development, feasibility evaluation, benchmarking, geometry development, user feedback, technical-commercial trade-offs, software-enabled product behavior, service design, and implementation readiness.
 
-Across this work, success often depends on how technology, workflows, supporting equipment, configuration decisions, documentation, production, and long-term use interact.
+Successful product development rarely depends on the product alone. It also depends on how technology, workflows, supporting equipment, configuration, documentation, production, and long-term use fit together.
 
 While much of her industrial experience has been in advanced manufacturing technology, the underlying R&D capability is broader: connecting user needs, technical constraints, product behavior, validation evidence, and implementation realities across product forms.
 
